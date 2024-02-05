@@ -47,6 +47,9 @@
                          Camera="{Binding Camera}" 
                          AutoStartPreview="{Binding AutoStartPreview}" 
                          NumCamerasDetected="{Binding NumCameras, Mode=OneWayToSource}"
+                         WidthRequest="{OnPlatform Android=150}"
+                         HeightRequest="{OnPlatform Android=150}"
+                         Scale="{OnPlatform Android=4}"
                          Grid.Column="0"
                          Grid.Row="0"
                          Grid.RowSpan="3" />

@@ -56,18 +56,20 @@
 	  <CodesignKey>iPhone Developer</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	  <UseInterpreter>true</UseInterpreter>
-	  <!--TODO: add argon2id load when library is built with the corresponding architecture for iOS Simulator-->
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|iossimulator-x64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|ios-arm64'">
-		<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
 	  <CreatePackage>false</CreatePackage>
-      <CodesignProvision>Automatic:AppStore</CodesignProvision>
-      <CodesignKey>iPhone Distribution</CodesignKey>
+      <CodesignProvision>$(ReleaseCodesignProvision)</CodesignProvision>
+      <CodesignKey>$(ReleaseCodesignKey)</CodesignKey>
 	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
 	  <UseInterpreter>true</UseInterpreter>
-	  <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+	  <MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<!--This is needed for PCLCrypto to work correctly-->
@@ -209,7 +211,7 @@
 	  </MauiImage>
 	  <MauiImage Include="Resources\yubikey.png" />
 	</ItemGroup>
-	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' AND '$(IncludeBitwardeniOSExtensions)' == 'True'">
 		<ProjectReference Include="..\iOS.Autofill\iOS.Autofill.csproj">
 			<IsAppExtension>true</IsAppExtension>
 			<IsWatchApp>false</IsWatchApp>
@@ -223,15 +225,15 @@
 			<IsWatchApp>false</IsWatchApp>
 		</ProjectReference>
 	</ItemGroup>
-	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios'">
-    <WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-acgkbpwvmebfiofokotvoerzkqcl/Build/Products</WatchAppBuildPath>
-    <WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))/watchOS/bitwarden.xcarchive/Products/Applications/bitwarden.app/Watch</WatchAppBuildPath>
-    <WatchAppBundle>Bitwarden.app</WatchAppBundle>
-		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'">watchsimulator</WatchAppConfiguration>
-		<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'">watchos</WatchAppConfiguration>
-    <WatchAppBundleFullPath Condition=" '$(Configuration)' == 'Debug' ">$(WatchAppBuildPath)/$(Configuration)-$(WatchAppConfiguration)/$(WatchAppBundle)</WatchAppBundleFullPath>
-    <WatchAppBundleFullPath Condition=" '$(Configuration)' != 'Debug' ">$(WatchAppBuildPath)/$(WatchAppBundle)</WatchAppBundleFullPath>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios' AND '$(IncludeBitwardenWatchOSApp)' == 'True'">
+		<WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-acgkbpwvmebfiofokotvoerzkqcl/Build/Products</WatchAppBuildPath>
+		<WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))/watchOS/bitwarden.xcarchive/Products/Applications/bitwarden.app/Watch</WatchAppBuildPath>
+		<WatchAppBundle>Bitwarden.app</WatchAppBundle>
+			<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'">watchsimulator</WatchAppConfiguration>
+			<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'">watchos</WatchAppConfiguration>
+		<WatchAppBundleFullPath Condition=" '$(Configuration)' == 'Debug' ">$(WatchAppBuildPath)/$(Configuration)-$(WatchAppConfiguration)/$(WatchAppBundle)</WatchAppBundleFullPath>
+		<WatchAppBundleFullPath Condition=" '$(Configuration)' != 'Debug' ">$(WatchAppBuildPath)/$(WatchAppBundle)</WatchAppBundleFullPath>
+	</PropertyGroup>
 	<ItemGroup Condition="'$(TargetFramework)'=='net8.0-ios' AND Exists('$(WatchAppBundleFullPath)') ">
 		<_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
 	</ItemGroup>

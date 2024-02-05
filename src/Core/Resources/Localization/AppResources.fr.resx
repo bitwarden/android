@@ -2821,6 +2821,9 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Continuer vers le contact du support ?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Poursuivre vers la politique de confidentialité ?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continuer vers la boutique des applications ?</value>
   </data>
@@ -2839,6 +2842,9 @@ Voulez-vous basculer vers ce compte ?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Vous ne trouvez pas ce que vous cherchez ? Contactez le support de Bitwarden sur bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Consultez notre politique de confidentialité sur bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explorez plus de fonctionnalités de votre compte Bitwarden sur l'application Web.</value>

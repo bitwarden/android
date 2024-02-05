@@ -79,6 +79,7 @@
     <Folder Include="Resources\Localization\" />
     <Folder Include="Utilities\Fido2\" />
     <Folder Include="Controls\Picker\" />
+    <Folder Include="Controls\Avatar\" />
   </ItemGroup>
 	<ItemGroup>
 	  <MauiImage Include="Resources\Images\dotnet_bot.svg">
@@ -109,5 +110,6 @@
 	<ItemGroup>
 	  <None Remove="Utilities\Fido2\" />
 	  <None Remove="Controls\Picker\" />
+	  <None Remove="Controls\Avatar\" />
 	</ItemGroup>
 </Project>

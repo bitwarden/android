@@ -115,7 +115,7 @@ namespace Bit.Core.Models.Domain
             switch (Type)
             {
                 case Enums.CipherType.Login:
-                    model.Login = await Login.DecryptAsync(OrganizationId, model.Key);
+                    model.Login = await Login.DecryptAsync(OrganizationId, Key == null, model.Key);
                     break;
                 case Enums.CipherType.SecureNote:
                     model.SecureNote = await SecureNote.DecryptAsync(OrganizationId, model.Key);

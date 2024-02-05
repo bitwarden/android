@@ -18,6 +18,8 @@ using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Platform;
 using MobileCoreServices;
 using UIKit;
 
@@ -151,7 +153,6 @@ namespace Bit.iOS.Extension
             }
         }
 
-#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
@@ -166,7 +167,6 @@ namespace Bit.iOS.Extension
 
             PresentViewController(uiController, true, null);
         }
-#endif
 
         private void ContinueOn()
         {
@@ -479,15 +479,22 @@ namespace Bit.iOS.Extension
         {
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if (await IsAuthed())
+                try
                 {
-                    var stateService = ServiceContainer.Resolve<IStateService>("stateService");
-                    await AppHelpers.LogOutAsync(await stateService.GetActiveUserIdAsync());
-                    var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-                    if (deviceActionService.SystemMajorVersion() >= 12)
+                    if (await IsAuthed())
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                        await AppHelpers.LogOutAsync(await stateService.GetActiveUserIdAsync());
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    throw;
                 }
             });
         }

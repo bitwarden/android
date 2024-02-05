@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<controls:ExtendedGrid xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<controls:BaseCipherViewCell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Controls.CipherViewCell"
     xmlns:controls="clr-namespace:Bit.App.Controls"
@@ -29,33 +29,31 @@
         <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
 
-    <controls:IconLabel
-        Grid.Column="0"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        StyleClass="list-icon, list-icon-platform"
-        IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
-        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
-        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
-        AutomationProperties.IsInAccessibleTree="False"
-        AutomationId="CipherTypeIcon" />
-
     <controls:CachedImage
         x:Name="_iconImage"
         Grid.Column="0"
         BitmapOptimizations="True"
-        ErrorPlaceholder="login.png"
-        LoadingPlaceholder="login.png"
         HorizontalOptions="CenterAndExpand"
         VerticalOptions="CenterAndExpand"
         Margin="9"
         WidthRequest="22"
         HeightRequest="22"
         Aspect="AspectFit"
-        IsVisible="{Binding ShowIconImage}"
-        Source="{Binding IconImageSource, Mode=OneTime}"
+        Success="Icon_Success"
+        Error="Icon_Error"
         AutomationProperties.IsInAccessibleTree="False"
         AutomationId="CipherWebsiteIcon" />
+
+    <controls:IconLabel
+        x:Name="_iconPlaceholderImage"
+        Grid.Column="0"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        StyleClass="list-icon, list-icon-platform"
+        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
+        AutomationProperties.IsInAccessibleTree="False"
+        AutomationId="CipherTypeIcon" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
         <Grid.RowDefinitions>
@@ -121,4 +119,4 @@
         SemanticProperties.Description="{u:I18n Options}"
         AutomationId="CipherOptionsButton" />
 
-</controls:ExtendedGrid>
+</controls:BaseCipherViewCell>

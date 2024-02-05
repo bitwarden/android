@@ -2820,6 +2820,9 @@ Chcete prepnúť na toto konto?</value>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Pokračovať v kontaktovaní podpory?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Pokračovať na zásady ochrany osobných údajov?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Pokračovať v obchode s aplikáciami?</value>
   </data>
@@ -2838,6 +2841,9 @@ Chcete prepnúť na toto konto?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Nemôžete nájsť, čo hľadáte? Obráťte sa na podporu Bitwarden na stránke bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Pozrite si naše zásady ochrany osobných údajov na bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Preskúmajte ďalšie funkcie svojho účtu na Bitwarden vo webovej aplikácii.</value>

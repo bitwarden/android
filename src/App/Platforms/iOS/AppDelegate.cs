@@ -15,6 +15,7 @@ using CoreNFC;
 using Foundation;
 using Microsoft.Maui.Platform;
 using UIKit;
+using UserNotifications;
 using WatchConnectivity;
 
 namespace Bit.iOS
@@ -41,73 +42,78 @@ namespace Bit.iOS
         private IStateService _stateService;
         private IEventService _eventService;
 
-        private LazyResolve<IDeepLinkContext> _deepLinkContext = new LazyResolve<IDeepLinkContext>();
+        private readonly LazyResolve<IDeepLinkContext> _deepLinkContext = new LazyResolve<IDeepLinkContext>();
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            InitApp();
-
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _eventService = ServiceContainer.Resolve<IEventService>("eventService");
-
-            ConnectToWatchIfNeededAsync().FireAndForget();
-
-            _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
+            try
             {
-                try
+                InitApp();
+
+                _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+                _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+                _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+
+                ConnectToWatchIfNeededAsync().FireAndForget();
+
+                _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
                 {
-                    if (message.Command == "startEventTimer")
+                    try
                     {
-                        StartEventTimer();
-                    }
-                    else if (message.Command == "stopEventTimer")
-                    {
-                        var task = StopEventTimerAsync();
-                    }
-                    else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
-                    {
-                        MainThread.BeginInvokeOnMainThread(() =>
+                        if (message.Command == "startEventTimer")
                         {
-                            iOSCoreHelpers.AppearanceAdjustments();
-                        });
-                    }
-                    else if (message.Command == "listenYubiKeyOTP")
-                    {
-                        iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
-                    }
-                    else if (message.Command == "unlocked")
-                    {
-                        var needsAutofillReplacement = await _storageService.GetAsync<bool?>(
-                            Core.Constants.AutofillNeedsIdentityReplacementKey);
-                        if (needsAutofillReplacement.GetValueOrDefault())
-                        {
-                            await ASHelpers.ReplaceAllIdentitiesAsync();
+                            StartEventTimer();
                         }
-                    }
-                    else if (message.Command == "showAppExtension")
-                    {
-                        MainThread.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
-                    }
-                    else if (message.Command == "syncCompleted")
-                    {
-                        if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
+                        else if (message.Command == "stopEventTimer")
                         {
-                            var success = data["successfully"] as bool?;
-                            if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
+                            var task = StopEventTimerAsync();
+                        }
+                        else if (message.Command is ThemeManager.UPDATED_THEME_MESSAGE_KEY)
+                        {
+                            await MainThread.InvokeOnMainThreadAsync(() =>
+                            {
+                                iOSCoreHelpers.AppearanceAdjustments();
+                            });
+                        }
+                        else if (message.Command == "listenYubiKeyOTP" && message.Data is bool listen)
+                        {
+                            iOSCoreHelpers.ListenYubiKey(listen, _deviceActionService, _nfcSession, _nfcDelegate);
+                        }
+                        else if (message.Command == "unlocked")
+                        {
+                            var needsAutofillReplacement = await _storageService.GetAsync<bool?>(
+                                Core.Constants.AutofillNeedsIdentityReplacementKey);
+                            if (needsAutofillReplacement.GetValueOrDefault())
                             {
                                 await ASHelpers.ReplaceAllIdentitiesAsync();
                             }
                         }
-                    }
-                    else if (message.Command == "addedCipher" || message.Command == "editedCipher" ||
-                        message.Command == "restoredCipher")
-                    {
-                        if (_deviceActionService.SystemMajorVersion() >= 12)
+                        else if (message.Command == "showAppExtension")
                         {
+                            await MainThread.InvokeOnMainThreadAsync(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
+                        }
+                        else if (message.Command == "syncCompleted")
+                        {
+                            if (message.Data is Dictionary<string, object> data && data.TryGetValue("successfully", out var value))
+                            {
+                                var success = value as bool?;
+                                if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
+                                {
+                                    await ASHelpers.ReplaceAllIdentitiesAsync();
+                                }
+                            }
+                        }
+                        else if (message.Command == "addedCipher" || message.Command == "editedCipher" ||
+                            message.Command == "restoredCipher")
+                        {
+                            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                            {
+                                return;
+                            }
+
                             if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                             {
                                 var cipherId = message.Data as string;
@@ -124,11 +130,13 @@ namespace Bit.iOS
                             }
                             await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
-                    }
-                    else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
-                    {
-                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
                         {
+                            if (!UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                            {
+                                return;
+                            }
+
                             if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                             {
                                 var identity = ASHelpers.ToPasswordCredentialIdentity(
@@ -142,105 +150,145 @@ namespace Bit.iOS
                             }
                             await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
-                    }
-                    else if (message.Command == "logout")
-                    {
-                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        else if (message.Command == "logout" && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
                             await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
                         }
-                    }
-                    else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
-                        && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-                        {
-                        await ASHelpers.ReplaceAllIdentitiesAsync();
-                    }
-                    else if (message.Command == AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND)
-                    {
-                        var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
-                        if (timeoutAction == VaultTimeoutAction.Logout && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
-                        {
-                            await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
-                        }
-                        else
+                        else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
+                            && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
                             await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
+                        else if (message.Command == AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND)
+                        {
+                            var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
+                            if (timeoutAction == VaultTimeoutAction.Logout)
+                            {
+                                if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                                {
+                                    await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
+                                }
+                            }
+                            else
+                            {
+                                await ASHelpers.ReplaceAllIdentitiesAsync();
+                            }
+                        }
                     }
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                }
-            });
+                    catch (Exception ex)
+                    {
+                        LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    }
+                });
 
-            var finishedLaunching = base.FinishedLaunching(app, options);
+                var finishedLaunching = base.FinishedLaunching(app, options);
 
-            ThemeManager.SetTheme(Microsoft.Maui.Controls.Application.Current.Resources);
-            iOSCoreHelpers.AppearanceAdjustments();
+                ThemeManager.SetTheme(Microsoft.Maui.Controls.Application.Current.Resources);
+                iOSCoreHelpers.AppearanceAdjustments();
 
-            return finishedLaunching;
+                return finishedLaunching;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
         public override void OnResignActivation(UIApplication uiApplication)
         {
-            if (UIApplication.SharedApplication.KeyWindow is null)
+            try
             {
+                if (UIApplication.SharedApplication.KeyWindow != null)
+                {
+                    var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+                    {
+                        Tag = SPLASH_VIEW_TAG
+                    };
+                    var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+                    {
+                        BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToPlatform()
+                    };
+                    var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
+                    var frame = new CGRect(0, 0, 280, 100); //Setting image width to avoid it being larger and getting cropped on smaller devices. This harcoded size should be good even for very small devices.
+                    var imageView = new UIImageView(frame)
+                    {
+                        Image = logo,
+                        Center = new CGPoint(view.Center.X, view.Center.Y - 30),
+                        ContentMode = UIViewContentMode.ScaleAspectFit
+                    };
+                    view.AddSubview(backgroundView);
+                    view.AddSubview(imageView);
+                    UIApplication.SharedApplication.KeyWindow.AddSubview(view);
+                    UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
+                    UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+                }
                 base.OnResignActivation(uiApplication);
-                return;
             }
-
-            var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            catch (Exception ex)
             {
-                Tag = SPLASH_VIEW_TAG
-            };
-            var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
-            {
-                BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToPlatform()
-            };
-            var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
-            var frame = new CGRect(0, 0, 280, 100); //Setting image width to avoid it being larger and getting cropped on smaller devices. This harcoded size should be good even for very small devices.
-            var imageView = new UIImageView(frame)
-            {
-                Image = logo,
-                Center = new CGPoint(view.Center.X, view.Center.Y - 30),
-                ContentMode = UIViewContentMode.ScaleAspectFit
-            };
-            view.AddSubview(backgroundView);
-            view.AddSubview(imageView);
-            UIApplication.SharedApplication.KeyWindow.AddSubview(view);
-            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
-            UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-
-            base.OnResignActivation(uiApplication);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            if (_stateService != null && _deviceActionService != null)
+            try
             {
-                _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
-            }
+                if (_stateService != null && _deviceActionService != null)
+                {
+                    _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
+                }
 
-            _messagingService?.Send("slept");
-            base.DidEnterBackground(uiApplication);
+                _messagingService?.Send("slept");
+                base.DidEnterBackground(uiApplication);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
-        public override void OnActivated(UIApplication uiApplication)
+        public override async void OnActivated(UIApplication uiApplication)
         {
-            base.OnActivated(uiApplication);
-            UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
-            UIApplication.SharedApplication.KeyWindow?
-                .ViewWithTag(SPLASH_VIEW_TAG)?
-                .RemoveFromSuperview();
+            try
+            {
+                base.OnActivated(uiApplication);
 
-            ThemeManager.UpdateThemeOnPagesAsync();
+                if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+                {
+                    await UNUserNotificationCenter.Current.SetBadgeCountAsync(0);
+                }
+                else
+                {
+                    UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+                }
+
+                UIApplication.SharedApplication.KeyWindow?
+                    .ViewWithTag(SPLASH_VIEW_TAG)?
+                    .RemoveFromSuperview();
+
+                ThemeManager.UpdateThemeOnPagesAsync();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService?.Send(AppHelpers.RESUMED_MESSAGE_COMMAND);
-            base.WillEnterForeground(uiApplication);
+            try
+            {
+                _messagingService?.Send(AppHelpers.RESUMED_MESSAGE_COMMAND);
+                base.WillEnterForeground(uiApplication);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         [Export("application:openURL:sourceApplication:annotation:")]
@@ -251,15 +299,30 @@ namespace Bit.iOS
 
         public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
         {
-            return _deepLinkContext.Value.OnNewUri(url) || base.OpenUrl(app, url, options);
+            try
+            {
+                return _deepLinkContext.Value.OnNewUri(url) || base.OpenUrl(app, url, options);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                return false;
+            }
         }
 
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
             UIApplicationRestorationHandler completionHandler)
         {
-            if (Microsoft.Maui.ApplicationModel.Platform.ContinueUserActivity(application, userActivity, completionHandler))
+            try
             {
-                return true;
+                if (Microsoft.Maui.ApplicationModel.Platform.ContinueUserActivity(application, userActivity, completionHandler))
+                {
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
             return base.ContinueUserActivity(application, userActivity, completionHandler);
         }
@@ -267,33 +330,68 @@ namespace Bit.iOS
         [Export("application:didFailToRegisterForRemoteNotificationsWithError:")]
         public void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
         {
-            _pushHandler?.OnErrorReceived(error);
+            try
+            {
+                _pushHandler?.OnErrorReceived(error);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         [Export("application:didRegisterForRemoteNotificationsWithDeviceToken:")]
         public void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            _pushHandler?.OnRegisteredSuccess(deviceToken);
+            try
+            {
+                _pushHandler?.OnRegisteredSuccess(deviceToken);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         [Export("application:didRegisterUserNotificationSettings:")]
         public void DidRegisterUserNotificationSettings(UIApplication application,
             UIUserNotificationSettings notificationSettings)
         {
-            application.RegisterForRemoteNotifications();
+            try
+            {
+                application.RegisterForRemoteNotifications();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         [Export("application:didReceiveRemoteNotification:fetchCompletionHandler:")]
         public void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo,
             Action<UIBackgroundFetchResult> completionHandler)
         {
-            _pushHandler?.OnMessageReceived(userInfo);
+            try
+            {
+                _pushHandler?.OnMessageReceived(userInfo);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         [Export("application:didReceiveRemoteNotification:")]
         public void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
         {
-            _pushHandler?.OnMessageReceived(userInfo);
+            try
+            {
+                _pushHandler?.OnMessageReceived(userInfo);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         public void InitApp()
@@ -319,7 +417,7 @@ namespace Bit.iOS
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
                 _messagingService.Send("gotYubiKeyOTP", message));
 
-            iOSCoreHelpers.Bootstrap(async () => await ApplyManagedSettingsAsync());
+            iOSCoreHelpers.Bootstrap(ApplyManagedSettingsAsync);
         }
 
         private void RegisterPush()
@@ -364,31 +462,45 @@ namespace Bit.iOS
             _eventTimer = null;
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                _eventTimer = NSTimer.CreateScheduledTimer(60, true, timer =>
+                try
                 {
-                    var task = Task.Run(() => _eventService.UploadEventsAsync());
-                });
+                    _eventTimer = NSTimer.CreateScheduledTimer(60, true, timer =>
+                    {
+                        _eventService?.UploadEventsAsync().FireAndForget();
+                    });
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
             });
         }
 
         private async Task StopEventTimerAsync()
         {
-            _eventTimer?.Invalidate();
-            _eventTimer?.Dispose();
-            _eventTimer = null;
-            if (_eventBackgroundTaskId > 0)
+            try
             {
+                _eventTimer?.Invalidate();
+                _eventTimer?.Dispose();
+                _eventTimer = null;
+                if (_eventBackgroundTaskId > 0)
+                {
+                    UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                    _eventBackgroundTaskId = 0;
+                }
+                _eventBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+                {
+                    UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                    _eventBackgroundTaskId = 0;
+                });
+                await _eventService.UploadEventsAsync();
                 UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
                 _eventBackgroundTaskId = 0;
             }
-            _eventBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+            catch (Exception ex)
             {
-                UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
-                _eventBackgroundTaskId = 0;
-            });
-            await _eventService.UploadEventsAsync();
-            UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
-            _eventBackgroundTaskId = 0;
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         private async Task ApplyManagedSettingsAsync()

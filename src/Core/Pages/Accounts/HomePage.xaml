@@ -50,11 +50,10 @@
                             x:Name="_email"
                             Text="{Binding Email}"
                             Keyboard="Email"
-                            StyleClass="box-value"
+                            StyleClass="box-value, no-keyboard-auto-help"
                             ReturnType="Go"
                             ReturnCommand="{Binding ContinueCommand}"
-                            AutomationId="EmailAddressEntry"
-                            >
+                            AutomationId="EmailAddressEntry">
                             <VisualStateManager.VisualStateGroups>
                                 <VisualStateGroup x:Name="CommonStates">
                                     <VisualState x:Name="Disabled">

@@ -137,22 +137,15 @@ namespace Bit.iOS.ShareExtension
             }
         }
 
-#if !ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND
-
         private void NavigateToPage(ContentPage page)
         {
             var navigationPage = new NavigationPage(page);
-
-            var window = new Window(navigationPage);
-            window.ToHandler(MauiContextSingleton.Instance.MauiContext);
 
             _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             _presentingOnNavigationPage = true;
             PresentViewController(_currentModalController, true, null);
         }
-
-#endif
 
         public void DismissLockAndContinue()
         {
@@ -274,13 +267,21 @@ namespace Bit.iOS.ShareExtension
         {
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if (await IsAuthed())
+                try
                 {
-                    await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
-                    if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                    if (await IsAuthed())
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    throw;
                 }
             });
         }

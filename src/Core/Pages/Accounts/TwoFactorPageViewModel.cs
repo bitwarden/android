@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Net;
 using System.Windows.Input;
 using Bit.App.Abstractions;
-using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
-using Bit.Core.Services;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
-
-using Microsoft.Maui.Authentication;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Pages
 {
@@ -43,6 +34,7 @@ namespace Bit.App.Pages
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _enableContinue = false;
         private bool _showContinue = true;
+        private double _duoWebViewHeight;
 
         public TwoFactorPageViewModel()
         {
@@ -62,7 +54,7 @@ namespace Bit.App.Pages
             _deviceTrustCryptoService = ServiceContainer.Resolve<IDeviceTrustCryptoService>();
 
             PageTitle = AppResources.TwoStepLogin;
-            SubmitCommand = new Command(async () => await SubmitAsync());
+            SubmitCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(async () => await SubmitAsync()), allowsMultipleExecutions: false);
             MoreCommand = CreateDefaultAsyncRelayCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
         }
 
@@ -72,6 +64,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _totpInstruction, value);
         }
 
+        public double DuoWebViewHeight
+        {
+            get => _duoWebViewHeight;
+            set => SetProperty(ref _duoWebViewHeight, value);
+        }
+        
         public bool Remember { get; set; }
 
         public bool AuthingWithSso { get; set; }
@@ -91,8 +89,7 @@ namespace Bit.App.Pages
 
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
-        public bool ShowTryAgain => (YubikeyMethod && // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-Device.RuntimePlatform == Device.iOS) || Fido2Method;
+        public bool ShowTryAgain => (YubikeyMethod && DeviceInfo.Platform == DevicePlatform.iOS) || Fido2Method;
 
         public bool ShowContinue
         {
@@ -106,9 +103,11 @@ Device.RuntimePlatform == Device.iOS) || Fido2Method;
             set => SetProperty(ref _enableContinue, value);
         }
 
-        public string YubikeyInstruction => // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
-            AppResources.YubiKeyInstruction;
+#if IOS
+        public string YubikeyInstruction => AppResources.YubiKeyInstructionIos;
+#else
+        public string YubikeyInstruction => AppResources.YubiKeyInstruction;
+#endif
 
         public TwoFactorProviderType? SelectedProviderType
         {
@@ -124,7 +123,7 @@ Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
                 nameof(ShowTryAgain),
             });
         }
-        public Command SubmitCommand { get; }
+        public ICommand SubmitCommand { get; }
         public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action LockAction { get; set; }
@@ -180,13 +179,14 @@ Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
+                    SetDuoWebViewHeight();
                     var host = WebUtility.UrlEncode(providerData["Host"] as string);
                     var req = WebUtility.UrlEncode(providerData["Signature"] as string);
                     page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
                     page.DuoWebView.RegisterAction(sig =>
                     {
                         Token = sig;
-                        Device.BeginInvokeOnMainThread(async () => await SubmitAsync());
+                        SubmitCommand.Execute(null);
                     });
                     break;
                 case TwoFactorProviderType.Email:
@@ -211,70 +211,84 @@ Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             ShowContinue = !(SelectedProviderType == null || DuoMethod || Fido2Method);
         }
 
+        public void SetDuoWebViewHeight()
+        {
+            var screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+            DuoWebViewHeight = screenHeight > 0 ? (screenHeight / 8) * 6 : 400;
+        }
+
         public async Task Fido2AuthenticateAsync(Dictionary<string, object> providerData = null)
         {
-            await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
-
-            if (providerData == null)
-            {
-                providerData = _authService.TwoFactorProvidersData[TwoFactorProviderType.Fido2WebAuthn];
-            }
-
-            var callbackUri = "bitwarden://webauthn-callback";
-            var data = AppHelpers.EncodeDataParameter(new
-            {
-                callbackUri = callbackUri,
-                data = JsonConvert.SerializeObject(providerData),
-                headerText = AppResources.Fido2Title,
-                btnText = AppResources.Fido2AuthenticateWebAuthn,
-                btnReturnText = AppResources.Fido2ReturnToApp,
-            });
-
-            var url = _webVaultUrl + "/webauthn-mobile-connector.html?" + "data=" + data +
-                      "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=2";
-
-            WebAuthenticatorResult authResult = null;
             try
             {
-                var options = new WebAuthenticatorOptions
-                {
-                    Url = new Uri(url),
-                    CallbackUrl = new Uri(callbackUri),
-                    PrefersEphemeralWebBrowserSession = true,
-                };
-                authResult = await WebAuthenticator.AuthenticateAsync(options);
-            }
-            catch (TaskCanceledException)
-            {
-                // user canceled
-                await _deviceActionService.HideLoadingAsync();
-                return;
-            }
+                await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
 
-            string response = null;
-            if (authResult != null && authResult.Properties.TryGetValue("data", out var resultData))
-            {
-                response = Uri.UnescapeDataString(resultData);
-            }
-            if (!string.IsNullOrWhiteSpace(response))
-            {
-                Token = response;
-                await SubmitAsync(false);
-            }
-            else
-            {
-                await _deviceActionService.HideLoadingAsync();
-                if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
+                if (providerData == null)
                 {
-                    var message = AppResources.Fido2CheckBrowser + "\n\n" + resultError;
-                    await _platformUtilsService.ShowDialogAsync(message, AppResources.AnErrorHasOccurred,
-                        AppResources.Ok);
+                    providerData = _authService.TwoFactorProvidersData[TwoFactorProviderType.Fido2WebAuthn];
+                }
+
+                var callbackUri = "bitwarden://webauthn-callback";
+                var data = AppHelpers.EncodeDataParameter(new
+                {
+                    callbackUri = callbackUri,
+                    data = JsonConvert.SerializeObject(providerData),
+                    headerText = AppResources.Fido2Title,
+                    btnText = AppResources.Fido2AuthenticateWebAuthn,
+                    btnReturnText = AppResources.Fido2ReturnToApp,
+                });
+
+                var url = _webVaultUrl + "/webauthn-mobile-connector.html?" + "data=" + data +
+                          "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=2";
+
+                WebAuthenticatorResult authResult = null;
+                try
+                {
+                    var options = new WebAuthenticatorOptions
+                    {
+                        Url = new Uri(url),
+                        CallbackUrl = new Uri(callbackUri),
+                        PrefersEphemeralWebBrowserSession = true,
+                    };
+                    authResult = await WebAuthenticator.AuthenticateAsync(options);
+                }
+                catch (TaskCanceledException)
+                {
+                    // user canceled
+                    await _deviceActionService.HideLoadingAsync();
+                    return;
+                }
+
+                string response = null;
+                if (authResult != null && authResult.Properties.TryGetValue("data", out var resultData))
+                {
+                    response = Uri.UnescapeDataString(resultData);
+                }
+                if (!string.IsNullOrWhiteSpace(response))
+                {
+                    Token = response;
+                    await SubmitAsync(false);
                 }
                 else
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2CheckBrowser,
-                        AppResources.AnErrorHasOccurred, AppResources.Ok);
+                    await _deviceActionService.HideLoadingAsync();
+                    if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
+                    {
+                        var message = AppResources.Fido2CheckBrowser + "\n\n" + resultError;
+                        await _platformUtilsService.ShowDialogAsync(message, AppResources.AnErrorHasOccurred,
+                            AppResources.Ok);
+                    }
+                    else
+                    {
+                        await _platformUtilsService.ShowDialogAsync(AppResources.Fido2CheckBrowser,
+                            AppResources.AnErrorHasOccurred, AppResources.Ok);
+                    }
                 }
+
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
             }
         }
 

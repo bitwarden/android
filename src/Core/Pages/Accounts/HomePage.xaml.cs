@@ -153,7 +153,7 @@ namespace Bit.App.Pages
 
         private async Task StartEnvironmentAsync()
         {
-             await _accountListOverlay.HideAsync();
+            await _accountListOverlay.HideAsync();
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }

@@ -1,6 +1,12 @@
 <Project>
  <PropertyGroup>
    <MauiVersion>8.0.4-nightly.*</MauiVersion>
+   <ReleaseCodesignProvision>Automatic:AppStore</ReleaseCodesignProvision>
+   <ReleaseCodesignKey>iPhone Distribution</ReleaseCodesignKey>
+   <IncludeBitwardeniOSExtensions>True</IncludeBitwardeniOSExtensions>
+   <IncludeBitwardenWatchOSApp>True</IncludeBitwardenWatchOSApp>
+   <Argon2IdLoadMtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</Argon2IdLoadMtouchExtraArgs>
+   
    <!-- Uncomment this when Unit Testing-->
    <!-- <CustomConstants>UT</CustomConstants> -->
  </PropertyGroup>

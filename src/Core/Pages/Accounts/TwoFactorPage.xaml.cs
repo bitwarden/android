@@ -2,6 +2,7 @@
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
@@ -63,11 +64,11 @@ namespace Bit.App.Pages
                     if (_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) &&
                         token.Length == 44 && !token.Contains(" "))
                     {
-                        MainThread.BeginInvokeOnMainThread(async () =>
+                        MainThread.BeginInvokeOnMainThread(() =>
                         {
                             _vm.Token = token;
-                            await _vm.SubmitAsync();
                         });
+                        _vm.SubmitCommand.Execute(null);
                     }
                 }
                 else if (message.Command == "resumeYubiKey")
@@ -124,12 +125,9 @@ namespace Bit.App.Pages
             return base.OnBackButtonPressed();
         }
 
-        private async void Continue_Clicked(object sender, EventArgs e)
+        private void Continue_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
-            {
-                await _vm.SubmitAsync();
-            }
+            _vm.SubmitCommand.Execute(null);
         }
 
         private async void Methods_Clicked(object sender, EventArgs e)
@@ -158,16 +156,23 @@ namespace Bit.App.Pages
 
         private async void TryAgain_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
+            try
             {
-                if (_vm.Fido2Method)
+                if (DoOnce())
                 {
-                    await _vm.Fido2AuthenticateAsync();
+                    if (_vm.Fido2Method)
+                    {
+                        await _vm.Fido2AuthenticateAsync();
+                    }
+                    else if (_vm.YubikeyMethod)
+                    {
+                        _messagingService.Send("listenYubiKeyOTP", true);
+                    }
                 }
-                else if (_vm.YubikeyMethod)
-                {
-                    _messagingService.Send("listenYubiKeyOTP", true);
-                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

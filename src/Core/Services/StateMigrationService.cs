@@ -10,8 +10,6 @@ namespace Bit.Core.Services
 {
     public class StateMigrationService : IStateMigrationService
     {
-        private const int StateVersion = 7;
-
         private readonly DeviceType _deviceType;
         private readonly IStorageService _preferencesStorageService;
         private readonly IStorageService _liteDbStorageService;
@@ -58,10 +56,10 @@ namespace Bit.Core.Services
             if (lastVersion == 0)
             {
                 // fresh install, set current/latest version for availability going forward
-                lastVersion = StateVersion;
+                lastVersion = Constants.LatestStateVersion;
                 await SetLastStateVersionAsync(lastVersion);
             }
-            return lastVersion < StateVersion;
+            return lastVersion < Constants.LatestStateVersion;
         }
 
         private async Task PerformMigrationAsync()

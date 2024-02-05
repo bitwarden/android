@@ -81,14 +81,31 @@ namespace Bit.App
         {
             get
             {
-                return Application.Current.Windows.OfType<ResumeWindow>().FirstOrDefault(w => w.IsActive);
+                return Application.Current?.Windows.OfType<ResumeWindow>().FirstOrDefault(w => w.IsActive);
             }
         }
 
-        //Allows setting Options from MainActivity before base.OnCreate
-        public void SetOptions(AppOptions appOptions)
+        /// <summary>
+        /// Allows setting Options from MainActivity before base.OnCreate
+        /// Note 1: This is only be used by Android due to way it's Lifecycle works
+        /// Note 2: This method does not replace existing Options in App.xaml.cs if it exists already.
+        ///         It only updates properties in Options related with Autofill/CreateSend/etc..
+        /// </summary>
+        /// <param name="appOptions">Options created in Android MainActivity.cs</param>
+        public void SetAndroidOptions(AppOptions appOptions)
         {
-            Options = appOptions ?? new AppOptions();
+            if (Options == null)
+            {
+                Options = appOptions ?? new AppOptions();
+            }
+            else if(appOptions != null)
+            { 
+                Options.Uri = appOptions.Uri;
+                Options.MyVaultTile = appOptions.MyVaultTile;
+                Options.GeneratorTile = appOptions.GeneratorTile;
+                Options.FromAutofillFramework = appOptions.FromAutofillFramework;
+                Options.CreateSend = appOptions.CreateSend;
+            }
         }
 
         protected override Window CreateWindow(IActivationState activationState)
@@ -145,11 +162,14 @@ namespace Bit.App
         {
             get
             {
-                return Application.Current.MainPage;
+                return Application.Current?.MainPage;
             }
             set
             {
-                Application.Current.MainPage = value;
+                if (Application.Current != null)
+                {
+                    Application.Current.MainPage = value;
+                }
             }
         }   
 #endif

@@ -9,8 +9,6 @@
       <ApplicationVersion>1</ApplicationVersion>
 
       <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
-      
-      <DefineConstants>$(DefineConstants);ENABLED_TAP_GESTURE_RECOGNIZER_MAUI_EMBEDDED_WORKAROUND</DefineConstants>
 
       <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
       <RootNamespace>Bit.iOS.Extension</RootNamespace>
@@ -29,16 +27,19 @@
 	  <MtouchInterpreter>all</MtouchInterpreter>
 		<!--TODO: add argon2id load when library is built with the corresponding architecture for iOS Simulator-->
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|iossimulator-x64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
+	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|ios-arm64'">
-		<MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
 	</PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
     <CreatePackage>false</CreatePackage>
-	  <UseInterpreter>true</UseInterpreter>
-    <MtouchExtraArgs>-gcc_flags "-L$(ProjectDir)../../lib/ios -largon2 -force_load $(ProjectDir)../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Automatic:AppStore</CodesignProvision>
+    <CodesignProvision>$(ReleaseCodesignProvision)</CodesignProvision>
+    <CodesignKey>$(ReleaseCodesignKey)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+	  <UseInterpreter>true</UseInterpreter>
+    <MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
   </PropertyGroup>
 	<ItemGroup>
 		<TrimmerRootAssembly Include="System.Security.Cryptography" />
@@ -75,7 +76,6 @@
     </Compile>
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
-    <Compile Include="LoadingViewController.TapGestureHack.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />

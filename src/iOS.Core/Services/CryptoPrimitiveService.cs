@@ -48,7 +48,7 @@ namespace Bit.iOS.Core.Services
             var saltData = NSData.FromArray(salt);
 
             argon2id_hash_raw(iterations, memory, parallelism, passwordData.Bytes, passwordData.Length,
-                saltData.Bytes, saltData.Length,  keyData.MutableBytes, keyData.Length);
+               saltData.Bytes, saltData.Length,  keyData.MutableBytes, keyData.Length);
 
             var keyBytes = new byte[keyData.Length];
             Marshal.Copy(keyData.Bytes, keyBytes, 0, Convert.ToInt32(keyData.Length));
@@ -62,6 +62,6 @@ namespace Bit.iOS.Core.Services
 
         [DllImport("__Internal", EntryPoint = "argon2id_hash_raw")]
         private static extern int argon2id_hash_raw(int timeCost, int memoryCost, int parallelism, IntPtr pwd,
-            nuint pwdlen, IntPtr salt, nuint saltlen, IntPtr hash, nuint hashlen);
+           nuint pwdlen, IntPtr salt, nuint saltlen, IntPtr hash, nuint hashlen);
     }
 }

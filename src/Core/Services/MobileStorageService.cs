@@ -82,6 +82,14 @@ namespace Bit.App.Services
 
         private async Task<T> TryMigrateLiteDbToPrefsAsync<T>(string key)
         {
+            // Note: this is added to prevent searching a value in LiteDB when the migration has already run and it's in its latest version.
+            // If not, we could get several concurrent calls to the DB asking for values we already know they are not there,
+            // possible causing crashes on backgrounded apps.
+            if (await _preferencesStorageService.GetAsync<int?>(Constants.StateVersionKey) == Constants.LatestStateVersion)
+            {
+                return default;
+            }
+
             var currentValue = await _liteDbStorageService.GetAsync<T>(key);
             if (currentValue != null)
             {

@@ -2820,6 +2820,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>接下來聯絡支援嗎？</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>接下來造訪 App Store 嗎？</value>
   </data>
@@ -2838,6 +2841,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>不能找到你想要的？請在 bitwarden.com 上聯絡 Bitwarden 支援。</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>在 Web 應用程式上探索 Bitwarden 帳戶的更多功能。</value>
@@ -2862,12 +2868,12 @@
     <value>帳戶已登出。</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>您的組織權限已更新，需要您設定主密碼。</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>您的組織要求您設定主密碼。</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>Set up an unlock option to change your vault timeout action.</value>
+    <value>設定一個解鎖方式來變更您的密碼庫逾時動作。</value>
   </data>
 </root>

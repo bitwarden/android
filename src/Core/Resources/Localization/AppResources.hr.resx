@@ -2818,6 +2818,9 @@
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Kontaktiraj podršku?</value>
   </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Nastavi u trgovinu aplikacijama?</value>
   </data>
@@ -2836,6 +2839,9 @@
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Ne možeš naći što te zanima? Kontaktiraj Bitwarden podršku na bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Pronađi viđe značajki svojeg Bitwarden računa u web aplikaciji.</value>

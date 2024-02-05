@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>İstifadəçi adını kopyalayın</value>
+    <value>İstifadəçi adını kopyala</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -176,7 +176,7 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Redaktə edin</value>
+    <value>Düzəliş et</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
     <value>Qovluğa düzəliş et</value>
@@ -349,7 +349,7 @@
     <value>Göndər</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Eyniləşdirmə</value>
+    <value>Sinxr</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -416,7 +416,7 @@
     <value>Tətbiq uzantısı</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Tətbiq və veb saytda giriş məlumatlarının avto-doldurulması üçün Bitwarden əlçatımlılıq xidmətini istifadə edin.</value>
+    <value>Tətbiqlərdə və vebdə giriş məlumatlarının avto-doldurulması üçün Bitwarden əlçatımlılıq xidmətini istifadə edin.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Avto-doldurma xidməti</value>
@@ -465,7 +465,7 @@
     <value>Elementə düzəliş et</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Avto-eyniləşdirməni fəallaşdır</value>
+    <value>Avto-sinxr icazə ver</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Ana parol məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</value>
@@ -523,7 +523,7 @@
     <value>Digər parol idarəetmə tətbiqlərindəki elementləri cəld və toplu formada daxilə köçürün.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Son eyniləşdirmə:</value>
+    <value>Son sinxr:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Uzunluq</value>
@@ -641,7 +641,7 @@
     <value>Hazırkı parolun üzərinə yazmaq istədiyinizə əminsiniz?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden, ani bildirişləri istifadə edərək anbarınızı avtomatik eyniləşdirir. Mümkün olan ən yaxşı təcrübəni təqdim etmək üçün, sizdən ani bildirişləri fəallaşdırmağı soruşanda növbəti ekranda "İcazə ver"i seçin.</value>
+    <value>Bitwarden, ani bildirişləri istifadə edərək anbarınızın avtomatik sinxronlaşdırılmasını təmin edir. Mümkün olan ən yaxşı təcrübəni təqdim etmək üçün, sizdən ani bildirişləri fəallaşdırmağı soruşduqda növbəti ekranda "İcazə ver"i seçin.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -682,17 +682,17 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Eyniləşdirilir...</value>
+    <value>Sinxronlaşdırılır...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Eyniləşdirmə tamamlandı.</value>
+    <value>Sinxr tamamlandı</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Uğursuz eyniləşdirmə.</value>
+    <value>Sinxr uğursuz oldu</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Anbarı indi eyniləşdir</value>
+    <value>Anbarı indi sinxronlaşdır</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -745,7 +745,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Bir giriş sahəsi seçəndə və Bitwarden avto-doldurma örtüyünü görəndə, avto-doldurma xidmətini başlatmaq üçün ona toxuna bilərsiniz.</value>
+    <value>Bir giriş xanası seçdikdə və Bitwarden avto-doldurma örtüyünü gördükdə, avto-doldurma xidmətini başlatmaq üçün buna toxuna bilərsiniz.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Anbarınızdakı bir elementi avto-doldurmaq üçün bu bildirişə toxunun.</value>
@@ -1167,10 +1167,10 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Avto-doldurma əlçatımlılıq xidməti</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden avto-doldurma xidməti, giriş məlumatlarının, kredit kartlarının və kimlik məlumatlarının cihazınızdakı digər tətbiqlərdə doldurmasına kömək etməsi üçün Android avto-doldurma sistemini istifadə edir.</value>
+    <value>Bitwarden avto-doldurma xidməti, giriş məlumatlarının cihazınızdakı digər tətbiqlərdə doldurmasına kömək etməsi üçün Android Avto-doldurma Çərçivəsini istifadə edir.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Digər tətbiqlərdəki giriş məlumatlarının, kredit kartlarının və kimlik məlumatlarının doldurulması üçün Bitwarden avto-doldurma xidmətini istifadə edin.</value>
+    <value>Giriş məlumatlarını digər tətbiqlərdə doldurmaq üçün Bitwarden avto-doldurma xidmətini istifadə edin.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Avto-doldurma ayarlarını aç</value>
@@ -1289,7 +1289,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Avto-doldurmanı istifadə edə bilmək üçün Bitwarden tətbiqində giriş etməlisiniz.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Tətbiqlərdə və veb saytlarda giriş edərkən giriş etmə məlumatlarınıza klaviaturadan asanlıqla müraciət edə bilərsiniz.</value>
+    <value>Tətbiqlərdə və veb saytlarda giriş edərkən giriş məlumatlarınıza klaviaturadan asanlıqla müraciət edə bilərsiniz.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>İstifadə etməyi düşünmürsünüzsə, digər Avto-doldurma tətbiqlərini Ayarlarda sıradan çıxartmağı tövsiyə edirik.</value>
@@ -1369,10 +1369,10 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Növlər</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Siyahılanacaq parol yoxdur.</value>
+    <value>Sadalanacaq parol yoxdur.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Siyahılanacaq heç bir element yoxdur.</value>
+    <value>Sadalanacaq heç bir element yoxdur.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Kolleksiya axtar</value>
@@ -1406,7 +1406,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Bu elementin sahibi kimdir?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Siyahılanacaq heç bir kolleksiya yoxdur.</value>
+    <value>Sadalanacaq heç bir kolleksiya yoxdur.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
     <value>{0}, {1} ünvanına daşındı.</value>
@@ -1428,7 +1428,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Təşkilata daşı</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Siyahılanacaq heç bir təşkilat yoxdur.</value>
+    <value>Sadalanacaq heç bir təşkilat yoxdur.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
     <value>Bu elementi daşımaq istədiyiniz təşkilatı seçin. Bir təşkilata daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</value>
@@ -1451,7 +1451,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Siyahılanacaq heç bir qovluq yoxdur.</value>
+    <value>Sadalanacaq heç bir qovluq yoxdur.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Barmaq izi ifadəsi</value>
@@ -1747,10 +1747,10 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Ana parolun doğrulanması gözlənildiyi üçün bu hesab üzrə avto-doldurma biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Təzələmə əsnasında eyniləşdirməni fəallaşdır</value>
+    <value>Təzələmə zamanı sinxr icazə ver</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Barmağınızla aşağı çəkəndə anbarı eyniləşdir</value>
+    <value>Barmağınızla aşağı çəkdikdə anbarı sinxronlaşdır.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
     <value>Müəssisə üçün tək daxil olma</value>
@@ -1828,10 +1828,10 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Əlçatımlılığı istifadə et</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Saytda və tətbiqlərdə giriş məlumatlarınızın avto-doldurulması üçün Bitwarden əlçatımlılıq xidmətini istifadə edə bilərsiniz. Fəal olanda, giriş məlumatlarını daxil edərkən açılan pəncərə görünəcək.</value>
+    <value>Saytda və vebdə giriş məlumatlarınızı avto-doldurmaq üçün Bitwarden Əlçatımlılıq Xidmətini istifadə edin. Qurulanda, giriş xanalarını seçərkən açılan pəncərə göstərəcəyik.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Saytda və tətbiqlərdə giriş məlumatlarınızın avto-doldurulması üçün Bitwarden əlçatımlılıq xidmətini istifadə edə bilərsiniz. ("Üzərində göstər" seçiminin fəal olması lazımdır)</value>
+    <value>Saytda və vebdə giriş məlumatlarınızı avto-doldurmaq üçün Bitwarden Əlçatımlılıq Xidmətini istifadə edin. ("Üzərində göstər" seçimi açıq olmalıdır)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
     <value>Avto-doldurma cəld əməliyyat qutusunu istifadə etmək üçün Bitwarden əlçatımlılıq xidmətini istifadə edin və/və ya "Üzərində göstər"i (əgər fəaldırsa) istifadə edərək açılan bir pəncərə göstərə bilərsiniz.</value>
@@ -1843,13 +1843,13 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>"Üzərində göstər"i istifadə edin</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>Fəal olsa, giriş məlumatları daxil ediləndə Bitwarden əlçatımlılıq xidmətinə açılan pəncərə görüntüləməsinə icazə verilər.</value>
+    <value>Giriş xanalarını seçdikdə Bitwarden Əlçatımlılıq Xidmətinin açılan pəncərə göstərməsinə icazə verir.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>Fəal olsa, giriş məlumatlarının avto-doldurmasına köməkçi olması üçün giriş sahələri seçiləndə Bitwarden əlçatımlılıq xidməti açılan bir pəncərə görüntüləyəcək.</value>
+    <value>İşə salındıqda Bitwarden Əlçatımlılıq Xidməti, giriş məlumatlarınızın avto-doldurmasına kömək etmək üçün giriş xanaları seçildikdə açılan pəncərə göstərəcək.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Fəal olsa, əlçatımlılıq, Android-in avto-doldurma sistemini dəstəkləməyən köhnə tətbiqlər üçün Avto-doldurma xidmətini təqlid etməsi üçün açılan bir pəncərə göstərəcək.</value>
+    <value>Fəal olsa, əlçatımlılıq, Android Avto-doldurma Çərçivəsini dəstəkləməyən köhnə tətbiqlərdə Avto-doldurma Xidmətini təqlid etməsi üçün açılan bir pəncərə göstərəcək.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Müəssisə Siyasətinə görə, elementləri şəxsi anbarınızda saxlamağınız məhdudlaşdırılıb. Sahiblik seçimini təşkilat olaraq dəyişdirin və mövcud kolleksiyalar arasından seçim edin.</value>
@@ -2464,7 +2464,7 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Əlçatımlılıq Xidməti açıqlaması</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden, tətbiqlərdə və veb saytlarda giriş sahələrini axtarmaq üçün Əlçatımlılıq Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq sahə kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</value>
+    <value>Bitwarden, tətbiqlərdə və veb saytlarda giriş xanalarını axtarmaq üçün Əlçatımlılıq Xidmətini istifadə edir, daha sonra tətbiq və ya sayt üçün uyuşma tapdıqda istifadəçi adı və parolun daxil edilməsi üçün müvafiq sahə kimliklərini yaradır. Xidmət tərəfindən bizə təqdim edilən məlumatların heç birini saxlamırıq, kimlik məlumatlarının daxil edilməsindən kənar ekrandakı hər hansısa elementə nəzarət etməyə cəhd etmirik.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Qəbul et</value>
@@ -2801,7 +2801,7 @@ Bu hesaba keçmək istəyirsiniz?</value>
     <value>Android Avto-doldurma Çərçivəsi, giriş məlumatlarını cihazınızdakı digər tətbiqlərə doldurmağa kömək etmək üçün istifadə olunur.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
-    <value>Seçdiyiniz klaviatura dəstəkləyirsə sətir daxili avto-doldurmani istifadə edin. Əks halda, ilkin örtük istifadə edin.</value>
+    <value>Seçdiyiniz klaviatura dəstəkləyirsə sətir daxili avto-doldurmanı istifadə edin. Əks halda, ilkin örtük istifadə edin.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
     <value>Əlavə seçimlər</value>
@@ -2818,6 +2818,9 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Dəstək komandası ilə əlaqə qurmağa davam edilsin?</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Gizlilik Siyasətinə davam edirsiniz?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Tətbiq mağazası ilə davam edilsin?</value>
@@ -2837,6 +2840,9 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Axtardığınızı tapa bilmirsiniz? bitwarden.com üzərindən Bitwarden dəstəyinə müraciət edin.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>bitwarden.com saytında gizlilik siyasətimizi nəzərdən keçirin.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Veb tətbiqində Bitwarden hesabınızın daha çox özəlliyini kəşf edin.</value>
