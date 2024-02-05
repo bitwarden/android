@@ -276,8 +276,9 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
-        maxHeapSize = "4g"
+        maxHeapSize = "2g"
         maxParallelForks = Runtime.getRuntime().availableProcessors()
+        jvmArgs = jvmArgs.orEmpty() + "-XX:+UseParallelGC"
     }
 }
 
