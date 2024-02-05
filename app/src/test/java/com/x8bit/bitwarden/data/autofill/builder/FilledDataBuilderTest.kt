@@ -32,13 +32,6 @@ class FilledDataBuilderTest {
         coEvery { isVaultLocked() } returns false
     }
 
-    private val autofillId: AutofillId = mockk()
-    private val autofillViewData = AutofillView.Data(
-        autofillId = autofillId,
-        isFocused = false,
-        textValue = null,
-    )
-
     @BeforeEach
     fun setup() {
         mockkStatic(AutofillValue::forText)
@@ -67,12 +60,14 @@ class FilledDataBuilderTest {
             username = username,
             subtitle = "Subtitle",
         )
-        val autofillViewPassword = AutofillView.Login.Password(
-            data = autofillViewData,
-        )
-        val autofillViewUsername = AutofillView.Login.Username(
-            data = autofillViewData,
-        )
+        val filledItemPassword: FilledItem = mockk()
+        val filledItemUsername: FilledItem = mockk()
+        val autofillViewPassword: AutofillView.Login.Password = mockk {
+            every { buildFilledItemOrNull(password) } returns filledItemPassword
+        }
+        val autofillViewUsername: AutofillView.Login.Username = mockk {
+            every { buildFilledItemOrNull(username) } returns filledItemUsername
+        }
         val autofillPartition = AutofillPartition.Login(
             views = listOf(
                 autofillViewPassword,
@@ -88,8 +83,6 @@ class FilledDataBuilderTest {
             partition = autofillPartition,
             uri = URI,
         )
-        val filledItemPassword: FilledItem = mockk()
-        val filledItemUsername: FilledItem = mockk()
         val filledPartition = FilledPartition(
             autofillCipher = autofillCipher,
             filledItems = listOf(
@@ -113,8 +106,6 @@ class FilledDataBuilderTest {
                 uri = URI,
             )
         } returns listOf(autofillCipher)
-        every { autofillViewPassword.buildFilledItemOrNull(password) } returns filledItemPassword
-        every { autofillViewUsername.buildFilledItemOrNull(username) } returns filledItemUsername
 
         // Test
         val actual = filledDataBuilder.build(
@@ -138,12 +129,8 @@ class FilledDataBuilderTest {
     fun `build should return no partitions and ignored AutofillIds when Login and no URI`() =
         runTest {
             // Setup
-            val autofillViewPassword = AutofillView.Login.Password(
-                data = autofillViewData,
-            )
-            val autofillViewUsername = AutofillView.Login.Username(
-                data = autofillViewData,
-            )
+            val autofillViewPassword: AutofillView.Login.Password = mockk()
+            val autofillViewUsername: AutofillView.Login.Username = mockk()
             val autofillPartition = AutofillPartition.Login(
                 views = listOf(
                     autofillViewPassword,
@@ -194,19 +181,22 @@ class FilledDataBuilderTest {
             number = number,
             subtitle = "Subtitle",
         )
-        val autofillViewCode = AutofillView.Card.SecurityCode(
-            data = autofillViewData,
-        )
-        val autofillViewExpirationMonth = AutofillView.Card.ExpirationMonth(
-            data = autofillViewData,
-            monthValue = null,
-        )
-        val autofillViewExpirationYear = AutofillView.Card.ExpirationYear(
-            data = autofillViewData,
-        )
-        val autofillViewNumber = AutofillView.Card.Number(
-            data = autofillViewData,
-        )
+        val filledItemCode: FilledItem = mockk()
+        val filledItemExpirationMonth: FilledItem = mockk()
+        val filledItemExpirationYear: FilledItem = mockk()
+        val filledItemNumber: FilledItem = mockk()
+        val autofillViewCode: AutofillView.Card.SecurityCode = mockk {
+            every { buildFilledItemOrNull(code) } returns filledItemCode
+        }
+        val autofillViewExpirationMonth: AutofillView.Card.ExpirationMonth = mockk {
+            every { buildFilledItemOrNull(expirationMonth) } returns filledItemExpirationMonth
+        }
+        val autofillViewExpirationYear: AutofillView.Card.ExpirationYear = mockk {
+            every { buildFilledItemOrNull(expirationYear) } returns filledItemExpirationYear
+        }
+        val autofillViewNumber: AutofillView.Card.Number = mockk {
+            every { buildFilledItemOrNull(number) } returns filledItemNumber
+        }
         val autofillPartition = AutofillPartition.Card(
             views = listOf(
                 autofillViewCode,
@@ -224,10 +214,6 @@ class FilledDataBuilderTest {
             partition = autofillPartition,
             uri = URI,
         )
-        val filledItemCode: FilledItem = mockk()
-        val filledItemExpirationMonth: FilledItem = mockk()
-        val filledItemExpirationYear: FilledItem = mockk()
-        val filledItemNumber: FilledItem = mockk()
         val filledPartition = FilledPartition(
             autofillCipher = autofillCipher,
             filledItems = listOf(
@@ -249,14 +235,6 @@ class FilledDataBuilderTest {
             isVaultLocked = false,
         )
         coEvery { autofillCipherProvider.getCardAutofillCiphers() } returns listOf(autofillCipher)
-        every { autofillViewCode.buildFilledItemOrNull(code) } returns filledItemCode
-        every {
-            autofillViewExpirationMonth.buildFilledItemOrNull(expirationMonth)
-        } returns filledItemExpirationMonth
-        every {
-            autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
-        } returns filledItemExpirationYear
-        every { autofillViewNumber.buildFilledItemOrNull(number) } returns filledItemNumber
 
         // Test
         val actual = filledDataBuilder.build(
@@ -288,12 +266,15 @@ class FilledDataBuilderTest {
                 username = username,
                 subtitle = "Subtitle",
             )
-            val autofillViewPassword = AutofillView.Login.Password(
-                data = autofillViewData,
-            )
-            val autofillViewUsername = AutofillView.Login.Username(
-                data = autofillViewData,
-            )
+
+            val filledItemPassword: FilledItem = mockk()
+            val filledItemUsername: FilledItem = mockk()
+            val autofillViewPassword: AutofillView.Login.Password = mockk {
+                every { buildFilledItemOrNull(password) } returns filledItemPassword
+            }
+            val autofillViewUsername: AutofillView.Login.Username = mockk {
+                every { buildFilledItemOrNull(username) } returns filledItemUsername
+            }
             val autofillPartition = AutofillPartition.Login(
                 views = listOf(
                     autofillViewPassword,
@@ -311,8 +292,6 @@ class FilledDataBuilderTest {
                 partition = autofillPartition,
                 uri = URI,
             )
-            val filledItemPassword: FilledItem = mockk()
-            val filledItemUsername: FilledItem = mockk()
             val filledPartitionOne = FilledPartition(
                 autofillCipher = autofillCipher,
                 filledItems = listOf(
@@ -347,12 +326,6 @@ class FilledDataBuilderTest {
                     uri = URI,
                 )
             } returns listOf(autofillCipher, autofillCipher, autofillCipher)
-            every {
-                autofillViewPassword.buildFilledItemOrNull(password)
-            } returns filledItemPassword
-            every {
-                autofillViewUsername.buildFilledItemOrNull(username)
-            } returns filledItemUsername
 
             // Test
             val actual = filledDataBuilder.build(
