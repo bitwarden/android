@@ -350,6 +350,19 @@ class VaultSdkSourceImpl(
             )
     }
 
+    override suspend fun validatePasswordUserKey(
+        userId: String,
+        password: String,
+        encryptedUserKey: String,
+    ): Result<String> = runCatching {
+        getClient(userId = userId)
+            .auth()
+            .validatePasswordUserKey(
+                password = password,
+                encryptedUserKey = encryptedUserKey,
+            )
+    }
+
     override suspend fun updatePassword(
         userId: String,
         newPassword: String,
