@@ -1,4 +1,5 @@
-﻿using Camera.MAUI;
+﻿using Bit.App.Controls;
+using Camera.MAUI;
 using CommunityToolkit.Maui;
 #if !UT
 using FFImageLoading.Maui;
@@ -62,6 +63,13 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
+        ExplicitlyPreventThingsGetRemovedBecauseOfLinker();
+
         return builder;
+    }
+
+    private static void ExplicitlyPreventThingsGetRemovedBecauseOfLinker()
+    {
+        StubBaseCipherViewCellSoLinkerDoesntRemoveMethods.CallThisSoLinkerDoesntRemoveMethods();
     }
 }

@@ -38,5 +38,11 @@ namespace Bit.App.Pages
                 return _iconImageSource;
             }
         }
+
+        /// <summary>
+        /// Flag that indicates if FFImageLoading has successfully finished loading  the image.
+        /// This is useful to check when the cell is being reused.
+        /// </summary>
+        public bool IconImageSuccesfullyLoaded { get; set; }
     }
 }
