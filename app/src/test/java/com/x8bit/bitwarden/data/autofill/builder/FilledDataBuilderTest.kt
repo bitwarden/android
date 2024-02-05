@@ -47,8 +47,9 @@ class FilledDataBuilderTest {
         unmockkStatic(AutofillView::buildFilledItemOrNull)
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `build should return filled data and ignored AutofillIds when Login`() = runTest {
+    fun `build should skip null AutofillValues and return filled data and ignored AutofillIds when Login`() = runTest {
         // Setup
         val password = "Password"
         val username = "johnDoe"
@@ -65,13 +66,17 @@ class FilledDataBuilderTest {
         val autofillViewPassword: AutofillView.Login.Password = mockk {
             every { buildFilledItemOrNull(password) } returns filledItemPassword
         }
-        val autofillViewUsername: AutofillView.Login.Username = mockk {
+        val autofillViewUsernameOne: AutofillView.Login.Username = mockk {
             every { buildFilledItemOrNull(username) } returns filledItemUsername
+        }
+        val autofillViewUsernameTwo: AutofillView.Login.Username = mockk {
+            every { buildFilledItemOrNull(username) } returns null
         }
         val autofillPartition = AutofillPartition.Login(
             views = listOf(
                 autofillViewPassword,
-                autofillViewUsername,
+                autofillViewUsernameOne,
+                autofillViewUsernameTwo,
             ),
         )
         val ignoreAutofillIds: List<AutofillId> = mockk()
@@ -121,7 +126,8 @@ class FilledDataBuilderTest {
         }
         verify(exactly = 1) {
             autofillViewPassword.buildFilledItemOrNull(password)
-            autofillViewUsername.buildFilledItemOrNull(username)
+            autofillViewUsernameOne.buildFilledItemOrNull(username)
+            autofillViewUsernameTwo.buildFilledItemOrNull(username)
         }
     }
 
@@ -164,8 +170,9 @@ class FilledDataBuilderTest {
             assertEquals(expected, actual)
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `build should return filled data and ignored AutofillIds when Card`() = runTest {
+    fun `build should skip null AutofillValues and return filled data and ignored AutofillIds when Card`() = runTest {
         // Setup
         val code = "123"
         val expirationMonth = "January"
@@ -194,15 +201,19 @@ class FilledDataBuilderTest {
         val autofillViewExpirationYear: AutofillView.Card.ExpirationYear = mockk {
             every { buildFilledItemOrNull(expirationYear) } returns filledItemExpirationYear
         }
-        val autofillViewNumber: AutofillView.Card.Number = mockk {
+        val autofillViewNumberOne: AutofillView.Card.Number = mockk {
             every { buildFilledItemOrNull(number) } returns filledItemNumber
+        }
+        val autofillViewNumberTwo: AutofillView.Card.Number = mockk {
+            every { buildFilledItemOrNull(number) } returns null
         }
         val autofillPartition = AutofillPartition.Card(
             views = listOf(
                 autofillViewCode,
                 autofillViewExpirationMonth,
                 autofillViewExpirationYear,
-                autofillViewNumber,
+                autofillViewNumberOne,
+                autofillViewNumberTwo,
             ),
         )
         val ignoreAutofillIds: List<AutofillId> = mockk()
@@ -248,7 +259,8 @@ class FilledDataBuilderTest {
             autofillViewCode.buildFilledItemOrNull(code)
             autofillViewExpirationMonth.buildFilledItemOrNull(expirationMonth)
             autofillViewExpirationYear.buildFilledItemOrNull(expirationYear)
-            autofillViewNumber.buildFilledItemOrNull(number)
+            autofillViewNumberOne.buildFilledItemOrNull(number)
+            autofillViewNumberTwo.buildFilledItemOrNull(number)
         }
     }
 

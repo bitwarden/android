@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.builder
 import android.os.Build
 import android.service.autofill.FillRequest
 import android.service.autofill.SaveInfo
+import android.view.View
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
@@ -30,12 +31,16 @@ class SaveInfoBuilderTest {
     private val autofillIdOptional: AutofillId = mockk()
     private val autofillViewDataOptional = AutofillView.Data(
         autofillId = autofillIdOptional,
+        autofillOptions = emptyList(),
+        autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = true,
         textValue = null,
     )
     private val autofillIdValid: AutofillId = mockk()
     private val autofillViewDataValid = AutofillView.Data(
         autofillId = autofillIdValid,
+        autofillOptions = emptyList(),
+        autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = true,
         textValue = null,
     )

@@ -11,11 +11,15 @@ sealed class AutofillView {
      * The data important to a given [AutofillView].
      *
      * @param autofillId The [AutofillId] associated with this view.
+     * @param autofillOptions A list of autofill options that can be used to fill this view.
+     * @param autofillType The autofill field type. (ex: View.AUTOFILL_TYPE_TEXT)
      * @param isFocused Whether the view is currently focused.
      * @param textValue A text value that represents the input present in the field.
      */
     data class Data(
         val autofillId: AutofillId,
+        val autofillOptions: List<String>,
+        val autofillType: Int,
         val isFocused: Boolean,
         val textValue: String?,
     )

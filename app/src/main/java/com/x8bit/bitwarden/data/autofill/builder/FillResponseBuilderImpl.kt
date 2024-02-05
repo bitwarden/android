@@ -32,8 +32,7 @@ class FillResponseBuilderImpl : FillResponseBuilder {
             filledData
                 .filledPartitions
                 .forEach { filledPartition ->
-                    // It won't be empty but we really don't want to make an empty dataset,
-                    // it causes a crash.
+                    // We really don't want to make an empty dataset as it causes a crash.
                     if (filledPartition.filledItems.isNotEmpty()) {
                         // We build a dataset for each filled partition. A filled partition is a
                         // copy of all the views that we are going to fill, loaded with the data

@@ -7,14 +7,14 @@ import android.view.autofill.AutofillValue
  */
 @Suppress("MagicNumber")
 fun AutofillValue.extractMonthValue(
-    autofillOptions: List<String>?,
+    autofillOptions: List<String>,
 ): String? =
     when {
-        this.isList && autofillOptions?.size == 13 -> {
+        this.isList && autofillOptions.size == 13 -> {
             this.listValue.toString()
         }
 
-        this.isList && autofillOptions?.size == 12 -> {
+        this.isList && autofillOptions.size == 12 -> {
             (this.listValue + 1).toString()
         }
 
