@@ -80,7 +80,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402 # v1.3.2
+        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
 
       # This step might be obsolete at some point as .NET MAUI workloads 
       # are starting to come pre-installed on the GH Actions build agents.
@@ -310,7 +310,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@031090342aeefe171e49f3820f3b52110c66e402 # v1.3.2
+        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
 
       # This step might be obsolete at some point as .NET MAUI workloads 
       # are starting to come pre-installed on the GH Actions build agents.
@@ -811,7 +811,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@6fb7e99759b996fd142995636fd8c88c1fb8ecd9 # v1.16.1
+        uses: crowdin/github-action@97bef4fd3f1b853eb105bc99b8d0d563760e024c # v1.17.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
