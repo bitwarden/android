@@ -57,7 +57,6 @@ import javax.inject.Inject
 import kotlin.math.max
 
 private const val KEY_STATE = "state"
-private const val KEY_GENERATOR_MODE = "key_generator_mode"
 
 /**
  * ViewModel responsible for handling user interactions in the generator screen.
@@ -100,7 +99,7 @@ class GeneratorViewModel @Inject constructor(
     init {
         stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
         when (val selectedType = mutableStateFlow.value.selectedType) {
-            is Passcode -> loadPasscodeOptions(selectedType)
+            is Passcode -> loadPasscodeOptions(selectedType, usePolicyDefault = true)
             is Username -> loadUsernameOptions(selectedType)
         }
     }
@@ -248,14 +247,26 @@ class GeneratorViewModel @Inject constructor(
     //region Generation Handlers
 
     @Suppress("CyclomaticComplexMethod")
-    private fun loadPasscodeOptions(selectedType: Passcode) {
+    private fun loadPasscodeOptions(selectedType: Passcode, usePolicyDefault: Boolean) {
+        val passwordType = if (usePolicyDefault) {
+            Passcode(
+                selectedType = generatorRepository
+                    .getPasswordGeneratorPolicy()
+                    ?.defaultType
+                    ?.toSelectedType()
+                    ?: Password(),
+            )
+        } else {
+            selectedType
+        }
+
         val options = generatorRepository.getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
 
         val policy = policyManager
             .getActivePolicies<PolicyInformation.PasswordGenerator>()
             .toStrictestPolicy()
-        when (selectedType.selectedType) {
+        when (passwordType.selectedType) {
             is Passphrase -> {
                 val minNumWords = policy.minNumberWords ?: Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
                 val passphrase = Passphrase(
@@ -638,7 +649,10 @@ class GeneratorViewModel @Inject constructor(
 
     private fun handleMainTypeOptionSelect(action: GeneratorAction.MainTypeOptionSelect) {
         when (action.mainTypeOption) {
-            GeneratorState.MainTypeOption.PASSWORD -> loadPasscodeOptions(Passcode())
+            GeneratorState.MainTypeOption.PASSWORD -> {
+                loadPasscodeOptions(Passcode(), usePolicyDefault = true)
+            }
+
             GeneratorState.MainTypeOption.USERNAME -> loadUsernameOptions(Username())
         }
     }
@@ -653,10 +667,12 @@ class GeneratorViewModel @Inject constructor(
         when (action.passcodeTypeOption) {
             PasscodeTypeOption.PASSWORD -> loadPasscodeOptions(
                 selectedType = Passcode(selectedType = Password()),
+                usePolicyDefault = false,
             )
 
             PasscodeTypeOption.PASSPHRASE -> loadPasscodeOptions(
                 selectedType = Passcode(selectedType = Passphrase()),
+                usePolicyDefault = false,
             )
         }
     }
@@ -2340,3 +2356,9 @@ private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
         else -> null
     }
 }
+
+private fun String?.toSelectedType(): Passcode.PasscodeType =
+    when (this) {
+        PolicyInformation.PasswordGenerator.TYPE_PASSPHRASE -> Passphrase()
+        else -> Password()
+    }

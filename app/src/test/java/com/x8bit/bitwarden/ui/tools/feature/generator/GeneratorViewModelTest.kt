@@ -5,10 +5,10 @@ import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
-import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
@@ -201,6 +201,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for passphrase state updates generatedText and saves passphrase generation options on successful passphrase generation`() =
         runTest {
+            setupMockPassphraseTypePolicy()
+
             val updatedGeneratedPassphrase = "updatedPassphrase"
 
             val viewModel = createViewModel(initialPassphraseState)
@@ -242,6 +244,8 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `RegenerateClick action for passphrase state sends ShowSnackbar event on passphrase generation failure`() =
         runTest {
+            setupMockPassphraseTypePolicy()
+
             val viewModel = createViewModel(initialPassphraseState)
 
             fakeGeneratorRepository.setMockGeneratePassphraseResult(
@@ -1035,6 +1039,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         @BeforeEach
         fun setup() {
+            setupMockPassphraseTypePolicy()
             fakeGeneratorRepository.setMockGeneratePasswordResult(
                 GeneratedPasswordResult.Success("defaultPassphrase"),
             )
@@ -1899,6 +1904,24 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     ): GeneratorViewModel = createViewModel(
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
     )
+
+    private fun setupMockPassphraseTypePolicy() {
+        fakeGeneratorRepository.setMockPasswordGeneratorPolicy(
+            PolicyInformation.PasswordGenerator(
+                defaultType = "passphrase",
+                minLength = null,
+                useUpper = false,
+                useLower = false,
+                useNumbers = false,
+                useSpecial = false,
+                minNumbers = null,
+                minSpecial = null,
+                minNumberWords = null,
+                capitalize = false,
+                includeNumber = false,
+            ),
+        )
+    }
 
     //endregion Helper Functions
 }
