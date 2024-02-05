@@ -18,7 +18,7 @@ private const val IP_REGEX: String =
  * Parses the base domain from the URL. Returns null if unavailable.
  */
 fun URI.parseDomainOrNull(context: Context): String? {
-    val host = this?.host ?: return null
+    val host = this.host ?: return null
     val isIpAddress = host.matches(IP_REGEX.toRegex())
 
     return if (host == "localhost" || isIpAddress) {
@@ -38,7 +38,7 @@ fun URI.parseDomainOrNull(context: Context): String? {
 fun URI.parseDomainNameOrNull(context: Context): DomainName? =
     this
         // URI is a platform type and host can be null.
-        ?.host
+        .host
         ?.let { nonNullHost ->
             parseDomainNameOrNullInternal(
                 context = context,

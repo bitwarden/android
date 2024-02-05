@@ -3335,9 +3335,6 @@ class VaultRepositoryTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         val attachmentId = "mockId-1"
-        val attachment = mockk<Attachment> {
-            every { id } returns attachmentId
-        }
         val cipher = mockk<Cipher> {
             every { attachments } returns emptyList()
             every { id } returns "mockId-1"
@@ -5364,58 +5361,6 @@ class VaultRepositoryTest {
         coEvery { vaultDiskSource.getDomains(MOCK_USER_STATE.activeUserId) } returns domainsFlow
         coEvery { vaultDiskSource.getFolders(MOCK_USER_STATE.activeUserId) } returns foldersFlow
         coEvery { vaultDiskSource.getSends(MOCK_USER_STATE.activeUserId) } returns sendsFlow
-    }
-
-    /**
-     * Helper to ensures that the vault for the user with the given [userId] is unlocked.
-     */
-    private suspend fun verifyUnlockedVault(userId: String) {
-        val kdf = MOCK_PROFILE.toSdkParams()
-        val email = MOCK_PROFILE.email
-        val masterPassword = "drowssap"
-        val userKey = "12345"
-        val privateKey = "54321"
-        val organizationKeys = null
-        coEvery {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                ),
-            )
-        } returns InitializeCryptoResult.Success.asSuccess()
-
-        val result = vaultRepository.unlockVault(
-            userId = userId,
-            masterPassword = masterPassword,
-            kdf = kdf,
-            email = email,
-            userKey = userKey,
-            privateKey = privateKey,
-            organizationKeys = organizationKeys,
-        )
-
-        assertEquals(VaultUnlockResult.Success, result)
-        coVerify(exactly = 1) {
-            vaultSdkSource.initializeCrypto(
-                userId = userId,
-                request = InitUserCryptoRequest(
-                    kdfParams = kdf,
-                    email = email,
-                    privateKey = privateKey,
-                    method = InitUserCryptoMethod.Password(
-                        password = masterPassword,
-                        userKey = userKey,
-                    ),
-                ),
-            )
-        }
     }
 
     private suspend fun setupDataStateFlow(userId: String) {

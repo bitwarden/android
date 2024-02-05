@@ -18,5 +18,6 @@ inline fun <reified T> Intent.getSafeParcelableExtra(name: String): T? =
             T::class.java,
         )
     } else {
+        @Suppress("DEPRECATION")
         getParcelableExtra(name)
     }
