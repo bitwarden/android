@@ -270,7 +270,6 @@ private fun VaultBottomAppBar(
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
         destinations.forEach { destination ->
-
             val isSelected = currentDestination?.hierarchy?.any {
                 it.route == destination.route
             } == true
@@ -288,11 +287,6 @@ private fun VaultBottomAppBar(
                         contentDescription = stringResource(
                             id = destination.contentDescriptionRes,
                         ),
-                        tint = if (isSelected) {
-                            MaterialTheme.colorScheme.onSecondaryContainer
-                        } else {
-                            MaterialTheme.colorScheme.onSurface
-                        },
                     )
                 },
                 label = {
@@ -309,6 +303,10 @@ private fun VaultBottomAppBar(
                 },
                 colors = NavigationBarItemDefaults.colors(
                     indicatorColor = MaterialTheme.colorScheme.secondaryContainer,
+                    selectedIconColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onSurface,
+                    selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    unselectedTextColor = MaterialTheme.colorScheme.onSurface,
                 ),
             )
         }
