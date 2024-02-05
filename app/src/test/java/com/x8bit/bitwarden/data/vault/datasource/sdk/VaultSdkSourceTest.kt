@@ -802,6 +802,27 @@ class VaultSdkSourceTest {
     }
 
     @Test
+    fun `validatePasswordUserKey should call SDK and a Result with correct data`() = runTest {
+        val userId = "userId"
+        val password = "password"
+        val encryptedUserKey = "encryptedUserKey"
+        val masterPasswordHash = "masterPasswordHash"
+        coEvery {
+            clientAuth.validatePasswordUserKey(
+                password = password,
+                encryptedUserKey = encryptedUserKey,
+            )
+        } returns masterPasswordHash
+
+        val result = vaultSdkSource.validatePasswordUserKey(
+            userId = userId,
+            password = password,
+            encryptedUserKey = encryptedUserKey,
+        )
+        assertEquals(masterPasswordHash.asSuccess(), result)
+    }
+
+    @Test
     fun `updatePassword should call SDK and a Result with correct data`() = runTest {
         val userId = "userId"
         val newPassword = "newPassword"

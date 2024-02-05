@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
+import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.HashPurpose
@@ -502,7 +503,7 @@ class AuthRepositoryImpl(
                         }
 
                         // Attempt to unlock the vault with auth request if possible.
-                        deviceData?.let {
+                        deviceData?.let { model ->
                             vaultRepository.clearUnlockedData()
                             vaultRepository.unlockVault(
                                 userId = userStateJson.activeUserId,
@@ -510,17 +511,27 @@ class AuthRepositoryImpl(
                                 kdf = userStateJson.activeAccount.profile.toSdkParams(),
                                 privateKey = loginResponse.privateKey,
                                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                                    requestPrivateKey = it.privateKey,
-                                    protectedUserKey = it.asymmetricalKey,
+                                    requestPrivateKey = model.privateKey,
+                                    method = model
+                                        .masterPasswordHash
+                                        ?.let {
+                                            AuthRequestMethod.MasterKey(
+                                                protectedMasterKey = model.asymmetricalKey,
+                                                authRequestKey = loginResponse.key,
+                                            )
+                                        }
+                                        ?: AuthRequestMethod.UserKey(
+                                            protectedUserKey = model.asymmetricalKey,
+                                        ),
                                 ),
                                 // We can separately unlock the vault for organization data after
                                 // receiving the sync response if this data is currently absent.
                                 organizationKeys = null,
                             )
-                            authDiskSource.storeMasterPasswordHash(
-                                userId = userStateJson.activeUserId,
-                                passwordHash = it.masterPasswordHash,
-                            )
+                            // We are purposely not storing the master password hash here since it
+                            // is not formatted in in a manner that we can use. We will store it
+                            // properly the next time the user enters their master password and
+                            // it is validated.
                         }
 
                         authDiskSource.userState = userStateJson
@@ -1064,14 +1075,13 @@ class AuthRepositoryImpl(
                 userId = userId,
             )
             .flatMap {
-                authRequestsService
-                    .updateAuthRequest(
-                        requestId = requestId,
-                        key = it,
-                        deviceId = authDiskSource.uniqueAppId,
-                        masterPasswordHash = masterPasswordHash,
-                        isApproved = isApproved,
-                    )
+                authRequestsService.updateAuthRequest(
+                    requestId = requestId,
+                    key = it,
+                    deviceId = authDiskSource.uniqueAppId,
+                    masterPasswordHash = null,
+                    isApproved = isApproved,
+                )
             }
             .map { request ->
                 AuthRequestResult.Success(
@@ -1138,22 +1148,46 @@ class AuthRepositoryImpl(
     @Suppress("ReturnCount")
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
         val userId = activeUserId ?: return ValidatePasswordResult.Error
-        val masterPasswordHash = authDiskSource.getMasterPasswordHash(userId = userId)
-            ?: return ValidatePasswordResult.Error
-        return vaultSdkSource
-            .validatePassword(
-                userId = userId,
-                password = password,
-                passwordHash = masterPasswordHash,
-            )
-            .fold(
-                onSuccess = {
-                    ValidatePasswordResult.Success(isValid = it)
-                },
-                onFailure = {
-                    ValidatePasswordResult.Error
-                },
-            )
+        return authDiskSource
+            .getMasterPasswordHash(userId = userId)
+            ?.let { masterPasswordHash ->
+                vaultSdkSource
+                    .validatePassword(
+                        userId = userId,
+                        password = password,
+                        passwordHash = masterPasswordHash,
+                    )
+                    .fold(
+                        onSuccess = { ValidatePasswordResult.Success(isValid = it) },
+                        onFailure = { ValidatePasswordResult.Error },
+                    )
+            }
+            ?: run {
+                val encryptedKey = authDiskSource
+                    .getUserKey(userId)
+                    ?: return ValidatePasswordResult.Error
+                vaultSdkSource
+                    .validatePasswordUserKey(
+                        userId = userId,
+                        password = password,
+                        encryptedUserKey = encryptedKey,
+                    )
+                    .onSuccess { masterPasswordHash ->
+                        authDiskSource.storeMasterPasswordHash(
+                            userId = userId,
+                            passwordHash = masterPasswordHash,
+                        )
+                    }
+                    .fold(
+                        onSuccess = { ValidatePasswordResult.Success(isValid = true) },
+                        onFailure = {
+                            // We currently assume that all errors are caused by the user entering
+                            // an invalid password, this is not necessarily the case but we have no
+                            // way to differentiate between the different errors.
+                            ValidatePasswordResult.Success(isValid = false)
+                        },
+                    )
+            }
     }
 
     @Suppress("CyclomaticComplexMethod", "ReturnCount")

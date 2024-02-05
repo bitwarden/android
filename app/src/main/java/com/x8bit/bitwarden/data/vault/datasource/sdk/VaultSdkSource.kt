@@ -328,6 +328,16 @@ interface VaultSdkSource {
     ): Result<Boolean>
 
     /**
+     * Validates that the given password with the encrypted user key and returns the master
+     * password hash on validation or an error on failure.
+     */
+    suspend fun validatePasswordUserKey(
+        userId: String,
+        password: String,
+        encryptedUserKey: String,
+    ): Result<String>
+
+    /**
      * Get the keys needed to update the user's password.
      */
     suspend fun updatePassword(

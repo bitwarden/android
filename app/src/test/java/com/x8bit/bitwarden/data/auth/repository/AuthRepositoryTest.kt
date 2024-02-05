@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
+import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.RegisterKeyResponse
@@ -1326,7 +1327,10 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
-                        protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
+                        method = AuthRequestMethod.MasterKey(
+                            authRequestKey = successResponse.key,
+                            protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
+                        ),
                     ),
                 )
             } returns VaultUnlockResult.Success
@@ -1369,7 +1373,10 @@ class AuthRepositoryTest {
                     organizationKeys = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
-                        protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
+                        method = AuthRequestMethod.MasterKey(
+                            authRequestKey = successResponse.key,
+                            protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
+                        ),
                     ),
                 )
             }
@@ -3680,7 +3687,7 @@ class AuthRepositoryTest {
         coEvery {
             authRequestsService.updateAuthRequest(
                 requestId = requestId,
-                masterPasswordHash = passwordHash,
+                masterPasswordHash = null,
                 key = encodedKey,
                 deviceId = UNIQUE_APP_ID,
                 isApproved = false,
@@ -3689,8 +3696,8 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
         val result = repository.updateAuthRequest(
-            requestId = "requestId",
-            masterPasswordHash = "masterPasswordHash",
+            requestId = requestId,
+            masterPasswordHash = passwordHash,
             publicKey = PUBLIC_KEY,
             isApproved = false,
         )
@@ -3746,7 +3753,7 @@ class AuthRepositoryTest {
         coEvery {
             authRequestsService.updateAuthRequest(
                 requestId = requestId,
-                masterPasswordHash = passwordHash,
+                masterPasswordHash = null,
                 key = encodedKey,
                 deviceId = UNIQUE_APP_ID,
                 isApproved = false,
@@ -3768,7 +3775,7 @@ class AuthRepositoryTest {
             )
             authRequestsService.updateAuthRequest(
                 requestId = requestId,
-                masterPasswordHash = passwordHash,
+                masterPasswordHash = null,
                 key = encodedKey,
                 deviceId = UNIQUE_APP_ID,
                 isApproved = false,
@@ -3912,7 +3919,7 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePassword with no stored password hash returns ValidatePasswordResult Error`() =
+    fun `validatePassword with no stored password hash and no stored user key returns ValidatePasswordResult Error`() =
         runTest {
             val userId = USER_ID_1
             val password = "password"
@@ -3988,6 +3995,55 @@ class AuthRepositoryTest {
             result,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validatePassword with no stored password hash and a stored user key with sdk failure returns ValidatePasswordResult Success invalid`() =
+        runTest {
+            val userId = USER_ID_1
+            val password = "password"
+            val userKey = "userKey"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
+            coEvery {
+                vaultSdkSource.validatePasswordUserKey(
+                    userId = userId,
+                    password = password,
+                    encryptedUserKey = userKey,
+                )
+            } returns Throwable("Fail").asFailure()
+
+            val result = repository.validatePassword(password = password)
+
+            assertEquals(ValidatePasswordResult.Success(isValid = false), result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `validatePassword with no stored password hash and a stored user key with sdk success returns ValidatePasswordResult Success valid`() =
+        runTest {
+            val userId = USER_ID_1
+            val password = "password"
+            val userKey = "userKey"
+            val passwordHash = "passwordHash"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            fakeAuthDiskSource.storeUserKey(userId = userId, userKey = userKey)
+            coEvery {
+                vaultSdkSource.validatePasswordUserKey(
+                    userId = userId,
+                    password = password,
+                    encryptedUserKey = userKey,
+                )
+            } returns passwordHash.asSuccess()
+
+            val result = repository.validatePassword(password = password)
+
+            assertEquals(ValidatePasswordResult.Success(isValid = true), result)
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = userId,
+                passwordHash = passwordHash,
+            )
+        }
 
     @Suppress("MaxLineLength")
     @Test
