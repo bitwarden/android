@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.util
 
+import android.view.View
 import com.x8bit.bitwarden.data.autofill.model.AutofillPartition
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import io.mockk.mockk
@@ -10,11 +11,15 @@ import org.junit.jupiter.api.Test
 class AutofillPartitionExtensionsTest {
     private val autofillDataEmptyText: AutofillView.Data = AutofillView.Data(
         autofillId = mockk(),
+        autofillOptions = emptyList(),
+        autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = false,
         textValue = null,
     )
     private val autofillDataValidText: AutofillView.Data = AutofillView.Data(
         autofillId = mockk(),
+        autofillOptions = emptyList(),
+        autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = false,
         textValue = TEXT_VALUE,
     )

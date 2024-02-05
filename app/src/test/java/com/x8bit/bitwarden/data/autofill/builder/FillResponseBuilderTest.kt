@@ -5,6 +5,7 @@ import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.service.autofill.FillResponse
 import android.service.autofill.SaveInfo
+import android.view.View
 import android.view.autofill.AutofillId
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -150,6 +151,8 @@ class FillResponseBuilderTest {
                     AutofillView.Login.Username(
                         data = AutofillView.Data(
                             autofillId = mockk(),
+                            autofillOptions = emptyList(),
+                            autofillType = AUTOFILL_TYPE,
                             isFocused = true,
                             textValue = null,
                         ),
@@ -259,6 +262,8 @@ class FillResponseBuilderTest {
                     AutofillView.Login.Username(
                         data = AutofillView.Data(
                             autofillId = mockk(),
+                            autofillOptions = emptyList(),
+                            autofillType = AUTOFILL_TYPE,
                             isFocused = true,
                             textValue = null,
                         ),
@@ -341,6 +346,7 @@ class FillResponseBuilderTest {
     }
 
     companion object {
+        private const val AUTOFILL_TYPE: Int = View.AUTOFILL_TYPE_TEXT
         private const val CIPHER_ID: String = "1234567890"
         private const val PACKAGE_NAME: String = "com.x8bit.bitwarden"
     }

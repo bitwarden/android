@@ -76,12 +76,20 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
                 ?.firstOrNull { SUPPORTED_VIEW_HINTS.contains(it) }
 
             if (supportedHint != null || this.isInputField) {
+                val autofillOptions = this
+                    .autofillOptions
+                    .orEmpty()
+                    .map { it.toString() }
+
                 val autofillViewData = AutofillView.Data(
                     autofillId = nonNullAutofillId,
-                    isFocused = isFocused,
+                    autofillOptions = autofillOptions,
+                    autofillType = this.autofillType,
+                    isFocused = this.isFocused,
                     textValue = this.autofillValue?.extractTextValue(),
                 )
                 buildAutofillView(
+                    autofillOptions = autofillOptions,
                     autofillViewData = autofillViewData,
                     supportedHint = supportedHint,
                 )
@@ -94,13 +102,11 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
  * Attempt to convert this [AssistStructure.ViewNode] and [autofillViewData] into an [AutofillView].
  */
 private fun AssistStructure.ViewNode.buildAutofillView(
+    autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
     supportedHint: String?,
 ): AutofillView? = when {
     supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> {
-        val autofillOptions = this
-            .autofillOptions
-            ?.map { it.toString() }
         val monthValue = this
             .autofillValue
             ?.extractMonthValue(

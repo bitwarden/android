@@ -187,6 +187,8 @@ class AutofillParserTests {
         val parentAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = parentAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -247,6 +249,8 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -255,6 +259,8 @@ class AutofillParserTests {
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
             ),
@@ -302,6 +308,8 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
             ),
@@ -310,6 +318,8 @@ class AutofillParserTests {
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -357,6 +367,8 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -365,6 +377,8 @@ class AutofillParserTests {
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -413,6 +427,8 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -421,6 +437,8 @@ class AutofillParserTests {
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -469,6 +487,8 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -477,6 +497,8 @@ class AutofillParserTests {
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -524,6 +546,8 @@ class AutofillParserTests {
         val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
             data = AutofillView.Data(
                 autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -532,6 +556,8 @@ class AutofillParserTests {
         val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
             data = AutofillView.Data(
                 autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
             ),
@@ -589,6 +615,7 @@ private val BLOCK_LISTED_URIS: List<String> = listOf(
     "androidapp://com.x8bit.bitwarden",
     "androidapp://com.oneplus.applocker",
 )
+private const val AUTOFILL_TYPE: Int = View.AUTOFILL_TYPE_TEXT
 private const val ID_PACKAGE: String = "com.x8bit.bitwarden"
 private const val MAX_INLINE_SUGGESTION_COUNT: Int = 42
 private const val PACKAGE_NAME: String = "com.google"

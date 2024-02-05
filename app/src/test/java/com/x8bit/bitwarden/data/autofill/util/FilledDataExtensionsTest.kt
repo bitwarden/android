@@ -7,6 +7,7 @@ import android.content.res.Resources
 import android.service.autofill.Dataset
 import android.service.autofill.InlinePresentation
 import android.service.autofill.Presentations
+import android.view.View
 import android.view.autofill.AutofillId
 import android.view.autofill.AutofillValue
 import android.widget.RemoteViews
@@ -69,6 +70,8 @@ class FilledDataExtensionsTest {
                 AutofillView.Login.Username(
                     data = AutofillView.Data(
                         autofillId = autofillId,
+                        autofillOptions = emptyList(),
+                        autofillType = View.AUTOFILL_TYPE_TEXT,
                         isFocused = true,
                         textValue = null,
                     ),

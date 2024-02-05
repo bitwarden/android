@@ -95,7 +95,7 @@ class FilledDataBuilderImpl(
         inlinePresentationSpec: InlinePresentationSpec?,
     ): FilledPartition {
         val filledItems = autofillViews
-            .map { autofillView ->
+            .mapNotNull { autofillView ->
                 val value = when (autofillView) {
                     is AutofillView.Card.ExpirationMonth -> autofillCipher.expirationMonth
                     is AutofillView.Card.ExpirationYear -> autofillCipher.expirationYear
@@ -124,7 +124,7 @@ class FilledDataBuilderImpl(
         inlinePresentationSpec: InlinePresentationSpec?,
     ): FilledPartition {
         val filledItems = autofillViews
-            .map { autofillView ->
+            .mapNotNull { autofillView ->
                 val value = when (autofillView) {
                     is AutofillView.Login.Username -> autofillCipher.username
                     is AutofillView.Login.Password -> autofillCipher.password

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
-import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.data.autofill.model.ViewNodeTraversalData
 import io.mockk.every
 import io.mockk.mockk
@@ -15,11 +14,6 @@ class ViewNodeTraversalDataExtensionsTest {
         every { this@mockk.windowNodeCount } returns 1
         every { this@mockk.getWindowNodeAt(0) } returns windowNode
     }
-    private val autofillViewData = AutofillView.Data(
-        autofillId = mockk(),
-        isFocused = false,
-        textValue = null,
-    )
 
     @Test
     fun `buildUriOrNull should return website URI when present`() {

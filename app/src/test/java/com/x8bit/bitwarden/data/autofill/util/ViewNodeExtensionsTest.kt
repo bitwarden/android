@@ -23,18 +23,17 @@ class ViewNodeExtensionsTest {
     private val expectedIsFocused = true
     private val autofillViewData = AutofillView.Data(
         autofillId = expectedAutofillId,
+        autofillOptions = AUTOFILL_OPTIONS_LIST,
+        autofillType = AUTOFILL_TYPE,
         isFocused = expectedIsFocused,
         textValue = TEXT_VALUE,
-    )
-    private val testAutofillOptions = arrayOf(
-        "option one",
-        "option two",
     )
     private val testAutofillValue: AutofillValue = mockk()
 
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { this@mockk.autofillId } returns expectedAutofillId
-        every { this@mockk.autofillOptions } returns testAutofillOptions
+        every { this@mockk.autofillOptions } returns AUTOFILL_OPTIONS_ARRAY
+        every { this@mockk.autofillType } returns AUTOFILL_TYPE
         every { this@mockk.autofillValue } returns testAutofillValue
         every { this@mockk.childCount } returns 0
         every { this@mockk.inputType } returns 1
@@ -51,7 +50,7 @@ class ViewNodeExtensionsTest {
         mockkStatic(AutofillValue::extractTextValue)
         every {
             testAutofillValue.extractMonthValue(
-                autofillOptions = testAutofillOptions.toList(),
+                autofillOptions = AUTOFILL_OPTIONS_LIST,
             )
         } returns MONTH_VALUE
         every { testAutofillValue.extractTextValue() } returns TEXT_VALUE
@@ -76,6 +75,34 @@ class ViewNodeExtensionsTest {
             monthValue = MONTH_VALUE,
         )
         every { viewNode.autofillHints } returns arrayOf(autofillHint)
+
+        // Test
+        val actual = viewNode.toAutofillView()
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Card ExpirationMonth with empty options when hint matches and options are null`() {
+        // Setup
+        val autofillViewData = autofillViewData.copy(
+            autofillOptions = emptyList(),
+        )
+        val autofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH
+        val monthValue = "11"
+        val expected = AutofillView.Card.ExpirationMonth(
+            data = autofillViewData,
+            monthValue = monthValue,
+        )
+        every { viewNode.autofillHints } returns arrayOf(autofillHint)
+        every { viewNode.autofillOptions } returns null
+        every {
+            testAutofillValue.extractMonthValue(
+                autofillOptions = emptyList(),
+            )
+        } returns monthValue
 
         // Test
         val actual = viewNode.toAutofillView()
@@ -478,6 +505,17 @@ class ViewNodeExtensionsTest {
     }
 }
 
+private const val AUTOFILL_OPTION_ONE: String = "AUTOFILL_OPTION_ONE"
+private const val AUTOFILL_OPTION_TWO: String = "AUTOFILL_OPTION_TWO"
+private val AUTOFILL_OPTIONS_ARRAY: Array<CharSequence> = arrayOf(
+    AUTOFILL_OPTION_ONE,
+    AUTOFILL_OPTION_TWO,
+)
+private val AUTOFILL_OPTIONS_LIST: List<String> = listOf(
+    AUTOFILL_OPTION_ONE,
+    AUTOFILL_OPTION_TWO,
+)
+private const val AUTOFILL_TYPE: Int = View.AUTOFILL_TYPE_LIST
 private const val ANDROID_EDIT_TEXT_CLASS_NAME: String = "android.widget.EditText"
 private val IGNORED_RAW_HINTS: List<String> = listOf(
     "search",
