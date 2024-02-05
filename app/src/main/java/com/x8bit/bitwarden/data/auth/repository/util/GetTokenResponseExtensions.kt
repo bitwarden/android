@@ -23,7 +23,6 @@ fun GetTokenResponseJson.Success.toUserState(
     val jwtTokenData = parseJwtTokenDataOrNull(jwtToken = accessToken)!!
     val userId = jwtTokenData.userId
 
-    // TODO: Update null properties below via sync request (BIT-916)
     val account = AccountJson(
         profile = AccountJson.Profile(
             userId = userId,

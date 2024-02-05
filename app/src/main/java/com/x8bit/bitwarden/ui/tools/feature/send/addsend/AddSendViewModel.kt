@@ -122,9 +122,6 @@ class AddSendViewModel @Inject constructor(
 ) {
 
     init {
-        // TODO: Check the special circumstance to place in custom mode when a new send request is
-        //  initiated externally (BIT-1518).
-
         when (val addSendType = state.addSendType) {
             AddSendType.AddItem -> Unit
             is AddSendType.EditItem -> {
