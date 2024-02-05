@@ -366,13 +366,6 @@ jobs:
 
           $androidManifest = $($env:GITHUB_WORKSPACE + "/${{ env.android_manifest_path }}");
 
-          # Write-Output "########################################"
-          # Write-Output "##### Clean Android and App"
-          # Write-Output "########################################"
-
-          # msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
-          # msbuild "$($appPath)" "/t:Clean" "/p:Configuration=FDroid"
-
           Write-Output "########################################"
           Write-Output "##### Backup project files"
           Write-Output "########################################"
@@ -391,42 +384,6 @@ jobs:
           $nsAndroid.AddNamespace("android", "http://schemas.android.com/apk/res/android");
 
           $xml.Save($androidManifest);
-
-          # Write-Output "########################################"
-          # Write-Output "##### Uninstall from App.csproj"
-          # Write-Output "########################################"
-
-          # $xml=New-Object XML;
-          # $xml.Load($appPath);
-
-          # $ns=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
-          # $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
-
-          # $firebaseNode=$xml.SelectSingleNode(`
-          #     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
-          # $firebaseNode.ParentNode.RemoveChild($firebaseNode);
-
-          # $daggerNode=$xml.SelectSingleNode(`
-          #     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Google.Dagger']", $ns);
-          # $daggerNode.ParentNode.RemoveChild($daggerNode);
-
-          # $safetyNetNode=$xml.SelectSingleNode(`
-          #     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.SafetyNet']", $ns);
-          # $safetyNetNode.ParentNode.RemoveChild($safetyNetNode);
-
-          # $xml.Save($appPath);
-
-          # Write-Output "########################################"
-          # Write-Output "##### Uninstall from Core.csproj"
-          # Write-Output "########################################"
-
-          # $xml=New-Object XML;
-          # $xml.Load($corePath);
-
-          # $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
-          # $appCenterNode.ParentNode.RemoveChild($appCenterNode);
-
-          # $xml.Save($corePath);
 
       - name: Restore packages
         run: dotnet restore
