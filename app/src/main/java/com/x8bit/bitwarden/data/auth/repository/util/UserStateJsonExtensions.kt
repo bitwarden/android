@@ -23,7 +23,6 @@ fun UserStateJson.toUpdatedUserStateJson(
     val userId = syncProfile.id
     val account = this.accounts[userId] ?: return this
     val profile = account.profile
-    // TODO: Update additional missing UserStateJson properties (BIT-916)
     val updatedProfile = profile
         .copy(
             avatarColorHex = syncProfile.avatarColor,

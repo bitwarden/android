@@ -536,7 +536,6 @@ class VaultViewModel @Inject constructor(
     }
 
     private fun vaultPendingReceive(vaultData: DataState.Pending<VaultData>) {
-        // TODO update state to refresh state BIT-505
         mutableStateFlow.update {
             it.copy(
                 viewState = vaultData.data.toViewState(

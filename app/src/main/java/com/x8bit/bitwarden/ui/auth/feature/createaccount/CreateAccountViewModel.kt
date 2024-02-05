@@ -129,7 +129,7 @@ class CreateAccountViewModel @Inject constructor(
             }
 
             PasswordStrengthResult.Error -> {
-                // TODO: Assess possible error conditions (BIT-964)
+                // Leave UI the same
             }
         }
     }
