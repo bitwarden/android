@@ -12,6 +12,9 @@ val Configuration.maxDialogHeight: Dp
         Configuration.ORIENTATION_LANDSCAPE -> 312.dp
         Configuration.ORIENTATION_PORTRAIT -> 542.dp
         Configuration.ORIENTATION_UNDEFINED -> Dp.Unspecified
-        Configuration.ORIENTATION_SQUARE -> Dp.Unspecified
+        @Suppress("DEPRECATION")
+        Configuration.ORIENTATION_SQUARE,
+        -> Dp.Unspecified
+
         else -> Dp.Unspecified
     }

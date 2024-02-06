@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.x8bit.bitwarden.data.platform.datasource.disk.legacy
 
 import android.annotation.SuppressLint
