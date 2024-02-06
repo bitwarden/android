@@ -5,8 +5,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.api.SyncApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import retrofit2.create
 
 class SyncServiceTest : BaseServiceTest() {

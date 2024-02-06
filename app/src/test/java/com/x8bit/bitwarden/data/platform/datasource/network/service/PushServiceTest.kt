@@ -5,8 +5,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.api.PushApi
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
-import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import retrofit2.create
 import java.util.UUID
 
