@@ -1263,6 +1263,28 @@ class VaultLockManagerTest {
             }
         }
 
+    @Test
+    fun `waitUntilUnlocked should suspend until the user's vault has unlocked`() = runTest {
+        // Begin in a locked state
+        assertFalse(vaultLockManager.isVaultUnlocked(userId = USER_ID))
+
+        val waitUntilUnlockedJob = async {
+            vaultLockManager.waitUntilUnlocked(userId = USER_ID)
+        }
+        this.testScheduler.advanceUntilIdle()
+
+        // Confirm waitUntilUnlocked has not yet completed
+        assertFalse(waitUntilUnlockedJob.isCompleted)
+
+        // Unlock vault
+        verifyUnlockedVault(userId = USER_ID)
+        this.testScheduler.advanceUntilIdle()
+
+        // Confirm unlock call has now completed and that the vault is unlocked
+        assertTrue(waitUntilUnlockedJob.isCompleted)
+        assertTrue(vaultLockManager.isVaultUnlocked(userId = USER_ID))
+    }
+
     /**
      * Resets the verification call count for the given [mock] while leaving all other mocked
      * behavior in place.

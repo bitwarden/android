@@ -176,6 +176,17 @@ class VaultLockManagerImpl(
             .onCompletion { setVaultToNotUnlocking(userId = userId) }
             .first()
 
+    override suspend fun waitUntilUnlocked(userId: String) {
+        vaultUnlockDataStateFlow
+            .map { vaultUnlockDataList ->
+                // Get the list of currently-unlocked vaults and map them to user IDs.
+                vaultUnlockDataList
+                    .filter { it.status == VaultUnlockData.Status.UNLOCKED }
+                    .map { it.userId }
+            }
+            .first { unlockedUserIds -> userId in unlockedUserIds }
+    }
+
     /**
      * Increments the stored invalid unlock count for the given [userId] and automatically logs out
      * if this new value is greater than [MAXIMUM_INVALID_UNLOCK_ATTEMPTS].
