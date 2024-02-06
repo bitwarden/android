@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.core
 import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import retrofit2.Retrofit
@@ -21,7 +21,7 @@ class ResultCallAdapterTest {
             .build()
             .create()
 
-    @After
+    @AfterEach
     fun after() {
         server.shutdown()
     }
