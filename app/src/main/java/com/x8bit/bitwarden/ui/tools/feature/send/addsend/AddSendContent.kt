@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandler
 fun AddSendContent(
     state: AddSendState.ViewState.Content,
     policyDisablesSend: Boolean,
+    policySendOptionsInEffect: Boolean,
     isAddMode: Boolean,
     isShared: Boolean,
     addSendHandlers: AddSendHandlers,
@@ -82,6 +83,17 @@ fun AddSendContent(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        if (policySendOptionsInEffect) {
+            BitwardenPolicyWarningText(
+                text = stringResource(id = R.string.send_options_policy_in_effect),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
         }
 
