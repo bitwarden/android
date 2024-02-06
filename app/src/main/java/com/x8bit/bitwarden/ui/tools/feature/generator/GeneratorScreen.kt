@@ -27,6 +27,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -580,7 +581,7 @@ private fun PasswordLengthSliderItem(
     minValue: Int,
     maxValue: Int,
 ) {
-    var sliderValue by remember { mutableStateOf(length.coerceIn(minValue, maxValue)) }
+    var sliderValue by remember { mutableIntStateOf(length.coerceIn(minValue, maxValue)) }
     var labelTextWidth by remember { mutableStateOf(Dp.Unspecified) }
 
     val density = LocalDensity.current
@@ -1389,17 +1390,17 @@ private data class PassphraseHandlers(
 private data class UsernameTypeHandlers(
     val onUsernameTooltipClicked: () -> Unit,
 ) {
-   companion object {
-       fun create(viewModel: GeneratorViewModel): UsernameTypeHandlers {
-           return UsernameTypeHandlers(
-               onUsernameTooltipClicked = {
-                   viewModel.trySendAction(
-                       GeneratorAction.MainType.Username.UsernameType.TooltipClick,
-                   )
-               },
-           )
-       }
-   }
+    companion object {
+        fun create(viewModel: GeneratorViewModel): UsernameTypeHandlers {
+            return UsernameTypeHandlers(
+                onUsernameTooltipClicked = {
+                    viewModel.trySendAction(
+                        GeneratorAction.MainType.Username.UsernameType.TooltipClick,
+                    )
+                },
+            )
+        }
+    }
 }
 
 /**

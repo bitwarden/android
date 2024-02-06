@@ -11,7 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,7 +51,7 @@ fun PasswordHistoryListItem(
     ) {
 
         Column(modifier = Modifier.weight(1f)) {
-            var widthPx by remember(label) { mutableStateOf(0) }
+            var widthPx by remember(label) { mutableIntStateOf(0) }
             val textStyle = LocalNonMaterialTypography.current.sensitiveInfoMedium
             val formattedText = label.withLineBreaksAtWidth(
                 widthPx = widthPx.toFloat(),

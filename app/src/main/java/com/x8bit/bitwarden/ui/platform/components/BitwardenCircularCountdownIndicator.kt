@@ -35,6 +35,7 @@ fun BitwardenCircularCountdownIndicator(
             delayMillis = 0,
             easing = LinearOutSlowInEasing,
         ),
+        label = "CircularCountDownAnimation",
     )
 
     Box(
