@@ -714,6 +714,13 @@ data class AddSendState(
         }
 
     /**
+     * Helper to determine if the policy notice should be displayed.
+     */
+    val shouldDisplayPolicyWarning: Boolean
+        get() = !policyDisablesSend &&
+            (viewState as? ViewState.Content)?.common?.isHideEmailAddressEnabled != true
+
+    /**
      * Helper to determine if the UI should display the content in add send mode.
      */
     val isAddMode: Boolean get() = addSendType is AddSendType.AddItem

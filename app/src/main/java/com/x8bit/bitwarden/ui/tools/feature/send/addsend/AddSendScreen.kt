@@ -198,6 +198,7 @@ fun AddSendScreen(
             is AddSendState.ViewState.Content -> AddSendContent(
                 state = viewState,
                 policyDisablesSend = state.policyDisablesSend,
+                policySendOptionsInEffect = state.shouldDisplayPolicyWarning,
                 isAddMode = state.isAddMode,
                 isShared = state.isShared,
                 addSendHandlers = addSendHandlers,

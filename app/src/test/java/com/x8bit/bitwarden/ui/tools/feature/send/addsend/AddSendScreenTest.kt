@@ -987,6 +987,37 @@ class AddSendScreenTest : BaseComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
     }
 
+    @Test
+    fun `policy send options text should be displayed based on state`() {
+        val text = "One or more organization policies are affecting your Send options."
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE,
+                policyDisablesSend = true,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text)
+            .assertIsNotDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_VIEW_STATE.copy(
+                    common = DEFAULT_COMMON_STATE.copy(
+                        isHideEmailAddressEnabled = false,
+                    ),
+                ),
+                policyDisablesSend = false,
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text)
+            .assertIsDisplayed()
+    }
+
     companion object {
         private val DEFAULT_COMMON_STATE = AddSendState.ViewState.Content.Common(
             name = "",
