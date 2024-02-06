@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -45,7 +46,7 @@ fun AddSendCustomDateChooser(
     // This tracks just the time component (hours and minutes) and ignores the higher level
     // components. 0 representing midnight and counting up from there.
     var timeMillis: Long by remember {
-        mutableStateOf(
+        mutableLongStateOf(
             currentZonedDateTime.orNow().let {
                 it.hour.hours.inWholeMilliseconds + it.minute.minutes.inWholeMilliseconds
             },

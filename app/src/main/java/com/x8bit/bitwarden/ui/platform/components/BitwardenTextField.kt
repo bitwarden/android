@@ -8,7 +8,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -63,7 +63,7 @@ fun BitwardenTextField(
     isError: Boolean = false,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
-    var widthPx by remember { mutableStateOf(0) }
+    var widthPx by remember { mutableIntStateOf(0) }
 
     val currentTextStyle = textStyle ?: LocalTextStyle.current
     val formattedText = if (shouldAddCustomLineBreaks) {

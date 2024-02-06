@@ -61,8 +61,8 @@ fun BitwardenMultiSelectButton(
     options: ImmutableList<String>,
     selectedOption: String?,
     onOptionSelected: (String) -> Unit,
-    isEnabled: Boolean = true,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
     supportingText: String? = null,
     tooltip: TooltipData? = null,
 ) {

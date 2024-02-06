@@ -25,8 +25,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenIconButtonWithResource(
     iconRes: IconResource,
     onClick: () -> Unit,
-    isEnabled: Boolean = true,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
 ) {
     FilledIconButton(
         modifier = modifier.semantics(mergeDescendants = true) {},
