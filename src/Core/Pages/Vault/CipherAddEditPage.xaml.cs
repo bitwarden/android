@@ -268,6 +268,15 @@ namespace Bit.App.Pages
                         {
                             await Navigation.PopModalAsync();
                             await _vm.UpdateTotpKeyAsync(key);
+
+#if IOS
+                            //Workaround: To avoid a bug that incorrectly sets the TextColor when changing text
+                            // programatically we need to set it to null and back to the correct color
+                            // MAUI issue https://github.com/dotnet/maui/pull/20100
+                            _loginTotpEntry.TextColor = null;
+                            var color = ThemeManager.GetResourceColor("TextColor");
+                            _loginTotpEntry.TextColor = color;
+#endif
                         }
                         catch (Exception ex)
                         {
