@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -176,7 +178,14 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             )
         } returns AuthRequestResult.Success(AUTH_REQUEST)
 
-        viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
+            assertEquals(
+                LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
+                awaitItem(),
+            )
+            assertEquals(LoginApprovalEvent.NavigateBack, awaitItem())
+        }
 
         coVerify {
             mockAuthRepository.updateAuthRequest(
@@ -200,7 +209,14 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             )
         } returns AuthRequestResult.Success(AUTH_REQUEST)
 
-        viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
+            assertEquals(
+                LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
+                awaitItem(),
+            )
+            assertEquals(LoginApprovalEvent.NavigateBack, awaitItem())
+        }
 
         coVerify {
             mockAuthRepository.updateAuthRequest(

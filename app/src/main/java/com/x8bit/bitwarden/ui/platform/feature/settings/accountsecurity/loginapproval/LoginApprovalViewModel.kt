@@ -99,7 +99,7 @@ class LoginApprovalViewModel @Inject constructor(
     private fun handleApproveRequestClicked() {
         viewModelScope.launch {
             trySendAction(
-                LoginApprovalAction.Internal.DeclineRequestResultReceive(
+                LoginApprovalAction.Internal.ApproveRequestResultReceive(
                     result = authRepository.updateAuthRequest(
                         requestId = mutableStateFlow.value.requestId,
                         masterPasswordHash = mutableStateFlow.value.masterPasswordHash,
@@ -195,6 +195,7 @@ class LoginApprovalViewModel @Inject constructor(
     ) {
         when (action.result) {
             is AuthRequestResult.Success -> {
+                sendEvent(LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()))
                 sendEvent(LoginApprovalEvent.NavigateBack)
             }
 
