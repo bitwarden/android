@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.datasource.disk.entity.SendEntity
         SendEntity::class,
     ],
     version = 3,
+    exportSchema = false,
 )
 @TypeConverters(ZonedDateTimeTypeConverter::class)
 abstract class VaultDatabase : RoomDatabase() {
