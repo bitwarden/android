@@ -125,7 +125,9 @@ import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -164,12 +166,24 @@ class VaultRepositoryTest {
     private val mutableVaultStateFlow = MutableStateFlow<List<VaultUnlockData>>(
         emptyList(),
     )
+    private val mutableUnlockedUserIdsStateFlow = MutableStateFlow<Set<String>>(emptySet())
     private val vaultLockManager: VaultLockManager = mockk {
         every { vaultUnlockDataStateFlow } returns mutableVaultStateFlow
-        every { isVaultUnlocked(any()) } returns false
+        every {
+            isVaultUnlocked(any())
+        } answers { call ->
+            val userId = call.invocation.args.first()
+            userId in mutableUnlockedUserIdsStateFlow.value
+        }
         every { isVaultUnlocking(any()) } returns false
         every { lockVault(any()) } just runs
         every { lockVaultForCurrentUser() } just runs
+        coEvery {
+            waitUntilUnlocked(any())
+        } coAnswers { call ->
+            val userId = call.invocation.args.first()
+            mutableUnlockedUserIdsStateFlow.first { userId in it }
+        }
     }
 
     private val mutableFullSyncFlow = bufferedMutableSharedFlow<Unit>()
@@ -245,6 +259,11 @@ class VaultRepositoryTest {
                 .test {
                     assertEquals(DataState.Loading, awaitItem())
                     mutableCiphersStateFlow.tryEmit(mockCipherList)
+
+                    // No additional emissions until vault is unlocked
+                    expectNoEvents()
+                    setVaultToUnlocked(userId = userId)
+
                     assertEquals(DataState.Loaded(mockCipherViewList), awaitItem())
                 }
         }
@@ -273,6 +292,11 @@ class VaultRepositoryTest {
             .test {
                 assertEquals(DataState.Loading, awaitItem())
                 mutableCiphersStateFlow.tryEmit(mockCipherList)
+
+                // No additional emissions until vault is unlocked
+                expectNoEvents()
+                setVaultToUnlocked(userId = userId)
+
                 assertEquals(DataState.Error<List<CipherView>>(throwable), awaitItem())
             }
     }
@@ -303,6 +327,11 @@ class VaultRepositoryTest {
                 .test {
                     assertEquals(DataState.Loading, awaitItem())
                     mutableCollectionsStateFlow.tryEmit(mockCollectionList)
+
+                    // No additional emissions until vault is unlocked
+                    expectNoEvents()
+                    setVaultToUnlocked(userId = userId)
+
                     assertEquals(DataState.Loaded(mockCollectionViewList), awaitItem())
                 }
         }
@@ -331,6 +360,11 @@ class VaultRepositoryTest {
             .test {
                 assertEquals(DataState.Loading, awaitItem())
                 mutableCollectionStateFlow.tryEmit(mockCollectionList)
+
+                // No additional emissions until vault is unlocked
+                expectNoEvents()
+                setVaultToUnlocked(userId = userId)
+
                 assertEquals(DataState.Error<List<CollectionView>>(throwable), awaitItem())
             }
     }
@@ -361,6 +395,11 @@ class VaultRepositoryTest {
                 .test {
                     assertEquals(DataState.Loading, awaitItem())
                     mutableFoldersStateFlow.tryEmit(mockFolderList)
+
+                    // No additional emissions until vault is unlocked
+                    expectNoEvents()
+                    setVaultToUnlocked(userId = userId)
+
                     assertEquals(DataState.Loaded(mockFolderViewList), awaitItem())
                 }
         }
@@ -389,6 +428,11 @@ class VaultRepositoryTest {
             .test {
                 assertEquals(DataState.Loading, awaitItem())
                 mutableFoldersStateFlow.tryEmit(mockFolderList)
+
+                // No additional emissions until vault is unlocked
+                expectNoEvents()
+                setVaultToUnlocked(userId = userId)
+
                 assertEquals(DataState.Error<List<FolderView>>(throwable), awaitItem())
             }
     }
@@ -418,6 +462,11 @@ class VaultRepositoryTest {
                 .test {
                     assertEquals(DataState.Loading, awaitItem())
                     mutableSendsStateFlow.tryEmit(mockSendList)
+
+                    // No additional emissions until vault is unlocked
+                    expectNoEvents()
+                    setVaultToUnlocked(userId = userId)
+
                     assertEquals(DataState.Loaded(SendData(mockSendViewList)), awaitItem())
                 }
         }
@@ -446,6 +495,11 @@ class VaultRepositoryTest {
             .test {
                 assertEquals(DataState.Loading, awaitItem())
                 mutableSendsStateFlow.tryEmit(mockSendList)
+
+                // No additional emissions until vault is unlocked
+                expectNoEvents()
+                setVaultToUnlocked(userId = userId)
+
                 assertEquals(DataState.Error<SendData>(throwable), awaitItem())
             }
     }
@@ -634,6 +688,7 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
+            setVaultToUnlocked(userId = userId)
             coEvery { syncService.sync() } returns UnknownHostException().asFailure()
             val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
             setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
@@ -1395,6 +1450,10 @@ class VaultRepositoryTest {
             foldersFlow.tryEmit(listOf(createMockFolder(number = 1)))
             sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
 
+            // No events received until unlocked
+            expectNoEvents()
+            setVaultToUnlocked(userId = userId)
+
             assertEquals(
                 DataState.Loaded(
                     data = VaultData(
@@ -1417,6 +1476,7 @@ class VaultRepositoryTest {
     fun `clearUnlockedData should update the sendDataStateFlow to Loading`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val userId = "mockId-1"
+        setVaultToUnlocked(userId = userId)
         coEvery {
             vaultSdkSource.decryptSendList(
                 userId = userId,
@@ -1580,6 +1640,11 @@ class VaultRepositoryTest {
         vaultRepository.getSendStateFlow("mockId-$sendId").test {
             assertEquals(DataState.Loading, awaitItem())
             sendsFlow.tryEmit(emptyList())
+
+            // No additional emissions until vault is unlocked
+            expectNoEvents()
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
+
             assertEquals(DataState.Loaded<SendView?>(null), awaitItem())
             sendsFlow.tryEmit(listOf(createMockSend(number = sendId)))
             assertEquals(DataState.Loaded<SendView?>(sendView), awaitItem())
@@ -4053,6 +4118,7 @@ class VaultRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
+            setVaultToUnlocked(userId = userId)
 
             val mockSyncResponse = createMockSyncResponse(number = 1)
             coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
@@ -4121,6 +4187,7 @@ class VaultRepositoryTest {
     fun `getAuthCodesFlow should update data state when state changes`() = runTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         val userId = "mockId-1"
+        setVaultToUnlocked(userId = userId)
 
         val mockSyncResponse = createMockSyncResponse(number = 1)
         coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
@@ -4214,6 +4281,7 @@ class VaultRepositoryTest {
             val cipherId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val cipherView = createMockCipherView(number = number)
             coEvery {
                 vaultSdkSource.decryptCipherList(
@@ -4256,6 +4324,7 @@ class VaultRepositoryTest {
             val cipherId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val cipherView = createMockCipherView(number = number)
             coEvery {
                 vaultSdkSource.decryptCipherList(
@@ -4326,6 +4395,7 @@ class VaultRepositoryTest {
             val cipherId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             coEvery {
                 vaultSdkSource.decryptCipherList(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -4393,6 +4463,7 @@ class VaultRepositoryTest {
         val cipherId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         coEvery {
             vaultSdkSource.decryptCipherList(
                 userId = MOCK_USER_STATE.activeUserId,
@@ -4432,6 +4503,7 @@ class VaultRepositoryTest {
         val cipherId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         val cipherView = createMockCipherView(number = number)
         coEvery {
             vaultSdkSource.decryptCipherList(
@@ -4487,6 +4559,7 @@ class VaultRepositoryTest {
             } just runs
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val cipherView = createMockCipherView(number = number)
             coEvery {
                 vaultSdkSource.decryptCipherList(
@@ -4531,6 +4604,7 @@ class VaultRepositoryTest {
             val cipherId = "mockId-1"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
 
             val response: HttpException = mockk {
                 every { code() } returns 404
@@ -4585,6 +4659,7 @@ class VaultRepositoryTest {
             val cipherId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             coEvery {
                 vaultSdkSource.decryptCipherList(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -4638,6 +4713,7 @@ class VaultRepositoryTest {
             val cipherId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val cipherView = createMockCipherView(number = number)
             coEvery {
                 vaultSdkSource.decryptCipherList(
@@ -4705,6 +4781,7 @@ class VaultRepositoryTest {
         val sendId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         val sendView = createMockSendView(number = number)
         coEvery {
             vaultSdkSource.decryptSendList(
@@ -4743,6 +4820,7 @@ class VaultRepositoryTest {
         val sendId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         coEvery {
             vaultSdkSource.decryptSendList(
                 userId = MOCK_USER_STATE.activeUserId,
@@ -4780,6 +4858,7 @@ class VaultRepositoryTest {
         val sendId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         val sendView = createMockSendView(number = number)
         coEvery {
             vaultSdkSource.decryptSendList(
@@ -4833,6 +4912,7 @@ class VaultRepositoryTest {
             } just runs
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val sendView = createMockSendView(number = number)
             coEvery {
                 vaultSdkSource.decryptSendList(
@@ -4875,6 +4955,7 @@ class VaultRepositoryTest {
             val sendId = "mockId-1"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
 
             val response: HttpException = mockk {
                 every { code() } returns 404
@@ -4927,6 +5008,7 @@ class VaultRepositoryTest {
             val sendId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             coEvery {
                 vaultSdkSource.decryptSendList(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -4978,6 +5060,7 @@ class VaultRepositoryTest {
             val sendId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val sendView = createMockSendView(number = number)
             coEvery {
                 vaultSdkSource.decryptSendList(
@@ -5049,6 +5132,7 @@ class VaultRepositoryTest {
         val folderId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         val folderView = createMockFolderView(number = number)
         coEvery {
             vaultSdkSource.decryptFolderList(
@@ -5087,6 +5171,7 @@ class VaultRepositoryTest {
         val folderId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         coEvery {
             vaultSdkSource.decryptFolderList(
                 userId = MOCK_USER_STATE.activeUserId,
@@ -5124,6 +5209,7 @@ class VaultRepositoryTest {
         val folderId = "mockId-$number"
 
         fakeAuthDiskSource.userState = MOCK_USER_STATE
+        setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
         val folderView = createMockFolderView(number = number)
         coEvery {
             vaultSdkSource.decryptFolderList(
@@ -5166,6 +5252,7 @@ class VaultRepositoryTest {
             val folderId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             coEvery {
                 vaultSdkSource.decryptFolderList(
                     userId = MOCK_USER_STATE.activeUserId,
@@ -5217,6 +5304,7 @@ class VaultRepositoryTest {
             val folderId = "mockId-$number"
 
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setVaultToUnlocked(userId = MOCK_USER_STATE.activeUserId)
             val folderView = createMockFolderView(number = number)
             coEvery {
                 vaultSdkSource.decryptFolderList(
@@ -5341,6 +5429,14 @@ class VaultRepositoryTest {
                 organizationKeys = createMockOrganizationKeys(number = 1),
             )
         } returns unlockResult
+    }
+
+    /**
+     * Ensures the vault for the given [userId] is unlocked and can pass any
+     * [VaultLockManager.waitUntilUnlocked] or [VaultLockManager.isVaultUnlocked] checks.
+     */
+    private fun setVaultToUnlocked(userId: String) {
+        mutableUnlockedUserIdsStateFlow.update { it + userId }
     }
 
     /**

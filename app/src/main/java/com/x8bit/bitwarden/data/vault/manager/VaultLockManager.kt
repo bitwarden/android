@@ -50,4 +50,9 @@ interface VaultLockManager {
         initUserCryptoMethod: InitUserCryptoMethod,
         organizationKeys: Map<String, String>?,
     ): VaultUnlockResult
+
+    /**
+     * Suspends until the vault for the given [userId] is unlocked.
+     */
+    suspend fun waitUntilUnlocked(userId: String)
 }

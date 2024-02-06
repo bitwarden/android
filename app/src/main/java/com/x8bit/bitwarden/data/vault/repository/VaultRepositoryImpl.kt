@@ -1289,6 +1289,7 @@ class VaultRepositoryImpl(
                 mutableCiphersStateFlow.value = DataState.Loading
             }
             .map {
+                waitUntilUnlocked(userId = userId)
                 vaultSdkSource
                     .decryptCipherList(
                         userId = userId,
@@ -1321,6 +1322,7 @@ class VaultRepositoryImpl(
             .getFolders(userId = userId)
             .onStart { mutableFoldersStateFlow.value = DataState.Loading }
             .map {
+                waitUntilUnlocked(userId = userId)
                 vaultSdkSource
                     .decryptFolderList(
                         userId = userId,
@@ -1340,6 +1342,7 @@ class VaultRepositoryImpl(
             .getCollections(userId = userId)
             .onStart { mutableCollectionsStateFlow.value = DataState.Loading }
             .map {
+                waitUntilUnlocked(userId = userId)
                 vaultSdkSource
                     .decryptCollectionList(
                         userId = userId,
@@ -1363,6 +1366,7 @@ class VaultRepositoryImpl(
             .getSends(userId = userId)
             .onStart { mutableSendDataStateFlow.value = DataState.Loading }
             .map {
+                waitUntilUnlocked(userId = userId)
                 vaultSdkSource
                     .decryptSendList(
                         userId = userId,
