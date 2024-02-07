@@ -48,6 +48,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void ConfigureMAUIHandlers(IMauiHandlersCollection handlers)
         {
+            handlers.AddHandler(typeof(HybridWebView), typeof(Handlers.HybridWebViewHandler));
             handlers.AddHandler(typeof(TabsPage), typeof(Handlers.CustomTabbedHandler));
             handlers.AddHandler(typeof(NavigationPage), typeof(Handlers.CustomNavigationHandler));
             handlers.AddHandler(typeof(ViewCell), typeof(Handlers.CustomViewCellHandler));
