@@ -74,7 +74,9 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                         .first { it.name == selectedFolderName },
                 )
             },
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .semantics { testTag = "FolderPicker" }
+                .padding(horizontal = 16.dp),
         )
     }
 
