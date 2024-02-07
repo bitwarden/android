@@ -54,6 +54,7 @@ fun VaultItemCardContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
+                    .semantics { testTag = "ItemRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -233,7 +234,6 @@ fun VaultItemCardContent(
                 header = "${stringResource(id = R.string.date_updated)}: ",
                 text = commonState.lastUpdated,
                 modifier = Modifier
-                    .semantics { testTag = "ItemRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )

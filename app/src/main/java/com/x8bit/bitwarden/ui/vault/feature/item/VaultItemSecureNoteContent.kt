@@ -51,6 +51,7 @@ fun VaultItemSecureNoteContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
+                    .semantics { testTag = "ItemRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -131,7 +132,6 @@ fun VaultItemSecureNoteContent(
             Spacer(modifier = Modifier.height(24.dp))
             Row(
                 modifier = Modifier
-                    .semantics { testTag = "ItemRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
                     .semantics(mergeDescendants = true) { },
