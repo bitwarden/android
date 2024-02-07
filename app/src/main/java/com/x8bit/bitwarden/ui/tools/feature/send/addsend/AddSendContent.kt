@@ -90,6 +90,7 @@ fun AddSendContent(
             BitwardenPolicyWarningText(
                 text = stringResource(id = R.string.send_options_policy_in_effect),
                 modifier = Modifier
+                    .semantics { testTag = "SendOptionsPolicyInEffectLabel" }
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
