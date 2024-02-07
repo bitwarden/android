@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS.ShareExtension", "src\i
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS.Autofill", "src\iOS.Autofill\iOS.Autofill.csproj", "{83449CC4-1F76-4CFE-92B1-D2E13A62506F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xamarin.AndroidX.Credentials", "src\Xamarin.AndroidX.Credentials\Xamarin.AndroidX.Credentials.csproj", "{1201A3B6-EF37-420D-A8AD-2C322F6D7B2C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BB702EBD-3B79-4ECA-A2A6-1237B07F0AF0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B972BBFA-917F-4A10-B07E-B89CFEC6BBDC}"
@@ -164,8 +162,6 @@ Global
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.AppStore|iPhone.Build.0 = Release|Any CPU
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Debug|Any CPU
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.Ad-Hoc|iPhoneSimulator.Build.0 = Debug|Any CPU
-		{1201A3B6-EF37-420D-A8AD-2C322F6D7B2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1201A3B6-EF37-420D-A8AD-2C322F6D7B2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.FDroid|Any CPU.ActiveCfg = Debug|Any CPU
 		{83449CC4-1F76-4CFE-92B1-D2E13A62506F}.FDroid|Any CPU.Build.0 = Debug|Any CPU
 		{137959BD-073B-4EC7-8ED5-31D73FA7DBC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
