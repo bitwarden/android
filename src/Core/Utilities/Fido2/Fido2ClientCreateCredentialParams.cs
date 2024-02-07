@@ -12,6 +12,7 @@ namespace Bit.Core.Utilities.Fido2
         /// </summary>
         public required string Origin { get; set; }
 
+        // TODO: Check if we actually need this
         /// <summary>
         /// A value which is true if and only if the caller’s environment settings object is same-origin with its ancestors.
         /// It is false if caller is cross-origin.
