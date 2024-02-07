@@ -184,12 +184,11 @@ namespace Bit.App.Pages
             var maxAccessEntry = (Microsoft.Maui.Controls.Entry)sender;
 
 #if IOS
-            //Workaround: To avoid a bug that incorrectly sets the TextColor when changing text
+            // HACK: To avoid a bug that incorrectly sets the TextColor when changing text
             // programatically we need to set it to null and back to the correct color
             // MAUI issue https://github.com/dotnet/maui/pull/20100
             maxAccessEntry.TextColor = null;
-            var color = ThemeManager.GetResourceColor("TextColor");
-            maxAccessEntry.TextColor = color;
+            maxAccessEntry.TextColor = ThemeManager.GetResourceColor("TextColor");
 #endif
 
             if (string.IsNullOrWhiteSpace(e.NewTextValue))
