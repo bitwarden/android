@@ -57,6 +57,7 @@ import javax.inject.Inject
 import kotlin.math.max
 
 private const val KEY_STATE = "state"
+private const val NO_GENERATED_TEXT: String = "-"
 
 /**
  * ViewModel responsible for handling user interactions in the generator screen.
@@ -77,7 +78,7 @@ class GeneratorViewModel @Inject constructor(
     private val policyManager: PolicyManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
     initialState = savedStateHandle[KEY_STATE] ?: GeneratorState(
-        generatedText = "",
+        generatedText = NO_GENERATED_TEXT,
         selectedType = when (GeneratorArgs(savedStateHandle).type) {
             GeneratorMode.Modal.Username -> Username()
             GeneratorMode.Modal.Password -> Passcode()
@@ -309,7 +310,7 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    private fun loadUsernameOptions(selectedType: Username) {
+    private fun loadUsernameOptions(selectedType: Username, forceRegeneration: Boolean = false) {
         val options = generatorRepository.getUsernameGenerationOptions()
         val updatedSelectedType = when (val type = selectedType.selectedType) {
             is PlusAddressedEmail -> {
@@ -351,7 +352,7 @@ class GeneratorViewModel @Inject constructor(
             }
         }
 
-        mutableStateFlow.update { it.copy(selectedType = updatedSelectedType) }
+        updateGeneratorMainType(forceRegeneration = forceRegeneration) { updatedSelectedType }
     }
 
     private fun savePasswordOptionsToDisk(password: Password) {
@@ -520,7 +521,7 @@ class GeneratorViewModel @Inject constructor(
     private suspend fun generatePassphrase(passphrase: Passphrase) {
         val request = PassphraseGeneratorRequest(
             numWords = passphrase.numWords.toUByte(),
-            wordSeparator = passphrase.wordSeparator.toString(),
+            wordSeparator = passphrase.wordSeparator?.toString() ?: " ",
             capitalize = passphrase.capitalize,
             includeNumber = passphrase.includeNumber,
         )
@@ -536,7 +537,7 @@ class GeneratorViewModel @Inject constructor(
     private fun handleRegenerationClick() {
         // Go through the update process with the current state to trigger a
         // regeneration of the generated text for the same state.
-        updateGeneratorMainType(isManualRegeneration = true) { mutableStateFlow.value.selectedType }
+        updateGeneratorMainType(forceRegeneration = true) { mutableStateFlow.value.selectedType }
     }
 
     private fun handleCopyClick() {
@@ -650,10 +651,12 @@ class GeneratorViewModel @Inject constructor(
     private fun handleMainTypeOptionSelect(action: GeneratorAction.MainTypeOptionSelect) {
         when (action.mainTypeOption) {
             GeneratorState.MainTypeOption.PASSWORD -> {
-                loadPasscodeOptions(Passcode(), usePolicyDefault = true)
+                loadPasscodeOptions(selectedType = Passcode(), usePolicyDefault = true)
             }
 
-            GeneratorState.MainTypeOption.USERNAME -> loadUsernameOptions(Username())
+            GeneratorState.MainTypeOption.USERNAME -> {
+                loadUsernameOptions(selectedType = Username(), forceRegeneration = true)
+            }
         }
     }
 
@@ -883,18 +886,24 @@ class GeneratorViewModel @Inject constructor(
         when (action.usernameTypeOption) {
             Username.UsernameTypeOption.PLUS_ADDRESSED_EMAIL -> loadUsernameOptions(
                 selectedType = Username(selectedType = PlusAddressedEmail()),
+                forceRegeneration = true,
             )
 
             Username.UsernameTypeOption.CATCH_ALL_EMAIL -> loadUsernameOptions(
                 selectedType = Username(selectedType = CatchAllEmail()),
+                forceRegeneration = true,
             )
 
+            // We do not force regeneration here since the API can fail if the data is entered
+            // incorrectly. This will only be generated when the user clicks the regenerate button.
             Username.UsernameTypeOption.FORWARDED_EMAIL_ALIAS -> loadUsernameOptions(
                 selectedType = Username(selectedType = ForwardedEmailAlias()),
+                forceRegeneration = false,
             )
 
             Username.UsernameTypeOption.RANDOM_WORD -> loadUsernameOptions(
                 selectedType = Username(selectedType = RandomWord()),
+                forceRegeneration = true,
             )
         }
     }
@@ -1170,7 +1179,7 @@ class GeneratorViewModel @Inject constructor(
     //region Utility Functions
 
     private inline fun updateGeneratorMainType(
-        isManualRegeneration: Boolean = false,
+        forceRegeneration: Boolean = false,
         crossinline block: (GeneratorState.MainType) -> GeneratorState.MainType?,
     ) {
         val currentSelectedType = mutableStateFlow.value.selectedType
@@ -1195,30 +1204,34 @@ class GeneratorViewModel @Inject constructor(
                 is Username -> when (val selectedType = updatedMainType.selectedType) {
                     is ForwardedEmailAlias -> {
                         saveForwardedEmailAliasServiceTypeToDisk(selectedType)
-                        if (isManualRegeneration) {
+                        if (forceRegeneration) {
                             generateForwardedEmailAlias(selectedType)
+                        } else {
+                            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
                         }
                     }
 
                     is CatchAllEmail -> {
                         saveCatchAllEmailOptionsToDisk(selectedType)
-                        if (isManualRegeneration) {
+                        if (forceRegeneration) {
                             generateCatchAllEmail(selectedType)
+                        } else {
+                            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
                         }
                     }
 
                     is PlusAddressedEmail -> {
                         savePlusAddressedEmailOptionsToDisk(selectedType)
-                        if (isManualRegeneration) {
+                        if (forceRegeneration) {
                             generatePlusAddressedEmail(selectedType)
+                        } else {
+                            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
                         }
                     }
 
                     is RandomWord -> {
                         saveRandomWordOptionsToDisk(selectedType)
-                        if (isManualRegeneration) {
-                            generateRandomWordUsername(selectedType)
-                        }
+                        generateRandomWordUsername(selectedType)
                     }
                 }
             }
@@ -1226,7 +1239,10 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private suspend fun generateForwardedEmailAlias(alias: ForwardedEmailAlias) {
-        val request = alias.selectedServiceType?.toUsernameGeneratorRequest() ?: return
+        val request = alias.selectedServiceType?.toUsernameGeneratorRequest() ?: run {
+            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+            return
+        }
         val result = generatorRepository.generateForwardedServiceUsername(request)
         sendAction(GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult(result))
     }
@@ -1242,10 +1258,14 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private suspend fun generateCatchAllEmail(catchAllEmail: CatchAllEmail) {
+        val domainName = catchAllEmail.domainName.orNullIfBlank() ?: run {
+            mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
+            return
+        }
         val result = generatorRepository.generateCatchAllEmail(
             UsernameGeneratorRequest.Catchall(
                 type = AppendType.Random,
-                domain = catchAllEmail.domainName,
+                domain = domainName,
             ),
         )
         sendAction(GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult(result))
@@ -1498,7 +1518,7 @@ data class GeneratorState(
      * Provides a list of available main types for the generator.
      */
     val typeOptions: List<MainTypeOption>
-        get() = MainTypeOption.values().toList()
+        get() = MainTypeOption.entries.toList()
 
     /**
      * Enum representing the main type options for the generator, such as PASSWORD and USERNAME.

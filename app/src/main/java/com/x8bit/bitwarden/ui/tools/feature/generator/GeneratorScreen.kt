@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -33,6 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -470,7 +472,7 @@ private fun PasscodeOptionsItem(
     currentSubState: GeneratorState.MainType.Passcode,
     onSubStateOptionClicked: (GeneratorState.MainType.Passcode.PasscodeTypeOption) -> Unit,
 ) {
-    val possibleSubStates = GeneratorState.MainType.Passcode.PasscodeTypeOption.values().toList()
+    val possibleSubStates = GeneratorState.MainType.Passcode.PasscodeTypeOption.entries
     val optionsWithStrings = possibleSubStates.associateWith { stringResource(id = it.labelRes) }
 
     BitwardenMultiSelectButton(
@@ -622,6 +624,12 @@ private fun PasswordLengthSliderItem(
             },
             valueRange = sliderRange,
             steps = maxValue - 1,
+            colors = SliderDefaults.colors(
+                activeTickColor = Color.Transparent,
+                inactiveTickColor = Color.Transparent,
+                disabledActiveTickColor = Color.Transparent,
+                disabledInactiveTickColor = Color.Transparent,
+            ),
             modifier = Modifier
                 .semantics { testTag = "PasswordLengthSlider" }
                 .weight(1f),
@@ -782,8 +790,7 @@ private fun ColumnScope.PassphraseTypeContent(
 
     PassphraseWordSeparatorInputItem(
         wordSeparator = passphraseTypeState.wordSeparator,
-        onPassphraseWordSeparatorChange =
-        passphraseHandlers.onPassphraseWordSeparatorChange,
+        onPassphraseWordSeparatorChange = passphraseHandlers.onPassphraseWordSeparatorChange,
     )
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -835,13 +842,19 @@ private fun PassphraseWordSeparatorInputItem(
 ) {
     BitwardenTextField(
         label = stringResource(id = R.string.word_separator),
-        value = wordSeparator?.toString() ?: "",
+        value = wordSeparator?.toString().orEmpty(),
         onValueChange = {
-            onPassphraseWordSeparatorChange(it.toCharArray().firstOrNull())
+            // When onValueChange triggers and we don't update the value for whatever reason,
+            // onValueChange triggers again with the previous value.
+            // To avoid passphrase regeneration, we filter out those re-emissions.
+            val char = it.firstOrNull()
+            if (char != wordSeparator) {
+                onPassphraseWordSeparatorChange(char)
+            }
         },
         modifier = Modifier
             .semantics { testTag = "WordSeparatorEntry" }
-            .width(267.dp)
+            .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )
 }
