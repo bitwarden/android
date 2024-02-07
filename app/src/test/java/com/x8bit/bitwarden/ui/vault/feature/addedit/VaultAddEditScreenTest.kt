@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import io.mockk.every
 import io.mockk.just
@@ -1904,7 +1905,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     VaultAddEditState.Owner(
                         id = "mockOwnerId-2",
                         name = "mockOwnerName-2",
-                        collections = emptyList(),
+                        collections = DEFAULT_COLLECTIONS,
                     ),
                 ),
             )
@@ -1926,6 +1927,45 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, mockOwnerName-2")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking a Collection should send CollectionSelect action`() {
+        updateStateWithOwners(selectedOwnerId = "mockOwnerId-2")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("mockCollectionName-2")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.CollectionSelect(
+                    VaultCollection(
+                        id = "mockCollectionId-2",
+                        name = "mockCollectionName-2",
+                        isSelected = false,
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `Collection list should display according to state`() {
+        updateStateWithOwners(selectedOwnerId = "mockOwnerId-2")
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("mockCollectionName-2")
+            .assertIsDisplayed()
+
+        updateStateWithOwners(
+            selectedOwnerId = "mockOwnerId-2",
+            availableOwners = ALTERED_OWNERS,
+        )
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("mockCollectionName-new")
             .assertIsDisplayed()
     }
 
@@ -2155,7 +2195,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     VaultAddEditState.Owner(
                         id = "mockOwnerId-2",
                         name = "mockOwnerName-2",
-                        collections = emptyList(),
+                        collections = DEFAULT_COLLECTIONS,
                     ),
                 ),
             )
@@ -2785,12 +2825,15 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         return currentState.copy(viewState = updatedType)
     }
 
-    private fun updateStateWithOwners() {
+    private fun updateStateWithOwners(
+        selectedOwnerId: String? = null,
+        availableOwners: List<VaultAddEditState.Owner> = DEFAULT_OWNERS,
+    ) {
         mutableStateFlow.update { currentState ->
             updateCommonContent(currentState) {
                 copy(
-                    selectedOwnerId = null,
-                    availableOwners = DEFAULT_OWNERS,
+                    selectedOwnerId = selectedOwnerId,
+                    availableOwners = availableOwners,
                 )
             }
         }
@@ -2881,6 +2924,40 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             dialog = null,
         )
 
+        private val ALTERED_COLLECTIONS = listOf(
+            VaultCollection(
+                id = "mockCollectionId-new",
+                name = "mockCollectionName-new",
+                isSelected = true,
+            ),
+        )
+
+        private val ALTERED_OWNERS = listOf(
+            VaultAddEditState.Owner(
+                id = null,
+                name = "placeholder@email.com",
+                collections = emptyList(),
+            ),
+            VaultAddEditState.Owner(
+                id = "mockOwnerId-1",
+                name = "mockOwnerName-1",
+                collections = emptyList(),
+            ),
+            VaultAddEditState.Owner(
+                id = "mockOwnerId-2",
+                name = "mockOwnerName-2",
+                collections = ALTERED_COLLECTIONS,
+            ),
+        )
+
+        private val DEFAULT_COLLECTIONS = listOf(
+            VaultCollection(
+                id = "mockCollectionId-2",
+                name = "mockCollectionName-2",
+                isSelected = false,
+            ),
+        )
+
         private val DEFAULT_OWNERS = listOf(
             VaultAddEditState.Owner(
                 id = null,
@@ -2895,7 +2972,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             VaultAddEditState.Owner(
                 id = "mockOwnerId-2",
                 name = "mockOwnerName-2",
-                collections = emptyList(),
+                collections = DEFAULT_COLLECTIONS,
             ),
         )
 

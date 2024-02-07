@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.coEvery
@@ -2297,6 +2298,26 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 settingsRepository.initialAutofillDialogShown = true
             }
         }
+
+        @Test
+        fun `CollectionSelect should update availableOwners collections`() = runTest {
+            viewModel.actionChannel.trySend(ownershipChangeAction())
+
+            val action = collectionSelectAction()
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = vaultAddItemInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(
+                        availableOwners = createOwnerList(isCollectionSelected = true),
+                        selectedOwnerId = "organizationId",
+                    ),
+                    isIndividualVaultDisabled = false,
+                    type = createLoginTypeContentViewState(),
+                ),
+            )
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
     }
     //region Helper functions
 
@@ -2332,18 +2353,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 name = "No Folder",
             ),
         ),
-        availableOwners: List<VaultAddEditState.Owner> = listOf(
-            VaultAddEditState.Owner(
-                id = null,
-                name = "activeEmail",
-                collections = emptyList(),
-            ),
-            VaultAddEditState.Owner(
-                id = "organizationId",
-                name = "organizationName",
-                collections = emptyList(),
-            ),
-        ),
+        availableOwners: List<VaultAddEditState.Owner> = createOwnerList(),
+        selectedOwnerId: String? = null,
     ): VaultAddEditState.ViewState.Content.Common =
         VaultAddEditState.ViewState.Content.Common(
             name = name,
@@ -2352,7 +2363,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             customFieldData = customFieldData,
             masterPasswordReprompt = masterPasswordReprompt,
             notes = notes,
-            selectedOwnerId = null,
+            selectedOwnerId = selectedOwnerId,
             originalCipher = originalCipher,
             availableFolders = availableFolders,
             availableOwners = availableOwners,
@@ -2446,6 +2457,57 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             ),
             hasPendingAccountAddition = false,
+        )
+
+    private fun createOwnerList(
+        hasCollection: Boolean = false,
+        isCollectionSelected: Boolean = false,
+    ): List<VaultAddEditState.Owner> =
+        listOf(
+            VaultAddEditState.Owner(
+                id = null,
+                name = "activeEmail",
+                collections = emptyList(),
+            ),
+            VaultAddEditState.Owner(
+                id = "organizationId",
+                name = "organizationName",
+                collections = if (hasCollection) {
+                    listOf(
+                        VaultCollection(
+                            id = "mockId-1",
+                            name = "mockName-1",
+                            isSelected = isCollectionSelected,
+                        ),
+                    )
+                } else {
+                    emptyList()
+                },
+            ),
+        )
+
+    private fun ownershipChangeAction(): VaultAddEditAction.Common.OwnershipChange =
+        VaultAddEditAction.Common.OwnershipChange(
+            ownership = VaultAddEditState.Owner(
+                id = "organizationId",
+                name = "organizationName",
+                collections = listOf(
+                    VaultCollection(
+                        id = "mockId-1",
+                        name = "mockName-1",
+                        isSelected = false,
+                    ),
+                ),
+            ),
+        )
+
+    private fun collectionSelectAction(): VaultAddEditAction.Common.CollectionSelect =
+        VaultAddEditAction.Common.CollectionSelect(
+            VaultCollection(
+                id = "mockId-1",
+                name = "mockName-1",
+                isSelected = false,
+            ),
         )
 
     /**
