@@ -66,6 +66,7 @@ fun VaultItemLoginContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
+                    .semantics { testTag = "ItemRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -193,6 +194,7 @@ fun VaultItemLoginContent(
             items(attachments) { attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
+                        .semantics { testTag = "CipherAttachment" }
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,
@@ -209,7 +211,6 @@ fun VaultItemLoginContent(
                 header = "${stringResource(id = R.string.date_updated)}: ",
                 text = commonState.lastUpdated,
                 modifier = Modifier
-                    .semantics { testTag = "ItemRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
