@@ -130,6 +130,7 @@ fun SearchScreen(
                 is SearchState.ViewState.Content -> SearchContent(
                     viewState = viewState,
                     searchHandlers = searchHandlers,
+                    searchType = state.searchType,
                     modifier = innerModifier,
                 )
 

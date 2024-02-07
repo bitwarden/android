@@ -108,7 +108,6 @@ fun SendContent(
                     null
                 },
                 modifier = Modifier
-                    .semantics { testTag = "SendCell" }
                     .padding(
                         start = 16.dp,
                         // There is some built-in padding to the menu button that makes up

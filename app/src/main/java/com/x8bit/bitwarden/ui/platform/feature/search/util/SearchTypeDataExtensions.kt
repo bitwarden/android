@@ -64,6 +64,15 @@ fun SearchTypeData.updateWithAdditionalDataIfNecessary(
     }
 
 /**
+ * The semantic test tag to use for the search item.
+ */
+val SearchTypeData.searchItemTestTag: String
+    get() = when (this) {
+        is SearchTypeData.Sends -> "SendCell"
+        is SearchTypeData.Vault -> "CipherCell"
+    }
+
+/**
  * Filters out any [CipherView]s that do not adhere to the [searchTypeData] and [searchTerm] and
  * sorts the remaining items.
  */
