@@ -40,12 +40,14 @@ import kotlinx.collections.immutable.persistentListOf
  */
 @Composable
 fun BitwardenOverflowActionItem(
+    modifier: Modifier = Modifier,
     menuItemDataList: ImmutableList<OverflowMenuItemData> = persistentListOf(),
 ) {
     if (menuItemDataList.isEmpty()) return
     var isOverflowMenuVisible by remember { mutableStateOf(false) }
     Box(
         contentAlignment = Alignment.Center,
+        modifier = modifier,
     ) {
         IconButton(onClick = { isOverflowMenuVisible = !isOverflowMenuVisible }) {
             Icon(
