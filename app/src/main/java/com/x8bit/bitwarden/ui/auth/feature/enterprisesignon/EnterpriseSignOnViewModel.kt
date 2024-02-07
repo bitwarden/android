@@ -309,8 +309,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
         showLoading()
 
         viewModelScope.launch {
-            val prevalidateSsoResult = authRepository.prevalidateSso(organizationIdentifier)
-            when (prevalidateSsoResult) {
+            when (val prevalidateSso = authRepository.prevalidateSso(organizationIdentifier)) {
                 is PrevalidateSsoResult.Failure -> {
                     sendAction(EnterpriseSignOnAction.Internal.OnSsoPrevalidationFailure)
                 }
@@ -318,7 +317,7 @@ class EnterpriseSignOnViewModel @Inject constructor(
                 is PrevalidateSsoResult.Success -> {
                     prepareAndLaunchCustomTab(
                         organizationIdentifier = organizationIdentifier,
-                        prevalidateSsoResult = prevalidateSsoResult,
+                        prevalidateSsoResult = prevalidateSso,
                     )
                 }
             }

@@ -736,11 +736,11 @@ class AuthRepositoryImpl(
             .userState
             ?.activeAccount
             ?: return ResetPasswordResult.Error
-        val currentPasswordHash = currentPassword?.let {
+        val currentPasswordHash = currentPassword?.let { password ->
             authSdkSource
                 .hashPassword(
                     email = activeAccount.profile.email,
-                    password = it,
+                    password = password,
                     kdf = activeAccount.profile.toSdkParams(),
                     purpose = HashPurpose.SERVER_AUTHORIZATION,
                 )
