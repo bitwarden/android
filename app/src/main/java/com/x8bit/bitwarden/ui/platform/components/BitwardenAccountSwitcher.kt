@@ -34,14 +34,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
@@ -88,7 +86,7 @@ private const val MAXIMUM_ACCOUNT_LIMIT = 5
  * @param topAppBarScrollBehavior Used to derive the background color of the content and keep it in
  * sync with the associated app bar.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun BitwardenAccountSwitcher(
@@ -141,7 +139,7 @@ fun BitwardenAccountSwitcher(
         }
     }
 
-    Box(modifier = modifier.semantics { testTagsAsResourceId = true }) {
+    Box(modifier = modifier) {
         BitwardenAnimatedScrim(
             isVisible = isVisible,
             onClick = onDismissRequest,

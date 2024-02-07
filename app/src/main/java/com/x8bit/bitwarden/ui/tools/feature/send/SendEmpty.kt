@@ -13,12 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -27,7 +25,6 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
 /**
  * Content for the empty state of the [SendScreen].
  */
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SendEmpty(
     policyDisablesSend: Boolean,
@@ -37,7 +34,7 @@ fun SendEmpty(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.semantics { testTagsAsResourceId = true },
+        modifier = modifier,
     ) {
         if (policyDisablesSend) {
             BitwardenPolicyWarningText(

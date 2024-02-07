@@ -17,7 +17,6 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -25,7 +24,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -45,7 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
  * Displays the about self-hosted/custom environment screen.
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EnvironmentScreen(
     onNavigateBack: () -> Unit,
@@ -103,7 +101,6 @@ fun EnvironmentScreen(
     ) { innerPadding ->
         Column(
             Modifier
-                .semantics { testTagsAsResourceId = true }
                 .padding(innerPadding)
                 .fillMaxSize()
                 .imePadding()
