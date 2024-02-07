@@ -2021,7 +2021,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId = userId,
-                    cipher = mockCipher,
+                    cipher = mockCipher.copy(collectionIds = mockCipherView.collectionIds),
                 )
             } just runs
 

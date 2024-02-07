@@ -744,7 +744,11 @@ class VaultRepositoryImpl(
                         }
 
                         is UpdateCipherResponseJson.Success -> {
-                            vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
+                            vaultDiskSource.saveCipher(
+                                userId = userId,
+                                cipher = response.cipher
+                                    .copy(collectionIds = cipherView.collectionIds),
+                            )
                             UpdateCipherResult.Success
                         }
                     }
