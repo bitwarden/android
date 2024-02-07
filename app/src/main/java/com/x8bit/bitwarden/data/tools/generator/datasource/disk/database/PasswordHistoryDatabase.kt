@@ -8,7 +8,11 @@ import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordH
 /**
  * Room database for storing passcode history.
  */
-@Database(entities = [PasswordHistoryEntity::class], version = 1)
+@Database(
+    entities = [PasswordHistoryEntity::class],
+    version = 1,
+    exportSchema = true,
+)
 abstract class PasswordHistoryDatabase : RoomDatabase() {
 
     /**

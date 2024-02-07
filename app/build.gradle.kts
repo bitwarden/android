@@ -74,6 +74,11 @@ android {
             "zh-rTW"
         )
 
+        ksp {
+            // The location in which the generated Room Database Schemas will be stored in the repo.
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
