@@ -139,7 +139,7 @@ namespace Bit.iOS.Core.Utilities
                 return ToPasswordCredentialIdentity(cipher);
             }
 
-            if (!cipher.Login.MainFido2Credential.IsDiscoverable)
+            if (!cipher.Login.MainFido2Credential.DiscoverableValue)
             {
                 return null;
             }
