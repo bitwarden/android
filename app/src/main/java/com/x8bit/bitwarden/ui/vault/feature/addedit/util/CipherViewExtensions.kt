@@ -114,6 +114,7 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                 ),
                 availableOwners = activeAccount.toAvailableOwners(
                     collectionViewList = collectionViewList,
+                    cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
                 ),
             ),
@@ -165,6 +166,7 @@ private fun UserState.Account.toSelectedOwnerId(cipherView: CipherView?): String
 
 private fun UserState.Account.toAvailableOwners(
     collectionViewList: List<CollectionView>,
+    cipherView: CipherView?,
     isIndividualVaultDisabled: Boolean,
 ): List<VaultAddEditState.Owner> =
     listOfNotNull(
@@ -188,7 +190,9 @@ private fun UserState.Account.toAvailableOwners(
                             VaultCollection(
                                 id = collection.id.orEmpty(),
                                 name = collection.name,
-                                isSelected = false,
+                                isSelected = cipherView
+                                    ?.collectionIds
+                                    ?.contains(collection.id) == true,
                             )
                         },
                 )

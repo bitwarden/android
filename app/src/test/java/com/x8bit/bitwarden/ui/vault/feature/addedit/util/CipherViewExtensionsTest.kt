@@ -13,10 +13,20 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockk
@@ -33,6 +43,7 @@ class CipherViewExtensionsTest {
 
     private val resourceManager: ResourceManager = mockk {
         every { getString(R.string.clone) } returns "Clone"
+        every { getString(R.string.folder_none) } returns "No Folder"
     }
 
     @BeforeEach
@@ -248,6 +259,166 @@ class CipherViewExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `validateCipherOrReturnErrorState with valid cipher should return provided state`() {
+        val providedState = VaultAddEditState.ViewState.Loading
+
+        val result = createMockCipherView(number = 1)
+            .validateCipherOrReturnErrorState(
+                currentAccount = createAccount(),
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ) { _, _ -> providedState }
+
+        assertEquals(providedState, result)
+    }
+
+    @Test
+    fun `validateCipherOrReturnErrorState with EditItem null cipher type should return Error`() {
+        val providedState = VaultAddEditState.ViewState.Loading
+
+        val result = null
+            .validateCipherOrReturnErrorState(
+                currentAccount = createAccount(),
+                vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "mockId-1"),
+            ) { _, _ -> providedState }
+
+        assertEquals(
+            VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText()),
+            result,
+        )
+    }
+
+    @Test
+    fun `validateCipherOrReturnErrorState with null account type should return Error`() {
+        val providedState = VaultAddEditState.ViewState.Loading
+
+        val result = createMockCipherView(number = 1)
+            .validateCipherOrReturnErrorState(
+                currentAccount = null,
+                vaultAddEditType = VaultAddEditType.AddItem,
+            ) { _, _ -> providedState }
+
+        assertEquals(
+            VaultAddEditState.ViewState.Error(R.string.generic_error_message.asText()),
+            result,
+        )
+    }
+
+    @Test
+    fun `appendFolderAndOwnerData should append folder and owner data`() {
+        val viewState = createSecureNoteViewState(withFolderAndOwnerData = false)
+        val account = createAccount()
+        val folderView = listOf(createMockFolderView(number = 1))
+        val collectionList = listOf(createMockCollectionView(number = 1))
+
+        val result = viewState.appendFolderAndOwnerData(
+            folderViewList = folderView,
+            collectionViewList = collectionList,
+            activeAccount = account,
+            isIndividualVaultDisabled = false,
+            resourceManager = resourceManager,
+        )
+
+        assertEquals(
+            createSecureNoteViewState(withFolderAndOwnerData = true),
+            result,
+        )
+    }
+
+    private fun createSecureNoteViewState(
+        cipherView: CipherView = createMockCipherView(number = 1),
+        withFolderAndOwnerData: Boolean,
+    ): VaultAddEditState.ViewState.Content =
+        VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "cipher",
+                favorite = false,
+                masterPasswordReprompt = true,
+                notes = "Lots of notes",
+                customFieldData = listOf(
+                    VaultAddEditState.Custom.BooleanField(
+                        itemId = TEST_ID,
+                        name = "TestBoolean",
+                        value = false,
+                    ),
+                    VaultAddEditState.Custom.TextField(
+                        itemId = TEST_ID,
+                        name = "TestText",
+                        value = "TestText",
+                    ),
+                    VaultAddEditState.Custom.HiddenField(
+                        itemId = TEST_ID,
+                        name = "TestHidden",
+                        value = "TestHidden",
+                    ),
+                ),
+                availableFolders = emptyList(),
+                availableOwners = emptyList(),
+            )
+                .let {
+                    if (withFolderAndOwnerData) {
+                        it.copy(
+                            selectedFolderId = "mockId-1",
+                            selectedOwnerId = "mockOrganizationId-1",
+                            availableFolders = listOf(
+                                VaultAddEditState.Folder(
+                                    id = null,
+                                    name = "No Folder",
+                                ),
+                                VaultAddEditState.Folder(
+                                    id = "mockId-1",
+                                    name = "mockName-1",
+                                ),
+                            ),
+                            availableOwners = listOf(
+                                VaultAddEditState.Owner(
+                                    id = null,
+                                    name = "activeEmail",
+                                    collections = emptyList(),
+                                ),
+                                VaultAddEditState.Owner(
+                                    id = "mockOrganizationId-1",
+                                    name = "organizationName",
+                                    collections = listOf(
+                                        VaultCollection(
+                                            id = "mockId-1",
+                                            name = "mockName-1",
+                                            isSelected = true,
+                                        ),
+                                    ),
+                                ),
+                            ),
+                        )
+                    } else {
+                        it
+                    }
+                },
+            isIndividualVaultDisabled = true,
+            type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,
+        )
+
+    private fun createAccount(): UserState.Account =
+        UserState.Account(
+            userId = "activeUserId",
+            name = "activeName",
+            email = "activeEmail",
+            avatarColorHex = "#ffecbc49",
+            environment = Environment.Eu,
+            isPremium = true,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            organizations = listOf(
+                Organization(
+                    id = "mockOrganizationId-1",
+                    name = "organizationName",
+                ),
+            ),
+            isBiometricsEnabled = true,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
 }
 
 private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
