@@ -105,10 +105,9 @@ class BlockAutoFillViewModel @Inject constructor(
             .filter { uri ->
                 uri in settingsRepository.blockedAutofillUris || !uri.isValidPattern()
             }
-            .mapNotNull { uri ->
+            .firstNotNullOfOrNull { uri ->
                 uri.validateUri(settingsRepository.blockedAutofillUris)
             }
-            .firstOrNull()
 
         if (errorText != null) {
             mutableStateFlow.update { currentState ->

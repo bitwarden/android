@@ -26,7 +26,7 @@ abstract class BaseViewModel<S, E, A>(
     initialState: S,
 ) : ViewModel() {
     protected val mutableStateFlow: MutableStateFlow<S> = MutableStateFlow(initialState)
-    protected val eventChannel: Channel<E> = Channel(capacity = Channel.UNLIMITED)
+    private val eventChannel: Channel<E> = Channel(capacity = Channel.UNLIMITED)
     private val internalActionChannel: Channel<A> = Channel(capacity = Channel.UNLIMITED)
 
     /**

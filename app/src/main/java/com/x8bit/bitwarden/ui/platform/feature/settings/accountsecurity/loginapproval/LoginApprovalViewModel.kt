@@ -59,9 +59,9 @@ class LoginApprovalViewModel @Inject constructor(
     init {
         state
             .specialCircumstance
-            ?.let {
+            ?.let { circumstance ->
                 authRepository
-                    .getAuthRequestByIdFlow(it.passwordlessRequestData.loginRequestId)
+                    .getAuthRequestByIdFlow(circumstance.passwordlessRequestData.loginRequestId)
                     .map { LoginApprovalAction.Internal.AuthRequestResultReceive(it) }
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
