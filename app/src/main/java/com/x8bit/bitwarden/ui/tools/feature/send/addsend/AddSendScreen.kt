@@ -19,8 +19,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
@@ -46,7 +44,6 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
-import com.x8bit.bitwarden.ui.tools.feature.send.addsend.util.testTag
 
 /**
  * Displays new send UX.
@@ -147,8 +144,6 @@ fun AddSendScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(AddSendAction.SaveClick) }
                         },
-                        modifier = Modifier
-                            .semantics { testTag = state.viewState.testTag },
                     )
                     if (!state.isAddMode) {
                         BitwardenOverflowActionItem(

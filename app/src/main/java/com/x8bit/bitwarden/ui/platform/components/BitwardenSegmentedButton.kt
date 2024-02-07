@@ -7,6 +7,8 @@ import androidx.compose.material3.SegmentedButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 
 /**
  * Displays a Bitwarden styled row of segmented buttons.
@@ -32,6 +34,9 @@ fun BitwardenSegmentedButton(
                     count = options.size,
                 ),
                 label = { Text(text = option.text) },
+                modifier = Modifier.run {
+                    option.testTag?.let { semantics { testTag = it } } ?: this
+                },
             )
         }
     }
@@ -44,4 +49,5 @@ data class SegmentedButtonState(
     val text: String,
     val onClick: () -> Unit,
     val isChecked: Boolean,
+    val testTag: String? = null,
 )
