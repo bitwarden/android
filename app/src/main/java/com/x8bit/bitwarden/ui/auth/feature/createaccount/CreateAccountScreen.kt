@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -42,7 +41,6 @@ import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.buildAnnotatedString
@@ -85,7 +83,7 @@ import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 /**
  * Top level composable for the create account screen.
  */
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 @Composable
 fun CreateAccountScreen(
@@ -193,7 +191,6 @@ fun CreateAccountScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .semantics { testTagsAsResourceId = true }
                 .padding(innerPadding)
                 .imePadding()
                 .fillMaxSize()

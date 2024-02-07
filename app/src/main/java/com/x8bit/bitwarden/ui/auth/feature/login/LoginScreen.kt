@@ -24,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +31,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
-import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -191,7 +189,6 @@ fun LoginScreen(
 }
 
 @Suppress("LongMethod", "LongParameterList")
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun LoginScreenContent(
     state: LoginState,
@@ -207,7 +204,6 @@ private fun LoginScreenContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .semantics { testTagsAsResourceId = true }
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {

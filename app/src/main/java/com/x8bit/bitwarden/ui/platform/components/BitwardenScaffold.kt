@@ -16,15 +16,18 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
 import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 
 /**
  * Direct passthrough to [Scaffold] but contains a few specific override values. Everything is
  * still overridable if necessary.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenScaffold(
     modifier: Modifier = Modifier,
@@ -43,6 +46,7 @@ fun BitwardenScaffold(
 ) {
     Scaffold(
         modifier = Modifier
+            .semantics { testTagsAsResourceId = true }
             .run { pullToRefreshState?.let { nestedScroll(it.nestedScrollConnection) } ?: this }
             .then(modifier),
         topBar = topBar,
