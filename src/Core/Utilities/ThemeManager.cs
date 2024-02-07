@@ -150,6 +150,10 @@ namespace Bit.App.Utilities
             return stateService.GetAutoDarkThemeAsync().GetAwaiter().GetResult();
         }
 
+        //HACK: OsDarkModeEnabled() is divided into Android and iOS implementations due to a MAUI bug.
+        // Currently on iOS when resuming the app after showing a System "Share/Sheet" (or other similar UI)
+        // MAUI reports the incorrect Theme. To avoid this we are fetching the current OS Theme directly on iOS from the iOS API.
+        // MAUI Issue: https://github.com/dotnet/maui/issues/19614
 #if ANDROID
         public static bool OsDarkModeEnabled()
         {
