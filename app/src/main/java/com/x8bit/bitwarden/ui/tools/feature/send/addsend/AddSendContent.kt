@@ -125,11 +125,13 @@ fun AddSendContent(
                         text = stringResource(id = R.string.file),
                         onClick = addSendHandlers.onFileTypeSelect,
                         isChecked = state.isFileType,
+                        testTag = "SendFileButton",
                     ),
                     SegmentedButtonState(
                         text = stringResource(id = R.string.text),
                         onClick = addSendHandlers.onTextTypeSelect,
                         isChecked = state.isTextType,
+                        testTag = "SendTextButton",
                     ),
                 ),
             )
