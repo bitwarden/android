@@ -26,6 +26,7 @@ import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.feature.search.handlers.SearchHandlers
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
+import com.x8bit.bitwarden.ui.platform.feature.search.util.searchItemTestTag
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
 
@@ -37,6 +38,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun SearchContent(
     viewState: SearchState.ViewState.Content,
     searchHandlers: SearchHandlers,
+    searchType: SearchTypeData,
     modifier: Modifier = Modifier,
 ) {
     var showConfirmationDialog: ListingItemOverflowAction? by rememberSaveable {
@@ -153,7 +155,7 @@ fun SearchContent(
                     }
                     .toPersistentList(),
                 modifier = Modifier
-                    .semantics { testTag = "CipherCell" }
+                    .semantics { testTag = searchType.searchItemTestTag }
                     .fillMaxWidth()
                     .padding(
                         start = 16.dp,
