@@ -9,6 +9,9 @@ using Bit.Core.Utilities;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+#if IOS
+using UIKit;
+#endif
 
 namespace Bit.App.Utilities
 {
@@ -147,16 +150,37 @@ namespace Bit.App.Utilities
             return stateService.GetAutoDarkThemeAsync().GetAwaiter().GetResult();
         }
 
+#if ANDROID
         public static bool OsDarkModeEnabled()
         {
-            if (Application.Current == null)
-            {
-                // called from iOS extension
-                var app = new App(new AppOptions { IosExtension = true });
-                return app.RequestedTheme == AppTheme.Dark;
-            }
             return Application.Current.RequestedTheme == AppTheme.Dark;
         }
+#elif IOS
+        public static bool OsDarkModeEnabled()
+        {
+            var requestedTheme = AppTheme.Unspecified;
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if ((OperatingSystem.IsIOS() && !OperatingSystem.IsIOSVersionAtLeast(13, 0)) || (OperatingSystem.IsTvOS() && !OperatingSystem.IsTvOSVersionAtLeast(13, 0)))
+                {
+                    requestedTheme = AppTheme.Unspecified;
+                }
+                else
+                {
+                    var traits = WindowStateManager.Default.GetCurrentUIViewController()?.TraitCollection ?? UITraitCollection.CurrentTraitCollection;
+                    var uiStyle = traits.UserInterfaceStyle;
+
+                    requestedTheme = uiStyle switch
+                    {
+                        UIUserInterfaceStyle.Light => AppTheme.Light,
+                        UIUserInterfaceStyle.Dark => AppTheme.Dark,
+                        _ => AppTheme.Unspecified
+                    };
+                }
+            });
+            return requestedTheme == AppTheme.Dark;
+        }
+#endif
 
         public static void ApplyResourcesTo(VisualElement element)
         {
