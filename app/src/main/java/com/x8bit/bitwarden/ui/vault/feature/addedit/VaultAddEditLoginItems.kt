@@ -202,7 +202,9 @@ fun LazyListScope.vaultAddEditLoginItems(
                         .first { it.name == selectedFolderName },
                 )
             },
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .semantics { testTag = "FolderPicker" }
+                .padding(horizontal = 16.dp),
         )
     }
 
@@ -375,11 +377,10 @@ private fun UsernameRow(
                         shouldShowDialog = true
                     }
                 },
+                modifier = Modifier.semantics { testTag = "GenerateUsernameButton" },
             )
         },
-        modifier = Modifier
-            .semantics { testTag = "GenerateUsernameButton" }
-            .padding(horizontal = 16.dp),
+        modifier = Modifier.padding(horizontal = 16.dp),
     )
 
     if (shouldShowDialog) {
