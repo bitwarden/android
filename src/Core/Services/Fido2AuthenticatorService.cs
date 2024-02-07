@@ -128,6 +128,7 @@ namespace Bit.Core.Services
             string selectedCipherId;
             bool userVerified;
             bool userPresence;
+            // TODO: We might want reconsider allowing user presence to be optional
             if (assertionParams.AllowCredentialDescriptorList?.Length == 1 && assertionParams.RequireUserPresence == false)
             {
                 selectedCipherId = cipherOptions[0].Id;
