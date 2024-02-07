@@ -74,7 +74,6 @@ fun AttachmentsContent(
                     attachmentItem = it,
                     onDeleteClick = attachmentsHandlers.onDeleteClick,
                     modifier = Modifier
-                        .semantics { testTag = "AttachmentRow" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -162,7 +161,7 @@ private fun AttachmentListEntry(
                 color = MaterialTheme.colorScheme.outlineVariant,
             )
             .defaultMinSize(minHeight = 56.dp)
-            .semantics { testTag = "CipherAttachment" }
+            .semantics { testTag = "AttachmentRow" }
             .padding(vertical = 8.dp)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
