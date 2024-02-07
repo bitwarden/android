@@ -94,6 +94,7 @@ fun PasswordHistoryScreen(
                                     },
                                 ),
                             ),
+                            modifier = Modifier.semantics { testTag = "Options" },
                         )
                     }
                 },

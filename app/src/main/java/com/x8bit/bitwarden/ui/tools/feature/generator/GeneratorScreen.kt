@@ -255,7 +255,6 @@ private fun DefaultAppBar(
                     OverflowMenuItemData(
                         text = stringResource(id = R.string.password_history),
                         onClick = onPasswordHistoryClick,
-                        testTag = "Options",
                     ),
                 ),
             )
