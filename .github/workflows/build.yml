@@ -469,7 +469,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-12
+    runs-on: macos-13
     needs: setup
     steps:
       - name: Setup NuGet
