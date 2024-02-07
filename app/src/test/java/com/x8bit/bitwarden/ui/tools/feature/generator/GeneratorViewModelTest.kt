@@ -132,7 +132,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(GeneratorAction.SelectClick)
 
             assertEquals(GeneratorEvent.NavigateBack, eventTurbine.awaitItem())
-            assertEquals(GeneratorResult.Username("username"), generatorResultTurbine.awaitItem())
+            assertEquals(
+                GeneratorResult.Username(username = "-"),
+                generatorResultTurbine.awaitItem(),
+            )
         }
     }
 
@@ -484,6 +487,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         val expectedState =
             initialPasscodeState.copy(
+                generatedText = "email+abcd1234@address.com",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
                         email = "currentEmail",
@@ -558,6 +562,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             )
 
             val expectedState = initialUsernameState.copy(
+                generatedText = "email+abcd1234@address.com",
                 selectedType = GeneratorState.MainType.Username(
                     selectedType = GeneratorState
                         .MainType
@@ -587,6 +592,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
 
         val expectedState = initialUsernameState.copy(
+            generatedText = "-",
             selectedType = GeneratorState.MainType.Username(
                 selectedType = GeneratorState.MainType.Username.UsernameType.CatchAllEmail(),
             ),
@@ -612,6 +618,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             )
 
             val expectedState = initialUsernameState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     selectedType = GeneratorState
                         .MainType
@@ -639,6 +646,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
 
         val expectedState = initialUsernameState.copy(
+            generatedText = "randomWord",
             selectedType = GeneratorState.MainType.Username(
                 selectedType = GeneratorState.MainType.Username.UsernameType.RandomWord(),
             ),
@@ -1209,6 +1217,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultForwardedEmailAliasState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     selectedType = GeneratorState
                         .MainType
@@ -1262,6 +1271,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultAddyIoState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1301,6 +1311,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultAddyIoState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1351,6 +1362,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultDuckDuckGoState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1401,6 +1413,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultFastMailState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1452,6 +1465,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultFirefoxRelayState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1503,6 +1517,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             viewModel.actionChannel.trySend(action)
 
             val expectedState = defaultSimpleLoginState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
                         selectedServiceType = GeneratorState
@@ -1547,6 +1562,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             )
 
             val expectedState = defaultPlusAddressedEmailState.copy(
+                generatedText = "-",
                 selectedType = GeneratorState.MainType.Username(
                     selectedType = GeneratorState
                         .MainType
@@ -1589,6 +1605,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = defaultCatchAllEmailState.copy(
+                    generatedText = "-",
                     selectedType = GeneratorState.MainType.Username(
                         selectedType = GeneratorState
                             .MainType
@@ -1629,6 +1646,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             )
 
             val expectedState = defaultRandomWordState.copy(
+                generatedText = "randomWord",
                 selectedType = GeneratorState.MainType.Username(
                     GeneratorState.MainType.Username.UsernameType.RandomWord(
                         capitalize = true,
@@ -1654,6 +1672,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val expectedState = defaultRandomWordState.copy(
+                    generatedText = "randomWord",
                     selectedType = GeneratorState.MainType.Username(
                         GeneratorState.MainType.Username.UsernameType.RandomWord(
                             includeNumber = true,

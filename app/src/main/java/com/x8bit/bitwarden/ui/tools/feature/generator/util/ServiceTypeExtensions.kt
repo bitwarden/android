@@ -2,18 +2,22 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.util
 
 import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 
 /**
  * Converts a [ServiceType] to a [UsernameGeneratorRequest.Forwarded].
  */
-fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded {
+@Suppress("ReturnCount", "LongMethod")
+fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded? {
     return when (this) {
         is ServiceType.AddyIo -> {
+            val accessToken = this.apiAccessToken.orNullIfBlank() ?: return null
+            val domain = this.domainName.orNullIfBlank() ?: return null
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.AddyIo(
-                    apiToken = this.apiAccessToken,
-                    domain = this.domainName,
+                    apiToken = accessToken,
+                    domain = domain,
                     baseUrl = this.baseUrl,
                 ),
                 website = null,
@@ -21,31 +25,51 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
         }
 
         is ServiceType.DuckDuckGo -> {
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.DuckDuckGo(token = this.apiKey),
-                website = null,
-            )
+            this
+                .apiKey
+                .orNullIfBlank()
+                ?.let {
+                    UsernameGeneratorRequest.Forwarded(
+                        service = ForwarderServiceType.DuckDuckGo(token = it),
+                        website = null,
+                    )
+                }
         }
 
         is ServiceType.FirefoxRelay -> {
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.Firefox(apiToken = this.apiAccessToken),
-                website = null,
-            )
+            this
+                .apiAccessToken
+                .orNullIfBlank()
+                ?.let {
+                    UsernameGeneratorRequest.Forwarded(
+                        service = ForwarderServiceType.Firefox(apiToken = it),
+                        website = null,
+                    )
+                }
         }
 
         is ServiceType.FastMail -> {
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.Fastmail(apiToken = this.apiKey),
-                website = null,
-            )
+            this
+                .apiKey
+                .orNullIfBlank()
+                ?.let {
+                    UsernameGeneratorRequest.Forwarded(
+                        service = ForwarderServiceType.Fastmail(apiToken = it),
+                        website = null,
+                    )
+                }
         }
 
         is ServiceType.SimpleLogin -> {
-            UsernameGeneratorRequest.Forwarded(
-                service = ForwarderServiceType.SimpleLogin(apiKey = this.apiKey),
-                website = null,
-            )
+            this
+                .apiKey
+                .orNullIfBlank()
+                ?.let {
+                    UsernameGeneratorRequest.Forwarded(
+                        service = ForwarderServiceType.SimpleLogin(apiKey = it),
+                        website = null,
+                    )
+                }
         }
     }
 }
