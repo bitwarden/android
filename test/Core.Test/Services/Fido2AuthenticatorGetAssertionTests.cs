@@ -141,6 +141,10 @@ namespace Bit.Core.Test.Services
         public async Task GetAssertionAsync_RequestsUserVerification_ParamsRequireUserVerification() {
             // Arrange
             _params.RequireUserVerification = true;
+            _sutProvider.GetDependency<IFido2UserInterface>().PickCredentialAsync(Arg.Any<Fido2PickCredentialParams>()).Returns(new Fido2PickCredentialResult {
+                CipherId = _ciphers[0].Id,
+                UserVerified = true
+            });
 
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params);
