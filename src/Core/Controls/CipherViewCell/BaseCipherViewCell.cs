@@ -47,6 +47,7 @@ namespace Bit.App.Controls
             });
         }
 
+#if !UT
         public void Icon_Success(object sender, FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
@@ -72,6 +73,10 @@ namespace Bit.App.Controls
                 IconPlaceholder.IsVisible = true;
             });
         }
+#else
+        private void Icon_Success(object sender, EventArgs e)  {}
+        private void Icon_Error(object sender, EventArgs e) {}
+#endif
     }
 
     public class StubBaseCipherViewCellSoLinkerDoesntRemoveMethods : BaseCipherViewCell
@@ -81,6 +86,7 @@ namespace Bit.App.Controls
 
         public static void CallThisSoLinkerDoesntRemoveMethods()
         {
+#if !UT
             var stub = new StubBaseCipherViewCellSoLinkerDoesntRemoveMethods();
 
             try
@@ -98,6 +104,7 @@ namespace Bit.App.Controls
             catch (Exception)
             {
             }
+#endif
         }
     }
 }
