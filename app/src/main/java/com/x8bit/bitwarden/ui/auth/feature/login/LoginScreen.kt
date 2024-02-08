@@ -23,7 +23,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -208,7 +207,6 @@ private fun LoginScreenContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .imePadding()
             .verticalScroll(rememberScrollState()),
@@ -221,94 +219,97 @@ private fun LoginScreenContent(
             onDismissRequest = onErrorDialogDismiss,
         )
 
-        Column(
-            modifier = Modifier.padding(horizontal = 16.dp),
-        ) {
-            BitwardenPasswordField(
-                modifier = Modifier
-                    .semantics { testTag = "MasterPasswordEntry" }
-                    .fillMaxWidth(),
-                value = state.passwordInput,
-                onValueChange = onPasswordInputChanged,
-                label = stringResource(id = R.string.master_password),
-                showPasswordTestTag = "PasswordVisibilityToggle",
-            )
+        BitwardenPasswordField(
+            modifier = Modifier
+                .semantics { testTag = "MasterPasswordEntry" }
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            value = state.passwordInput,
+            onValueChange = onPasswordInputChanged,
+            label = stringResource(id = R.string.master_password),
+            showPasswordTestTag = "PasswordVisibilityToggle",
+        )
 
-            // TODO: Need to figure out better handling for very small clickable text (BIT-724)
-            Text(
-                text = stringResource(id = R.string.get_password_hint),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier
-                    .semantics { testTag = "GetMasterPasswordHintLabel" }
-                    .fillMaxWidth()
-                    .clickable { onMasterPasswordClick() }
-                    .padding(
-                        vertical = 4.dp,
-                        horizontal = 16.dp,
-                    ),
-            )
+        // TODO: Need to figure out better handling for very small clickable text (BIT-724)
+        Text(
+            text = stringResource(id = R.string.get_password_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier
+                .semantics { testTag = "GetMasterPasswordHintLabel" }
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth()
+                .clickable { onMasterPasswordClick() }
+                .padding(
+                    vertical = 4.dp,
+                    horizontal = 16.dp,
+                ),
+        )
 
-            Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
-            BitwardenFilledButton(
-                label = stringResource(id = R.string.log_in_with_master_password),
-                onClick = onLoginButtonClick,
-                isEnabled = state.isLoginButtonEnabled,
+        BitwardenFilledButton(
+            label = stringResource(id = R.string.log_in_with_master_password),
+            onClick = onLoginButtonClick,
+            isEnabled = state.isLoginButtonEnabled,
+            modifier = Modifier
+                .semantics { testTag = "LogInWithMasterPasswordButton" }
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        if (state.shouldShowLoginWithDevice) {
+            BitwardenOutlinedButtonWithIcon(
+                label = stringResource(id = R.string.log_in_with_device),
+                icon = painterResource(id = R.drawable.ic_device),
+                onClick = onLoginWithDeviceClick,
                 modifier = Modifier
-                    .semantics { testTag = "LogInWithMasterPasswordButton" }
+                    .semantics { testTag = "LogInWithAnotherDeviceButton" }
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
 
             Spacer(modifier = Modifier.height(12.dp))
-
-            if (state.shouldShowLoginWithDevice) {
-                BitwardenOutlinedButtonWithIcon(
-                    label = stringResource(id = R.string.log_in_with_device),
-                    icon = painterResource(id = R.drawable.ic_device),
-                    onClick = onLoginWithDeviceClick,
-                    modifier = Modifier
-                        .semantics { testTag = "LogInWithAnotherDeviceButton" }
-                        .fillMaxWidth(),
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-            }
-
-            BitwardenOutlinedButtonWithIcon(
-                label = stringResource(id = R.string.log_in_sso),
-                icon = painterResource(id = R.drawable.ic_briefcase),
-                onClick = onSingleSignOnClick,
-                modifier = Modifier
-                    .semantics { testTag = "LogInWithSsoButton" }
-                    .fillMaxWidth(),
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = stringResource(
-                    id = R.string.logging_in_as_x_on_y,
-                    state.emailAddress,
-                    state.environmentLabel,
-                ),
-                textAlign = TextAlign.Start,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier
-                    .semantics { testTag = "LoggingInAsLabel" }
-                    .fillMaxWidth(),
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            BitwardenClickableText(
-                modifier = Modifier
-                    .semantics { testTag = "NotYouLabel" },
-                onClick = onNotYouButtonClick,
-                label = stringResource(id = R.string.not_you),
-            )
-            Spacer(modifier = Modifier.navigationBarsPadding())
         }
+
+        BitwardenOutlinedButtonWithIcon(
+            label = stringResource(id = R.string.log_in_sso),
+            icon = painterResource(id = R.drawable.ic_briefcase),
+            onClick = onSingleSignOnClick,
+            modifier = Modifier
+                .semantics { testTag = "LogInWithSsoButton" }
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = stringResource(
+                id = R.string.logging_in_as_x_on_y,
+                state.emailAddress,
+                state.environmentLabel,
+            ),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier
+                .semantics { testTag = "LoggingInAsLabel" }
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        BitwardenClickableText(
+            modifier = Modifier
+                .semantics { testTag = "NotYouLabel" }
+                .padding(horizontal = 16.dp),
+            onClick = onNotYouButtonClick,
+            label = stringResource(id = R.string.not_you),
+        )
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
