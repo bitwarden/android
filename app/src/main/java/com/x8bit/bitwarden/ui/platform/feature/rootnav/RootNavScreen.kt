@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -70,10 +72,10 @@ fun RootNavScreen(
     NavHost(
         navController = navController,
         startDestination = SPLASH_ROUTE,
-        enterTransition = { this.targetState.destination.route.toEnterTransition()(this) },
-        exitTransition = { this.targetState.destination.route.toExitTransition()(this) },
-        popEnterTransition = { this.targetState.destination.route.toEnterTransition()(this) },
-        popExitTransition = { this.targetState.destination.route.toExitTransition()(this) },
+        enterTransition = { toEnterTransition()(this) },
+        exitTransition = { toExitTransition()(this) },
+        popEnterTransition = { toEnterTransition()(this) },
+        popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
         authGraph(navController)
@@ -177,15 +179,27 @@ private fun NavDestination?.rootLevelRoute(): String? {
 /**
  * Define the enter transition for each route.
  */
-private fun String?.toEnterTransition(): NonNullEnterTransitionProvider = when (this) {
-    RESET_PASSWORD_ROUTE -> RootTransitionProviders.Enter.slideUp
-    else -> RootTransitionProviders.Enter.fadeIn
-}
+@Suppress("MaxLineLength")
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(): NonNullEnterTransitionProvider =
+    when (targetState.destination.rootLevelRoute()) {
+        RESET_PASSWORD_ROUTE -> RootTransitionProviders.Enter.slideUp
+        else -> when (initialState.destination.rootLevelRoute()) {
+            // The RESET_PASSWORD_ROUTE animation should be stay but due to an issue when combining
+            // certain animations, we are just using a fadeIn instead.
+            RESET_PASSWORD_ROUTE -> RootTransitionProviders.Enter.fadeIn
+            else -> RootTransitionProviders.Enter.fadeIn
+        }
+    }
 
 /**
  * Define the exit transition for each route.
  */
-private fun String?.toExitTransition(): NonNullExitTransitionProvider = when (this) {
-    RESET_PASSWORD_ROUTE -> RootTransitionProviders.Exit.slideDown
-    else -> RootTransitionProviders.Exit.fadeOut
-}
+@Suppress("MaxLineLength")
+private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition(): NonNullExitTransitionProvider =
+    when (initialState.destination.rootLevelRoute()) {
+        RESET_PASSWORD_ROUTE -> RootTransitionProviders.Exit.slideDown
+        else -> when (targetState.destination.rootLevelRoute()) {
+            RESET_PASSWORD_ROUTE -> RootTransitionProviders.Exit.stay
+            else -> RootTransitionProviders.Exit.fadeOut
+        }
+    }
