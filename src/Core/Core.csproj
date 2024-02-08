@@ -1,50 +1,111 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <!--When running Unit tests we'll have the custom constant "UT" added, so in this manner we can add the net8.0 target we need for UT -->
+    <TargetFrameworks Condition="$(CustomConstants.Contains(UT))">net8.0;net8.0-android;net8.0-ios</TargetFrameworks>
+    <TargetFrameworks Condition="!$(CustomConstants.Contains(UT))">net8.0-android;net8.0-ios</TargetFrameworks>
     <RootNamespace>Bit.Core</RootNamespace>
-    <AssemblyName>BitwardenCore</AssemblyName>
-    <Configurations>Debug;Release;FDroid</Configurations>
+
+    <UseMaui>true</UseMaui>
+		<ImplicitUsings>enable</ImplicitUsings>
+    
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+    <CreatePackage>false</CreatePackage>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="Resources\eff_long_word_list.txt" />
-    <None Remove="Resources\public_suffix_list.dat" />
-    <None Remove="Microsoft.AppCenter.Crashes" />
-    <None Remove="Services\Logging\" />
-    <None Remove="Attributes\" />
-    <None Remove="MessagePack" />
-    <None Remove="MessagePack.MSBuild.Tasks" />
-    <None Remove="Services\EmailForwarders\" />
-  </ItemGroup>
-
+	<PropertyGroup>
+    <DefineConstants Condition=" '$(CustomConstants)' != '' ">$(DefineConstants);$(CustomConstants)</DefineConstants>
+  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\eff_long_word_list.txt" />
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="CsvHelper" Version="30.0.1" />
-    <PackageReference Include="LiteDB" Version="5.0.17" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PCLCrypto" Version="2.0.147" />
-    <PackageReference Include="zxcvbn-core" Version="7.0.92" />
-    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.2" />
-    <PackageReference Include="MessagePack" Version="2.4.59" />
-    <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.4.59">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-  </ItemGroup>
-
+		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="MessagePack" Version="2.5.124" />
+	  <PackageReference Include="CsvHelper" Version="30.0.1" />
+	  <PackageReference Include="LiteDB" Version="5.0.17" />
+	  <PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
+	  <PackageReference Include="zxcvbn-core" Version="7.0.92" />
+	  <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.5.124">
+	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+	    <PrivateAssets>all</PrivateAssets>
+	  </PackageReference>		
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
+		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+		<!-- HACK: When running Unit Tests we cannot load FFImageLoading because it doesn't support "raw" net8.0 -->
+		<PackageReference Condition="!$(CustomConstants.Contains(UT))" Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
+	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND !$(DefineConstants.Contains(FDROID))">
+	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
+	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	</ItemGroup>
+	<ItemGroup Condition="!$(DefineConstants.Contains(FDROID))">
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
+	</ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Logging\" />
     <Folder Include="Attributes\" />
     <Folder Include="Services\EmailForwarders\" />
+    <Folder Include="Resources\Fonts\" />
+    <Folder Include="Effects\" />
+    <Folder Include="Resources\Raw\" />
+    <Folder Include="Behaviors\" />
+    <Folder Include="Controls\" />
+    <Folder Include="Lists\" />
+    <Folder Include="Resources\Styles\" />
+    <Folder Include="Utilities\AccountManagement\" />
+    <Folder Include="Utilities\Automation\" />
+    <Folder Include="Utilities\Prompts\" />
+    <Folder Include="Resources\Localization\" />
+    <Folder Include="Controls\Picker\" />
+    <Folder Include="Controls\Avatar\" />
   </ItemGroup>
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\dotnet_bot.svg">
+	    <BaseSize>168,208</BaseSize>
+	  </MauiImage>
+	  <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiFont Include="Resources\Fonts\*" />
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="Resources\Localization\AppResources.resx">
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+		<Compile Update="Pages\AndroidNavigationRedirectPage.xaml.cs">
+		  <DependentUpon>AndroidNavigationRedirectPage.xaml</DependentUpon>
+		</Compile>
+    <Compile Update="Resources\Localization\AppResources.Designer.cs">
+      <DependentUpon>AppResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiXaml Update="Pages\AndroidNavigationRedirectPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Controls\Picker\" />
+	  <None Remove="Controls\Avatar\" />
+	</ItemGroup>
 </Project>

@@ -1,441 +1,260 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>Bit.App</RootNamespace>
-    <AssemblyName>BitwardenApp</AssemblyName>
-    <Configurations>Debug;Release;FDroid</Configurations>
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-android;net8.0-ios</TargetFrameworks>
+
+    <!-- Uncomment to also build for Windows platform.-->
+    <!--<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>-->
+
+    <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+    <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Bit.App</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+
+		<!-- Display name -->
+		<ApplicationTitle>Bitwarden</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">com.8bit.bitwarden</ApplicationId>
+		<ApplicationId Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">com.x8bit.bitwarden</ApplicationId>
+		<ApplicationIdGuid>ccf4766c-a36c-4647-900c-0ea7d323ccc6</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+
+		<ForceSimulatorX64ArchitectureInIDE>true</ForceSimulatorX64ArchitectureInIDE>
+	</PropertyGroup>
+	<PropertyGroup>
+    <DefineConstants Condition=" '$(CustomConstants)' != '' ">$(DefineConstants);$(CustomConstants)</DefineConstants>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>true</DebugSymbols>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <UseInterpreter>False</UseInterpreter>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.3" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.6" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
-    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2612" />
-    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
-    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
-    <PackageReference Include="MessagePack" Version="2.4.59" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Pages\Accounts\EnvironmentPage.xaml.cs">
-      <DependentUpon>EnvironmentPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\HintPage.xaml.cs">
-      <DependentUpon>HintPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\LockPage.xaml.cs">
-      <DependentUpon>LockPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\TwoFactorPage.xaml.cs">
-      <DependentUpon>TwoFactorPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\RegisterPage.xaml.cs">
-      <DependentUpon>RegisterPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\LoginPage.xaml.cs">
-      <DependentUpon>LoginPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Generator\GeneratorPage.xaml.cs">
-      <DependentUpon>GeneratorPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Generator\GeneratorHistoryPage.xaml.cs">
-      <DependentUpon>GeneratorHistoryPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\AutofillPage.xaml.cs">
-      <DependentUpon>AutofillPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\ExtensionPage.xaml.cs">
-      <DependentUpon>ExtensionPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\FolderAddEditPage.xaml.cs">
-      <DependentUpon>FolderAddEditPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\FoldersPage.xaml.cs">
-      <DependentUpon>FoldersPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\ExportVaultPage.xaml.cs">
-      <DependentUpon>ExportVaultPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\AttachmentsPage.xaml.cs">
-      <DependentUpon>AttachmentsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\AutofillCiphersPage.xaml.cs">
-      <DependentUpon>AutofillCiphersPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\CollectionsPage.xaml.cs">
-      <DependentUpon>CollectionsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\ScanPage.xaml.cs">
-      <DependentUpon>ScanPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\SharePage.xaml.cs">
-      <DependentUpon>SharePage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\CiphersPage.xaml.cs">
-      <DependentUpon>CiphersPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\PasswordHistoryPage.xaml.cs">
-      <DependentUpon>PasswordHistoryPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\CipherDetailsPage.xaml.cs">
-      <DependentUpon>CipherDetailsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\CipherAddEditPage.xaml.cs">
-      <DependentUpon>CipherAddEditPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Settings\SettingsPage\SettingsPage.xaml.cs">
-      <DependentUpon>SettingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Vault\GroupingsPage\GroupingsPage.xaml.cs">
-      <DependentUpon>GroupingsPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\LoginSsoPage.xaml.cs">
-      <DependentUpon>LoginSsoPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Pages\Accounts\SetPasswordPage.xaml.cs">
-      <DependentUpon>ResetMasterPasswordPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Pages\Send\SendGroupingsPage\SendGroupingsPage.xaml.cs">
-      <DependentUpon>SendGroupingsPage.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Remove="Pages\Accounts\AccountsPopupPage.xaml.cs" />
-    <Compile Update="Pages\Accounts\LoginPasswordlessPage.xaml.cs">
-      <DependentUpon>LoginPasswordlessPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Pages\Accounts\LoginPasswordlessRequestPage.xaml.cs">
-      <DependentUpon>LoginPasswordlessRequestPage.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Behaviors\" />
-    <Folder Include="Lists\" />
-    <Folder Include="Lists\ItemLayouts\" />
-    <Folder Include="Lists\DataTemplateSelectors\" />
-    <Folder Include="Lists\ItemLayouts\CustomFields\" />
-    <Folder Include="Lists\ItemViewModels\" />
-    <Folder Include="Lists\ItemViewModels\CustomFields\" />
-    <Folder Include="Controls\AccountSwitchingOverlay\" />
-    <Folder Include="Utilities\AccountManagement\" />
-    <Folder Include="Controls\DateTime\" />
-    <Folder Include="Controls\IconLabelButton\" />
-    <Folder Include="Controls\PasswordStrengthProgressBar\" />
-    <Folder Include="Utilities\Automation\" />
-    <Folder Include="Utilities\Prompts\" />
-    <Folder Include="Controls\Settings\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Pages\Accounts\AccountsPopupPage.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Styles\Black.xaml.cs">
-      <DependentUpon>Black.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Styles\Nord.xaml.cs">
-      <DependentUpon>Nord.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Styles\Variables.xaml.cs">
-      <DependentUpon>Variables.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Styles\Light.xaml.cs">
-      <DependentUpon>Light.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Styles\Dark.xaml.cs">
-      <DependentUpon>Dark.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Styles\iOS.xaml.cs">
-      <DependentUpon>iOS.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="Styles\Android.xaml.cs">
-      <DependentUpon>Android.xaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\AppResources.cs.Designer.cs">
-      <DependentUpon>AppResources.cs.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.da.Designer.cs">
-      <DependentUpon>AppResources.da.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.de.Designer.cs">
-      <DependentUpon>AppResources.de.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>AppResources.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\AppResources.es.Designer.cs">
-      <DependentUpon>AppResources.es.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.fi.Designer.cs">
-      <DependentUpon>AppResources.fi.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.fr.Designer.cs">
-      <DependentUpon>AppResources.fr.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.hi.Designer.cs">
-      <DependentUpon>AppResources.hi.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.hr.Designer.cs">
-      <DependentUpon>AppResources.hr.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.hu.Designer.cs">
-      <DependentUpon>AppResources.hu.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.id.Designer.cs">
-      <DependentUpon>AppResources.id.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.it.Designer.cs">
-      <DependentUpon>AppResources.it.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.ja.Designer.cs">
-      <DependentUpon>AppResources.ja.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.nl.Designer.cs">
-      <DependentUpon>AppResources.nl.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.pl.Designer.cs">
-      <DependentUpon>AppResources.pl.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.pt-BR.Designer.cs">
-      <DependentUpon>AppResources.pt-BR.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.pt-PT.Designer.cs">
-      <DependentUpon>AppResources.pt-PT.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.ro.Designer.cs">
-      <DependentUpon>AppResources.ro.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.ru.Designer.cs">
-      <DependentUpon>AppResources.ru.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.sk.Designer.cs">
-      <DependentUpon>AppResources.sk.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.sv.Designer.cs">
-      <DependentUpon>AppResources.sv.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.th.Designer.cs">
-      <DependentUpon>AppResources.th.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.tr.Designer.cs">
-      <DependentUpon>AppResources.tr.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.uk.Designer.cs">
-      <DependentUpon>AppResources.uk.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.vi.Designer.cs">
-      <DependentUpon>AppResources.vi.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.zh-Hans.Designer.cs">
-      <DependentUpon>AppResources.zh-Hans.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\AppResources.zh-Hant.Designer.cs">
-      <DependentUpon>AppResources.zh-Hant.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Resources\AppResources.cs.resx">
-      <LastGenOutput>AppResources.cs.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.da.resx">
-      <LastGenOutput>AppResources.da.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.de.resx">
-      <LastGenOutput>AppResources.de.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.es.resx">
-      <LastGenOutput>AppResources.es.Designer.cs</LastGenOutput>
-      <Generator>PublicResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.fi.resx">
-      <LastGenOutput>AppResources.fi.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.fr.resx">
-      <LastGenOutput>AppResources.fr.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.hi.resx">
-      <LastGenOutput>AppResources.hi.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.hr.resx">
-      <LastGenOutput>AppResources.hr.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.hu.resx">
-      <LastGenOutput>AppResources.hu.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.id.resx">
-      <LastGenOutput>AppResources.id.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.it.resx">
-      <LastGenOutput>AppResources.it.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.ja.resx">
-      <LastGenOutput>AppResources.ja.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.nl.resx">
-      <LastGenOutput>AppResources.nl.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.pl.resx">
-      <LastGenOutput>AppResources.pl.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.pt-BR.resx">
-      <LastGenOutput>AppResources.pt-BR.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.pt-PT.resx">
-      <LastGenOutput>AppResources.pt-PT.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.ro.resx">
-      <LastGenOutput>AppResources.ro.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.ru.resx">
-      <LastGenOutput>AppResources.ru.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.sk.resx">
-      <LastGenOutput>AppResources.sk.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.sv.resx">
-      <LastGenOutput>AppResources.sv.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.th.resx">
-      <LastGenOutput>AppResources.th.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.tr.resx">
-      <LastGenOutput>AppResources.tr.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.uk.resx">
-      <LastGenOutput>AppResources.uk.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.vi.resx">
-      <LastGenOutput>AppResources.vi.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.zh-Hans.resx">
-      <LastGenOutput>AppResources.zh-Hans.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.zh-Hant.resx">
-      <LastGenOutput>AppResources.zh-Hant.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Behaviors\" />
-    <None Remove="Xamarin.CommunityToolkit" />
-    <None Remove="Lists\" />
-    <None Remove="Lists\DataTemplates\" />
-    <None Remove="Lists\DataTemplateSelectors\" />
-    <None Remove="Lists\DataTemplates\CustomFields\" />
-    <None Remove="Lists\ItemViewModels\" />
-    <None Remove="Lists\ItemViewModels\CustomFields\" />
-    <None Remove="Controls\AccountSwitchingOverlay\" />
-    <None Remove="Utilities\AccountManagement\" />
-    <None Remove="Controls\DateTime\" />
-    <None Remove="Controls\IconLabelButton\" />
-    <None Remove="MessagePack" />
-    <None Remove="MessagePack.MSBuild.Tasks" />
-    <None Remove="Controls\PasswordStrengthProgressBar\" />
-    <None Remove="Utilities\Automation\" />
-    <None Remove="Utilities\Prompts\" />
-    <None Remove="Controls\Settings\" />
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
+    <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+    <UseInterpreter>False</UseInterpreter>
+    <DebugSymbols>False</DebugSymbols>
+    <RunAOTCompilation>False</RunAOTCompilation>
+    <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
+    <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
+  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+	  <CodesignProvision>Automatic</CodesignProvision>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	  <UseInterpreter>true</UseInterpreter>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|iossimulator-x64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|ios-arm64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+	  <CreatePackage>false</CreatePackage>
+      <CodesignProvision>$(ReleaseCodesignProvision)</CodesignProvision>
+      <CodesignKey>$(ReleaseCodesignKey)</CodesignKey>
+	  <CodesignEntitlements>Platforms\iOS\Entitlements.plist</CodesignEntitlements>
+	  <UseInterpreter>true</UseInterpreter>
+	  <MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
+	</PropertyGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+		<!--This is needed for PCLCrypto to work correctly-->
+		<TrimmerRootAssembly Include="System.Security.Cryptography" />
+	</ItemGroup>
+	<ItemGroup>
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\arm64-v8a\libargon2.so" />
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\armeabi-v7a\libargon2.so" />
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\x86\libargon2.so" />
+	  <AndroidNativeLibrary Include="Platforms\Android\lib\x86_64\libargon2.so" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="CsvHelper" Version="30.0.1" />
+		<PackageReference Include="LiteDB" Version="5.0.17" />
+		<PackageReference Include="MessagePack" Version="2.5.124" />
+		<PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.5.124">
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		  <PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
+		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
+		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+		<PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
+		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Effects\" />
+	  <Folder Include="Resources\" />
+	  <Folder Include="Resources\AppIcon\" />
+	  <Folder Include="Resources\Splash\" />
+	  <Folder Include="Platforms\Android\Accessibility\" />
+	  <Folder Include="Platforms\Android\Autofill\" />
+	  <Folder Include="Platforms\Android\Push\" />
+	  <Folder Include="Platforms\Android\Receivers\" />
+	  <Folder Include="Platforms\Android\Services\" />
+	  <Folder Include="Platforms\Android\Tiles\" />
+	  <Folder Include="Platforms\Android\Utilities\" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
+	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND !$(DefineConstants.Contains(FDROID))">
+	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
+	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	</ItemGroup>
+	<ItemGroup Condition="!$(DefineConstants.Contains(FDROID))">
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-mdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-hdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xhdpi\logo_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xhdpi\yubikey.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xhdpi\logo_white_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xxhdpi\logo_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xxhdpi\yubikey.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-xxhdpi\logo_white_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\logo_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\yubikey.png" />
+	  <BundleResource Include="Platforms\Android\Resources\drawable-hdpi\logo_white_legacy.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher.png" />
+	  <BundleResource Include="Platforms\Android\Resources\mipmap-xhdpi\ic_launcher_round.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo_white%402x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\more_vert%402x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo_white%403x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo%403x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\more_vert%403x.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\more_vert.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo_white.png" />
+	  <BundleResource Include="Platforms\iOS\Resources\logo%402x.png" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\iOS.Core\iOS.Core.csproj" Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'" />
+	  <ProjectReference Include="..\Core\Core.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+				<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+	</ItemGroup>
+	<ItemGroup>
+	  <MauiImage Include="Resources\cog_settings.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\ext_act.png" />
+	  <MauiImage Include="Resources\ext_more.png" />
+	  <MauiImage Include="Resources\ext_use.png" />
+	  <MauiImage Include="Resources\generate.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\info.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\lock.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\login.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\logo_white.png" />
+	  <MauiImage Include="Resources\logo.png" />
+	  <MauiImage Include="Resources\more_vert.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\more.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\plus.svg" TintColor="#FFFFFFFF">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\send.svg">
+	    <BaseSize>24,24</BaseSize>
+	  </MauiImage>
+	  <MauiImage Include="Resources\yubikey.png" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios' AND '$(IncludeBitwardeniOSExtensions)' == 'True'">
+		<ProjectReference Include="..\iOS.Autofill\iOS.Autofill.csproj">
+			<IsAppExtension>true</IsAppExtension>
+			<IsWatchApp>false</IsWatchApp>
+		</ProjectReference>
+		<ProjectReference Include="..\iOS.Extension\iOS.Extension.csproj">
+			<IsAppExtension>true</IsAppExtension>
+			<IsWatchApp>false</IsWatchApp>
+		</ProjectReference>
+		<ProjectReference Include="..\iOS.ShareExtension\iOS.ShareExtension.csproj">
+			<IsAppExtension>true</IsAppExtension>
+			<IsWatchApp>false</IsWatchApp>
+		</ProjectReference>
+	</ItemGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios' AND '$(IncludeBitwardenWatchOSApp)' == 'True'">
+		<WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-acgkbpwvmebfiofokotvoerzkqcl/Build/Products</WatchAppBuildPath>
+		<WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..'))/watchOS/bitwarden.xcarchive/Products/Applications/bitwarden.app/Watch</WatchAppBuildPath>
+		<WatchAppBundle>Bitwarden.app</WatchAppBundle>
+			<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'!='ios-arm64'">watchsimulator</WatchAppConfiguration>
+			<WatchAppConfiguration Condition="'$(RuntimeIdentifier)'=='ios-arm64'">watchos</WatchAppConfiguration>
+		<WatchAppBundleFullPath Condition=" '$(Configuration)' == 'Debug' ">$(WatchAppBuildPath)/$(Configuration)-$(WatchAppConfiguration)/$(WatchAppBundle)</WatchAppBundleFullPath>
+		<WatchAppBundleFullPath Condition=" '$(Configuration)' != 'Debug' ">$(WatchAppBuildPath)/$(WatchAppBundle)</WatchAppBundleFullPath>
+	</PropertyGroup>
+	<ItemGroup Condition="'$(TargetFramework)'=='net8.0-ios' AND Exists('$(WatchAppBundleFullPath)') ">
+		<_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
+	</ItemGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net8.0-ios' AND Exists('$(WatchAppBundleFullPath)') ">
+		<CreateAppBundleDependsOn>
+			_CopyWatchOS2AppsToBundle;
+			$(CreateAppBundleDependsOn);
+		</CreateAppBundleDependsOn>
+	</PropertyGroup>
+	<ItemGroup>
+	  <GoogleServicesJson Include="Platforms\Android\google-services.json" />
+	  <GoogleServicesJson Include="Platforms\Android\google-services.json.enc" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="Platforms\iOS\Resources\logo.png" />
+	  <None Remove="Platforms\iOS\Resources\logo_white%402x.png" />
+	  <None Remove="Platforms\iOS\Resources\more_vert%402x.png" />
+	  <None Remove="Platforms\iOS\Resources\logo_white%403x.png" />
+	  <None Remove="Platforms\iOS\Resources\logo%403x.png" />
+	  <None Remove="Platforms\iOS\Resources\more_vert%403x.png" />
+	  <None Remove="Platforms\iOS\Resources\more_vert.png" />
+	  <None Remove="Platforms\iOS\Resources\logo_white.png" />
+	  <None Remove="Platforms\iOS\Resources\logo%402x.png" />
+	</ItemGroup>
 </Project>

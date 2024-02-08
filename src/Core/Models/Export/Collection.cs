@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Models.View;
+using CollectionView = Bit.Core.Models.View.CollectionView;
 
 namespace Bit.Core.Models.Export
 {

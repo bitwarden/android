@@ -44,7 +44,7 @@ namespace Bit.Core.Test.AutoFixture
             fixture.Customize<CipherView>(composer => composer
                 .Without(c => c.OrganizationId)
                 .Without(c => c.Attachments)
-                .With(c => c.Key, new SymmetricCryptoKey(getRandomBytes(32), Enums.EncryptionType.AesCbc128_HmacSha256_B64)));
+                .With(c => c.Key, new CipherKey(getRandomBytes(32), Enums.EncryptionType.AesCbc128_HmacSha256_B64)));
         }
     }
 

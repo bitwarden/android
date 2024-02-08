@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Text;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
@@ -16,9 +17,10 @@ using Bit.iOS.Core.Views;
 using CoreFoundation;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Platform;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Autofill
 {
@@ -29,7 +31,7 @@ namespace Bit.iOS.Autofill
         private Core.NFCReaderDelegate _nfcDelegate = null;
         private IAccountsManager _accountsManager;
 
-        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
+        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -37,18 +39,23 @@ namespace Bit.iOS.Autofill
             ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
         }
 
+        private ASCredentialProviderExtensionContext ASExtensionContext => _context?.ExtContext as ASCredentialProviderExtensionContext;
+
         public override void ViewDidLoad()
         {
             try
             {
-                InitApp();
+                InitAppIfNeeded();
+
                 base.ViewDidLoad();
+
                 Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
                 View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
                 _context = new Context
                 {
                     ExtContext = ExtensionContext
                 };
+
             }
             catch (Exception ex)
             {
@@ -169,7 +176,7 @@ namespace Bit.iOS.Autofill
             if ((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteExtensionConfigurationRequest();
+                ASExtensionContext?.CompleteExtensionConfigurationRequest();
                 return;
             }
 
@@ -178,7 +185,7 @@ namespace Bit.iOS.Autofill
                 ServiceContainer.Reset();
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
-                NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CancelRequest(err));
+                NSRunLoop.Main.BeginInvokeOnMainThread(() => ASExtensionContext?.CancelRequest(err));
                 return;
             }
 
@@ -196,7 +203,7 @@ namespace Bit.iOS.Autofill
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
                 }
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteRequest(cred, null);
+                ASExtensionContext?.CompleteRequest(cred, null);
             });
         }
 
@@ -243,37 +250,49 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public void DismissLockAndContinue()
+        public async void DismissLockAndContinue()
         {
-            DismissViewController(false, async () =>
+            DismissViewController(false, async () => await OnLockDismissedAsync());
+        }
+
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+            var uiController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
+            uiController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+
+            PresentViewController(uiController, true, null);
+        }
+
+        public async Task OnLockDismissedAsync()
+        {
+            try
             {
-                try
+                if (_context.CredentialIdentity != null)
                 {
-                    if (_context.CredentialIdentity != null)
-                    {
-                        await ProvideCredentialAsync();
-                        return;
-                    }
-                    if (_context.Configuring)
-                    {
-                        PerformSegue("setupSegue", this);
-                        return;
-                    }
-                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
-                    {
-                        PerformSegue("loginSearchSegue", this);
-                    }
-                    else
-                    {
-                        PerformSegue("loginListSegue", this);
-                    }
+                    await MainThread.InvokeOnMainThreadAsync(() => ProvideCredentialAsync());
+                    return;
                 }
-                catch (Exception ex)
+                if (_context.Configuring)
                 {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                    throw;
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("setupSegue", this));
+                    return;
                 }
-            });
+
+                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginSearchSegue", this));
+                }
+                else
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginListSegue", this));
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                throw;
+            }
         }
 
         private async Task ProvideCredentialAsync(bool userInteraction = true)
@@ -349,7 +368,7 @@ namespace Bit.iOS.Autofill
         {
             if (await IsLocked() || await _stateService.Value.GetPasswordRepromptAutofillAsync())
             {
-                DispatchQueue.MainQueue.DispatchAsync(() =>  PerformSegue("lockPasswordSegue", this));
+                DispatchQueue.MainQueue.DispatchAsync(() => PerformSegue("lockPasswordSegue", this));
             }
             else
             {
@@ -392,31 +411,8 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
-            // Init Xamarin Forms
-            Forms.Init();
-
-            if (ServiceContainer.RegisteredServices.Count > 0)
-            {
-                ServiceContainer.Reset();
-            }
-            iOSCoreHelpers.RegisterLocalServices();
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
-                Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            iOSCoreHelpers.InitLogger();
-            iOSCoreHelpers.RegisterFinallyBeforeBootstrap();
-            iOSCoreHelpers.Bootstrap();
-            var appOptions = new AppOptions { IosExtension = true };
-            var app = new App.App(appOptions);
-            ThemeManager.SetTheme(app.Resources);
-            iOSCoreHelpers.AppearanceAdjustments();
-            _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
-                messagingService.Send("gotYubiKeyOTP", message));
-            iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
-
-            _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
-            _accountsManager.Init(() => appOptions, this);
+            iOSCoreHelpers.InitApp(this, Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey,
+                _nfcSession, out _nfcDelegate, out _accountsManager);
         }
 
         private void InitAppIfNeeded()
@@ -443,10 +439,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => CompleteRequest();
             }
 
-            var navigationPage = new NavigationPage(homePage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(homePage);
 
             LogoutIfAuthed();
         }
@@ -463,10 +456,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(environmentPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(environmentPage);
         }
 
         private void LaunchRegisterFlow()
@@ -481,10 +471,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(registerPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(registerPage);
         }
 
         private void LaunchLoginFlow(string email = null)
@@ -504,10 +491,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -527,10 +511,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginWithDevicePage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginWithDevicePage);
 
             LogoutIfAuthed();
         }
@@ -551,10 +532,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -581,10 +559,7 @@ namespace Bit.iOS.Autofill
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
             }
 
-            var navigationPage = new NavigationPage(twoFactorPage);
-            var twoFactorController = navigationPage.CreateViewController();
-            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(twoFactorController, true, null);
+            NavigateToPage(twoFactorPage);
         }
 
         private void LaunchSetPasswordFlow()
@@ -600,10 +575,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(setPasswordPage);
-            var setPasswordController = navigationPage.CreateViewController();
-            setPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(setPasswordController, true, null);
+            NavigateToPage(setPasswordPage);
         }
 
         private void LaunchUpdateTempPasswordFlow()
@@ -618,10 +590,7 @@ namespace Bit.iOS.Autofill
                 vm.LogOutAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(updateTempPasswordPage);
-            var updateTempPasswordController = navigationPage.CreateViewController();
-            updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(updateTempPasswordController, true, null);
+            NavigateToPage(updateTempPasswordPage);
         }
 
         private void LaunchDeviceApprovalOptionsFlow()
@@ -637,10 +606,7 @@ namespace Bit.iOS.Autofill
                 vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email, true));
             }
 
-            var navigationPage = new NavigationPage(loginApproveDevicePage);
-            var loginApproveDeviceController = navigationPage.CreateViewController();
-            loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginApproveDeviceController, true, null);
+            NavigateToPage(loginApproveDevicePage);
         }
 
         public Task SetPreviousPageInfoAsync() => Task.CompletedTask;

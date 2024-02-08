@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:BaseContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.SendsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:views="clr-namespace:Bit.Core.Models.View"
+    xmlns:core="clr-namespace:Bit.Core"
+    x:DataType="pages:SendsPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+
+    <ContentPage.BindingContext>
+        <pages:SendsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                         x:Name="_closeItem" x:Key="closeItem" />
+            <StackLayout
+                Orientation="Horizontal"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                Spacing="0"
+                Padding="0"
+                x:Name="_titleLayout"
+                x:Key="titleLayout">
+                <controls:MiButton
+                    StyleClass="btn-title, btn-title-platform"
+                    Text="&#xe5c4;"
+                    VerticalOptions="CenterAndExpand"
+                    Clicked="BackButton_Clicked"
+                    x:Name="_backButton" />
+                <controls:ExtendedSearchBar
+                    x:Name="_searchBar"
+                    HorizontalOptions="FillAndExpand"
+                    TextChanged="SearchBar_TextChanged"
+                    SearchButtonPressed="SearchBar_SearchButtonPressed"
+                    Placeholder="{Binding PageTitle}" />
+            </StackLayout>
+            <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform"
+                     x:Name="_separator" x:Key="separator" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout x:Name="_mainLayout" Spacing="0" Padding="0">
+        <controls:IconLabel IsVisible="{Binding ShowSearchDirection}"
+               Text="{Binding Source={x:Static core:BitwardenIcons.Search}}"
+               StyleClass="text-muted"
+               FontSize="50"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center" />
+        <Label IsVisible="{Binding ShowNoData}"
+               Text="{u:I18n NoItemsToList}"
+               Margin="20, 0"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center"
+               AutomationId="NoSendDisplayedLabel" />
+        <controls:ExtendedCollectionView
+               IsVisible="{Binding ShowList}"
+               ItemsSource="{Binding Sends}"
+               VerticalOptions="FillAndExpand"
+               SelectionMode="Single"
+               SelectionChanged="RowSelected"
+               StyleClass="list, list-platform"
+               ExtraDataForLogging="Sends Page"
+               AutomationId="SendCellList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="controls:SendViewCellViewModel">
+                    <controls:SendViewCell
+                        ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
+                        AutomationId="SendCell" />
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </controls:ExtendedCollectionView>
+    </StackLayout>
+
+</pages:BaseContentPage>

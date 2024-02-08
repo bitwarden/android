@@ -1,240 +1,39 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E71F3053-056C-4381-9638-048ED73BDFF6}</ProjectGuid>
-    <ProjectTypeGuids>{FEACFBD2-3405-455C-9665-78FE426C6842};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TemplateGuid>{a52b8a63-bc84-4b47-910d-692533484892}</TemplateGuid>
-    <OutputType>Library</OutputType>
+    <TargetFrameworks>net8.0-ios;net8.0-android</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <UseMaui>true</UseMaui>
+    <ImplicitUsings>true</ImplicitUsings>
+
+    <ForceSimulatorX64ArchitectureInIDE>true</ForceSimulatorX64ArchitectureInIDE>
+
+    <!--<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>-->
     <RootNamespace>Bit.iOS.Core</RootNamespace>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>BitwardeniOSCore</AssemblyName>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <CreatePackage>false</CreatePackage>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <CreatePackage>false</CreatePackage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <OutputPath>bin\iPhoneSimulator\Release\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|AnyCPU'">
-    <OutputPath>bin\FDroid\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|AnyCPU'">
-    <OutputPath>bin\AppStore\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
-    <OutputPath>bin\iPhone\AppStore\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator' ">
-    <OutputPath>bin\iPhoneSimulator\AppStore\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|AnyCPU'">
-    <OutputPath>bin\Ad-Hoc\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
-    <OutputPath>bin\iPhone\Ad-Hoc\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhoneSimulator' ">
-    <OutputPath>bin\iPhoneSimulator\Ad-Hoc\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <NoWarn>;VSX1000</NoWarn>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Xamarin.iOS" />
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-android'">
+    <Content Remove="**" />
+    <Compile Remove="**" />
+    <EmbeddedResource Remove="**" />
+    <None Remove="**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\" />
-    <Folder Include="Effects\" />
-    <Folder Include="Renderers\CollectionView\" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\ExtendedUITableViewController.cs" />
-    <Compile Include="Controllers\ExtendedUITableViewCell.cs" />
-    <Compile Include="Controllers\ExtendedUIViewController.cs" />
-    <Compile Include="Controllers\ExtendedUITableViewSource.cs" />
-    <Compile Include="Controllers\LoginAddViewController.cs" />
-    <Compile Include="Controllers\PasswordGeneratorViewController.cs" />
-    <Compile Include="Models\AppExtensionContext.cs" />
-    <Compile Include="Models\CipherViewModel.cs" />
-    <Compile Include="Models\FillScript.cs" />
-    <Compile Include="Models\PageDetails.cs" />
-    <Compile Include="Models\PasswordGenerationOptions.cs" />
-    <Compile Include="NFCReaderDelegate.cs" />
-    <Compile Include="Renderers\CustomButtonRenderer.cs" />
-    <Compile Include="Renderers\CustomContentPageRenderer.cs" />
-    <Compile Include="Renderers\CustomNavigationRenderer.cs" />
-    <Compile Include="Renderers\ExtendedDatePickerRenderer.cs" />
-    <Compile Include="Renderers\CustomEditorRenderer.cs" />
-    <Compile Include="Renderers\CustomEntryRenderer.cs" />
-    <Compile Include="Renderers\CustomLabelRenderer.cs" />
-    <Compile Include="Renderers\CustomPickerRenderer.cs" />
-    <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
-    <Compile Include="Renderers\CustomTabbedRenderer.cs" />
-    <Compile Include="Renderers\ExtendedStepperRenderer.cs" />
-    <Compile Include="Renderers\ExtendedTimePickerRenderer.cs" />
-    <Compile Include="Renderers\CustomViewCellRenderer.cs" />
-    <Compile Include="Renderers\HybridWebViewRenderer.cs" />
-    <Compile Include="Services\BiometricService.cs" />
-    <Compile Include="Services\DeviceActionService.cs" />
-    <Compile Include="Utilities\ASHelpers.cs" />
-    <Compile Include="Utilities\Dialogs.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\CryptoPrimitiveService.cs" />
-    <Compile Include="Services\KeyChainStorageService.cs" />
-    <Compile Include="Services\LocalizeService.cs" />
-    <Compile Include="Utilities\iOSCoreHelpers.cs" />
-    <Compile Include="Utilities\iOSHelpers.cs" />
-    <Compile Include="Utilities\ThemeHelpers.cs" />
-    <Compile Include="Views\CustomPresentationControllerDelegate.cs" />
-    <Compile Include="Views\ExtensionSearchDelegate.cs" />
-    <Compile Include="Views\ExtensionTableSource.cs" />
-    <Compile Include="Views\FormEntryTableViewCell.cs" />
-    <Compile Include="Views\ISelectable.cs" />
-    <Compile Include="Views\PickerTableViewCell.cs" />
-    <Compile Include="Views\SliderTableViewCell.cs" />
-    <Compile Include="Views\StepperTableViewCell.cs" />
-    <Compile Include="Views\SwitchTableViewCell.cs" />
-    <Compile Include="Views\Toast.cs" />
-    <Compile Include="Renderers\SelectableLabelRenderer.cs" />
-    <Compile Include="Effects\ScrollEnabledEffect.cs" />
-    <Compile Include="Services\ClipboardService.cs" />
-    <Compile Include="Utilities\FontElementExtensions.cs" />
-    <Compile Include="Effects\ScrollViewContentInsetAdjustmentBehaviorEffect.cs" />
-    <Compile Include="Utilities\AccountSwitchingOverlayHelper.cs" />
-    <Compile Include="Utilities\ImageSourceExtensions.cs" />
-    <Compile Include="Controllers\BaseLockPasswordViewController.cs" />
-    <Compile Include="Renderers\CollectionView\ExtendedCollectionViewRenderer.cs" />
-    <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewController.cs" />
-    <Compile Include="Utilities\UISearchBarExtensions.cs" />
-    <Compile Include="Renderers\CollectionView\CollectionException.cs" />
-    <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewDelegator.cs" />
-    <Compile Include="Effects\NoEmojiKeyboardEffect.cs" />
-    <Compile Include="Utilities\WCSessionManager.cs" />
-    <Compile Include="Services\FileService.cs" />
-    <Compile Include="Utilities\UIViewControllerExtensions.cs" />
-    <Compile Include="Services\AutofillHandler.cs" />
-    <Compile Include="Utilities\DictionaryExtensions.cs" />
-    <Compile Include="Services\WatchDeviceService.cs" />
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\App\App.csproj">
-      <Project>{ee44c6a1-2a85-45fe-8d9b-bf1d5f88809c}</Project>
-      <Name>App</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{4b8a8c41-9820-4341-974c-41e65b7f4366}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
+    <None Remove="Handlers\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NETStandard.Library">
-      <Version>2.0.3</Version>
-    </PackageReference>
+    <Folder Include="Handlers\" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

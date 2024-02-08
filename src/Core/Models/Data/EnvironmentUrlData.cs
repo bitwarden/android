@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using Bit.Core.Enums;
 using Bit.Core.Utilities;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Models.Data
 {
@@ -47,19 +47,19 @@ namespace Bit.Core.Models.Data
                 && string.IsNullOrEmpty(WebVault)
                 && string.IsNullOrEmpty(Events);
 
-        public Region Region
+        public BwRegion Region
         {
             get
             {
-                if (Base == Region.US.BaseUrl())
+                if (Base == BwRegion.US.BaseUrl())
                 {
-                    return Region.US;
+                    return BwRegion.US;
                 }
-                if (Base == Region.EU.BaseUrl())
+                if (Base == BwRegion.EU.BaseUrl())
                 {
-                    return Region.EU;
+                    return BwRegion.EU;
                 }
-                return Region.SelfHosted;
+                return BwRegion.SelfHosted;
             }
         }
 
@@ -98,7 +98,7 @@ namespace Bit.Core.Models.Data
             {
                 return string.Empty;
             }
-            if (url.Contains(Region.US.Domain()) || url.Contains(Region.EU.Domain()))
+            if (url.Contains(BwRegion.US.Domain()) || url.Contains(BwRegion.EU.Domain()))
             {
                 return CoreHelpers.GetDomain(url);
             }

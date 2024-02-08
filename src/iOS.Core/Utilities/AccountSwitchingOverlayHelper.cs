@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Bit.App.Controls;
+﻿using Bit.App.Controls;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using CoreGraphics;
+using Microsoft.Maui.Platform;
+using SkiaSharp.Views.iOS;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Core.Utilities
 {
@@ -24,7 +23,7 @@ namespace Bit.iOS.Core.Utilities
             _logger = ServiceContainer.Resolve<ILogger>("logger");
         }
 
-        public async Task<UIImage> CreateAvatarImageAsync()
+        public async Task<UIImage?> CreateAvatarImageAsync()
         {
             try
             {
@@ -33,12 +32,19 @@ namespace Bit.iOS.Core.Utilities
                     throw new NullReferenceException(nameof(_stateService));
                 }
 
-                var avatarImageSource = new AvatarImageSource(await _stateService.GetActiveUserIdAsync(),
-                    await _stateService.GetNameAsync(), await _stateService.GetEmailAsync(),
-                    await _stateService.GetAvatarColorAsync());
-                using (var avatarUIImage = await avatarImageSource.GetNativeImageAsync())
+                var avatarInfo = await _stateService.GetActiveUserCustomDataAsync<AvatarInfo?>(a => a?.Profile is null
+                    ? null
+                    : new AvatarInfo(a.Profile.UserId, a.Profile.Name, a.Profile.Email, a.Profile.AvatarColor));
+
+                if (!avatarInfo.HasValue)
                 {
-                    return avatarUIImage?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal) ?? UIImage.GetSystemImage(DEFAULT_SYSTEM_AVATAR_IMAGE);
+                    return UIImage.GetSystemImage(DEFAULT_SYSTEM_AVATAR_IMAGE);
+                }
+
+                using (var avatarUIImage = SKAvatarImageHelper.Draw(avatarInfo.Value))
+                {
+                    return avatarUIImage?.ToUIImage()?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+                        ?? UIImage.GetSystemImage(DEFAULT_SYSTEM_AVATAR_IMAGE);
                 }
             }
             catch (Exception ex)
@@ -69,10 +75,12 @@ namespace Bit.iOS.Core.Utilities
             overlay.BindingContext = vm;
             overlay.IsVisible = false;
 
-            var renderer = Platform.CreateRenderer(overlay.Content);
-            renderer.SetElementSize(new Size(containerView.Frame.Size.Width, containerView.Frame.Size.Height));
+            if (MauiContextSingleton.Instance.MauiContext is null)
+            {
+                throw new ArgumentNullException("Maui context should be set to create the account switching overlay view");
+            }
 
-            var view = renderer.NativeView;
+            var view = overlay.ToPlatform(MauiContextSingleton.Instance.MauiContext);
             view.TranslatesAutoresizingMaskIntoConstraints = false;
 
             containerView.AddSubview(view);
@@ -100,6 +108,33 @@ namespace Bit.iOS.Core.Utilities
             accountSwitchingOverlayView.ToggleVisibililtyCommand.Execute(null);
             containerView.UserInteractionEnabled = !overlayVisible;
             containerView.Subviews[0].UserInteractionEnabled = !overlayVisible;
+        }
+
+        public async Task<UIControl> CreateAccountSwitchToolbarButtonItemCustomViewAsync()
+        {
+            const float size = 40f;
+            var image = await CreateAvatarImageAsync();
+            var accountSwitchButton = new UIControl(new CGRect(0, 0, size, size));
+            if (image != null)
+            {
+                var accountSwitchAvatarImageView = new UIImageView(new CGRect(0, 0, size, size))
+                {
+                    Image = image
+                };
+                accountSwitchButton.AddSubview(accountSwitchAvatarImageView);
+            }
+
+            return accountSwitchButton;
+        }
+
+        public void DisposeAccountSwitchToolbarButtonItemImage(UIControl accountSwitchButton)
+        {
+            if (accountSwitchButton?.Subviews?.FirstOrDefault() is UIImageView accountSwitchImageView && accountSwitchImageView.Image != null)
+            {
+                var img = accountSwitchImageView.Image;
+                accountSwitchImageView.Image = null;
+                img.Dispose();
+            }
         }
     }
 }

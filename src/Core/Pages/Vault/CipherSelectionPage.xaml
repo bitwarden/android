@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="Bit.App.Pages.CipherSelectionPage"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:effects="clr-namespace:Bit.App.Effects"
+             x:DataType="pages:CipherSelectionPageViewModel"
+             Title="{Binding PageTitle}"
+             x:Name="_page">
+    <ContentPage.ToolbarItems>
+        <controls:ExtendedToolbarItem
+            x:Name="_accountAvatar"
+            IconImageSource="{Binding AvatarImageSource}"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+            Order="Primary"
+            Priority="-1"
+            UseOriginalImage="True"
+            SemanticProperties.Description="{u:I18n Account}"
+            AutomationId="AccountIconButton" />
+        <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
+                     SemanticProperties.Description="{u:I18n Search}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <controls:SelectionChangedEventArgsConverter x:Key="SelectionChangedEventArgsConverter" />
+                        
+            <ToolbarItem
+                x:Name="_closeItem"
+                x:Key="_closeItem"
+                Text="{u:I18n Close}"
+                Clicked="CloseItem_Clicked"
+                Order="Primary"
+                Priority="-1" />
+            <ToolbarItem x:Name="_addItem" x:Key="addItem"
+                         IconImageSource="plus.png"
+                         Command="{Binding AddCipherCommand}"
+                         Order="Primary"
+                         SemanticProperties.Description="{u:I18n AddItem}" />
+
+            <DataTemplate x:Key="cipherTemplate"
+                          x:DataType="pages:GroupingsPageListItem">
+                <controls:CipherViewCell
+                    ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
+            </DataTemplate>
+            
+            <DataTemplate
+                x:Key="headerTemplate"
+                x:DataType="pages:GroupingsPageHeaderListItem">
+                <StackLayout
+                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Title}"
+                            StyleClass="list-header, list-header-platform" />
+                        <Label
+                            Text="{Binding ItemCount}"
+                            StyleClass="list-header-sub" />
+                    </StackLayout>
+                </StackLayout>
+	        </DataTemplate>
+
+            <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
+                                                 HeaderTemplate="{StaticResource headerTemplate}"
+                                                 CipherTemplate="{StaticResource cipherTemplate}" />
+
+            <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
+                <StackLayout
+                    VerticalOptions="CenterAndExpand"
+                    Padding="20, 0"
+                    Spacing="20"
+                    IsVisible="{Binding ShowNoData}">
+                    <Image
+                        Source="empty_items_state" />
+                    <Label
+                        Text="{Binding NoDataText}"
+                        HorizontalTextAlignment="Center"></Label>
+                    <Button
+                        Text="{u:I18n AddAnItem}"
+                        Command="{Binding AddCipherCommand}" />
+                </StackLayout>
+
+                <Frame
+                    IsVisible="{Binding ShowCallout}"
+                    Padding="10"
+                    Margin="20, 10"
+                    HasShadow="False"
+                    BackgroundColor="Transparent"
+                    BorderColor="{DynamicResource PrimaryColor}">
+                    <Label
+                        Text="{u:I18n AddTheKeyToAnExistingOrNewItem}"
+                        StyleClass="text-muted, text-sm, text-bold"
+                        HorizontalTextAlignment="Center" />
+                </Frame>
+
+                <controls:ExtendedCollectionView
+                    IsVisible="{Binding ShowList}"
+                    ItemsSource="{Binding GroupedItems}"
+                    VerticalOptions="FillAndExpand"
+                    ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                    SelectionMode="Single"
+                    StyleClass="list, list-platform"
+                    ExtraDataForLogging="Autofill Ciphers Page">
+                    <controls:ExtendedCollectionView.Behaviors>
+                        <xct:EventToCommandBehavior
+                            EventName="SelectionChanged"
+                            Command="{Binding SelectCipherCommand}"
+                            EventArgsConverter="{StaticResource SelectionChangedEventArgsConverter}" />
+                    </controls:ExtendedCollectionView.Behaviors>
+                </controls:ExtendedCollectionView>
+            </StackLayout>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
+        
+        <!-- Android FAB -->
+        <Button
+            x:Name="_fab"
+            ImageSource="plus.png"
+            Command="{Binding AddCipherCommand}"
+            Style="{StaticResource btn-fab}"
+            IsVisible="{OnPlatform iOS=false, Android=true}"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"/>
+        
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainPage="{Binding Source={x:Reference _page}}"
+            MainFab="{Binding Source={x:Reference _fab}, Path=.}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
+    </AbsoluteLayout>
+
+</pages:BaseContentPage>
