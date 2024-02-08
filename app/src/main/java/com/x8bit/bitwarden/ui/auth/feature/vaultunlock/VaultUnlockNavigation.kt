@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import androidx.navigation.compose.composable
 
 const val VAULT_UNLOCK_ROUTE: String = "vault_unlock"
 
@@ -20,7 +20,7 @@ fun NavController.navigateToVaultUnlock(
  * Add the Vault Unlock screen to the nav graph.
  */
 fun NavGraphBuilder.vaultUnlockDestination() {
-    composableWithSlideTransitions(
+    composable(
         route = VAULT_UNLOCK_ROUTE,
     ) {
         VaultUnlockScreen()

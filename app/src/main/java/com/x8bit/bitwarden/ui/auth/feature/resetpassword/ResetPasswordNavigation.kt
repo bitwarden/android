@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.resetpassword
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
+import androidx.navigation.compose.composable
 
 const val RESET_PASSWORD_ROUTE: String = "reset_password"
 
@@ -11,7 +11,7 @@ const val RESET_PASSWORD_ROUTE: String = "reset_password"
  * Add the Reset Password screen to the nav graph.
  */
 fun NavGraphBuilder.resetPasswordDestination() {
-    composableWithSlideTransitions(
+    composable(
         route = RESET_PASSWORD_ROUTE,
     ) {
         ResetPasswordScreen()
