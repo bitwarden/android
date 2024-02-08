@@ -248,6 +248,7 @@ fun VaultItemIdentityContent(
             items(attachments) { attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
+                        .semantics { testTag = "CipherAttachment" }
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,
