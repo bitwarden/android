@@ -105,6 +105,7 @@ fun VaultAddEditCustomField(
             customField.vaultLinkedFieldType?.let { fieldType ->
                 CustomFieldLinkedField(
                     selectedOption = fieldType,
+                    label = customField.name,
                     supportedLinkedTypes = supportedLinkedTypes,
                     onValueChanged = {
                         onCustomFieldValueChange(customField.copy(vaultLinkedFieldType = it))
@@ -228,11 +229,11 @@ private fun CustomFieldTextField(
  */
 @Composable
 private fun CustomFieldLinkedField(
+    label: String,
     selectedOption: VaultLinkedFieldType,
     onValueChanged: (VaultLinkedFieldType) -> Unit,
     onEditValue: () -> Unit,
     modifier: Modifier = Modifier,
-    label: String = stringResource(id = R.string.options),
     supportedLinkedTypes: ImmutableList<VaultLinkedFieldType> = persistentListOf(),
 ) {
     val possibleTypesWithStrings = supportedLinkedTypes.associateWith { it.label.invoke() }
