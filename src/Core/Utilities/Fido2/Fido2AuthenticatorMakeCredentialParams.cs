@@ -20,7 +20,7 @@ namespace Bit.Core.Utilities.Fido2
         /// <summary>
         /// A sequence of pairs of PublicKeyCredentialType and public key algorithms (COSEAlgorithmIdentifier) requested by the Relying Party. This sequence is ordered from most preferred to least preferred. The authenticator makes a best-effort to create the most preferred credential that it can.
         /// </summary>
-        public PublicKeyCredentialAlgorithmDescriptor[] CredTypesAndPubKeyAlgs { get; set; }
+        public PublicKeyCredentialParameters[] CredTypesAndPubKeyAlgs { get; set; }
 
         /// <summary>
         ///An OPTIONAL list of PublicKeyCredentialDescriptor objects provided by the Relying Party with the intention that, if any of these are known to the authenticator, it SHOULD NOT create a new credential. excludeCredentialDescriptorList contains a list of known credentials.

@@ -15,7 +15,7 @@ namespace Bit.Core.Services
 
         public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
         {
-            if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Algorithm != (int) Fido2AlgorithmIdentifier.ES256))
+            if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Alg != (int) Fido2AlgorithmIdentifier.ES256))
             {
                 // var requestedAlgorithms = string.Join(", ", makeCredentialParams.CredTypesAndPubKeyAlgs.Select((p) => p.Algorithm).ToArray());
                 // _logService.Warning(

@@ -21,6 +21,13 @@ namespace Bit.Core.Utilities.Fido2
         }
     }
 
+    public class InvalidStateError : Fido2AuthenticatorException
+    {
+        public InvalidStateError() : base("InvalidStateError")
+        {
+        }
+    }
+
     public class UnknownError : Fido2AuthenticatorException
     {
         public UnknownError() : base("UnknownError")

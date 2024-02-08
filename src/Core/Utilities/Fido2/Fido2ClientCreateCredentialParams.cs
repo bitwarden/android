@@ -39,7 +39,7 @@ namespace Bit.Core.Utilities.Fido2
         /// the same account on a single authenticator. The client is requested to return an error if the new credential would
         /// be created on an authenticator that also contains one of the credentials enumerated in this parameter.
         /// </summary>
-        public List<PublicKeyCredentialDescriptor>? ExcludeCredentials { get; set; }
+        public PublicKeyCredentialDescriptor[]? ExcludeCredentials { get; set; }
 
         /// <summary>
         /// This member contains additional parameters requesting additional processing by the client and authenticator.
@@ -52,7 +52,7 @@ namespace Bit.Core.Utilities.Fido2
         /// The sequence is ordered from most preferred to least preferred.
         /// The client makes a best-effort to create the most preferred credential that it can.
         /// </summary>
-        public required List<PublicKeyCredentialParameters> PubKeyCredParams { get; set; }
+        public required PublicKeyCredentialParameters[] PubKeyCredParams { get; set; }
 
         /// <summary>
         /// Data about the Relying Party responsible for the request.

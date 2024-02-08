@@ -7,7 +7,6 @@ using Bit.Core.Models.View;
 using Bit.Core.Enums;
 using Bit.Core.Utilities.Fido2;
 using Bit.Test.Common.AutoFixture;
-using Bit.Test.Common.AutoFixture.Attributes;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using Xunit;
@@ -49,9 +48,9 @@ namespace Bit.Core.Test.Services
                     Name = "Bitwarden"
                 },
                 CredTypesAndPubKeyAlgs = [
-                    new PublicKeyCredentialAlgorithmDescriptor {
+                    new PublicKeyCredentialParameters {
                         Type = "public-key",
-                        Algorithm = -7 // ES256
+                        Alg = -7 // ES256
                     }
                 ],
                 RequireResidentKey = false,
@@ -84,9 +83,9 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _params.CredTypesAndPubKeyAlgs = [
-                new PublicKeyCredentialAlgorithmDescriptor {
+                new PublicKeyCredentialParameters {
                     Type = "public-key",
-                    Algorithm = -257 // RS256 which we do not support
+                    Alg = -257 // RS256 which we do not support
                 }
             ];
 

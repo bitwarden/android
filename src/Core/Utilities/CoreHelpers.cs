@@ -40,7 +40,7 @@ namespace Bit.Core.Utilities
 
         /// <summary>
         /// Returns the host (and not port) of the given uri.
-        /// Does not support plain hostnames/only top level domain.
+        /// Does not support plain hostnames without a protocol.
         /// 
         /// Input => Output examples:
         /// <para>https://bitwarden.com => bitwarden.com</para>
@@ -59,7 +59,7 @@ namespace Bit.Core.Utilities
 
         /// <summary>
         /// Returns the host and port of the given uri.
-        /// Does not support plain hostnames/only top level domain.
+        /// Does not support plain hostnames without 
         /// 
         /// Input => Output examples:
         /// <para>https://bitwarden.com => bitwarden.com</para>
@@ -89,7 +89,7 @@ namespace Bit.Core.Utilities
 
         /// <summary>
         /// Returns the second and top level domain of the given uri.
-        /// Does not support plain hostnames/only top level domain.
+        /// Does not support plain hostnames without 
         /// 
         /// Input => Output examples:
         /// <para>https://bitwarden.com => bitwarden.com</para>

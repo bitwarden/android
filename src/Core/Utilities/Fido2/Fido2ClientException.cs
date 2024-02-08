@@ -7,6 +7,9 @@ namespace Bit.Core.Utilities.Fido2
             NotAllowedError,
             TypeError,
             SecurityError,
+            UriBlockedError,
+            NotSupportedError,
+            InvalidStateError,
             UnknownError
         }
 
