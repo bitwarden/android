@@ -105,33 +105,22 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength", "LongMethod")
     override fun handleAction(action: GeneratorAction) {
         when (action) {
-            is GeneratorAction.PasswordHistoryClick -> {
-                handlePasswordHistoryClick()
-            }
+            is GeneratorAction.PasswordHistoryClick -> handlePasswordHistoryClick()
+            is GeneratorAction.CloseClick -> handleCloseClick()
+            is GeneratorAction.SelectClick -> handleSelectClick()
+            is GeneratorAction.RegenerateClick -> handleRegenerationClick()
+            is GeneratorAction.CopyClick -> handleCopyClick()
+            is GeneratorAction.MainTypeOptionSelect -> handleMainTypeOptionSelect(action)
+            is GeneratorAction.MainType -> handleMainTypeAction(action)
+            is GeneratorAction.Internal -> handleInternalAction(action)
+        }
+    }
 
-            is GeneratorAction.CloseClick -> {
-                handleCloseClick()
-            }
-
-            is GeneratorAction.SelectClick -> {
-                handleSelectClick()
-            }
-
-            is GeneratorAction.RegenerateClick -> {
-                handleRegenerationClick()
-            }
-
-            is GeneratorAction.CopyClick -> {
-                handleCopyClick()
-            }
-
-            is GeneratorAction.MainTypeOptionSelect -> {
-                handleMainTypeOptionSelect(action)
-            }
-
+    @Suppress("MaxLineLength")
+    private fun handleMainTypeAction(action: GeneratorAction.MainType) {
+        when (action) {
             is GeneratorAction.MainType.Passcode.PasscodeTypeOptionSelect -> {
                 handlePasscodeTypeOptionSelect(action)
             }
@@ -142,30 +131,6 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Passcode.PasscodeType.Passphrase -> {
                 handlePassphraseSpecificAction(action)
-            }
-
-            is GeneratorAction.Internal.UpdateGeneratedPasswordResult -> {
-                handleUpdateGeneratedPasswordResult(action)
-            }
-
-            is GeneratorAction.Internal.UpdateGeneratedPassphraseResult -> {
-                handleUpdateGeneratedPassphraseResult(action)
-            }
-
-            is GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult -> {
-                handleUpdatePlusAddressedGeneratedUsernameResult(action)
-            }
-
-            is GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult -> {
-                handleUpdateCatchAllGeneratedUsernameResult(action)
-            }
-
-            is GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult -> {
-                handleUpdateRandomWordGeneratedUsernameResult(action)
-            }
-
-            is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
-                handleUpdateForwardedServiceGeneratedUsernameResult(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameTypeOptionSelect -> {
@@ -210,6 +175,34 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.RandomWord -> {
                 handleRandomWordSpecificAction(action)
+            }
+        }
+    }
+
+    private fun handleInternalAction(action: GeneratorAction.Internal) {
+        when (action) {
+            is GeneratorAction.Internal.UpdateGeneratedPasswordResult -> {
+                handleUpdateGeneratedPasswordResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedPassphraseResult -> {
+                handleUpdateGeneratedPassphraseResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedPlusAddessedUsernameResult -> {
+                handleUpdatePlusAddressedGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedCatchAllUsernameResult -> {
+                handleUpdateCatchAllGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedRandomWordUsernameResult -> {
+                handleUpdateRandomWordGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
+                handleUpdateForwardedServiceGeneratedUsernameResult(action)
             }
         }
     }
@@ -2111,7 +2104,7 @@ sealed class GeneratorAction {
                 /**
                  * Represents the action to learn more.
                  */
-                data object TooltipClick : GeneratorAction()
+                data object TooltipClick : UsernameType()
 
                 /**
                  * Represents actions specifically related to Forwarded Email Alias.
