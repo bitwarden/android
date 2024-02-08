@@ -6,9 +6,18 @@ using AWebkit = Android.Webkit;
 
 namespace Bit.App.Handlers
 {
-    public partial class HybridWebViewHandler : ViewHandler<HybridWebView, AWebkit.WebView>
+    public class HybridWebViewHandler : ViewHandler<HybridWebView, AWebkit.WebView>
     {
         private const string JSFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
+
+        public static PropertyMapper<HybridWebView, HybridWebViewHandler> PropertyMapper = new PropertyMapper<HybridWebView, HybridWebViewHandler>(ViewHandler.ViewMapper)
+        {
+            [nameof(HybridWebView.Uri)] = MapUri
+        };
+
+        public HybridWebViewHandler() : base(PropertyMapper)
+        {
+        }
 
         public HybridWebViewHandler([NotNull] IPropertyMapper mapper, CommandMapper commandMapper = null) : base(mapper, commandMapper)
         {

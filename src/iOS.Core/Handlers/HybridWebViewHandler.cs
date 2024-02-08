@@ -5,14 +5,23 @@ using Foundation;
 using Microsoft.Maui.Handlers;
 using WebKit;
 
-namespace Bit.App.Handlers
+namespace Bit.iOS.Core.Handlers
 {
-    public partial class HybridWebViewHandler : ViewHandler<HybridWebView, WebKit.WKWebView>
+    public class HybridWebViewHandler : ViewHandler<HybridWebView, WebKit.WKWebView>
     {
         private const string JSFunction =
             "function invokeCSharpAction(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
 
         private WKUserContentController _userController;
+
+        public static PropertyMapper<HybridWebView, HybridWebViewHandler> PropertyMapper = new PropertyMapper<HybridWebView, HybridWebViewHandler>(ViewHandler.ViewMapper)
+        {
+            [nameof(HybridWebView.Uri)] = MapUri
+        };
+
+        public HybridWebViewHandler() : base(PropertyMapper)
+        {
+        }
 
         public HybridWebViewHandler([NotNull] IPropertyMapper mapper, CommandMapper commandMapper = null) : base(mapper, commandMapper)
         {
