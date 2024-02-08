@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -230,20 +230,13 @@ private fun LoginScreenContent(
             showPasswordTestTag = "PasswordVisibilityToggle",
         )
 
-        // TODO: Need to figure out better handling for very small clickable text (BIT-724)
-        Text(
-            text = stringResource(id = R.string.get_password_hint),
+        BitwardenClickableText(
+            label = stringResource(id = R.string.get_password_hint),
+            onClick = onMasterPasswordClick,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.primary,
             modifier = Modifier
-                .semantics { testTag = "GetMasterPasswordHintLabel" }
                 .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .clickable { onMasterPasswordClick() }
-                .padding(
-                    vertical = 4.dp,
-                    horizontal = 16.dp,
-                ),
+                .semantics { testTag = "GetMasterPasswordHintLabel" },
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -301,14 +294,12 @@ private fun LoginScreenContent(
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         BitwardenClickableText(
-            modifier = Modifier
-                .semantics { testTag = "NotYouLabel" }
-                .padding(horizontal = 16.dp),
-            onClick = onNotYouButtonClick,
             label = stringResource(id = R.string.not_you),
+            onClick = onNotYouButtonClick,
+            style = MaterialTheme.typography.labelLarge,
+            innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+            modifier = Modifier.semantics { testTag = "NotYouLabel" },
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
