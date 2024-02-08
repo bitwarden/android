@@ -27,6 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -68,6 +70,7 @@ fun LoginScreen(
     onNavigateToTwoFactorLogin: (String, String?) -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    keyboardController: SoftwareKeyboardController? = LocalSoftwareKeyboardController.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -148,7 +151,10 @@ fun LoginScreen(
                 { viewModel.trySendAction(LoginAction.MasterPasswordHintClick) }
             },
             onLoginButtonClick = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.LoginButtonClick) }
+                {
+                    keyboardController?.hide()
+                    viewModel.trySendAction(LoginAction.LoginButtonClick)
+                }
             },
             onLoginWithDeviceClick = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.LoginWithDeviceButtonClick) }
