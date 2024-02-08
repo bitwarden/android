@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
@@ -137,7 +138,6 @@ private fun LoginWithDeviceScreenContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .imePadding()
             .verticalScroll(rememberScrollState()),
@@ -202,11 +202,11 @@ private fun LoginWithDeviceScreenContent(
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Column(
             modifier = Modifier
-                .defaultMinSize(minHeight = 32.dp)
+                .defaultMinSize(minHeight = 36.dp)
                 .align(Alignment.Start),
         ) {
             if (state.isResendNotificationLoading) {
@@ -217,17 +217,16 @@ private fun LoginWithDeviceScreenContent(
                 )
             } else {
                 BitwardenClickableText(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .semantics { testTag = "ResendNotificationButton" }
-                        .fillMaxWidth(),
+                    modifier = Modifier.semantics { testTag = "ResendNotificationButton" },
                     label = stringResource(id = R.string.resend_notification),
+                    style = MaterialTheme.typography.labelLarge,
+                    innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
                     onClick = onResendNotificationClick,
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(28.dp))
 
         Text(
             text = stringResource(id = R.string.need_another_option),
@@ -239,14 +238,11 @@ private fun LoginWithDeviceScreenContent(
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
         BitwardenClickableText(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .semantics { testTag = "ViewAllLoginOptionsButton" }
-                .fillMaxWidth(),
+            modifier = Modifier.semantics { testTag = "ViewAllLoginOptionsButton" },
             label = stringResource(id = R.string.view_all_login_options),
+            innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+            style = MaterialTheme.typography.labelLarge,
             onClick = onViewAllLogInOptionsClick,
         )
 

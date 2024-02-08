@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.landing
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,6 +34,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
@@ -262,7 +266,7 @@ private fun LandingScreenContent(
             keyboardType = KeyboardType.Email,
         )
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         EnvironmentSelector(
             selectedOption = state.selectedEnvironmentType,
@@ -272,8 +276,6 @@ private fun LandingScreenContent(
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         BitwardenSwitch(
             label = stringResource(id = R.string.remember_me),
@@ -345,15 +347,25 @@ private fun EnvironmentSelector(
     onOptionSelected: (Environment.Type) -> Unit,
     modifier: Modifier,
 ) {
-    val options = Environment.Type.values()
+    val options = Environment.Type.entries.toTypedArray()
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     Box(modifier = modifier) {
         Row(
             modifier = Modifier
-                .clickable { shouldShowDialog = !shouldShowDialog }
-                .fillMaxWidth()
-                .padding(start = 16.dp),
+                .clip(RoundedCornerShape(28.dp))
+                .clickable(
+                    indication = rememberRipple(
+                        bounded = true,
+                        color = MaterialTheme.colorScheme.primary,
+                    ),
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = { shouldShowDialog = !shouldShowDialog },
+                )
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = 16.dp,
+                ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
