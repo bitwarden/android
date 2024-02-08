@@ -79,7 +79,7 @@ namespace Bit.Droid.Services
             }
             
             var context = Android.App.Application.Context;
-            var intent = new Intent(context, typeof(MainActivity));
+            var intent = context.PackageManager?.GetLaunchIntentForPackage(context.PackageName ?? string.Empty);
             intent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
             var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
             var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
