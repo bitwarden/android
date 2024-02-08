@@ -32,6 +32,11 @@
             get { return (Aspect)GetValue(AspectProperty); }
             set { SetValue(AspectProperty, value); }
         }
+
+        public bool IsLoading { get; set; }
+
+        public event EventHandler Success;
+        public event EventHandler Error;
     }
 #endif
 }

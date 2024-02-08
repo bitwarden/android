@@ -13,7 +13,6 @@
                 },
                 handlers =>
                 {
-                    handlers.AddHandler(typeof(Bit.App.Controls.HybridWebView), typeof(Bit.App.Handlers.HybridWebViewHandler));
 #if ANDROID
                     Bit.App.Handlers.EntryHandlerMappings.Setup();
                     Bit.App.Handlers.EditorHandlerMappings.Setup();
@@ -28,6 +27,7 @@
                     Bit.App.Handlers.ButtonHandlerMappings.Setup();
                     Bit.App.Handlers.ToolbarHandlerMappings.Setup();
 
+                    handlers.AddHandler(typeof(Bit.App.Controls.HybridWebView), typeof(Bit.App.Handlers.HybridWebViewHandler));
                     handlers.AddHandler(typeof(Bit.App.Pages.TabsPage), typeof(Bit.App.Handlers.CustomTabbedPageHandler));
                     handlers.AddHandler(typeof(Bit.App.Controls.ExtendedDatePicker), typeof(Bit.App.Handlers.ExtendedDatePickerHandler));
 #else
