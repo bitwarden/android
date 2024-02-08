@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.login
 
 import android.net.Uri
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filter
@@ -32,7 +33,9 @@ import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,8 +44,11 @@ import org.junit.Before
 import org.junit.Test
 
 class LoginScreenTest : BaseComposeTest() {
+    private val keyboardController: SoftwareKeyboardController = mockk {
+        every { hide() } just runs
+    }
     private val intentManager = mockk<IntentManager>(relaxed = true) {
-        every { startCustomTabsActivity(any()) } returns Unit
+        every { startCustomTabsActivity(any()) } just runs
     }
     private var onNavigateBackCalled = false
     private var onNavigateToMasterPasswordHintCalled = false
@@ -67,6 +73,7 @@ class LoginScreenTest : BaseComposeTest() {
                 onNavigateToTwoFactorLogin = { _, _ -> onNavigateToTwoFactorLoginCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
+                keyboardController = keyboardController,
             )
         }
     }
