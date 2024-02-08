@@ -10,6 +10,7 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 #if IOS
+using Foundation;
 using UIKit;
 #endif
 
@@ -154,35 +155,34 @@ namespace Bit.App.Utilities
         // Currently on iOS when resuming the app after showing a System "Share/Sheet" (or other similar UI)
         // MAUI reports the incorrect Theme. To avoid this we are fetching the current OS Theme directly on iOS from the iOS API.
         // MAUI Issue: https://github.com/dotnet/maui/issues/19614
+        public static bool OsDarkModeEnabled()
+        {
 #if ANDROID
-        public static bool OsDarkModeEnabled()
-        {
             return Application.Current.RequestedTheme == AppTheme.Dark;
-        }
 #elif IOS
-        public static bool OsDarkModeEnabled()
-        {
             var requestedTheme = AppTheme.Unspecified;
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                if ((OperatingSystem.IsIOS() && !OperatingSystem.IsIOSVersionAtLeast(13, 0)) || (OperatingSystem.IsTvOS() && !OperatingSystem.IsTvOSVersionAtLeast(13, 0)))
-                {
-                    requestedTheme = AppTheme.Unspecified;
-                }
-                else
-                {
-                    var traits = WindowStateManager.Default.GetCurrentUIViewController()?.TraitCollection ?? UITraitCollection.CurrentTraitCollection;
-                    var uiStyle = traits.UserInterfaceStyle;
+            if ((OperatingSystem.IsIOS() && !OperatingSystem.IsIOSVersionAtLeast(13, 0)))
+                return false;
 
-                    requestedTheme = uiStyle switch
-                    {
-                        UIUserInterfaceStyle.Light => AppTheme.Light,
-                        UIUserInterfaceStyle.Dark => AppTheme.Dark,
-                        _ => AppTheme.Unspecified
-                    };
-                }
-            });
+            var traits = InvokeOnMainThread(() => WindowStateManager.Default.GetCurrentUIViewController()?.TraitCollection) ?? UITraitCollection.CurrentTraitCollection;
+            var uiStyle = traits.UserInterfaceStyle;
+
+            requestedTheme = uiStyle switch
+            {
+                UIUserInterfaceStyle.Light => AppTheme.Light,
+                UIUserInterfaceStyle.Dark => AppTheme.Dark,
+                _ => AppTheme.Unspecified
+            };
             return requestedTheme == AppTheme.Dark;
+#endif
+        }
+
+#if IOS
+        internal static T InvokeOnMainThread<T>(Func<T> factory)
+        {
+            T value = default;
+            NSRunLoop.Main.InvokeOnMainThread(() => value = factory());
+            return value;
         }
 #endif
 
