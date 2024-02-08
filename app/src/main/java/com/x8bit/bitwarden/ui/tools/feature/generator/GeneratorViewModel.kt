@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
+import com.x8bit.bitwarden.data.platform.manager.util.getActivePoliciesFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.GeneratorRepository
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
@@ -49,6 +50,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.util.toUsernameGeneratorRe
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -103,6 +105,11 @@ class GeneratorViewModel @Inject constructor(
             is Passcode -> loadPasscodeOptions(selectedType, usePolicyDefault = true)
             is Username -> loadUsernameOptions(selectedType)
         }
+        policyManager
+            .getActivePoliciesFlow<PolicyInformation.PasswordGenerator>()
+            .map { GeneratorAction.Internal.PasswordGeneratorPolicyReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: GeneratorAction) {
@@ -203,6 +210,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.Internal.UpdateGeneratedForwardedServiceUsernameResult -> {
                 handleUpdateForwardedServiceGeneratedUsernameResult(action)
+            }
+
+            is GeneratorAction.Internal.PasswordGeneratorPolicyReceive -> {
+                handlePasswordGeneratorPolicyReceive(action)
             }
         }
     }
@@ -635,6 +646,12 @@ class GeneratorViewModel @Inject constructor(
                 sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
             }
         }
+    }
+
+    private fun handlePasswordGeneratorPolicyReceive(
+        action: GeneratorAction.Internal.PasswordGeneratorPolicyReceive,
+    ) {
+        mutableStateFlow.update { it.copy(isUnderPolicy = action.policies.any()) }
     }
 
     //endregion Generated Field Handlers
@@ -2251,6 +2268,13 @@ sealed class GeneratorAction {
      * Models actions that the [GeneratorViewModel] itself might send.
      */
     sealed class Internal : GeneratorAction() {
+        /**
+         * Indicates that updated policies have been received.
+         */
+        data class PasswordGeneratorPolicyReceive(
+            val policies: List<PolicyInformation.PasswordGenerator>,
+        ) : Internal()
+
         /**
          * Indicates a generated text update is received.
          */

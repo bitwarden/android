@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedCatchAllUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedForwardedServiceUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPassphraseResult
@@ -19,6 +20,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -91,8 +93,10 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         )
     }
 
+    private val mutablePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val policyManager: PolicyManager = mockk {
         every { getActivePolicies(PolicyTypeJson.PASSWORD_GENERATOR) } returns emptyList()
+        every { getActivePoliciesFlow(PolicyTypeJson.PASSWORD_GENERATOR) } returns mutablePolicyFlow
     }
 
     @Test
@@ -105,6 +109,41 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct when there is a saved state`() {
         val viewModel = createViewModel(state = initialPasscodeState)
         assertEquals(initialPasscodeState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `activePolicyFlow changes should update state`() = runTest {
+        val payload = mapOf(
+            "defaultType" to JsonNull,
+            "minLength" to JsonPrimitive(10),
+            "useUpper" to JsonPrimitive(true),
+            "useNumbers" to JsonPrimitive(true),
+            "useSpecial" to JsonPrimitive(true),
+            "minNumbers" to JsonPrimitive(3),
+            "minSpecial" to JsonPrimitive(3),
+            "minNumberWords" to JsonPrimitive(5),
+            "capitalize" to JsonPrimitive(true),
+            "includeNumber" to JsonPrimitive(true),
+            "useLower" to JsonPrimitive(true),
+        )
+        val policies = listOf(
+            SyncResponseJson.Policy(
+                organizationId = "organizationId",
+                id = "id",
+                type = PolicyTypeJson.PASSWORD_GENERATOR,
+                isEnabled = true,
+                data = JsonObject(payload),
+            ),
+        )
+        val viewModel = createViewModel(state = initialPasscodeState)
+
+        viewModel.stateFlow.test {
+            assertEquals(initialPasscodeState, awaitItem())
+            mutablePolicyFlow.tryEmit(value = policies)
+            assertEquals(initialPasscodeState.copy(isUnderPolicy = true), awaitItem())
+            mutablePolicyFlow.tryEmit(value = emptyList())
+            assertEquals(initialPasscodeState.copy(isUnderPolicy = false), awaitItem())
+        }
     }
 
     @Test
