@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -196,17 +197,17 @@ private fun LoginWithDeviceScreenContent(
             textAlign = TextAlign.Start,
             color = LocalNonMaterialColors.current.fingerprint,
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
+            minLines = 2,
             modifier = Modifier
                 .semantics { testTag = "FingerprintValueLabel" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
         Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .defaultMinSize(minHeight = 36.dp)
+                .defaultMinSize(minHeight = 40.dp)
                 .align(Alignment.Start),
         ) {
             if (state.isResendNotificationLoading) {
