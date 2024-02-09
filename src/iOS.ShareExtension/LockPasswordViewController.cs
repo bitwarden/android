@@ -1,15 +1,17 @@
+using System;
 using Bit.App.Controls;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
-using System;
 using UIKit;
 
 namespace Bit.iOS.ShareExtension
 {
     public partial class LockPasswordViewController : Core.Controllers.BaseLockPasswordViewController
     {
+        UIBarButtonItem _cancelButton;
+        UIControl _accountSwitchButton;
         AccountSwitchingOverlayView _accountSwitchingOverlayView;
-        AccountSwitchingOverlayHelper _accountSwitchingOverlayHelper;
+        private Lazy<AccountSwitchingOverlayHelper> _accountSwitchingOverlayHelper = new Lazy<AccountSwitchingOverlayHelper>(() => new AccountSwitchingOverlayHelper());
 
         public LockPasswordViewController()
         {
@@ -43,15 +45,33 @@ namespace Bit.iOS.ShareExtension
 
         public override async void ViewDidLoad()
         {
+            _cancelButton = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, CancelButton_TouchUpInside);
+
             base.ViewDidLoad();
 
             _cancelButton.TintColor = ThemeHelpers.NavBarTextColor;
             _submitButton.TintColor = ThemeHelpers.NavBarTextColor;
 
-            _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
-            _accountSwitchingButton.Image = await _accountSwitchingOverlayHelper.CreateAvatarImageAsync();
+            _accountSwitchButton = await _accountSwitchingOverlayHelper.Value.CreateAccountSwitchToolbarButtonItemCustomViewAsync();
+            _accountSwitchButton.TouchUpInside += AccountSwitchedButton_TouchUpInside;
 
-            _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(_overlayView);
+            _navItem.SetLeftBarButtonItems(new UIBarButtonItem[]
+            {
+                _cancelButton,
+                new UIBarButtonItem(_accountSwitchButton)
+            }, false);
+
+            _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.Value.CreateAccountSwitchingOverlayView(_overlayView);
+        }
+
+        private void CancelButton_TouchUpInside(object sender, EventArgs e)
+        {
+            Cancel();
+        }
+
+        private void AccountSwitchedButton_TouchUpInside(object sender, EventArgs e)
+        {
+            _accountSwitchingOverlayHelper.Value.OnToolbarItemActivated(_accountSwitchingOverlayView, _overlayView);
         }
 
         protected override void UpdateNavigationBarTheme()
@@ -59,19 +79,9 @@ namespace Bit.iOS.ShareExtension
             UpdateNavigationBarTheme(_navBar);
         }
 
-        partial void AccountSwitchingButton_Activated(UIBarButtonItem sender)
-        {
-            _accountSwitchingOverlayHelper.OnToolbarItemActivated(_accountSwitchingOverlayView, _overlayView);
-        }
-
         partial void SubmitButton_Activated(UIBarButtonItem sender)
         {
             CheckPasswordAsync().FireAndForget();
-        }
-
-        partial void CancelButton_Activated(UIBarButtonItem sender)
-        {
-            Cancel();
         }
 
         protected override void Dispose(bool disposing)
@@ -82,11 +92,11 @@ namespace Bit.iOS.ShareExtension
                 {
                     TableView.Source?.Dispose();
                 }
-                if (_accountSwitchingButton?.Image != null)
+                if (_accountSwitchButton != null)
                 {
-                    var img = _accountSwitchingButton.Image;
-                    _accountSwitchingButton.Image = null;
-                    img.Dispose();
+                    _accountSwitchingOverlayHelper.Value.DisposeAccountSwitchToolbarButtonItemImage(_accountSwitchButton);
+                
+                    _accountSwitchButton.TouchUpInside -= AccountSwitchedButton_TouchUpInside;
                 }
                 if (_accountSwitchingOverlayView != null && _overlayView?.Subviews != null)
                 {

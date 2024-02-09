@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Services
 {
@@ -1372,17 +1369,17 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<Region?> GetActiveUserRegionAsync()
+        public async Task<BwRegion?> GetActiveUserRegionAsync()
         {
             return await GetActiveUserCustomDataAsync(a => a?.Settings?.Region);
         }
 
-        public async Task<Region?> GetPreAuthRegionAsync()
+        public async Task<BwRegion?> GetPreAuthRegionAsync()
         {
-            return await _storageMediatorService.GetAsync<Region?>(Constants.RegionEnvironment);
+            return await _storageMediatorService.GetAsync<BwRegion?>(Constants.RegionEnvironment);
         }
 
-        public async Task SetPreAuthRegionAsync(Region value)
+        public async Task SetPreAuthRegionAsync(BwRegion value)
         {
             await _storageMediatorService.SaveAsync(Constants.RegionEnvironment, value);
         }

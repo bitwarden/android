@@ -1,16 +1,16 @@
 using System;
 using System.Linq;
+using Bit.App.Abstractions;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Utilities;
+using Bit.iOS.Core;
+using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using Foundation;
-using UIKit;
-using Bit.iOS.Core.Utilities;
-using Bit.iOS.Core;
 using MobileCoreServices;
-using Bit.iOS.Core.Controllers;
-using Bit.App.Resources;
-using Bit.iOS.Core.Views;
-using Bit.App.Abstractions;
-using Bit.Core.Utilities;
+using UIKit;
 
 namespace Bit.iOS.Extension
 {

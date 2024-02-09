@@ -1,10 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Bit.Core.Abstractions;
-using Bit.Core.Enums;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Services
 {
@@ -34,7 +31,7 @@ namespace Bit.Core.Services
         public string IconsUrl { get; set; }
         public string NotificationsUrl { get; set; }
         public string EventsUrl { get; set; }
-        public Region SelectedRegion { get; set; }
+        public BwRegion SelectedRegion { get; set; }
 
         public string GetWebVaultUrl(bool returnNullIfDefault = false)
         {
@@ -77,7 +74,7 @@ namespace Bit.Core.Services
 
                 if (urls == null || urls.IsEmpty || region is null)
                 {
-                    await SetRegionAsync(Region.US);
+                    await SetRegionAsync(BwRegion.US);
                     _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
                     return;
                 }
@@ -93,16 +90,16 @@ namespace Bit.Core.Services
 
         }
 
-        public async Task<EnvironmentUrlData> SetRegionAsync(Region region, EnvironmentUrlData selfHostedUrls = null)
+        public async Task<EnvironmentUrlData> SetRegionAsync(BwRegion region, EnvironmentUrlData selfHostedUrls = null)
         {
             EnvironmentUrlData urls;
 
-            if (region == Region.SelfHosted)
+            if (region == BwRegion.SelfHosted)
             {
                 // If user saves a self-hosted region with empty fields, default to US
                 if (selfHostedUrls.IsEmpty)
                 {
-                    return await SetRegionAsync(Region.US);
+                    return await SetRegionAsync(BwRegion.US);
                 }
                 urls = selfHostedUrls.FormatUrls();
             }

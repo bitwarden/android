@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core.Models.Domain;
+﻿using System.Diagnostics;
 using Bit.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Foundation;
 using Newtonsoft.Json;
-using ObjCRuntime;
 
 namespace WatchConnectivity
 {
@@ -17,35 +11,45 @@ namespace WatchConnectivity
         // Setup is converted from https://www.natashatherobot.com/watchconnectivity-say-hello-to-wcsession/ 
         // with some extra bits
         private static readonly WCSessionManager sharedManager = new WCSessionManager();
-        private static WCSession session = WCSession.IsSupported ? WCSession.DefaultSession : null;
+        private static WCSession? session = WCSession.IsSupported ? WCSession.DefaultSession : null;
 
-        public event WCSessionReceiveDataHandler OnApplicationContextUpdated;
-        public event WCSessionReceiveDataHandler OnMessagedReceived;
-        public delegate void WCSessionReceiveDataHandler(WCSession session, Dictionary<string, object> data);
+        public event WCSessionReceiveDataHandler? OnApplicationContextUpdated;
+        public event WCSessionReceiveDataHandler? OnMessagedReceived;
+        public delegate void WCSessionReceiveDataHandler(WCSession session, Dictionary<string, object?> data);
 
-        WCSessionUserInfoTransfer _transf;
+        WCSessionUserInfoTransfer? _transf;
 
-        private WCSession validSession
+        private WCSession? validSession
         {
             get
             {
+                if (session is null)
+                {
+                    return null;
+                }
+
                 Debug.WriteLine($"Paired status:{(session.Paired ? '✓' : '✗')}\n");
                 Debug.WriteLine($"Watch App Installed status:{(session.WatchAppInstalled ? '✓' : '✗')}\n");
                 return (session.Paired && session.WatchAppInstalled) ? session : null;
             }
         }
 
-        private WCSession validReachableSession
+        private WCSession? validReachableSession
         {
             get
             {
+                if (session is null)
+                {
+                    return null;
+                }
+
                 return session.Reachable ? validSession : null;
             }
         }
 
         public bool IsValidSession => validSession != null;
 
-        public bool IsSessionReachable => session.Reachable;
+        public bool IsSessionReachable => session?.Reachable ?? false;
 
         public bool IsSessionActivated => validSession?.ActivationState == WCSessionActivationState.Activated;
 
@@ -71,7 +75,7 @@ namespace WatchConnectivity
 
         public override void SessionReachabilityDidChange(WCSession session)
         {
-            Debug.WriteLine($"Watch connectivity Reachable:{(session.Reachable ? '✓' : '✗')}");
+            Debug.WriteLine($"Watch connectivity Reachable:{(session?.Reachable == true ? '✓' : '✗')}");
         }
 
         public void SendBackgroundHighPriorityMessage(NSDictionary<NSString, NSObject> applicationContext)
@@ -102,7 +106,7 @@ namespace WatchConnectivity
 
         public void SendBackgroundFifoHighPriorityMessage(Dictionary<string, object> message)
         {
-            if(validSession is null || validSession.ActivationState != WCSessionActivationState.Activated)
+            if (session is null || validSession is null || validSession.ActivationState != WCSessionActivationState.Activated)
             {
                 return;
             }
@@ -112,6 +116,10 @@ namespace WatchConnectivity
             Debug.WriteLine("Started transferring user info");
 
             _transf = session.TransferUserInfo(message.ToNSDictionary());
+            if (_transf is null)
+            {
+                return;
+            }
 
             Task.Run(async () =>
             {
@@ -136,7 +144,7 @@ namespace WatchConnectivity
             if (OnApplicationContextUpdated != null)
             {
                 var keys = applicationContext.Keys.Select(k => k.ToString()).ToArray();
-                var values = applicationContext.Values.Select(v => JsonConvert.DeserializeObject(v.ToString())).ToArray();
+                var values = applicationContext.Values.Select(v => v != null ? JsonConvert.DeserializeObject(v.ToString()) : null).ToArray();
                 var dictionary = keys.Zip(values, (k, v) => new { Key = k, Value = v })
                                      .ToDictionary(x => x.Key, x => x.Value);
 

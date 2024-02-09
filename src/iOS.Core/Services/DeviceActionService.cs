@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
 using Bit.iOS.Core.Utilities;
@@ -11,7 +11,7 @@ using CoreGraphics;
 using Foundation;
 using LocalAuthentication;
 using UIKit;
-using Xamarin.Forms;
+using Bit.Core.Utilities;
 
 namespace Bit.iOS.Core.Services
 {
@@ -27,14 +27,14 @@ namespace Bit.iOS.Core.Services
             {
                 if (string.IsNullOrWhiteSpace(_userAgent))
                 {
-                    _userAgent = $"Bitwarden_Mobile/{Xamarin.Essentials.AppInfo.VersionString} " +
+                    _userAgent = $"Bitwarden_Mobile/{AppInfo.VersionString} " +
                         $"(iOS {UIDevice.CurrentDevice.SystemVersion}; Model {UIDevice.CurrentDevice.Model})";
                 }
                 return _userAgent;
             }
         }
 
-        public DeviceType DeviceType => DeviceType.iOS;
+        public Bit.Core.Enums.DeviceType DeviceType => Bit.Core.Enums.DeviceType.iOS;
 
         public bool LaunchApp(string appName)
         {
@@ -165,7 +165,7 @@ namespace Bit.iOS.Core.Services
             {
                 uri = "itms-apps://itunes.apple.com/us/app/id1137397744?action=write-review";
             }
-            Device.OpenUri(new Uri(uri));
+            Launcher.OpenAsync(uri).FireAndForget();
         }
 
         public bool SupportsFaceBiometric()
@@ -252,7 +252,7 @@ namespace Bit.iOS.Core.Services
         {
             if (Application.Current is App.App app && app.Options != null && !app.Options.IosExtension)
             {
-                return app.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
+                return Bit.App.App.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
             }
             var vc = GetPresentedViewController();
             if (vc is null)
