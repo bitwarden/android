@@ -8,10 +8,27 @@ using System.Security.Cryptography;
 
 namespace Bit.Core.Services
 {
-    public class Fido2AuthenticatorService(ICipherService _cipherService, ISyncService _syncService, ICryptoFunctionService _cryptoFunctionService, IFido2UserInterface _userInterface) : IFido2AuthenticatorService
+    public class Fido2AuthenticatorService: IFido2AuthenticatorService
     {
         // AAGUID: d548826e-79b4-db40-a3d8-11116f7e8349
-        public static readonly byte[] AAGUID = [ 0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49 ];
+        public static readonly byte[] AAGUID = new byte[] { 0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49 };
+
+        private readonly ICipherService _cipherService;
+        private readonly ISyncService _syncService;
+        private readonly ICryptoFunctionService _cryptoFunctionService;
+        private IFido2UserInterface _userInterface;
+
+        public Fido2AuthenticatorService(ICipherService cipherService, ISyncService syncService, ICryptoFunctionService cryptoFunctionService)
+        {
+            _cipherService = cipherService;
+            _syncService = syncService;
+            _cryptoFunctionService = cryptoFunctionService;
+        }
+
+        public void Init(IFido2UserInterface userInterface)
+        {
+            _userInterface = userInterface;
+        }
 
         public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
         {
@@ -21,6 +38,7 @@ namespace Bit.Core.Services
                 // _logService.Warning(
                 //     $"[Fido2Authenticator] No compatible algorithms found, RP requested: {requestedAlgorithms}"
                 // );
+                ClipLogger.Log("[Fido2Authenticator] No compatible algorithms found, RP requested: {requestedAlgorithms}");
                 throw new NotSupportedError();
             }
 
@@ -34,6 +52,7 @@ namespace Bit.Core.Services
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting due to excluded credential found in vault."
                 // );
+                ClipLogger.Log("[Fido2Authenticator] Aborting due to excluded credential found in vault");
                 await _userInterface.InformExcludedCredential(existingCipherIds);
                 throw new NotAllowedError();
             }
@@ -51,6 +70,7 @@ namespace Bit.Core.Services
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because user confirmation was not recieved."
                 // );
+                ClipLogger.Log("[Fido2Authenticator] Aborting because user confirmation was not recieved");
                 throw new NotAllowedError();
             }
             
@@ -65,10 +85,11 @@ namespace Bit.Core.Services
                     // _logService.Info(
                     //     "[Fido2Authenticator] Aborting because user verification was unsuccessful."
                     // );
+                    ClipLogger.Log("[Fido2Authenticator] Aborting because user verification was unsuccessful");
                     throw new NotAllowedError();
                 }
 
-                cipher.Login.Fido2Credentials = [fido2Credential];
+                cipher.Login.Fido2Credentials = new List<Fido2CredentialView> { fido2Credential };
                 var reencrypted = await _cipherService.EncryptAsync(cipher);
                 await _cipherService.SaveWithServerAsync(reencrypted);
                 credentialId = fido2Credential.CredentialId;
@@ -92,10 +113,11 @@ namespace Bit.Core.Services
                 };
             } catch (NotAllowedError) {
                 throw;
-            } catch (Exception) {
+            } catch (Exception e) {
                 // _logService.Error(
                 //     $"[Fido2Authenticator] Unknown error occured during attestation: {e.Message}"
                 // );
+                ClipLogger.Log("[Fido2Authenticator] Unknown error occured during attestation: {e.Message}");
 
                 throw new UnknownError();
             }
@@ -121,6 +143,7 @@ namespace Bit.Core.Services
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because no matching credentials were found in the vault."
                 // );
+                ClipLogger.Log("[Fido2Authenticator] Aborting because no matching credentials were found in the vault");
 
                 throw new NotAllowedError();
             }
@@ -151,6 +174,7 @@ namespace Bit.Core.Services
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because the selected credential could not be found."
                 // );
+                ClipLogger.Log("[Fido2Authenticator] Aborting because the selected credential could not be found");
 
                 throw new NotAllowedError();
             }
@@ -160,6 +184,7 @@ namespace Bit.Core.Services
                 //     "[Fido2Authenticator] Aborting because user presence was required but not detected."
                 // );
 
+                ClipLogger.Log("[Fido2Authenticator] Aborting because user presence was required but not detected");
                 throw new NotAllowedError();
             }
 
@@ -167,6 +192,7 @@ namespace Bit.Core.Services
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because user verification was unsuccessful."
                 // );
+                ClipLogger.Log("[Fido2Authenticator] Aborting because user verification was unsuccessful");
 
                 throw new NotAllowedError();
             }
@@ -206,10 +232,11 @@ namespace Bit.Core.Services
                     AuthenticatorData = authenticatorData,
                     Signature = signature
                 };
-            } catch (Exception) {
+            } catch (Exception e) {
                 // _logService.Error(
                 //     $"[Fido2Authenticator] Unknown error occured during assertion: {e.Message}"
                 // );
+                ClipLogger.Log($"[Fido2Authenticator] Unknown error occured during assertion: {e.Message}");
 
                 throw new UnknownError();
             }
@@ -235,7 +262,7 @@ namespace Bit.Core.Services
             PublicKeyCredentialDescriptor[] credentials
         ) {
             if (credentials == null || credentials.Length == 0) {
-                return [];
+                return Array.Empty<string>();
             }
 
             var ids = new List<string>();
@@ -249,7 +276,7 @@ namespace Bit.Core.Services
             }
 
             if (ids.Count == 0) {
-                return [];
+                return Array.Empty<string>();
             }
 
             var ciphers = await _cipherService.GetAllDecryptedAsync();
@@ -358,12 +385,12 @@ namespace Bit.Core.Services
             );
             authData.Add(flags);
 
-            authData.AddRange([
+            authData.AddRange(new List<byte> {
                 (byte)(counter >> 24),
                 (byte)(counter >> 16),
                 (byte)(counter >> 8),
                 (byte)counter
-            ]);
+            });
 
             if (isAttestation)
             {

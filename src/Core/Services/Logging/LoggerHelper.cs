@@ -1,5 +1,5 @@
-﻿using System;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
@@ -22,9 +22,22 @@ namespace Bit.Core.Services
 #if !FDROID
                 // just in case the caller throws the exception in a moment where the logger can't be resolved
                 // we need to track the error as well
-                Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
+                //Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
+                ClipLogger.Log(ex?.ToString());
 #endif
 
+            }
+        }
+
+        public static void LogBreadcrumb(string breadcrumb)
+        {
+            if (ServiceContainer.Resolve<ILogger>("logger", true) is ILogger logger)
+            {
+                logger.Error(breadcrumb);
+            }
+            else
+            {
+                ClipLogger.Log(breadcrumb);
             }
         }
     }

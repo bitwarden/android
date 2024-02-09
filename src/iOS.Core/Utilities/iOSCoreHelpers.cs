@@ -123,7 +123,7 @@ namespace Bit.iOS.Core.Utilities
             else
             { 
 #if DEBUG
-                logger = DebugLogger.Instance;
+                logger = ClipLogger.Instance;
 #else
                 logger = Logger.Instance;
 #endif
@@ -138,6 +138,7 @@ namespace Bit.iOS.Core.Utilities
                 logger!.Exception(nreAppGroupContainer);
                 throw nreAppGroupContainer;
             }
+
             var liteDbStorage = new LiteDbStorageService(
                 Path.Combine(appGroupContainer.Path, "Library", "bitwarden.db"));
             var localizeService = new LocalizeService();
@@ -189,6 +190,11 @@ namespace Bit.iOS.Core.Utilities
 
         public static void RegisterFinallyBeforeBootstrap()
         {
+            ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
+                ServiceContainer.Resolve<ICipherService>(),
+                ServiceContainer.Resolve<ISyncService>(),
+                ServiceContainer.Resolve<ICryptoFunctionService>()));
+
             ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<IEnvironmentService>(),
                 ServiceContainer.Resolve<IStateService>(),

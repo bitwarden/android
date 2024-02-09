@@ -20,6 +20,8 @@ using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Platform;
 using UIKit;
+using static CoreFoundation.DispatchSource;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace Bit.iOS.Autofill
 {
@@ -31,7 +33,6 @@ namespace Bit.iOS.Autofill
         private IAccountsManager _accountsManager;
 
         private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
-        private readonly LazyResolve<IFido2AuthenticationService> _fido2AuthService = new LazyResolve<IFido2AuthenticationService>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -45,7 +46,11 @@ namespace Bit.iOS.Autofill
         {
             try
             {
+                ClipLogger.Log("ViewDidLoad");
+
                 InitAppIfNeeded();
+
+                ClipLogger.Log("Inited");
 
                 base.ViewDidLoad();
 
@@ -56,9 +61,11 @@ namespace Bit.iOS.Autofill
                     ExtContext = ExtensionContext
                 };
 
+                ClipLogger.Log("ViewDidLoad completed");
             }
             catch (Exception ex)
             {
+                ClipLogger.Log($"ViewDidLoad ex: {ex}");
                 OnProvidingCredentialException(ex);
             }
         }
@@ -67,6 +74,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
+                ClipLogger.Log("PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers");
                 InitAppIfNeeded();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
@@ -104,22 +112,116 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public override async void ProvideCredentialWithoutUserInteraction(IASCredentialRequest credentialRequest)
+        [Export("prepareCredentialListForServiceIdentifiers:requestParameters:")]
+        public override async void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers, ASPasskeyCredentialRequestParameters requestParameters)
         {
             try
             {
-                switch (credentialRequest)
+                ClipLogger.Log("PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers, ASPasskeyCredentialRequestParameters requestParameters");
+                InitAppIfNeeded();
+                _context.ServiceIdentifiers = serviceIdentifiers;
+                if (serviceIdentifiers.Length > 0)
                 {
-                    case ASPasswordCredentialRequest passwordRequest:
-                        await ProvideCredentialWithoutUserInteractionAsync(passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                    var uri = serviceIdentifiers[0].Identifier;
+                    if (serviceIdentifiers[0].Type == ASCredentialServiceIdentifierType.Domain)
+                    {
+                        uri = string.Concat("https://", uri);
+                    }
+                    _context.UrlString = uri;
+                }
+                if (!await IsAuthed())
+                {
+                    await _accountsManager.NavigateOnAccountChangeAsync(false);
+                }
+                else if (await IsLocked())
+                {
+                    PerformSegue("lockPasswordSegue", this);
+                }
+                else
+                {
+                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                    {
+                        PerformSegue("loginSearchSegue", this);
+                    }
+                    else
+                    {
+                        PerformSegue("loginListSegue", this);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProvidingCredentialException(ex);
+            }
+        }
+
+        [Export("provideCredentialWithoutUserInteractionForRequest:")]
+        public override async void ProvideCredentialWithoutUserInteraction(IASCredentialRequest credentialRequest)
+        {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+            {
+                return;
+            }
+
+            try
+            {
+
+                ClipLogger.Log("ProvideCredentialWithoutUserInteraction(IASCredentialRequest credentialRequest");
+                ClipLogger.Log($"PCWUI(IASC) -> R: {credentialRequest?.GetType().FullName}");
+                ClipLogger.Log($"PCWUI(IASC) -> I: {credentialRequest?.CredentialIdentity?.GetType().FullName}");
+
+                var crType = credentialRequest.GetType();
+                foreach (var item in crType.GetProperties())
+                {
+                    ClipLogger.Log($"PCWUI(IASC) -> R -> {item.Name} -- {item.PropertyType}");
+                }
+
+                var ciType = credentialRequest.CredentialIdentity.GetType();
+                foreach (var item in ciType.GetProperties())
+                {
+                    ClipLogger.Log($"PCWUI(IASC) -> I -> {item.Name} -- {item.PropertyType}");
+                }
+
+                try
+                {
+                    var cc = (ASPasskeyCredentialRequest)credentialRequest;
+                    ClipLogger.Log($"PCWUI(IASC) -> R -> Force cast {cc}");
+                }
+                catch (Exception ex)
+                {
+                    ClipLogger.Log($"PCWUI(IASC) -> R -> Force cast bad - {ex}");
+                }
+
+
+                switch (credentialRequest?.Type)
+                {
+                    case ASCredentialRequestType.Password:
+                        ClipLogger.Log($"PCWUI(IASC) -> Type P {credentialRequest.CredentialIdentity}");
+                        await ProvideCredentialWithoutUserInteractionAsync(credentialRequest.CredentialIdentity as ASPasswordCredentialIdentity);
                         break;
-                    case ASPasskeyCredentialRequest passkeyRequest:
-                        await ProvideCredentialWithoutUserInteractionAsync(passkeyRequest);
+                    case ASCredentialRequestType.PasskeyAssertion:
+                        var bpa = credentialRequest is ASPasskeyCredentialRequest;
+                        ClipLogger.Log($"PCWUI(IASC) -> Type PA {bpa}");
+                        await ProvideCredentialWithoutUserInteractionAsync(credentialRequest as ASPasskeyCredentialRequest);
                         break;
                     default:
+                        ClipLogger.Log($"PCWUI(IASC) -> Type not P nor PA");
                         CancelRequest(ASExtensionErrorCode.Failed);
                         break;
                 }
+
+                //switch (credentialRequest)
+                //{
+                //    case ASPasswordCredentialRequest passwordRequest:
+                //        await ProvideCredentialWithoutUserInteractionAsync(passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                //        break;
+                //    case ASPasskeyCredentialRequest passkeyRequest:
+                //        await ProvideCredentialWithoutUserInteractionAsync(passkeyRequest);
+                //        break;
+                //    default:
+                //        CancelRequest(ASExtensionErrorCode.Failed);
+                //        break;
+                //}
             }
             catch (Exception ex)
             {
@@ -127,86 +229,89 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
-        {
-            try
-            {
-                await ProvideCredentialWithoutUserInteractionAsync(credentialIdentity);
-            }
-            catch (Exception ex)
-            {
-                OnProvidingCredentialException(ex);
-            }
-        }
+        //public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
+        //{
+        //    try
+        //    {
+        //        ClipLogger.Log("ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity");
+        //        await ProvideCredentialWithoutUserInteractionAsync(credentialIdentity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OnProvidingCredentialException(ex);
+        //    }
+        //}
 
-        private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
-        {
-            InitAppIfNeeded();
-            await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
-            await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
-            if (!await IsAuthed() || await IsLocked())
-            {
-                var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                ExtensionContext.CancelRequest(err);
-                return;
-            }
-            _context.PasswordCredentialIdentity = credentialIdentity;
-            await ProvideCredentialAsync(false);
-        }
-
+        [Export("prepareInterfaceToProvideCredentialForRequest:")]
         public override async void PrepareInterfaceToProvideCredential(IASCredentialRequest credentialRequest)
         {
-            try
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
             {
-                switch (credentialRequest)
-                {
-                    case ASPasswordCredentialRequest passwordRequest:
-                        PrepareInterfaceToProvideCredential(passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
-                        break;
-                    case ASPasskeyCredentialRequest passkeyRequest:
-                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialRequest = passkeyRequest);
-                        break;
-                    default:
-                        ExtensionContext?.CancelRequest(new NSError(ASExtensionErrorCodeExtensions.GetDomain(ASExtensionErrorCode.Failed), (int)ASExtensionErrorCode.Failed));
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                OnProvidingCredentialException(ex);
-            }
-        }
-
-        public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
-        {
-            try
-            {
-                await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialIdentity);
-            }
-            catch (Exception ex)
-            {
-                OnProvidingCredentialException(ex);
-            }
-        }
-
-        private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
-        {
-            InitAppIfNeeded();
-            if (!await IsAuthed())
-            {
-                await _accountsManager.NavigateOnAccountChangeAsync(false);
                 return;
             }
-            updateContext(_context);
-            await CheckLockAsync(async () => await ProvideCredentialAsync());
+
+            try
+            {
+                ClipLogger.Log("PrepareInterfaceToProvideCredential(IASCredentialRequest credentialRequest");
+                ClipLogger.Log($"PITPC(IASCR) -> R: {credentialRequest?.GetType().FullName}");
+                ClipLogger.Log($"PITPC(IASCR) -> I: {credentialRequest?.CredentialIdentity?.GetType().FullName}");
+
+                switch (credentialRequest?.Type)
+                {
+                    case ASCredentialRequestType.Password:
+                        ClipLogger.Log($"PITPC(IASCR) -> Type P {credentialRequest.CredentialIdentity}");
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                        break;
+                    case ASCredentialRequestType.PasskeyAssertion:
+                        var bpa = credentialRequest is ASPasskeyCredentialRequest;
+                        ClipLogger.Log($"PITPC(IASCR) -> Type PA {bpa}");
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialRequest = credentialRequest as ASPasskeyCredentialRequest);
+                        break;
+                    default:
+                        ClipLogger.Log($"PITPC(IASCR) -> Type not P nor PA");
+                        CancelRequest(ASExtensionErrorCode.Failed);
+                        break;
+                }
+
+
+                //switch (credentialRequest)
+                //{
+                //    case ASPasswordCredentialRequest passwordRequest:
+                //        //PrepareInterfaceToProvideCredential(passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                //        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = passwordRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                //        break;
+                //    case ASPasskeyCredentialRequest passkeyRequest:
+                //        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialRequest = passkeyRequest);
+                //        break;
+                //    default:
+                //        CancelRequest(ASExtensionErrorCode.Failed);
+                //        break;
+                //}
+            }
+            catch (Exception ex)
+            {
+                OnProvidingCredentialException(ex);
+            }
         }
 
+        //public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
+        //{
+        //    try
+        //    {
+        //        ClipLogger.Log("PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity");
+        //        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialIdentity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OnProvidingCredentialException(ex);
+        //    }
+        //}
 
         public override async void PrepareInterfaceForExtensionConfiguration()
         {
             try
             {
+                ClipLogger.Log("PrepareInterfaceForExtensionConfiguration");
                 InitAppIfNeeded();
                 _context.Configuring = true;
                 if (!await IsAuthed())
@@ -221,10 +326,41 @@ namespace Bit.iOS.Autofill
                 OnProvidingCredentialException(ex);
             }
         }
+        
+        private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
+        {
+            ClipLogger.Log("ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity");
+            InitAppIfNeeded();
+            await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
+            await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
+            if (!await IsAuthed() || await IsLocked())
+            {
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                ExtensionContext.CancelRequest(err);
+                return;
+            }
+            _context.PasswordCredentialIdentity = credentialIdentity;
+            await ProvideCredentialAsync(false);
+        }
+
+        private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
+        {
+            ClipLogger.Log("PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext");
+            InitAppIfNeeded();
+            if (!await IsAuthed())
+            {
+                await _accountsManager.NavigateOnAccountChangeAsync(false);
+                return;
+            }
+            updateContext(_context);
+            await CheckLockAsync(async () => await ProvideCredentialAsync());
+        }
 
         public void CompleteRequest(string id = null, string username = null,
             string password = null, string totp = null)
         {
+            ClipLogger.Log("CompleteRequest");
             if ((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
                 ServiceContainer.Reset();
@@ -261,13 +397,13 @@ namespace Bit.iOS.Autofill
 
         private void OnProvidingCredentialException(Exception ex)
         {
-            //LoggerHelper.LogEvenIfCantBeResolved(ex);
-            UIPasteboard.General.String = ex.ToString();
+            LoggerHelper.LogEvenIfCantBeResolved(ex);
             CancelRequest(ASExtensionErrorCode.Failed);
         }
 
         private void CancelRequest(ASExtensionErrorCode code)
         {
+            ClipLogger.Log("CancelRequest" + code);
             //var err = new NSError(new NSString("ASExtensionErrorDomain"), Convert.ToInt32(code), null);
             var err = new NSError(ASExtensionErrorCodeExtensions.GetDomain(code), (int)code);
             ExtensionContext?.CancelRequest(err);
@@ -277,6 +413,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
+                ClipLogger.Log("Preparing for Segue");
                 if (segue.DestinationViewController is UINavigationController navController)
                 {
                     if (navController.TopViewController is LoginListViewController listLoginController)
@@ -315,13 +452,15 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public async void DismissLockAndContinue()
+        public void DismissLockAndContinue()
         {
+            ClipLogger.Log("DismissLockAndContinue");
             DismissViewController(false, async () => await OnLockDismissedAsync());
         }
 
         private void NavigateToPage(ContentPage page)
         {
+            ClipLogger.Log("NavigateToPage" + page.GetType().FullName);
             var navigationPage = new NavigationPage(page);
             var uiController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             uiController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
@@ -333,23 +472,28 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                if (_context.PasswordCredentialIdentity != null)
+                ClipLogger.Log("OnLockDismissedAsync");
+                if (_context.PasswordCredentialIdentity != null || _context.IsPasskey)
                 {
+                    ClipLogger.Log("OnLockDismissedAsync -> ProvideCredentialAsync");
                     await MainThread.InvokeOnMainThreadAsync(() => ProvideCredentialAsync());
                     return;
                 }
                 if (_context.Configuring)
                 {
+                    ClipLogger.Log("OnLockDismissedAsync -> Configuring");
                     await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("setupSegue", this));
                     return;
                 }
 
                 if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
                 {
+                    ClipLogger.Log("OnLockDismissedAsync -> loginSearchSegue");
                     await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginSearchSegue", this));
                 }
                 else
                 {
+                    ClipLogger.Log("OnLockDismissedAsync -> loginListSegue");
                     await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginListSegue", this));
                 }
             }
@@ -363,14 +507,27 @@ namespace Bit.iOS.Autofill
         {
             try
             {
+                ClipLogger.Log("ProvideCredentialAsync");
                 if (!ServiceContainer.TryResolve<ICipherService>(out var cipherService)
                     ||
                     _context.RecordIdentifier == null)
                 {
+                    ClipLogger.Log("ProvideCredentialAsync -> CredentialIdentityNotFound");
                     CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
                     return;
                 }
 
+                if (_context.IsPasskey)
+                {
+                    ClipLogger.Log("ProvideCredentialAsync -> IsPasskey");
+                    await CompleteAssertionRequestAsync(_context.PasskeyCredentialIdentity.RelyingPartyIdentifier,
+                        _context.PasskeyCredentialIdentity.UserHandle,
+                        _context.PasskeyCredentialIdentity.CredentialId,
+                        _context.RecordIdentifier);
+                    return;
+                }
+
+                ClipLogger.Log("ProvideCredentialAsync -> IsPassword");
                 var cipher = await cipherService.GetAsync(_context.RecordIdentifier);
                 if (cipher?.Login is null || cipher.Type != CipherType.Login)
                 {
@@ -410,12 +567,6 @@ namespace Bit.iOS.Autofill
                     }
                 }
 
-                if (_context.IsPasskey)
-                {
-                    await CompleteAssertionRequestAsync(decCipher);
-                    return;
-                }
-
                 string totpCode = null;
                 if (await _stateService.Value.GetDisableAutoTotpCopyAsync() != true)
                 {
@@ -437,6 +588,7 @@ namespace Bit.iOS.Autofill
 
         private async Task CheckLockAsync(Action notLockedAction)
         {
+            ClipLogger.Log("CheckLockAsync");
             if (await IsLocked() || await _stateService.Value.GetPasswordRepromptAutofillAsync())
             {
                 DispatchQueue.MainQueue.DispatchAsync(() => PerformSegue("lockPasswordSegue", this));
@@ -460,6 +612,7 @@ namespace Bit.iOS.Autofill
 
         private void LogoutIfAuthed()
         {
+            ClipLogger.Log("LogoutIfAuthed");
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
                 try
@@ -482,12 +635,14 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
+            ClipLogger.Log("InitApp");
             iOSCoreHelpers.InitApp(this, Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey,
                 _nfcSession, out _nfcDelegate, out _accountsManager);
         }
 
         private void InitAppIfNeeded()
         {
+            ClipLogger.Log("InitAppIfNeeded");
             if (ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
             {
                 InitApp();
@@ -685,6 +840,7 @@ namespace Bit.iOS.Autofill
 
         public void Navigate(NavigationTarget navTarget, INavigationParams navParams = null)
         {
+            ClipLogger.Log("Navigate" + navTarget);
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
