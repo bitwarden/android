@@ -158,9 +158,9 @@ namespace Bit.App.Utilities
         {
 #if ANDROID
             return Application.Current.RequestedTheme == AppTheme.Dark;
-#elif IOS
+#else
             var requestedTheme = AppTheme.Unspecified;
-            if ((OperatingSystem.IsIOS() && !OperatingSystem.IsIOSVersionAtLeast(13, 0)))
+            if (!OperatingSystem.IsIOSVersionAtLeast(13, 0))
                 return false;
 
             var traits = InvokeOnMainThread(() => WindowStateManager.Default.GetCurrentUIViewController()?.TraitCollection) ?? UITraitCollection.CurrentTraitCollection;
