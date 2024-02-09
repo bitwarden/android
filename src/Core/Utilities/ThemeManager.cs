@@ -156,6 +156,10 @@ namespace Bit.App.Utilities
         // MAUI Issue: https://github.com/dotnet/maui/issues/19614
         public static bool OsDarkModeEnabled()
         {
+#if UT
+            return false;
+#endif
+
 #if ANDROID
             return Application.Current.RequestedTheme == AppTheme.Dark;
 #else
