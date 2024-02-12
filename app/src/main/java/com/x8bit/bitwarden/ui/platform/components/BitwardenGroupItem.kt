@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
+import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -86,7 +87,9 @@ fun BitwardenGroupItem(
             painter = painterResource(id = R.drawable.ic_navigate_next),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .mirrorIfRtl()
+                .size(24.dp),
         )
     }
 }
