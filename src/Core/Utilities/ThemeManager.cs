@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Models;
@@ -158,9 +158,7 @@ namespace Bit.App.Utilities
         {
 #if UT
             return false;
-#endif
-
-#if ANDROID
+#elif ANDROID
             return Application.Current.RequestedTheme == AppTheme.Dark;
 #else
             var requestedTheme = AppTheme.Unspecified;
