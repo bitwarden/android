@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.push
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -9,6 +10,7 @@ import javax.inject.Inject
 /**
  * Handles setup and receiving of push notifications.
  */
+@OmitFromCoverage
 @AndroidEntryPoint
 class BitwardenFirebaseMessagingService : FirebaseMessagingService() {
     @Inject

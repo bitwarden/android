@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -15,6 +16,7 @@ import javax.inject.Inject
  * selected and it requires TOTP authentication. Due to the constraints of the autofill framework,
  * we also have to re-fulfill the autofill for the views that are being filled.
  */
+@OmitFromCoverage
 @AndroidEntryPoint
 class AutofillTotpCopyActivity : AppCompatActivity() {
 

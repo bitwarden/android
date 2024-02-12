@@ -9,6 +9,7 @@ import android.service.autofill.SaveCallback
 import android.service.autofill.SaveRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -16,6 +17,7 @@ import javax.inject.Inject
  * The [AutofillService] implementation for the app. This fulfills autofill requests from other
  * applications.
  */
+@OmitFromCoverage
 @AndroidEntryPoint
 class BitwardenAutofillService : AutofillService() {
 

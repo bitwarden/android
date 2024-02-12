@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -25,6 +26,7 @@ import javax.inject.Inject
 /**
  * Primary entry point for the application.
  */
+@OmitFromCoverage
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
