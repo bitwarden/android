@@ -259,7 +259,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             var keyPair = GenerateKeyPair();
             var rpIdHashMock = RandomBytes(32);
-            _params.ClientDataHash = RandomBytes(32);
+            _params.Hash = RandomBytes(32);
             _params.RequireUserVerification = true;
             _selectedCipher.Login.MainFido2Credential.CounterValue = 9000;
             _selectedCipher.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
@@ -283,7 +283,7 @@ namespace Bit.Core.Test.Services
             Assert.Equal(rpIdHashMock, rpIdHash);
             Assert.Equal(new byte[] { 0b00000101 }, flags); // UP = true, UV = true
             Assert.Equal(new byte[] { 0, 0, 0x23, 0x29 }, counter); // 9001 in binary big-endian format
-            Assert.True(keyPair.VerifyData(authData.Concat(_params.ClientDataHash).ToArray(), result.Signature, HashAlgorithmName.SHA256), "Signature verification failed");
+            Assert.True(keyPair.VerifyData(authData.Concat(_params.Hash).ToArray(), result.Signature, HashAlgorithmName.SHA256), "Signature verification failed");
         }
 
         [Fact]
@@ -357,11 +357,11 @@ namespace Bit.Core.Test.Services
             };
         }
 
-        private Fido2AuthenticatorGetAssertionParams CreateParams(string? rpId = null, byte[]? clientDataHash = null, PublicKeyCredentialDescriptor[]? allowCredentialDescriptorList = null, bool? requireUserPresence = null, bool? requireUserVerification = null)
+        private Fido2AuthenticatorGetAssertionParams CreateParams(string? rpId = null, byte[]? hash = null, PublicKeyCredentialDescriptor[]? allowCredentialDescriptorList = null, bool? requireUserPresence = null, bool? requireUserVerification = null)
         {
             return new Fido2AuthenticatorGetAssertionParams {
                 RpId = rpId ?? "bitwarden.com",
-                ClientDataHash = clientDataHash ?? RandomBytes(32),
+                Hash = hash ?? RandomBytes(32),
                 AllowCredentialDescriptorList = allowCredentialDescriptorList ?? null,
                 RequireUserPresence = requireUserPresence ?? true,
                 RequireUserVerification = requireUserPresence ?? false

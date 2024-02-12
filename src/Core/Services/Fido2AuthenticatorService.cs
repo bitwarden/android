@@ -192,7 +192,7 @@ namespace Bit.Core.Services
 
                 var signature = GenerateSignature(
                     authData: authenticatorData,
-                    clientDataHash: assertionParams.ClientDataHash,
+                    clientDataHash: assertionParams.Hash,
                     privateKey: selectedFido2Credential.KeyBytes
                 );
 

@@ -18,8 +18,7 @@ namespace Bit.Core.Services
             IStateService stateService,
             IEnvironmentService environmentService,
             ICryptoFunctionService cryptoFunctionService,
-            IFido2AuthenticatorService fido2AuthenticatorService
-        )
+            IFido2AuthenticatorService fido2AuthenticatorService)
         {
             _stateService = stateService;
             _environmentService = environmentService;
@@ -133,7 +132,74 @@ namespace Bit.Core.Services
             }
         }
 
-        public Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams) => throw new NotImplementedException();
+        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams)
+        {
+            var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
+            var domain = CoreHelpers.GetHostname(assertCredentialParams.Origin);
+            if (blockedUris.Contains(domain))
+            {
+                throw new Fido2ClientException(
+                    Fido2ClientException.ErrorCode.UriBlockedError,
+                    "Origin is blocked by the user");
+            }
+
+            if (!await _stateService.IsAuthenticatedAsync())
+            {
+                throw new Fido2ClientException(
+                    Fido2ClientException.ErrorCode.InvalidStateError,
+                    "No user is logged in");
+            }
+
+            if (assertCredentialParams.Origin == _environmentService.GetWebVaultUrl())
+            {
+                throw new Fido2ClientException(
+                    Fido2ClientException.ErrorCode.NotAllowedError,
+                    "Saving Bitwarden credentials in a Bitwarden vault is not allowed");
+            }
+
+            if (!assertCredentialParams.Origin.StartsWith("https://"))
+            {
+                throw new Fido2ClientException(
+                    Fido2ClientException.ErrorCode.SecurityError,
+                    "Origin is not a valid https origin");
+            }
+
+            if (!Fido2DomainUtils.IsValidRpId(assertCredentialParams.RpId, assertCredentialParams.Origin))
+            {
+                throw new Fido2ClientException(
+                    Fido2ClientException.ErrorCode.SecurityError,
+                    "RP ID cannot be used with this origin");
+            }
+
+            var clientDataJSON = JsonSerializer.Serialize(new {
+                type = "webauthn.get",
+                challenge = CoreHelpers.Base64UrlEncode(assertCredentialParams.Challenge),
+                origin = assertCredentialParams.Origin,
+                crossOrigin = !assertCredentialParams.SameOriginWithAncestors,
+            });
+            var clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
+            var clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
+            var getAssertionParams = MapToGetAssertionParams(assertCredentialParams, clientDataHash);
+
+            try {
+                var getAssertionResult = await _fido2AuthenticatorService.GetAssertionAsync(getAssertionParams);
+
+                return new Fido2ClientAssertCredentialResult {
+                    AuthenticatorData = getAssertionResult.AuthenticatorData,
+                    ClientDataJSON = clientDataJSONBytes,
+                    Id = CoreHelpers.Base64UrlEncode(getAssertionResult.SelectedCredential.Id),
+                    RawId = getAssertionResult.SelectedCredential.Id,
+                    Signature = getAssertionResult.Signature,
+                    UserHandle = getAssertionResult.SelectedCredential.UserHandle
+                };
+            } catch (InvalidStateError) {
+                throw new Fido2ClientException(Fido2ClientException.ErrorCode.InvalidStateError, "Unknown invalid state encountered");
+            } catch (Exception) {
+                throw new Fido2ClientException(Fido2ClientException.ErrorCode.UnknownError, $"An unknown error occurred");
+            }
+
+            throw new NotImplementedException();
+        }
 
         private Fido2AuthenticatorMakeCredentialParams MapToMakeCredentialParams(
             Fido2ClientCreateCredentialParams createCredentialParams,
@@ -158,6 +224,24 @@ namespace Bit.Core.Services
                 RpEntity = createCredentialParams.Rp,
                 UserEntity = createCredentialParams.User,
                 Extensions = createCredentialParams.Extensions
+            };
+        }
+
+        private Fido2AuthenticatorGetAssertionParams MapToGetAssertionParams(
+            Fido2ClientAssertCredentialParams assertCredentialParams,
+            byte[] cliendDataHash)
+        {
+            var requireUserVerification = assertCredentialParams.UserVerification == "required" ||
+                assertCredentialParams.UserVerification == "preferred" ||
+                assertCredentialParams.UserVerification == null;
+
+            return new Fido2AuthenticatorGetAssertionParams {
+                RpId = assertCredentialParams.RpId,
+                Challenge = assertCredentialParams.Challenge,
+                AllowCredentialDescriptorList = assertCredentialParams.AllowCredentials,
+                RequireUserPresence = true,
+                RequireUserVerification = requireUserVerification,
+                Hash = cliendDataHash
             };
         }
     }

@@ -16,5 +16,27 @@ namespace Bit.Core.Utilities.Fido2
         /// The credential identifier.
         /// </summary>
         public required byte[] RawId { get; set; }
+
+        /// <summary>
+        /// The JSON-compatible serialization of client datapassed to the authenticator by the client in
+        /// order to generate this assertion.
+        /// </summary>
+        public required byte[] ClientDataJSON { get; set; }
+
+        /// <summary>
+        /// The authenticator data returned by the authenticator.
+        /// </summary>
+        public required byte[] AuthenticatorData { get; set; }
+
+        /// <summary>
+        /// The raw signature returned from the authenticator.
+        /// </summary>
+        public required byte[] Signature { get; set; }
+
+        /// <summary>
+        /// The user handle returned from the authenticator, or null if the authenticator did not
+        /// return a user handle.
+        /// </summary>
+        public byte[]? UserHandle { get; set; }
     }
 }
