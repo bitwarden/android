@@ -20,4 +20,11 @@ enum class ForcePasswordResetReason {
      */
     @SerialName("weakMasterPasswordOnLogin")
     WEAK_MASTER_PASSWORD_ON_LOGIN,
+
+    /**
+     * Occurs when a TDE user without a password obtains the password reset permission.
+     * Set post login & decryption client side and by server in sync (to catch logged in users).
+     */
+    @SerialName("tdeUserWithoutPasswordHasPasswordResetPermission")
+    TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
 }
