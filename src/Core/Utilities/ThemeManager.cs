@@ -158,7 +158,7 @@ namespace Bit.App.Utilities
         {
 #if UT
             return false;
-#endif
+#else
 
 #if ANDROID
             return Application.Current.RequestedTheme == AppTheme.Dark;
@@ -177,6 +177,8 @@ namespace Bit.App.Utilities
                 _ => AppTheme.Unspecified
             };
             return requestedTheme == AppTheme.Dark;
+#endif
+
 #endif
         }
 
