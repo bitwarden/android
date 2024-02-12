@@ -199,14 +199,6 @@ koverReport {
                 "*.*ComposableSingletons*",
                 // Generated classes related to interfaces with default values
                 "*.*DefaultImpls*",
-                // OS-level components
-                "com.x8bit.bitwarden.BitwardenApplication",
-                "com.x8bit.bitwarden.MainActivity*",
-                "com.x8bit.bitwarden.WebAuthCallbackActivity*",
-                "com.x8bit.bitwarden.data.autofill.BitwardenAutofillService*",
-                "com.x8bit.bitwarden.data.push.BitwardenFirebaseMessagingService*",
-                // Empty Composables
-                "com.x8bit.bitwarden.ui.platform.feature.splash.SplashScreenKt",
                 // Databases
                 "*.database.*Database*",
                 "*.dao.*Dao*",

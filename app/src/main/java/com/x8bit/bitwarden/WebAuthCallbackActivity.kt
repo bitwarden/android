@@ -4,12 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * An activity to receive callbacks from Custom Chrome tabs or other web-auth related flows such
  * the current state of the task holding the [MainActivity] can remain undisturbed.
  */
+@OmitFromCoverage
 @AndroidEntryPoint
 class WebAuthCallbackActivity : AppCompatActivity() {
 
