@@ -68,7 +68,7 @@ fun createMockCipherView(
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
         edit = false,
         organizationUseTotp = false,
-        viewPassword = false,
+        viewPassword = true,
         localData = null,
     )
 

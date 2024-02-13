@@ -475,7 +475,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         password = "mockPassword-1",
                         uri = listOf(UriItem("testId", "www.mockuri1.com", UriMatchType.HOST)),
                         totpCode = "mockTotp-1",
-                        canViewPassword = false,
+                        canViewPassword = true,
                     )
                         .copy(totp = "mockTotp-1"),
                 ),

@@ -20,9 +20,9 @@ fun CipherView.toOverflowActions(): List<ListingItemOverflowAction.VaultAction> 
                 this.login?.username?.let {
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
                 },
-                this.login?.password?.let {
-                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = it)
-                },
+                this.login?.password
+                    ?.let { ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = it) }
+                    .takeIf { this.viewPassword },
                 this.login?.totp
                     ?.let { ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = it) }
                     .takeIf { this.type == CipherType.LOGIN },
