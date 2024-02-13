@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -300,21 +300,15 @@ class VaultLockManagerImpl(
     }
 
     private fun observeUserSwitchingChanges() {
-        var lastActiveUserId: String? = null
-
         authDiskSource
-            .userStateFlow
-            .mapNotNull { it?.activeUserId }
-            .distinctUntilChanged()
-            .onEach { activeUserId ->
-                val previousActiveUserId = lastActiveUserId
-                lastActiveUserId = activeUserId
-                if (previousActiveUserId != null &&
-                    activeUserId != previousActiveUserId
-                ) {
+            .userSwitchingChangesFlow
+            .onEach { userSwitchingData ->
+                val previousActiveUserId = userSwitchingData.previousActiveUserId
+                val currentActiveUserId = userSwitchingData.currentActiveUserId
+                if (previousActiveUserId != null && currentActiveUserId != null) {
                     handleUserSwitch(
                         previousActiveUserId = previousActiveUserId,
-                        currentActiveUserId = activeUserId,
+                        currentActiveUserId = currentActiveUserId,
                     )
                 }
             }
