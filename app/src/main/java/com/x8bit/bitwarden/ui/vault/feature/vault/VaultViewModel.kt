@@ -34,7 +34,9 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAppBarTitle
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toVaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toViewState
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
+import com.x8bit.bitwarden.ui.vault.util.shortName
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -814,15 +816,15 @@ data class VaultState(
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
-                val brand: Text? = null,
+                private val brand: VaultCardBrand? = null,
                 val lastFourDigits: Text? = null,
             ) : VaultItem() {
                 override val supportingLabel: Text?
                     get() = when {
-                        brand != null && lastFourDigits != null -> brand
+                        brand != null && lastFourDigits != null -> brand.shortName
                             .concat(", *".asText(), lastFourDigits)
 
-                        brand != null -> brand
+                        brand != null -> brand.shortName
                         lastFourDigits != null -> "*".asText().concat(lastFourDigits)
                         else -> null
                     }

@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.util.shortName
 
 /**
  * The top level content UI state for the [VaultItemScreen] when viewing a Card cipher.
@@ -104,7 +105,7 @@ fun VaultItemCardContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenTextField(
                     label = stringResource(id = R.string.brand),
-                    value = cardState.brand.value(),
+                    value = cardState.brand.shortName(),
                     onValueChange = {},
                     readOnly = true,
                     singleLine = false,

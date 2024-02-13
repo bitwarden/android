@@ -9,7 +9,7 @@ class VaultCardBrandTest {
     fun `findVaultCardBrandWithNameOrNull should return matching brand, regardless of format`() {
         val names = listOf(
             "UNIONpay",
-            "AMERICAN_EXPRESS",
+            "AMEx",
             "diNERs  cLub",
             "rupay",
             "nothing card",
@@ -20,7 +20,7 @@ class VaultCardBrandTest {
         assertEquals(
             listOf(
                 VaultCardBrand.UNIONPAY,
-                VaultCardBrand.AMERICAN_EXPRESS,
+                VaultCardBrand.AMEX,
                 VaultCardBrand.DINERS_CLUB,
                 VaultCardBrand.RUPAY,
                 null,
