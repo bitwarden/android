@@ -195,7 +195,7 @@ class AuthRepositoryTest {
         } returns "AsymmetricEncString".asSuccess()
     }
     private val userLogoutManager: UserLogoutManager = mockk {
-        every { logout(any()) } just runs
+        every { logout(any(), any()) } just runs
     }
 
     private val mutableLogoutFlow = bufferedMutableSharedFlow<Unit>()

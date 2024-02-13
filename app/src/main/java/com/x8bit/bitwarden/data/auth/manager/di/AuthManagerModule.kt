@@ -45,6 +45,7 @@ object AuthManagerModule {
     @Provides
     @Singleton
     fun provideUserLogoutManager(
+        @ApplicationContext context: Context,
         authDiskSource: AuthDiskSource,
         generatorDiskSource: GeneratorDiskSource,
         passwordHistoryDiskSource: PasswordHistoryDiskSource,
@@ -54,6 +55,7 @@ object AuthManagerModule {
         dispatcherManager: DispatcherManager,
     ): UserLogoutManager =
         UserLogoutManagerImpl(
+            context = context,
             authDiskSource = authDiskSource,
             generatorDiskSource = generatorDiskSource,
             passwordHistoryDiskSource = passwordHistoryDiskSource,
