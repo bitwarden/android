@@ -268,6 +268,7 @@ private fun PendingRequestItem(
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             textAlign = TextAlign.Start,
             modifier = Modifier
+                .semantics { testTag = "FingerprintValueLabel" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )

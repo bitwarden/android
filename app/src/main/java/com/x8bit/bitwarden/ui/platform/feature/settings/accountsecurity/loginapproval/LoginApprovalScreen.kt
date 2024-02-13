@@ -186,8 +186,7 @@ private fun LoginApprovalContent(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .semantics { testTag = "FingerprintValueLabel" },
+                .padding(horizontal = 16.dp),
         )
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -197,9 +196,9 @@ private fun LoginApprovalContent(
             color = LocalNonMaterialColors.current.fingerprint,
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             modifier = Modifier
+                .semantics { testTag = "FingerprintValueLabel" }
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .semantics { testTag = "FingerprintValue" },
+                .padding(horizontal = 16.dp),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
