@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
+import com.x8bit.bitwarden.ui.vault.util.stringLongNameOrNull
 import java.time.Instant
 
 /**
@@ -81,7 +82,7 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toCardView(): CardView?
                 .takeUnless { brand ->
                     brand == VaultCardBrand.SELECT
                 }
-                ?.name,
+                ?.stringLongNameOrNull,
             number = it.number.orNullIfBlank(),
         )
     }

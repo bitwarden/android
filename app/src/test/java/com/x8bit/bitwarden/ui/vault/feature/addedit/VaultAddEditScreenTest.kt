@@ -1717,7 +1717,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.update { currentState ->
             updateCardType(currentState) {
                 copy(
-                    brand = VaultCardBrand.AMERICAN_EXPRESS,
+                    brand = VaultCardBrand.AMEX,
                 )
             }
         }

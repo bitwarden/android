@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
+import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
@@ -14,6 +15,8 @@ import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
+import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
@@ -24,6 +27,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
+@Suppress("LargeClass")
 class VaultAddItemStateExtensionsTest {
 
     @AfterEach
@@ -513,6 +517,151 @@ class VaultAddItemStateExtensionsTest {
             result,
         )
     }
+
+    @Test
+    fun `toCipherView should transform Card ItemType to CipherView`() {
+        mockkStatic(Instant::class)
+        every { Instant.now() } returns Instant.MIN
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                name = "mockName-1",
+                selectedFolderId = "mockId-1",
+                favorite = false,
+                masterPasswordReprompt = false,
+                notes = "mockNotes-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                cardHolderName = "mockName-1",
+                number = "1234567",
+                brand = VaultCardBrand.VISA,
+                expirationMonth = VaultCardExpirationMonth.MARCH,
+                expirationYear = "2028",
+                securityCode = "987",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            CipherView(
+                id = null,
+                organizationId = "mockOwnerId-1",
+                folderId = "mockId-1",
+                collectionIds = emptyList(),
+                key = null,
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                type = CipherType.CARD,
+                login = null,
+                identity = null,
+                card = CardView(
+                    cardholderName = "mockName-1",
+                    expMonth = "3",
+                    expYear = "2028",
+                    code = "987",
+                    brand = "Visa",
+                    number = "1234567",
+                ),
+                secureNote = null,
+                favorite = false,
+                reprompt = CipherRepromptType.NONE,
+                organizationUseTotp = false,
+                edit = true,
+                viewPassword = true,
+                localData = null,
+                attachments = null,
+                fields = emptyList(),
+                passwordHistory = null,
+                creationDate = Instant.MIN,
+                deletedDate = null,
+                revisionDate = Instant.MIN,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toCipherView should transform Card ItemType to CipherView with original cipher`() {
+        val cipherView = DEFAULT_CARD_CIPHER_VIEW
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                selectedFolderId = "mockId-1",
+                favorite = true,
+                masterPasswordReprompt = false,
+                customFieldData = listOf(
+                    VaultAddEditState.Custom.BooleanField("testId", "TestBoolean", false),
+                    VaultAddEditState.Custom.TextField("testId", "TestText", "TestText"),
+                    VaultAddEditState.Custom.HiddenField("testId", "TestHidden", "TestHidden"),
+                    VaultAddEditState.Custom.LinkedField(
+                        "testId",
+                        "TestLinked",
+                        VaultLinkedFieldType.USERNAME,
+                    ),
+                ),
+                notes = "mockNotes-1",
+                selectedOwnerId = "mockOwnerId-1",
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Card(
+                cardHolderName = "mockName-1",
+                number = "1234567",
+                brand = VaultCardBrand.VISA,
+                expirationMonth = VaultCardExpirationMonth.MARCH,
+                expirationYear = "2028",
+                securityCode = "987",
+            ),
+        )
+
+        val result = viewState.toCipherView()
+
+        assertEquals(
+            cipherView.copy(
+                name = "mockName-1",
+                notes = "mockNotes-1",
+                organizationId = "mockOwnerId-1",
+                folderId = "mockId-1",
+                favorite = true,
+                reprompt = CipherRepromptType.NONE,
+                fields = listOf(
+                    FieldView(
+                        name = "TestBoolean",
+                        value = "false",
+                        type = FieldType.BOOLEAN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestText",
+                        value = "TestText",
+                        type = FieldType.TEXT,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestHidden",
+                        value = "TestHidden",
+                        type = FieldType.HIDDEN,
+                        linkedId = null,
+                    ),
+                    FieldView(
+                        name = "TestLinked",
+                        value = null,
+                        type = FieldType.LINKED,
+                        linkedId = VaultLinkedFieldType.USERNAME.id,
+                    ),
+                ),
+                passwordHistory = listOf(
+                    PasswordHistoryView(
+                        password = "old_password",
+                        lastUsedDate = Instant.MIN,
+                    ),
+                ),
+            ),
+            result,
+        )
+    }
 }
 
 private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
@@ -641,5 +790,17 @@ private val DEFAULT_IDENTITY_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.
         username = "MockUsername",
         passportNumber = "mockPassportNumber",
         licenseNumber = "mockLicenseNumber",
+    ),
+)
+
+private val DEFAULT_CARD_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+    type = CipherType.CARD,
+    card = CardView(
+        cardholderName = "mockName-1",
+        expMonth = "3",
+        expYear = "2028",
+        code = "987",
+        brand = "Visa",
+        number = "1234567",
     ),
 )

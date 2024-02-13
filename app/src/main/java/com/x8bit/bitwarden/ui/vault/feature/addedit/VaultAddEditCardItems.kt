@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonH
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
+import com.x8bit.bitwarden.ui.vault.util.longName
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -84,14 +85,14 @@ fun LazyListScope.vaultAddEditCardItems(
             label = stringResource(id = R.string.brand),
             options = VaultCardBrand
                 .entries
-                .map { it.value() }
+                .map { it.longName() }
                 .toImmutableList(),
-            selectedOption = cardState.brand.value(),
+            selectedOption = cardState.brand.longName(),
             onOptionSelected = { selectedString ->
                 cardHandlers.onBrandSelected(
                     VaultCardBrand
                         .entries
-                        .first { it.value.toString(resources) == selectedString },
+                        .first { it.longName.toString(resources) == selectedString },
                 )
             },
             modifier = Modifier.padding(horizontal = 16.dp),

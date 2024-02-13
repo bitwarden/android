@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 
 private const val ANDROID_URI = "androidapp://"
 private const val IOS_URI = "iosapp://"
@@ -175,7 +176,7 @@ private fun CipherView.toVaultItemOrNull(
         CipherType.CARD -> VaultState.ViewState.VaultItem.Card(
             id = id,
             name = name.asText(),
-            brand = card?.brand?.asText(),
+            brand = card?.brand?.findVaultCardBrandWithNameOrNull(),
             lastFourDigits = card?.number
                 ?.takeLast(4)
                 ?.asText(),
