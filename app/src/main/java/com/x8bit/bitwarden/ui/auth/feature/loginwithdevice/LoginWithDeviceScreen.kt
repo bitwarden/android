@@ -199,7 +199,7 @@ private fun LoginWithDeviceScreenContent(
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             minLines = 2,
             modifier = Modifier
-                .semantics { testTag = "FingerprintValueLabel" }
+                .semantics { testTag = "FingerprintPhraseValue" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
