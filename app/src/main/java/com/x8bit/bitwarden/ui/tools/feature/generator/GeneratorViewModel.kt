@@ -101,10 +101,7 @@ class GeneratorViewModel @Inject constructor(
 
     init {
         stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
-        when (val selectedType = mutableStateFlow.value.selectedType) {
-            is Passcode -> loadPasscodeOptions(selectedType, usePolicyDefault = true)
-            is Username -> loadUsernameOptions(selectedType)
-        }
+        loadOptions()
         policyManager
             .getActivePoliciesFlow<PolicyInformation.PasswordGenerator>()
             .map { GeneratorAction.Internal.PasswordGeneratorPolicyReceive(it) }
@@ -250,6 +247,13 @@ class GeneratorViewModel @Inject constructor(
     //endregion Top Level Handlers
 
     //region Generation Handlers
+
+    private fun loadOptions() {
+        when (val selectedType = state.selectedType) {
+            is Passcode -> loadPasscodeOptions(selectedType = selectedType, usePolicyDefault = true)
+            is Username -> loadUsernameOptions(selectedType = selectedType)
+        }
+    }
 
     @Suppress("CyclomaticComplexMethod")
     private fun loadPasscodeOptions(selectedType: Passcode, usePolicyDefault: Boolean) {
@@ -652,6 +656,7 @@ class GeneratorViewModel @Inject constructor(
         action: GeneratorAction.Internal.PasswordGeneratorPolicyReceive,
     ) {
         mutableStateFlow.update { it.copy(isUnderPolicy = action.policies.any()) }
+        loadOptions()
     }
 
     //endregion Generated Field Handlers

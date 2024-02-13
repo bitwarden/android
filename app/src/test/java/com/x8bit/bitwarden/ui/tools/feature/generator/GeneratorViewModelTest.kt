@@ -139,10 +139,74 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(initialPasscodeState, awaitItem())
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR)
+            } returns policies
             mutablePolicyFlow.tryEmit(value = policies)
-            assertEquals(initialPasscodeState.copy(isUnderPolicy = true), awaitItem())
+            assertEquals(
+                initialPasscodeState.copy(
+                    selectedType = GeneratorState.MainType.Passcode(
+                        selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            length = 14,
+                            minLength = 10,
+                            maxLength = 128,
+                            useCapitals = true,
+                            capitalsEnabled = false,
+                            useLowercase = true,
+                            lowercaseEnabled = false,
+                            useNumbers = true,
+                            numbersEnabled = false,
+                            useSpecialChars = true,
+                            specialCharsEnabled = false,
+                            minNumbers = 3,
+                            minNumbersAllowed = 3,
+                            maxNumbersAllowed = 5,
+                            minSpecial = 3,
+                            minSpecialAllowed = 3,
+                            maxSpecialAllowed = 5,
+                            avoidAmbiguousChars = false,
+                            ambiguousCharsEnabled = true,
+                            isUserInteracting = false,
+                        ),
+                    ),
+                    isUnderPolicy = true,
+                ),
+                awaitItem(),
+            )
+            every {
+                policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR)
+            } returns emptyList()
             mutablePolicyFlow.tryEmit(value = emptyList())
-            assertEquals(initialPasscodeState.copy(isUnderPolicy = false), awaitItem())
+            assertEquals(
+                initialPasscodeState.copy(
+                    selectedType = GeneratorState.MainType.Passcode(
+                        selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(
+                            length = 14,
+                            minLength = 5,
+                            maxLength = 128,
+                            useCapitals = true,
+                            capitalsEnabled = true,
+                            useLowercase = true,
+                            lowercaseEnabled = true,
+                            useNumbers = true,
+                            numbersEnabled = true,
+                            useSpecialChars = true,
+                            specialCharsEnabled = true,
+                            minNumbers = 3,
+                            minNumbersAllowed = 0,
+                            maxNumbersAllowed = 5,
+                            minSpecial = 3,
+                            minSpecialAllowed = 0,
+                            maxSpecialAllowed = 5,
+                            avoidAmbiguousChars = false,
+                            ambiguousCharsEnabled = true,
+                            isUserInteracting = false,
+                        ),
+                    ),
+                    isUnderPolicy = false,
+                ),
+                awaitItem(),
+            )
         }
     }
 
