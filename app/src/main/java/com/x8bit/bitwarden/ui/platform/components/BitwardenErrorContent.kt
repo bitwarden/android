@@ -1,12 +1,13 @@
 package com.x8bit.bitwarden.ui.platform.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,10 +30,10 @@ fun BitwardenErrorContent(
     onTryAgainClick: (() -> Unit)? = null,
 ) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.weight(1f))
         Text(
             text = message,
             color = MaterialTheme.colorScheme.onSurface,
@@ -50,6 +51,7 @@ fun BitwardenErrorContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
+        Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
