@@ -137,7 +137,6 @@ class AuthRepositoryTest {
     private val vaultRepository: VaultRepository = mockk {
         every { vaultUnlockDataStateFlow } returns mutableVaultUnlockDataStateFlow
         every { deleteVaultData(any()) } just runs
-        every { clearUnlockedData() } just runs
     }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val fakeEnvironmentRepository =
@@ -489,7 +488,6 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
-            verify { vaultRepository.clearUnlockedData() }
         }
 
     @Test
@@ -866,7 +864,6 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
-            verify { vaultRepository.clearUnlockedData() }
         }
 
     @Suppress("MaxLineLength")
@@ -953,7 +950,6 @@ class AuthRepositoryTest {
             )
             assertFalse(repository.hasPendingAccountAddition)
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
-            verify { vaultRepository.clearUnlockedData() }
         }
 
     @Test
@@ -1194,7 +1190,6 @@ class AuthRepositoryTest {
             fakeAuthDiskSource.userState,
         )
         verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
-        verify { vaultRepository.clearUnlockedData() }
     }
 
     @Test
@@ -2582,18 +2577,6 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `logout for the active account should call logout on the UserLogoutManager and clear the user's in memory vault data`() {
-        val userId = USER_ID_1
-        fakeAuthDiskSource.userState = MULTI_USER_STATE
-
-        repository.logout(userId = userId)
-
-        verify { userLogoutManager.logout(userId = userId) }
-        verify { vaultRepository.clearUnlockedData() }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `logout for an inactive account should call logout on the UserLogoutManager`() {
         val userId = USER_ID_2
         fakeAuthDiskSource.userState = MULTI_USER_STATE
@@ -2601,7 +2584,6 @@ class AuthRepositoryTest {
         repository.logout(userId = userId)
 
         verify { userLogoutManager.logout(userId = userId) }
-        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
 
     @Test
@@ -2683,7 +2665,6 @@ class AuthRepositoryTest {
         )
 
         assertNull(repository.userStateFlow.value)
-        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
 
     @Suppress("MaxLineLength")
@@ -2714,7 +2695,6 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
         assertFalse(repository.hasPendingAccountAddition)
-        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
 
     @Suppress("MaxLineLength")
@@ -2743,12 +2723,11 @@ class AuthRepositoryTest {
             originalUserState,
             repository.userStateFlow.value,
         )
-        verify(exactly = 0) { vaultRepository.clearUnlockedData() }
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `switchAccount when the userId is valid should update the current UserState, clear the previously unlocked data, and reset any pending account additions`() {
+    fun `switchAccount when the userId is valid should update the current UserState and reset any pending account additions`() {
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -2774,7 +2753,6 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
         assertFalse(repository.hasPendingAccountAddition)
-        verify { vaultRepository.clearUnlockedData() }
     }
 
     @Test
@@ -4045,9 +4023,8 @@ class AuthRepositoryTest {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `logOutFlow emission for action account should call logout on the UserLogoutManager and clear the user's in memory vault data`() {
+    fun `logOutFlow emission for action account should call logout on the UserLogoutManager`() {
         val userId = USER_ID_1
         fakeAuthDiskSource.userState = MULTI_USER_STATE
 
@@ -4055,7 +4032,6 @@ class AuthRepositoryTest {
 
         coVerify(exactly = 1) {
             userLogoutManager.logout(userId = userId)
-            vaultRepository.clearUnlockedData()
         }
     }
 

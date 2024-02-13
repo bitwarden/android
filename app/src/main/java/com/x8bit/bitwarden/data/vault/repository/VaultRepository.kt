@@ -101,11 +101,6 @@ interface VaultRepository : VaultLockManager {
     val totpCodeFlow: Flow<TotpCodeResult>
 
     /**
-     * Clear any previously unlocked, in-memory data (vault, send, etc).
-     */
-    fun clearUnlockedData()
-
-    /**
      * Completely remove any persisted data from the vault.
      */
     fun deleteVaultData(userId: String)

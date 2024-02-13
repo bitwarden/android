@@ -5,11 +5,11 @@ package com.x8bit.bitwarden.data.vault.repository.model
  */
 fun createMockDomainsData(number: Int): DomainsData =
     DomainsData(
-        equivalentDomains = listOf(listOf("mockEquivalentDomains-$number")),
+        equivalentDomains = listOf(listOf("mockEquivalentDomain-$number")),
         globalEquivalentDomains = listOf(
             DomainsData.GlobalEquivalentDomain(
                 isExcluded = false,
-                domains = listOf("domains-$number"),
+                domains = listOf("mockDomain-$number"),
                 type = number,
             ),
         ),
