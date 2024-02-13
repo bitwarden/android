@@ -119,42 +119,50 @@ fun RootNavScreen(
         restoreState = false
     }
 
-    when (val currentState = state) {
-        RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
-        RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
-        RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
-        RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
-        is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(rootNavOptions)
-        RootNavState.VaultUnlockedForNewSend -> {
-            navController.navigateToVaultUnlock(rootNavOptions)
-            navController.navigateToAddSend(
-                sendAddType = AddSendType.AddItem,
-                navOptions = rootNavOptions,
+    // Use a LaunchedEffect to ensure we don't navigate too soon when the app first opens. This
+    // avoids a bug that first appeared in Compose Material3 1.2.0-rc01 that causes the initial
+    // transition to appear corrupted.
+    LaunchedEffect(state) {
+        when (val currentState = state) {
+            RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
+            RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
+            RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
+            RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
+            is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(
+                rootNavOptions,
             )
-        }
 
-        is RootNavState.VaultUnlockedForAutofillSave -> {
-            navController.navigateToVaultUnlockedGraph(rootNavOptions)
-            navController.navigateToVaultAddEdit(
-                vaultAddEditType = VaultAddEditType.AddItem,
-                navOptions = rootNavOptions,
-            )
-        }
+            RootNavState.VaultUnlockedForNewSend -> {
+                navController.navigateToVaultUnlock(rootNavOptions)
+                navController.navigateToAddSend(
+                    sendAddType = AddSendType.AddItem,
+                    navOptions = rootNavOptions,
+                )
+            }
 
-        is RootNavState.VaultUnlockedForAutofillSelection -> {
-            navController.navigateToVaultUnlockedGraph(rootNavOptions)
-            navController.navigateToVaultItemListingAsRoot(
-                vaultItemListingType = currentState.type.toVaultItemListingType(),
-                navOptions = rootNavOptions,
-            )
-        }
+            is RootNavState.VaultUnlockedForAutofillSave -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToVaultAddEdit(
+                    vaultAddEditType = VaultAddEditType.AddItem,
+                    navOptions = rootNavOptions,
+                )
+            }
 
-        RootNavState.VaultUnlockedForAuthRequest -> {
-            navController.navigateToVaultUnlockedGraph(rootNavOptions)
-            navController.navigateToLoginApproval(
-                fingerprint = null,
-                navOptions = rootNavOptions,
-            )
+            is RootNavState.VaultUnlockedForAutofillSelection -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToVaultItemListingAsRoot(
+                    vaultItemListingType = currentState.type.toVaultItemListingType(),
+                    navOptions = rootNavOptions,
+                )
+            }
+
+            RootNavState.VaultUnlockedForAuthRequest -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToLoginApproval(
+                    fingerprint = null,
+                    navOptions = rootNavOptions,
+                )
+            }
         }
     }
 }
@@ -184,6 +192,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
     when (targetState.destination.rootLevelRoute()) {
         RESET_PASSWORD_ROUTE -> RootTransitionProviders.Enter.slideUp
         else -> when (initialState.destination.rootLevelRoute()) {
+            // Disable transitions when coming from the splash screen
+            SPLASH_ROUTE -> RootTransitionProviders.Enter.none
             // The RESET_PASSWORD_ROUTE animation should be stay but due to an issue when combining
             // certain animations, we are just using a fadeIn instead.
             RESET_PASSWORD_ROUTE -> RootTransitionProviders.Enter.fadeIn
@@ -197,6 +207,8 @@ private fun AnimatedContentTransitionScope<NavBackStackEntry>.toEnterTransition(
 @Suppress("MaxLineLength")
 private fun AnimatedContentTransitionScope<NavBackStackEntry>.toExitTransition(): NonNullExitTransitionProvider =
     when (initialState.destination.rootLevelRoute()) {
+        // Disable transitions when coming from the splash screen
+        SPLASH_ROUTE -> RootTransitionProviders.Exit.none
         RESET_PASSWORD_ROUTE -> RootTransitionProviders.Exit.slideDown
         else -> when (targetState.destination.rootLevelRoute()) {
             RESET_PASSWORD_ROUTE -> RootTransitionProviders.Exit.stay

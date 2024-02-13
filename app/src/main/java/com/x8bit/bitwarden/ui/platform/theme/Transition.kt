@@ -219,6 +219,13 @@ object RootTransitionProviders {
         }
 
         /**
+         * There is no transition for the entering screen.
+         */
+        val none: NonNullEnterTransitionProvider = {
+            EnterTransition.None
+        }
+
+        /**
          * Slides the new screen in from the left of the screen.
          */
         val pushLeft: NonNullEnterTransitionProvider = {
@@ -282,6 +289,16 @@ object RootTransitionProviders {
          */
         val fadeOut: NonNullExitTransitionProvider = {
             fadeOut(tween(DEFAULT_FADE_TRANSITION_TIME_MS))
+        }
+
+        /**
+         * There is no transition for the exiting screen.
+         *
+         * Unlike the [stay] transition, this will immediately remove the outgoing screen even if
+         * there is an ongoing enter transition happening for the new screen.
+         */
+        val none: NonNullExitTransitionProvider = {
+            ExitTransition.None
         }
 
         /**
