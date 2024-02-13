@@ -15,6 +15,7 @@ import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
+import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -215,6 +216,14 @@ class VaultRepositoryImpl(
         get() = mutableSendDataStateFlow.asStateFlow()
 
     init {
+        authDiskSource
+            .userSwitchingChangesFlow
+            .onEach {
+                syncJob.cancel()
+                clearUnlockedData()
+            }
+            .launchIn(unconfinedScope)
+
         // Setup ciphers MutableStateFlow
         mutableCiphersStateFlow
             .observeWhenSubscribedAndLoggedIn(authDiskSource.userStateFlow) { activeUserId ->
@@ -282,7 +291,7 @@ class VaultRepositoryImpl(
             .launchIn(ioScope)
     }
 
-    override fun clearUnlockedData() {
+    private fun clearUnlockedData() {
         mutableCiphersStateFlow.update { DataState.Loading }
         mutableDomainsStateFlow.update { DataState.Loading }
         mutableFoldersStateFlow.update { DataState.Loading }

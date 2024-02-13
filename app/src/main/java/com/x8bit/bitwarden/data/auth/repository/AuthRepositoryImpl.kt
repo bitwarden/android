@@ -469,7 +469,6 @@ class AuthRepositoryImpl(
 
                         // Attempt to unlock the vault with password if possible.
                         password?.let {
-                            vaultRepository.clearUnlockedData()
                             vaultRepository.unlockVault(
                                 userId = userStateJson.activeUserId,
                                 email = userStateJson.activeAccount.profile.email,
@@ -504,7 +503,6 @@ class AuthRepositoryImpl(
 
                         // Attempt to unlock the vault with auth request if possible.
                         deviceData?.let { model ->
-                            vaultRepository.clearUnlockedData()
                             vaultRepository.unlockVault(
                                 userId = userStateJson.activeUserId,
                                 email = userStateJson.activeAccount.profile.email,
@@ -582,12 +580,7 @@ class AuthRepositoryImpl(
     }
 
     override fun logout(userId: String) {
-        val wasActiveUser = userId == activeUserId
-
         userLogoutManager.logout(userId = userId)
-
-        // Clear the current vault data if the logged out user was the active one.
-        if (wasActiveUser) vaultRepository.clearUnlockedData()
     }
 
     override suspend fun resendVerificationCodeEmail(): ResendEmailResult =
@@ -617,9 +610,6 @@ class AuthRepositoryImpl(
 
         // Switch to the new user
         authDiskSource.userState = currentUserState.copy(activeUserId = userId)
-
-        // Clear data for the previous user
-        vaultRepository.clearUnlockedData()
 
         // Clear any pending account additions
         hasPendingAccountAddition = false

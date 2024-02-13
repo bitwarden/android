@@ -232,6 +232,130 @@ class VaultRepositoryTest {
     }
 
     @Test
+    fun `userSwitchingChangesFlow should cancel any pending sync call`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.sync()
+        vaultRepository.sync()
+        coVerify(exactly = 1) {
+            // Despite being called twice, we only allow 1 sync
+            syncService.sync()
+        }
+
+        fakeAuthDiskSource.userState = UserStateJson(
+            activeUserId = "mockId-2",
+            accounts = mapOf("mockId-2" to mockk()),
+        )
+        vaultRepository.sync()
+        coVerify(exactly = 2) {
+            // A second sync should have happened now since it was cancelled by the userState change
+            syncService.sync()
+        }
+    }
+
+    @Test
+    fun `userSwitchingChangesFlow should clear unlocked data`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        val userId = "mockId-1"
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = userId,
+                cipherList = listOf(createMockSdkCipher(1)),
+            )
+        } returns listOf(createMockCipherView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(
+                userId = userId,
+                folderList = listOf(createMockSdkFolder(1)),
+            )
+        } returns listOf(createMockFolderView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptCollectionList(
+                userId = userId,
+                collectionList = listOf(createMockSdkCollection(1)),
+            )
+        } returns listOf(createMockCollectionView(number = 1)).asSuccess()
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = userId,
+                sendList = listOf(createMockSdkSend(number = 1)),
+            )
+        } returns listOf(createMockSendView(number = 1)).asSuccess()
+        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
+        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
+        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
+        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
+        val domainsFlow = bufferedMutableSharedFlow<SyncResponseJson.Domains>()
+        setupVaultDiskSourceFlows(
+            ciphersFlow = ciphersFlow,
+            collectionsFlow = collectionsFlow,
+            foldersFlow = foldersFlow,
+            sendsFlow = sendsFlow,
+            domainsFlow = domainsFlow,
+        )
+
+        turbineScope {
+            val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+            val collectionsStateFlow = vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+            val foldersStateFlow = vaultRepository.foldersStateFlow.testIn(backgroundScope)
+            val sendsStateFlow = vaultRepository.sendDataStateFlow.testIn(backgroundScope)
+            val domainsStateFlow = vaultRepository.domainsStateFlow.testIn(backgroundScope)
+
+            assertEquals(DataState.Loading, ciphersStateFlow.awaitItem())
+            assertEquals(DataState.Loading, collectionsStateFlow.awaitItem())
+            assertEquals(DataState.Loading, foldersStateFlow.awaitItem())
+            assertEquals(DataState.Loading, sendsStateFlow.awaitItem())
+            assertEquals(DataState.Loading, domainsStateFlow.awaitItem())
+
+            ciphersFlow.tryEmit(listOf(createMockCipher(number = 1)))
+            collectionsFlow.tryEmit(listOf(createMockCollection(number = 1)))
+            foldersFlow.tryEmit(listOf(createMockFolder(number = 1)))
+            sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
+            domainsFlow.tryEmit(createMockDomains(number = 1))
+
+            // No events received until unlocked
+            ciphersStateFlow.expectNoEvents()
+            collectionsStateFlow.expectNoEvents()
+            foldersStateFlow.expectNoEvents()
+            sendsStateFlow.expectNoEvents()
+            // Domains does not care about being unlocked
+            assertEquals(
+                DataState.Loaded(createMockDomainsData(number = 1)),
+                domainsStateFlow.awaitItem(),
+            )
+            setVaultToUnlocked(userId = userId)
+
+            assertEquals(
+                DataState.Loaded(listOf(createMockCipherView(number = 1))),
+                ciphersStateFlow.awaitItem(),
+            )
+            assertEquals(
+                DataState.Loaded(listOf(createMockCollectionView(number = 1))),
+                collectionsStateFlow.awaitItem(),
+            )
+            assertEquals(
+                DataState.Loaded(listOf(createMockFolderView(number = 1))),
+                foldersStateFlow.awaitItem(),
+            )
+            assertEquals(
+                DataState.Loaded(SendData(listOf(createMockSendView(number = 1)))),
+                sendsStateFlow.awaitItem(),
+            )
+            // Domain data has not changed
+            domainsStateFlow.expectNoEvents()
+
+            fakeAuthDiskSource.userState = null
+
+            assertEquals(DataState.Loading, ciphersStateFlow.awaitItem())
+            assertEquals(DataState.Loading, collectionsStateFlow.awaitItem())
+            assertEquals(DataState.Loading, foldersStateFlow.awaitItem())
+            assertEquals(DataState.Loading, sendsStateFlow.awaitItem())
+            assertEquals(DataState.Loading, domainsStateFlow.awaitItem())
+        }
+    }
+
+    @Test
     fun `ciphersStateFlow should emit decrypted list of ciphers when decryptCipherList succeeds`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
@@ -1326,137 +1450,6 @@ class VaultRepositoryTest {
 
                 organizationKeys = organizationKeys,
             )
-        }
-    }
-
-    @Test
-    fun `clearUnlockedData should update the vaultDataStateFlow to Loading`() = runTest {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val userId = "mockId-1"
-        coEvery {
-            vaultSdkSource.decryptCipherList(
-                userId = userId,
-                cipherList = listOf(createMockSdkCipher(1)),
-            )
-        } returns listOf(createMockCipherView(number = 1)).asSuccess()
-        coEvery {
-            vaultSdkSource.decryptFolderList(
-                userId = userId,
-                folderList = listOf(createMockSdkFolder(1)),
-            )
-        } returns listOf(createMockFolderView(number = 1)).asSuccess()
-        coEvery {
-            vaultSdkSource.decryptCollectionList(
-                userId = userId,
-                collectionList = listOf(createMockSdkCollection(1)),
-            )
-        } returns listOf(createMockCollectionView(number = 1)).asSuccess()
-        coEvery {
-            vaultSdkSource.decryptSendList(
-                userId = userId,
-                sendList = listOf(createMockSdkSend(number = 1)),
-            )
-        } returns listOf(createMockSendView(number = 1)).asSuccess()
-        val ciphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
-        val collectionsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Collection>>()
-        val foldersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Folder>>()
-        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-        setupVaultDiskSourceFlows(
-            ciphersFlow = ciphersFlow,
-            collectionsFlow = collectionsFlow,
-            foldersFlow = foldersFlow,
-            sendsFlow = sendsFlow,
-        )
-
-        vaultRepository.vaultDataStateFlow.test {
-            assertEquals(DataState.Loading, awaitItem())
-
-            ciphersFlow.tryEmit(listOf(createMockCipher(number = 1)))
-            collectionsFlow.tryEmit(listOf(createMockCollection(number = 1)))
-            foldersFlow.tryEmit(listOf(createMockFolder(number = 1)))
-            sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
-
-            // No events received until unlocked
-            expectNoEvents()
-            setVaultToUnlocked(userId = userId)
-
-            assertEquals(
-                DataState.Loaded(
-                    data = VaultData(
-                        cipherViewList = listOf(createMockCipherView(number = 1)),
-                        collectionViewList = listOf(createMockCollectionView(number = 1)),
-                        folderViewList = listOf(createMockFolderView(number = 1)),
-                        sendViewList = listOf(createMockSendView(number = 1)),
-                    ),
-                ),
-                awaitItem(),
-            )
-
-            vaultRepository.clearUnlockedData()
-
-            assertEquals(DataState.Loading, awaitItem())
-        }
-    }
-
-    @Test
-    fun `clearUnlockedData should update the sendDataStateFlow to Loading`() = runTest {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val userId = "mockId-1"
-        setVaultToUnlocked(userId = userId)
-        coEvery {
-            vaultSdkSource.decryptSendList(
-                userId = userId,
-                sendList = listOf(createMockSdkSend(number = 1)),
-            )
-        } returns listOf(createMockSendView(number = 1)).asSuccess()
-        val sendsFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Send>>()
-        setupVaultDiskSourceFlows(sendsFlow = sendsFlow)
-
-        vaultRepository.sendDataStateFlow.test {
-            assertEquals(DataState.Loading, awaitItem())
-
-            sendsFlow.tryEmit(listOf(createMockSend(number = 1)))
-
-            assertEquals(
-                DataState.Loaded(
-                    data = SendData(sendViewList = listOf(createMockSendView(number = 1))),
-                ),
-                awaitItem(),
-            )
-
-            vaultRepository.clearUnlockedData()
-
-            assertEquals(DataState.Loading, awaitItem())
-        }
-    }
-
-    @Test
-    fun `clearUnlockedData should update the domainsStateFlow to Loading`() = runTest {
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        val domainsData = createMockDomainsData(number = 1)
-        coEvery {
-            createMockDomains(number = 1).toDomainsData()
-        } returns domainsData
-        val domainsFlow = bufferedMutableSharedFlow<SyncResponseJson.Domains>()
-        setupVaultDiskSourceFlows(
-            domainsFlow = domainsFlow,
-        )
-
-        vaultRepository.domainsStateFlow.test {
-            assertEquals(DataState.Loading, awaitItem())
-
-            domainsFlow.tryEmit(createMockDomains(number = 1))
-
-            assertEquals(
-                DataState.Loaded(
-                    data = domainsData,
-                ),
-                awaitItem(),
-            )
-
-            vaultRepository.clearUnlockedData()
-
-            assertEquals(DataState.Loading, awaitItem())
         }
     }
 
