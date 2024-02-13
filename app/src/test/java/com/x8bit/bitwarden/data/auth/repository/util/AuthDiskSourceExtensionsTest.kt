@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
+import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import io.mockk.every
 import io.mockk.mockk
@@ -154,4 +155,75 @@ class AuthDiskSourceExtensionsTest {
                 )
             }
         }
+
+    @Test
+    fun `userSwitchingChangesFlow should emit changes when active user changes`() = runTest {
+        authDiskSource.userSwitchingChangesFlow.test {
+            assertEquals(
+                UserSwitchingData(
+                    previousActiveUserId = null,
+                    currentActiveUserId = null,
+                ),
+                awaitItem(),
+            )
+            authDiskSource.userState = MOCK_USER_STATE
+            assertEquals(
+                UserSwitchingData(
+                    previousActiveUserId = null,
+                    currentActiveUserId = MOCK_USER_ID,
+                ),
+                awaitItem(),
+            )
+            authDiskSource.userState = MOCK_USER_STATE.copy(
+                accounts = mapOf(
+                    MOCK_USER_ID to MOCK_ACCOUNT,
+                    "mockId-2" to mockk(),
+                ),
+            )
+            expectNoEvents()
+            authDiskSource.userState = null
+            assertEquals(
+                UserSwitchingData(
+                    previousActiveUserId = MOCK_USER_ID,
+                    currentActiveUserId = null,
+                ),
+                awaitItem(),
+            )
+        }
+    }
 }
+
+private const val MOCK_USER_ID: String = "mockId-1"
+
+private val MOCK_PROFILE = AccountJson.Profile(
+    userId = MOCK_USER_ID,
+    email = "email",
+    isEmailVerified = true,
+    name = null,
+    stamp = null,
+    organizationId = null,
+    avatarColorHex = null,
+    hasPremium = false,
+    forcePasswordResetReason = null,
+    kdfType = null,
+    kdfIterations = null,
+    kdfMemory = null,
+    kdfParallelism = null,
+    userDecryptionOptions = null,
+)
+
+private val MOCK_ACCOUNT = AccountJson(
+    profile = MOCK_PROFILE,
+    tokens = AccountJson.Tokens(
+        accessToken = "accessToken",
+        refreshToken = "refreshToken",
+    ),
+    settings = AccountJson.Settings(
+        environmentUrlData = null,
+    ),
+)
+
+private val MOCK_USER_STATE = UserStateJson(
+    activeUserId = MOCK_USER_ID,
+    accounts = mapOf(MOCK_USER_ID to MOCK_ACCOUNT),
+)
