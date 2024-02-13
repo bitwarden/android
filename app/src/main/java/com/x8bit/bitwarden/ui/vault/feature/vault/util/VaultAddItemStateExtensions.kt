@@ -140,8 +140,8 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
 ): LoginView? =
     (this as? VaultAddEditState.ViewState.Content.ItemType.Login)?.let {
         LoginView(
-            username = it.username,
-            password = it.password,
+            username = it.username.orNullIfBlank(),
+            password = it.password.orNullIfBlank(),
             passwordRevisionDate = common.originalCipher?.login?.passwordRevisionDate,
             uris = it.uriList.toLoginUriView(),
             totp = it.totp,
