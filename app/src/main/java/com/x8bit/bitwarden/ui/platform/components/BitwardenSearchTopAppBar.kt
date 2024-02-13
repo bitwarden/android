@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,6 +21,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 
@@ -85,6 +87,7 @@ fun BitwardenSearchTopAppBar(
                         )
                     }
                 },
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
                     .focusRequester(focusRequester)
                     .fillMaxWidth(),
