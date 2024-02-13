@@ -1,5 +1,8 @@
 package com.x8bit.bitwarden.data.auth.manager
 
+import android.content.Context
+import android.widget.Toast
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
@@ -16,6 +19,7 @@ import kotlinx.coroutines.launch
  */
 @Suppress("LongParameterList")
 class UserLogoutManagerImpl(
+    private val context: Context,
     private val authDiskSource: AuthDiskSource,
     private val generatorDiskSource: GeneratorDiskSource,
     private val passwordHistoryDiskSource: PasswordHistoryDiskSource,
@@ -25,9 +29,16 @@ class UserLogoutManagerImpl(
     private val dispatcherManager: DispatcherManager,
 ) : UserLogoutManager {
     private val scope = CoroutineScope(dispatcherManager.unconfined)
+    private val mainScope = CoroutineScope(dispatcherManager.main)
 
-    override fun logout(userId: String) {
+    override fun logout(userId: String, isExpired: Boolean) {
         val currentUserState = authDiskSource.userState ?: return
+
+        if (isExpired) {
+            mainScope.launch {
+                Toast.makeText(context, R.string.login_expired, Toast.LENGTH_SHORT).show()
+            }
+        }
 
         // Remove the active user from the accounts map
         val updatedAccounts = currentUserState

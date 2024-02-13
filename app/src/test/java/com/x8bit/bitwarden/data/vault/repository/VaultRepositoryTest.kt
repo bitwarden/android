@@ -18,6 +18,7 @@ import com.bitwarden.core.TotpResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -56,6 +57,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockProfile
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSyncResponse
@@ -148,6 +150,9 @@ class VaultRepositoryTest {
         ZoneOffset.UTC,
     )
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
+    private val userLogoutManager: UserLogoutManager = mockk() {
+        every { logout(any(), any()) } just runs
+    }
     private val fileManager: FileManager = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val settingsDiskSource = mockk<SettingsDiskSource>()
@@ -215,6 +220,7 @@ class VaultRepositoryTest {
         pushManager = pushManager,
         fileManager = fileManager,
         clock = clock,
+        userLogoutManager = userLogoutManager,
     )
 
     @BeforeEach
@@ -703,6 +709,47 @@ class VaultRepositoryTest {
                 vaultDiskSource.replaceVaultData(
                     userId = MOCK_USER_STATE.activeUserId,
                     vault = mockSyncResponse,
+                )
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `sync with syncService Success with a different security stamp should logout and return early`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val mockSyncResponse = createMockSyncResponse(number = 1)
+            coEvery { syncService.sync() } returns mockSyncResponse.copy(
+                profile = createMockProfile(number = 1).copy(securityStamp = "newStamp"),
+            )
+                .asSuccess()
+
+            coEvery {
+                vaultSdkSource.initializeOrganizationCrypto(
+                    userId = userId,
+                    request = InitOrgCryptoRequest(
+                        organizationKeys = createMockOrganizationKeys(1),
+                    ),
+                )
+            } returns InitializeCryptoResult.Success.asSuccess()
+
+            vaultRepository.sync()
+
+            coVerify {
+                userLogoutManager.logout(userId = userId, isExpired = true)
+            }
+
+            coVerify(exactly = 0) {
+                vaultDiskSource.replaceVaultData(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    vault = any(),
                 )
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = userId,
@@ -5456,7 +5503,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
     email = "email",
     isEmailVerified = true,
     name = null,
-    stamp = null,
+    stamp = "mockSecurityStamp-1",
     organizationId = null,
     avatarColorHex = null,
     hasPremium = false,

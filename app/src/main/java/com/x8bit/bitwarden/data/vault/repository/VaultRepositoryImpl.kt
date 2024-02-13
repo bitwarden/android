@@ -13,6 +13,7 @@ import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -139,6 +140,7 @@ class VaultRepositoryImpl(
     private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
+    private val userLogoutManager: UserLogoutManager,
     private val pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
@@ -305,6 +307,7 @@ class VaultRepositoryImpl(
         }
     }
 
+    @Suppress("LongMethod")
     override fun sync() {
         val userId = activeUserId ?: return
         if (!syncJob.isCompleted) return
@@ -318,6 +321,18 @@ class VaultRepositoryImpl(
                 .sync()
                 .fold(
                     onSuccess = { syncResponse ->
+                        val localSecurityStamp =
+                            authDiskSource.userState?.activeAccount?.profile?.stamp
+                        val serverSecurityStamp = syncResponse.profile.securityStamp
+
+                        // Log the user out if the stamps do not match
+                        localSecurityStamp?.let {
+                            if (serverSecurityStamp != localSecurityStamp) {
+                                userLogoutManager.logout(userId = userId, isExpired = true)
+                                return@launch
+                            }
+                        }
+
                         // Update user information with additional information from sync response
                         authDiskSource.userState = authDiskSource
                             .userState

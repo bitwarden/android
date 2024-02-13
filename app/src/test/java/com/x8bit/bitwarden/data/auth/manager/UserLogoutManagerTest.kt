@@ -45,6 +45,7 @@ class UserLogoutManagerTest {
 
     private val userLogoutManager: UserLogoutManager =
         UserLogoutManagerImpl(
+            context = mockk(),
             authDiskSource = authDiskSource,
             generatorDiskSource = generatorDiskSource,
             passwordHistoryDiskSource = passwordHistoryDiskSource,
