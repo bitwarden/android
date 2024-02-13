@@ -1,11 +1,13 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,8 +32,7 @@ fun VaultNoItems(
     message: String = stringResource(id = R.string.no_items),
 ) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (policyDisablesSend) {
@@ -73,5 +74,6 @@ fun VaultNoItems(
         }
 
         Spacer(modifier = Modifier.weight(1F))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

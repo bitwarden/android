@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -308,12 +310,11 @@ private fun PendingRequestsEmpty(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-
+        Spacer(modifier = Modifier.weight(1f))
         Image(
             painter = painterResource(id = R.drawable.ic_pending_requests),
             contentDescription = null,
@@ -333,6 +334,8 @@ private fun PendingRequestsEmpty(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
+
+        Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.navigationBarsPadding())
         Spacer(modifier = Modifier.height(64.dp))
     }

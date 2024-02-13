@@ -1,9 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,10 +47,10 @@ private fun GenericNoItems(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        Spacer(modifier = Modifier.weight(1f))
         Text(
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -56,5 +59,7 @@ private fun GenericNoItems(
             text = text,
             style = MaterialTheme.typography.bodyMedium,
         )
+        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }

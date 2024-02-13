@@ -1,12 +1,13 @@
 package com.x8bit.bitwarden.ui.tools.feature.send
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -30,9 +31,8 @@ fun SendEmpty(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier.verticalScroll(rememberScrollState()),
     ) {
         if (policyDisablesSend) {
             BitwardenPolicyWarningText(
@@ -71,8 +71,7 @@ fun SendEmpty(
                 style = MaterialTheme.typography.labelLarge,
             )
         }
-        Spacer(modifier = Modifier.navigationBarsPadding())
-
         Spacer(modifier = Modifier.weight(1F))
+        Spacer(modifier = Modifier.navigationBarsPadding())
     }
 }
