@@ -298,7 +298,7 @@ class VaultRepositoryImpl(
 
     override fun sync() {
         val userId = activeUserId ?: return
-        if (!syncJob.isCompleted || isVaultUnlocking(userId)) return
+        if (!syncJob.isCompleted) return
         mutableCiphersStateFlow.updateToPendingOrLoading()
         mutableDomainsStateFlow.updateToPendingOrLoading()
         mutableFoldersStateFlow.updateToPendingOrLoading()

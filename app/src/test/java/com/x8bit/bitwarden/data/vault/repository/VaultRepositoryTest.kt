@@ -12,16 +12,13 @@ import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
-import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
-import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -1331,77 +1328,6 @@ class VaultRepositoryTest {
             )
         }
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `sync should not be able to be called while isVaultUnlocking is true for the current user`() =
-        runTest {
-            val userId = "mockId-1"
-            val mockSyncResponse = createMockSyncResponse(number = 1)
-            coEvery { syncService.sync() } returns mockSyncResponse.asSuccess()
-            coEvery {
-                vaultSdkSource.initializeOrganizationCrypto(
-                    userId = userId,
-                    request = InitOrgCryptoRequest(
-                        organizationKeys = createMockOrganizationKeys(1),
-                    ),
-                )
-            } returns InitializeCryptoResult.Success.asSuccess()
-            coEvery {
-                vaultDiskSource.replaceVaultData(
-                    userId = MOCK_USER_STATE.activeUserId,
-                    vault = mockSyncResponse,
-                )
-            } just runs
-            every {
-                settingsDiskSource.storeLastSyncTime(MOCK_USER_STATE.activeUserId, clock.instant())
-            } just runs
-            coEvery {
-                vaultSdkSource.decryptSendList(
-                    userId = userId,
-                    sendList = listOf(createMockSdkSend(number = 1)),
-                )
-            } returns listOf(createMockSendView(number = 1)).asSuccess()
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = "mockPrivateKey-1",
-            )
-            fakeAuthDiskSource.storeUserKey(
-                userId = "mockId-1",
-                userKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery {
-                vaultSdkSource.initializeCrypto(
-                    userId = userId,
-                    request = InitUserCryptoRequest(
-                        kdfParams = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt()),
-                        email = "email",
-                        privateKey = "mockPrivateKey-1",
-                        method = InitUserCryptoMethod.Password(
-                            password = "mockPassword-1",
-                            userKey = "mockKey-1",
-                        ),
-                    ),
-                )
-            } just awaits
-
-            every {
-                vaultLockManager.isVaultUnlocking(userId)
-            } returns true
-
-            // We call sync here but the call to the SyncService should be blocked
-            // by unlocking vault.
-            vaultRepository.sync()
-            coVerify(exactly = 0) { syncService.sync() }
-
-            every {
-                vaultLockManager.isVaultUnlocking(userId)
-            } returns false
-
-            vaultRepository.sync()
-            coVerify(exactly = 1) { syncService.sync() }
-        }
 
     @Test
     fun `clearUnlockedData should update the vaultDataStateFlow to Loading`() = runTest {
