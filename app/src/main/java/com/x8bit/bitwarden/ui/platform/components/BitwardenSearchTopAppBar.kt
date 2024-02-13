@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -56,6 +57,7 @@ fun BitwardenSearchTopAppBar(
                     onClick = it.onNavigationIconClick,
                 ) {
                     Icon(
+                        modifier = Modifier.mirrorIfRtl(),
                         painter = it.navigationIcon,
                         contentDescription = it.navigationIconContentDescription,
                     )
