@@ -46,6 +46,37 @@ class CipherViewExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toOverflowActions should return the correct actions when viewPassword is false for a login cipher`() {
+        val id = "mockId-1"
+        val username = "Bitwarden"
+        val password = "password"
+        val totpCode = "mockTotp-1"
+        val uri = "www.test.com"
+        val cipher = createMockCipherView(number = 1, cipherType = CipherType.LOGIN).copy(
+            id = id,
+            login = createMockLoginView(number = 1).copy(
+                username = username,
+                password = password,
+                uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
+            ),
+            viewPassword = false,
+        )
+        val result = cipher.toOverflowActions()
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
+                ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
+                ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
+            ),
+            result,
+        )
+    }
+
     @Test
     fun `toOverflowActions should return minimum actions for a login cipher`() {
         val id = "mockId-1"
