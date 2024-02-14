@@ -3812,11 +3812,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Launch Duo.
+        ///   Looks up a localized string similar to Launch DUO.
         /// </summary>
-        public static string LaunchDuo {
+        public static string LaunchDUO {
             get {
-                return ResourceManager.GetString("LaunchDuo", resourceCulture);
+                return ResourceManager.GetString("LaunchDUO", resourceCulture);
             }
         }
         
