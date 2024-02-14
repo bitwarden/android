@@ -281,9 +281,9 @@ namespace Bit.App.Pages
             }
 
             string code = null;
-            if (authResult.Properties.TryGetValue("code", out var resultData))
+            if (authResult.Properties.TryGetValue("code", out var resultCodeData))
             {
-                code = Uri.UnescapeDataString(resultData);
+                code = Uri.UnescapeDataString(resultCodeData);
             }
 
             if (string.IsNullOrWhiteSpace(code))
@@ -291,7 +291,18 @@ namespace Bit.App.Pages
                 throw new ArgumentException("Duo authentication error: response code is null or empty/whitespace");
             }
 
-            Token = code;
+            string state = null;
+            if (authResult.Properties.TryGetValue("state", out var resultStateData))
+            {
+                code = Uri.UnescapeDataString(resultStateData);
+            }
+
+            if (string.IsNullOrWhiteSpace(state))
+            {
+                throw new ArgumentException("Duo authentication error: response state is null or empty/whitespace");
+            }
+
+            Token = $"{code}|{state}";
             await SubmitAsync(true);
         }
 
