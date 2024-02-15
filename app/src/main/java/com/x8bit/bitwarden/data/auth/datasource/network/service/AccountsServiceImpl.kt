@@ -15,7 +15,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenErr
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
 
-class AccountsServiceImpl constructor(
+class AccountsServiceImpl(
     private val accountsApi: AccountsApi,
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
     private val json: Json,

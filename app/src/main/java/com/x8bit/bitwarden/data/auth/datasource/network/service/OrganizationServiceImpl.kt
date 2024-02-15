@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomain
 /**
  * Default implementation of [OrganizationService].
  */
-class OrganizationServiceImpl constructor(
+class OrganizationServiceImpl(
     private val organizationApi: OrganizationApi,
 ) : OrganizationService {
     override suspend fun getOrganizationDomainSsoDetails(
