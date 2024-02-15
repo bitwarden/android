@@ -4,6 +4,7 @@ import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
+import com.x8bit.bitwarden.data.auth.util.getYubiKeyResultOrNull
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -22,9 +23,14 @@ class WebAuthCallbackViewModel @Inject constructor(
     }
 
     private fun handleIntentReceived(action: WebAuthCallbackAction.IntentReceive) {
+        val yubiKeyResult = action.intent.getYubiKeyResultOrNull()
         val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
         val ssoCallbackResult = action.intent.getSsoCallbackResult()
         when {
+            yubiKeyResult != null -> {
+                authRepository.setYubiKeyResult(yubiKeyResult = yubiKeyResult)
+            }
+
             captchaCallbackTokenResult != null -> {
                 authRepository.setCaptchaCallbackTokenResult(
                     tokenResult = captchaCallbackTokenResult,

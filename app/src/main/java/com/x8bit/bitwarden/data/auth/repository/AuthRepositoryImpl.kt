@@ -66,6 +66,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
+import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -228,6 +229,9 @@ class AuthRepositoryImpl(
     private val captchaTokenChannel = Channel<CaptchaCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
         captchaTokenChannel.receiveAsFlow()
+
+    private val yubiKeyResultChannel = Channel<YubiKeyResult>(capacity = Int.MAX_VALUE)
+    override val yubiKeyResultFlow: Flow<YubiKeyResult> = yubiKeyResultChannel.receiveAsFlow()
 
     private val mutableSsoCallbackResultFlow =
         bufferedMutableSharedFlow<SsoCallbackResult>()
@@ -787,6 +791,10 @@ class AuthRepositoryImpl(
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         captchaTokenChannel.trySend(tokenResult)
+    }
+
+    override fun setYubiKeyResult(yubiKeyResult: YubiKeyResult) {
+        yubiKeyResultChannel.trySend(yubiKeyResult)
     }
 
     override suspend fun getOrganizationDomainSsoDetails(
