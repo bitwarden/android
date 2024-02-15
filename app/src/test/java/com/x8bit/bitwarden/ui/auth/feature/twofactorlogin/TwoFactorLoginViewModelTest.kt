@@ -22,6 +22,9 @@ import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
@@ -417,8 +420,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     companion object {
         private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
-            TwoFactorAuthMethod.EMAIL to mapOf("Email" to "ex***@email.com"),
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to mapOf("Email" to null),
+            TwoFactorAuthMethod.EMAIL to JsonObject(
+                mapOf("Email" to JsonPrimitive("ex***@email.com")),
+            ),
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
         )
         private val TWO_FACTOR_RESPONSE =
             GetTokenResponseJson.TwoFactorRequired(

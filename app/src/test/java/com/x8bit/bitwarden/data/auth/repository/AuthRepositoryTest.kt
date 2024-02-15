@@ -104,6 +104,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import org.junit.jupiter.api.AfterEach
@@ -4151,8 +4154,10 @@ class AuthRepositoryTest {
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
         private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
         private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
-            TwoFactorAuthMethod.EMAIL to mapOf("Email" to "ex***@email.com"),
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to mapOf("Email" to null),
+            TwoFactorAuthMethod.EMAIL to JsonObject(
+                mapOf("Email" to JsonPrimitive("ex***@email.com")),
+            ),
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
         )
         private val PRE_LOGIN_SUCCESS = PreLoginResponseJson(
             kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(iterations = 1u),
