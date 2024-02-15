@@ -57,7 +57,7 @@
             android:theme="@style/AutofillTotpCopyTheme" />
 
         <activity
-            android:name=".WebAuthCallbackActivity"
+            android:name=".AuthCallbackActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:noHistory="true"

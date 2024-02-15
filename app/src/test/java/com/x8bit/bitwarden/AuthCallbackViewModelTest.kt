@@ -20,7 +20,7 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-class WebAuthCallbackViewModelTest : BaseViewModelTest() {
+class AuthCallbackViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { setCaptchaCallbackTokenResult(any()) } just runs
         every { setSsoCallbackResult(any()) } just runs
@@ -54,7 +54,7 @@ class WebAuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getYubiKeyResultOrNull() } returns null
         every { mockIntent.getSsoCallbackResult() } returns null
 
-        viewModel.trySendAction(WebAuthCallbackAction.IntentReceive(intent = mockIntent))
+        viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
             authRepository.setCaptchaCallbackTokenResult(tokenResult = captchaCallbackTokenResult)
         }
@@ -72,7 +72,7 @@ class WebAuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getYubiKeyResultOrNull() } returns null
         every { mockIntent.getCaptchaCallbackTokenResult() } returns null
 
-        viewModel.trySendAction(WebAuthCallbackAction.IntentReceive(intent = mockIntent))
+        viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
             authRepository.setSsoCallbackResult(result = sseCallbackResult)
         }
@@ -87,13 +87,13 @@ class WebAuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getCaptchaCallbackTokenResult() } returns null
         every { mockIntent.getSsoCallbackResult() } returns null
 
-        viewModel.trySendAction(WebAuthCallbackAction.IntentReceive(intent = mockIntent))
+        viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
             authRepository.setYubiKeyResult(yubiKeyResult)
         }
     }
 
-    private fun createViewModel() = WebAuthCallbackViewModel(
+    private fun createViewModel() = AuthCallbackViewModel(
         authRepository = authRepository,
     )
 }

@@ -10,19 +10,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 /**
- * A view model that handles logic for the [WebAuthCallbackActivity].
+ * A view model that handles logic for the [AuthCallbackActivity].
  */
 @HiltViewModel
-class WebAuthCallbackViewModel @Inject constructor(
+class AuthCallbackViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-) : BaseViewModel<Unit, Unit, WebAuthCallbackAction>(Unit) {
-    override fun handleAction(action: WebAuthCallbackAction) {
+) : BaseViewModel<Unit, Unit, AuthCallbackAction>(Unit) {
+    override fun handleAction(action: AuthCallbackAction) {
         when (action) {
-            is WebAuthCallbackAction.IntentReceive -> handleIntentReceived(action)
+            is AuthCallbackAction.IntentReceive -> handleIntentReceived(action)
         }
     }
 
-    private fun handleIntentReceived(action: WebAuthCallbackAction.IntentReceive) {
+    private fun handleIntentReceived(action: AuthCallbackAction.IntentReceive) {
         val yubiKeyResult = action.intent.getYubiKeyResultOrNull()
         val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
         val ssoCallbackResult = action.intent.getSsoCallbackResult()
@@ -49,11 +49,11 @@ class WebAuthCallbackViewModel @Inject constructor(
 }
 
 /**
- * Actions for the [WebAuthCallbackViewModel].
+ * Actions for the [AuthCallbackViewModel].
  */
-sealed class WebAuthCallbackAction {
+sealed class AuthCallbackAction {
     /**
      * Receive Intent by the application.
      */
-    data class IntentReceive(val intent: Intent) : WebAuthCallbackAction()
+    data class IntentReceive(val intent: Intent) : AuthCallbackAction()
 }
