@@ -76,6 +76,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
@@ -201,7 +202,7 @@ class AuthRepositoryTest {
         every { logout(any(), any()) } just runs
     }
 
-    private val mutableLogoutFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableLogoutFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutableSyncOrgKeysFlow = bufferedMutableSharedFlow<Unit>()
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val pushManager: PushManager = mockk {
@@ -4031,7 +4032,7 @@ class AuthRepositoryTest {
         val userId = USER_ID_1
         fakeAuthDiskSource.userState = MULTI_USER_STATE
 
-        mutableLogoutFlow.tryEmit(Unit)
+        mutableLogoutFlow.tryEmit(NotificationLogoutData(userId = userId))
 
         coVerify(exactly = 1) {
             userLogoutManager.logout(userId = userId)

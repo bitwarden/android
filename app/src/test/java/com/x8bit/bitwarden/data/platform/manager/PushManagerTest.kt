@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkMo
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
@@ -156,6 +157,22 @@ class PushManagerTest {
                 }
             }
 
+        @Test
+        fun `onMessageReceived logout should emit to logoutFlow`() = runTest {
+            val account = mockk<AccountJson> {
+                every { isLoggedIn } returns true
+            }
+            authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
+
+            pushManager.logoutFlow.test {
+                pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
+                assertEquals(
+                    NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
+                    awaitItem(),
+                )
+            }
+        }
+
         @Nested
         inner class LoggedOutUserState {
             @BeforeEach
@@ -168,10 +185,13 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived logout does nothing`() = runTest {
+            fun `onMessageReceived logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
-                    expectNoEvents()
+                    assertEquals(
+                        NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
+                        awaitItem(),
+                    )
                 }
             }
 
@@ -541,7 +561,7 @@ class PushManagerTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
                     assertEquals(
-                        Unit,
+                        NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
                         awaitItem(),
                     )
                 }

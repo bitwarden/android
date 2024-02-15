@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenReque
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.BitwardenNotification
+import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationPayload
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationType
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
@@ -50,7 +51,7 @@ class PushManagerImpl @Inject constructor(
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     private val mutableFullSyncSharedFlow = bufferedMutableSharedFlow<Unit>()
-    private val mutableLogoutSharedFlow = bufferedMutableSharedFlow<Unit>()
+    private val mutableLogoutSharedFlow = bufferedMutableSharedFlow<NotificationLogoutData>()
     private val mutablePasswordlessRequestSharedFlow =
         bufferedMutableSharedFlow<PasswordlessRequestData>()
     private val mutableSyncCipherDeleteSharedFlow =
@@ -70,7 +71,7 @@ class PushManagerImpl @Inject constructor(
     override val fullSyncFlow: SharedFlow<Unit>
         get() = mutableFullSyncSharedFlow.asSharedFlow()
 
-    override val logoutFlow: SharedFlow<Unit>
+    override val logoutFlow: SharedFlow<NotificationLogoutData>
         get() = mutableLogoutSharedFlow.asSharedFlow()
 
     override val passwordlessRequestFlow: SharedFlow<PasswordlessRequestData>
@@ -140,8 +141,11 @@ class PushManagerImpl @Inject constructor(
             }
 
             NotificationType.LOG_OUT -> {
-                if (!isLoggedIn) return
-                mutableLogoutSharedFlow.tryEmit(Unit)
+                val payload: NotificationPayload.UserNotification =
+                    json.decodeFromJsonElement(notification.payload)
+                mutableLogoutSharedFlow.tryEmit(
+                    NotificationLogoutData(payload.userId),
+                )
             }
 
             NotificationType.SYNC_CIPHER_CREATE,
