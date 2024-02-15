@@ -5,7 +5,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.IntentFilter
 import android.nfc.NfcAdapter
-import com.x8bit.bitwarden.MainActivity
+import com.x8bit.bitwarden.WebAuthCallbackActivity
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
@@ -27,7 +27,7 @@ class NfcManagerImpl(
             PendingIntent.getActivity(
                 activity,
                 1,
-                Intent(activity, MainActivity::class.java).addFlags(
+                Intent(activity, WebAuthCallbackActivity::class.java).addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP,
                 ),
                 PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),

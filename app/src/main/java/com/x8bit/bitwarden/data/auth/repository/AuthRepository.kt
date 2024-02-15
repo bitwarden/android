@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -57,6 +58,12 @@ interface AuthRepository : AuthenticatorProvider {
      * receive updates whenever [setSsoCallbackResult] is called.
      */
     val ssoCallbackResultFlow: Flow<SsoCallbackResult>
+
+    /**
+     * Flow of the current [YubiKeyResult]. Subscribers should listen to the flow in order to
+     * receive updates whenever [setYubiKeyResult] is called.
+     */
+    val yubiKeyResultFlow: Flow<YubiKeyResult>
 
     /**
      * The two-factor response data necessary for login and also to populate the
@@ -203,6 +210,11 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
+
+    /**
+     * Set the value of [yubiKeyResultFlow].
+     */
+    fun setYubiKeyResult(yubiKeyResult: YubiKeyResult)
 
     /**
      * Checks for a claimed domain organization for the [email] that can be used for an SSO request.

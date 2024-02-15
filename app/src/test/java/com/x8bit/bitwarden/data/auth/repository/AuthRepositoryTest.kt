@@ -71,6 +71,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
+import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -2510,6 +2511,15 @@ class AuthRepositoryTest {
                 SsoCallbackResult.Success(state = "mockk_state", code = "mockk_code"),
                 awaitItem(),
             )
+        }
+    }
+
+    @Test
+    fun `setYubiKeyResult should change the value of yubiKeyResultFlow`() = runTest {
+        val yubiKeyResult = YubiKeyResult("mockk")
+        repository.yubiKeyResultFlow.test {
+            repository.setYubiKeyResult(yubiKeyResult)
+            assertEquals(yubiKeyResult, awaitItem())
         }
     }
 
