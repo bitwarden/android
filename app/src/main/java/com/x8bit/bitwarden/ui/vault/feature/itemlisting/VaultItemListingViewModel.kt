@@ -952,7 +952,10 @@ data class VaultItemListingState(
                 // The folderName will always initially be an empty string
                 val folderName: String = "",
             ) : Vault() {
-                override val titleText: Text get() = folderName.asText()
+                override val titleText: Text
+                    get() = folderId
+                        ?.let { folderName.asText() }
+                        ?: R.string.folder_none.asText()
                 override val hasFab: Boolean get() = false
             }
 

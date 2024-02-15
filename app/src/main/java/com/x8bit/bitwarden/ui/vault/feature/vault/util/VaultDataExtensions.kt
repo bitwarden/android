@@ -21,6 +21,12 @@ private const val ANDROID_URI = "androidapp://"
 private const val IOS_URI = "iosapp://"
 
 /**
+ * The maximum number of no folder items that can be displayed before the UI creates a
+ * no folder "folder".
+ */
+private const val NO_FOLDER_ITEM_THRESHOLD: Int = 100
+
+/**
  * Transforms [VaultData] into [VaultState.ViewState] using the given [vaultFilterType].
  */
 @Suppress("LongMethod")
@@ -38,6 +44,8 @@ fun VaultData.toViewState(
         .filter { it.deletedDate == null }
     val filteredFolderViewList = folderViewList.toFilteredList(vaultFilterType)
     val filteredCollectionViewList = collectionViewList.toFilteredList(vaultFilterType)
+    val noFolderItems = filteredCipherViewList
+        .filter { it.folderId.isNullOrBlank() }
 
     return if (filteredCipherViewList.isEmpty()) {
         VaultState.ViewState.NoItems
@@ -61,25 +69,40 @@ fun VaultData.toViewState(
                         baseIconUrl = baseIconUrl,
                     )
                 },
-            folderItems = filteredFolderViewList.map { folderView ->
-                VaultState.ViewState.FolderItem(
-                    id = folderView.id,
-                    name = folderView.name.asText(),
-                    itemCount = filteredCipherViewList
-                        .count {
-                            !it.id.isNullOrBlank() &&
-                                folderView.id == it.folderId
-                        },
-                )
-            },
-            noFolderItems = filteredCipherViewList
-                .filter { it.folderId.isNullOrBlank() }
+            folderItems = filteredFolderViewList
+                .map { folderView ->
+                    VaultState.ViewState.FolderItem(
+                        id = folderView.id,
+                        name = folderView.name.asText(),
+                        itemCount = filteredCipherViewList
+                            .count {
+                                !it.id.isNullOrBlank() &&
+                                    folderView.id == it.folderId
+                            },
+                    )
+                }
+                .let { folderItems ->
+                    if (noFolderItems.size < NO_FOLDER_ITEM_THRESHOLD) {
+                        folderItems
+                    } else {
+                        folderItems.plus(
+                            VaultState.ViewState.FolderItem(
+                                id = null,
+                                name = R.string.folder_none.asText(),
+                                itemCount = noFolderItems.size,
+                            ),
+                        )
+                    }
+                },
+            noFolderItems = noFolderItems
                 .mapNotNull {
                     it.toVaultItemOrNull(
                         isIconLoadingDisabled = isIconLoadingDisabled,
                         baseIconUrl = baseIconUrl,
                     )
-                },
+                }
+                .takeIf { it.size < NO_FOLDER_ITEM_THRESHOLD }
+                .orEmpty(),
             collectionItems = filteredCollectionViewList
                 .filter { it.id != null }
                 .map { collectionView ->

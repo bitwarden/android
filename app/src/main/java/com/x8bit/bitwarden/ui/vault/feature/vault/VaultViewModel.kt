@@ -888,14 +888,6 @@ data class VaultState(
             val message: Text,
         ) : DialogState()
     }
-
-    companion object {
-        /**
-         * The maximum number of no folder items that can be displayed before the UI creates a
-         * no folder "folder".
-         */
-        private const val NO_FOLDER_ITEM_THRESHOLD: Int = 100
-    }
 }
 
 /**
