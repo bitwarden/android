@@ -79,24 +79,29 @@ namespace Bit.Droid.Services
             }
             
             var context = Android.App.Application.Context;
-            var intent = new Intent(context, typeof(MainActivity));
-            intent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
-            var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
-            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
+            var intent = context.PackageManager?.GetLaunchIntentForPackage(context.PackageName ?? string.Empty);
 
-            var deleteIntent = new Intent(context, typeof(NotificationDismissReceiver));
-            deleteIntent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
-            var deletePendingIntent = PendingIntent.GetBroadcast(context, 20220802, deleteIntent, pendingIntentFlags);
+            var builder = new NotificationCompat.Builder(context, Bit.Core.Constants.AndroidNotificationChannelId);
+            if(intent != null && context.PackageManager != null && !string.IsNullOrEmpty(context.PackageName))
+            {
+                intent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
+                var pendingIntentFlags = AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true);
+                var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, pendingIntentFlags);
 
-            var builder = new NotificationCompat.Builder(context, Bit.Core.Constants.AndroidNotificationChannelId)
-               .SetContentIntent(pendingIntent)
-               .SetContentTitle(title)
+                var deleteIntent = new Intent(context, typeof(NotificationDismissReceiver));
+                deleteIntent.PutExtra(Bit.Core.Constants.NotificationData, JsonConvert.SerializeObject(data));
+                var deletePendingIntent = PendingIntent.GetBroadcast(context, 20220802, deleteIntent, pendingIntentFlags);
+
+                builder.SetContentIntent(pendingIntent)
+                    .SetDeleteIntent(deletePendingIntent);
+            }
+            
+            builder.SetContentTitle(title)
                .SetContentText(message)
                .SetSmallIcon(Bit.Core.Resource.Drawable.ic_notification)
                .SetColor((int)Android.Graphics.Color.White)
-               .SetDeleteIntent(deletePendingIntent)
                .SetAutoCancel(true);
-
+            
             if (data is PasswordlessNotificationData passwordlessNotificationData && passwordlessNotificationData.TimeoutInMinutes > 0)
             {
                 builder.SetTimeoutAfter(passwordlessNotificationData.TimeoutInMinutes * 60000);

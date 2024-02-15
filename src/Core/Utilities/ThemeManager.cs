@@ -9,6 +9,10 @@ using Bit.Core.Utilities;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+#if IOS
+using Foundation;
+using UIKit;
+#endif
 
 namespace Bit.App.Utilities
 {
@@ -65,12 +69,11 @@ namespace Bit.App.Utilities
                 resources.MergedDictionaries.Add(new ControlTemplates());
 
                 // Platform styles
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                                if (Device.RuntimePlatform == Device.Android)
+                if (DeviceInfo.Platform == DevicePlatform.Android)
                 {
                     resources.MergedDictionaries.Add(new Styles.Android());
                 }
-                else if (Device.RuntimePlatform == Device.iOS)
+                else if (DeviceInfo.Platform == DevicePlatform.iOS)
                 {
                     resources.MergedDictionaries.Add(new iOS());
                 }
@@ -147,16 +150,46 @@ namespace Bit.App.Utilities
             return stateService.GetAutoDarkThemeAsync().GetAwaiter().GetResult();
         }
 
+        //HACK: OsDarkModeEnabled() is divided into Android and iOS implementations due to a MAUI bug.
+        // Currently on iOS when resuming the app after showing a System "Share/Sheet" (or other similar UI)
+        // MAUI reports the incorrect Theme. To avoid this we are fetching the current OS Theme directly on iOS from the iOS API.
+        // MAUI Issue: https://github.com/dotnet/maui/issues/19614
         public static bool OsDarkModeEnabled()
         {
-            if (Application.Current == null)
-            {
-                // called from iOS extension
-                var app = new App(new AppOptions { IosExtension = true });
-                return app.RequestedTheme == AppTheme.Dark;
-            }
+#if UT
+            return false;
+#else
+
+#if ANDROID
             return Application.Current.RequestedTheme == AppTheme.Dark;
+#else
+            var requestedTheme = AppTheme.Unspecified;
+            if (!OperatingSystem.IsIOSVersionAtLeast(13, 0))
+                return false;
+
+            var traits = InvokeOnMainThread(() => WindowStateManager.Default.GetCurrentUIViewController()?.TraitCollection) ?? UITraitCollection.CurrentTraitCollection;
+            var uiStyle = traits.UserInterfaceStyle;
+
+            requestedTheme = uiStyle switch
+            {
+                UIUserInterfaceStyle.Light => AppTheme.Light,
+                UIUserInterfaceStyle.Dark => AppTheme.Dark,
+                _ => AppTheme.Unspecified
+            };
+            return requestedTheme == AppTheme.Dark;
+#endif
+
+#endif
         }
+
+#if IOS
+        private static T InvokeOnMainThread<T>(Func<T> factory)
+        {
+            T value = default;
+            NSRunLoop.Main.InvokeOnMainThread(() => value = factory());
+            return value;
+        }
+#endif
 
         public static void ApplyResourcesTo(VisualElement element)
         {
