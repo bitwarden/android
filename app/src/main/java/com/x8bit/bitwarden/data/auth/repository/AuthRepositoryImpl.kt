@@ -233,8 +233,7 @@ class AuthRepositoryImpl(
     private val yubiKeyResultChannel = Channel<YubiKeyResult>(capacity = Int.MAX_VALUE)
     override val yubiKeyResultFlow: Flow<YubiKeyResult> = yubiKeyResultChannel.receiveAsFlow()
 
-    private val mutableSsoCallbackResultFlow =
-        bufferedMutableSharedFlow<SsoCallbackResult>()
+    private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
     override val ssoCallbackResultFlow: Flow<SsoCallbackResult> =
         mutableSsoCallbackResultFlow.asSharedFlow()
 
@@ -377,15 +376,17 @@ class AuthRepositoryImpl(
         password: String?,
         twoFactorData: TwoFactorDataModel,
         captchaToken: String?,
-    ): LoginResult = identityTokenAuthModel?.let {
-        loginCommon(
-            email = email,
-            password = password,
-            authModel = it,
-            twoFactorData = twoFactorData,
-            captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
-        )
-    } ?: LoginResult.Error(errorMessage = null)
+    ): LoginResult = identityTokenAuthModel
+        ?.let {
+            loginCommon(
+                email = email,
+                password = password,
+                authModel = it,
+                twoFactorData = twoFactorData,
+                captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
+            )
+        }
+        ?: LoginResult.Error(errorMessage = null)
 
     override suspend fun login(
         email: String,
@@ -588,17 +589,18 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun resendVerificationCodeEmail(): ResendEmailResult =
-        resendEmailRequestJson?.let { jsonRequest ->
-            accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
-                onFailure = { ResendEmailResult.Error(message = it.message) },
-                onSuccess = { ResendEmailResult.Success },
-            )
-        } ?: ResendEmailResult.Error(message = null)
+        resendEmailRequestJson
+            ?.let { jsonRequest ->
+                accountsService.resendVerificationCodeEmail(body = jsonRequest).fold(
+                    onFailure = { ResendEmailResult.Error(message = it.message) },
+                    onSuccess = { ResendEmailResult.Success },
+                )
+            }
+            ?: ResendEmailResult.Error(message = null)
 
     @Suppress("ReturnCount")
     override fun switchAccount(userId: String): SwitchAccountResult {
-        val currentUserState = authDiskSource.userState
-            ?: return SwitchAccountResult.NoChange
+        val currentUserState = authDiskSource.userState ?: return SwitchAccountResult.NoChange
         val previousActiveUserId = currentUserState.activeUserId
 
         if (userId == previousActiveUserId) {
@@ -699,9 +701,7 @@ class AuthRepositoryImpl(
                         }
                     }
                 },
-                onFailure = {
-                    RegisterResult.Error(errorMessage = null)
-                },
+                onFailure = { RegisterResult.Error(errorMessage = null) },
             )
     }
 
@@ -709,10 +709,7 @@ class AuthRepositoryImpl(
         return accountsService.requestPasswordHint(email).fold(
             onSuccess = {
                 when (it) {
-                    is PasswordHintResponseJson.Error -> {
-                        PasswordHintResult.Error(it.errorMessage)
-                    }
-
+                    is PasswordHintResponseJson.Error -> PasswordHintResult.Error(it.errorMessage)
                     PasswordHintResponseJson.Success -> PasswordHintResult.Success
                 }
             },
@@ -1133,14 +1130,8 @@ class AuthRepositoryImpl(
                 password = password,
             )
             .fold(
-                onSuccess = {
-                    PasswordStrengthResult.Success(
-                        passwordStrength = it,
-                    )
-                },
-                onFailure = {
-                    PasswordStrengthResult.Error
-                },
+                onSuccess = { PasswordStrengthResult.Success(passwordStrength = it) },
+                onFailure = { PasswordStrengthResult.Error },
             )
 
     @Suppress("ReturnCount")
@@ -1188,7 +1179,6 @@ class AuthRepositoryImpl(
             }
     }
 
-    @Suppress("CyclomaticComplexMethod", "ReturnCount")
     override suspend fun validatePasswordAgainstPolicies(
         password: String,
     ): Boolean = passwordPolicies

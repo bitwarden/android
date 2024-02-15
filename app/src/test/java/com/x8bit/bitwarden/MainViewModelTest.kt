@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
-import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -17,30 +15,27 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class MainViewModelTest : BaseViewModelTest() {
 
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
-    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
-    private val mutableCrashLoggingEnabledFlow = MutableStateFlow(true)
-    val authRepository = mockk<AuthRepository> {
-        every { userStateFlow } returns mutableUserStateFlow
-        every { activeUserId } returns USER_ID
-    }
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
@@ -51,6 +46,24 @@ class MainViewModelTest : BaseViewModelTest() {
         every { getShareDataFromIntent(any()) } returns null
     }
     private val savedStateHandle = SavedStateHandle()
+
+    @BeforeEach
+    fun setup() {
+        mockkStatic(
+            Intent::getPasswordlessRequestDataIntentOrNull,
+            Intent::getAutofillSaveItemOrNull,
+            Intent::getAutofillSelectionDataOrNull,
+        )
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(
+            Intent::getPasswordlessRequestDataIntentOrNull,
+            Intent::getAutofillSaveItemOrNull,
+            Intent::getAutofillSelectionDataOrNull,
+        )
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -360,27 +373,6 @@ class MainViewModelTest : BaseViewModelTest() {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
     )
-
-    companion object {
-        private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
-        private const val USER_ID = "userID"
-        private val DEFAULT_USER_STATE = UserState(
-            activeUserId = USER_ID,
-            accounts = listOf(
-                UserState.Account(
-                    userId = USER_ID,
-                    name = "Active User",
-                    email = "active@bitwarden.com",
-                    environment = Environment.Us,
-                    avatarColorHex = "#aa00aa",
-                    isPremium = true,
-                    isLoggedIn = true,
-                    isVaultUnlocked = true,
-                    needsPasswordReset = false,
-                    isBiometricsEnabled = false,
-                    organizations = emptyList(),
-                ),
-            ),
-        )
-    }
 }
+
+private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
