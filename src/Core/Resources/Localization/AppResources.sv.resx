@@ -778,7 +778,7 @@
     <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från Bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder Bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till fliken "Inställningar".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Automatisk ifyllnad</value>
+    <value>Autofyll</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Vill du automatiskt fylla i den här inloggningen eller visa den?</value>
@@ -2377,7 +2377,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</value>
     <value>Lösenordstyp</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>Vad vill du skapa?</value>
+    <value>Vad skulle du vilja generera?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
     <value>Typ av användarnamn</value>
