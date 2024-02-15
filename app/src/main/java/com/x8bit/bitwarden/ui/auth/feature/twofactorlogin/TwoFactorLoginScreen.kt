@@ -43,9 +43,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
+import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -83,29 +83,12 @@ fun TwoFactorLoginScreen(
         }
     }
 
-    when (val dialog = state.dialogState) {
-        is TwoFactorLoginState.DialogState.Error -> {
-            BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialog.title ?: R.string.an_error_has_occurred.asText(),
-                    message = dialog.message,
-                ),
-                onDismissRequest = remember(viewModel) {
-                    { viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss) }
-                },
-            )
-        }
-
-        is TwoFactorLoginState.DialogState.Loading -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = dialog.message,
-                ),
-            )
-        }
-
-        null -> Unit
-    }
+    TwoFactorLoginDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(TwoFactorLoginAction.DialogDismiss) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -164,7 +147,28 @@ fun TwoFactorLoginScreen(
 }
 
 @Composable
-@Suppress("LongMethod")
+private fun TwoFactorLoginDialogs(
+    dialogState: TwoFactorLoginState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is TwoFactorLoginState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title ?: R.string.an_error_has_occurred.asText(),
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is TwoFactorLoginState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(text = dialogState.message),
+        )
+
+        null -> Unit
+    }
+}
+
+@Composable
 private fun TwoFactorLoginScreenContent(
     state: TwoFactorLoginState,
     onCodeInputChange: (String) -> Unit,
@@ -203,7 +207,7 @@ private fun TwoFactorLoginScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        BitwardenSwitch(
+        BitwardenWideSwitch(
             label = stringResource(id = R.string.remember_me),
             isChecked = state.isRememberMeEnabled,
             onCheckedChange = onRememberMeToggle,

@@ -13,7 +13,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.AUTHENTICATOR_APP to R.string.authenticator_app_title.asText(),
             TwoFactorAuthMethod.EMAIL to R.string.email.asText(),
             TwoFactorAuthMethod.DUO to "".asText(),
-            TwoFactorAuthMethod.YUBI_KEY to "".asText(),
+            TwoFactorAuthMethod.YUBI_KEY to R.string.yubi_key_title.asText(),
             TwoFactorAuthMethod.U2F to "".asText(),
             TwoFactorAuthMethod.REMEMBER to "".asText(),
             TwoFactorAuthMethod.DUO_ORGANIZATION to "".asText(),
@@ -36,7 +36,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.EMAIL to
                 R.string.enter_verification_code_email.asText("ex***@email.com"),
             TwoFactorAuthMethod.DUO to "".asText(),
-            TwoFactorAuthMethod.YUBI_KEY to "".asText(),
+            TwoFactorAuthMethod.YUBI_KEY to R.string.yubi_key_instruction.asText(),
             TwoFactorAuthMethod.U2F to "".asText(),
             TwoFactorAuthMethod.REMEMBER to "".asText(),
             TwoFactorAuthMethod.DUO_ORGANIZATION to "".asText(),
