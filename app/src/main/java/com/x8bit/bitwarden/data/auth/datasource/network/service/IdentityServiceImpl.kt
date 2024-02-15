@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyO
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
 
-class IdentityServiceImpl constructor(
+class IdentityServiceImpl(
     private val api: IdentityApi,
     private val json: Json,
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),

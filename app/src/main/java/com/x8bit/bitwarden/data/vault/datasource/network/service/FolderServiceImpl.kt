@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderRespo
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.serialization.json.Json
 
-class FolderServiceImpl constructor(
+class FolderServiceImpl(
     private val foldersApi: FoldersApi,
     private val json: Json,
 ) : FolderService {
