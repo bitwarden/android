@@ -29,6 +29,8 @@ import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
+import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
+import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 
@@ -85,6 +87,7 @@ fun BitwardenTheme(
         LocalIntentManager provides IntentManagerImpl(context),
         LocalExitManager provides ExitManagerImpl(activity),
         LocalBiometricsManager provides BiometricsManagerImpl(activity),
+        LocalNfcManager provides NfcManagerImpl(activity),
     ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
@@ -199,6 +202,13 @@ val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionL
  */
 val LocalPermissionsManager: ProvidableCompositionLocal<PermissionsManager> = compositionLocalOf {
     error("CompositionLocal LocalPermissionsManager not present")
+}
+
+/**
+ * Provides access to the NFC manager throughout the app.
+ */
+val LocalNfcManager: ProvidableCompositionLocal<NfcManager> = compositionLocalOf {
+    error("CompositionLocal NfcManager not present")
 }
 
 /**
