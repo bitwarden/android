@@ -419,4 +419,51 @@ class VaultDataExtensionsTest {
             actual,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState with over 100 no folder items should show no folder option`() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri1.com"
+        val vaultData = VaultData(
+            cipherViewList = List(100) {
+                createMockCipherView(number = it, folderId = null)
+            },
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 100,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(
+                    VaultState.ViewState.FolderItem(
+                        id = null,
+                        name = R.string.folder_none.asText(),
+                        itemCount = 100,
+                    ),
+                ),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 100,
+            ),
+            actual,
+        )
+        unmockkStatic(Uri::class)
+    }
 }

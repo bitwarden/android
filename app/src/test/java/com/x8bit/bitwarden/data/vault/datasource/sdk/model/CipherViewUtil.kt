@@ -28,11 +28,12 @@ fun createMockCipherView(
     isDeleted: Boolean = false,
     cipherType: CipherType = CipherType.LOGIN,
     totp: String? = "mockTotp-$number",
+    folderId: String? = "mockId-$number",
 ): CipherView =
     CipherView(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
-        folderId = "mockId-$number",
+        folderId = folderId,
         collectionIds = listOf("mockId-$number"),
         key = "mockKey-$number",
         name = "mockName-$number",

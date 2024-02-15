@@ -246,6 +246,36 @@ class VaultItemListingDataExtensionsTest {
 
     @Test
     @Suppress("MaxLineLength")
+    fun `determineListingPredicate should return the correct predicate for item not in a folder`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            isDeleted = false,
+            cipherType = CipherType.SECURE_NOTE,
+            folderId = null,
+        )
+
+        mapOf(
+            VaultItemListingState.ItemListingType.Vault.Login to false,
+            VaultItemListingState.ItemListingType.Vault.Card to false,
+            VaultItemListingState.ItemListingType.Vault.SecureNote to true,
+            VaultItemListingState.ItemListingType.Vault.Identity to false,
+            VaultItemListingState.ItemListingType.Vault.Trash to false,
+            VaultItemListingState.ItemListingType.Vault.Folder(folderId = null) to true,
+            VaultItemListingState.ItemListingType.Vault.Collection(collectionId = "mockId-1") to true,
+        )
+            .forEach { (type, expected) ->
+                val result = cipherView.determineListingPredicate(
+                    itemListingType = type,
+                )
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
     fun `determineListingPredicate should return the correct predicate for trash SecureNote cipherView`() {
         val cipherView = createMockCipherView(
             number = 1,
