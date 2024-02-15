@@ -294,7 +294,7 @@ namespace Bit.App.Pages
             string state = null;
             if (authResult.Properties.TryGetValue("state", out var resultStateData))
             {
-                code = Uri.UnescapeDataString(resultStateData);
+                state = Uri.UnescapeDataString(resultStateData);
             }
 
             if (string.IsNullOrWhiteSpace(state))
