@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.network.util
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonPrimitive
 
 /**
  * Return the list of two-factor auth methods available to the user.
@@ -34,4 +36,6 @@ val GetTokenResponseJson.TwoFactorRequired?.twoFactorDisplayEmail: String
         ?.authMethodsData
         ?.get(TwoFactorAuthMethod.EMAIL)
         ?.get("Email")
+        ?.jsonPrimitive
+        ?.contentOrNull
         ?: ""

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonObject
 
 /**
  * Models response bodies from the get token request.
@@ -121,7 +122,7 @@ sealed class GetTokenResponseJson {
     @Serializable
     data class TwoFactorRequired(
         @SerialName("TwoFactorProviders2")
-        val authMethodsData: Map<TwoFactorAuthMethod, Map<String, String?>?>,
+        val authMethodsData: Map<TwoFactorAuthMethod, JsonObject?>,
 
         @SerialName("CaptchaBypassToken")
         val captchaToken: String?,

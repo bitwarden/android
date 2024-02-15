@@ -18,6 +18,9 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -195,8 +198,8 @@ private const val TWO_FACTOR_BODY_JSON = """
 """
 private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
     authMethodsData = mapOf(
-        TwoFactorAuthMethod.EMAIL to mapOf("Email" to "ex***@email.com"),
-        TwoFactorAuthMethod.AUTHENTICATOR_APP to mapOf("Email" to null),
+        TwoFactorAuthMethod.EMAIL to JsonObject(mapOf("Email" to JsonPrimitive("ex***@email.com"))),
+        TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
     ),
     ssoToken = "exampleToken",
     captchaToken = "BWCaptchaBypass_ABCXYZ",
