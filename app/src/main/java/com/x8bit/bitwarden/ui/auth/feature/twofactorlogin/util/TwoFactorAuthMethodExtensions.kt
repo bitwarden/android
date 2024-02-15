@@ -13,6 +13,7 @@ val TwoFactorAuthMethod.title: Text
         TwoFactorAuthMethod.AUTHENTICATOR_APP -> R.string.authenticator_app_title.asText()
         TwoFactorAuthMethod.EMAIL -> R.string.email.asText()
         TwoFactorAuthMethod.RECOVERY_CODE -> R.string.recovery_code_title.asText()
+        TwoFactorAuthMethod.YUBI_KEY -> R.string.yubi_key_title.asText()
         else -> "".asText()
     }
 
@@ -22,5 +23,6 @@ val TwoFactorAuthMethod.title: Text
 fun TwoFactorAuthMethod.description(email: String): Text = when (this) {
     TwoFactorAuthMethod.AUTHENTICATOR_APP -> R.string.enter_verification_code_app.asText()
     TwoFactorAuthMethod.EMAIL -> R.string.enter_verification_code_email.asText(email)
+    TwoFactorAuthMethod.YUBI_KEY -> R.string.yubi_key_instruction.asText()
     else -> "".asText()
 }

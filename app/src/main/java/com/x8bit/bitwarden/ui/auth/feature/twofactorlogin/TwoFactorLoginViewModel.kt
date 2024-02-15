@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -60,13 +61,8 @@ class TwoFactorLoginViewModel @Inject constructor(
         // Automatically attempt to login again if a captcha token is received.
         authRepository
             .captchaTokenResultFlow
-            .onEach {
-                sendAction(
-                    TwoFactorLoginAction.Internal.ReceiveCaptchaToken(
-                        tokenResult = it,
-                    ),
-                )
-            }
+            .map { TwoFactorLoginAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
@@ -79,20 +75,27 @@ class TwoFactorLoginViewModel @Inject constructor(
             is TwoFactorLoginAction.RememberMeToggle -> handleRememberMeToggle(action)
             TwoFactorLoginAction.ResendEmailClick -> handleResendEmailClick()
             is TwoFactorLoginAction.SelectAuthMethod -> handleSelectAuthMethod(action)
+            is TwoFactorLoginAction.Internal -> handleInternalAction(action)
+        }
+    }
 
+    private fun handleInternalAction(action: TwoFactorLoginAction.Internal) {
+        when (action) {
+            is TwoFactorLoginAction.Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
             is TwoFactorLoginAction.Internal.ReceiveCaptchaToken -> {
-                handleCaptchaTokenReceived(action.tokenResult)
+                handleCaptchaTokenReceived(action)
             }
 
-            is TwoFactorLoginAction.Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
             is TwoFactorLoginAction.Internal.ReceiveResendEmailResult -> {
                 handleReceiveResendEmailResult(action)
             }
         }
     }
 
-    private fun handleCaptchaTokenReceived(tokenResult: CaptchaCallbackTokenResult) {
-        when (tokenResult) {
+    private fun handleCaptchaTokenReceived(
+        action: TwoFactorLoginAction.Internal.ReceiveCaptchaToken,
+    ) {
+        when (val tokenResult = action.tokenResult) {
             CaptchaCallbackTokenResult.MissingToken -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -138,26 +141,31 @@ class TwoFactorLoginViewModel @Inject constructor(
         }
 
         // If the user is manually entering a code, remove any white spaces, just in case.
-        val code = mutableStateFlow.value.codeInput.let { rawCode ->
-            if (mutableStateFlow.value.authMethod == TwoFactorAuthMethod.AUTHENTICATOR_APP ||
-                mutableStateFlow.value.authMethod == TwoFactorAuthMethod.EMAIL
-            ) {
-                rawCode.replace(" ", "")
-            } else {
-                rawCode
-            }
+        val code = when (state.authMethod) {
+            TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            TwoFactorAuthMethod.EMAIL,
+            -> state.codeInput.replace(" ", "")
+
+            TwoFactorAuthMethod.YUBI_KEY,
+            TwoFactorAuthMethod.DUO,
+            TwoFactorAuthMethod.U2F,
+            TwoFactorAuthMethod.REMEMBER,
+            TwoFactorAuthMethod.DUO_ORGANIZATION,
+            TwoFactorAuthMethod.FIDO_2_WEB_APP,
+            TwoFactorAuthMethod.RECOVERY_CODE,
+            -> state.codeInput
         }
 
         viewModelScope.launch {
             val result = authRepository.login(
-                email = mutableStateFlow.value.email,
-                password = mutableStateFlow.value.password,
+                email = state.email,
+                password = state.password,
                 twoFactorData = TwoFactorDataModel(
                     code = code,
-                    method = mutableStateFlow.value.authMethod.value.toString(),
-                    remember = mutableStateFlow.value.isRememberMeEnabled,
+                    method = state.authMethod.value.toString(),
+                    remember = state.isRememberMeEnabled,
                 ),
-                captchaToken = mutableStateFlow.value.captchaToken,
+                captchaToken = state.captchaToken,
             )
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveLoginResult(
@@ -267,7 +275,7 @@ class TwoFactorLoginViewModel @Inject constructor(
      */
     private fun handleResendEmailClick() {
         // Ensure that the user is in fact verifying with email.
-        if (mutableStateFlow.value.authMethod != TwoFactorAuthMethod.EMAIL) {
+        if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
             return
         }
 
