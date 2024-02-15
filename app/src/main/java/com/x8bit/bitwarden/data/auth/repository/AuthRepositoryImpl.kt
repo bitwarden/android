@@ -263,7 +263,7 @@ class AuthRepositoryImpl(
 
         pushManager
             .logoutFlow
-            .onEach { logout() }
+            .onEach { logout(userId = it.userId) }
             .launchIn(unconfinedScope)
 
         // When the policies for the user have been set, complete the login process.

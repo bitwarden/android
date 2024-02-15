@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -35,9 +36,7 @@ class UserLogoutManagerImpl(
         val currentUserState = authDiskSource.userState ?: return
 
         if (isExpired) {
-            mainScope.launch {
-                Toast.makeText(context, R.string.login_expired, Toast.LENGTH_SHORT).show()
-            }
+            showToast(message = R.string.login_expired)
         }
 
         // Remove the active user from the accounts map
@@ -47,6 +46,10 @@ class UserLogoutManagerImpl(
 
         // Check if there is a new active user
         if (updatedAccounts.isNotEmpty()) {
+            if (userId == currentUserState.activeUserId && !isExpired) {
+                showToast(message = R.string.account_switched_automatically)
+            }
+
             // If we logged out a non-active user, we want to leave the active user unchanged.
             // If we logged out the active user, we want to set the active user to the first one
             // in the list.
@@ -117,5 +120,9 @@ class UserLogoutManagerImpl(
             passwordHistoryDiskSource.clearPasswordHistories(userId = userId)
             vaultDiskSource.deleteVaultData(userId = userId)
         }
+    }
+
+    private fun showToast(@StringRes message: Int) {
+        mainScope.launch { Toast.makeText(context, message, Toast.LENGTH_SHORT).show() }
     }
 }

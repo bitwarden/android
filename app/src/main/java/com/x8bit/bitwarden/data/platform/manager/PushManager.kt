@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherUpsertData
@@ -21,7 +22,7 @@ interface PushManager {
     /**
      * Flow that represents requests intended to log a user out.
      */
-    val logoutFlow: Flow<Unit>
+    val logoutFlow: Flow<NotificationLogoutData>
 
     /**
      * Flow that represents requests intended to trigger a passwordless request.
