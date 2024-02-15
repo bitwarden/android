@@ -8,21 +8,22 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
- * An activity to receive callbacks from Custom Chrome tabs or other web-auth related flows such
- * the current state of the task holding the [MainActivity] can remain undisturbed.
+ * An activity to receive external authentication-related callbacks so the current state of the
+ * task holding the [MainActivity] can remain undisturbed.
+ *
+ * These callbacks can be from Custom Chrome tabs or other auth related flows, including NFC
+ * related transmissions.
  */
 @OmitFromCoverage
 @AndroidEntryPoint
-class WebAuthCallbackActivity : AppCompatActivity() {
+class AuthCallbackActivity : AppCompatActivity() {
 
-    private val webAuthCallbackViewModel: WebAuthCallbackViewModel by viewModels()
+    private val viewModel: AuthCallbackViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        webAuthCallbackViewModel.trySendAction(
-            WebAuthCallbackAction.IntentReceive(intent = intent),
-        )
+        viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = intent))
 
         val intent = Intent(this, MainActivity::class.java)
             .apply {
