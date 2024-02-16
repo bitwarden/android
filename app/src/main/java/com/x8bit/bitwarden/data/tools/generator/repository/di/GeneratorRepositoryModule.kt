@@ -13,6 +13,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -25,6 +26,7 @@ object GeneratorRepositoryModule {
     @Provides
     @Singleton
     fun provideGeneratorRepository(
+        clock: Clock,
         generatorSdkSource: GeneratorSdkSource,
         generatorDiskSource: GeneratorDiskSource,
         authDiskSource: AuthDiskSource,
@@ -33,6 +35,7 @@ object GeneratorRepositoryModule {
         dispatcherManager: DispatcherManager,
         policyManager: PolicyManager,
     ): GeneratorRepository = GeneratorRepositoryImpl(
+        clock = clock,
         generatorSdkSource = generatorSdkSource,
         generatorDiskSource = generatorDiskSource,
         authDiskSource = authDiskSource,

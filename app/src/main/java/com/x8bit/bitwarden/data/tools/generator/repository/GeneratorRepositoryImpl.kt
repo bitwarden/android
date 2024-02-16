@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import java.time.Instant
+import java.time.Clock
 import javax.inject.Singleton
 import kotlin.math.max
 
@@ -50,6 +50,7 @@ import kotlin.math.max
 @Singleton
 @Suppress("LongParameterList")
 class GeneratorRepositoryImpl(
+    private val clock: Clock,
     private val generatorSdkSource: GeneratorSdkSource,
     private val generatorDiskSource: GeneratorDiskSource,
     private val authDiskSource: AuthDiskSource,
@@ -119,7 +120,7 @@ class GeneratorRepositoryImpl(
                 onSuccess = { generatedPassword ->
                     val passwordHistoryView = PasswordHistoryView(
                         password = generatedPassword,
-                        lastUsedDate = Instant.now(),
+                        lastUsedDate = clock.instant(),
                     )
 
                     if (shouldSave) {
@@ -141,7 +142,7 @@ class GeneratorRepositoryImpl(
                 onSuccess = { generatedPassphrase ->
                     val passwordHistoryView = PasswordHistoryView(
                         password = generatedPassphrase,
-                        lastUsedDate = Instant.now(),
+                        lastUsedDate = clock.instant(),
                     )
                     scope.launch {
                         storePasswordHistory(passwordHistoryView)
