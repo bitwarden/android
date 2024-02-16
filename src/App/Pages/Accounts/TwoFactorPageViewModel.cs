@@ -113,8 +113,8 @@ namespace Bit.App.Pages
         }
 
         public string DuoFramelessLabel => SelectedProviderType == TwoFactorProviderType.OrganizationDuo ?
-            $"{AppResources.DUOTwoStepLoginIsRequiredForYourAccount} {AppResources.FollowTheStepsFromDUOToFinishLoggingIn}" :
-            AppResources.FollowTheStepsFromDUOToFinishLoggingIn;
+            $"{AppResources.DuoTwoStepLoginIsRequiredForYourAccount} {AppResources.FollowTheStepsFromDuoToFinishLoggingIn}" :
+            AppResources.FollowTheStepsFromDuoToFinishLoggingIn;
 
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
