@@ -24,17 +24,20 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.description
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.title
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
@@ -42,14 +45,16 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
+import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalNfcManager
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -62,9 +67,27 @@ fun TwoFactorLoginScreen(
     onNavigateBack: () -> Unit,
     viewModel: TwoFactorLoginViewModel = hiltViewModel(),
     intentManager: IntentManager = LocalIntentManager.current,
+    nfcManager: NfcManager = LocalNfcManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    LivecycleEventEffect { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_RESUME -> {
+                if (state.shouldListenForNfc) {
+                    nfcManager.start()
+                }
+            }
+
+            Lifecycle.Event.ON_PAUSE -> {
+                if (state.shouldListenForNfc) {
+                    nfcManager.stop()
+                }
+            }
+
+            else -> Unit
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             TwoFactorLoginEvent.NavigateBack -> onNavigateBack()
@@ -195,11 +218,13 @@ private fun TwoFactorLoginScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        BitwardenTextField(
+        BitwardenPasswordField(
             value = state.codeInput,
             onValueChange = onCodeInputChange,
             label = stringResource(id = R.string.verification_code),
             keyboardType = KeyboardType.Number,
+            imeAction = ImeAction.Done,
+            autoFocus = true,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),

@@ -15,6 +15,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -64,6 +66,12 @@ class TwoFactorLoginViewModel @Inject constructor(
             .map { TwoFactorLoginAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+        // Fill in the verification code input field when a Yubi Key code is received.
+        authRepository
+            .yubiKeyResultFlow
+            .map { TwoFactorLoginAction.Internal.ReceiveYubiKeyResult(yubiKeyResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: TwoFactorLoginAction) {
@@ -84,6 +92,10 @@ class TwoFactorLoginViewModel @Inject constructor(
             is TwoFactorLoginAction.Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
             is TwoFactorLoginAction.Internal.ReceiveCaptchaToken -> {
                 handleCaptchaTokenReceived(action)
+            }
+
+            is TwoFactorLoginAction.Internal.ReceiveYubiKeyResult -> {
+                handleReceiveYubiKeyResult(action)
             }
 
             is TwoFactorLoginAction.Internal.ReceiveResendEmailResult -> {
@@ -227,6 +239,20 @@ class TwoFactorLoginViewModel @Inject constructor(
     }
 
     /**
+     * Handle the Yubi Key result.
+     */
+    private fun handleReceiveYubiKeyResult(
+        action: TwoFactorLoginAction.Internal.ReceiveYubiKeyResult,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                codeInput = action.yubiKeyResult.token,
+                isContinueButtonEnabled = true,
+            )
+        }
+    }
+
+    /**
      * Handle the resend email result.
      */
     private fun handleReceiveResendEmailResult(
@@ -332,6 +358,12 @@ data class TwoFactorLoginState(
     val email: String,
     val password: String?,
 ) : Parcelable {
+
+    /**
+     * Indicates if the screen should be listening for NFC events from the operating system.
+     */
+    val shouldListenForNfc: Boolean get() = authMethod.shouldUseNfc
+
     /**
      * Represents the current state of any dialogs on the screen.
      */
@@ -437,6 +469,13 @@ sealed class TwoFactorLoginAction {
          */
         data class ReceiveCaptchaToken(
             val tokenResult: CaptchaCallbackTokenResult,
+        ) : Internal()
+
+        /**
+         * Indicates a Yubi Key result has been received.
+         */
+        data class ReceiveYubiKeyResult(
+            val yubiKeyResult: YubiKeyResult,
         ) : Internal()
 
         /**

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -49,6 +50,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTrans
  * Setting this to true on multiple fields at once may have unexpected consequences.
  * @param keyboardType The type of keyboard the user has access to when inputting values into
  * the password field.
+ * @param imeAction the preferred IME action for the keyboard to have.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -64,6 +66,7 @@ fun BitwardenPasswordField(
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
+    imeAction: ImeAction = ImeAction.Default,
 ) {
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
@@ -79,7 +82,10 @@ fun BitwardenPasswordField(
         },
         singleLine = singleLine,
         readOnly = readOnly,
-        keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = imeAction,
+        ),
         supportingText = hint?.let {
             {
                 Text(
@@ -134,6 +140,7 @@ fun BitwardenPasswordField(
  * Setting this to true on multiple fields at once may have unexpected consequences.
  * @param keyboardType The type of keyboard the user has access to when inputting values into
  * the password field.
+ * @param imeAction the preferred IME action for the keyboard to have.
  */
 @Composable
 fun BitwardenPasswordField(
@@ -148,6 +155,7 @@ fun BitwardenPasswordField(
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
+    imeAction: ImeAction = ImeAction.Default,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -163,6 +171,7 @@ fun BitwardenPasswordField(
         showPasswordTestTag = showPasswordTestTag,
         autoFocus = autoFocus,
         keyboardType = keyboardType,
+        imeAction = imeAction,
     )
 }
 
