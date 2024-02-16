@@ -7,6 +7,11 @@
         public byte[] Signature { get; set; }
 
         public Fido2AuthenticatorGetAssertionSelectedCredential SelectedCredential { get; set; }
+
+        public override string ToString()
+        {
+            return $"AD: {AuthenticatorData.Length}; Sig: {Signature.Length}; SC: {SelectedCredential?.Id?.Length}; {SelectedCredential?.UserHandle?.Length}";
+        }
     }
 
     public class Fido2AuthenticatorGetAssertionSelectedCredential {

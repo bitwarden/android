@@ -60,7 +60,8 @@ namespace Bit.Core.Services
             var response = await _userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams {
                 CredentialName = makeCredentialParams.RpEntity.Name,
                 UserName = makeCredentialParams.UserEntity.Name,
-                UserVerification = makeCredentialParams.RequireUserVerification
+                UserVerification = makeCredentialParams.RequireUserVerification,
+                RpId = makeCredentialParams.RpEntity.Id
             });
 
             var cipherId = response.CipherId;
@@ -131,11 +132,16 @@ namespace Bit.Core.Services
             await _syncService.FullSyncAsync(false);
 
             if (assertionParams.AllowCredentialDescriptorList?.Length > 0) {
+
+                ClipLogger.Log("[Fido2Authenticator] Finding credentials with credential descriptor list");
+
                 cipherOptions = await FindCredentialsByIdAsync(
                     assertionParams.AllowCredentialDescriptorList,
                     assertionParams.RpId
                 );
-            } else {
+            } else
+            {
+                ClipLogger.Log("[Fido2Authenticator] Finding credentials with RP");
                 cipherOptions = await FindCredentialsByRpAsync(assertionParams.RpId);
             }
 
@@ -154,12 +160,15 @@ namespace Bit.Core.Services
             // TODO: We might want reconsider allowing user presence to be optional
             if (assertionParams.AllowCredentialDescriptorList?.Length == 1 && assertionParams.RequireUserPresence == false)
             {
+                ClipLogger.Log("[Fido2Authenticator] AllowCredentialDescriptorList + RequireUserPresence false");
                 selectedCipherId = cipherOptions[0].Id;
                 userVerified = false;
                 userPresence = false;
             }
             else
             {
+                ClipLogger.Log("[Fido2Authenticator] PickCredentialAsync");
+
                 var response = await _userInterface.PickCredentialAsync(new Fido2PickCredentialParams {
                     CipherIds = cipherOptions.Select((cipher) => cipher.Id).ToArray(),
                     UserVerification = assertionParams.RequireUserVerification
@@ -197,9 +206,12 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
             
-            try {
+            try
+            {
                 var selectedFido2Credential = selectedCipher.Login.MainFido2Credential;
                 var selectedCredentialId = selectedFido2Credential.CredentialId;
+
+                ClipLogger.Log($"[Fido2Authenticator] Selected fido2 cred {selectedFido2Credential.CredentialId}");
 
                 if (selectedFido2Credential.CounterValue != 0) {
                     ++selectedFido2Credential.CounterValue;
@@ -211,16 +223,23 @@ namespace Bit.Core.Services
 
                 var authenticatorData = await GenerateAuthDataAsync(
                     rpId: selectedFido2Credential.RpId,
-                    userPresence: userPresence,
-                    userVerification: userVerified,
+                    userPresence: true,
+                    userVerification: true,
                     counter: selectedFido2Credential.CounterValue
                 );
+
+
+                ClipLogger.Log($"authenticatorData base64 from bytes: {Convert.ToBase64String(authenticatorData, Base64FormattingOptions.None)}");
+                ClipLogger.Log($"ClientDataHash base64 from bytes: {Convert.ToBase64String(assertionParams.Hash, Base64FormattingOptions.None)}");
+                ClipLogger.Log($"selectedFido2Credential.KeyBytes base64 from bytes: {Convert.ToBase64String(selectedFido2Credential.KeyBytes, Base64FormattingOptions.None)}");
 
                 var signature = GenerateSignature(
                     authData: authenticatorData,
                     clientDataHash: assertionParams.Hash,
                     privateKey: selectedFido2Credential.KeyBytes
                 );
+
+                ClipLogger.Log($"signature base64 from bytes: {Convert.ToBase64String(signature, Base64FormattingOptions.None)}");
 
                 return new Fido2AuthenticatorGetAssertionResult
                 {
@@ -301,17 +320,35 @@ namespace Bit.Core.Services
             {
                 try
                 {
+                    if (credential.IdStr != null)
+                    {
+                        ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> Adding credID: {credential.IdStr}");
+                        ids.Add(credential.IdStr);
+                        continue;
+                    }
+
+                    ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> Converting Guid byte length: {credential.Id.Length}");
                     ids.Add(GuidToStandardFormat(credential.Id));
                 }
-                catch {}
+                catch(Exception ex)
+                {
+                    ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> Converting Guid ex {ex}");
+                }
             }
+
+            ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> {credentials.Length} vs {ids.Count}");
 
             if (ids.Count == 0)
             {
                 return new List<CipherView>();
             }
 
+            ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> {ids[0]}");
+
             var ciphers = await _cipherService.GetAllDecryptedAsync();
+
+            ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> ciphers count: {ciphers?.Count}");
+
             return ciphers.FindAll((cipher) =>
                 !cipher.IsDeleted &&
                 cipher.Type == CipherType.Login &&
@@ -347,9 +384,9 @@ namespace Bit.Core.Services
         {
             return new Fido2CredentialView {
                 CredentialId = Guid.NewGuid().ToString(),
-                KeyType = "public-key",
-                KeyAlgorithm = "ECDSA",
-                KeyCurve = "P-256",
+                KeyType = Bit.Core.Constants.DefaultFido2CredentialType,
+                KeyAlgorithm = Bit.Core.Constants.DefaultFido2CredentialAlgorithm,
+                KeyCurve = Bit.Core.Constants.DefaultFido2CredentialCurve,
                 KeyValue = CoreHelpers.Base64UrlEncode(privateKey),
                 RpId = makeCredentialsParams.RpEntity.Id,
                 UserHandle = CoreHelpers.Base64UrlEncode(makeCredentialsParams.UserEntity.Id),
@@ -377,6 +414,9 @@ namespace Bit.Core.Services
             var rpIdHash = await _cryptoFunctionService.HashAsync(rpId, CryptoHashAlgorithm.Sha256);
             authData.AddRange(rpIdHash);
 
+
+            ClipLogger.Log($"[Fido2Authenticator] GenerateAuthDataAsync -> ad: {isAttestation} - uv: {userVerification} - up: {userPresence}");
+
             var flags = AuthDataFlags(
                 extensionData: false,
                 attestationData: isAttestation,
@@ -384,6 +424,10 @@ namespace Bit.Core.Services
                 userPresence: userPresence
             );
             authData.Add(flags);
+
+            ClipLogger.Log($"[Fido2Authenticator] GenerateAuthDataAsync -> flags: {flags}");
+
+            ClipLogger.Log($"[Fido2Authenticator] GenerateAuthDataAsync -> counter: {counter}");
 
             authData.AddRange(new List<byte> {
                 (byte)(counter >> 24),
@@ -407,13 +451,14 @@ namespace Bit.Core.Services
                 attestedCredentialData.AddRange(credentialId);
                 attestedCredentialData.AddRange(publicKey.ExportCose());
 
+                ClipLogger.Log($"[Fido2Authenticator] GenerateAuthDataAsync -> adding attestedCD: {attestedCredentialData}");
                 authData.AddRange(attestedCredentialData);
             }
 
             return authData.ToArray();
         }
 
-        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence) {
+        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence, bool backupEligibility = true, bool backupState = true) {
             byte flags = 0;
 
             if (extensionData) {
@@ -422,6 +467,16 @@ namespace Bit.Core.Services
 
             if (attestationData) {
                 flags |= 0b01000000;
+            }
+
+            if (backupEligibility)
+            {
+                flags |= 0b00001000;
+            }
+
+            if (backupState)
+            {
+                flags |= 0b00010000;
             }
 
             if (userVerification) {

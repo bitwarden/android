@@ -50,6 +50,8 @@ namespace Bit.Core.Abstractions
         /// Whether or not the user must be verified before completing the operation.
         /// </summary>
         public bool UserVerification { get; set; }
+
+        public string RpId { get; set; }
     }
 
     public struct Fido2ConfirmNewCredentialResult

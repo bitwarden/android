@@ -1,6 +1,8 @@
-﻿using AuthenticationServices;
+﻿using System.Threading.Tasks;
+using AuthenticationServices;
 using Bit.iOS.Core.Models;
 using Foundation;
+using ObjCRuntime;
 using UIKit;
 
 namespace Bit.iOS.Autofill.Models
@@ -12,14 +14,16 @@ namespace Bit.iOS.Autofill.Models
         public ASPasswordCredentialIdentity PasswordCredentialIdentity { get; set; }
         public ASPasskeyCredentialRequest PasskeyCredentialRequest { get; set; }
         public bool Configuring { get; set; }
+        public bool IsCreatingPasskey { get; set; }
+        public TaskCompletionSource<bool> _unlockVaultTcs { get; set; }
 
         public ASPasskeyCredentialIdentity PasskeyCredentialIdentity
         {
             get
             {
-                if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+                if (PasskeyCredentialRequest != null && UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
                 {
-                    return PasskeyCredentialRequest?.CredentialIdentity as ASPasskeyCredentialIdentity;
+                    return Runtime.GetNSObject<ASPasskeyCredentialIdentity>(PasskeyCredentialRequest.CredentialIdentity.GetHandle());
                 }
                 return null;
             }

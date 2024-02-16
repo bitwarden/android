@@ -20,6 +20,7 @@ using Foundation;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Platform;
+using ObjCRuntime;
 using UIKit;
 using static CoreFoundation.DispatchSource;
 using static Microsoft.Maui.ApplicationModel.Permissions;
@@ -166,44 +167,37 @@ namespace Bit.iOS.Autofill
 
             try
             {
-
                 ClipLogger.Log("ProvideCredentialWithoutUserInteraction(IASCredentialRequest credentialRequest");
-                ClipLogger.Log($"PCWUI(IASC) -> R: {credentialRequest?.GetType().FullName}");
-                ClipLogger.Log($"PCWUI(IASC) -> I: {credentialRequest?.CredentialIdentity?.GetType().FullName}");
 
-                var crType = credentialRequest.GetType();
-                foreach (var item in crType.GetProperties())
-                {
-                    ClipLogger.Log($"PCWUI(IASC) -> R -> {item.Name} -- {item.PropertyType}");
-                }
+                //ClipLogger.Log($"PCWUI(IASC) -> R: {credentialRequest?.GetType().FullName}");
+                //ClipLogger.Log($"PCWUI(IASC) -> I: {credentialRequest?.CredentialIdentity?.GetType().FullName}");
 
-                var ciType = credentialRequest.CredentialIdentity.GetType();
-                foreach (var item in ciType.GetProperties())
-                {
-                    ClipLogger.Log($"PCWUI(IASC) -> I -> {item.Name} -- {item.PropertyType}");
-                }
+                //ClipLogger.Log($"PCWUI(IASC) -> R k: {asPasskeyCredentialRequest?.GetType().FullName}");
+                //ClipLogger.Log($"PCWUI(IASC) -> I k: {asPasskeyCredentialRequest?.CredentialIdentity?.GetType().FullName}");
 
-                try
-                {
-                    var cc = (ASPasskeyCredentialRequest)credentialRequest;
-                    ClipLogger.Log($"PCWUI(IASC) -> R -> Force cast {cc}");
-                }
-                catch (Exception ex)
-                {
-                    ClipLogger.Log($"PCWUI(IASC) -> R -> Force cast bad - {ex}");
-                }
+                //var crType = asPasskeyCredentialRequest.GetType();
+                //foreach (var item in crType.GetProperties())
+                //{
+                //    ClipLogger.Log($"PCWUI(IASC) -> R -> {item.Name} -- {item.PropertyType}");
+                //}
+
+                //var ciType = asPasskeyCredentialRequest.CredentialIdentity.GetType();
+                //foreach (var item in ciType.GetProperties())
+                //{
+                //    ClipLogger.Log($"PCWUI(IASC) -> I -> {item.Name} -- {item.PropertyType}");
+                //}
 
 
                 switch (credentialRequest?.Type)
                 {
                     case ASCredentialRequestType.Password:
-                        ClipLogger.Log($"PCWUI(IASC) -> Type P {credentialRequest.CredentialIdentity}");
-                        await ProvideCredentialWithoutUserInteractionAsync(credentialRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                        var passwordCredentialIdentity = Runtime.GetNSObject<ASPasswordCredentialIdentity>(credentialRequest.CredentialIdentity.GetHandle());
+                        ClipLogger.Log($"PCWUI(IASC) -> Type P {passwordCredentialIdentity}");
+                        await ProvideCredentialWithoutUserInteractionAsync(passwordCredentialIdentity);
                         break;
                     case ASCredentialRequestType.PasskeyAssertion:
-                        var bpa = credentialRequest is ASPasskeyCredentialRequest;
-                        ClipLogger.Log($"PCWUI(IASC) -> Type PA {bpa}");
-                        await ProvideCredentialWithoutUserInteractionAsync(credentialRequest as ASPasskeyCredentialRequest);
+                        var asPasskeyCredentialRequest = Runtime.GetNSObject<ASPasskeyCredentialRequest>(credentialRequest.GetHandle());
+                        await ProvideCredentialWithoutUserInteractionAsync(asPasskeyCredentialRequest);
                         break;
                     default:
                         ClipLogger.Log($"PCWUI(IASC) -> Type not P nor PA");
@@ -254,19 +248,17 @@ namespace Bit.iOS.Autofill
             try
             {
                 ClipLogger.Log("PrepareInterfaceToProvideCredential(IASCredentialRequest credentialRequest");
-                ClipLogger.Log($"PITPC(IASCR) -> R: {credentialRequest?.GetType().FullName}");
-                ClipLogger.Log($"PITPC(IASCR) -> I: {credentialRequest?.CredentialIdentity?.GetType().FullName}");
 
                 switch (credentialRequest?.Type)
                 {
                     case ASCredentialRequestType.Password:
+                        var passwordCredentialIdentity = Runtime.GetNSObject<ASPasswordCredentialIdentity>(credentialRequest.CredentialIdentity.GetHandle());
                         ClipLogger.Log($"PITPC(IASCR) -> Type P {credentialRequest.CredentialIdentity}");
-                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialRequest.CredentialIdentity as ASPasswordCredentialIdentity);
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = passwordCredentialIdentity);
                         break;
                     case ASCredentialRequestType.PasskeyAssertion:
-                        var bpa = credentialRequest is ASPasskeyCredentialRequest;
-                        ClipLogger.Log($"PITPC(IASCR) -> Type PA {bpa}");
-                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialRequest = credentialRequest as ASPasskeyCredentialRequest);
+                        var asPasskeyCredentialRequest = Runtime.GetNSObject<ASPasskeyCredentialRequest>(credentialRequest.GetHandle());
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialRequest = asPasskeyCredentialRequest);
                         break;
                     default:
                         ClipLogger.Log($"PITPC(IASCR) -> Type not P nor PA");
@@ -474,6 +466,14 @@ namespace Bit.iOS.Autofill
             try
             {
                 ClipLogger.Log("OnLockDismissedAsync");
+
+                if (_context.IsCreatingPasskey)
+                {
+                    ClipLogger.Log("OnLockDismissedAsync -> IsCreatingPasskey");
+                    _context._unlockVaultTcs.SetResult(true);
+                    return;
+                }
+
                 if (_context.PasswordCredentialIdentity != null || _context.IsPasskey)
                 {
                     ClipLogger.Log("OnLockDismissedAsync -> ProvideCredentialAsync");
@@ -509,22 +509,34 @@ namespace Bit.iOS.Autofill
             try
             {
                 ClipLogger.Log("ProvideCredentialAsync");
+
+                if (_context.IsPasskey && UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+                {
+                    if (_context.PasskeyCredentialIdentity is null)
+                    {
+                        ClipLogger.Log("ProvideCredentialAsync -> IsPasskey failed");
+                        CancelRequest(ASExtensionErrorCode.Failed);
+                    }
+
+                    ClipLogger.Log("ProvideCredentialAsync -> IsPasskey");
+                    ClipLogger.Log($"ProvideCredentialAsync -> IsPasskey - RP: {_context.PasskeyCredentialIdentity.RelyingPartyIdentifier}");
+                    ClipLogger.Log($"ProvideCredentialAsync -> IsPasskey - UH: {_context.PasskeyCredentialIdentity.UserHandle}");
+                    ClipLogger.Log($"ProvideCredentialAsync -> IsPasskey - CID: {_context.PasskeyCredentialIdentity.CredentialId}");
+                    ClipLogger.Log($"ProvideCredentialAsync -> IsPasskey - RI: {_context.RecordIdentifier}");
+
+                    await CompleteAssertionRequestAsync(_context.PasskeyCredentialIdentity.RelyingPartyIdentifier,
+                        _context.PasskeyCredentialIdentity.UserHandle,
+                        _context.PasskeyCredentialIdentity.CredentialId,
+                        _context.RecordIdentifier);
+                    return;
+                }
+
                 if (!ServiceContainer.TryResolve<ICipherService>(out var cipherService)
                     ||
                     _context.RecordIdentifier == null)
                 {
                     ClipLogger.Log("ProvideCredentialAsync -> CredentialIdentityNotFound");
                     CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
-                    return;
-                }
-
-                if (_context.IsPasskey)
-                {
-                    ClipLogger.Log("ProvideCredentialAsync -> IsPasskey");
-                    await CompleteAssertionRequestAsync(_context.PasskeyCredentialIdentity.RelyingPartyIdentifier,
-                        _context.PasskeyCredentialIdentity.UserHandle,
-                        _context.PasskeyCredentialIdentity.CredentialId,
-                        _context.RecordIdentifier);
                     return;
                 }
 
