@@ -44,27 +44,29 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class GeneratorRepositoryTest {
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2021-01-01T00:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val mutableUserStateFlow = MutableStateFlow<UserStateJson?>(null)
-
     private val generatorSdkSource: GeneratorSdkSource = mockk()
     private val generatorDiskSource: GeneratorDiskSource = mockk()
     private val authDiskSource: AuthDiskSource = mockk {
@@ -77,6 +79,7 @@ class GeneratorRepositoryTest {
     private val policyManager: PolicyManager = mockk()
 
     private val repository = GeneratorRepositoryImpl(
+        clock = fixedClock,
         generatorSdkSource = generatorSdkSource,
         generatorDiskSource = generatorDiskSource,
         authDiskSource = authDiskSource,
@@ -86,20 +89,10 @@ class GeneratorRepositoryTest {
         policyManager = policyManager,
     )
 
-    @AfterEach
-    fun tearDown() {
-        unmockkStatic(Instant::class)
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `generatePassword should emit Success result and store the generated password when shouldSave is true`() =
         runTest {
-            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
-
-            mockkStatic(Instant::class)
-            every { Instant.now() } returns fixedInstant
-
             val userId = "testUserId"
             val request = PasswordGeneratorRequest(
                 lowercase = true,
@@ -116,7 +109,7 @@ class GeneratorRepositoryTest {
             val generatedPassword = "GeneratedPassword123!"
             val encryptedPasswordHistory = PasswordHistory(
                 password = generatedPassword,
-                lastUsedDate = Instant.now(),
+                lastUsedDate = fixedClock.instant(),
             )
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
@@ -147,11 +140,6 @@ class GeneratorRepositoryTest {
     @Test
     fun `generatePassword should emit Success result but not store the generated password when shouldSave is false`() =
         runTest {
-            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
-
-            mockkStatic(Instant::class)
-            every { Instant.now() } returns fixedInstant
-
             val userId = "testUserId"
             val request = PasswordGeneratorRequest(
                 lowercase = true,
@@ -168,7 +156,7 @@ class GeneratorRepositoryTest {
             val generatedPassword = "GeneratedPassword123!"
             val encryptedPasswordHistory = PasswordHistory(
                 password = generatedPassword,
-                lastUsedDate = Instant.now(),
+                lastUsedDate = fixedClock.instant(),
             )
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
@@ -219,10 +207,6 @@ class GeneratorRepositoryTest {
     @Test
     fun `generatePassphrase should emit Success result and store the generated passphrase`() =
         runTest {
-            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
-            mockkStatic(Instant::class)
-            every { Instant.now() } returns fixedInstant
-
             val userId = "testUserId"
             val request = PassphraseGeneratorRequest(
                 numWords = 5.toUByte(),
@@ -233,7 +217,7 @@ class GeneratorRepositoryTest {
             val generatedPassphrase = "Generated-Passphrase-123"
             val encryptedPasswordHistory = PasswordHistory(
                 password = generatedPassphrase,
-                lastUsedDate = Instant.now(),
+                lastUsedDate = fixedClock.instant(),
             )
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
