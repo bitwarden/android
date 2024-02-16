@@ -138,7 +138,7 @@ class AuthRepositoryTest {
             getNewAuthRequest(
                 email = EMAIL,
             )
-        } returns Result.success(AUTH_REQUEST_RESPONSE)
+        } returns AUTH_REQUEST_RESPONSE.asSuccess()
         coEvery {
             hashPassword(
                 email = EMAIL,
@@ -146,7 +146,7 @@ class AuthRepositoryTest {
                 kdf = PRE_LOGIN_SUCCESS.kdfParams.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
-        } returns Result.success(PASSWORD_HASH)
+        } returns PASSWORD_HASH.asSuccess()
         coEvery {
             hashPassword(
                 email = EMAIL,
@@ -154,23 +154,22 @@ class AuthRepositoryTest {
                 kdf = ACCOUNT_1.profile.toSdkParams(),
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
             )
-        } returns Result.success(PASSWORD_HASH)
+        } returns PASSWORD_HASH.asSuccess()
         coEvery {
             makeRegisterKeys(
                 email = EMAIL,
                 password = PASSWORD,
                 kdf = Kdf.Pbkdf2(DEFAULT_KDF_ITERATIONS.toUInt()),
             )
-        } returns Result.success(
-            RegisterKeyResponse(
-                masterPasswordHash = PASSWORD_HASH,
-                encryptedUserKey = ENCRYPTED_USER_KEY,
-                keys = RsaKeyPair(
-                    public = PUBLIC_KEY,
-                    private = PRIVATE_KEY,
-                ),
+        } returns RegisterKeyResponse(
+            masterPasswordHash = PASSWORD_HASH,
+            encryptedUserKey = ENCRYPTED_USER_KEY,
+            keys = RsaKeyPair(
+                public = PUBLIC_KEY,
+                private = PRIVATE_KEY,
             ),
         )
+            .asSuccess()
     }
     private val vaultSdkSource = mockk<VaultSdkSource> {
         coEvery {
@@ -369,7 +368,7 @@ class AuthRepositoryTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
                 accountsService.preLogin(email = EMAIL)
-            } returns Result.success(PRE_LOGIN_SUCCESS)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -380,7 +379,7 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            } returns Result.success(successResponse)
+            } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -688,7 +687,7 @@ class AuthRepositoryTest {
     fun `login when pre login fails should return Error with no message`() = runTest {
         coEvery {
             accountsService.preLogin(email = EMAIL)
-        } returns (Result.failure(RuntimeException()))
+        } returns RuntimeException().asFailure()
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.Error(errorMessage = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -699,7 +698,7 @@ class AuthRepositoryTest {
     fun `login get token fails should return Error with no message`() = runTest {
         coEvery {
             accountsService.preLogin(email = EMAIL)
-        } returns Result.success(PRE_LOGIN_SUCCESS)
+        } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -710,8 +709,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        }
-            .returns(Result.failure(RuntimeException()))
+        } returns RuntimeException().asFailure()
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.Error(errorMessage = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -733,7 +731,7 @@ class AuthRepositoryTest {
     fun `login get token returns Invalid should return Error with correct message`() = runTest {
         coEvery {
             accountsService.preLogin(email = EMAIL)
-        } returns Result.success(PRE_LOGIN_SUCCESS)
+        } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -744,13 +742,13 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns Result.success(
-            GetTokenResponseJson.Invalid(
+        } returns GetTokenResponseJson
+            .Invalid(
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
-            ),
-        )
+            )
+            .asSuccess()
 
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
@@ -776,7 +774,7 @@ class AuthRepositoryTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
                 accountsService.preLogin(email = EMAIL)
-            } returns Result.success(PRE_LOGIN_SUCCESS)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -787,8 +785,7 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            }
-                .returns(Result.success(successResponse))
+            } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -863,7 +860,7 @@ class AuthRepositoryTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
                 accountsService.preLogin(email = EMAIL)
-            } returns Result.success(PRE_LOGIN_SUCCESS)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 identityService.getToken(
                     email = EMAIL,
@@ -874,8 +871,7 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            }
-                .returns(Result.success(successResponse))
+            } returns successResponse.asSuccess()
             coEvery {
                 vaultRepository.unlockVault(
                     userId = USER_ID_1,
@@ -939,7 +935,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `login get token returns captcha request should return CaptchaRequired`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -950,8 +946,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        }
-            .returns(Result.success(GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY)))
+        } returns GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY).asSuccess()
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -971,7 +966,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `login get token returns two factor request should return TwoFactorRequired`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -982,14 +977,13 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        }
-            .returns(
-                Result.success(
-                    GetTokenResponseJson.TwoFactorRequired(
-                        TWO_FACTOR_AUTH_METHODS_DATA, null, null,
-                    ),
-                ),
+        } returns GetTokenResponseJson
+            .TwoFactorRequired(
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                captchaToken = null,
+                ssoToken = null,
             )
+            .asSuccess()
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.TwoFactorRequired, result)
         assertEquals(
@@ -1015,7 +1009,7 @@ class AuthRepositoryTest {
     fun `login two factor with remember saves two factor auth token`() = runTest {
         // Attempt a normal login with a two factor error first, so that the auth
         // data will be cached.
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -1026,11 +1020,13 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns Result.success(
-            GetTokenResponseJson.TwoFactorRequired(
-                TWO_FACTOR_AUTH_METHODS_DATA, null, null,
-            ),
-        )
+        } returns GetTokenResponseJson
+            .TwoFactorRequired(
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                captchaToken = null,
+                ssoToken = null,
+            )
+            .asSuccess()
         val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
         coVerify { accountsService.preLogin(email = EMAIL) }
@@ -1061,7 +1057,7 @@ class AuthRepositoryTest {
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
             )
-        } returns Result.success(successResponse)
+        } returns successResponse.asSuccess()
         coEvery {
             vaultRepository.unlockVault(
                 userId = USER_ID_1,
@@ -1105,7 +1101,7 @@ class AuthRepositoryTest {
         val successResponse = GET_TOKEN_RESPONSE_SUCCESS
         coEvery {
             accountsService.preLogin(email = EMAIL)
-        } returns Result.success(PRE_LOGIN_SUCCESS)
+        } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -1117,7 +1113,7 @@ class AuthRepositoryTest {
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
             )
-        } returns Result.success(successResponse)
+        } returns successResponse.asSuccess()
         coEvery {
             vaultRepository.unlockVault(
                 userId = USER_ID_1,
@@ -1545,8 +1541,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        }
-            .returns(Result.failure(RuntimeException()))
+        } returns RuntimeException().asFailure()
         val result = repository.login(
             email = EMAIL,
             ssoCode = SSO_CODE,
@@ -1583,13 +1578,13 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns Result.success(
-            GetTokenResponseJson.Invalid(
+        } returns GetTokenResponseJson
+            .Invalid(
                 errorModel = GetTokenResponseJson.Invalid.ErrorModel(
                     errorMessage = "mock_error_message",
                 ),
-            ),
-        )
+            )
+            .asSuccess()
 
         val result = repository.login(
             email = EMAIL,
@@ -1630,8 +1625,7 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            }
-                .returns(Result.success(successResponse))
+            } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
@@ -1697,8 +1691,7 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            }
-                .returns(Result.success(successResponse))
+            } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
             every {
                 GET_TOKEN_RESPONSE_SUCCESS.toUserState(
@@ -1759,8 +1752,7 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        }
-            .returns(Result.success(GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY)))
+        } returns GetTokenResponseJson.CaptchaRequired(CAPTCHA_KEY).asSuccess()
         val result = repository.login(
             email = EMAIL,
             ssoCode = SSO_CODE,
@@ -1798,14 +1790,13 @@ class AuthRepositoryTest {
                     captchaToken = null,
                     uniqueAppId = UNIQUE_APP_ID,
                 )
-            }
-                .returns(
-                    Result.success(
-                        GetTokenResponseJson.TwoFactorRequired(
-                            TWO_FACTOR_AUTH_METHODS_DATA, null, null,
-                        ),
-                    ),
+            } returns GetTokenResponseJson
+                .TwoFactorRequired(
+                    authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                    captchaToken = null,
+                    ssoToken = null,
                 )
+                .asSuccess()
             val result = repository.login(
                 email = EMAIL,
                 ssoCode = SSO_CODE,
@@ -1848,11 +1839,14 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns Result.success(
-            GetTokenResponseJson.TwoFactorRequired(
-                TWO_FACTOR_AUTH_METHODS_DATA, null, null,
-            ),
-        )
+        } returns GetTokenResponseJson
+            .TwoFactorRequired(
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                captchaToken = null,
+                ssoToken = null,
+            )
+            .asSuccess()
+
         val firstResult = repository.login(
             email = EMAIL,
             ssoCode = SSO_CODE,
@@ -1890,7 +1884,7 @@ class AuthRepositoryTest {
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = TWO_FACTOR_DATA,
             )
-        } returns Result.success(successResponse)
+        } returns successResponse.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
         every {
             successResponse.toUserState(
@@ -1933,7 +1927,7 @@ class AuthRepositoryTest {
                 uniqueAppId = UNIQUE_APP_ID,
                 twoFactorData = rememberedTwoFactorData,
             )
-        } returns Result.success(successResponse)
+        } returns successResponse.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
         every {
             GET_TOKEN_RESPONSE_SUCCESS.toUserState(
@@ -1983,7 +1977,7 @@ class AuthRepositoryTest {
     fun `register check data breaches error should still return register success`() = runTest {
         coEvery {
             haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
-        } returns Result.failure(Throwable())
+        } returns Throwable().asFailure()
         coEvery {
             accountsService.register(
                 body = RegisterRequestJson(
@@ -2000,7 +1994,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.success(RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY))
+        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -2049,7 +2043,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.success(RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY))
+        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -2064,7 +2058,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register Success should return Success`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             accountsService.register(
                 body = RegisterRequestJson(
@@ -2081,7 +2075,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.success(RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY))
+        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -2096,7 +2090,7 @@ class AuthRepositoryTest {
     @Test
     fun `register returns CaptchaRequired captchaKeys empty should return Error no message`() =
         runTest {
-            coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 accountsService.register(
                     body = RegisterRequestJson(
@@ -2113,15 +2107,15 @@ class AuthRepositoryTest {
                         kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                     ),
                 )
-            } returns Result.success(
-                RegisterResponseJson.CaptchaRequired(
+            } returns RegisterResponseJson
+                .CaptchaRequired(
                     validationErrors = RegisterResponseJson
                         .CaptchaRequired
                         .ValidationErrors(
                             captchaKeys = emptyList(),
                         ),
-                ),
-            )
+                )
+                .asSuccess()
 
             val result = repository.register(
                 email = EMAIL,
@@ -2136,7 +2130,7 @@ class AuthRepositoryTest {
     @Test
     fun `register returns CaptchaRequired captchaKeys should return CaptchaRequired`() =
         runTest {
-            coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+            coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
             coEvery {
                 accountsService.register(
                     body = RegisterRequestJson(
@@ -2153,15 +2147,15 @@ class AuthRepositoryTest {
                         kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                     ),
                 )
-            } returns Result.success(
-                RegisterResponseJson.CaptchaRequired(
+            } returns RegisterResponseJson
+                .CaptchaRequired(
                     validationErrors = RegisterResponseJson
                         .CaptchaRequired
                         .ValidationErrors(
                             captchaKeys = listOf(CAPTCHA_KEY),
                         ),
-                ),
-            )
+                )
+                .asSuccess()
 
             val result = repository.register(
                 email = EMAIL,
@@ -2175,7 +2169,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register Failure should return Error with no message`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             accountsService.register(
                 body = RegisterRequestJson(
@@ -2192,7 +2186,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.failure(RuntimeException())
+        } returns RuntimeException().asFailure()
 
         val result = repository.register(
             email = EMAIL,
@@ -2206,7 +2200,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register returns Invalid should return Error with invalid message`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             accountsService.register(
                 body = RegisterRequestJson(
@@ -2223,7 +2217,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.success(RegisterResponseJson.Invalid("message", mapOf()))
+        } returns RegisterResponseJson.Invalid("message", mapOf()).asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -2237,7 +2231,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register returns Invalid should return Error with first message in map`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             accountsService.register(
                 body = RegisterRequestJson(
@@ -2254,12 +2248,12 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.success(
-            RegisterResponseJson.Invalid(
+        } returns RegisterResponseJson
+            .Invalid(
                 message = "message",
                 validationErrors = mapOf("" to listOf("expected")),
-            ),
-        )
+            )
+            .asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -2273,7 +2267,7 @@ class AuthRepositoryTest {
 
     @Test
     fun `register returns Error body should return Error with message`() = runTest {
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             accountsService.register(
                 body = RegisterRequestJson(
@@ -2290,11 +2284,7 @@ class AuthRepositoryTest {
                     kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
                 ),
             )
-        } returns Result.success(
-            RegisterResponseJson.Error(
-                message = "message",
-            ),
-        )
+        } returns RegisterResponseJson.Error(message = "message").asSuccess()
 
         val result = repository.register(
             email = EMAIL,
@@ -2327,12 +2317,11 @@ class AuthRepositoryTest {
                 userId = ACCOUNT_1.profile.userId,
                 newPassword = newPassword,
             )
-        } returns Result.success(
-            UpdatePasswordResponse(
-                passwordHash = newPasswordHash,
-                newKey = newKey,
-            ),
+        } returns UpdatePasswordResponse(
+            passwordHash = newPasswordHash,
+            newKey = newKey,
         )
+            .asSuccess()
         coEvery {
             accountsService.resetPassword(
                 body = ResetPasswordRequestJson(
@@ -2438,7 +2427,7 @@ class AuthRepositoryTest {
         val email = "valid@example.com"
         coEvery {
             accountsService.requestPasswordHint(email)
-        } returns Result.success(PasswordHintResponseJson.Success)
+        } returns PasswordHintResponseJson.Success.asSuccess()
 
         val result = repository.passwordHintRequest(email)
 
@@ -2451,7 +2440,7 @@ class AuthRepositoryTest {
         val errorMessage = "Error message"
         coEvery {
             accountsService.requestPasswordHint(email)
-        } returns Result.success(PasswordHintResponseJson.Error(errorMessage))
+        } returns PasswordHintResponseJson.Error(errorMessage).asSuccess()
 
         val result = repository.passwordHintRequest(email)
 
@@ -2463,7 +2452,7 @@ class AuthRepositoryTest {
         val email = "failure@example.com"
         coEvery {
             accountsService.requestPasswordHint(email)
-        } returns Result.failure(RuntimeException("Network error"))
+        } returns RuntimeException("Network error").asFailure()
 
         val result = repository.passwordHintRequest(email)
 
@@ -2509,7 +2498,7 @@ class AuthRepositoryTest {
         val throwable = Throwable()
         coEvery {
             organizationService.getOrganizationDomainSsoDetails(email)
-        } returns Result.failure(throwable)
+        } returns throwable.asFailure()
         val result = repository.getOrganizationDomainSsoDetails(email)
         assertEquals(OrganizationDomainSsoDetailsResult.Failure, result)
     }
@@ -2519,15 +2508,14 @@ class AuthRepositoryTest {
         val email = "test@gmail.com"
         coEvery {
             organizationService.getOrganizationDomainSsoDetails(email)
-        } returns Result.success(
-            OrganizationDomainSsoDetailsResponseJson(
-                isSsoAvailable = true,
-                organizationIdentifier = "Test Org",
-                domainName = "bitwarden.com",
-                isSsoRequired = false,
-                verifiedDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
-            ),
+        } returns OrganizationDomainSsoDetailsResponseJson(
+            isSsoAvailable = true,
+            organizationIdentifier = "Test Org",
+            domainName = "bitwarden.com",
+            isSsoRequired = false,
+            verifiedDate = ZonedDateTime.parse("2024-09-13T00:00Z"),
         )
+            .asSuccess()
         val result = repository.getOrganizationDomainSsoDetails(email)
         assertEquals(
             OrganizationDomainSsoDetailsResult.Success(
@@ -2544,7 +2532,7 @@ class AuthRepositoryTest {
         val throwable = Throwable()
         coEvery {
             identityService.prevalidateSso(organizationId)
-        } returns Result.failure(throwable)
+        } returns throwable.asFailure()
         val result = repository.prevalidateSso(organizationId)
         assertEquals(PrevalidateSsoResult.Failure, result)
     }
@@ -2554,7 +2542,7 @@ class AuthRepositoryTest {
         val organizationId = "organizationid"
         coEvery {
             identityService.prevalidateSso(organizationId)
-        } returns Result.success(PrevalidateSsoResponseJson(token = ""))
+        } returns PrevalidateSsoResponseJson(token = "").asSuccess()
         val result = repository.prevalidateSso(organizationId)
         assertEquals(PrevalidateSsoResult.Failure, result)
     }
@@ -2564,7 +2552,7 @@ class AuthRepositoryTest {
         val organizationId = "organizationid"
         coEvery {
             identityService.prevalidateSso(organizationId)
-        } returns Result.success(PrevalidateSsoResponseJson(token = "token"))
+        } returns PrevalidateSsoResponseJson(token = "token").asSuccess()
         val result = repository.prevalidateSso(organizationId)
         assertEquals(PrevalidateSsoResult.Success(token = "token"), result)
     }
@@ -2584,7 +2572,7 @@ class AuthRepositoryTest {
     fun `resendVerificationCodeEmail uses cached request data to make api call`() = runTest {
         // Attempt a normal login with a two factor error first, so that the necessary
         // data will be cached.
-        coEvery { accountsService.preLogin(EMAIL) } returns Result.success(PRE_LOGIN_SUCCESS)
+        coEvery { accountsService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
         coEvery {
             identityService.getToken(
                 email = EMAIL,
@@ -2595,11 +2583,13 @@ class AuthRepositoryTest {
                 captchaToken = null,
                 uniqueAppId = UNIQUE_APP_ID,
             )
-        } returns Result.success(
-            GetTokenResponseJson.TwoFactorRequired(
-                TWO_FACTOR_AUTH_METHODS_DATA, null, null,
-            ),
-        )
+        } returns GetTokenResponseJson
+            .TwoFactorRequired(
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                captchaToken = null,
+                ssoToken = null,
+            )
+            .asSuccess()
         val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
         coVerify { accountsService.preLogin(email = EMAIL) }
@@ -2625,7 +2615,7 @@ class AuthRepositoryTest {
                     ssoToken = null,
                 ),
             )
-        } returns Result.success(Unit)
+        } returns Unit.asSuccess()
         val resendEmailResult = repository.resendVerificationCodeEmail()
         assertEquals(ResendEmailResult.Success, resendEmailResult)
         coVerify {
@@ -2828,23 +2818,23 @@ class AuthRepositoryTest {
     fun `getPasswordStrength returns expected results for various strength levels`() = runTest {
         coEvery {
             authSdkSource.passwordStrength(any(), eq("level_0"))
-        } returns Result.success(LEVEL_0)
+        } returns LEVEL_0.asSuccess()
 
         coEvery {
             authSdkSource.passwordStrength(any(), eq("level_1"))
-        } returns Result.success(LEVEL_1)
+        } returns LEVEL_1.asSuccess()
 
         coEvery {
             authSdkSource.passwordStrength(any(), eq("level_2"))
-        } returns Result.success(LEVEL_2)
+        } returns LEVEL_2.asSuccess()
 
         coEvery {
             authSdkSource.passwordStrength(any(), eq("level_3"))
-        } returns Result.success(LEVEL_3)
+        } returns LEVEL_3.asSuccess()
 
         coEvery {
             authSdkSource.passwordStrength(any(), eq("level_4"))
-        } returns Result.success(LEVEL_4)
+        } returns LEVEL_4.asSuccess()
 
         assertEquals(
             PasswordStrengthResult.Success(LEVEL_0),
@@ -3101,7 +3091,7 @@ class AuthRepositoryTest {
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 password = password,
             )
-        } returns Result.success(LEVEL_0)
+        } returns LEVEL_0.asSuccess()
         setPolicy(minComplexity = 10)
         assertFalse(repository.validatePasswordAgainstPolicies(password = password))
 
