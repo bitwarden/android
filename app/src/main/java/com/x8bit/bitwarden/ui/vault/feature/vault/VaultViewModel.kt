@@ -834,8 +834,8 @@ data class VaultState(
              * Represents an identity item within the vault, containing personal identification
              * information.
              *
-             * @property firstName The first name of the individual associated with this
-             * identity item.
+             * @property fullName The first and last name of the individual associated with
+             * this identity item.
              */
             @Parcelize
             data class Identity(
@@ -845,9 +845,9 @@ data class VaultState(
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
-                val firstName: Text?,
+                val fullName: Text?,
             ) : VaultItem() {
-                override val supportingLabel: Text? get() = firstName
+                override val supportingLabel: Text? get() = fullName
             }
 
             /**

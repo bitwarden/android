@@ -10,6 +10,7 @@ import com.bitwarden.core.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
@@ -211,7 +212,12 @@ private fun CipherView.toVaultItemOrNull(
         CipherType.IDENTITY -> VaultState.ViewState.VaultItem.Identity(
             id = id,
             name = name.asText(),
-            firstName = identity?.firstName?.asText(),
+            fullName = when {
+                identity?.firstName.isNullOrBlank() -> identity?.lastName?.orNullIfBlank()
+                identity?.lastName.isNullOrBlank() -> identity?.firstName
+                else -> "${identity?.firstName} ${identity?.lastName}"
+            }
+                ?.asText(),
             overflowOptions = toOverflowActions(),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
