@@ -3,14 +3,9 @@ package com.x8bit.bitwarden.data.auth.repository
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsUpdatesResult
+import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
-import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -36,7 +31,7 @@ import kotlinx.coroutines.flow.StateFlow
  * Provides an API for observing an modifying authentication state.
  */
 @Suppress("TooManyFunctions")
-interface AuthRepository : AuthenticatorProvider {
+interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Models the current auth state.
      */
@@ -234,42 +229,6 @@ interface AuthRepository : AuthenticatorProvider {
      * Set the value of [ssoCallbackResultFlow].
      */
     fun setSsoCallbackResult(result: SsoCallbackResult)
-
-    /**
-     * Creates a new authentication request and then continues to emit updates over time.
-     */
-    fun createAuthRequestWithUpdates(email: String): Flow<CreateAuthRequestResult>
-
-    /**
-     * Get an auth request by its [fingerprint] and emits updates for that request.
-     */
-    fun getAuthRequestByFingerprintFlow(fingerprint: String): Flow<AuthRequestUpdatesResult>
-
-    /**
-     * Get an auth request by its request ID and emits updates for that request.
-     */
-    fun getAuthRequestByIdFlow(requestId: String): Flow<AuthRequestUpdatesResult>
-
-    /**
-     * Get all auth request and emits updates over time.
-     */
-    fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult>
-
-    /**
-     * Get a list of the current user's [AuthRequest]s.
-     */
-    suspend fun getAuthRequests(): AuthRequestsResult
-
-    /**
-     * Approves or declines the request corresponding to this [requestId] based on [publicKey]
-     * according to [isApproved].
-     */
-    suspend fun updateAuthRequest(
-        requestId: String,
-        masterPasswordHash: String?,
-        publicKey: String,
-        isApproved: Boolean,
-    ): AuthRequestResult
 
     /**
      * Get a [Boolean] indicating whether this is a known device.

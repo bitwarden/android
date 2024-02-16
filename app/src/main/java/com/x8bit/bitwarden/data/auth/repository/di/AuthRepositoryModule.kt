@@ -2,13 +2,12 @@ package com.x8bit.bitwarden.data.auth.repository.di
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.AuthRepositoryImpl
@@ -23,7 +22,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -37,13 +35,10 @@ object AuthRepositoryModule {
     @Singleton
     @Suppress("LongParameterList")
     fun providesAuthRepository(
-        clock: Clock,
         accountsService: AccountsService,
-        authRequestsService: AuthRequestsService,
         devicesService: DevicesService,
         identityService: IdentityService,
         haveIBeenPwnedService: HaveIBeenPwnedService,
-        newAuthRequestService: NewAuthRequestService,
         organizationService: OrganizationService,
         authSdkSource: AuthSdkSource,
         vaultSdkSource: VaultSdkSource,
@@ -52,16 +47,14 @@ object AuthRepositoryModule {
         environmentRepository: EnvironmentRepository,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        authRequestManager: AuthRequestManager,
         userLogoutManager: UserLogoutManager,
         pushManager: PushManager,
         policyManager: PolicyManager,
     ): AuthRepository = AuthRepositoryImpl(
-        clock = clock,
         accountsService = accountsService,
-        authRequestsService = authRequestsService,
         devicesService = devicesService,
         identityService = identityService,
-        newAuthRequestService = newAuthRequestService,
         organizationService = organizationService,
         authSdkSource = authSdkSource,
         vaultSdkSource = vaultSdkSource,
@@ -71,6 +64,7 @@ object AuthRepositoryModule {
         environmentRepository = environmentRepository,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
+        authRequestManager = authRequestManager,
         userLogoutManager = userLogoutManager,
         pushManager = pushManager,
         policyManager = policyManager,

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.repository.model
+package com.x8bit.bitwarden.data.auth.manager.model
 
 /**
  * Models result of an authorization approval request.
