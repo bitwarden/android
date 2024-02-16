@@ -3,10 +3,10 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginap
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
 import com.bitwarden.core.AuthRequestMethod
-import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
@@ -23,24 +22,17 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordReque
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.IdentityService
-import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.OrganizationService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toInt
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toKdfTypeJson
+import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequest
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestUpdatesResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsResult
-import com.x8bit.bitwarden.data.auth.repository.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
-import com.x8bit.bitwarden.data.auth.repository.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
@@ -53,7 +45,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -84,8 +75,6 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -93,20 +82,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.isActive
-import java.time.Clock
 import javax.inject.Singleton
-import kotlin.coroutines.coroutineContext
-
-private const val PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS: Long = 15L * 60L * 1_000L
-private const val PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS: Long = 4L * 1_000L
-private const val PASSWORDLESS_APPROVER_INTERVAL_MILLIS: Long = 5L * 60L * 1_000L
 
 /**
  * Default implementation of [AuthRepository].
@@ -114,13 +95,10 @@ private const val PASSWORDLESS_APPROVER_INTERVAL_MILLIS: Long = 5L * 60L * 1_000
 @Suppress("LargeClass", "LongParameterList", "TooManyFunctions")
 @Singleton
 class AuthRepositoryImpl(
-    private val clock: Clock,
     private val accountsService: AccountsService,
-    private val authRequestsService: AuthRequestsService,
     private val devicesService: DevicesService,
     private val haveIBeenPwnedService: HaveIBeenPwnedService,
     private val identityService: IdentityService,
-    private val newAuthRequestService: NewAuthRequestService,
     private val organizationService: OrganizationService,
     private val authSdkSource: AuthSdkSource,
     private val vaultSdkSource: VaultSdkSource,
@@ -128,12 +106,14 @@ class AuthRepositoryImpl(
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
+    private val authRequestManager: AuthRequestManager,
     private val userLogoutManager: UserLogoutManager,
-    private val pushManager: PushManager,
     private val policyManager: PolicyManager,
+    pushManager: PushManager,
     dispatcherManager: DispatcherManager,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
-) : AuthRepository {
+) : AuthRepository,
+    AuthRequestManager by authRequestManager {
     private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow(false)
     private val mutableHasPendingAccountDeletionStateFlow = MutableStateFlow(false)
 
@@ -831,276 +811,6 @@ class AuthRepositoryImpl(
         mutableSsoCallbackResultFlow.tryEmit(result)
     }
 
-    override fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult> = flow {
-        while (currentCoroutineContext().isActive) {
-            when (val result = getAuthRequests()) {
-                AuthRequestsResult.Error -> emit(AuthRequestsUpdatesResult.Error)
-
-                is AuthRequestsResult.Success -> {
-                    emit(AuthRequestsUpdatesResult.Update(authRequests = result.authRequests))
-                }
-            }
-            delay(timeMillis = PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
-        }
-    }
-
-    @Suppress("LongMethod")
-    override fun createAuthRequestWithUpdates(
-        email: String,
-    ): Flow<CreateAuthRequestResult> = flow {
-        val initialResult = createNewAuthRequest(email)
-            .getOrNull()
-            ?: run {
-                emit(CreateAuthRequestResult.Error)
-                return@flow
-            }
-        val authRequestResponse = initialResult.authRequestResponse
-        var authRequest = initialResult.authRequest
-        emit(CreateAuthRequestResult.Update(authRequest))
-
-        var isComplete = false
-        while (currentCoroutineContext().isActive && !isComplete) {
-            delay(timeMillis = PASSWORDLESS_NOTIFICATION_RETRY_INTERVAL_MILLIS)
-            newAuthRequestService
-                .getAuthRequestUpdate(
-                    requestId = authRequest.id,
-                    accessCode = authRequestResponse.accessCode,
-                )
-                .map { request ->
-                    AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = authRequest.fingerprint,
-                    )
-                }
-                .fold(
-                    onFailure = { emit(CreateAuthRequestResult.Error) },
-                    onSuccess = { updateAuthRequest ->
-                        when {
-                            updateAuthRequest.requestApproved -> {
-                                isComplete = true
-                                emit(
-                                    CreateAuthRequestResult.Success(
-                                        authRequest = updateAuthRequest,
-                                        authRequestResponse = authRequestResponse,
-                                    ),
-                                )
-                            }
-
-                            !updateAuthRequest.requestApproved &&
-                                updateAuthRequest.responseDate != null -> {
-                                isComplete = true
-                                emit(CreateAuthRequestResult.Declined)
-                            }
-
-                            updateAuthRequest
-                                .creationDate
-                                .toInstant()
-                                .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
-                                .isBefore(clock.instant()) -> {
-                                isComplete = true
-                                emit(CreateAuthRequestResult.Expired)
-                            }
-
-                            else -> {
-                                authRequest = updateAuthRequest
-                                emit(CreateAuthRequestResult.Update(authRequest))
-                            }
-                        }
-                    },
-                )
-        }
-    }
-
-    private fun getAuthRequest(
-        initialRequest: suspend () -> AuthRequestUpdatesResult,
-    ): Flow<AuthRequestUpdatesResult> = flow {
-        val result = initialRequest()
-        emit(result)
-        if (result is AuthRequestUpdatesResult.Error) return@flow
-        var isComplete = false
-        while (coroutineContext.isActive && !isComplete) {
-            delay(PASSWORDLESS_APPROVER_INTERVAL_MILLIS)
-            val updateResult = result as AuthRequestUpdatesResult.Update
-            authRequestsService
-                .getAuthRequest(result.authRequest.id)
-                .map { request ->
-                    AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = updateResult.authRequest.fingerprint,
-                    )
-                }
-                .fold(
-                    onFailure = { emit(AuthRequestUpdatesResult.Error) },
-                    onSuccess = { updateAuthRequest ->
-                        when {
-                            updateAuthRequest.requestApproved -> {
-                                isComplete = true
-                                emit(AuthRequestUpdatesResult.Approved)
-                            }
-
-                            !updateAuthRequest.requestApproved &&
-                                updateAuthRequest.responseDate != null -> {
-                                isComplete = true
-                                emit(AuthRequestUpdatesResult.Declined)
-                            }
-
-                            updateAuthRequest
-                                .creationDate
-                                .toInstant()
-                                .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
-                                .isBefore(clock.instant()) -> {
-                                isComplete = true
-                                emit(AuthRequestUpdatesResult.Expired)
-                            }
-
-                            else -> {
-                                emit(AuthRequestUpdatesResult.Update(updateAuthRequest))
-                            }
-                        }
-                    },
-                )
-        }
-    }
-
-    override fun getAuthRequestByFingerprintFlow(
-        fingerprint: String,
-    ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
-        when (val authRequestsResult = getAuthRequests()) {
-            AuthRequestsResult.Error -> AuthRequestUpdatesResult.Error
-            is AuthRequestsResult.Success -> {
-                authRequestsResult
-                    .authRequests
-                    .firstOrNull { it.fingerprint == fingerprint }
-                    ?.let { AuthRequestUpdatesResult.Update(it) }
-                    ?: AuthRequestUpdatesResult.Error
-            }
-        }
-    }
-
-    override fun getAuthRequestByIdFlow(
-        requestId: String,
-    ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
-        authRequestsService
-            .getAuthRequest(requestId)
-            .map { request ->
-                when (val result = getFingerprintPhrase(request.publicKey)) {
-                    is UserFingerprintResult.Error -> null
-                    is UserFingerprintResult.Success -> AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = result.fingerprint,
-                    )
-                }
-            }
-            .fold(
-                onFailure = { AuthRequestUpdatesResult.Error },
-                onSuccess = { authRequest ->
-                    authRequest
-                        ?.let { AuthRequestUpdatesResult.Update(it) }
-                        ?: AuthRequestUpdatesResult.Error
-                },
-            )
-    }
-
-    override suspend fun getAuthRequests(): AuthRequestsResult =
-        authRequestsService
-            .getAuthRequests()
-            .fold(
-                onFailure = { AuthRequestsResult.Error },
-                onSuccess = { response ->
-                    AuthRequestsResult.Success(
-                        authRequests = response.authRequests.mapNotNull { request ->
-                            when (val result = getFingerprintPhrase(request.publicKey)) {
-                                is UserFingerprintResult.Error -> null
-                                is UserFingerprintResult.Success -> AuthRequest(
-                                    id = request.id,
-                                    publicKey = request.publicKey,
-                                    platform = request.platform,
-                                    ipAddress = request.ipAddress,
-                                    key = request.key,
-                                    masterPasswordHash = request.masterPasswordHash,
-                                    creationDate = request.creationDate,
-                                    responseDate = request.responseDate,
-                                    requestApproved = request.requestApproved ?: false,
-                                    originUrl = request.originUrl,
-                                    fingerprint = result.fingerprint,
-                                )
-                            }
-                        },
-                    )
-                },
-            )
-
-    override suspend fun updateAuthRequest(
-        requestId: String,
-        masterPasswordHash: String?,
-        publicKey: String,
-        isApproved: Boolean,
-    ): AuthRequestResult {
-        val userId = activeUserId ?: return AuthRequestResult.Error
-        return vaultSdkSource
-            .getAuthRequestKey(
-                publicKey = publicKey,
-                userId = userId,
-            )
-            .flatMap {
-                authRequestsService.updateAuthRequest(
-                    requestId = requestId,
-                    key = it,
-                    deviceId = authDiskSource.uniqueAppId,
-                    masterPasswordHash = null,
-                    isApproved = isApproved,
-                )
-            }
-            .map { request ->
-                AuthRequestResult.Success(
-                    authRequest = AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = "",
-                    ),
-                )
-            }
-            .fold(
-                onFailure = { AuthRequestResult.Error },
-                onSuccess = { it },
-            )
-    }
-
     override suspend fun getIsKnownDevice(emailAddress: String): KnownDeviceResult =
         devicesService
             .getIsKnownDevice(
@@ -1243,59 +953,6 @@ class AuthRepositoryImpl(
         }
     }
 
-    private suspend fun getFingerprintPhrase(
-        publicKey: String,
-    ): UserFingerprintResult {
-        val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return UserFingerprintResult.Error
-
-        return authSdkSource
-            .getUserFingerprint(
-                email = profile.email,
-                publicKey = publicKey,
-            )
-            .fold(
-                onFailure = { UserFingerprintResult.Error },
-                onSuccess = { UserFingerprintResult.Success(it) },
-            )
-    }
-
-    /**
-     * Attempts to create a new auth request for the given email and returns a [NewAuthRequestData]
-     * with the [AuthRequest] and [AuthRequestResponse].
-     */
-    private suspend fun createNewAuthRequest(
-        email: String,
-    ): Result<NewAuthRequestData> =
-        authSdkSource
-            .getNewAuthRequest(email)
-            .flatMap { authRequestResponse ->
-                newAuthRequestService
-                    .createAuthRequest(
-                        email = email,
-                        publicKey = authRequestResponse.publicKey,
-                        deviceId = authDiskSource.uniqueAppId,
-                        accessCode = authRequestResponse.accessCode,
-                        fingerprint = authRequestResponse.fingerprint,
-                    )
-                    .map { request ->
-                        AuthRequest(
-                            id = request.id,
-                            publicKey = request.publicKey,
-                            platform = request.platform,
-                            ipAddress = request.ipAddress,
-                            key = request.key,
-                            masterPasswordHash = request.masterPasswordHash,
-                            creationDate = request.creationDate,
-                            responseDate = request.responseDate,
-                            requestApproved = request.requestApproved ?: false,
-                            originUrl = request.originUrl,
-                            fingerprint = authRequestResponse.fingerprint,
-                        )
-                    }
-                    .map { NewAuthRequestData(it, authRequestResponse) }
-            }
-
     /**
      * Get the remembered two-factor token associated with the user's email, if applicable.
      */
@@ -1344,11 +1001,3 @@ class AuthRepositoryImpl(
             ?.copy(accounts = accounts)
     }
 }
-
-/**
- * Wrapper class for the [AuthRequest] and [AuthRequestResponse] data.
- */
-private data class NewAuthRequestData(
-    val authRequest: AuthRequest,
-    val authRequestResponse: AuthRequestResponse,
-)

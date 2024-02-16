@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.repository.model
+package com.x8bit.bitwarden.data.auth.manager.model
 
 /**
  * Models result of getting the list of login approval requests for the current user.

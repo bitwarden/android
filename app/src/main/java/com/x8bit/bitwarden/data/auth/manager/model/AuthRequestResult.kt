@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.auth.repository.model
+package com.x8bit.bitwarden.data.auth.manager.model
 
 /**
  * Models result of creating a new login approval request.
