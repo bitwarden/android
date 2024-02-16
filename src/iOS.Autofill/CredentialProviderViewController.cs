@@ -509,7 +509,7 @@ namespace Bit.iOS.Autofill
             try
             {
                 ClipLogger.Log("ProvideCredentialAsync");
-
+                
                 if (_context.IsPasskey && UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
                 {
                     if (_context.PasskeyCredentialIdentity is null)

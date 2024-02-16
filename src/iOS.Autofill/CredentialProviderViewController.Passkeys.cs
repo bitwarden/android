@@ -14,7 +14,6 @@ using Foundation;
 using Microsoft.Maui.ApplicationModel;
 using ObjCRuntime;
 using UIKit;
-using Vision;
 
 namespace Bit.iOS.Autofill
 {
@@ -110,9 +109,12 @@ namespace Bit.iOS.Autofill
                 UserEntity = new PublicKeyCredentialUserEntity
                 {
                     Id = credIdentity.UserHandle.ToArray(),
-                    Name = credIdentity.UserName
+                    Name = credIdentity.UserName,
+                    DisplayName = credIdentity.UserName
                 }
             });
+
+            await ASHelpers.ReplaceAllIdentitiesAsync();
 
             ClipLogger.Log($"PIFPR Completing");
             ClipLogger.Log($"PIFPR Completing - RpId: {credIdentity.RelyingPartyIdentifier}");
@@ -127,15 +129,6 @@ namespace Bit.iOS.Autofill
                             NSData.FromArray(result.AttestationObject)));
 
             ClipLogger.Log($"CompleteRegistrationRequestAsync: {expired}");
-
-            //else if (await IsLocked())
-            //{
-            //    PerformSegue("lockPasswordSegue", this);
-            //}
-            //else
-            //{
-            //    PerformSegue("loginListSegue", this);
-            //}
         }
 
         private PublicKeyCredentialParameters[] GetCredTypesAndPubKeyAlgs(NSNumber[] supportedAlgorithms)
@@ -204,14 +197,14 @@ namespace Bit.iOS.Autofill
                 var fido2AssertionResult = await Fido2AuthService.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
                 {
                     RpId = rpId,
-                    Hash = _context.PasskeyCredentialRequest.ClientDataHash.ToByteArray(),
+                    Hash = _context.PasskeyCredentialRequest.ClientDataHash.ToArray(),
                     RequireUserVerification = _context.PasskeyCredentialRequest.UserVerificationPreference == "required",
                     RequireUserPresence = false,
                     AllowCredentialDescriptorList = new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor[]
                     {
                         new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor
                         {
-                            IdStr = credentialIdData.ToString()
+                            Id = credentialIdData.ToArray()
                         }
                     }
                 });
@@ -227,7 +220,7 @@ namespace Bit.iOS.Autofill
                 ClipLogger.Log("selectedUserHandleData:" + selectedUserHandleData);
 
                 var selectedCredentialIdData = fido2AssertionResult.SelectedCredential != null
-                    ? new Guid(fido2AssertionResult.SelectedCredential.Id).ToString()
+                    ? NSData.FromArray(fido2AssertionResult.SelectedCredential.Id)
                     : credentialIdData;
 
                 ClipLogger.Log("selectedCredentialIdData:" + selectedCredentialIdData);

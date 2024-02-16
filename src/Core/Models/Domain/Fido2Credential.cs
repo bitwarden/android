@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core.Models.Data;
+﻿using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
 
 namespace Bit.Core.Models.Domain
@@ -21,6 +17,7 @@ namespace Bit.Core.Models.Domain
             nameof(RpName),
             nameof(UserHandle),
             nameof(UserName),
+            nameof(UserDisplayName),
             nameof(Counter)
         };
 
@@ -48,6 +45,7 @@ namespace Bit.Core.Models.Domain
         public EncString RpName { get; set; }
         public EncString UserHandle { get; set; }
         public EncString UserName { get; set; }
+        public EncString UserDisplayName { get; set; }
         public EncString Counter { get; set; }
         public DateTime CreationDate { get; set; }
 

@@ -26,6 +26,7 @@ namespace Bit.Core.Models.View
         public string RpName { get; set; }
         public string UserHandle { get; set; }
         public string UserName { get; set; }
+        public string UserDisplayName { get; set; }
         public string Counter { get; set; }
         public DateTime CreationDate { get; set; }
 
@@ -50,7 +51,7 @@ namespace Bit.Core.Models.View
         [JsonIgnore]
         public bool DiscoverableValue {
             get => bool.TryParse(Discoverable, out var discoverable) && discoverable;
-            set => Discoverable = value.ToString();
+            set => Discoverable = value.ToString().ToLower(); // must be lowercase so it can be parsed in the current version of clients
         }
 
         [JsonIgnore]

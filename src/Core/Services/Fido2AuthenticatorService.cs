@@ -79,6 +79,8 @@ namespace Bit.Core.Services
                 var keyPair = GenerateKeyPair();
                 var fido2Credential = CreateCredentialView(makeCredentialParams, keyPair.privateKey);
 
+                ClipLogger.Log($"[Fido2Authenticator] IsDiscoverable {fido2Credential.Discoverable} - {fido2Credential.DiscoverableValue}");
+
                 var encrypted = await _cipherService.GetAsync(cipherId);
                 var cipher = await encrypted.DecryptAsync();
 
@@ -95,18 +97,20 @@ namespace Bit.Core.Services
                 await _cipherService.SaveWithServerAsync(reencrypted);
                 credentialId = fido2Credential.CredentialId;
 
+                ClipLogger.Log($"[Fido2Authenticator] IsDiscoverable {cipher.Login.MainFido2Credential.Discoverable} - {cipher.Login.MainFido2Credential.DiscoverableValue}");
+
                 var authData = await GenerateAuthDataAsync(
                     rpId: makeCredentialParams.RpEntity.Id,
                     counter: fido2Credential.CounterValue,
                     userPresence: true,
                     userVerification: userVerified,
-                    credentialId: GuidToRawFormat(credentialId),
+                    credentialId: credentialId.GuidToRawFormat(),
                     publicKey: keyPair.publicKey
                 );
 
                 return new Fido2AuthenticatorMakeCredentialResult
                 {
-                    CredentialId = GuidToRawFormat(credentialId),
+                    CredentialId = credentialId.GuidToRawFormat(),
                     AttestationObject = EncodeAttestationObject(authData),
                     AuthData = authData,
                     PublicKey = keyPair.publicKey.ExportDer(),
@@ -197,6 +201,9 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
 
+            // TODO: Remove this hardcoding
+            userVerified = true;
+
             if (!userVerified && (assertionParams.RequireUserVerification || selectedCipher.Reprompt != CipherRepromptType.None)) {
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because user verification was unsuccessful."
@@ -220,6 +227,9 @@ namespace Bit.Core.Services
                 await _cipherService.UpdateLastUsedDateAsync(selectedCipher.Id);
                 var encrypted = await _cipherService.EncryptAsync(selectedCipher);
                 await _cipherService.SaveWithServerAsync(encrypted);
+
+                ClipLogger.Log($"[Fido2Authenticator] Selected fido2 cred RPID {selectedFido2Credential.RpId}");
+                ClipLogger.Log($"[Fido2Authenticator] param RpId {assertionParams.RpId}");
 
                 var authenticatorData = await GenerateAuthDataAsync(
                     rpId: selectedFido2Credential.RpId,
@@ -245,7 +255,7 @@ namespace Bit.Core.Services
                 {
                     SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
                     {
-                        Id = GuidToRawFormat(selectedCredentialId),
+                        Id = selectedCredentialId.GuidToRawFormat(),
                         UserHandle = selectedFido2Credential.UserHandleValue
                     },
                     AuthenticatorData = authenticatorData,
@@ -265,7 +275,7 @@ namespace Bit.Core.Services
         {
             var credentials = (await FindCredentialsByRpAsync(rpId)).Select(cipher => new Fido2AuthenticatorDiscoverableCredentialMetadata {
                 Type = "public-key",
-                Id = GuidToRawFormat(cipher.Login.MainFido2Credential.CredentialId),
+                Id = cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                 RpId = cipher.Login.MainFido2Credential.RpId,
                 UserHandle = cipher.Login.MainFido2Credential.UserHandleValue,
                 UserName = cipher.Login.MainFido2Credential.UserName
@@ -290,7 +300,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    ids.Add(GuidToStandardFormat(credential.Id));
+                    ids.Add(credential.Id.GuidToStandardFormat());
                 } catch {}
             }
 
@@ -320,15 +330,8 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    if (credential.IdStr != null)
-                    {
-                        ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> Adding credID: {credential.IdStr}");
-                        ids.Add(credential.IdStr);
-                        continue;
-                    }
-
                     ClipLogger.Log($"[Fido2Authenticator] FindCredentialsByIdAsync -> Converting Guid byte length: {credential.Id.Length}");
-                    ids.Add(GuidToStandardFormat(credential.Id));
+                    ids.Add(credential.Id.GuidToStandardFormat());
                 }
                 catch(Exception ex)
                 {
@@ -384,16 +387,16 @@ namespace Bit.Core.Services
         {
             return new Fido2CredentialView {
                 CredentialId = Guid.NewGuid().ToString(),
-                KeyType = Bit.Core.Constants.DefaultFido2CredentialType,
-                KeyAlgorithm = Bit.Core.Constants.DefaultFido2CredentialAlgorithm,
-                KeyCurve = Bit.Core.Constants.DefaultFido2CredentialCurve,
+                KeyType = Constants.DefaultFido2CredentialType,
+                KeyAlgorithm = Constants.DefaultFido2CredentialAlgorithm,
+                KeyCurve = Constants.DefaultFido2CredentialCurve,
                 KeyValue = CoreHelpers.Base64UrlEncode(privateKey),
                 RpId = makeCredentialsParams.RpEntity.Id,
                 UserHandle = CoreHelpers.Base64UrlEncode(makeCredentialsParams.UserEntity.Id),
                 UserName = makeCredentialsParams.UserEntity.Name,
                 CounterValue = 0,
                 RpName = makeCredentialsParams.RpEntity.Name,
-                // UserDisplayName = makeCredentialsParams.UserEntity.DisplayName,
+                UserDisplayName = makeCredentialsParams.UserEntity.DisplayName,
                 DiscoverableValue = makeCredentialsParams.RequireResidentKey,
                 CreationDate = DateTime.Now
             };
@@ -414,6 +417,7 @@ namespace Bit.Core.Services
             var rpIdHash = await _cryptoFunctionService.HashAsync(rpId, CryptoHashAlgorithm.Sha256);
             authData.AddRange(rpIdHash);
 
+            ClipLogger.Log($"[Fido2Authenticator] GenerateAuthDataAsync -> rpIdHash: {rpIdHash}");
 
             ClipLogger.Log($"[Fido2Authenticator] GenerateAuthDataAsync -> ad: {isAttestation} - uv: {userVerification} - up: {userPresence}");
 
@@ -518,16 +522,6 @@ namespace Bit.Core.Services
             }
 
             return dsa.SignData(sigBase, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
-        }
-
-        private string GuidToStandardFormat(byte[] bytes)
-        {
-            return new Guid(bytes).ToString();
-        }
-
-        private byte[] GuidToRawFormat(string guid)
-        {
-            return Guid.Parse(guid).ToByteArray();
         }
 
         private class PublicKey

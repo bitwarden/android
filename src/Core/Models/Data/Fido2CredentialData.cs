@@ -19,6 +19,7 @@ namespace Bit.Core.Models.Data
             RpName = apiData.RpName;
             UserHandle = apiData.UserHandle;
             UserName = apiData.UserName;
+            UserDisplayName = apiData.UserDisplayName;
             Counter = apiData.Counter;
             CreationDate = apiData.CreationDate;
         }
@@ -33,6 +34,7 @@ namespace Bit.Core.Models.Data
         public string RpName { get; set; }
         public string UserHandle { get; set; }
         public string UserName { get; set; }
+        public string UserDisplayName { get; set; }
         public string Counter { get; set; }
         public DateTime CreationDate { get; set; }
     }
