@@ -150,7 +150,7 @@ class VaultRepositoryTest {
         ZoneOffset.UTC,
     )
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
-    private val userLogoutManager: UserLogoutManager = mockk() {
+    private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
     }
     private val fileManager: FileManager = mockk()
@@ -932,14 +932,12 @@ class VaultRepositoryTest {
         coVerify(exactly = 0) { syncService.sync() }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `lockVaultForCurrentUser should delegate to the VaultLockManager`() {
         vaultRepository.lockVaultForCurrentUser()
         verify { vaultLockManager.lockVaultForCurrentUser() }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `unlockVaultWithBiometrics with missing user state should return InvalidStateError`() =
         runTest {
@@ -958,7 +956,6 @@ class VaultRepositoryTest {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `unlockVaultWithBiometrics with missing biometrics key should return InvalidStateError`() =
         runTest {
@@ -1091,7 +1088,6 @@ class VaultRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `unlockVaultWithMasterPassword with missing user state should return InvalidStateError`() =
         runTest {
@@ -1113,7 +1109,6 @@ class VaultRepositoryTest {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `unlockVaultWithMasterPassword with missing user key should return InvalidStateError`() =
         runTest {
@@ -1311,27 +1306,25 @@ class VaultRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPin with missing user state should return InvalidStateError`() =
-        runTest {
-            fakeAuthDiskSource.userState = null
-            assertEquals(
-                emptyList<VaultUnlockData>(),
-                vaultRepository.vaultUnlockDataStateFlow.value,
-            )
+    fun `unlockVaultWithPin with missing user state should return InvalidStateError`() = runTest {
+        fakeAuthDiskSource.userState = null
+        assertEquals(
+            emptyList<VaultUnlockData>(),
+            vaultRepository.vaultUnlockDataStateFlow.value,
+        )
 
-            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
+        val result = vaultRepository.unlockVaultWithPin(pin = "1234")
 
-            assertEquals(
-                VaultUnlockResult.InvalidStateError,
-                result,
-            )
-            assertEquals(
-                emptyList<VaultUnlockData>(),
-                vaultRepository.vaultUnlockDataStateFlow.value,
-            )
-        }
+        assertEquals(
+            VaultUnlockResult.InvalidStateError,
+            result,
+        )
+        assertEquals(
+            emptyList<VaultUnlockData>(),
+            vaultRepository.vaultUnlockDataStateFlow.value,
+        )
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1362,33 +1355,31 @@ class VaultRepositoryTest {
             )
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `unlockVaultWithPin with missing private key should return InvalidStateError`() =
-        runTest {
-            assertEquals(
-                emptyList<VaultUnlockData>(),
-                vaultRepository.vaultUnlockDataStateFlow.value,
-            )
-            val result = vaultRepository.unlockVaultWithPin(pin = "1234")
-            fakeAuthDiskSource.storePinProtectedUserKey(
-                userId = "mockId-1",
-                pinProtectedUserKey = "mockKey-1",
-            )
-            fakeAuthDiskSource.storePrivateKey(
-                userId = "mockId-1",
-                privateKey = null,
-            )
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            assertEquals(
-                VaultUnlockResult.InvalidStateError,
-                result,
-            )
-            assertEquals(
-                emptyList<VaultUnlockData>(),
-                vaultRepository.vaultUnlockDataStateFlow.value,
-            )
-        }
+    fun `unlockVaultWithPin with missing private key should return InvalidStateError`() = runTest {
+        assertEquals(
+            emptyList<VaultUnlockData>(),
+            vaultRepository.vaultUnlockDataStateFlow.value,
+        )
+        val result = vaultRepository.unlockVaultWithPin(pin = "1234")
+        fakeAuthDiskSource.storePinProtectedUserKey(
+            userId = "mockId-1",
+            pinProtectedUserKey = "mockKey-1",
+        )
+        fakeAuthDiskSource.storePrivateKey(
+            userId = "mockId-1",
+            privateKey = null,
+        )
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertEquals(
+            VaultUnlockResult.InvalidStateError,
+            result,
+        )
+        assertEquals(
+            emptyList<VaultUnlockData>(),
+            vaultRepository.vaultUnlockDataStateFlow.value,
+        )
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -3518,7 +3509,6 @@ class VaultRepositoryTest {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `downloadAttachment with failed decryption should delete file and return Failure`() =
         runTest {
@@ -3590,7 +3580,6 @@ class VaultRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `downloadAttachment with successful decryption should delete file and return Success`() =
         runTest {
@@ -3683,9 +3672,9 @@ class VaultRepositoryTest {
     @Test
     fun `generateTotp should return a success result on getting a code`() = runTest {
         val totpResponse = TotpResponse("Testcode", 30u)
-        coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
-            totpResponse,
-        )
+        coEvery {
+            vaultSdkSource.generateTotp(any(), any(), any())
+        } returns totpResponse.asSuccess()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         val result = vaultRepository.generateTotp(
@@ -4071,14 +4060,12 @@ class VaultRepositoryTest {
             assertEquals(UpdateFolderResult.Success(folderView), result)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getAuthCodeFlow with no active user should emit an error`() = runTest {
         fakeAuthDiskSource.userState = null
         assertTrue(vaultRepository.getAuthCodeFlow(cipherId = "cipherId").value is DataState.Error)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getAuthCodeFlow for a single cipher should update data state when state changes`() =
         runTest {
@@ -4142,7 +4129,6 @@ class VaultRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getAuthCodesFlow with no active user should emit an error`() = runTest {
         fakeAuthDiskSource.userState = null
