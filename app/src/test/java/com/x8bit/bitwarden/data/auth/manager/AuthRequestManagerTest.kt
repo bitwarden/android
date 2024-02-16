@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.manager
 import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
@@ -980,7 +981,7 @@ private val ACCOUNT: AccountJson = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
         refreshToken = REFRESH_TOKEN,
     ),

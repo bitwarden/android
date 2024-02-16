@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -77,7 +77,7 @@ class UserLogoutManagerImpl(
             .accounts[userId]
             // Clear the tokens for the current user if present
             ?.copy(
-                tokens = AccountJson.Tokens(
+                tokens = AccountTokensJson(
                     accessToken = null,
                     refreshToken = null,
                 ),
