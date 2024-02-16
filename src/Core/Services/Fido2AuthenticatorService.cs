@@ -435,7 +435,7 @@ namespace Bit.Core.Services
                 throw new Exception("Failed to import private key");
             }
 
-            return dsa.SignData(sigBase, HashAlgorithmName.SHA256);
+            return dsa.SignData(sigBase, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
         }
 
         private string GuidToStandardFormat(byte[] bytes)
