@@ -2336,11 +2336,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DUO two-step login is required for your account. .
+        ///   Looks up a localized string similar to Duo two-step login is required for your account. .
         /// </summary>
-        public static string DUOTwoStepLoginIsRequiredForYourAccount {
+        public static string DuoTwoStepLoginIsRequiredForYourAccount {
             get {
-                return ResourceManager.GetString("DUOTwoStepLoginIsRequiredForYourAccount", resourceCulture);
+                return ResourceManager.GetString("DuoTwoStepLoginIsRequiredForYourAccount", resourceCulture);
             }
         }
         
@@ -3209,11 +3209,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Follow the steps from DUO to finish logging in..
+        ///   Looks up a localized string similar to Follow the steps from Duo to finish logging in..
         /// </summary>
-        public static string FollowTheStepsFromDUOToFinishLoggingIn {
+        public static string FollowTheStepsFromDuoToFinishLoggingIn {
             get {
-                return ResourceManager.GetString("FollowTheStepsFromDUOToFinishLoggingIn", resourceCulture);
+                return ResourceManager.GetString("FollowTheStepsFromDuoToFinishLoggingIn", resourceCulture);
             }
         }
         
@@ -3812,11 +3812,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Launch DUO.
+        ///   Looks up a localized string similar to Launch Duo.
         /// </summary>
-        public static string LaunchDUO {
+        public static string LaunchDuo {
             get {
-                return ResourceManager.GetString("LaunchDUO", resourceCulture);
+                return ResourceManager.GetString("LaunchDuo", resourceCulture);
             }
         }
         
