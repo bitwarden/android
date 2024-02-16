@@ -18,7 +18,7 @@ data class AccountJson(
     val profile: Profile,
 
     @SerialName("tokens")
-    val tokens: Tokens,
+    val tokens: AccountTokensJson,
 
     @SerialName("settings")
     val settings: Settings,
@@ -89,21 +89,6 @@ data class AccountJson(
 
         @SerialName("accountDecryptionOptions")
         val userDecryptionOptions: UserDecryptionOptionsJson?,
-    )
-
-    /**
-     * Container for the user's API tokens.
-     *
-     * @property accessToken The user's primary access token.
-     * @property refreshToken The user's refresh token.
-     */
-    @Serializable
-    data class Tokens(
-        @SerialName("accessToken")
-        val accessToken: String?,
-
-        @SerialName("refreshToken")
-        val refreshToken: String?,
     )
 
     /**

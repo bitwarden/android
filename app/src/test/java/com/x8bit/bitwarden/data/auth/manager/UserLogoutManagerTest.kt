@@ -5,6 +5,7 @@ import android.widget.Toast
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -136,7 +137,7 @@ class UserLogoutManagerTest {
 
         val updatedAccount = ACCOUNT_1
             .copy(
-                tokens = AccountJson.Tokens(
+                tokens = AccountTokensJson(
                     accessToken = null,
                     refreshToken = null,
                 ),
@@ -201,7 +202,7 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
         refreshToken = REFRESH_TOKEN,
     ),
@@ -226,7 +227,7 @@ private val ACCOUNT_2 = AccountJson(
         kdfParallelism = null,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_2,
         refreshToken = "refreshToken",
     ),

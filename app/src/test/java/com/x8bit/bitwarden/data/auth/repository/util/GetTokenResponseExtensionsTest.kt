@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -102,7 +103,7 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_1,
         refreshToken = "refreshToken",
     ),
@@ -127,7 +128,7 @@ private val ACCOUNT_2 = AccountJson(
         kdfParallelism = null,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_2,
         refreshToken = "refreshToken",
     ),

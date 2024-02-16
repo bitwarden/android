@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -94,7 +95,7 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN,
         refreshToken = REFRESH_TOKEN,
     ),
@@ -111,7 +112,7 @@ private val ACCOUNT_1_UPDATED = ACCOUNT_1.copy(
         name = JWT_TOKEN_DATA.name,
         hasPremium = JWT_TOKEN_DATA.hasPremium,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = ACCESS_TOKEN_UPDATED,
         refreshToken = REFRESH_TOKEN_UPDATED,
     ),
@@ -134,7 +135,7 @@ private val ACCOUNT_2 = AccountJson(
         kdfParallelism = null,
         userDecryptionOptions = null,
     ),
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = "accessToken2",
         refreshToken = "refreshToken2",
     ),

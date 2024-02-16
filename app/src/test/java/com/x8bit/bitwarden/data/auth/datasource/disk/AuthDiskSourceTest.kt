@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -912,7 +913,7 @@ private val USER_STATE = UserStateJson(
                     ),
                 ),
             ),
-            tokens = AccountJson.Tokens(
+            tokens = AccountTokensJson(
                 accessToken = "accessToken",
                 refreshToken = "refreshToken",
             ),

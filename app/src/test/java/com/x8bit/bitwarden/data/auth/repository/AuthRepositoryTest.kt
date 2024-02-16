@@ -10,6 +10,7 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -258,7 +259,7 @@ class AuthRepositoryTest {
 
         // Clearing the tokens of the active state results in the Unauthenticated state
         val updatedAccount = ACCOUNT_1.copy(
-            tokens = AccountJson.Tokens(
+            tokens = AccountTokensJson(
                 accessToken = null,
                 refreshToken = null,
             ),
@@ -3197,7 +3198,7 @@ class AuthRepositoryTest {
                 kdfParallelism = 4,
                 userDecryptionOptions = null,
             ),
-            tokens = AccountJson.Tokens(
+            tokens = AccountTokensJson(
                 accessToken = ACCESS_TOKEN,
                 refreshToken = REFRESH_TOKEN,
             ),
@@ -3222,7 +3223,7 @@ class AuthRepositoryTest {
                 kdfParallelism = null,
                 userDecryptionOptions = null,
             ),
-            tokens = AccountJson.Tokens(
+            tokens = AccountTokensJson(
                 accessToken = ACCESS_TOKEN_2,
                 refreshToken = "refreshToken",
             ),

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -44,7 +45,7 @@ fun GetTokenResponseJson.Success.toUserState(
             kdfParallelism = this.kdfParallelism,
             userDecryptionOptions = this.userDecryptionOptions,
         ),
-        tokens = AccountJson.Tokens(
+        tokens = AccountTokensJson(
             accessToken = accessToken,
             refreshToken = this.refreshToken,
         ),

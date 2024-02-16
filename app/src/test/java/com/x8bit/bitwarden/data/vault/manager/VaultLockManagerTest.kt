@@ -5,6 +5,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.crypto.HashPurpose
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
@@ -1441,7 +1442,7 @@ private val MOCK_PROFILE = AccountJson.Profile(
 
 private val MOCK_ACCOUNT = AccountJson(
     profile = MOCK_PROFILE,
-    tokens = AccountJson.Tokens(
+    tokens = AccountTokensJson(
         accessToken = "accessToken",
         refreshToken = "refreshToken",
     ),

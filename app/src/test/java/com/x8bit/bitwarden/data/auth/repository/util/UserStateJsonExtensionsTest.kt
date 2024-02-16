@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -131,7 +132,7 @@ class UserStateJsonExtensionsTest {
                             every { hasPremium } returns null
                             every { forcePasswordResetReason } returns null
                         },
-                        tokens = AccountJson.Tokens(
+                        tokens = AccountTokensJson(
                             accessToken = "accessToken",
                             refreshToken = "refreshToken",
                         ),
@@ -207,7 +208,7 @@ class UserStateJsonExtensionsTest {
                             every { hasPremium } returns true
                             every { forcePasswordResetReason } returns null
                         },
-                        tokens = AccountJson.Tokens(
+                        tokens = AccountTokensJson(
                             accessToken = null,
                             refreshToken = null,
                         ),
