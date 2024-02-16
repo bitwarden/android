@@ -17,8 +17,11 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import junit.framework.TestCase
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +32,10 @@ import org.junit.Test
 class TwoFactorLoginScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { launchUri(any()) } returns Unit
+    }
+    private val nfcManager: NfcManager = mockk {
+        every { start() } just runs
+        every { stop() } just runs
     }
     private var onNavigateBackCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<TwoFactorLoginEvent>()
@@ -45,6 +52,7 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
                 intentManager = intentManager,
+                nfcManager = nfcManager,
             )
         }
     }
@@ -223,22 +231,20 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
             intentManager.launchUri(any())
         }
     }
-
-    companion object {
-        private val DEFAULT_STATE = TwoFactorLoginState(
-            authMethod = TwoFactorAuthMethod.EMAIL,
-            availableAuthMethods = listOf(
-                TwoFactorAuthMethod.EMAIL,
-                TwoFactorAuthMethod.RECOVERY_CODE,
-            ),
-            codeInput = "",
-            displayEmail = "ex***@email.com",
-            dialogState = null,
-            isContinueButtonEnabled = false,
-            isRememberMeEnabled = false,
-            captchaToken = null,
-            email = "example@email.com",
-            password = "password123",
-        )
-    }
 }
+
+private val DEFAULT_STATE = TwoFactorLoginState(
+    authMethod = TwoFactorAuthMethod.EMAIL,
+    availableAuthMethods = listOf(
+        TwoFactorAuthMethod.EMAIL,
+        TwoFactorAuthMethod.RECOVERY_CODE,
+    ),
+    codeInput = "",
+    displayEmail = "ex***@email.com",
+    dialogState = null,
+    isContinueButtonEnabled = false,
+    isRememberMeEnabled = false,
+    captchaToken = null,
+    email = "example@email.com",
+    password = "password123",
+)

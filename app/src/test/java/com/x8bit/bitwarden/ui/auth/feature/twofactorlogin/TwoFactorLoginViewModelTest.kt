@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -33,14 +34,11 @@ import org.junit.jupiter.api.Test
 class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     private val mutableCaptchaTokenResultFlow =
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
+    private val mutableYubiKeyResultFlow = bufferedMutableSharedFlow<YubiKeyResult>()
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
-    }
-
-    private val savedStateHandle = SavedStateHandle().also {
-        it["email_address"] = "example@email.com"
-        it["password"] = "password123"
+        every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
     }
 
     @BeforeEach
@@ -59,6 +57,21 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
         }
+    }
+
+    @Test
+    fun `yubiKeyResultFlow update should populate the input field`() {
+        val initialState = DEFAULT_STATE
+        val token = "token"
+        val viewModel = createViewModel(initialState)
+        mutableYubiKeyResultFlow.tryEmit(YubiKeyResult(token))
+        assertEquals(
+            initialState.copy(
+                codeInput = token,
+                isContinueButtonEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -412,10 +425,16 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel(): TwoFactorLoginViewModel =
+    private fun createViewModel(
+        state: TwoFactorLoginState? = null,
+    ): TwoFactorLoginViewModel =
         TwoFactorLoginViewModel(
             authRepository = authRepository,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = SavedStateHandle().also {
+                it["state"] = state
+                it["email_address"] = "example@email.com"
+                it["password"] = "password123"
+            },
         )
 
     companion object {

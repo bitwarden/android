@@ -26,3 +26,12 @@ fun TwoFactorAuthMethod.description(email: String): Text = when (this) {
     TwoFactorAuthMethod.YUBI_KEY -> R.string.yubi_key_instruction.asText()
     else -> "".asText()
 }
+
+/**
+ * Gets a boolean indicating if the given auth method uses NFC.
+ */
+val TwoFactorAuthMethod.shouldUseNfc: Boolean
+    get() = when (this) {
+        TwoFactorAuthMethod.YUBI_KEY -> true
+        else -> false
+    }

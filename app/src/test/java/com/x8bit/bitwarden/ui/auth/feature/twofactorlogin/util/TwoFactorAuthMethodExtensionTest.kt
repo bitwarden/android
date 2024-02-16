@@ -50,4 +50,22 @@ class TwoFactorAuthMethodExtensionTest {
                 )
             }
     }
+
+    @Test
+    fun `shouldUseNfc returns the expected value`() {
+        mapOf(
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to false,
+            TwoFactorAuthMethod.EMAIL to false,
+            TwoFactorAuthMethod.DUO to false,
+            TwoFactorAuthMethod.YUBI_KEY to true,
+            TwoFactorAuthMethod.U2F to false,
+            TwoFactorAuthMethod.REMEMBER to false,
+            TwoFactorAuthMethod.DUO_ORGANIZATION to false,
+            TwoFactorAuthMethod.FIDO_2_WEB_APP to false,
+            TwoFactorAuthMethod.RECOVERY_CODE to false,
+        )
+            .forEach { (type, shouldUseNfc) ->
+                assertEquals(shouldUseNfc, type.shouldUseNfc)
+            }
+    }
 }
