@@ -21,6 +21,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
+import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity.PasswordHistoryEntity
@@ -55,7 +57,6 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -113,25 +114,26 @@ class GeneratorRepositoryTest {
                 minSpecial = null,
             )
             val generatedPassword = "GeneratedPassword123!"
-            val encryptedPasswordHistory =
-                PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
+            val encryptedPasswordHistory = PasswordHistory(
+                password = generatedPassword,
+                lastUsedDate = Instant.now(),
+            )
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
 
-            coEvery { generatorSdkSource.generatePassword(request) } returns
-                Result.success(generatedPassword)
+            coEvery {
+                generatorSdkSource.generatePassword(request)
+            } returns generatedPassword.asSuccess()
 
-            coEvery { vaultSdkSource.encryptPasswordHistory(any(), any()) } returns
-                Result.success(encryptedPasswordHistory)
+            coEvery {
+                vaultSdkSource.encryptPasswordHistory(any(), any())
+            } returns encryptedPasswordHistory.asSuccess()
 
             coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
 
             val result = repository.generatePassword(request, true)
 
-            assertEquals(
-                generatedPassword,
-                (result as GeneratedPasswordResult.Success).generatedString,
-            )
+            assertEquals(GeneratedPasswordResult.Success(generatedPassword), result)
             coVerify { generatorSdkSource.generatePassword(request) }
 
             coVerify {
@@ -164,25 +166,26 @@ class GeneratorRepositoryTest {
                 minSpecial = null,
             )
             val generatedPassword = "GeneratedPassword123!"
-            val encryptedPasswordHistory =
-                PasswordHistory(password = generatedPassword, lastUsedDate = Instant.now())
+            val encryptedPasswordHistory = PasswordHistory(
+                password = generatedPassword,
+                lastUsedDate = Instant.now(),
+            )
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
 
-            coEvery { generatorSdkSource.generatePassword(request) } returns
-                Result.success(generatedPassword)
+            coEvery {
+                generatorSdkSource.generatePassword(request)
+            } returns generatedPassword.asSuccess()
 
-            coEvery { vaultSdkSource.encryptPasswordHistory(any(), any()) } returns
-                Result.success(encryptedPasswordHistory)
+            coEvery {
+                vaultSdkSource.encryptPasswordHistory(any(), any())
+            } returns encryptedPasswordHistory.asSuccess()
 
             coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
 
             val result = repository.generatePassword(request, false)
 
-            assertEquals(
-                generatedPassword,
-                (result as GeneratedPasswordResult.Success).generatedString,
-            )
+            assertEquals(GeneratedPasswordResult.Success(generatedPassword), result)
             coVerify { generatorSdkSource.generatePassword(request) }
 
             coVerify(exactly = 0) {
@@ -205,11 +208,11 @@ class GeneratorRepositoryTest {
             minSpecial = null,
         )
         val exception = RuntimeException("An error occurred")
-        coEvery { generatorSdkSource.generatePassword(request) } returns Result.failure(exception)
+        coEvery { generatorSdkSource.generatePassword(request) } returns exception.asFailure()
 
         val result = repository.generatePassword(request, true)
 
-        assertTrue(result is GeneratedPasswordResult.InvalidRequest)
+        assertEquals(GeneratedPasswordResult.InvalidRequest, result)
         coVerify { generatorSdkSource.generatePassword(request) }
     }
 
@@ -228,25 +231,26 @@ class GeneratorRepositoryTest {
                 wordSeparator = "-",
             )
             val generatedPassphrase = "Generated-Passphrase-123"
-            val encryptedPasswordHistory =
-                PasswordHistory(password = generatedPassphrase, lastUsedDate = Instant.now())
+            val encryptedPasswordHistory = PasswordHistory(
+                password = generatedPassphrase,
+                lastUsedDate = Instant.now(),
+            )
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
 
-            coEvery { generatorSdkSource.generatePassphrase(request) } returns
-                Result.success(generatedPassphrase)
+            coEvery {
+                generatorSdkSource.generatePassphrase(request)
+            } returns generatedPassphrase.asSuccess()
 
-            coEvery { vaultSdkSource.encryptPasswordHistory(any(), any()) } returns
-                Result.success(encryptedPasswordHistory)
+            coEvery {
+                vaultSdkSource.encryptPasswordHistory(any(), any())
+            } returns encryptedPasswordHistory.asSuccess()
 
             coEvery { passwordHistoryDiskSource.insertPasswordHistory(any()) } just runs
 
             val result = repository.generatePassphrase(request)
 
-            assertEquals(
-                generatedPassphrase,
-                (result as GeneratedPassphraseResult.Success).generatedString,
-            )
+            assertEquals(GeneratedPassphraseResult.Success(generatedPassphrase), result)
             coVerify { generatorSdkSource.generatePassphrase(request) }
             coVerify { vaultSdkSource.encryptPasswordHistory(any(), any()) }
             coVerify {
@@ -266,13 +270,11 @@ class GeneratorRepositoryTest {
                 wordSeparator = '-'.toString(),
             )
             val exception = RuntimeException("An error occurred")
-            coEvery { generatorSdkSource.generatePassphrase(request) } returns Result.failure(
-                exception,
-            )
+            coEvery { generatorSdkSource.generatePassphrase(request) } returns exception.asFailure()
 
             val result = repository.generatePassphrase(request)
 
-            assertTrue(result is GeneratedPassphraseResult.InvalidRequest)
+            assertEquals(GeneratedPassphraseResult.InvalidRequest, result)
             coVerify { generatorSdkSource.generatePassphrase(request) }
         }
 
@@ -288,19 +290,16 @@ class GeneratorRepositoryTest {
             val generatedEmail = "user+generated@example.com"
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
-            coEvery { generatorSdkSource.generatePlusAddressedEmail(request) } returns
-                Result.success(generatedEmail)
+            coEvery {
+                generatorSdkSource.generatePlusAddressedEmail(request)
+            } returns generatedEmail.asSuccess()
 
             val result = repository.generatePlusAddressedEmail(request)
 
-            assertEquals(
-                generatedEmail,
-                (result as GeneratedPlusAddressedUsernameResult.Success).generatedEmailAddress,
-            )
+            assertEquals(GeneratedPlusAddressedUsernameResult.Success(generatedEmail), result)
             coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `generatePlusAddressedEmail should return InvalidRequest on SDK failure`() = runTest {
         val request = UsernameGeneratorRequest.Subaddress(
@@ -310,11 +309,11 @@ class GeneratorRepositoryTest {
         val exception = RuntimeException("An error occurred")
         coEvery {
             generatorSdkSource.generatePlusAddressedEmail(request)
-        } returns Result.failure(exception)
+        } returns exception.asFailure()
 
         val result = repository.generatePlusAddressedEmail(request)
 
-        assertTrue(result is GeneratedPlusAddressedUsernameResult.InvalidRequest)
+        assertEquals(GeneratedPlusAddressedUsernameResult.InvalidRequest, result)
         coVerify { generatorSdkSource.generatePlusAddressedEmail(request) }
     }
 
@@ -328,19 +327,16 @@ class GeneratorRepositoryTest {
             )
             val generatedEmail = "user@domain"
 
-            coEvery { generatorSdkSource.generateCatchAllEmail(request) } returns
-                Result.success(generatedEmail)
+            coEvery {
+                generatorSdkSource.generateCatchAllEmail(request)
+            } returns generatedEmail.asSuccess()
 
             val result = repository.generateCatchAllEmail(request)
 
-            assertEquals(
-                generatedEmail,
-                (result as GeneratedCatchAllUsernameResult.Success).generatedEmailAddress,
-            )
+            assertEquals(GeneratedCatchAllUsernameResult.Success(generatedEmail), result)
             coVerify { generatorSdkSource.generateCatchAllEmail(request) }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `generateCatchAllEmail should return InvalidRequest on SDK failure`() = runTest {
         val request = UsernameGeneratorRequest.Catchall(
@@ -348,13 +344,11 @@ class GeneratorRepositoryTest {
             domain = "user@domain",
         )
         val exception = RuntimeException("An error occurred")
-        coEvery {
-            generatorSdkSource.generateCatchAllEmail(request)
-        } returns Result.failure(exception)
+        coEvery { generatorSdkSource.generateCatchAllEmail(request) } returns exception.asFailure()
 
         val result = repository.generateCatchAllEmail(request)
 
-        assertTrue(result is GeneratedCatchAllUsernameResult.InvalidRequest)
+        assertEquals(GeneratedCatchAllUsernameResult.InvalidRequest, result)
         coVerify { generatorSdkSource.generateCatchAllEmail(request) }
     }
 
@@ -368,15 +362,13 @@ class GeneratorRepositoryTest {
             )
             val generatedEmail = "user"
 
-            coEvery { generatorSdkSource.generateRandomWord(request) } returns
-                Result.success(generatedEmail)
+            coEvery {
+                generatorSdkSource.generateRandomWord(request)
+            } returns generatedEmail.asSuccess()
 
             val result = repository.generateRandomWordUsername(request)
 
-            assertEquals(
-                generatedEmail,
-                (result as GeneratedRandomWordUsernameResult.Success).generatedUsername,
-            )
+            assertEquals(GeneratedRandomWordUsernameResult.Success(generatedEmail), result)
             coVerify { generatorSdkSource.generateRandomWord(request) }
         }
 
@@ -387,13 +379,11 @@ class GeneratorRepositoryTest {
             includeNumber = false,
         )
         val exception = RuntimeException("An error occurred")
-        coEvery {
-            generatorSdkSource.generateRandomWord(request)
-        } returns Result.failure(exception)
+        coEvery { generatorSdkSource.generateRandomWord(request) } returns exception.asFailure()
 
         val result = repository.generateRandomWordUsername(request)
 
-        assertTrue(result is GeneratedRandomWordUsernameResult.InvalidRequest)
+        assertEquals(GeneratedRandomWordUsernameResult.InvalidRequest, result)
         coVerify { generatorSdkSource.generateRandomWord(request) }
     }
 
@@ -411,15 +401,13 @@ class GeneratorRepositoryTest {
             val generatedEmail = "generated@email.com"
 
             coEvery { authDiskSource.userState?.activeUserId } returns userId
-            coEvery { generatorSdkSource.generateForwardedServiceEmail(request) } returns
-                Result.success(generatedEmail)
+            coEvery {
+                generatorSdkSource.generateForwardedServiceEmail(request)
+            } returns generatedEmail.asSuccess()
 
             val result = repository.generateForwardedServiceUsername(request)
 
-            assertEquals(
-                generatedEmail,
-                (result as GeneratedForwardedServiceUsernameResult.Success).generatedEmailAddress,
-            )
+            assertEquals(GeneratedForwardedServiceUsernameResult.Success(generatedEmail), result)
             coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
         }
 
@@ -433,11 +421,11 @@ class GeneratorRepositoryTest {
             val exception = RuntimeException("An error occurred")
             coEvery {
                 generatorSdkSource.generateForwardedServiceEmail(request)
-            } returns Result.failure(exception)
+            } returns exception.asFailure()
 
             val result = repository.generateForwardedServiceUsername(request)
 
-            assertTrue(result is GeneratedForwardedServiceUsernameResult.InvalidRequest)
+            assertEquals(GeneratedForwardedServiceUsernameResult.InvalidRequest, result)
             coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
         }
 
@@ -548,8 +536,7 @@ class GeneratorRepositoryTest {
                 userId = testUserId,
                 passwordHistory = passwordHistoryView,
             )
-        } returns
-            Result.success(encryptedPasswordHistory)
+        } returns encryptedPasswordHistory.asSuccess()
 
         coEvery {
             passwordHistoryDiskSource.insertPasswordHistory(expectedPasswordHistoryEntity)
@@ -562,8 +549,8 @@ class GeneratorRepositoryTest {
                 userId = testUserId,
                 passwordHistory = passwordHistoryView,
             )
+            passwordHistoryDiskSource.insertPasswordHistory(expectedPasswordHistoryEntity)
         }
-        coVerify { passwordHistoryDiskSource.insertPasswordHistory(expectedPasswordHistoryEntity) }
     }
 
     @Test
@@ -599,7 +586,7 @@ class GeneratorRepositoryTest {
 
             coEvery {
                 vaultSdkSource.decryptPasswordHistoryList(any(), any())
-            } returns Result.success(decryptedPasswordHistoryList)
+            } returns decryptedPasswordHistoryList.asSuccess()
 
             val historyFlow = repository.passwordHistoryStateFlow
 
@@ -770,7 +757,6 @@ class GeneratorRepositoryTest {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getPasswordGeneratorPolicy returns default settings when no policies are present`() =
         runTest {
@@ -798,7 +784,6 @@ class GeneratorRepositoryTest {
             assertEquals(expectedPolicy, policy)
         }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `getPasswordGeneratorPolicy applies strictest settings from multiple policies`() = runTest {
         val policy1 = PolicyInformation.PasswordGenerator(
@@ -843,7 +828,9 @@ class GeneratorRepositoryTest {
                 organizationId = "id2",
             ),
         )
-        every { policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR) } returns policies
+        every {
+            policyManager.getActivePolicies(type = PolicyTypeJson.PASSWORD_GENERATOR)
+        } returns policies
 
         val resultPolicy = repository.getPasswordGeneratorPolicy()
 
