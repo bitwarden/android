@@ -11,7 +11,13 @@ namespace Bit.Core.Utilities.Fido2
     public class Fido2ClientAssertCredentialParams
     {
         /// <summary>
-        /// S challenge that the selected authenticator signs, along with other data, when producing an authentication
+        /// A value which is true if and only if the caller’s environment settings object is same-origin with its ancestors.
+        /// It is false if caller is cross-origin.
+        /// </summary>
+        public bool SameOriginWithAncestors { get; set; }
+
+        /// <summary>
+        /// The challenge that the selected authenticator signs, along with other data, when producing an authentication
         /// assertion. 
         /// </summary>
         public required byte[] Challenge { get; set; }

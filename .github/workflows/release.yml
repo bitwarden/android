@@ -56,7 +56,7 @@ jobs:
 
       - name: Create GitHub deployment
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: chrnorm/deployment-action@d42cde7132fcec920de534fffc3be83794335c00 # v2.0.5
+        uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1 # v2.0.7
         id: deployment
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -87,7 +87,7 @@ jobs:
 
       - name: Create release
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5  # v1.13.0
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
@@ -147,7 +147,7 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
-        uses: actions/setup-node@b39b52d1213e96004bfcb1c61a8a6fa8ab84f3e8 # v4.0.1
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '16.x'
 

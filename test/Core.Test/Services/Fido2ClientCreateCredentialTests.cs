@@ -96,7 +96,7 @@ namespace Bit.Core.Test.Services
 
         [Fact(Skip = "Not sure how to check this, or if it matters.")]
         // Spec: If callerOrigin is an opaque origin, return a DOMException whose name is "NotAllowedError", and terminate this algorithm.
-        public Task CreateCredentialAsync_ThrowsNotAllowedError_UserIdIsTooLarge() => throw new NotImplementedException();
+        public Task CreateCredentialAsync_ThrowsNotAllowedError_OriginIsOpaque() => throw new NotImplementedException();
 
         [Fact]
         // Spec: Let effectiveDomain be the callerOrigin’s effective domain. If effective domain is not a valid domain, 

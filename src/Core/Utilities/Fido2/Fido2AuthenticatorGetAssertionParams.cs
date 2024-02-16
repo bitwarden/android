@@ -6,7 +6,7 @@
         public string RpId { get; set; }
 
         /** The hash of the serialized client data, provided by the client. */
-        public byte[] ClientDataHash { get; set; }
+        public byte[] Hash { get; set; }
 
         public PublicKeyCredentialDescriptor[] AllowCredentialDescriptorList { get; set; }
 
@@ -19,6 +19,11 @@
         /// Instructs the authenticator to require user consent to complete the operation.
         /// </summary>
         public bool RequireUserPresence { get; set; }
+
+        /// <summary>
+        /// The challenge to be signed by the authenticator.
+        /// </summary>
+        public byte[] Challenge { get; set; }
 
         public object Extensions { get; set; }
     }
