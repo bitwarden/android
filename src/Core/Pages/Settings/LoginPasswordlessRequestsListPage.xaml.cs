@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Response;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
@@ -19,7 +20,7 @@ namespace Bit.App.Pages
         public LoginPasswordlessRequestsListPage()
         {
             InitializeComponent();
-            SetActivityIndicator(_mainContent);
+            _activityIndicator.IsRunning = true;
             _vm = BindingContext as LoginPasswordlessRequestsListViewModel;
             _vm.Page = this;
         }
@@ -27,9 +28,22 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadOnAppearedAsync(_mainLayout, false, _vm.RefreshAsync, _mainContent);
 
-            UpdatePlaceholder();
+            try
+            {
+                await _vm.RefreshAsync();
+                UpdatePlaceholder();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
+            finally
+            {
+                _activityIndicator.IsRunning = false;
+                _activityIndicator.IsVisible = false;
+                _refreshView.IsVisible = true;
+            }
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
