@@ -20,7 +20,6 @@ namespace Bit.App.Pages
         public LoginPasswordlessRequestsListPage()
         {
             InitializeComponent();
-            _activityIndicator.IsRunning = true;
             _vm = BindingContext as LoginPasswordlessRequestsListViewModel;
             _vm.Page = this;
         }
@@ -28,9 +27,10 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
             try
             {
+                _activityIndicatorGrid.IsVisible = true;
+
                 await _vm.RefreshAsync();
                 UpdatePlaceholder();
             }
@@ -40,9 +40,7 @@ namespace Bit.App.Pages
             }
             finally
             {
-                _activityIndicator.IsRunning = false;
-                _activityIndicator.IsVisible = false;
-                _refreshView.IsVisible = true;
+                _activityIndicatorGrid.IsVisible = false;
             }
         }
 
