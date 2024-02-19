@@ -78,6 +78,12 @@ interface VaultDiskSource {
     suspend fun replaceVaultData(userId: String, vault: SyncResponseJson)
 
     /**
+     * Trigger re-emissions from the [getCiphers], [getCollections], [getFolders], and [getSends]
+     * functions.
+     */
+    suspend fun resyncVaultData(userId: String)
+
+    /**
      * Deletes all stored vault data from the data source for a given [userId].
      */
     suspend fun deleteVaultData(userId: String)
