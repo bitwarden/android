@@ -11,6 +11,7 @@ using Xunit;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics.CodeAnalysis;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Test.Services
 {
@@ -76,7 +77,7 @@ namespace Bit.Core.Test.Services
             Assert.True(
                 result.SequenceEqual(matchingCredentials.Select(c => new Fido2AuthenticatorDiscoverableCredentialMetadata {
                     Type = "public-key",
-                    Id = Guid.Parse(c.Login.MainFido2Credential.CredentialId).ToByteArray(),
+                    Id = c.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                     RpId = "bitwarden.com",
                     UserHandle = c.Login.MainFido2Credential.UserHandleValue,
                     UserName = c.Login.MainFido2Credential.UserName

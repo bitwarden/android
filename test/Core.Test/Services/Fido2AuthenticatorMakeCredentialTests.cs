@@ -22,20 +22,28 @@ namespace Bit.Core.Test.Services
         private readonly string _rpId = "bitwarden.com";
         private readonly SutProvider<Fido2AuthenticatorService> _sutProvider = new SutProvider<Fido2AuthenticatorService>().Create();
 
+        private Fido2AuthenticatorMakeCredentialParams _params;
+        private List<string> _credentialIds;
+        private List<byte[]> _rawCredentialIds;
+        private List<CipherView> _ciphers;
         private Cipher _encryptedSelectedCipher;
         private CipherView _selectedCipherView;
-        private Fido2AuthenticatorMakeCredentialParams _params;
-        private List<Guid> _credentialIds;
-        private List<CipherView> _ciphers;
-        
+        private string _selectedCipherCredentialId;
+        private byte[] _selectedCipherRawCredentialId;
 
         public Fido2AuthenticatorMakeCredentialTests() {
-            _credentialIds = [ Guid.NewGuid(), Guid.NewGuid() ];
+            _credentialIds = [ "21d6aa04-92bd-4def-bf81-33f046924599", "f70c01ca-d1bf-4704-86e1-b07573aa17fa" ];
+            _rawCredentialIds = [
+                [0x21, 0xd6, 0xaa, 0x04, 0x92, 0xbd, 0x4d, 0xef, 0xbf, 0x81, 0x33, 0xf0, 0x46, 0x92, 0x45, 0x99],
+                [0xf7, 0x0c, 0x01, 0xca, 0xd1, 0xbf, 0x47, 0x04, 0x86, 0xe1, 0xb0, 0x75, 0x73, 0xaa, 0x17, 0xfa]
+            ];
             _ciphers = [ 
-                CreateCipherView(true, _credentialIds[0].ToString(), "bitwarden.com", false),
-                CreateCipherView(true, _credentialIds[1].ToString(), "bitwarden.com", true)
+                CreateCipherView(true, _credentialIds[0], "bitwarden.com", false),
+                CreateCipherView(true, _credentialIds[1], "bitwarden.com", true)
             ];
             _selectedCipherView = _ciphers[0];
+            _selectedCipherCredentialId = _credentialIds[0];
+            _selectedCipherRawCredentialId = _rawCredentialIds[0];
             _encryptedSelectedCipher = CreateCipher();
             _encryptedSelectedCipher.Id = _selectedCipherView.Id;
             _params = new Fido2AuthenticatorMakeCredentialParams {
@@ -106,7 +114,7 @@ namespace Bit.Core.Test.Services
             _params.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
                     Type = "public-key",
-                    Id = _credentialIds[0].ToByteArray()
+                    Id = _rawCredentialIds[0]
                 }
             ];
 
@@ -130,7 +138,7 @@ namespace Bit.Core.Test.Services
             _params.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
                     Type = "public-key",
-                    Id = _credentialIds[0].ToByteArray()
+                    Id = _rawCredentialIds[0]
                 }
             ];
 
@@ -145,7 +153,7 @@ namespace Bit.Core.Test.Services
             _params.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
                     Type = "public-key",
-                    Id = _credentialIds[0].ToByteArray()
+                    Id = _rawCredentialIds[0]
                 }
             ];
 
@@ -287,7 +295,7 @@ namespace Bit.Core.Test.Services
             var result = await _sutProvider.Sut.MakeCredentialAsync(_params);
 
             // Assert
-            var credentialIdBytes = Guid.Parse(generatedCipherView.Login.MainFido2Credential.CredentialId).ToByteArray();
+            var credentialIdBytes = generatedCipherView.Login.MainFido2Credential.CredentialId.GuidToRawFormat();
             var attestationObject = DecodeAttestationObject(result.AttestationObject);
             Assert.Equal("none", attestationObject.Fmt);
 
@@ -320,7 +328,7 @@ namespace Bit.Core.Test.Services
         }
 
         #nullable enable
-        private CipherView CreateCipherView(bool? withFido2Credential, string? credentialId = null, string? rpId = null, bool? discoverable = null)
+        private CipherView CreateCipherView(bool? withFido2Credential, string credentialId, string? rpId = null, bool? discoverable = null)
         {
             return new CipherView {
                 Type = CipherType.Login,
@@ -329,7 +337,7 @@ namespace Bit.Core.Test.Services
                 Login = new LoginView {
                     Fido2Credentials = withFido2Credential.HasValue && withFido2Credential.Value ? new List<Fido2CredentialView> {
                         new Fido2CredentialView {
-                            CredentialId = credentialId ?? Guid.NewGuid().ToString(),
+                            CredentialId = credentialId,
                             RpId = rpId ?? "bitwarden.com",
                             Discoverable = discoverable.HasValue ? discoverable.ToString() : "true",
                             UserHandleValue = RandomBytes(32)

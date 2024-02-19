@@ -78,13 +78,13 @@ namespace Bit.Core.Services
                     counter: fido2Credential.CounterValue,
                     userPresence: true,
                     userVerification: userVerified,
-                    credentialId: GuidToRawFormat(credentialId),
+                    credentialId: credentialId.GuidToRawFormat(),
                     publicKey: keyPair.publicKey
                 );
 
                 return new Fido2AuthenticatorMakeCredentialResult
                 {
-                    CredentialId = GuidToRawFormat(credentialId),
+                    CredentialId = credentialId.GuidToRawFormat(),
                     AttestationObject = EncodeAttestationObject(authData),
                     AuthData = authData,
                     PublicKey = keyPair.publicKey.ExportDer(),
@@ -200,7 +200,7 @@ namespace Bit.Core.Services
                 {
                     SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
                     {
-                        Id = GuidToRawFormat(selectedCredentialId),
+                        Id = selectedCredentialId.GuidToRawFormat(),
                         UserHandle = selectedFido2Credential.UserHandleValue
                     },
                     AuthenticatorData = authenticatorData,
@@ -219,7 +219,7 @@ namespace Bit.Core.Services
         {
             var credentials = (await FindCredentialsByRpAsync(rpId)).Select(cipher => new Fido2AuthenticatorDiscoverableCredentialMetadata {
                 Type = "public-key",
-                Id = GuidToRawFormat(cipher.Login.MainFido2Credential.CredentialId),
+                Id = cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                 RpId = cipher.Login.MainFido2Credential.RpId,
                 UserHandle = cipher.Login.MainFido2Credential.UserHandleValue,
                 UserName = cipher.Login.MainFido2Credential.UserName
@@ -244,7 +244,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    ids.Add(GuidToStandardFormat(credential.Id));
+                    ids.Add(credential.Id.GuidToStandardFormat());
                 } catch {}
             }
 
@@ -274,7 +274,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    ids.Add(GuidToStandardFormat(credential.Id));
+                    ids.Add(credential.Id.GuidToStandardFormat());
                 }
                 catch {}
             }
@@ -446,16 +446,6 @@ namespace Bit.Core.Services
             }
 
             return dsa.SignData(sigBase, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
-        }
-
-        private string GuidToStandardFormat(byte[] bytes)
-        {
-            return new Guid(bytes).ToString();
-        }
-
-        private byte[] GuidToRawFormat(string guid)
-        {
-            return Guid.Parse(guid).ToByteArray();
         }
 
         private class PublicKey
