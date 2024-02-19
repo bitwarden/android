@@ -67,7 +67,7 @@ Task("UpdateAndroidManifest")
     .Does(()=> 
     {
         var buildVariant = GetVariant();
-        var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
+        var manifestPath = Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "AndroidManifest.xml");
 
         // Cake.AndroidAppManifest doesn't currently enable us to access nested items so, quick (not ideal) fix:
         var manifestText = FileReadText(manifestPath);
@@ -119,26 +119,26 @@ Task("UpdateAndroidCodeFiles")
         //We're not using _androidPackageName here because the codefile is currently slightly different string than the one in AndroidManifest.xml
         var keyName = "com.8bit.bitwarden";
         var fixedPackageName = buildVariant.AndroidPackageName.Replace("x8bit", "8bit");
-        var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
+        var filePath = Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Services", "BiometricService.cs");
         ReplaceInFile(filePath, keyName, fixedPackageName);
 
         var packageFileList = new string[] {
-            Path.Combine(_slnPath, "src", "Android", "MainActivity.cs"),
-            Path.Combine(_slnPath, "src", "Android", "MainApplication.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Constants.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Accessibility", "AccessibilityService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillHelpers.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "ClearClipboardAlarmReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "EventUploadReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "PackageReplacedReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "RestrictionsChangedReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Services", "DeviceActionService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Services", "FileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Tiles", "AutofillTileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Tiles", "GeneratorTileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Tiles", "MyVaultTileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "google-services.json"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "MainActivity.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "MainApplication.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Constants.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Accessibility", "AccessibilityService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Autofill", "AutofillHelpers.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Autofill", "AutofillService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "ClearClipboardAlarmReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "EventUploadReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "PackageReplacedReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "RestrictionsChangedReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Services", "DeviceActionService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Services", "FileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Tiles", "AutofillTileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Tiles", "GeneratorTileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Tiles", "MyVaultTileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "google-services.json"),
             Path.Combine(_slnPath, "store", "google", "Publisher", "Program.cs"),
         };
 
@@ -148,7 +148,7 @@ Task("UpdateAndroidCodeFiles")
         }
 
         var labelFileList = new string[] {
-            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Autofill", "AutofillService.cs"),
         };
 
         foreach(string path in labelFileList)
@@ -315,7 +315,7 @@ private void UpdateAppleIcons(string target, string appiconsetTarget)
 
 Task("UpdateiOSIcons")
     .Does(()=>{
-        UpdateAppleIcons("ios", Path.Combine(_slnPath, "src", "iOS", "Resources", "Assets.xcassets", "AppIcons.appiconset"));
+        UpdateAppleIcons("ios", Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Resources", "Assets.xcassets", "AppIcons.appiconset"));
         UpdateAppleIcons("watch", Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit App", "Assets.xcassets", "AppIcon.appiconset"));
         // TODO: Update complication icons when they start working
     });
@@ -324,8 +324,8 @@ Task("UpdateiOSPlist")
     .IsDependentOn("GetGitInfo")
     .Does(()=> {
         var buildVariant = GetVariant();
-        var infoPath = Path.Combine(_slnPath, "src", "iOS", "Info.plist");
-        var entitlementsPath = Path.Combine(_slnPath, "src", "iOS", "Entitlements.plist");
+        var infoPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Info.plist");
+        var entitlementsPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
     });

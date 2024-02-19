@@ -1,7 +1,7 @@
 ﻿using System;
 using UIKit;
 using Bit.iOS.Core.Controllers;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Autofill

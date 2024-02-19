@@ -31,6 +31,7 @@ Components/
 x64/
 x86/
 !src/lib/x86/
+!src/App/Platforms/Android/lib/x86/
 build/
 bld/
 [Bb]in/

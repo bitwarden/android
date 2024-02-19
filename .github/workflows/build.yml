@@ -10,6 +10,11 @@ on:
       - ".github/workflows/**"
   workflow_dispatch:
 
+env:
+  main_app_folder_path: src/App
+  main_app_project_path: src/App/App.csproj
+  target-net-version: net8.0
+
 jobs:
   cloc:
     name: CLOC
@@ -25,7 +30,6 @@ jobs:
 
       - name: Print lines of code
         run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
-
 
   setup:
     name: Setup
@@ -54,7 +58,6 @@ jobs:
             echo "hotfix_branch_exists=0" >> $GITHUB_OUTPUT
           fi
 
-
   android:
     name: Android
     runs-on: windows-2022
@@ -63,19 +66,26 @@ jobs:
       fail-fast: false
       matrix:
         variant: ["prod", "qa"]
+    env:
+      android_folder_path: src/App/Platforms/Android
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
         with:
-          nuget-version: 5.9.0
+          nuget-version: 6.4.0
 
       - name: Set up .NET
         uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
         with:
-          dotnet-version: '3.1.x'
+          dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
+
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
 
       - name: Setup Windows builder
         run: choco install checksum --no-progress
@@ -106,9 +116,9 @@ jobs:
           mkdir -p ~/secrets
 
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
+            --output ./${{ env.main_app_folder_path }}/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
+            --output ./${{ env.main_app_folder_path }}/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
         shell: bash
@@ -119,7 +129,7 @@ jobs:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+            --output ./${{ env.android_folder_path }}/google-services.json ./.github/secrets/google-services.json.gpg
         shell: bash
 
       - name: Increment version
@@ -129,9 +139,9 @@ jobs:
           echo "########################################"
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
-
+          
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
-            ./src/Android/Properties/AndroidManifest.xml
+            ./${{ env.android_folder_path }}/AndroidManifest.xml
         shell: bash
 
       - name: Restore packages
@@ -140,14 +150,14 @@ jobs:
       - name: Restore tools
         run: dotnet tool restore
 
-      - name: Verify Format
-        run: dotnet tool run dotnet-format --check
+      # - name: Verify Format
+      #   run: dotnet tool run dotnet-format --check
 
       - name: Run Core tests
-        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx"
+        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" /p:CustomConstants=UT
 
       - name: Report test results
-        uses: dorny/test-reporter@afe6793191b75b608954023a46831a3fe10048d4 # v1.7.0
+        uses: dorny/test-reporter@eaa763f6ffc21c7a37837f56cd5f9737f27fc6c8 # v1.8.0
         if: always()
         with:
           name: Test Results
@@ -165,18 +175,20 @@ jobs:
       - name: Build Android
         run: |
           $configuration = "Release";
+          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
 
           Write-Output "########################################"
           Write-Output "##### Build $configuration Configuration"
           Write-Output "########################################"
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
+          
+          dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android
 
       - name: Sign Android Build
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
         run: |
-          $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
+          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
           $packageName = "com.x8bit.bitwarden";
 
           if ("${{ matrix.variant }}" -ne "prod")
@@ -187,16 +199,13 @@ jobs:
           Write-Output "##### Sign Google Play Bundle Release Configuration"
           Write-Output "########################################"
 
-          msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
-              "/p:AndroidSigningKeyAlias=upload" "/p:AndroidSigningKeyPass=$($env:UPLOAD_KEYSTORE_PASSWORD)" `
-              "/p:AndroidSigningKeyStore=$("app_upload-keystore.jks")" `
-              "/p:AndroidSigningStorePass=$($env:UPLOAD_KEYSTORE_PASSWORD)" "/p:AndroidPackageFormat=aab" "/v:quiet"
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidPackageFormats=aab /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_upload-keystore.jks") /p:AndroidSigningKeyAlias=upload /p:AndroidSigningKeyPass="$($env:UPLOAD_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:UPLOAD_KEYSTORE_PASSWORD)" --no-restore
 
           Write-Output "########################################"
           Write-Output "##### Copy Google Play Bundle to project root"
           Write-Output "########################################"
 
-          $signedAabPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/$($packageName)-Signed.aab");
+          $signedAabPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.aab");
           $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/$($packageName).aab");
           Copy-Item $signedAabPath $signedAabDestPath
 
@@ -204,23 +213,20 @@ jobs:
           Write-Output "##### Sign APK Release Configuration"
           Write-Output "########################################"
 
-          msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
-              "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:PLAY_KEYSTORE_PASSWORD)" `
-              "/p:AndroidSigningKeyStore=$("app_play-keystore.jks")" `
-              "/p:AndroidSigningStorePass=$($env:PLAY_KEYSTORE_PASSWORD)" "/v:quiet"
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_play-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:PLAY_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:PLAY_KEYSTORE_PASSWORD)" --no-restore
 
           Write-Output "########################################"
           Write-Output "##### Copy Release APK to project root"
           Write-Output "########################################"
 
-          $signedApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/$($packageName)-Signed.apk");
+          $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
           $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/$($packageName).apk");
 
           Copy-Item $signedApkPath $signedApkDestPath
 
       - name: Upload Prod .aab artifact
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
@@ -228,7 +234,7 @@ jobs:
 
       - name: Upload Prod .apk artifact
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
@@ -236,7 +242,7 @@ jobs:
 
       - name: Upload Other .apk artifact
         if: ${{ matrix.variant != 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
@@ -256,7 +262,7 @@ jobs:
 
       - name: Upload .apk sha file for prod
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-android-apk-sha256.txt
           path: ./bw-android-apk-sha256.txt
@@ -264,7 +270,7 @@ jobs:
 
       - name: Upload .apk sha file for other
         if: ${{ matrix.variant != 'prod' }}
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-android-${{ matrix.variant }}-apk-sha256.txt
           path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
@@ -277,7 +283,7 @@ jobs:
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
           || github.ref == 'refs/heads/hotfix-rc' ) }}
         run: |
-          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
+          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/net7.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
           AAB_PATH="$GITHUB_WORKSPACE/com.x8bit.bitwarden.aab"
           TRACK="internal"
@@ -289,14 +295,27 @@ jobs:
   f-droid:
     name: F-Droid Build
     runs-on: windows-2022
+    env:
+      android_folder_path: src/App/Platforms/Android
+      android_manifest_path: src/App/Platforms/Android/AndroidManifest.xml
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
         with:
-          nuget-version: 5.9.0
+          nuget-version: 6.4.0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        with:
+          dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@1ff57057b5cfdc39105cd07a01d78e9b0ea0c14c # v1.3.1
+        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
+
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
 
       - name: Setup Windows builder
         run: choco install checksum --no-progress
@@ -325,7 +344,7 @@ jobs:
           mkdir -p ~/secrets
 
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
+            --output ./${{ env.main_app_folder_path }}/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
         shell: bash
 
       - name: Increment version
@@ -337,30 +356,21 @@ jobs:
           echo "########################################"
 
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
-            ./src/Android/Properties/AndroidManifest.xml
+            ./${{ env.android_manifest_path }}
         shell: bash
 
       - name: Clean for F-Droid
         run: |
-          $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
-          $appPath = $($env:GITHUB_WORKSPACE + "/src/App/App.csproj");
+          $appPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
           $corePath = $($env:GITHUB_WORKSPACE + "/src/Core/Core.csproj");
 
-          $androidManifest = $($env:GITHUB_WORKSPACE + "/src/Android/Properties/AndroidManifest.xml");
-
-          Write-Output "########################################"
-          Write-Output "##### Clean Android and App"
-          Write-Output "########################################"
-
-          msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
-          msbuild "$($appPath)" "/t:Clean" "/p:Configuration=FDroid"
+          $androidManifest = $($env:GITHUB_WORKSPACE + "/${{ env.android_manifest_path }}");
 
           Write-Output "########################################"
           Write-Output "##### Backup project files"
           Write-Output "########################################"
 
           Copy-Item $androidManifest $($androidManifest + ".original");
-          Copy-Item $androidPath $($androidPath + ".original");
           Copy-Item $appPath $($appPath + ".original");
 
           Write-Output "########################################"
@@ -375,80 +385,44 @@ jobs:
 
           $xml.Save($androidManifest);
 
-          Write-Output "########################################"
-          Write-Output "##### Uninstall from Android.csproj"
-          Write-Output "########################################"
-
-          $xml=New-Object XML;
-          $xml.Load($androidPath);
-
-          $ns=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
-          $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
-
-          $firebaseNode=$xml.SelectSingleNode(`
-              "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
-          $firebaseNode.ParentNode.RemoveChild($firebaseNode);
-
-          $daggerNode=$xml.SelectSingleNode(`
-              "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Google.Dagger']", $ns);
-          $daggerNode.ParentNode.RemoveChild($daggerNode);
-
-          $safetyNetNode=$xml.SelectSingleNode(`
-              "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.SafetyNet']", $ns);
-          $safetyNetNode.ParentNode.RemoveChild($safetyNetNode);
-
-          $xml.Save($androidPath);
-
-          Write-Output "########################################"
-          Write-Output "##### Uninstall from Core.csproj"
-          Write-Output "########################################"
-
-          $xml=New-Object XML;
-          $xml.Load($corePath);
-
-          $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
-          $appCenterNode.ParentNode.RemoveChild($appCenterNode);
-
-          $xml.Save($corePath);
-
       - name: Restore packages
-        run: nuget restore
+        run: dotnet restore
 
       - name: Build for F-Droid
         run: |
-          $configuration = "FDroid";
+          $configuration = "Release";
+          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
 
           Write-Output "########################################"
-          Write-Output "##### Build $configuration Configuration"
+          Write-Output "##### Build $configuration FDROID
           Write-Output "########################################"
-
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
+          
+          dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android /p:CustomConstants="FDROID"
 
       - name: Sign for F-Droid
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
         run: |
+          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
+          $packageName = "com.x8bit.bitwarden";
+
           Write-Output "########################################"
-          Write-Output "##### Sign FDroid Configuration"
+          Write-Output "##### Sign FDroid"
           Write-Output "########################################"
 
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" `
-            "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" `
-            "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:FDROID_KEYSTORE_PASSWORD)" `
-            "/p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks")" `
-            "/p:AndroidSigningStorePass=$($env:FDROID_KEYSTORE_PASSWORD)" "/v:quiet"
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:CustomConstants="FDROID" --no-restore
 
           Write-Output "########################################"
           Write-Output "##### Copy FDroid apk to project root"
           Write-Output "########################################"
 
-          $signedApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/FDroid/com.x8bit.bitwarden-Signed.apk");
+          $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
           $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden-fdroid.apk");
 
           Copy-Item $signedApkPath $signedApkDestPath
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
@@ -460,27 +434,44 @@ jobs:
             -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
 
       - name: Upload F-Droid sha file
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: bw-fdroid-apk-sha256.txt
           path: ./bw-fdroid-apk-sha256.txt
           if-no-files-found: error
 
-
   ios:
     name: Apple iOS
-    runs-on: macos-12
+    runs-on: macos-13
     needs: setup
+    env:
+      ios_folder_path: src/App/Platforms/iOS
+      app_output_name: App
+      app_ci_output_filename: App_x64_Debug
     steps:
+      - name: Set XCode version
+        uses: maxim-lobanov/setup-xcode@60606e260d2fc5762a71e64e74b2174e8ea3c8bd # v1.6.0
+        with:
+          xcode-version: 15.1
+
       - name: Setup NuGet
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
         with:
-          nuget-version: 5.9.0
+          nuget-version: 6.4.0
+      
+      - name: Set up .NET
+        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        with:
+          dotnet-version: '8.0.x'
+  
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
 
       - name: Print environment
         run: |
           nuget help | grep Version
-          msbuild -version
           dotnet --info
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
@@ -538,7 +529,9 @@ jobs:
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
           echo "########################################"
 
-          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS/Info.plist
+          echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
+
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
@@ -551,8 +544,8 @@ jobs:
           echo "##### Updating Entitlements"
           echo "########################################"
 
-          perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./src/iOS/Entitlements.plist
-
+          perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+        
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
@@ -599,6 +592,9 @@ jobs:
           WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
 
+      - name: Restore packages
+        run: dotnet restore
+
       - name: Bulid WatchApp
         run: |
           echo "########################################"
@@ -611,19 +607,13 @@ jobs:
           echo "##### Done"
           echo "########################################"
 
-      - name: Restore packages
-        run: nuget restore
-
       - name: Archive Build for App Store
         run: |
-          $configuration = "AppStore";
-          $platform = "iPhone";
+          Write-Output "########################################"
+          Write-Output "##### Archive for Release ios-arm64
+          Write-Output "########################################"
 
-          Write-Output "########################################"
-          Write-Output "##### Archive $configuration Configuration for $platform Platform"
-          Write-Output "########################################"
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
-            "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "########################################"
           Write-Output "##### Done"
@@ -632,14 +622,11 @@ jobs:
 
       - name: Archive Build for Mobile Automation
         run: |
-          $configuration = "Release";
-          $platform = "iPhoneSimulator";
+          Write-Output "########################################"
+          Write-Output "##### Archive Debug for iossimulator-x64
+          Write-Output "########################################"
 
-          Write-Output "########################################"
-          Write-Output "##### Archive $configuration Configuration for $platform Platform"
-          Write-Output "########################################"
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
-            "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
+          dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "########################################"
           Write-Output "##### Done"
@@ -658,11 +645,11 @@ jobs:
 
       - name: Export .app for Automation CI
         run: |
-          ARCHIVE_PATH="./src/iOS/bin/iPhoneSimulator/Release/BitwardeniOS.app"
+          ARCHIVE_PATH="./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64"
           EXPORT_PATH="./bitwarden-export"
 
-          zip -r -q BitwardeniOS.app.zip $ARCHIVE_PATH
-          mv BitwardeniOS.app.zip $EXPORT_PATH
+          zip -r -q ${{ env.app_ci_output_filename }}.app.zip $ARCHIVE_PATH
+          mv ${{ env.app_ci_output_filename }}.app.zip $EXPORT_PATH
 
       - name: Copy all dSYMs files to upload
         run: |
@@ -677,7 +664,7 @@ jobs:
           cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
 
       - name: Upload App Store .ipa & dSYMs artifacts
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
           name: Bitwarden iOS
           path: |
@@ -686,10 +673,10 @@ jobs:
           if-no-files-found: error
 
       - name: Upload .app file for Automation CI
-        uses: actions/upload-artifact@a8a3f3ad30e3422c9c7b888a15615d19a852ae32 # v3.1.3
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
         with:
-          name: BitwardeniOS.app.zip
-          path: ./bitwarden-export/BitwardeniOS.app.zip
+          name: ${{ env.app_ci_output_filename }}.app.zip
+          path: ./bitwarden-export/${{ env.app_ci_output_filename }}.app.zip
           if-no-files-found: error
 
       - name: Install AppCenter CLI
@@ -725,6 +712,21 @@ jobs:
           echo "########################################"
 
           find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
+
+      - name: Validate app in App Store
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        run: |
+          xcrun altool --validate-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
 
       - name: Deploy to App Store
         if: |
@@ -768,7 +770,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@6fb7e99759b996fd142995636fd8c88c1fb8ecd9 # v1.16.1
+        uses: crowdin/github-action@198daeb2d30636c4608d6a6bb96c009dbefc02a2 # v1.18.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}

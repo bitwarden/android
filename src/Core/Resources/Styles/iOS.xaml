@@ -1,0 +1,412 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Bit.App.Styles.iOS"
+                    xmlns:controls="clr-namespace:Bit.App.Controls">
+    <Style TargetType="Entry"
+           ApplyToDerivedTypes="True">
+        <Setter Property="PlaceholderColor"
+                Value="{DynamicResource InputPlaceholderColor}" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 12" />
+    </Style>
+    <Style TargetType="Picker"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 12" />
+    </Style>
+    <Style TargetType="DatePicker"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="TimePicker"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="Editor"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="PlaceholderColor"
+                Value="{DynamicResource InputPlaceholderColor}" />
+        <Setter Property="Margin"
+                Value="0, 0, 0, 12" />
+    </Style>
+    <Style TargetType="Switch"
+           ApplyToDerivedTypes="True">
+        <Setter Property="OnColor"
+                Value="{DynamicResource SwitchOnColor}" />
+    </Style>
+    <Style TargetType="SearchBar"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ListHeaderBackgroundColor}" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+        <Setter Property="CancelButtonColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="PlaceholderColor"
+                Value="#777777" />
+    </Style>
+    <Style TargetType="ContentPage"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="CollectionView"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="RefreshView"
+           ApplyToDerivedTypes="True">
+        <Setter Property="RefreshColor"
+                Value="{DynamicResource PrimaryColor}" />
+    </Style>
+    <Style TargetType="ActivityIndicator"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Color"
+                Value="{DynamicResource PrimaryColor}" />
+    </Style>
+    <Style TargetType="controls:ExtendedSlider">
+        <Setter Property="MinimumTrackColor"
+                Value="{DynamicResource SliderTrackMinColor}" />
+        <Setter Property="MaximumTrackColor"
+                Value="{DynamicResource SliderTrackMaxColor}" />
+        <Setter Property="ThumbColor"
+                Value="{DynamicResource SliderThumbColor}" />
+    </Style>
+    <Style TargetType="controls:ExtendedStepper">
+        <Setter Property="StepperForegroundColor"
+                Value="{DynamicResource StepperForegroundColor}" />
+    </Style>
+    <Style TargetType="Frame" 
+           ApplyToDerivedTypes="True"
+           Class="btn-icon-row">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ButtonBackgroundColor}" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource ButtonBorderColor}" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="Margin"
+                Value="0, 10, 0, 0" />
+        <Setter Property="HasShadow"
+                Value="False" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!-- Buttons -->
+
+    <Style TargetType="Button">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ButtonBackgroundColor}" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource ButtonBorderColor}" />
+        <Setter Property="BorderWidth"
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonTextColor}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 0" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" 
+                                    Value="{DynamicResource ButtonBackgroundColorPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="BorderWidth"
+                                    Value="0" />
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-primary">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="BorderWidth" 
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonPrimaryTextColor}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 0" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="MinimumHeightRequest"
+                Value="45" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" 
+                                    Value="{DynamicResource ButtonPrimaryBackgroundColorPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonPrimaryTextColorDisabled}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonPrimaryBackgroundColorDisabled}" />
+                            <Setter Property="BorderColor"
+                                    Value="{DynamicResource ButtonPrimaryBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-secondary">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource ButtonBorderColor}" />
+        <Setter Property="BorderWidth" 
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonTextColorOpacity}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" 
+                                    Value="{DynamicResource ButtonBackgroundColorPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="BorderColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-danger">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="BorderWidth" 
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonPrimaryTextColor}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" 
+                                    Value="{DynamicResource DangerPressedColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="BorderColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+
+    <!-- List -->
+
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ListItemBorderColor}" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header-container-platform">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ListHeaderBackgroundColor}" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header-platform">
+        <Setter Property="Padding"
+                Value="10, 22, 10, 5" />
+        <Setter Property="VerticalOptions"
+                Value="EndAndExpand" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header-platform">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-top-platform">
+        <Setter Property="Color"
+                Value="{DynamicResource ListSectionBorderColor}" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-bottom-platform">
+        <Setter Property="Color"
+                Value="{DynamicResource ListSectionBorderBottomColor}" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="controls:ExtendedStackLayout"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="controls:ExtendedGrid"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Label"
+           Class="list-icon-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="21" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-title-platform"
+           ApplyToDerivedTypes="True">
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-sub-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+
+    <!-- Box -->
+
+    <Style TargetType="Label"
+           Class="box-header-platform">
+        <Setter Property="TextColor"
+                Value="{DynamicResource BoxHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-input-options-platform">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 5" />
+    </Style>
+
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="title-danger">
+        <Setter Property="TextColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+    </Style>
+
+    <Style
+        TargetType="Label"
+        ApplyToDerivedTypes="True"
+        Class="settings-header">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource ListHeaderBackgroundColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="Padding"
+                Value="10,20,5,3" />
+    </Style>
+</ResourceDictionary>

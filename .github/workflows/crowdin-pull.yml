@@ -30,7 +30,7 @@ jobs:
           secrets: "crowdin-api-token, github-gpg-private-key, github-gpg-private-key-passphrase"
 
       - name: Download translations
-        uses: crowdin/github-action@6fb7e99759b996fd142995636fd8c88c1fb8ecd9 # v1.16.1
+        uses: crowdin/github-action@198daeb2d30636c4608d6a6bb96c009dbefc02a2 # v1.18.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}

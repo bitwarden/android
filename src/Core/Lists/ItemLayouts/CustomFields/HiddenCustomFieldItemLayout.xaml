@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StackLayout xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Lists.ItemLayouts.CustomFields.HiddenCustomFieldItemLayout"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:cfvm="clr-namespace:Bit.App.Lists.ItemViewModels.CustomFields"
+    xmlns:core="clr-namespace:Bit.Core"
+    x:DataType="cfvm:HiddenCustomFieldItemViewModel"
+    Spacing="0" Padding="0">
+    <StackLayout.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:IconGlyphConverter x:Key="iconGlyphConverter" />
+            <u:BooleanToBoxRowInputPaddingConverter x:Key="booleanToBoxRowInputPaddingConverter" />
+        </ResourceDictionary>
+    </StackLayout.Resources>
+    <Grid
+        StyleClass="box-row"
+        Padding="{Binding IsEditing, Converter={StaticResource booleanToBoxRowInputPaddingConverter}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Label
+            Text="{Binding Field.Name, Mode=OneWay}"
+            StyleClass="box-label"
+            Grid.Row="0"
+            Grid.Column="0"
+            AutomationId="HiddenCustomFieldNameLabel" />
+        <StackLayout
+            Grid.Row="1"
+            Grid.Column="0"
+            IsVisible="{Binding IsEditing, Converter={StaticResource inverseBool}}">
+            <controls:MonoLabel
+                Text="{Binding ValueText, Mode=OneWay}"
+                StyleClass="box-value"
+                IsVisible="{Binding ShowHiddenValue}"
+                AutomationId="HiddenCustomFieldValueLabel" />
+            <controls:MonoLabel
+                Text="{Binding Field.MaskedValue, Mode=OneWay}"
+                StyleClass="box-value"
+                IsVisible="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
+        </StackLayout>
+        <controls:MonoEntry
+            Text="{Binding Field.Value}"
+            StyleClass="box-value"
+            Grid.Row="1"
+            Grid.Column="0"
+            IsVisible="{Binding IsEditing}"
+            IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
+            IsEnabled="{Binding ShowViewHidden}"
+            IsSpellCheckEnabled="False"
+            IsTextPredictionEnabled="False"
+            SemanticProperties.Description="{Binding Field.Name}"
+            AutomationId="HiddenCustomFieldValueEntry">
+            <Entry.Keyboard>
+                <Keyboard x:FactoryMethod="Create">
+                    <x:Arguments>
+                        <KeyboardFlags>None</KeyboardFlags>
+                    </x:Arguments>
+                </Keyboard>
+            </Entry.Keyboard>
+        </controls:MonoEntry>
+        <controls:IconButton 
+            StyleClass="box-row-button, box-row-button-platform"
+            Text="{Binding ShowHiddenValue, Converter={StaticResource iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Eye}}"
+            Command="{Binding ToggleHiddenValueCommand}"
+            IsVisible="{Binding ShowViewHidden}"
+            Grid.Row="0"
+            Grid.Column="1"
+            Grid.RowSpan="2"
+            SemanticProperties.Description="{u:I18n ToggleVisibility}"
+            AutomationId="HiddenCustomFieldShowValueButton" />
+        <controls:IconButton
+            StyleClass="box-row-button, box-row-button-platform"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+            Command="{Binding CopyFieldCommand}"
+            IsVisible="{Binding ShowCopyButton}"
+            Grid.Row="0"
+            Grid.Column="2"
+            Grid.RowSpan="2"
+            SemanticProperties.Description="{u:I18n Copy}" />
+        <controls:IconButton 
+            StyleClass="box-row-button, box-row-button-platform"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
+            Command="{Binding FieldOptionsCommand}"
+            IsVisible="{Binding IsEditing}"
+            Grid.Row="0"
+            Grid.Column="2"
+            Grid.RowSpan="2"
+            SemanticProperties.Description="{u:I18n Options}" />
+    </Grid>
+    <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsEditing, Mode=OneWay, Converter={StaticResource inverseBool}}" />
+</StackLayout>

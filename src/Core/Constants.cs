@@ -71,10 +71,11 @@ namespace Bit.Core
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
         public const int CipherKeyRandomBytesLength = 64;
-        public const string CipherKeyEncryptionMinServerVersion = "2024.1.3";
+        public const string CipherKeyEncryptionMinServerVersion = "2024.2.0";
         public const string DefaultFido2CredentialType = "public-key";
         public const string DefaultFido2CredentialAlgorithm = "ECDSA";
         public const string DefaultFido2CredentialCurve = "P-256";
+        public const int LatestStateVersion = 7;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {

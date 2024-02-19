@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<controls:BaseCipherViewCell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Controls.CipherViewCell"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core"
+    StyleClass="list-row, list-row-platform"
+    RowSpacing="0"
+    ColumnSpacing="0"
+    x:DataType="pages:CipherItemViewModel"
+    AutomationId="CipherCell">
+
+    <Grid.Resources>
+        <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
+        <u:IconImageConverter x:Key="iconImageConverter"/>
+        <u:InverseBoolConverter x:Key="inverseBool" />
+        <u:StringHasValueConverter x:Key="stringHasValueConverter" />
+    </Grid.Resources>
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="40" x:Name="_iconColumn" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="60" />
+    </Grid.ColumnDefinitions>
+
+    <controls:CachedImage
+        x:Name="_iconImage"
+        Grid.Column="0"
+        BitmapOptimizations="True"
+        HorizontalOptions="CenterAndExpand"
+        VerticalOptions="CenterAndExpand"
+        Margin="9"
+        WidthRequest="22"
+        HeightRequest="22"
+        Aspect="AspectFit"
+        Success="Icon_Success"
+        Error="Icon_Error"
+        AutomationProperties.IsInAccessibleTree="False"
+        AutomationId="CipherWebsiteIcon" />
+
+    <controls:IconLabel
+        x:Name="_iconPlaceholderImage"
+        Grid.Column="0"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        StyleClass="list-icon, list-icon-platform"
+        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
+        AutomationProperties.IsInAccessibleTree="False"
+        AutomationId="CipherTypeIcon" />
+
+    <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <Label 
+            Grid.Column="0"
+            Grid.Row="0"
+            LineBreakMode="TailTruncation"
+            StyleClass="list-title, list-title-platform"
+            Text="{Binding Cipher.Name}"
+            AutomationId="CipherNameLabel" />
+        <Label
+            Grid.Column="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            LineBreakMode="TailTruncation"
+            StyleClass="list-subtitle, list-subtitle-platform"
+            Text="{Binding Cipher.SubTitle}"
+            IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
+                        Converter={StaticResource stringHasValueConverter}}"
+            AutomationId="CipherSubTitleLabel" />
+        <controls:IconLabel
+            Grid.Column="1"
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            StyleClass="list-title-icon"
+            Margin="5, 0, 0, 0"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
+            IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
+            SemanticProperties.Description="{u:I18n Shared}"
+            AutomationId="CipherInCollectionIcon" />
+        <controls:IconLabel
+            Grid.Column="2"
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            StyleClass="list-title-icon"
+            Margin="5, 0, 0, 0"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Paperclip}}"
+            IsVisible="{Binding Cipher.HasAttachments, Mode=OneTime}"
+            SemanticProperties.Description="{u:I18n Attachments}"
+            AutomationId="CipherWithAttachmentsIcon" />
+    </Grid>
+
+    <controls:MiButton
+        Grid.Row="0"
+        Grid.Column="2"
+        Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
+        StyleClass="list-row-button, list-row-button-platform, btn-disabled"
+        Clicked="MoreButton_Clicked"
+        VerticalOptions="CenterAndExpand"
+        HorizontalOptions="EndAndExpand"
+        SemanticProperties.Description="{u:I18n Options}"
+        AutomationId="CipherOptionsButton" />
+
+</controls:BaseCipherViewCell>

@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.FolderAddEditPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:FolderAddEditPageViewModel"
+    HideSoftInputOnTapped="True"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:FolderAddEditPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Cancel}"
+                     Clicked="Close_Clicked"
+                     Order="Primary"
+                     Priority="-1" />
+        <ToolbarItem Text="{u:I18n Save}"
+                     Clicked="Save_Clicked"
+                     Order="Primary" />
+        <ToolbarItem Text="{u:I18n Delete}"
+                     Clicked="Delete_Clicked"
+                     Order="Secondary"
+                     IsDestructive="True"
+                     x:Name="_deleteItem" />
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ToolbarItem IconImageSource="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
+                         x:Key="moreItem"
+                         SemanticProperties.Description="{u:I18n Options}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView x:Name="_scrollView">
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Name}"
+                        StyleClass="box-label" />
+                    <Entry
+                        Text="{Binding Folder.Name}"
+                        StyleClass="box-value"
+                        x:Name="_nameEntry"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="FolderNameEntry" />
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

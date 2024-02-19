@@ -1,10 +1,6 @@
-﻿using System;
-using Bit.iOS.Core.Effects;
+﻿using Microsoft.Maui.Controls.Platform;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportEffect(typeof(NoEmojiKeyboardEffect), nameof(NoEmojiKeyboardEffect))]
 namespace Bit.iOS.Core.Effects
 {
     public class NoEmojiKeyboardEffect : PlatformEffect
@@ -22,4 +18,3 @@ namespace Bit.iOS.Core.Effects
         }
     }
 }
-

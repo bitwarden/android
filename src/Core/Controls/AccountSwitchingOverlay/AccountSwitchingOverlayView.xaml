@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:view="clr-namespace:Bit.Core.Models.View"
+    x:Name="_mainOverlay"
+    x:DataType="controls:AccountSwitchingOverlayViewModel"
+    x:Class="Bit.App.Controls.AccountSwitchingOverlayView"
+    BackgroundColor="#22000000"
+    Padding="0"
+    IsVisible="False">
+    <Grid
+        x:Name="_accountListContainer"
+        VerticalOptions="Fill"
+        HorizontalOptions="Fill"
+        BackgroundColor="Transparent"
+        RowDefinitions="Auto, *">
+        <Frame
+            Grid.Row="0"
+            Padding="0"
+            HorizontalOptions="Fill"
+            VerticalOptions="Start">
+            <Frame.Shadow>
+                <Shadow
+                    Brush="Black"
+                    Radius="10"
+                    Offset="0,3" />
+            </Frame.Shadow>
+            <ListView
+                x:Name="_accountListView"
+                ItemsSource="{Binding BindingContext.AccountViews, Source={x:Reference _mainOverlay}}"
+                BackgroundColor="{DynamicResource BackgroundColor}"
+                VerticalOptions="Start"
+                RowHeight="{Binding AccountListRowHeight, Source={x:Reference _mainOverlay}}"
+                effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never"
+                AutomationId="AccountListView">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:DataType="controls:AccountViewCellViewModel">
+                        <controls:AccountViewCell
+                            SelectAccountCommand="{Binding SelectAccountCommand, Source={x:Reference _mainOverlay}}"
+                            LongPressAccountCommand="{Binding LongPressAccountCommand, Source={x:Reference _mainOverlay}}"
+                            AutomationId="AccountViewCell" />
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Effects>
+                    <effects:ScrollViewContentInsetAdjustmentBehaviorEffect />
+                </ListView.Effects>
+            </ListView>
+        </Frame>
+        <BoxView
+            Grid.Row="1"
+            BackgroundColor="Transparent"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill">
+            <BoxView.GestureRecognizers>
+                <TapGestureRecognizer Tapped="FreeSpaceOverlay_Tapped" />
+            </BoxView.GestureRecognizers>
+        </BoxView>
+    </Grid>
+</ContentView>

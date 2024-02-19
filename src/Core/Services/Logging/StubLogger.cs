@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
+﻿using System.Runtime.CompilerServices;
 using Bit.Core.Abstractions;
 
 namespace Bit.Core.Services
