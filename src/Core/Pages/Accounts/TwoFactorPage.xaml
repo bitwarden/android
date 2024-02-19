@@ -163,7 +163,7 @@
                             HorizontalOptions="End" />
                     </StackLayout>
                 </StackLayout>
-                <Button Text="{u:I18n LaunchDUO}"
+                <Button Text="{u:I18n LaunchDuo}"
                     Margin="10,21"
                     StyleClass="btn-primary"
                     Command="{Binding AuthenticateWithDuoFramelessCommand}"
