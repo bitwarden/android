@@ -1874,7 +1874,12 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns mockCipher.asSuccess()
-            coEvery { vaultDiskSource.saveCipher(userId, mockCipher) } just runs
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId,
+                    mockCipher.copy(collectionIds = listOf("mockId-1")),
+                )
+            } just runs
 
             val result = vaultRepository.createCipherInOrganization(
                 cipherView = mockCipherView,
@@ -2842,7 +2847,13 @@ class VaultRepositoryTest {
                     ),
                 )
             } returns createMockCipher(number = 1).asSuccess()
-            coEvery { vaultDiskSource.saveCipher(userId, createMockCipher(number = 1)) } just runs
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId,
+                    createMockCipher(number = 1)
+                        .copy(collectionIds = listOf("mockId-1")),
+                )
+            } just runs
 
             val result = vaultRepository.shareCipher(
                 cipherId = "mockId-1",

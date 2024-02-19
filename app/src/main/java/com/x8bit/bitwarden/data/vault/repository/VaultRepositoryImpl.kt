@@ -633,7 +633,12 @@ class VaultRepositoryImpl(
                         ),
                     )
             }
-            .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.copy(collectionIds = collectionIds),
+                )
+            }
             .fold(
                 onFailure = { CreateCipherResult.Error },
                 onSuccess = { CreateCipherResult.Success },
@@ -797,7 +802,12 @@ class VaultRepositoryImpl(
                     ),
                 )
             }
-            .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.copy(collectionIds = collectionIds),
+                )
+            }
             .fold(
                 onFailure = { ShareCipherResult.Error },
                 onSuccess = { ShareCipherResult.Success },
