@@ -21,6 +21,8 @@ namespace Bit.iOS.Autofill
     {
         private readonly LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
 
+        private readonly Fido2DelegatedUserInterface _userInterface = new Fido2DelegatedUserInterface();
+
         private IFido2AuthenticatorService _fido2AuthService;
         private IFido2AuthenticatorService Fido2AuthService
         {
@@ -29,7 +31,7 @@ namespace Bit.iOS.Autofill
                 if (_fido2AuthService is null)
                 {
                     _fido2AuthService = ServiceContainer.Resolve<IFido2AuthenticatorService>();
-                    _fido2AuthService.Init(this);
+                    _fido2AuthService.Init(_userInterface);
                 }
                 return _fido2AuthService;
             }
@@ -159,18 +161,20 @@ namespace Bit.iOS.Autofill
                 }).ToArray();
         }
 
+        public class UserInteractionRequiredException : Exception {}
+
         private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasskeyCredentialRequest passkeyCredentialRequest)
         {
             InitAppIfNeeded();
             await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
             await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
-            if (!await IsAuthed() || await IsLocked())
-            {
-                CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
-                return;
-            }
             _context.PasskeyCredentialRequest = passkeyCredentialRequest;
-            await ProvideCredentialAsync(false);
+
+            try {
+                await ProvideCredentialAsync(false);
+            } catch (UserInteractionRequiredException) {
+                CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
+            }
         }
 
         public async Task CompleteAssertionRequestAsync(string rpId, NSData userHandleData, NSData credentialIdData, string cipherId)
@@ -209,6 +213,10 @@ namespace Bit.iOS.Autofill
                     }
                 });
 
+                _userInterface.UserPickedCredential(cipherId);
+                // if (os.PerformedFaceID) {
+                _userInterface.UserIsVerified();
+                //}
 
                 ClipLogger.Log("fido2AssertionResult:" + fido2AssertionResult);
 

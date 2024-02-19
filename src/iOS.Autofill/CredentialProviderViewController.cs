@@ -506,6 +506,13 @@ namespace Bit.iOS.Autofill
 
         private async Task ProvideCredentialAsync(bool userInteraction = true)
         {
+            _userInterface.WithEnsureUnlockedVaultAsyncCallback(async () => {
+                if (!userInteraction && (!await IsAuthed() || await IsLocked())) {
+                    throw new UserInteractionRequiredException();
+                }
+
+                await EnsureUnlockedVaultAsync();
+            });
             try
             {
                 ClipLogger.Log("ProvideCredentialAsync");
