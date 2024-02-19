@@ -39,7 +39,7 @@ namespace Bit.iOS.Autofill
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
             SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
-            await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
+            await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
         }
 
         public override void ViewDidAppear(bool animated)
@@ -88,7 +88,7 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
+                await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
                 TableView.ReloadData();
             });
         }

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AuthenticationServices;
+using Bit.Core.Abstractions;
 using Bit.iOS.Core.Models;
 using Foundation;
 using ObjCRuntime;
@@ -15,7 +16,8 @@ namespace Bit.iOS.Autofill.Models
         public ASPasskeyCredentialRequest PasskeyCredentialRequest { get; set; }
         public bool Configuring { get; set; }
         public bool IsCreatingPasskey { get; set; }
-        public TaskCompletionSource<bool> _unlockVaultTcs { get; set; }
+        public TaskCompletionSource<bool> UnlockVaultTcs { get; set; }
+        public TaskCompletionSource<Fido2ConfirmNewCredentialResult> ConfirmNewCredentialTcs { get; set; }
 
         public ASPasskeyCredentialIdentity PasskeyCredentialIdentity
         {

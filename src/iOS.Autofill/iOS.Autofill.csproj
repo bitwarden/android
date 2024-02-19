@@ -82,6 +82,8 @@
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
     <Compile Include="CredentialProviderViewController.Passkeys.cs" />
+    <Compile Include="SegueConstants.cs" />
+    <Compile Include="ColorConstants.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\check.png" />

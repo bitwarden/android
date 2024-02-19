@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Bit.Core.Resources.Localization;
+﻿using System.Diagnostics;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Models;
@@ -25,7 +20,7 @@ namespace Bit.iOS.Core.Views
         protected ITotpService _totpService;
         protected IStateService _stateService;
         protected ISearchService _searchService;
-        private AppExtensionContext _context;
+        protected AppExtensionContext _context;
         private UIViewController _controller;
 
         public ExtensionTableSource(AppExtensionContext context, UIViewController controller)
@@ -36,11 +31,19 @@ namespace Bit.iOS.Core.Views
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _context = context;
             _controller = controller;
+
+            Items = new List<CipherViewModel>();
         }
 
         public IEnumerable<CipherViewModel> Items { get; private set; }
 
-        public async Task LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
+        public virtual async Task LoadAsync(bool urlFilter = true, string searchFilter = null)
+        {
+            _allItems = await LoadItemsAsync(urlFilter, searchFilter);
+            FilterResults(searchFilter, new CancellationToken());
+        }
+
+        protected virtual async Task<IEnumerable<CipherViewModel>> LoadItemsAsync(bool urlFilter = true, string? searchFilter = null)
         {
             var combinedLogins = new List<CipherView>();
 
@@ -62,11 +65,10 @@ namespace Bit.iOS.Core.Views
                 combinedLogins.AddRange(logins);
             }
 
-            _allItems = combinedLogins
+            return combinedLogins
                 .Where(c => c.Type == Bit.Core.Enums.CipherType.Login && !c.IsDeleted)
                 .Select(s => new CipherViewModel(s))
-                .ToList() ?? new List<CipherViewModel>();
-            FilterResults(searchFilter, new CancellationToken());
+                .ToList();
         }
 
         public void FilterResults(string searchFilter, CancellationToken ct)
@@ -87,7 +89,7 @@ namespace Bit.iOS.Core.Views
             }
         }
 
-        public IEnumerable<CipherViewModel> TableItems { get; set; }
+        //public IEnumerable<CipherViewModel> TableItems { get; set; }
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
@@ -135,9 +137,9 @@ namespace Bit.iOS.Core.Views
             cell.DetailTextLabel.Text = item.Username;
         }
 
-        public async Task<string> GetTotpAsync(CipherViewModel item)
+        public async Task<string?> GetTotpAsync(CipherViewModel item)
         {
-            string totp = null;
+            string? totp = null;
             var accessPremium = await _stateService.CanAccessPremiumAsync();
             if (accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
             {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AuthenticationServices;
@@ -19,8 +18,6 @@ namespace Bit.iOS.Autofill
 {
     public partial class CredentialProviderViewController : ASCredentialProviderViewController, IAccountsManagerHost, IFido2UserInterface
     {
-        private readonly LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
-
         private IFido2AuthenticatorService _fido2AuthService;
         private IFido2AuthenticatorService Fido2AuthService
         {
@@ -87,6 +84,8 @@ namespace Bit.iOS.Autofill
             _context.IsCreatingPasskey = true;
 
             var credIdentity = Runtime.GetNSObject<ASPasskeyCredentialIdentity>(passkeyRegistrationRequest.CredentialIdentity.GetHandle());
+
+            _context.UrlString = credIdentity?.RelyingPartyIdentifier;
 
             ClipLogger.Log($"PIFPR MakeCredentialAsync");
             ClipLogger.Log($"PIFPR MakeCredentialAsync RpID: {credIdentity.RelyingPartyIdentifier}");
@@ -245,14 +244,14 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-            ClipLogger.Log("CompleteAssertionRequest(ASPasskeyAssertionCredential assertionCredential");
-            if (assertionCredential is null)
-            {
-                ClipLogger.Log("CompleteAssertionRequest(ASPasskeyAssertionCredential assertionCredential -> assertionCredential is null");
-                ServiceContainer.Reset();
-                CancelRequest(ASExtensionErrorCode.UserCanceled);
-                return;
-            }
+                ClipLogger.Log("CompleteAssertionRequest(ASPasskeyAssertionCredential assertionCredential");
+                if (assertionCredential is null)
+                {
+                    ClipLogger.Log("CompleteAssertionRequest(ASPasskeyAssertionCredential assertionCredential -> assertionCredential is null");
+                    ServiceContainer.Reset();
+                    CancelRequest(ASExtensionErrorCode.UserCanceled);
+                    return;
+                }
 
             //NSRunLoop.Main.BeginInvokeOnMainThread(() =>
             //{
@@ -290,43 +289,28 @@ namespace Bit.iOS.Autofill
 
         public Task InformExcludedCredential(string[] existingCipherIds)
         {
+            // iOS doesn't seem to provide the ExcludeCredentialDescriptorList so nothing to do here currently.
             return Task.CompletedTask;
         }
 
         public async Task<Fido2ConfirmNewCredentialResult> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {
-            // TODO: Show interface so the user can choose whether to create a new passkey or select one to add the passkey to.
-            var newCipher = new CipherView
+            ClipLogger.Log($"ConfirmNewCredentialAsync");
+            _context.ConfirmNewCredentialTcs?.SetCanceled();
+            _context.ConfirmNewCredentialTcs = new TaskCompletionSource<Fido2ConfirmNewCredentialResult>();
+            MainThread.BeginInvokeOnMainThread(() =>
             {
-                Name = confirmNewCredentialParams.RpId,
-                Type = Bit.Core.Enums.CipherType.Login,
-                Login = new LoginView
+                try
                 {
-                    Uris = new List<LoginUriView>
-                {
-                    new LoginUriView
-                    {
-                        Uri = confirmNewCredentialParams.RpId
-                    }
+                    PerformSegue(SegueConstants.LOGIN_LIST, this);
                 }
-                },
-                Card = new CardView(),
-                Identity = new IdentityView(),
-                SecureNote = new SecureNoteView
+                catch (Exception ex)
                 {
-                    Type = Bit.Core.Enums.SecureNoteType.Generic
-                },
-                Reprompt = Bit.Core.Enums.CipherRepromptType.None
-            };
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
+            });
 
-            var encryptedCipher = await _cipherService.Value.EncryptAsync(newCipher);
-            await _cipherService.Value.SaveWithServerAsync(encryptedCipher);
-
-            return new Fido2ConfirmNewCredentialResult
-            {
-                CipherId = encryptedCipher.Id,
-                UserVerified = true
-            };
+            return await _context.ConfirmNewCredentialTcs.Task;
         }
 
         public async Task EnsureUnlockedVaultAsync()
@@ -340,8 +324,8 @@ namespace Bit.iOS.Autofill
                     return;
                 }
 
-                _context._unlockVaultTcs?.SetCanceled();
-                _context._unlockVaultTcs = new TaskCompletionSource<bool>();
+                _context.UnlockVaultTcs?.SetCanceled();
+                _context.UnlockVaultTcs = new TaskCompletionSource<bool>();
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
                     try
@@ -356,7 +340,7 @@ namespace Bit.iOS.Autofill
                 });
 
                 ClipLogger.Log($"EnsureUnlockedVaultAsync awaiting for unlock");
-                await _context._unlockVaultTcs.Task;
+                await _context.UnlockVaultTcs.Task;
                 return;
             }
 

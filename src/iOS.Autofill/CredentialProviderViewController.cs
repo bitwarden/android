@@ -394,9 +394,16 @@ namespace Bit.iOS.Autofill
             CancelRequest(ASExtensionErrorCode.Failed);
         }
 
-        private void CancelRequest(ASExtensionErrorCode code)
+        public void CancelRequest(ASExtensionErrorCode code)
         {
             ClipLogger.Log("CancelRequest" + code);
+
+            if (_context?.IsPasskey == true)
+            {
+                _context.ConfirmNewCredentialTcs?.TrySetCanceled();
+                _context.UnlockVaultTcs?.TrySetCanceled();
+            }
+
             //var err = new NSError(new NSString("ASExtensionErrorDomain"), Convert.ToInt32(code), null);
             var err = new NSError(ASExtensionErrorCodeExtensions.GetDomain(code), (int)code);
             ExtensionContext?.CancelRequest(err);
@@ -470,7 +477,7 @@ namespace Bit.iOS.Autofill
                 if (_context.IsCreatingPasskey)
                 {
                     ClipLogger.Log("OnLockDismissedAsync -> IsCreatingPasskey");
-                    _context._unlockVaultTcs.SetResult(true);
+                    _context.UnlockVaultTcs.SetResult(true);
                     return;
                 }
 

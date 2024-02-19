@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Autofill.Utilities;
@@ -17,6 +20,8 @@ namespace Bit.iOS.Autofill
 {
     public partial class LoginListViewController : ExtendedUIViewController
     {
+        //internal const string HEADER_SECTION_IDENTIFIER = "headerSectionId";
+
         UIBarButtonItem _cancelButton;
         UIControl _accountSwitchButton;
 
@@ -34,8 +39,11 @@ namespace Bit.iOS.Autofill
         AccountSwitchingOverlayView _accountSwitchingOverlayView;
         AccountSwitchingOverlayHelper _accountSwitchingOverlayHelper;
 
-        LazyResolve<IBroadcasterService> _broadcasterService = new LazyResolve<IBroadcasterService>("broadcasterService");
-        LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        LazyResolve<IBroadcasterService> _broadcasterService = new LazyResolve<IBroadcasterService>();
+        LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
+        LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
+        LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
+
         bool _alreadyLoadItemsOnce = false;
 
         public async override void ViewDidLoad()
@@ -46,14 +54,30 @@ namespace Bit.iOS.Autofill
 
             SubscribeSyncCompleted();
 
-            NavItem.Title = AppResources.Items;
+            NavItem.Title = Context.IsCreatingPasskey ? AppResources.SavePasskey : AppResources.Items;
             _cancelButton.Title = AppResources.Cancel;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
             TableView.Source = new TableSource(this);
-            await ((TableSource)TableView.Source).LoadItemsAsync();
+            //TableView.RegisterClassForHeaderFooterViewReuse(typeof(AccountViewCell), HEADER_SECTION_IDENTIFIER);
+
+            await ((TableSource)TableView.Source).LoadAsync();
+
+            if (Context.IsCreatingPasskey)
+            {
+                _headerLabel.Text = AppResources.ChooseALoginToSaveThisPasskeyTo;
+                _emptyViewLabel.Text = string.Format(AppResources.NoItemsForUri, Context.UrlString);
+
+                _emptyViewButton.SetTitle(AppResources.SavePasskeyAsNewLogin, UIControlState.Normal);
+                _emptyViewButton.Layer.BorderWidth = 2;
+                _emptyViewButton.Layer.BorderColor = UIColor.FromName(ColorConstants.LIGHT_TEXT_MUTED).CGColor;
+                _emptyViewButton.Layer.CornerRadius = 10;
+                _emptyViewButton.ClipsToBounds = true;
+
+                _headerView.Hidden = false;
+            }
 
             _alreadyLoadItemsOnce = true;
 
@@ -91,17 +115,46 @@ namespace Bit.iOS.Autofill
 
         private void Cancel()
         {
-            CPViewController.CompleteRequest();
+            CPViewController.CancelRequest(AuthenticationServices.ASExtensionErrorCode.UserCanceled);
         }
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("loginAddSegue", this);
+            PerformSegue(SegueConstants.ADD_LOGIN, this);
         }
 
         partial void SearchBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("loginSearchFromListSegue", this);
+            PerformSegue(SegueConstants.LOGIN_SEARCH_FROM_LIST, this);
+        }
+
+        partial void EmptyButton_Activated(UIButton sender)
+        {
+            ClipLogger.Log($"EmptyButton_Activated");
+            SavePasskeyAsNewLoginAsync().FireAndForget(ex =>
+            {
+                _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred).FireAndForget();
+            });
+        }
+
+        private async Task SavePasskeyAsNewLoginAsync()
+        {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+            {
+                Context?.ConfirmNewCredentialTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login on iOS less than 17."));
+                return;
+            }
+
+            ClipLogger.Log($"SavePasskeyAsNewLoginAsync ");
+
+            var cipherId = await _cipherService.Value.CreateNewLoginForPasskeyAsync(Context.PasskeyCredentialIdentity.RelyingPartyIdentifier);
+
+            ClipLogger.Log($"SavePasskeyAsNewLoginAsync -> setting result {cipherId}");
+            Context.ConfirmNewCredentialTcs.TrySetResult(new Fido2ConfirmNewCredentialResult
+            {
+                CipherId = cipherId,
+                UserVerified = true
+            });
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -136,7 +189,7 @@ namespace Bit.iOS.Autofill
                     {
                         try
                         {
-                            await ((TableSource)TableView.Source).LoadItemsAsync();
+                            await ((TableSource)TableView.Source).LoadAsync();
                             TableView.ReloadData();
                         }
                         catch (Exception ex)
@@ -146,6 +199,14 @@ namespace Bit.iOS.Autofill
                     });
                 }
             });
+        }
+
+        public void OnEmptyList()
+        {
+            ClipLogger.Log($"OnEmptyList");
+            _emptyView.Hidden = false;
+            _headerView.Hidden = false;
+            TableView.Hidden = true;
         }
 
         public override void ViewDidUnload()
@@ -159,8 +220,15 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadItemsAsync();
-                TableView.ReloadData();
+                try
+                {
+                    await ((TableSource)TableView.Source).LoadAsync();
+                    TableView.ReloadData();
+                }
+                catch (Exception ex)
+                {
+                    _logger.Value.Exception(ex);
+                }
             });
         }
 
@@ -181,7 +249,10 @@ namespace Bit.iOS.Autofill
 
         public class TableSource : ExtensionTableSource
         {
-            private LoginListViewController _controller;
+            private readonly LoginListViewController _controller;
+
+            private readonly LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
+            private readonly LazyResolve<IPasswordRepromptService> _passwordRepromptService = new LazyResolve<IPasswordRepromptService>();
 
             public TableSource(LoginListViewController controller)
                 : base(controller.Context, controller)
@@ -189,10 +260,108 @@ namespace Bit.iOS.Autofill
                 _controller = controller;
             }
 
+            private Context Context => (Context)_context;
+
+            //protected override async Task<IEnumerable<CipherViewModel>> LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
+            //{
+            //    if (!Context.IsCreatingPasskey)
+            //    {
+            //        return await base.LoadItemsAsync(urlFilter, searchFilter);
+            //    }
+
+
+            //}
+
+            public override async Task LoadAsync(bool urlFilter = true, string searchFilter = null)
+            {
+                await base.LoadAsync(urlFilter, searchFilter);
+
+                if (Context.IsCreatingPasskey && !Items.Any())
+                {
+                    _controller?.OnEmptyList();
+                }
+            }
+
+            //public override nint NumberOfSections(UITableView tableView)
+            //{
+            //    return Context.IsCreatingPasskey ? 1 : 0;
+            //}
+
+            //public override UIView GetViewForHeader(UITableView tableView, nint section)
+            //{
+            //    if (Context.IsCreatingPasskey)
+            //    {
+            //        var view = tableView.DequeueReusableHeaderFooterView(LoginListViewController.HEADER_SECTION_IDENTIFIER);
+
+            //        return view;
+            //    }
+
+            //    return base.GetViewForHeader(tableView, section);
+            //}
+
+            public override nint RowsInSection(UITableView tableview, nint section)
+            {
+                if (Context.IsCreatingPasskey)
+                {
+                    return Items?.Count() ?? 0;
+                }
+
+                return base.RowsInSection(tableview, section);
+            }
+
             public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
+                if (Context.IsCreatingPasskey)
+                {
+                    await SelectRowForPasskeyCreationAsync(tableView, indexPath);
+                    return;
+                }
+
                 await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
                     _controller.CPViewController, _controller, _controller.PasswordRepromptService, "loginAddSegue");
+            }
+
+            private async Task SelectRowForPasskeyCreationAsync(UITableView tableView, NSIndexPath indexPath)
+            {
+                ClipLogger.Log($"SelectRowForPasskeyCreationAsync");
+
+                tableView.DeselectRow(indexPath, true);
+                tableView.EndEditing(true);
+
+                var item = Items.ElementAt(indexPath.Row);
+                if (item is null)
+                {
+                    ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> item is null");
+                    await _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred);
+                    return;
+                }
+
+                if (item.CipherView.Login.HasFido2Credentials
+                    &&
+                    !await _platformUtilsService.Value.ShowDialogAsync(
+                        AppResources.ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey,
+                        AppResources.OverwritePasskey,
+                        AppResources.Yes,
+                        AppResources.No))
+                {
+                    ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> don't want to overwrite");
+                    return;
+                }
+
+                if (!await _passwordRepromptService.Value.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
+                {
+                    ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> PromptAndCheckPasswordIfNeededAsync -> false");
+                    return;
+                }
+
+                // TODO: Check user verification
+
+                ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> Setting result {item.Id}");
+                Context.ConfirmNewCredentialTcs.SetResult(new Fido2ConfirmNewCredentialResult
+                {
+                    CipherId = item.Id,
+                    UserVerified = true
+                });
             }
         }
     }

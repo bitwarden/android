@@ -44,7 +44,7 @@ namespace Bit.iOS.Extension
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
-            await ((TableSource)TableView.Source).LoadItemsAsync();
+            await ((TableSource)TableView.Source).LoadAsync();
         }
 
         public bool CanAutoFill()
@@ -93,7 +93,7 @@ namespace Bit.iOS.Extension
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadItemsAsync();
+                await ((TableSource)TableView.Source).LoadAsync();
                 TableView.ReloadData();
             });
         }
