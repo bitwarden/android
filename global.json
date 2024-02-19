@@ -1,7 +1,0 @@
-{
-  "sdk": {
-    "version": "7.0.400",
-    "rollForward": "latestPatch",
-    "allowPrerelease": false
-  }
-}

@@ -38,7 +38,7 @@ jobs:
           fi
 
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Check Release Version
         id: version
@@ -56,7 +56,7 @@ jobs:
 
       - name: Create GitHub deployment
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: chrnorm/deployment-action@d42cde7132fcec920de534fffc3be83794335c00 # v2.0.5
+        uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1 # v2.0.7
         id: deployment
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -68,7 +68,7 @@ jobs:
 
       - name: Download all artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d # v3.0.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -76,7 +76,7 @@ jobs:
 
       - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d # v3.0.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -87,7 +87,7 @@ jobs:
 
       - name: Create release
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5  # v1.13.0
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
@@ -126,11 +126,11 @@ jobs:
     if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d # v3.0.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -139,7 +139,7 @@ jobs:
 
       - name: Dry Run - Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        uses: dawidd6/action-download-artifact@e7466d1a7587ed14867642c2ca74b5bcc1e19a2d # v3.0.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -147,7 +147,7 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
-        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d  # v3.8.1
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '16.x'
 

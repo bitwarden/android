@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Grid
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:Class="Bit.App.Controls.DateTimePicker"
+    Unloaded="DateTimePicker_OnUnloaded"
+    ColumnDefinitions="*,*">
+    <controls:ExtendedDatePicker
+        x:Name="_datePicker"
+        Grid.Column="0"
+        NullableDate="{Binding Date, Mode=TwoWay}"
+        Format="d" />
+    <controls:ExtendedTimePicker
+        x:Name="_timePicker"
+        Grid.Column="1"
+        NullableTime="{Binding Time, Mode=TwoWay}"
+        Format="t" />
+</Grid>

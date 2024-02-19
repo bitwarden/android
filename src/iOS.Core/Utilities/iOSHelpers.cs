@@ -2,9 +2,8 @@
 using System.Runtime.InteropServices;
 using Bit.App.Utilities;
 using Bit.Core.Services;
+using Microsoft.Maui.Controls.Compatibility.Platform.iOS;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Core.Utilities
 {

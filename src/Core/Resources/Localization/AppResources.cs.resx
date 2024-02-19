@@ -1,0 +1,2878 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>O aplikaci</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Přidat</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Přidat složku</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Přidat položku</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Vyskytla se chyba.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Zpět</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>Bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Zrušit</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopírovat</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Kopírovat heslo</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Kopírovat uživatelské jméno</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Autoři</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Smazat</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Mazání...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Opravdu chcete smazat tuto položku? Akce je nevratná.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Upravit</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Upravit složku</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>E-mail</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>E-mailová adresa</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Napište nám</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>Napište nám e-mail pro získání pomoci nebo zanechání zpětné vazby.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Zadejte PIN kód.</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Oblíbené</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>Nahlásit chybu</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Nahlaste chybu přímo v našem repozitáři na GitHubu.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Pro ověření použijte otisk prstu.</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Složka</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>Nová složka byla vytvořena.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Složka byla smazána.</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>Žádná složka</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Složky</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Složka byla uložena</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Přejít na webovou stránku</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Nápověda a zpětná vazba</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Skrýt</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Před pokračováním se připojte k internetu.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>Je vyžadováno připojení k internetu</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>Chybné hlavní heslo. Zkuste to znovu.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>Chybný PIN. Zkuste to znovu.</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Spustit</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Přihlásit se</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Přihlašovací údaje</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Odhlásit se</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Opravdu se chcete odhlásit?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Odebrat účet</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Opravdu chcete odebrat tento účet?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Účet byl již přidán</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Chcete se na něj nyní přepnout?</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Hlavní heslo</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Více</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>Můj trezor</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Ověřovací aplikace</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Název</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Poznámky</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>OK</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Heslo</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Uložit</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Přesunout</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Ukládání...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Nastavení</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Zobrazit</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Položka byla smazána</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Odeslat</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Synchronizace</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Poděkování</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Nástroje</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>URI</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Pro odemknutí použít otisk prstu</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Uživatelské jméno</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>Pole {0} je povinné.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0}: zkopírováno</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Ověřit otisk prstu</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Ověřit hlavní heslo</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Ověřit PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Verze</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Zobrazit</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Navštivte naše webové stránky</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Webová stránka</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Účet</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Váš účet byl vytvořen! Můžete se přihlásit.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Přidat položku</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>Rozšíření aplikace</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Služba přístupnosti Bitwarden umožňuje automatické vyplňování přihlašovacích údajů v aplikacích a na webových stránkách.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Služba automatického vyplňování</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Nepoužívat zaměnitelné znaky</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>Rozšíření aplikace Bitwarden</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>Nejjednodušší způsob přidání nových přihlášení do trezoru je z rozšíření Bitwardenu. Další informace o používání rozšíření Bitwardenu získáte klepnutím na obrazovku Nastavení.</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Použijte Bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>Služba automatického vyplňování</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Změnit e-mail</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>E-mailovou adresu si můžete změnit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Změnit hlavní heslo</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Zavřít</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Pokračovat</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Vytvořit účet</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Vytváření účtu...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Upravit položku</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Povolit automatickou synchronizaci</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Zadejte e-mailovou adresu pro zaslání nápovědy k hlavnímu heslu.</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Znovu zapnout rozšíření aplikace</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Téměř hotovo!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Zapnout rozšíření aplikace</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>V Safari používá Bitwarden ikonu pro sdílení (nápověda: nachází se vpravo dole v menu).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Získejte okamžitý přístup ke svým heslům!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>Jste připraveni se přihlásit!</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Vaše přihlašovací údaje jsou nyní snadno přístupné ze Safari, Chromu a dalších podporovaných aplikací.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>V Safari a Chromu najdete Bitwarden pomocí ikony sdílení (nápověda: nachází se vpravo dole v menu).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Pro spuštění rozšíření klepněte  na ikonu Bitwardenu v menu.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu "Další“ v dolní části menu.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Oblíbené</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>Otisk prstu</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Vygenerovat heslo</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Získat nápovědu pro hlavní heslo</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Importovat položky</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>Na bitwarden.com můžete do webového trezoru hromadně importovat položky. Chcete tuto stránku nyní otevřít?</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Importuje rychle a hromadně údaje z jiných aplikací pro správu hesel.</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Poslední synchronizace:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Délka</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Zamknout</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minut</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hodina</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minuta</value>
+  </data>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hodiny</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Okamžitě</value>
+  </data>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Časový limit trezoru</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Akce při vypršení časového limitu trezoru</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Po vypršení časového limitu dojde k odhlášení. Přístup k trezoru bude odebrán a pro opětovné přihlášení bude vyžadováno online ověření. Opravdu chcete použít toto nastavení?</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Přihlašování…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Pro přístup do Vašeho bezpečného trezoru se přihlaste nebo si vytvořte nový účet.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Správa</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Potvrzení hesla se neshoduje.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>Hlavní heslo je heslo, které používáte k přístupu do Vašeho trezoru. Je velmi důležité, abyste jej nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste jej zapomněli.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Nápověda k hlavnímu heslu (volitelné)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>Nápověda k hlavnímu heslu Vám pomůže vzpomenout si heslo, pokud ho zapomenete.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hlavní heslo musí obsahovat alespoň {0} znaků.</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Minimální počet číslic</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Minimální počet speciálních znaků</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>Další nastavení</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>Před použitím rozšíření se musíte nejdříve přihlásit v hlavní aplikaci Bitwarden.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Nikdy</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>Položka byla přidána</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>Žádné oblíbené přihlašovací údaje.</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Žádné položky.</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>Pro tuto stránku neexistují žádné položky. Klepněte pro jejich přidání.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Tyto přihlašovací údaje nemají nastavené uživatelské jméno nebo heslo.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>OK, rozumím!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Výchozí nastavení je převzato z nastavení generování hesel v aplikaci Bitwarden.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Volby</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Ostatní</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Heslo bylo vygenerováno.</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Generátor hesel</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Nápověda pro heslo</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>Poslali jsme Vám e-mail s nápovědou k hlavnímu heslu.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Opravdu chcete přepsat aktuální heslo?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>Bitwarden udržuje Váš trezor automaticky synchronizovaný pomocí oznámení. Aby aplikace správně pracovala, klepněte při žádosti o povolení oznámení na "Povolit".</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>Ohodnotit aplikaci</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Pomozte nám napsáním dobré recenze!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Vygenerovat jiné heslo</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>Znovu zadejte hlavní heslo</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Prohledat trezor</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Zabezpečení</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Vybrat</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Nastavit PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Zadejte 4místný PIN kód pro odemknutí aplikace.</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Informace o položce</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Položka byla uložena</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Odesílání...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Synchronizování...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Synchronizace byla dokončena</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Synchronizace selhala</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>Synchronizovat trezor nyní</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Dvoufázové přihlášení</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Odemknout pomocí {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Odemknout pomocí PIN kódu</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Ověřování</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Ověřovací kód</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>Zobrazit položku</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>Webový trezor Bitwardenu</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Ztratili jste ověřovací aplikaci?</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Položky</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Rozšíření aktivováno!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikony</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Překlady</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Položky pro {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>Žádné položky pro {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>Když vyberete vstupní pole a uvidíte překrytí automatického vyplnění, můžete na něj klepnout a spustit službu automatického vyplnění.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Klepnutím na toto oznámení automaticky vyplníte přihlašovací údaje z trezoru.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Otevřít nastavení přístupnosti</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. V nastavení Přístupnosti systému Android klepněte na "Bitwarden" v části "Stažené služby".</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Zapněte přepínač a potvrďte stisknutím tlačítka OK.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Zakázáno</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Povoleno</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Vypnuto</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Zapnuto</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do Vašeho trezoru, je služba automatického vyplňování Bitwardenu. Další informace o použití této služby naleznete na obrazovce "Nastavení".</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>Automatické vyplňování</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Opravdu chcete tyto přihlašovací údaje automaticky vyplnit? Nejsou úplně shodné s "{0}".</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Odpovídající položky</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Možné odpovídající položky</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Hledáte přihlašovací údaje k automatickému vyplnění pro "{0}".</value>
+  </data>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Více o organizacích</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Nelze otevřít aplikaci "{0}".</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Ověřovací aplikace</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Zadejte 6místný kód z ověřovací aplikace.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Zadejte 6místný kód z e-mailu, který byl zaslán na {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Přihlášení není dostupné</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>Tento účet má dvoufázové přihlášení, ale žádný z nakonfigurovaných poskytovatelů dvoufázového přihlášení není na tomto zařízení podporován. Použijte prosím podporované zařízení nebo přidejte další poskytovatele, kteří jsou lépe podporováni napříč zařízeními (jako je ověřovací aplikace).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Kód pro obnovení</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Zapamatovat mě</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Znovu zaslat ověřovací kód na e-mail</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Volby dvoufázového přihlášení</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Použít jinou metodu dvoufázového přihlášení</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Nelze odeslat ověřovací e-mail. Zkuste to znovu.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Ověřovací e-mail byl odeslán.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Pro pokračování podržte YubiKey NEO blízko zadní strany Vašeho zařízení nebo vložte YubiKey do USB portu a stiskněte tlačítko na klíči.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>Bezpečnostní klíč YubiKey</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Přidat novou přílohu</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Přílohy</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Nelze stáhnout soubor.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Vaše zařízení nemůže otevřít tento typ souboru.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Stahování...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>Tato příloha má velikost {0}. Opravdu ji chcete stáhnout do Vašeho zařízení?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Autentizační klíč (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Ověřovací kód (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Byl přidán autentizační klíč.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Nelze přečíst autentizační klíč.</value>
+  </data>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Nasměrujte kameru na QR kód.
+Načtení proběhne automaticky.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Načíst QR kód</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Fotoaparát</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Fotky</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Kopírovat TOTP</value>
+  </data>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Pokud mají Vaše přihlašovací údaje přidán autentizační klíč pro TOTP, vygenerovaný ověřovací kód (TOTP) se automaticky zkopíruje do schránky při každém automatickém vyplnění přihlašovacích údajů.</value>
+  </data>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Automaticky kopírovat TOTP</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>Pro použití této funkce je potřebné členství Premium.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Příloha byla přidána</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Příloha byla smazána</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Vybrat soubor</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Soubor</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>Není vybrán žádný soubor</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>Žádné přílohy.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>Zdrojový soubor</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Funkce je nedostupná</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Maximální velikost souboru je 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>Dokud neaktualizujete svůj šifrovací klíč, nemůžete tuto funkci použít.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Vyžaduje se migrace šifrovacího klíče. Pro aktualizaci šifrovacího klíče se přihlaste přes webový trezor.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Dozvědět se více</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>URL serveru API</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Vlastní prostředí</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>Pro pokročilé uživatele. Můžete zadat základní URL každé služby zvlášť.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>URL vlastního prostředí byly uloženy.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} nemá správný formát.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>URL serveru identity</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Vlastní hostované prostředí</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Zadejte základní URL vlastní hostované aplikace Bitwarden.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>URL serveru</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>URL serveru webového trezoru</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Klepnutím na toto oznámení zobrazíte přihlašovací údaje z trezoru.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Vlastní pole</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Kopírovat číslo</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Kopírovat bezpečnostní kód</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Číslo</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Bezpečnostní kód</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Karta</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identita</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Přihlášení</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Zabezpečená poznámka</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Adresa 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Adresa 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Adresa 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>duben</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>srpen</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Vydavatel</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Jméno držitele karty</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>Město</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Společnost</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Stát</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>prosinec</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr.</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Měsíc expirace</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Rok expirace</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>únor</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Křestní jméno</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>leden</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>červenec</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>červen</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Příjmení</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Celé jméno</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>Číslo dokladu totožnosti</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>březen</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>květen</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Prostřední jméno</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Pan</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Paní</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Slečna</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Neutrální</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>listopad</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>říjen</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Číslo cestovního pasu</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telefon</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>září</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Rodné číslo</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>Kraj / Provincie</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Oslovení</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>PSČ</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresa</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Expirace</value>
+  </data>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Zobrazit ikony webových stránek</value>
+  </data>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Zobrazí rozeznatelný obrázek vedle každého přihlášení.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>URL serveru ikon</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Automatické vyplnění aplikací Bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Trezor je uzamčený</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Přejít do trezoru</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Kolekce</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>V této kolekci nejsou žádné položky.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>V této složce nejsou žádné položky.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>V koši nejsou žádné položky.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Služba přístupnosti automatického vyplňování</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>Služba automatického vyplňování používá Android Autofill Framework k vyplnění přihlašovacích údajů do jiných aplikací na Vašem zařízení.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů, platebních karet či identit v ostatních aplikacích.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Otevřít nastavení automatického vyplňování</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Použít Face ID k ověření.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Použít Face ID k odemknutí</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Ověření Face ID</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>Obrazovku nastavení automatického vyplňování Android se nepodařilo otevřít. Nastavení můžete otevřít ručně z Nastavení systému Android &gt; Systém &gt; Jazyky a zadávání &gt; Rozšířená nastavení &gt; Služba automatického vyplňování.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Název vlastního pole</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Skryté</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Propojené</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>Nové vlastní pole</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>Jaký typ vlastního pole chcete přidat?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Odebrat</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>Nová URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Základní doména</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Výchozí</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Přesně</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Hostitel</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regulární výraz</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Začíná na</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>Zjišťování shody URI</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Zjišťování shody</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Ano a uložit</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Automaticky vyplnit a uložit</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organizace</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Podržte Yubikey u horní části zařízení.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Zkusit znovu</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>Pro pokračování podržte YubiKey NEO u zadní části zařízení.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>Služba přístupnosti může být užitečná, pokud aplikace nepodporují standardní službu automatického vyplňování.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Heslo bylo aktualizováno</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Aktualizováno</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>Automatické vyplňování aktivováno!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>Před použitím automatického vyplňování se musíte nejdříve přihlásit v hlavní aplikaci Bitwardenu.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Vaše přihlašovací údaje jsou nyní snadno přístupné přímo z Vaší klávesnice během přihlašování do aplikací či webů.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>Doporučujeme vypnout v nastavení všechny další aplikace pro automatické vyplňování údajů, pokud je neplánujete používat.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Přistupujte k Vašemu trezoru přímo z Vaší klávesnice pro rychlejší automatické vyplnění hesel.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>Pokyny pro zapnutí automatického vyplňování hesel na Vašem zařízení:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Přejděte do aplikace "Nastavení" v iOS</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Klepněte na "Hesla" > "Volby hesla"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Zapněte přepínač u položky "Automatické vyplnění hesel"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Najděte sekci "Povolit vyplňování z:"</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Zvolte "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Automatické vyplňování hesel</value>
+  </data>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do trezoru, je pomocí rozšíření automatického vyplňování Bitwardenu. Další informace o používání rozšíření automatického vyplňování Bitwardenu naleznete na obrazovce Nastavení.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Neplatná e-mailová adresa.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Karty</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Přihlašovací údaje</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Zabezpečené poznámky</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Všechny položky</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URI</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Kontrolování hesla...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Zkontrolujte, zda nedošlo k úniku hesla.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>K úniku tohoto hesla došlo celkem {0}x. Měli byste jej změnit.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value> V žádném ze známých případů nedošlo k úniku tohoto hesla. Mělo by být bezpečné používat jej i nadále.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Název identity</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Hodnota</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Historie hesel</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Typy</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>Žádná hesla k zobrazení.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>Žádné položky k zobrazení.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Prohledat kolekci</value>
+  </data>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Prohledat soubory Sends</value>
+  </data>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Prohledat texty Sends</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Prohledat {0}</value>
+    <comment>ex: Search Logins</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Přesunout dolů</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Přesunout nahoru</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Různé</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Vlastnictví</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Kdo vlastní tuto položku?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>Žádné kolekce k zobrazení.</value>
+  </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>Položka {0} přesunuta do {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Položka byla sdílena.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>Musíte vybrat alespoň jednu kolekci.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Sdílet</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Sdílet položku</value>
+  </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Přesunout do organizace</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>Žádné organizace k zobrazení.</value>
+  </data>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Vyberte organizaci, do které chcete tuto položku přesunout. Přesun do organizace převede vlastnictví položky této organizaci. Po přesunutí této položky již nebudete přímým vlastníkem této položky.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Počet slov</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Heslová fráze</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Oddělovač slov</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Vymazat</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Generátor</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>Nejsou k dispozici žádné složky k zobrazení.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Fráze otisku prstu</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Fráze otisku prstu Vašeho účtu</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden Vám umožňuje sdílet položky v trezoru s ostatními prostřednictvím organizace. Chcete přejít na bitwarden.com a dozvědět se více?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Exportovat trezor</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Zamknout nyní</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Odemknout</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odemknout trezor</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minut</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Nastavte svůj PIN kód pro odemknutí trezoru. Pokud se zcela odhlásíte z aplikace bude Váš aktuální PIN resetován.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Přihlášen jako {0} na {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Váš trezor je uzamčen. Pro pokračování musíte zadat hlavní heslo.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Váš trezor je uzamčen. Pro pokračování musíte zadat PIN.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Váš trezor je uzamčen. Pro pokračování ověřte svou identitu.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Tmavý</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Světlý</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 minut</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 sekund</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 sekund</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 sekund</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 minuty</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Vymazat schránku</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Automaticky vymaže zkopírované hodnoty z Vaší schránky.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Výchozí zjišťování shody URI</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Vyberte výchozí způsob, jakým se detekuje shoda URI přihlašovacích údajů. Používá se například pro automatické vyplňování.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Motiv</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Změna barevného motivu aplikace.</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Výchozí (Systémový)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Výchozí tmavý motiv</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Kopírovat poznámku</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Ukončit</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Opravdu chcete ukončit Bitwarden?</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Černý</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Tmavý (solární)</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Automatické vyplňování blokovaných URI</value>
+  </data>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Ptát se na přidání přihlášení</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Zeptá se na uložení údajů, pokud nebyly v trezoru nalezeny.</value>
+  </data>
+  <data name="OnRestart" xml:space="preserve">
+    <value>Při restartu aplikace</value>
+  </data>
+  <data name="AutofillServiceNotEnabled" xml:space="preserve">
+    <value>Automatické vyplňování umožňuje bezpečný přístup k Vašemu trezoru Bitwarden z jiných webových stránek a aplikací. Zdá se, že jste nenastavili službu automatického vyplňování pro Bitwarden. Nastavte automatické vyplňování na obrazovce "Nastavení".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Změna motivu se projeví po restartování aplikace.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Velká písmena na začátku slova</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Zahrnout číslice</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Stáhnout</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Sdílené</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Přepnout viditelnost</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Platnost přihlášení vypršela.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Použít biometrii k ověření</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Biometrie</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Použít biometrii k odemknutí</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bitwarden vyžaduje pozornost – Zkontrolujte "Službu automatického vyplňování" v nastavení Bitwardenu</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. V nastavení Android aplikace Bitwarden přejděte v části Rozšířená nastavení do "Zobrazit přes ostatní aplikace"  a povolte zobrazení přes jiné aplikace.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Oprávnění</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Otevřít nastavení oprávnění překrytí obrazovky</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. V nastavení Android aplikace Bitwarden přejděte v části Rozšířená nastavení do "Zobrazit přes ostatní aplikace"  a povolte zobrazení přes jiné aplikace.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Zamítnuto</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Uděleno</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>Formát souboru</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Zadejte své hlavní heslo pro export dat.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Poslat ověřovací kód na Váš e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kód byl odeslán!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Pro pokračování potvrďte svou identitu.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>Tento export obsahuje data Vašeho trezoru v nezašifrovaném formátu. Soubor s exportem byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Smažte jej okamžitě po jeho použití.</value>
+  </data>
+  <data name="EncExportKeyWarning" xml:space="preserve">
+    <value>Tento export zašifruje Vaše data pomocí šifrovacího klíče Vašeho účtu. Pokud někdy změníte šifrovací klíč Vašeho účtu, měli by jste vyexportovat data znovu, protože tento exportovaný soubor nebudete moci dešifrovat.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Šifrovací klíče účtu jsou pro každý uživatelský účet Bitwardenu jedinečné, takže nelze importovat šifrovaný export do jiného účtu.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Potvrdit export trezoru</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Varování</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>Při exportu Vašeho trezoru došlo k chybě. Pokud problém přetrvává, proveďte export z webového trezoru.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Trezor byl úspěšně exportován</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Duplikovat</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>Jedna nebo více zásad organizace ovlivňují nastavení generátoru</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Otevřít</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>Při ukládání této přílohy došlo k chybě. Pokud problém přetrvává, můžete ji uložit z webového trezoru.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Příloha byla úspěšně uložena</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Pro povolení dlaždice automatického vyplňování povolte v nastavení Bitwardenu "Službu automatického vyplňování".</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Nebyla nalezena žádná pole s heslem</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Přesouvání do koše...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Položka byla přesunuta do koše.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Obnovit</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Obnovování...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Položka byla obnovena</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Koš</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Prohledat koš</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Opravdu chcete trvale tuto položku smazat? Akce je nevratná.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Opravdu chcete tuto položku obnovit?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Opravdu chcete položku přesunout do koše?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometrické odemknutí pro tento účet je vypnuto a čeká na ověření hlavního hesla.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometrické odemknutí pro automatické vyplnění je vypnuto a čeká na ověření hlavního hesla.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Povolit synchronizaci při obnovení</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Trezor se synchronizuje gestem potažení dolů.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Jednotné podnikové přihlášení</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Rychle se přihlaste pomocí přihlašovacího portálu Vaší organizace. Chcete-li začít, zadejte identifikátor Vaší organizace.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Identifikátor organizace</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Aktuálně se nelze přihlásit pomocí SSO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Nastavit hlavní heslo</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>Chcete-li dokončit přihlášení pomocí SSO, nastavte hlavní přístupové heslo k Vašemu trezoru.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>Jedna nebo více zásad organizace vyžaduje, aby hlavní heslo splňovalo následující požadavky:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Minimální skóre složitosti {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Minimální délka {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Obsahuje jedno nebo více velkých písmen</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Obsahuje jedno nebo více malých písmen</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Obsahuje jednu nebo více číslic</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Obsahuje jeden nebo více následujících speciálních znaků: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Neplatné heslo</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Heslo nesplňuje požadavky organizace. Zkontrolujte požadavky a zkuste to znovu.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Načítání</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>Aktivací tohoto přepínače souhlasíte s těmito dokumenty:</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Podmínky použití a Zásady ochrany osobních údajů nebyly odsouhlaseny.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Podmínky použití</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Zásady ochrany osobních údajů</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bitwarden vyžaduje pozornost – Povolte volbu "Zobrazit přes ostatní aplikace" ve "Službách automatického vyplňování“ v nastavení aplikace Bitwarden</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Služby automatického vyplňování</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Použít automatické vyplňování</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Použije automatické vyplňování, pokud to podporuje Váš vybraný editor IME (klávesnice). Pokud Vaše konfigurace není podporována (nebo je tato možnost zakázána), použije se výchozí překrytí automatického vyplňování.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Použít přístupnost</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Použije službu přístupnosti aplikace Bitwarden k automatickému vyplnění přihlašovacích údajů napříč aplikacemi a weby. Při zapnutí se po výběru pole s přihlašovacími údaji zobrazí vyskakovací okno.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Použije službu přístupnosti aplikace Bitwarden k automatickému vyplnění přihlašovacích údajů napříč aplikacemi a weby (vykreslování přes ostatní aplikace musí být povoleno).</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Použije službu přístupnosti aplikace Bitwarden pro dlaždici rychlého automatického vyplnění anebo zobrazení překryvného okna (pokud je povoleno).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Vyžadováno pro použití dlaždice rychlého automatického vyplnění nebo rozšíření služby automatického vyplnění pomocí vykreslování přes ostatní aplikace (pokud je povoleno).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Použít vykreslování přes ostatní aplikace</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>Služba přístupnosti aplikace Bitwarden umožní zobrazovat vyskakovací okno při výběru pole s přihlašovacími údaji.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>Pokud je povoleno, služba usnadnění Bitwardenu zobrazí vyskakovací okno při výběru přihlašovacích polí pro automatické vyplňování přihlašovacích údajů.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>Pokud je povoleno, přístupnost zobrazí vyskakovací okno pro rozšíření služby automatického vyplňování pro starší aplikace, které nepodporují Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Z důvodu podnikových zásad nemůžete ukládat položky do svého osobního trezoru. Změňte vlastnictví položky na organizaci a poté si vyberte z dostupných kolekcí.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>Zásady organizace ovlivňují možnosti vlastnictví.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AllSends" xml:space="preserve">
+    <value>Všechny Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Sends" xml:space="preserve">
+    <value>Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>Přátelský název pro popis tohoto Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>Text, který chcete odeslat.</value>
+  </data>
+  <data name="HideTextByDefault" xml:space="preserve">
+    <value>Při přístupu k Send, ve výchozím nastavení skrýt text</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="TypeFile" xml:space="preserve">
+    <value>Soubor</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>Soubor, který chcete odeslat.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Je vybrán typ souboru.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Není vybrán typ souboru, klepněte pro výběr.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Je vybrán typ textu.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Není vybrán typ textu, klepněte pro výběr.</value>
+  </data>
+  <data name="DeletionDate" xml:space="preserve">
+    <value>Datum smazání</value>
+  </data>
+  <data name="DeletionTime" xml:space="preserve">
+    <value>Čas smazání</value>
+  </data>
+  <data name="DeletionDateInfo" xml:space="preserve">
+    <value>Tento Send bude trvale smazán v určený datum a čas.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PendingDelete" xml:space="preserve">
+    <value>Čeká na smazání</value>
+  </data>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Datum vypršení platnosti</value>
+  </data>
+  <data name="ExpirationTime" xml:space="preserve">
+    <value>Čas vypršení platnosti</value>
+  </data>
+  <data name="ExpirationDateInfo" xml:space="preserve">
+    <value>Je-li nastaveno, přístup k tomuto Send vyprší v daný datum a čas.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Vypršela platnost</value>
+  </data>
+  <data name="MaximumAccessCount" xml:space="preserve">
+    <value>Maximální počet přístupů</value>
+  </data>
+  <data name="MaximumAccessCountInfo" xml:space="preserve">
+    <value>Je-li nastaveno, uživatelé již nebudou mít přístup k tomuto Send, jakmile bude dosaženo maximálního počtu přístupů.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="MaximumAccessCountReached" xml:space="preserve">
+    <value>Dosažen maximální počet přístupů</value>
+  </data>
+  <data name="CurrentAccessCount" xml:space="preserve">
+    <value>Aktuální počet přístupů</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Nové heslo</value>
+  </data>
+  <data name="PasswordInfo" xml:space="preserve">
+    <value>Volitelně bude vyžadovat heslo pro přístup k tomuto Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="RemovePassword" xml:space="preserve">
+    <value>Odebrat heslo</value>
+  </data>
+  <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
+    <value>Opravdu chcete odebrat heslo?</value>
+  </data>
+  <data name="RemovingSendPassword" xml:space="preserve">
+    <value>Odebírání hesla</value>
+  </data>
+  <data name="SendPasswordRemoved" xml:space="preserve">
+    <value>Heslo bylo odebráno.</value>
+  </data>
+  <data name="NotesInfo" xml:space="preserve">
+    <value>Soukromé poznámky k tomuto Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="DisableSend" xml:space="preserve">
+    <value>Deaktivovat tento Send (nikdo k němu nebude mít přístup)</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NoSends" xml:space="preserve">
+    <value>Ve Vašem účtu nejsou žádné Sends.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Přidat Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopírovat odkaz</value>
+  </data>
+  <data name="ShareLink" xml:space="preserve">
+    <value>Sdílet odkaz</value>
+  </data>
+  <data name="SendLink" xml:space="preserve">
+    <value>Odkaz tohoto Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SearchSends" xml:space="preserve">
+    <value>Prohledat Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="EditSend" xml:space="preserve">
+    <value>Upravit Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddSend" xml:space="preserve">
+    <value>Nový Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AreYouSureDeleteSend" xml:space="preserve">
+    <value>Opravdu chcete smazat tento Send?</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDeleted" xml:space="preserve">
+    <value>Send byl smazán</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendUpdated" xml:space="preserve">
+    <value>Send byl uložen</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NewSendCreated" xml:space="preserve">
+    <value>Send byl vytvořen</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="OneDay" xml:space="preserve">
+    <value>1 den</value>
+  </data>
+  <data name="TwoDays" xml:space="preserve">
+    <value>2 dny</value>
+  </data>
+  <data name="ThreeDays" xml:space="preserve">
+    <value>3 dny</value>
+  </data>
+  <data name="SevenDays" xml:space="preserve">
+    <value>7 dnů</value>
+  </data>
+  <data name="ThirtyDays" xml:space="preserve">
+    <value>30 dnů</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Vlastní</value>
+  </data>
+  <data name="ShareOnSave" xml:space="preserve">
+    <value>Sdílet tento Send po uložení</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDisabledWarning" xml:space="preserve">
+    <value>Z důvodu podnikových zásad můžete smazat pouze existující Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>O Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Skrýt mou e-mailovou adresu před příjemci</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>Jedna nebo více zásad organizace ovlivňuje nastavení Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Bezplatné účty jsou omezeny pouze na sdílení textu. K používání souborů pomocí Send je vyžadováno prémiové členství.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>Abyste mohli tuto funkci používat, musíte ověřit svůj e-mail. Svůj e-mail můžete ověřit ve webovém trezoru.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Zeptat se znovu na hlavní heslo</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Potvrzení hlavního hesla</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>Tato akce je chráněna. Chcete-li pokračovat, zadejte znovu Vaše hlavní heslo, abychom ověřili Vaši totožnost.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Vyžadována Captcha</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha selhala. Zkuste to znovu.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Hlavní heslo bylo aktualizováno</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Aktualizovat hlavní heslo</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Administrátor v organizaci nedávno změnil Vaše hlavní heslo. Pro přístup k trezoru jej nyní musíte změnit. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se znovu přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Aktualizování hesla</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Aktuálně nelze aktualizovat heslo</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Odebrat hlavní heslo</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} používá SSO se šifrováním spravovaným zákazníkem. Pokračováním se odebere Vaše hlavní heslo z Vašeho účtu a bude vyžadováno přihlášení přes SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Pokud nechcete odebrat hlavní heslo, můžete tuto organizaci opustit.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Opustit organizaci</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Opustit {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Chcete-li pokračovat, mějte připravený bezpečnostní klíč kompatibilní s FIDO2 a postupujte podle pokynů po klepnutí na 'Ověření WebAuthn' na další obrazovce.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Ověřování pomocí FIDO2 WebAuthn. Můžete se ověřit pomocí externího bezpečnostního klíče.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Ověření WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Zpět do aplikace</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Ujistěte se, že Váš výchozí prohlížeč podporuje WebAuthn a zkuste to znovu.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Tato organizace má podnikové zásady, které Vás automaticky zaregistrují k obnovení hesla. Registrace umožní správcům organizace změnit Vaše hlavní heslo.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Zásady Vaší organizace ovlivňují časový limit trezoru. Maximální povolený časový limit trezoru je {0} hodin a {1} minut.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Zásady Vaší organizace mají vliv na časový limit trezoru. Maximální povolený časový limit trezoru je {0} hodin a {1} minut. Akce po časovém limitu trezoru je nastavena na {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Zásady Vaší organizace nastavily akce po časovém limitu trezoru na {0}.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Časový limit Vašeho trezoru překračuje omezení stanovená Vaší organizací.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Jedna nebo více zásad organizace Vám brání v exportu Vašeho osobního trezoru.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Přidat účet</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odemčeno</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Uzamčeno</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Odhlášen</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Přepnuto na další dostupný účet</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Účet uzamčen</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Odhlášení proběhlo úspěšně</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Účet byl úspěšně odebrán</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Smazat účet</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Smazání Vašeho účtu je trvalé</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Váš účet a všechna související data budou vymazána a neobnovitelná. Opravdu chcete pokračovat?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Mazání Vašeho účtu</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Váš účet byl trvale smazán</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Neplatný ověřovací kód.</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Vyžádat jednorázové heslo</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Poslat kód</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Odesílání</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Při uložení zkopírovat odkaz na Send</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Odesílání kódu</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Ověřování</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Znovu odeslat kód</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Ověřovací kód byl odeslán na Váš e-mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Při odesílání ověřovacího kódu na Váš e-mail došlo k chybě. Zkuste to znovu.</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Zadejte ověřovací kód, který byl odeslán do Vašeho e-mailu</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Odesílat záznamy o pádech</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Pomozte zlepšovat stabilitu aplikace odesíláním hlášení o selháních.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Volby jsou rozbaleny, klepněte pro sbalení.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Volby jsou sbaleny, klepněte pro rozbalení.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Velká písmena (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Malá písmena (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Číslice (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Speciální znaky (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Klepnutím se vrátíte zpět</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Heslo je viditelné, klepněte pro skrytí.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Heslo není viditelné, klepněte pro zobrazení.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtrovat položky podle trezoru</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Všechny trezory</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Trezory</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Trezor: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Všechny</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Ověřovací kódy</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Je vyžadováno předplatné Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nelze přidat autentizační klíč? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Naskenovat QR kód</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nelze naskenovat QR kód? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentizační klíč</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Zadat klíč ručně</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Přidat TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Nastavit TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Jakmile je klíč úspěšně zadán, zvolte "Přidat TOTP" pro bezpečné uložení klíče</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Nastavení zámku na "Nikdy" ponechá Váš trezor k dispozici komukoli s přístupem k Vašemu zařízení. Používáte-li tuto možnost, měli byste zajistit, aby Vaše zařízení bylo náležitě chráněno.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Jedna nebo více zadaných URL jsou neplatné. Zkontrolujte je a opakujte akci znovu.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Nepodařilo se nám zpracovat Váš požadavek. Zkuste to znovu nebo nás kontaktujte.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Zapnout záznam obrazovky</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Opravdu chcete zapnout záznam obrazovky?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Bylo vyžádáno přihlášení</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Pokoušíte se přihlásit?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Pokus o přihlášení od {0} na {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Typ zařízení</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP adresa</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Čas</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Poblíž</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Potvrdit přihlášení</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Zamítnout přihlášení</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Právě teď</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>Před {0} minutami</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Přihlášení potvrzeno</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Přihlášení zamítnuto</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Schválit žádosti o přihlášení</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Použít toto zařízení pro schvalování žádostí o přihlášení z jiných zařízení</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Povolit oznámení</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Dostávat oznámení ohledně nových žádostí o přihlášení</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Ne, děkuji</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Potvrdit pokus o přihlášení pro {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Všechna oznámení</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Typ hesla</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Co chcete vygenerovat?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Typ uživatelského jména</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>E-mailová adresa s plusem</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>E-mail pro doménový koš</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias přeposílaného e-mailu</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Náhodné slovo</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (vyžadován)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Název domény (vyžadován)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Klíč API (vyžadován)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Služba</value>
+  </data>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Přístupový token API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Opravdu chcete přepsat aktuální uživatelské jméno?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Vygenerovat uživatelské jméno</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Typ e-mailu</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webová stránka (vyžadovaná)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Vyskytla se neznámá chyba: {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Použijte funkce podadres Vašeho poskytovatele e-mailu</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Použijte nakonfigurovanou univerzální schránku své domény.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Vygeneruje alias e-mailu pomocí externí přeposílací služby.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Náhodně</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Propojit s hodinkami</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Prohlášení služby usnadnění přístupu</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden používá službu usnadnění přístupu k hledání přihlašovacích polí v aplikacích a webových stránkách a pokud bude nalezena shoda pro aplikaci nebo stránku, pak vytvoří odpovídající ID pole pro zadání uživatelského jména a hesla. Neukládáme žádné informace, které nám služba poskytla, ani se nepokoušíme kontrolovat jakékoli prvky na obrazovce mimo zadání textových údajů.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Potvrdit</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Zamítnout</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Požadavek na přihlášení již vypršel.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Pokus o přihlášení z:
+{0}
+Chcete se přepnout na tento účet?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Jste tu noví?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Získat nápovědu pro hlavní heslo</value>
+  </data>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Přihlašování jako {0} na {1}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Nejste to Vy?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Přihlásit se pomocí hlavního hesla</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Přihlásit se pomocí jiného zařízení</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Bylo zahájeno přihlášení</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Na Vaše zařízení bylo odesláno oznámení.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Ujistěte se, že je Váš trezor odemčen a fráze otisku prstu se shodují s druhým zařízením.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Znovu odeslat oznámení</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Potřebujete další volby?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Zobrazit všechny volby přihlášení</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Tento požadavek již není platný</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Čekající žádosti na přihlášení</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Zamítnout všechny žádosti</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Opravdu chcete zamítnout všechny žádosti na přihlášení?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Žádosti byly zamítnuty</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Žádné čekající žádosti</value>  
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Pro použití skeneru musíte povolit přístup k fotoaparátu</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Jazyk</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Jazyk byl změněn na {0}. Pro zobrazení změn restartujte aplikaci.</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Změna jazyka vyžaduje restart aplikace.</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Výchozí (Systémový)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Důležité</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit! Heslo musí mít alespoň {0} znaků.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Slabé hlavní heslo</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Slabé</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobré</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Silné</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Zkontrolovat heslo, zda nebylo odhaleno</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Odhalené hlavní heslo</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte jedinečné heslo. Opravdu chcete používat odhalené heslo?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Slabé a odhalené hlavní heslo</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Je vyžadován SSO identifikátor organizace.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Přidat klíč k existující nebo nové položce</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Žádné položky se shodou s "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Hledat položku nebo přidat novou</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Neexistují žádné položky, které by odpovídaly hledání</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Vlastní hosting</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Datový region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Aktuální hlavní heslo</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Přihlášeno!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Schválit s mým dalším zařízením</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Žádost o schválení správcem</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Schválit hlavním heslem</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Vypnout pomocí veřejného zařízení</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Zapamatovat toto zařízení</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Přístupový klíč</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Přístupové klíče</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Aplikace</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>Nemůžete upravovat aplikaci pro přístupové klíče, protože by to zneplatnilo přístupový klíč</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Přístupový klíč nebude zkopírován</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>Přístupový klíč nebude zkopírován do duplikované položky. Chete pokračovat v duplikování této položky?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Kopírovat aplikaci</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Dostupné pro dvoufázové přihlášení</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Nápověda pro znovuzeptání se na hlavní heslo</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Odemknutí může selhat z důvodu nedostatku paměti. Snižte nastavení KDF paměti nebo nastavte odemykání pomocí biometrie.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Neplatný klíč API</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Neplatný token API</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Bylo vyžádáno schválení správcem</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Váš požadavek byl odeslán Vašemu správci.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>Po schválení budete upozorněni. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Potíže s přihlášením?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Přihlášování jako {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Akce časového limitu trezoru byla změněna na odhlášení</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Blokovat automatické vyplňování</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Pro tento URI nebude nabízeno automatické vyplňování.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>Nový blokovaný URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI byl uložen</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Neplatný formát. Použijte https://, http:// nebo androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Upravit URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Zadat URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Formát: {0}. Oddělte více URI čárkou.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Formát: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Neplatný URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI byl odebrán</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>Nejsou žádné blokované URI</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>URI {0} je již blokován</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Najednou nelze upravovat více URI</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Přihlášení bylo schváleno</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Přihlášení zařízením musí být nastaveno v aplikaci Bitwarden. Potřebujete další volby?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Přihlásit se zařízením</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Přihlašování na</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Trezor</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Vzhled</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Zabezpečení účtu</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Centrum nápovědy Bitwarden</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Kontakt na podporu Bitwarden</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Kopírovat informace o aplikaci</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Synchronizovat nyní</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Volby odemknutí</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Časový limit relace</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Akce časového limitu relace</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Fráze otisku prstu účtu</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>Jedna hodina a jedna minuta</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>Jedna hodina a {0} minut</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} hodin a jedna minuta</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} hodin a {1} minut</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} hodin</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>Android Autofill Framework se používá k vyplnění přihlašovacích údajů do jiných aplikací na Vašem zařízení.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Pokud to Vaše vybraná klávesnice podporuje, použije se inline automatické vyplňování. V opačném případě se použije výchozí překrytí.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Další volby</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Pokračovat do webové aplikace?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Pokračovat do {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Pokračovat do centra nápovědy?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Pokračovat v kontaktování podpory?</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Pokračovat na Zásady ochrany osobních údajů?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Pokračovat do obchodu s aplikacemi?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Vytvořte svůj účet bezpečnějším nastavením dvoufázového přihlášení ve webové aplikaci Bitwarden.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>Hlavní heslo můžete změnit na webové aplikaci Bitwarden.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>Data můžete importovat do Vašeho trezoru na {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Přečtěte si více o tom, jak používat Bitwarden v centru nápovědy.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Nenašli jste to, co jste hledali? Na bitwarden.com získejte podporu.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Podívejte se na naše Zásady ochrany osobních údajů na bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Prozkoumejte další funkce Vašeho účtu Bitwarden ve webové aplikaci.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Bitwarden Vám umožňuje sdílet položky v trezoru s ostatními prostřednictvím organizace. Více informací naleznete na bitwarden.com.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Pomozte ostatním zjistit, zda je Bitwarden pro ně správný. Navštivte obchod s aplikacemi a zanechte hodnocení.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Vybere tmavý motiv při použití tmavého režimu Vašeho zařízení.</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Vytvořeno {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Příliš mnoho pokusů</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Účet byl odhlášen.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Oprávnění Vaší organizace byla aktualizována. To vyžaduje nastavení hlavního hesla.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Vaše organizace vyžaduje nastavení hlavního hesla.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Nastavte volbu odemknutí, abyste změnili časový limit Vašeho trezoru.</value>
+  </data>
+</root>

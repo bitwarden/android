@@ -2,7 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.iOS.Core.Utilities;
 using Foundation;

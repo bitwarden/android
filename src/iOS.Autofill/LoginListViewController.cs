@@ -1,8 +1,8 @@
 using System;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Autofill.Utilities;
@@ -17,6 +17,9 @@ namespace Bit.iOS.Autofill
 {
     public partial class LoginListViewController : ExtendedUIViewController
     {
+        UIBarButtonItem _cancelButton;
+        UIControl _accountSwitchButton;
+
         public LoginListViewController(IntPtr handle)
             : base(handle)
         {
@@ -37,12 +40,14 @@ namespace Bit.iOS.Autofill
 
         public async override void ViewDidLoad()
         {
+            _cancelButton = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, CancelButton_TouchUpInside);
+
             base.ViewDidLoad();
 
             SubscribeSyncCompleted();
 
             NavItem.Title = AppResources.Items;
-            CancelBarButton.Title = AppResources.Cancel;
+            _cancelButton.Title = AppResources.Cancel;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
@@ -61,19 +66,27 @@ namespace Bit.iOS.Autofill
             }
 
             _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
-            AccountSwitchingBarButton.Image = await _accountSwitchingOverlayHelper.CreateAvatarImageAsync();
+
+            _accountSwitchButton = await _accountSwitchingOverlayHelper.CreateAccountSwitchToolbarButtonItemCustomViewAsync();
+            _accountSwitchButton.TouchUpInside += AccountSwitchedButton_TouchUpInside;
+
+            NavItem.SetLeftBarButtonItems(new UIBarButtonItem[]
+            {
+                _cancelButton,
+                new UIBarButtonItem(_accountSwitchButton)
+            }, false);
 
             _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
         }
 
-        partial void AccountSwitchingBarButton_Activated(UIBarButtonItem sender)
-        {
-            _accountSwitchingOverlayHelper.OnToolbarItemActivated(_accountSwitchingOverlayView, OverlayView);
-        }
-
-        partial void CancelBarButton_Activated(UIBarButtonItem sender)
+        private void CancelButton_TouchUpInside(object sender, EventArgs e)
         {
             Cancel();
+        }
+
+        private void AccountSwitchedButton_TouchUpInside(object sender, EventArgs e)
+        {
+            _accountSwitchingOverlayHelper.OnToolbarItemActivated(_accountSwitchingOverlayView, OverlayView);
         }
 
         private void Cancel()
@@ -149,6 +162,21 @@ namespace Bit.iOS.Autofill
                 await ((TableSource)TableView.Source).LoadItemsAsync();
                 TableView.ReloadData();
             });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (_accountSwitchButton != null)
+                {
+                    _accountSwitchingOverlayHelper.DisposeAccountSwitchToolbarButtonItemImage(_accountSwitchButton);
+
+                    _accountSwitchButton.TouchUpInside -= AccountSwitchedButton_TouchUpInside;
+                }
+            }
+
+            base.Dispose(disposing);
         }
 
         public class TableSource : ExtensionTableSource

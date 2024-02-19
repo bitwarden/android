@@ -16,6 +16,7 @@ using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using View = Bit.Core.Models.View.View;
 
 namespace Bit.Core.Services
 {
@@ -1146,13 +1147,15 @@ namespace Bit.Core.Services
                     if (model.Login.Uris != null)
                     {
                         cipher.Login.Uris = new List<LoginUri>();
-                        foreach (var uri in model.Login.Uris)
+                        foreach (var uri in model.Login.Uris.Where(u => u.Uri != null))
                         {
                             var loginUri = new LoginUri
                             {
                                 Match = uri.Match
                             };
                             await EncryptObjPropertyAsync(uri, loginUri, new HashSet<string> { "Uri" }, key);
+                            var uriHash = await _cryptoService.HashAsync(uri.Uri, CryptoHashAlgorithm.Sha256);
+                            loginUri.UriChecksum = await _cryptoService.EncryptAsync(uriHash, key);
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }

@@ -1,5 +1,5 @@
 ﻿using System;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.Core;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;

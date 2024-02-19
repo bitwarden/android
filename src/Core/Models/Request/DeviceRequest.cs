@@ -12,7 +12,7 @@ namespace Bit.Core.Models.Request
             Identifier = appId;
         }
 
-        public DeviceType? Type { get; set; }
+        public Enums.DeviceType? Type { get; set; }
         public string Name { get; set; }
         public string Identifier { get; set; }
         public string PushToken { get; set; }

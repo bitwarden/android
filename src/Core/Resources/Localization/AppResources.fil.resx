@@ -1,0 +1,2880 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Tungkol</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Magdagdag</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Bagong Folder</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Bagong Item</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Nagkaproblema.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Bumalik</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>Bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Kanselahin</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Kopyahin</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Kopyahin ang password</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Kopyahin ang username</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Mga nag-ambag</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Burahin</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Binubura...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Buburahin mo na ba talaga ito? Wala nang bawian.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Baguhin</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Baguhin ang folder</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Email address</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Magpadala sa amin ng email</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>Direktang magpadala sa amin ng email para humingi ng tulong o magbahagi ng feedback.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Ipasok ang iyong PIN code.</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Mga Paborito</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>Magpadala ng ulat sa problema</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Magbukas ng isyu sa repositoryo namin sa GitHub.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Gamitin ang fingerprint mo para sa pagpapatunay.</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>Ginawa ang bagong folder.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Binura ang folder.</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>Walang Folder</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Mga Folder</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Sinave ang folder</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Pumunta sa website</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Tulong at feedback</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Itago</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Mangyaring kumonekta sa internet bago magpatuloy.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>Kailangang kumonekta sa internet</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>'Di-wastong master password. Subukan ulit.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>'Di-wastong PIN. Subukan ulit.</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Buksan</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Mag-log in</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Login</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Mag-log out</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong mag-log out?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Tanggalin ang account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong tanggalin ang account na ito?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Naidagdag na ang account</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Gusto mo bang lumipat na roon ngayon?</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Master password</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Higit pa</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>Vault ko</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Pangalan</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Hindi</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Mga Tala</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Sige</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Password</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>I-save</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Ilipat</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Sine-save...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Mga Setting</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Ipakita</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Tinanggal ang item</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Ipadala</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Sync</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Salamat</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Mga Kagamitan</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>URI</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Gumamit ng fingerprint sa pag-unlock</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>Kailangan ang field ng {0}.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>Kinopya ang {0}</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Beripikahin ang fingerprint</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Beripikahin ang master password</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Beripikahin ang PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Bersyon</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Tingnan</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Bisitahin ang website namin</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Oo</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Nalikha na ang iyong bagong account! Maaari ka nang mag-log in.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Magdagdag ng Item</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>Ekstensyon ng app</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Gamitin ang serbisyo sa aksesibilidad ng Bitwarden para i-autofill ang mga login mo sa mga app at sa web.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Serbisyo pang-autofill</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Iwasang gumamit ng mga nakakalitong karakter</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>Ekstensyon ng app ng Bitwarden</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>Ang pinakamadaling paraan para magdagdag ng bagong login sa vault mo ay mula sa ekstensyon ng app ng Bitwarden. Pumunta sa "Mga Setting" para matuto pa tungkol sa paggamit ng ekstensyon ng app ng Bitwarden.</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Gamitin ang Bitwarden sa Safari at iba pang mga app para i-autofill ang mga login mo.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>Serbisyo ng Bitwarden Pang-autofill</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Gamitin ang serbisyo sa aksesibilidad ng Bitwarden para i-autofill ang mga login mo.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Palitan ang email</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>Maaari mong baguhin ang iyong email address sa bitwarden.com web vault. Gusto mo bang bisitahin ang website ngayon?</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Palitan ang master password</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Isara</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Magpatuloy</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Gumawa ng account</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Gumagawa ng account...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Baguhin ang item</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Payagan ang awtomatikong pag-sync</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Ipasok ang email address ng account mo para makita ang palatandaan ng master password mo.</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Buksan ulit ang ekstensyon ng app</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Patapos na!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Buksan ang ekstensyon ng app</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>Sa Safari, hanapin ang Bitwarden gamit ang icon ng pagbabahagi (pahiwatig: mag-scroll pakanan sa ibabang hilera ng menu).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Agarang ma-access ang mga password mo!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>Handa ka nang mag-log in!</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Madali mo na ngayong maa-access mula sa Safari, Chrome, at iba pang mga suportadong app ang mga login mo.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>Sa Safari at Chrome, hanapin ang Bitwarden gamit ang icon ng pagbabahagi (pahiwatig: mag-scroll pakanan sa ibabang hilera ng menu).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Pindutin ang icon ng Bitwarden sa menu para buksan ang ekstensyon.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>Para buksan ang Bitwarden sa Safari at iba pang mga app, pindutin ang "higit pa"ng icon sa ibabang hilera ng menu.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Paborito</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>Fingerprint</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Gumawa ng password</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Kunin ang palatandaan ng master password mo</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Mag-import ng mga item</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>Maaari kang mag-import ng maramihang mga item sa bitwarden.com web vault. Gusto mo bang bisitahin ang website ngayon?</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Mabilisang mag-import ng maramihang mga item mula sa iba pang mga app sa pamamahala ng password.</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Huling pag-sync:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Haba</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Ikandado</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minuto</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 oras</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minuto</value>
+  </data>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 na oras</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Kaagad</value>
+  </data>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Pag-timeout ng vault</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Aksyon pagka-timeout ng vault</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Mawawala ang access mo sa vault at kailangan mong mag-authenticate online pagkatapos ng timeout period. Sigurado ka bang gagamitin mo ang setting na ito?</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Nagla-log in...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Mag-log in o gumawa ng bagong account para ma-access ang secure vault mo.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Pamahalaan</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Mali ang kumpirmasyon sa password.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>Ang master password ang password na gagamitin mo para ma-access ang vault. Napakamahalagang hindi mo kailanman makalimutan ang master password—kung gaano kahalagang makalimutan mo ang iyong ex, ganyan kahalagang maalala mo ang master password mo. Hindi kayang mabalik ang master password kung nakalimutan mo ito.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Palatandaan ng master password (opsyonal)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>Makakatulong ang palatandaan ng master password na maalala mo ang password mo kung nakalimutan mo ito.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Hindi dapat bumaba sa {0} karakter ang master password.</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Pinakamababang dami ng mga numero</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Pinakamababang dami ng mga espesyal na karakter</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>Higit pang mga setting</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>Kailangan mong mag-log in sa pangunahing app ng Bitwarden para magamit ang ekstensyon.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Hindi kailanman</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>Naidagdag ang item</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>Wala kang paborito sa vault mo.</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Walang laman ang vault mo.</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>Walang item sa vault mo para sa website/app na ito. Pindutin para magdagdag.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Walang nakatakdang username o password ang login na ito.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>Sige, kuha ko na!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Mula ang mga default na opsyon sa kagamitan panggawa ng password ng pangunahing Bitwarden app.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Mga Opsyon</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Iba pa</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Nakagawa ng password</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Tagagawa ng password</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Palatandaan ng password</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>Pinadalhan ka namin ng email na may palatandaan ng master password mo.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong palitan ang kasalukuyang password?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>Pinapanatili ng Bitwarden na awtomatikong nagsi-sync ang vault mo gamit ang mga push notification. Para sa pinakamainam na karanasan, mangyaring pindutin ang "Payagan" sa prompt na nagtatanong sa iyo kung papayagan mo ba ang mga notification.</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>I-rate ang app</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Baka maaari kang tumulong sa amin sa pamamagitan ng isang magandang review!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Gumawa ng isa pang password</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>I-type ulit ang master password</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Maghanap sa vault</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Seguridad</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Piliin</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Magtakda ng PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Maglagay ng 4 na numerong PIN code na gagawing pambukas ng app.</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Impormasyon tungkol sa item</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Na-save ang item</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Ipinapadala...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Nagsi-sync...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Tapos na ang pagsi-sync</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Nagkaproblema sa pagsi-sync</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>I-sync na ngayon ang vault</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Dalawang-hakbang na pag-log in</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Buksan gamit ang {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Buksan gamit ang PIN code</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Bineberipika</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Code pamberipika</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>Tingnan ang item</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>Web vault ng Bitwarden</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Nawala ang authenticator app?</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Mga Item</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Pinagana ang extension!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Mga Icon</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Mga Pagsasalin</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Mga item para sa {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>Walang item para sa {0} sa vault mo.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>Pwede mong pindutin ang overlay sa pag-autofill ng Bitwarden pagpindot mo sa isang input field para buksan ang serbisyo pang-autofill.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Pindutin ang notipikasyong ito para i-autofill ang isang item mula sa vault mo.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Buksan ang Mga Setting ng Aksesibilidad</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. Sa screen ng Mga Setting sa Aksesibilidad ng Android, pindutin ang Bitwarden sa ilalim ng heading ng Mga Serbisyo.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Buksan ang toggle at pindutin ang OK para sumang-ayon.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Hindi pinapagana</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Pinapagana</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Nakasara</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Nakabukas</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Katayuan</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>Ang pinakamadaling paraan para magdagdag ng bagong login sa vault mo ay gamit ang Serbisyo ng Bitwarden Pang-autofill. Para sa higit pang impormasyon tungkol sa serbisyong ito, pumunta sa screen ng "Mga Setting".</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>I-autofill</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Gusto mo bang i-autofill o tingnan ang item na ito?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong i-autofill ang item na ito? Hindi ito isang kumpletong tugma para sa "{0}".</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Mga tumutugmang item</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Mga item na maaaring isang tugma</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Maghanap</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Naghahanap ka ng item pang-autofill para sa "{0}".</value>
+  </data>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Matuto pa tungkol sa mga organisasyon</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Hindi mabuksan ang app na "{0}".</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Authenticator app</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Ilagay ang 6 na numerong code pamberipika mula sa authenticator app mo.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Ilagay ang 6 na numerong code pamberipikang in-email sa {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Unavailable ang login</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>Gumagamit ng dalawang-hakbang na pag-log in ang account na ito, pero walang suportadong naitakdang two-step provider sa device na ito. Mangyaring gumamit ng suportadong device at/o karagdagang provider na may mas mainam na suporta sa iba't-ibang mga device (tulad ng isang authenticator app).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Code pang-recover</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Tandaan ako</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Ipadala ulit ang email na naglalaman ng code pamberipika</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Mga opsyon para sa dalawang-hakbang na pag-log in</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Gumamit ng ibang paraan sa dalawang-hakbang na pag-log in</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Hindi maipadala ang email pamberipika. Pakisubukan ulit.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Ipinadala ang email pamberipika</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Para tumuloy, ilagay ang YubiKey NEO mo sa likod ng iyong device o isaksak ang YubiKey mo sa USB port, at pindutin ang buton nito.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>YubiKey security key</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Magdagdag ng bagong attachment</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Mga Attachment</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Hindi ma-download ang file.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Hindi nakakabukas ng ganitong uri ng file ang device mo.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Nagda-download...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>{0} kalaki ang attachment. Sigurado ka bang gusto mo itong i-download?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Authenticator key (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Code pamberipika (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Idinagdag ang authenticator key.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Hindi mabasa ang authenticator key.</value>
+  </data>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Ituro sa QR code ang camera mo.
+Awtomatikong itong magsa-scan.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Mag-scan ng QR Code</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Kamera</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Mga Larawan</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Kopyahin ang TOTP</value>
+  </data>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Kung may authenticator key ang login, kopyahin ang TOTP verification code sa clipboard mo pagka-autofill ng login.</value>
+  </data>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Awtomatikong kopyahin ang TOTP</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>Kailangan mo ng premium membership para magamit ang feature na ito.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Idinagdag ang attachment</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Tinanggal ang attachment</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Pumili ng file</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>Walang napiling file</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>Walang mga attachment.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>Pinagmulan ng File</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Hindi available ang feature</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Hanggang sa 100 MB lang dapat ang mga file.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>Hindi mo magagamit ang feature na ito hanggang sa i-update mo ang encryption key mo.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Matuto pa</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>URL ng API server</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Ipinasadyang environment</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>Para sa mga advanced user. Maitatakda mo nang magkahiwalay ang base URL ng bawat serbisyo.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>Nai-save ang mga URL ng environment.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>Hindi tama ang pagka-format ng {0}.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>URL ng identity server</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Self-hosted na environment</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Itakda ang base URL ng on-premise hosted Bitwarden installation mo.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>URL ng server</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>URL ng web vault server</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Pindutin ang notipikasyong ito para tingnan ang mga item sa vault mo.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Ipinasadyang mga field</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Kopyahin ang numero</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Kopyahin ang code panseguridad</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Numero</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Code panseguridad</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Kard</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Pagkakakilanlan</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Secure na tala</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Address 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>Abril</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Agosto</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Tatak</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Pangalan ng cardholder</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>Lungsod / Bayan</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Kumpanya</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Bansa</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Disyembre</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr(a)</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Buwan ng pag-expire</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Taon ng pag-expire</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Pebrero</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Unang pangalan</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Enero</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Hulyo</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Hunyo</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Apelyido</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Buong pangalan</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>Numero ng lisensya</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Marso</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Mayo</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Gitnang pangalan</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>G</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Gng</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Bb</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Mx</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>Nobyembre</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Oktubre</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Numero ng pasaporte</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telepono</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>Setyembre</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Numero ng National ID / Social Security</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>Estado / Probinsya</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Zip / Postal code</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Mag-e-expire</value>
+  </data>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Ipakita ang mga icon ng website</value>
+  </data>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Magpakita ng makikilalang larawan sa tabi ng mga login.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>URL ng server ng mga icon</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>I-autofill gamit ang Bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Naka-lock ang vault</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Pumunta sa vault ko</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Mga Koleksyon</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>Walang mga item sa koleksyong ito.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>Walang mga item sa folder na ito.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Walang mga item sa basurahan.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Serbisyo Pang-aksesibilidad sa Autofill</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>Gumagamit ng Android Autofill Framework ang serbisyo ng Bitwarden pang-autofill para tumulong maglagay ng impormasyon ng login sa iba pang mga app sa device mo.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Gamitin ang serbisyo ng Bitwarden sa pag-autofill para awtomatikong maglagay ng impormasyon ng login sa iba pang mga app.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Buksan ang Mga Setting ng Awtomatikong Paglalagay ng Kredensyal</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Gamitin ang Face ID pamberipika.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Gamitin ang Face ID Pambukas</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Beripikahin gamit ang Face ID</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>Hindi namin awtomatikong mabuksan ang menu ng mga setting ng Android autofill para sayo. Manu-mano kang makakapunta roon sa pamamagitan ng Mga Setting &gt; System &gt; Mga wika at input &gt; Advanced &gt; Serbisyo ng autofill.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Pangalan ng pasadyang field</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Nakatago</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Naka-link</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Teksto</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>Bagong pasadyang field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>Anong uri ng pasadyang field ang gusto mong idagdag?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Tanggalin</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>Bagong URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Eksakto</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular na expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Nag-uumpisa sa</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>Deteksyon ng pagkakatugma ng URI</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Deteksyon ng tugma</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Oo, at i-save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>I-autofill at i-save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organisasyon</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Ilagay ang YubiKey mo sa may taas ng device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Subukan ulit</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>Para tumuloy, ilagay ang YubiKey mo sa likod ng device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>Maaaring makatulong ang serbisyo sa aksesibilidad sa mga app na hindi sinusuportahan ang standard na serbisyo pang-autofill.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Na-update ang password</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Na-update</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>Nabuksan ang Awtomatikong Paglalagay!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>Kailangan mong mag-log in sa pangunahing app ng Bitwarden bago mo magamit ang Awtomatikong Paglalagay.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Madali na ngayong maa-access ang mga login mo mula sa iyong keyboard habang nagla-log in sa mga app at website.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>Inirerekomenda naming patayin ang iba pang mga app pang-autofill sa Mga Setting kung hindi mo sila balak gamitin.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Direktang ma-access ang vault mo mula sa iyong keyboard para awtomatikong mailagay ang mga password.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>Sundin ang mga hakbang na ito para ihanda ang pag-autofill ng password sa iyong device:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Pumunta sa app ng "Mga Setting" ng iOS</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Pindutin ang "Mga Password"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Pindutin ang "Mga Password ng AutoFill"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Buksan ang AutoFill</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Piliin ang "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Pag-autofill ng password</value>
+  </data>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>Ang pinakamadaling paraan para magdagdag ng bagong login sa vault mo ay gamit ang Bitwarden Password AutoFill extension. Para sa higit pang impormasyon tungkol sa serbisyong ito, pumunta sa screen ng "Mga Setting".</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>'Di-wastong email address.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Mga Kard</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Mga Pagkakakilanlan</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Mga login</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Mga Secure na Tala</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Lahat ng mga item</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>Mga URI</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Sinusuri ang password...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Tingnan kung nakompromiso na ba ang password.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>Nakompromiso na nang {0} beses ang password na ito sa mga data breach. Dapat mo na itong palitan.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>Hindi pa nakokompromiso ang password na ito sa mga naitalang data breach. Ligtas itong gamitin.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Pangalan ng pagkakakilanlan</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Halaga</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Kasaysayan ng password</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Mga uri</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>Walang maililistang password.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>Walang maililistang item.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Maghanap sa koleksyon</value>
+  </data>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Maghanap ng mga file sa Send</value>
+  </data>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Maghanap ng mga teksto sa Send</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Maghanap sa {0}</value>
+    <comment>ex: Search Logins</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Uri</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Ilipat pababa</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Ilipat Pataas</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Pag-aari</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Sino ang may-ari ng item na ito?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>Walang maililistang koleksyon.</value>
+  </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>Nilipat ang {0} sa {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Naibahagi na ang item.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>Kailangan mong pumili ng isa man lang na koleksyon.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Ibahagi</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Ibahagi ang Item</value>
+  </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Ilipat sa Organisasyon</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>Walang maililistang organisasyon.</value>
+  </data>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Piliin kung saang organisasyon mo ililipat ang item na ito. Magiging pag-aari ng organisasyon ang anumang item na ililipat mo rito. Hindi ka na ang direktang may-ari ng item na ito pagkalipat.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Bilang ng mga salita</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Passphrase</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Panghiwalay sa mga salita</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Burahin</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Tagagawa</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>Walang maililistang folder.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Parirala ng fingerprint</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Parirala ng fingerprint ng account mo</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Maaari mong ibahagi sa iba ang mga item sa vault mo gamit ang isang pang-organisasyong account. Gusto mo bang bumisita sa website na bitwarden.com para sa higit pang impormasyon?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>I-export ang vault</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>I-lock ngayon</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>I-unlock</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>I-unlock ang vault</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minuto</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Itakda ang PIN code mo pang-unlock sa Bitwarden. Mare-reset ang mga setting mo sa PIN kapag magla-log out ka sa aplikasyon.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Naka-log in sa {1} bilang si {0}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Naka-lock ang vault mo. Beripikahin ang master password mo para tumuloy.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Naka-lock ang vault mo. Beripikahin ang PIN mo para tumuloy.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Naka-lock ang vault mo. Beripikahin ang pagkakakilanlan mo para tumuloy.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Madilim</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Maliwanag</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 minuto</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 segundo</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 segundo</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 segundo</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 minuto</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Linisin ang clipboard</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Awtomatikong linisin ang mga bagay na nakopya sa iyong clipboard.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Default na deteksyon ng pagkakatugma ng URI</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Piliin ang default na paraang ginagamit sa pag-detect sa pagkakatugma ng URI para sa mga login kung gumagawa ng mga kilos tulad ng pag-autofill.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Tema</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Baguhin ang kulay at tema ng aplikasyon.</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Default (Sistema)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Default na madilim na tema</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Kopyahin ang tala</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Umalis</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong umalis sa Bitwarden?</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>Gusto mo bang kailanganing gamitin ang master password pang-unlock kapag na-restart ang aplikasyon?</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Itim</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Mga URI na hindi io-autofill-an</value>
+  </data>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Magpaalam para magdagdag ng login</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Magpaalam na idagdag ang isang item kung walang ganitong nakita sa vault mo.</value>
+  </data>
+  <data name="OnRestart" xml:space="preserve">
+    <value>Sa pag-restart ng app</value>
+  </data>
+  <data name="AutofillServiceNotEnabled" xml:space="preserve">
+    <value>Mas napapadali ng autofill ang ligtas na pag-access sa Bitwarden vault mo mula sa ibang mga website at app. Mukhang hindi ka pa nakapag-set up ng serbisyo pang-autofill ng Bitwarden. Pumunta sa screen ng "Mga Setting" para sa higit pang impormasyon.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Mailalapat lang ang mga binago mo sa tema pagka-restart ng app.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Kapitalisasyon</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Magsama ng mga numero</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>I-download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Naibahagi</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Ipakita/itago</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Nag-expire na ang login session mo.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Beripikasyong biometriko</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Biometriko</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Gumamit ng biometriko pang-unlock</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bigyang atensyon ang Bitwarden - Tingnan ang "Pang-aksesibilidad na Serbisyo sa Autofill" sa mga setting ng Bitwarden</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. Sa screen ng Mga Setting ng App ng Android para sa Bitwarden, pumunta sa opsyong "Lumitaw sa itaas" (sa ilalim ng Advanced) at pindutin ang toggle para mabuksan ang suporta sa overlay.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Pahintulot</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Buksan ang Mga Setting ng Pahintulot Mag-overlay</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. Sa screen ng Mga Setting ng App ng Android para sa Bitwarden, pindutin ang "Lumitaw sa itaas" (sa ilalim ng Advanced) at pindutin ang toggle para mabuksan ang overlay.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Tinanggihan</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Pinahintulutan</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>Format ng file</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Ipasok ang master password mo para i-export ang data ng vault mo.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Magpadala ng code pamberipika sa email mo</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Ipinadala ang code!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Kumpirmahin ang pagkakakilanlan mo para tumuloy.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>Naglalaman ng unencrypted vault data mo ang export na ito. Hindi mo dapat ilagay o ipadala ang file gamit ang hindi ligtas na mga paraan (tulad ng email). Burahin ito kaagad pagkagamit.</value>
+  </data>
+  <data name="EncExportKeyWarning" xml:space="preserve">
+    <value>Ine-encrypt ng export na ito ang data mo gamit ang encryption key ng iyong account. Kung iro-rotate mo man ang encryption key ng iyong account, kailangan mong mag-export ulit dahil hindi mo na made-decrypt ang file na ito.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Magkaiba ang encryption key ng bawat Bitwarden user account, kaya hindi ka makakapag-import ng encrypted export sa iba pang account.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Kumpirmahin ang pag-export ng vault</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Babala</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>Nagkaproblema sa pag-e-export ng vault mo. Kung paulit-ulit nang nagkakaproblema, sa web vault ka dapat mag-export.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Matagumpay na na-export ang vault</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Doblehin</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>Naaapektuhan ng isa o higit pang mga patakaran ng organisasyon mo ang mga setting mo sa tagagawa</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Buksan</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>Nagkaproblema sa pagse-save ng attachment na ito. Kung paulit-ulit nang nagkakaproblema, sa web vault ka dapat mag-save.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Matagumpay na na-save ang attachment</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Pakibuksan ang "Pang-aksesibilidad na Serbisyo sa Autofill" sa Mga Setting ng Bitwarden para magamit ang Autofill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Walang na-detect na password field</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Itinatapon sa basurahan...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Naitapon ang item sa basurahan.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Ibalik</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Ibinabalik...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Naibalik ang item</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Basurahan</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Maghanap sa basurahan</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Gusto mo ba talagang permanente itong burahin? Wala nang bawian.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Gusto mo ba talagang ibalik ang item na ito?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Gusto mo ba talaga itong itapon?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Payagan ang pag-sync pagka-refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Mag-sync ng vault sa pamamagitan ng paghila sa screen pababa.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Isahang sign-on para sa enterprise</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Mabilisang mag-log in gamit ang portal ng organisasyon mo pang-isahang sign-on. Pakilagay ang identifier ng organisasyon mo para magsimula.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Identifier ng organisasyon</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Kasalukuyang hindi maka-log in gamit ang ISO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Itakda ang master password</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>Para matapos ang pagla-log in gamit ang ISO, magtakda ng master password para ma-access at maprotektahan ang vault mo.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>Kinakailangang makapasa sa mga requirement na ito ang master password mo dahil sa isa o higit pang patakaran ng organisasyon mo:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Pinakamababang antas ng pagkakomplikado: {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Hindi iigsi sa {0} karakter</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>May isa o higit pang malaking letra</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>May isa o higit pang maliit na letra</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>May isa o higit pang numero</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>May isa o higit pang ganitong espesyal na karakter: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>'Di-wastong password</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Hindi nakapasa sa mga requirement ng organisasyon ang password. Sumangguni sa impormasyon tungkol sa mga patakaran at subukan ulit.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Naglo-load</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>Sumasang-ayon ka sa sumusunod sa pamamagitan ng pagbukas sa switch na ito:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Hindi pa natatanggap ang Mga Tuntunin ng Serbisyo at Patakaran sa Privacy.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Mga Tuntunin ng Serbisyo</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Patakaran sa Privacy</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bigyang atensyon ang Bitwarden - Buksan ang "Draw-Over" sa Mga Setting ng Bitwarden</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Mga serbisyo sa pag-autofill</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Gumamit ng inline autofill</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Gumamit ng inline autofill kung suportado ito ng IME (keyboard) mo. Kung hindi suportado ang kompigurasyon mo (o nakasara ang opsyong ito), gagamitin ang default na overlay ng Autofill.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Gumamit ng aksesibilidad</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Gamitin ang Serbisyo sa Aksesibilidad ng Bitwarden para i-autofill ang mga login mo sa mga app at sa web. Kapag na-set up, magpapakita kami ng popup kung napindot ang mga login field.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Gamitin ang Serbisyo sa Aksesibilidad ng Bitwarden para i-autofill ang mga login mo sa mga app at sa web. (Kailangang nakabukas rin ang Draw-Over)</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Gamitin ang Serbisyo sa Aksesibilidad ng Bitwarden para magamit ang Autofill Quick-Action Tile, at/o magpakita ng popup gamit ang Draw-Over (kung nakabukas ito).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Kailangan para gamitin ang Autofill Quick-Action Tile, o para dumagdag sa Serbisyo Pang-autofill gamit ang Draw-Over (kung nakabukas ito).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Gumamit ng draw-over</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>Pinapayagan ang Serbisyo sa Aksesibilidad ng Bitwarden na magpakita ng popup kapag napindot ang mga login field.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>Kung nakabukas, magpapakita ang Serbisyo sa Aksesibilidad ng Bitwarden ng popup kapag napindot ang mga login field para tumulong sa pag-autofill ng mga login mo.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>Kung nakabukas, magpapakita ang aksesibilidad ng popup para dumagdag sa Serbisyo Pang-autofill sa mga lumang app na hindi sinusuportahan ang Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Dahil sa isang patakaran sa enterprise, pinaghihigpitan ang pag-save ng mga item sa individual vault mo. Baguhin ang opsyon sa pagmamay-ari papunta sa isang organisasyon at pumili mula sa mga available ng koleksyon.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>Naaapektuhan ng isang patakaran sa organisasyon ang mga opsyon mo sa pagmamay-ari.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AllSends" xml:space="preserve">
+    <value>Lahat ng Mga Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Sends" xml:space="preserve">
+    <value>Mga Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>Isang simpleng pangalan para ilarawan ang Send na ito.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Teksto</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Teksto</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>Ang tekstong gusto mong ipadala.</value>
+  </data>
+  <data name="HideTextByDefault" xml:space="preserve">
+    <value>Kung binubuksan ang Send na ito, itago ang teksto by default</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="TypeFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>Ang file na gusto mong ipadala.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Pinili ang uri ng file.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Hindi pa napipili ang uri ng file, pindutin para pumili.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Pinili ang uri ng teksto.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Hindi pa napipili ang uri ng teksto, pindutin para pumili.</value>
+  </data>
+  <data name="DeletionDate" xml:space="preserve">
+    <value>Petsa kung kailan buburahin</value>
+  </data>
+  <data name="DeletionTime" xml:space="preserve">
+    <value>Oras kung kailan buburahin</value>
+  </data>
+  <data name="DeletionDateInfo" xml:space="preserve">
+    <value>Permanenteng mabubura ang Send sa napiling petsa at oras.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PendingDelete" xml:space="preserve">
+    <value>Nakabinbin ang pagbura</value>
+  </data>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Petsa kung kailan ma-e-expire</value>
+  </data>
+  <data name="ExpirationTime" xml:space="preserve">
+    <value>Oras kung kailan ma-e-expire</value>
+  </data>
+  <data name="ExpirationDateInfo" xml:space="preserve">
+    <value>Kung naitakda, mag-e-expire ang access sa Send na ito sa napiling petsa at oras.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Na-expire na</value>
+  </data>
+  <data name="MaximumAccessCount" xml:space="preserve">
+    <value>Pinakamataas na beses ng pag-access</value>
+  </data>
+  <data name="MaximumAccessCountInfo" xml:space="preserve">
+    <value>Kung naitakda, hindi na maa-access ng mga user ang Send na ito kapag naabot ang pinakamataas na beses ng pag-access.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="MaximumAccessCountReached" xml:space="preserve">
+    <value>Naabot na ang pinakamataas na beses ng pag-access</value>
+  </data>
+  <data name="CurrentAccessCount" xml:space="preserve">
+    <value>Kasalukuyang beses ng pag-access</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Bagong password</value>
+  </data>
+  <data name="PasswordInfo" xml:space="preserve">
+    <value>Ipayo na mag-require ng password para ma-access ng mga user ang Send na ito.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="RemovePassword" xml:space="preserve">
+    <value>Tanggalin ang password</value>
+  </data>
+  <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong tanggalin ang password?</value>
+  </data>
+  <data name="RemovingSendPassword" xml:space="preserve">
+    <value>Tinatanggal ang password</value>
+  </data>
+  <data name="SendPasswordRemoved" xml:space="preserve">
+    <value>Natanggal ang password.</value>
+  </data>
+  <data name="NotesInfo" xml:space="preserve">
+    <value>Mga pribadong tala tungkol sa Send na ito.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="DisableSend" xml:space="preserve">
+    <value>I-deactivate ang Send na ito para walang sinumang maka-access nito</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NoSends" xml:space="preserve">
+    <value>Walang mga Send sa account mo.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Magdagdag ng isang Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Kopyahin ang link</value>
+  </data>
+  <data name="ShareLink" xml:space="preserve">
+    <value>Ibahagi ang link</value>
+  </data>
+  <data name="SendLink" xml:space="preserve">
+    <value>Link ng Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SearchSends" xml:space="preserve">
+    <value>Maghanap ng Mga Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="EditSend" xml:space="preserve">
+    <value>Baguhin ang Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddSend" xml:space="preserve">
+    <value>Bagong Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AreYouSureDeleteSend" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong burahin ang Send na ito?</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDeleted" xml:space="preserve">
+    <value>Nabura ang Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendUpdated" xml:space="preserve">
+    <value>Na-save ang Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NewSendCreated" xml:space="preserve">
+    <value>Nagawa ang Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="OneDay" xml:space="preserve">
+    <value>1 araw</value>
+  </data>
+  <data name="TwoDays" xml:space="preserve">
+    <value>2 araw</value>
+  </data>
+  <data name="ThreeDays" xml:space="preserve">
+    <value>3 araw</value>
+  </data>
+  <data name="SevenDays" xml:space="preserve">
+    <value>7 araw</value>
+  </data>
+  <data name="ThirtyDays" xml:space="preserve">
+    <value>30 araw</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Ipinasadya</value>
+  </data>
+  <data name="ShareOnSave" xml:space="preserve">
+    <value>Ibahagi ang Send na ito pagka-save</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDisabledWarning" xml:space="preserve">
+    <value>Makakabura ka lang ng kasalukuyang save dahil sa isang patakaran sa enterprise.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>Tungkol sa Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Itago ang email address ko sa mga tatanggap</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>Naaapektuhan ng isa o higit pang mga patakaran sa organisasyon mo ang mga opsyon mo sa Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Teksto lamang ang maibabahagi ng mga libreng account. Kailangan ng premium membership para makapagbahagi ng mga file gamit ang Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>Kailangan mong beripikahin ang email mo para makapagbahagi ng mga file gamit ang Send. Mabeberipika mo ang email mo sa web vault.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Reprompt para sa master password</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Kumpirmasyon para sa master password</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>Protektado ang aksyong ito, mangyaring ilagay ulit ang master password mo para maberipika ang pagkakakilanlan mo.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Kailangan ang Captcha</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Mali ang Captcha. Pakisubukan ulit.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Na-update ang master password</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>I-update ang master password</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Kamakailang binago ng isang administrator sa organisasyon mo ang iyong master password. Para ma-access ang vault, kailangan mo nang i-update ngayon ang master password mo. Mala-log out ka sa kasalukuyan mong sesyon, at kailangan mong mag-log in ulit. Maaaring manatiling aktibo ang mga sesyon sa iba mo pang device hanggang sa isang oras.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Ina-update ang password</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Hindi ma-update ang password ngayon</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Tanggalin ang master password</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>Gumagamit ang {0} ng ISO na may encryption na pinamamahalaan ng customer. Matatanggal ang master password sa account mo at kakailanganin mo ang ISO para mag-log in kung tutuloy ka.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Kung hindi mo gustong matanggal ang master password mo, pwede kang umalis sa organisasyong ito.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Umalis sa organisasyon</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Umalis sa {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Para magpatuloy, ihanda ang FIDO2 WebAuthn compatible security key mo, at sundin ang mga hakbang pagkatapos pindutin ang 'I-authenticate ang WebAuthn' sa susunod na screen.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Authentication gamit ang FIDO2 WebAuthn, makakapag-authenticate ka gamit ang isang external security key.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>I-authenticate ang WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Bumalik sa app</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Tiyaking suportado ng default browser mo ang WebAuthn at pakisubukan ulit.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>May patakarang enterprise ang organisasyong ito na awtomatiko kang ie-enroll pagka-reset ng password. Kapag na-enroll ka, mababago ng mga administrator ng organisasyon ang master password mo.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Naaapektuhan ng mga patakaran sa organisasyon mo ang time-out ng vault mo. {0} oras at {1} minuto ang pinakamataas na pinapayagang time-out ng vault.</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is {0} hour(s) and {1} minute(s). Your vault timeout action is set to {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies have set your vault timeout action to {0}.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Lumagpas ang time-out ng vault mo sa mga restriksyong ipinapatupad ng organisasyon mo.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Pinipigilan ka ng isa o higit pang mga patakaran sa organisasyon na i-export ang individual vault mo.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Magdagdag ng account</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Naka-unlock</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Naka-lock</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Naka-log out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Lumipat sa susunod na available na account</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Naka-lock ang account</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Matagumpay na nakapag-log out sa account</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Matagumpay na natanggal ang account</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Burahin ang account</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Wala nang bawian kapag binura mo ang account mo</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Mabubura at hindi na maibabalik ang account mo at lahat ng datos sa vault. Sigurado ka ba rito?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Binubura ang account mo</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Permanente nang nabura ang account mo</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Maling code pamberipika</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Humingi ng isahang-beses na password</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Magpadala ng code</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Nagpapadala</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopyahin ang link ng Send pagka-save</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Ipinapadala ang code</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Bineberipika</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Ipadala ulit ang code</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Naipadala ang code pamberipika sa email mo</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Nagkaproblema habang ipinapadala ang code pamberipika sa email mo. Pakisubukan ulit</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Ilagay ang code pamberipika na ipinadala sa email mo</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Ipadala ang mga log sa pag-crash</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Tulungan ang Bitwarden na mapainam ang stabilidad ng app sa pamamagitan ng pagpapadala ng mga ulat sa pag-crash.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Napalaki ang mga opsyon, pindutin para paliitin.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Napaliit ang mga opsyon, pindutin para palakihin.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Malaking letra (A hanggang Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Maliit na letra (A hanggang Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Mga numero (0 hanggang 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Mga espesyal na karakter (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Pindutin para bumalik</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Nakikita ang password, pindutin para itago.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Nakatago ang password, pindutin para ipakita.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Salain ang mga item ayon sa vault</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Lahat ng mga vault</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Mga vault</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Vault: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Lahat</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Mga code pamberipika</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Kailangan ng premium subscription</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Hindi maidagdag ang authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Mag-scan ng QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Hindi mai-scan ang QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Manu-manong ilagay ang key</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Magdagdag ng TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>I-set up ang TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Kapag matagumpay na nailagay ang key,
+pindutin ang Magdagdag ng TOTP para ligtas na mai-store ang key</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Mabubuksan ng sinumang may access sa device mo ang iyong vault kung nakatakda sa "Hindi kailanman" ang opsyon sa pag-lock. Kung gusto mong magamit ang opsyong ito, dapat siguraduhin mong laging protektado ang device mo.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Hindi wasto ang isa o higit pang mga URL na inilagay mo. Pakiayos at subukan ulit.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Hindi namin maproseso ang kahilingan mo. Pakisubukan ulit o kontakin kami.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Payagan ang pag-capture sa screen</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong payagan ang pag-capture sa screen?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Hiniling ang pag-log in</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Sinusubukan mo bang mag-log in?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Sinubukang mag-log in ni {0} sa {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Uri ng device</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Oras</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Malapit sa</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Kumpirmahin ang pag-login</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Tanggihan ang login</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Ngayon lang</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minuto ang nakalipas</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Kinumpirma ang login</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Tinanggihan ang login</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Aprubahan ang mga kahilingang mag-log in</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Gamitin ang device na ito para aprubahan ang mga hiling sa pag-log in mula sa ibang mga device.</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Payagan ang mga notipikasyon</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Makatanggap ng push notification para sa mga bagong kahilingan sa pag-log in</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>Salamat na lang</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Kumpirmahin ang tangkang mag-log in mula sa {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>Lahat ng mga notipikasyon</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Uri ng password</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Ano'ng gusto mong ipagawa?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Uri ng username</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus-addressed na email</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all email</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Forwarded email alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Random na salita</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (kinakailangan)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Pangalan ng domain (kinakailangan)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API key (kinakailangan)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Serbisyo</value>
+  </data>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token pang-access sa API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong palitan ang kasalukuyang username?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Gumawa ng username</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Uri ng Email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (kinakailangan)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Nagkaroon ng hindi matukoy na problema {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Gamitin ang feature ng email provider mo pang-subaddress</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Gamitin ang nakatakdang catch-all inbox ng domain mo.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Gumawa ng email alias na gagamitin sa isang forwarding service.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Kumonekta sa Relo</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Disclosure sa Serbisyo Pang-aksesibilidad</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Ginagamit ng Bitwarden ang Serbisyo Pang-aksesibilidad para maghanap ng mga login field sa mga app at website, at itakda ang tamang field ID para sa paglalagay ng username at password kung may tugma para sa app o website. Hindi namin iniimbak ang anumang impormasyong nakokolekta namin gamit ang serbisyo, at hindi rin namin kinokontrol ang anumang elemento sa screen na walang kinalaman sa paglalagay ng mga kredensyal.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Tanggapin</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Tanggihan</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Nag-expire na ang hiling mag-log in.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Tangkang mag-log in sa:
+{0}
+Gusto mo bang pumunta sa account na ito?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>Bago rito?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Kunin ang palatandaan ng master password</value>
+  </data>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Hindi ikaw?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Mag-log in gamit ang master password</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Mag-log in gamit ang device</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Sinimulan ang pag-log in</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>Nakapagpadala na ng notipikasyon sa device mo.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Tiyaking naka-unlock ang vault mo at magkatugma ang Parirala ng fingerprint sa dalawang device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Ipadala ulit ang notipikasyon</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Kailangan ng iba pang opsyon?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>Tingnan lahat ng mga opsyon sa pag-log in</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>Hindi na wasto ang hiling na ito</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Nakabinbing mga kahilingan sa pag-log in</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Tanggihan lahat</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Sigurado ka bang gusto mong tanggihan lahat ng mga nakabinbing hiling mag-log in?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Tinanggihan ang mga kahilingan</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>Walang nakabinbing kahilingan</value>  
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Pahintulutang ma-access ang kamera para magamit ang scanner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Wika</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>Ginawang {0} ang wika. I-restart ang app para mailapat ang pagbabago</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Kailangang i-restart ang app kapag binago ang wika</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (Sistema)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Mahalaga</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Hindi na mare-recover ang master password kapag nakalimutan mo ito! Hindi ito dapat bumaba sa {0} karakter.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Mahinang Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Mahina ang password. Gumamit ng malakas na password para maprotektahan ang account mo. Sigurado ka bang gusto mong gumamit ng mahinang password?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Mahina</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Katamtaman</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Malakas</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Tingnan kung kasama ba ang password na ito sa mga pagkakompromiso ng datos</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Nakompromisong Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Nakompromiso na ang password na ito. Gumamit ng unique na password para maprotektahan ang account mo. Sigurado ka bang gusto mong gumamit ng nakompromisong password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Mahina at Nakompromisong Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Nakompromiso na ang mahinang password na ito. Gumamit ng malakas at unique na password para maprotektahan ang account mo. Sigurado ka bang gusto mong gamitin ang password na ito?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Kinakailangan ang Organization SSO identifier.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Idagdag ang key sa kasalukuyan o bagong item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>Walang mga item sa vault mo na tumutugma sa "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Hanapin ang isang item o gumawa ng bagong item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>Walang mga item na tumutugma sa paghahanap</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Logged in!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Approve with my other device</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Approve with master password</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Turn off using a public device</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Remember this device</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>You will be notified once approved. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Block auto-fill</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Auto-fill will not be offered for these URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>New blocked URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saved</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Edit URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Enter URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Invalid URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI removed</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>There are no blocked URIs</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>The URI {0} is already blocked</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log in with device</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Vault</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Account security</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Bitwarden Help Center</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Contact Bitwarden support</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Copy app information</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Sync now</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Unlock options</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Session timeout</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Session timeout action</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Account fingerprint phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>One hour and one minute</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>One hour and {0} minutes</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} hours and one minute</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} hours and {1} minutes</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} hours</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Additional options</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Continue to web app?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Continue to {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Continue to Help center?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Continue to contact support?</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Continue to app store?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>You can change your master password on the Bitwarden web app.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>You can import data to your vault on {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Learn more about how to use Bitwarden on the Help center.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Explore more features of your Bitwarden account on the web app.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Created {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Set up an unlock option to change your vault timeout action.</value>
+  </data>
+</root>

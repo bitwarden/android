@@ -1,0 +1,2879 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Tentang</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>Tambah</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Tambah Folder</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Tambah Item</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>Terjadi kesalahan.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Kembali</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>Bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Batal</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Salin</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Salin Kata Sandi</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Salin Nama Pengguna</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Kredit</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Hapus</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Menghapus...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Apakah Anda yakin ingin menghapusnya? Ini tidak dapat dibatalkan.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Edit Folder</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Alamat Email</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Kirim Email Ke Kami</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>Email kami secara langsung untuk mendapatkan bantuan atau memberikan umpan balik.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Masukkan kode PIN Anda.</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Favorit</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>Buat Laporan Masalah</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Buka sebuah isu di repositori GitHub kami.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Gunakan sidik jari Anda untuk memverifikasi.</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>Folder</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>Folder baru telah dibuat.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Folder dihapus.</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>Tidak Ada Folder</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folder</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Folder diperbarui.</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Buka Situs Web</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Bantuan dan Umpan Balik</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Sembunyikan</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Pastikan Anda tersambung ke internet sebelum melanjutkan.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>Sambungan Internet Dibutuhkan</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>Kata Sandi Utama Tidak Valid. Coba Lagi.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>PIN Tidak Valid. Coba Lagi.</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Luncurkan</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>Masuk</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Masuk</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Keluar</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Anda yakin ingin keluar?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Hapus Akun</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Apakah anda yakin ingin menghapus akun ini?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Akun telah ditambahkan</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Apakah anda ingin beralih akun sekarang?</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>Kata Sandi Utama</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>Lainnya</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>Brankas Saya</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nama</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Tidak</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>Catatan</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Oke</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Kata Sandi</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Simpan</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Pindah</value>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Menyimpan...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Setelan</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Tampilkan</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Item telah dihapus.</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Kirim</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>Sinkronisasi</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Terima Kasih</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>Alat</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>URI</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Gunakan Sidik Jari untuk Membuka</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Nama Pengguna</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>Kolom {0} harus diisi.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0} disalin.</value>
+    <comment>Confirmation message after successfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Verifikasi Sidik Jari</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Verifikasi Kata Sandi Utama</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Verifikasi PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versi</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>Tampilan</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Kunjungi Situs Web Kami</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Situs web</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ya</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Akun</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Akun baru Anda telah dibuat! Sekarang Anda bisa masuk.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Tambah Item</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>Ekstensi Aplikasi</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Gunakan layanan aksesibilitas Bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Layanan Pengisian Otomatis</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Hindari Karakter Ambigu</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>ekstensi Aplikasi bitwarden</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>Cara termudah untuk menambahkan login baru ke vault Anda adalah dari Bitwarden App Extension. Pelajari lebih lanjut tentang menggunakan Bitwarden App Extension dengan menuju ke layar "Pengaturan".</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Gunakan Bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis info masuk Anda.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>Layanan Pengisian Otomatis Bitwarden</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Gunakan layanan aksesibilitas Bitwarden untuk mengisi otomatis info masuk Anda.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Ubah Email</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>Anda dapat mengubah alamat email Anda di brankas web bitwarden.com. Anda ingin mengunjungi situs web sekarang?</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Ubah Kata Sandi Utama</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Lanjutkan</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Buat Akun</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Membuat akun...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit Item</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Aktifkan Sinkronisasi Otomatis</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Masukkan email akun Anda untuk menerima pentunjuk sandi utama Anda.</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Aktifkan Ulang Ekstensi Aplikasi</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Hampir selesai!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Aktifkan Ekstensi Aplikasi</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>Pada Safari, temukan Bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Dapatkan akses instan ke kata sandi Anda!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>Anda siap untuk masuk!</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Login anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>Pada Safari dan Chrome, temukan Bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Ketuk ikon Bitwarden pada menu untuk menjalankan ekstensi.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>Untuk mengaktifkan Bitwarden di Safari dan aplikasi lainnya, ketuk ikon "lebih banyak" di baris bawah menu.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Favorit</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>Sidik Jari</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Buat Kata Sandi</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Dapatkan petunjuk sandi utama Anda</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Impor Item</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>Anda dapat mengimpor massal item dari brankas web bitwarden.com. Anda ingin mengunjungi situs web sekarang?</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Mengimpor massal item Anda dari aplikasi pengelola sandi lainnya dengan cepat.</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Sinkronisasi Terakhir:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Panjang</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Kunci</value>
+  </data>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 menit</value>
+  </data>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 jam</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 menit</value>
+  </data>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 Jam</value>
+  </data>
+  <data name="Immediately" xml:space="preserve">
+    <value>Segera</value>
+  </data>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>waktu habis brankas</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Aksi Batas Waktu Penyimpanan</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Keluar akan menghapus semua akses ke Brankas Anda dan memerlukan otentikasi online setelah batas waktu yang ditentukan. Anda yakin ingin menggunakan pengaturan ini?</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Sedang masuk...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Masuk atau buat akun baru untuk mengakses brankas Anda.</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Kelola</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Konfirmasi kata sandi tidak benar.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>Kata sandi utama adalah kata sandi yang Anda gunakan untuk mengakses brankas Anda. Sangat penting bahwa Anda tidak lupa kata sandi utama Anda. Tidak ada cara untuk memulihkan kata sandi jika Anda melupakannya.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Petunjuk Kata Sandi Utama (pilihan)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>Petunjuk kata sandi utama dapat membantu Anda mengingat kata sandi Anda jika Anda melupakannya.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
+    <value>Kata sandi utama sedikitnya harus {0} karakter.</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Angka Minimum</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Karakter Khusus Minimum</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>Setelan Lainnya</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>Anda harus masuk ke aplikasi utama Bitwarden sebelum Anda dapat menggunakan ekstensi.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Jangan pernah</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>Item baru telah dibuat.</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>Tidak ada favorit di brankas Anda.</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>Tidak ada item di brankas Anda.</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>Tidak ada item untuk situs ini di brankas Anda. Ketuk untuk menambahkan.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Info masuk ini tidak memiliki nama pengguna atau sandi yang dikonfigurasi.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>Oke, saya mengerti!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Pilihan baku diatur dari alat pembuat sandi utama aplikasi Bitwarden.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>Pilihan</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Lainnya</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Sandi telah dibuat.</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Pembuat Kata Sandi</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Petunjuk Sandi</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>Kami telah mengirimi Anda email dengan petunjuk sandi utama Anda.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Anda yakin ingin menimpa sandi saat ini?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>Bitwarden membuat brankas Anda disinkronkan secara otomatis dengan menggunakan notifikasi. Untuk pengalaman yang sebaik mungkin, silakan pilih "Oke" pada saran berikut ketika diminta untuk mengaktifkan notifikasi.</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>Nilai Aplikasi</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Mohon pertimbangkan membantu kami dengan ulasan yang baik!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Buat Ulang Sandi</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>Ketik Ulang Sandi Utama</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Cari Brankas</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Keamanan</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Pilih</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Atur PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Masukkan 4 digit kode PIN untuk membuka aplikasi.</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Informasi Item</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Item diperbarui.</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Mengirim...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Menyinkronkan...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Sinkronisasi selesai.</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Sinkronisasi gagal.</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>Sinkronkan Brankas Sekarang</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Info masuk dua langkah</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Buka denga {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Buka dengan kode PIN</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>Memvalidasi</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Kode Verifikasi</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>Lihat Item</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>Brankas Web bitwarden</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Kehilangan aplikasi autentikasi?</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>Item</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Ekstensi Diaktifkan!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikon</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Terjemahan</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Item untuk {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>Tidak ada item di brankas Anda untuk {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>Saat Anda memilih kolom input dan melihat overlay pengisian otomatis Bitwarden, Anda dapat mengetuknya untuk meluncurkan layanan pengisian otomatis.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Ketuk notifikasi ini untuk mengisi info masuk secara otomatis dari brankas Anda.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Buka Setelan Aksesibilitas</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. Pada layar Setelan Aksesibilitas Android, sentuh "bitwarden" di bawah Layanan.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Aktifkan sakelar dan tekan OKE untuk menerima.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Dinonaktifkan</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Diaktifkan</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Mati</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Aktif</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>Cara termudah untuk menambahkan login baru ke vault Anda adalah dari Bitwarden Auto-fill Service. Pelajari lebih lanjut tentang menggunakan Bitwarden Auto-fill Service dengan menavigasi ke layar "Pengaturan".</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>Isi otomatis</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Apakah Anda ingin mengisi otomatis atau melihat info masuk ini?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Anda yakin ingin mengisi otomatis info masuk ini? Ini tidak sepenuhnya cocok untuk "{0}".</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Item yang Cocok</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Item yang Mungkin Cocok</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Pencarian</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Anda mencari item pengisian otomatis untuk "{0}".</value>
+  </data>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Pelajari tentang Organisasi</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Tidak dapat membuka aplikasi {0}.</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Aplikasi Autentikasi</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Masukkan 6 digit kode verifikasi dari aplikasi autentikasi Anda.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Masukkan 6 digit kode verifikasi yang dikirim melalui email ke {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Info Masuk Tidak Tersedia</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>Akun ini mengaktifkan info masuk dua langkah, namun, tidak satupun dari penyedia dua langkah yang dikonfigurasi didukung oleh peranti ini. Silakan gunakan peranti yang didukung dan/atau tambahkan penyedia tambahan yang didukung di semua peranti (seperti aplikasi autentikasi).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Kode Pemulihan</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Ingat saya</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Kirim ulang email kode verifikasi</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Pilihan Info Masuk Dua Langkah</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Gunakan metode masuk dua langkah lainnya</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Tidak dapat mengirim email verifikasi. Coba lagi.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Email verifikasi terkirim.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Untuk melanjutkan, tahan YubiKey Neo pada bagian belakang perangkat anda atau masukkan YubiKey ke port USB perangkat anda, kemudian tekan tombolnya.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>Kunci Keamanan YubiKey</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Tambah Lampiran Baru</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Lampiran</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Tidak bisa mengunduh berkas.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Peranti Anda tidak dapat membuka jenis berkas ini.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Mengunduh...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>Lampiran ini berukuran {0}. Anda ingin mengunduhnya ke peranti Anda?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Kunci Autentikasi (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Kode Verifikasi (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Kunci autentikasi ditambahkan.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Tidak dapat membaca kunci autentikasi.</value>
+  </data>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Arahkan kamera anda pada kode QR.
+Proses pindai akan terjadi secara otomatis.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Pindai Kode QR</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Kamera</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Foto</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Salin TOTP</value>
+  </data>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Jika login memiliki kunci autentikator, salin kode verifikasi TOTP ke clip-board anda, saat anda mengisi login secara otomatis.</value>
+  </data>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Salin TOTP secara otomatis</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>Keanggotaan premium diperlukan untuk menggunakan fitur ini.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Lampiran ditambahkan</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Lampiran dihapus</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Pilih Berkas</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Berkas</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>Tidak ada berkas yang dipilih</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>Tidak ada lampiran.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>Sumber Berkas</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Fitur Tidak Tersedia</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Ukuran berkas maksimal adalah 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>Anda tidak dapat menggunakan fitur ini sampai Anda memperbarui kunci enkripsi Anda.</value>
+  </data>
+  <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
+    <value>Diperlukan migrasi kunci enkripsi. Silakan masuk melalui brankas web untuk memperbarui kunci enkripsi Anda.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Pelajari Lebih Lanjut</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>URL Server API</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Lingkungan Kustom</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>Untuk pengguna tingkat lanjutan. Anda dapat menentukan secara mandiri basis dari URL untuk setiap layanan.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>URL dari lingkungan sudah tersimpan.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} tidak diformat dengan benar.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>URL Server Identitas</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Lingkungan Host-Mandiri</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>URL Server</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>URL Server Brankas Web</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Ketuk notifikasi ini untuk melihat item dari brankas Anda.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Kolom Ubahsuai</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Salin Nomor</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Salin Kode Keamanan</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Nomor</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Kode Keamanan</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Kartu</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identitas</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Info Masuk</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Catatan Aman</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Alamat 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Alamat 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Alamat 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>Agustus</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Merek</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Nama Pemilik Kartu</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>Kota / Kabupaten</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Perusahaan</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Negara</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>Desember</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Bulan Kedaluwarsa</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Tahun Kedaluwarsa</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>Februari</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Nama Depan</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>Januari</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>Juli</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>Juni</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Nama Belakang</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nama Lengkap</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>Nomor Lisensi</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>Maret</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>Mei</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Nama Tengah</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Tuan</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Nyonya</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Nona</value>
+  </data>
+  <data name="Mx" xml:space="preserve">
+    <value>Bapak/Ibu</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>Oktober</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Nomor Paspor</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Telepon</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Nomor Jaminan Sosial</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>Negara Bagian / Provinsi</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Panggilan</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Kode Pos</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Alamat</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Masa Berlaku</value>
+  </data>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Tampilkan ikon website</value>
+  </data>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Tampilkan gambar pengenal di samping setiap login.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>URL Server Ikon</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Isi otomatis dengan Bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Brankas terkunci</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Buka brankas saya</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Koleksi</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>Tidak ada item di koleksi ini.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>Tidak ada item di folder ini.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Tidak ada item di sampah.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Layanan Aksesibilitas Isi Otomatis</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>Layanan pengisian otomatis bitwarden menggunakan Kerangka Kerja Pengisian Otomatis Android untuk membantu dalam mengisi info masuk, kartu kredit, dan informasi identitas ke aplikasi lain di perangkat Anda.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Gunakan layanan pengisian otomatis bitwarden untuk mengisi info masuk, kartu kredit, dan informasi identitas ke aplikasi lainnya.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Buka Setelan Isi Otomatis</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Gunakan Face ID untuk memverifikasi.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Gunakan Face ID untuk membuka</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verifikasi Face ID</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>Kami tidak dapat secara otomatis membuka menu pengaturan Android isi otomatis untuk Anda. Anda dapat membuka menu pengaturan isi otomatis secara manual dari Pengaturan Android &gt; Sistem &gt; Bahasa dan masukan &gt; Lanjutan &gt; Layanan isi otomatis.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Nama Kolom Pilihan Sendiri</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Tersembunyi</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Terhubung</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>Kolom Pilihan Sendiri Baru</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>Jenis kolom ubahsuai apa yang ingin Anda tambahkan?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>URl Baru</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Domain basis</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Bawaan</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Tepat</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Ekspresi umum</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Dimulai dengan</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>Deteksi kecocokan URI</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Deteksi kecocokan</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Ya, dan Simpan</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Isi otomatis dan simpan</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organisasi</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Pegang Yubikey di dekat bagian atas perangkat.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Coba Lagi</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>Untuk melanjutkan, pegang YubiKey NEO Anda pada bagian belakang perangkat.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>Layanan aksesibilitas sangat berguna untuk dimanfaatkan saat aplikasi tidak mendukung layanan isi otomatis.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Kata Sandi Diperbarui</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Di perbarui</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>Isi Otomatis diaktifkan!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>Anda harus masuk ke aplikasi utama Bitwarden sebelum Anda dapat menggunakan Isi Otomatis.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Sekarang login Anda bisa diakses dengan mudah dari keyboard Anda saat masuk ke aplikasi atau lewat situs web.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>Sebaiknya fitur Isi Otomatis dinonaktifkan lewat Pengaturan, jika Anda tidak berencana menggunakannya.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Mengakses vault Anda lewat keyboard untuk mengisi otomatis sandi dengan cepat.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>Untuk mengisi otomatis sandi pada perangkat Anda, ikuti petunjuk berikut:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Pergi ke "Setting" di menu iOS app</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Pilih "Password &amp; Accounts"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Pilih "AutoFill Passwords"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Aktifkan AutoFill</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Pilih "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Isi Otomatis Sandi</value>
+  </data>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>Cara termudah untuk menambahkan login baru ke vault Anda adalah dengan menggunakan ekstensi Bitwarden Password AutoFill. Pelajari lebih lanjut tentang menggunakan ekstensi Bitwarden Password AutoFill dengan menavigasi ke layar "Pengaturan".</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Alamat email tidak valid.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Kartu</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Identitas</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Info Masuk</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Catatan Aman</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>Semua Item</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URI</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Memeriksa kata sandi...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Periksalah jika kata sandi telah terpapar.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>Sandi ini telah terungkap {0} kali dalam pelanggaran data. Anda harus mengubahnya.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>Kata sandi ini tidak ditemukan dalam data pelanggaran yang dikenal. Kata sandi tersebut harusnya aman untuk digunakan.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Nama Identitas</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Nilai</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Riwayat Sandi</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Jenis</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>Tidak ada kata sandi untuk dicantumkan.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>Tidak ada item yang dapat dicantumkan.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Cari koleksi</value>
+  </data>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Cari berkas pada Sends</value>
+  </data>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Cari teks pada Sends</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Cari {0}</value>
+    <comment>ex: Search Logins</comment>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Jenis</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Pindah ke bawah</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Naik ke Atas</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Lain-lain</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Kepemilikan</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Pemilik item ini?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>Tidak ada koleksi yang akan ditampilkan.</value>
+  </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} dipindahkan ke {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Item telah dibagikan.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>Anda harus memilih setidaknya satu koleksi.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Bagikan</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Berbagi Item</value>
+  </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Pindah ke Organisasi</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>Tidak ada organisasi untuk dicantumkan.</value>
+  </data>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Pilih sebuah organisasi yang Anda inginkan untuk memindahkan item ini. Memindahkan berarti menyerahkan kepemilikan item kepada organisasi tersebut. Anda tidak akan lagi menjadi pemilik item ini.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Jumlah kata</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Frasa sandi</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Pemisah kata</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Bersihkan</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Pembuat Sandi</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>Tidak ada folder yang dapat dicantumkan.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Frase Sidik Jari</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Frase sidik jari akun Anda</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden memungkinkan Anda untuk berbagi brankas dengan orang lain menggunakan akun organisasi. Apakah Anda ingin mengunjungi bitwarden.com untuk mempelajari lebih lanjut?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Ekspor Brankas</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Kunci Sekarang</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Membuka kunci</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Buka Vault</value>
+  </data>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 menit</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Atur kode PIN Anda untuk membuka kunci Bitwarden. Pengaturan PIN Anda akan disetel ulang jika Anda benar-benar keluar dari aplikasi.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Masuk sebagai {0} pada {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Brankas Anda terkunci. Verifikasi kata sandi utama Anda untuk melanjutkan.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Brankas Anda terkunci. Verifikasi kode PIN Anda untuk melanjutkan.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Brankas terkunci. Verifikasi identitas Anda untuk melanjutkan.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Gelap</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Terang</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 menit</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 detik</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 detik</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 detik</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 menit</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Hapus Clipboard</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Secara otomatis menghapus nilai yang disalin dari clipboard Anda.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Deteksi Kecocokan URI Default</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Pilih cara default penanganan pencocokan URI untuk login saat melakukan tindakan seperti pengisian otomatis.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Tema</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Ubah warna tema aplikasi.</value>
+  </data>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Bawaan (Sistem)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Tema gelap bawaan</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Catatan Salinan</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Apakah anda yakin ingin keluar dari Bitwarden?</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Hitam</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="SolarizedDark" xml:space="preserve">
+    <value>Solarized Dark</value>
+    <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
+  </data>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Isi otomatis URI yang diblokir</value>
+  </data>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Minta untuk penambahan login</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Minta untuk menambahkan item jika tidak ditemukan di brankas Anda.</value>
+  </data>
+  <data name="OnRestart" xml:space="preserve">
+    <value>Saat Aplikasi Memulai Ulang</value>
+  </data>
+  <data name="AutofillServiceNotEnabled" xml:space="preserve">
+    <value>Isi-otomatis memudahkan untuk mengakses brankas Bitwarden anda dengan aman dari situs web dan aplikasi lain. Sepertinya anda belum mengaktifkan layanan pengisian-otomatis untuk Bitwarden. Aktifkan pengisian-otomatis untuk Bitwarden dari layar "Pengaturan".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Perubahan tema anda akan diterapkan setelah aplikasi dimulai ulang.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Jadikan Huruf Besar</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Sertakan Digit</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Unduh</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Dibagikan</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Alihkan Visibilitas</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Sesi masuk Anda telah berakhir.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Verifikasi Biometrik</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Biometrik</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Gunakan Biometrik Untuk Membuka Kunci</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bitwarden membutuhkan perhatian - Lihat "Layanan Aksesibilitas Isi-Otomatis" dari Pengaturan Bitwarden</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. Pada layar Pengaturan Aplikasi Android untuk Bitwarden, buka opsi "Tampilkan di atas aplikasi lain" (di bawah Lanjutan) dan ketuk sakelar untuk mengaktifkan dukungan overlay.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>izin</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Buka Pengaturan Izin Overlay</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. Pada layar Pengaturan Aplikasi Android untuk Bitwarden, pilih "Tampilan di atas aplikasi lain" (di bawah "Lanjutan") dan aktifkan sakelar untuk mengizinkan hamparan.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Ditolak</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Diberikan</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>Format File</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Masukkan kata sandi utama Anda untuk mengekspor data brankas Anda.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Kirim kode verifikasi ke email Anda</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kode Terkirim!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Konfirmasi identitas Anda untuk melanjutkan.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti emel). Hapus segera setelah Anda selesai menggunakannya.</value>
+  </data>
+  <data name="EncExportKeyWarning" xml:space="preserve">
+    <value>Ekspor ini mengenkripsi data Anda menggunakan kunci enkripsi akun Anda. Jika Anda pernah merotasi kunci enkripsi akun Anda, Anda harus mengekspor lagi karena Anda tidak akan dapat mendekripsi file ekspor ini.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Kunci enkripsi akun unik untuk setiap akun pengguna Bitwarden, jadi Anda tidak dapat mengimpor ekspor terenkripsi ke akun lain.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Konfirmasi Ekspor Vault</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>Terjadi masalah saat mengekspor vault Anda. Jika masalah terus berlanjut, Anda harus mengekspor dari brankas web.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Vault berhasil diekspor</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Klon</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>Satu atau beberapa kebijakan organisasi memengaruhi pengaturan generator Anda</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Buka</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>Terjadi masalah saat menyimpan lampiran ini. Jika masalah terus berlanjut, Anda dapat menyimpannya dari brankas web.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Lampiran berhasil disimpan</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Harap aktifkan "Layanan Aksesibilitas Isi-Otomatis" dari Pengaturan Bitwarden untuk menggunakan ubin Isi-Otomatis.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Tidak ada bidang kata sandi yang terdeteksi</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Mengirim ke sampah ...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Item telah dikirim ke sampah.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Mengembalikan</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Mengembalikan</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Item telah dipulihkan.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Sampah</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Cari di sampah</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Anda yakin ingin menghapus secara permanen? Ini tidak dapat dibatalkan.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Apakah Anda benar-benar ingin memulihkan item ini?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Yakin ingin mengirim ke sampah?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="AccountBiometricInvalidated" xml:space="preserve">
+    <value>Buka kunci biometrik untuk akun ini dinonaktifkan sambil menunggu verifikasi kata sandi utama.</value>
+  </data>
+  <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
+    <value>Buka kunci biometrik otomatis untuk akun ini dinonaktifkan sambil menunggu verifikasi kata sandi utama.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Aktifkan sinkronisasi saat refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Sinkronisasi lemari besi dengan gerakan tarik ke bawah.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Sistem Masuk Tunggal Perusahaan</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Masuk dengan cepat menggunakan portal sistem masuk tunggal organisasi Anda. Harap masukkan pengenal organisasi Anda untuk memulai.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Pengenal Organisasi</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Saat ini tidak dapat masuk dengan SSO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Atur Kata Sandi Utama</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>Untuk menyelesaikan masuk dengan SSO, harap setel kata sandi utama untuk mengakses dan melindungi brankas Anda.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>Satu atau lebih kebijakan organisasi memerlukan kata sandi utama Anda untuk memenuhi persyaratan berikut:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Skor kompleksitas minimum {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Panjang minimum {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Berisi satu atau lebih karakter huruf besar</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Berisi satu atau lebih karakter huruf kecil</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Berisi satu atau lebih angka</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Berisi satu atau lebih karakter khusus berikut: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>kata sandi salah</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Kata sandi tidak memenuhi persyaratan organisasi. Harap periksa informasi kebijakan dan coba lagi.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Memuat</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>Dengan mengaktifkan sakelar ini, anda menyetujui yang berikut:</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Persyaratan Layanan dan Kebijakan Privasi belum diakui.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Persyaratan Layanan</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Kebijakan pribadi</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bitwarden membutuhkan perhatian - Aktifkan "Draw-Over" di "Layanan Isi-Otomatis" dari Pengaturan Bitwarden</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Layanan Isi Otomatis</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Gunakan IsiOtomatis Sebaris</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Gunakan pengisian otomatis sebaris jika IME (keyboard) yang Anda pilih mendukungnya. Jika konfigurasi Anda tidak didukung (atau opsi ini dinonaktifkan), overlay IsiOtomatis default akan digunakan.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Gunakan Aksesibilitas</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Gunakan Layanan Aksesibilitas Bitwarden untuk mengisi login Anda secara otomatis di seluruh aplikasi dan web. Saat diaktifkan, kami akan menampilkan popup saat kolom login dipilih.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Gunakan Layanan Aksesibilitas Bitwarden untuk mengisi login Anda secara otomatis di seluruh aplikasi dan web. (Membutuhkan Draw-Over untuk diaktifkan juga)</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Gunakan Layanan Aksesibilitas Bitwarden untuk menggunakan Ubin Tindakan Cepat IsiOtomatis, dan / atau tampilkan munculan menggunakan Draw-Over (jika diaktifkan).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Diperlukan untuk menggunakan Ubin Tindakan Cepat IsiOtomatis, atau untuk menambah Layanan IsiOtomatis dengan menggunakan Draw-Over (jika diaktifkan).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Gunakan Draw-Over</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>Saat diaktifkan, izinkan Layanan Aksesibilitas Bitwarden untuk menampilkan munculan saat kolom login dipilih.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>Jika diaktifkan, Layanan Aksesibilitas Bitwarden akan menampilkan munculan ketika kolom login dipilih untuk membantu pengisian login Anda secara otomatis.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>Jika diaktifkan, aksesibilitas akan menampilkan munculan untuk menambah Layanan IsiOtomatis untuk aplikasi lama yang tidak mendukung Kerangka Pengisian Otomatis Android.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Karena Kebijakan Perusahaan, anda dilarang menyimpan item ke lemari besi pribadi anda. Ubah opsi Kepemilikan ke organisasi dan pilih dari Koleksi yang tersedia.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>Kebijakan organisasi memengaruhi opsi kepemilikan anda.</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AllSends" xml:space="preserve">
+    <value>Semua Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Sends" xml:space="preserve">
+    <value>Sends</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>Nama yang bersahabat untuk menggambarkan Send ini.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Teks</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>Teks yang ingin Anda kirim.</value>
+  </data>
+  <data name="HideTextByDefault" xml:space="preserve">
+    <value>Saat mengakses Send, sembunyikan teks secara default</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="TypeFile" xml:space="preserve">
+    <value>Berkas</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>Berkas yang ingin Anda kirim.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Jenis file dipilih.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Jenis file tidak dipilih, ketuk untuk memilih.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Jenis teks telah dipilih.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Jenis teks tidak dipilih, ketuk untuk memilih.</value>
+  </data>
+  <data name="DeletionDate" xml:space="preserve">
+    <value>Tanggal Penghapusan</value>
+  </data>
+  <data name="DeletionTime" xml:space="preserve">
+    <value>Waktu Penghapusan</value>
+  </data>
+  <data name="DeletionDateInfo" xml:space="preserve">
+    <value>Send akan dihapus secara permanen pada tanggal dan waktu yang ditentukan.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PendingDelete" xml:space="preserve">
+    <value>Penghapusan menunggu keputusan</value>
+  </data>
+  <data name="ExpirationDate" xml:space="preserve">
+    <value>Tanggal habis tempo</value>
+  </data>
+  <data name="ExpirationTime" xml:space="preserve">
+    <value>Waktu kedaluwarsa</value>
+  </data>
+  <data name="ExpirationDateInfo" xml:space="preserve">
+    <value>Jika disetel, akses ke Send ini akan berakhir pada tanggal dan waktu yang ditentukan.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="Expired" xml:space="preserve">
+    <value>Kedaluwarsa</value>
+  </data>
+  <data name="MaximumAccessCount" xml:space="preserve">
+    <value>Hitungan Akses Maksimum</value>
+  </data>
+  <data name="MaximumAccessCountInfo" xml:space="preserve">
+    <value>Jika disetel, pengguna tidak dapat lagi mengakses Send ini setelah jumlah akses maksimum tercapai.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="MaximumAccessCountReached" xml:space="preserve">
+    <value>Jumlah akses maksimum tercapai</value>
+  </data>
+  <data name="CurrentAccessCount" xml:space="preserve">
+    <value>Hitungan Akses Saat Ini</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Kata Sandi baru</value>
+  </data>
+  <data name="PasswordInfo" xml:space="preserve">
+    <value>Secara opsional, minta kata sandi bagi pengguna untuk mengakses Send ini.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="RemovePassword" xml:space="preserve">
+    <value>Hapus Kata Sandi</value>
+  </data>
+  <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
+    <value>Anda yakin ingin menghapus kata sandi?</value>
+  </data>
+  <data name="RemovingSendPassword" xml:space="preserve">
+    <value>Menghapus kata sandi...</value>
+  </data>
+  <data name="SendPasswordRemoved" xml:space="preserve">
+    <value>Kata sandi telah dihapus.</value>
+  </data>
+  <data name="NotesInfo" xml:space="preserve">
+    <value>Catatan pribadi tentang Send ini.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="DisableSend" xml:space="preserve">
+    <value>Nonaktifkan Send ini sehingga tidak ada yang dapat mengaksesnya.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NoSends" xml:space="preserve">
+    <value>Tidak ada Send di akun Anda.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Tambahkan Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="CopyLink" xml:space="preserve">
+    <value>Salin Tautan</value>
+  </data>
+  <data name="ShareLink" xml:space="preserve">
+    <value>Membagikan tautan</value>
+  </data>
+  <data name="SendLink" xml:space="preserve">
+    <value>Tautan Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SearchSends" xml:space="preserve">
+    <value>Pencarian Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="EditSend" xml:space="preserve">
+    <value>Edit Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddSend" xml:space="preserve">
+    <value>Tambahkan Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AreYouSureDeleteSend" xml:space="preserve">
+    <value>Anda yakin ingin menghapus Send ini?</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDeleted" xml:space="preserve">
+    <value>Send telah dihapus.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendUpdated" xml:space="preserve">
+    <value>Send diperbarui.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="NewSendCreated" xml:space="preserve">
+    <value>Send baru telah dibuat.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="OneDay" xml:space="preserve">
+    <value>1 hari</value>
+  </data>
+  <data name="TwoDays" xml:space="preserve">
+    <value>2 hari</value>
+  </data>
+  <data name="ThreeDays" xml:space="preserve">
+    <value>3 Hari</value>
+  </data>
+  <data name="SevenDays" xml:space="preserve">
+    <value>7 hari</value>
+  </data>
+  <data name="ThirtyDays" xml:space="preserve">
+    <value>30 hari</value>
+  </data>
+  <data name="Custom" xml:space="preserve">
+    <value>Kustom</value>
+  </data>
+  <data name="ShareOnSave" xml:space="preserve">
+    <value>Bagikan Send ini setelah disimpan.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendDisabledWarning" xml:space="preserve">
+    <value>Karena kebijakan perusahaan, Anda hanya dapat menghapus Send yang sudah ada.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>Tentang Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Sembunyikan alamat surel saya dari penerima.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>Satu atau lebih kebijakan orgnanisasi mempengaruhi pilihan Send Anda.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Akun gratis dibatasi hanya untuk berbagi teks. Keanggotaan premium diperlukan untuk menggunakan berkas dengan Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>Anda harus memverifikasi email Anda untuk menggunakan berkas dengan Send. Anda dapat memverifikasi email Anda di brankas web.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Pengingat ulang sandi utama</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Konfirmasi sandi utama</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>Tindakan ini dilindungi, untuk melanjutkan harap masukkan ulang sandi utama Anda untuk memverifikasi identitas Anda.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha Diperlukan</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha Gagal. Silahkan coba lagi.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Kata Sandi Telah Diperbarui</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Perbarui Kata Sandi Utama</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Kata Sandi Utama Anda baru-baru ini diubah oleh administrator organisasi Anda. Untuk mengakses brankas tersebut, Anda diharuskan memperbarui Kata Sandi Utama Anda sekarang. Jika Anda melanjutkan, Anda akan keluar dari sesi saat ini, yang mana mengharuskan Anda untuk login kembali. Sesi yang aktif di perangkat lain akan tetap aktif selama satu jam kedepan.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Memperbarui Kata Sandi</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Saat ini tidak dapat memperbarui kata sandi</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Hapus Kata Sandi Utama</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} sedang menggunakan SSO dengan enkripsi yang dikelola oleh pelanggan. Melanjutkan akan menghapus Kata Sandi Utama Anda dari akun Anda dan membutuhkan SSO untuk login.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Jika Anda tidak ingin menghapus Kata Sandi Utama Anda, Anda dapat meninggalkan organisasi ini.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Tinggalkan Organisasi</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Tinggalkan {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Untuk melanjutkan, pastikan kunci keamanan FIDO2 WebAuthn dalam keadaan aktif, kemudian ikuti instruksi yang muncul setelah mengklik 'Authenticate WebAuthn' di layar berikutnya.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Otentikasi menggunakan FIDO2 WebAuthn, Anda dapat mengautentikasi menggunakan kunci keamanan eksternal.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Otentikasi WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Kembali ke Aplikasi </value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Pastikan peramban utama Anda mendukung WebAuthn, kemudian coba lagi.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Organisasi ini memiliki kebijakan perusahaan yang secara otomatis mendaftarkan Anda dalam pengaturan ulang kata sandi. Dengan mendaftar, akan memungkinkan administrator organisasi untuk mengubah kata sandi utama Anda.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Kebijakan organisasi Anda memengaruhi waktu tunggu brankas Anda. Batas maksimal Waktu Tunggu Brankas yang diizinkan adalah {0} jam dan {1} menit</value>
+  </data>
+  <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
+    <value>Kebijakan organisasi Anda memengaruhi batas waktu vault Anda. Batas waktu brankas maksimum yang diizinkan adalah {0} jam dan {1} menit. Tindakan batas waktu vault Anda diatur ke {2}.</value>
+  </data>
+  <data name="VaultTimeoutActionPolicyInEffect" xml:space="preserve">
+    <value>Kebijakan organisasi anda telah menetapkan tindakan batas waktu vault ke {0}.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Batas waktu brankas anda melebihi batasan yang ditetapkan oleh organisasi Anda.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect" xml:space="preserve">
+    <value>Satu atau beberapa kebijakan organiasasi mencegah anda untuk mengekspor brankas pribadi anda.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Tambahkan Akun</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Tidak terkunci</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Terkunci</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Beralih ke akun berikutnya yang tersedia</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Akun terkunci</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Berhasil keluar</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Akun berhasil dihapus</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Hapus akun</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Menghapus akun anda bersifat permanen</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Akun anda dan semua data brankas akan terhapus dan tidak dapat dipulihkan. Apakah anda yakin untuk melanjutkan?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Hapus akun anda</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Akun Anda telah dihapus secara permanen.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Kode verifikasi tidak valid.</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Meminta kata sandi sekali pakai</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Kirim Kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Mengirim...</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Salin tautan Send saat menyimpan</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Mengirim kode</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Memverifikasi...</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Kirim ulang kode</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kode verifikasi telah dikirim ke email Anda.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Terdapat kesalahan terjadi saat mengirim kode verifikasi ke email anda. Silahkan coba lagi</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Masukkan kode verifikasi yang dikirim ke email anda</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Kirim catatan kerusakan</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Bantu Bitwarden meningkatkan stabilitas aplikasi dengan mengirim laporan kerusakan.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Opsi diperluas, ketuk untuk menciutkan.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Opsi diciutkan, ketuk untuk memperluas.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Huruf besar (A ke Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Huruf kecil (Z ke A)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Angka (0 ke 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Karakter spesial (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Ketuk untuk kembali</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Kata sandi terlihat, ketuk untuk menyembunyikannya.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Kata sandi tidak terlihat, ketuk untuk menampilkannya.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Saring item berdasarkan brankas</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Semua brankas</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Brankas</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Brankas: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Semua</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Kode Verifikasi</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Diperlukan langganan premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Tidak dapat menambah kunci autentikator? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Pindai Kode QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Tidak dapat memindai Kode QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Kunci Autentikator</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Masukkan kunci secara manual</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Tambahkan TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Atur TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Setelah kunci berhasil dimasukkan,
+pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Mengatur opsi kunci Anda ke "Tidak Pernah" membuat brankas Anda tetap tersedia bagi siapa saja yang memiliki akses ke perangkat Anda. Jika Anda menggunakan opsi ini, Anda harus memastikan bahwa perangkat Anda terlindungi dengan baik.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Satu atau beberapa URL yang dimasukkan tidak valid. Silakan revisi dan coba simpan lagi.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Kami tidak dapat memproses permintaan Anda. Silakan coba lagi atau hubungi kami.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Mengizinkan penangkapan layar</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Apakah Anda yakin ingin mengaktifkan tangkapan layar?</value>
+  </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Login requested</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Are you trying to log in?</value>
+  </data>
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
+    <value>Login attempt by {0} on {1}</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Device type</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP address</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Near</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirm login</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Deny login</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just now</value>
+  </data>
+  <data name="XMinutesAgo" xml:space="preserve">
+    <value>{0} minutes ago</value>
+  </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Login confirmed</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Login denied</value>
+  </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Approve login requests</value>
+  </data>
+  <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
+    <value>Use this device to approve login requests made from other devices</value>
+  </data>
+  <data name="AllowNotifications" xml:space="preserve">
+    <value>Allow notifications</value>
+  </data>
+  <data name="ReceivePushNotificationsForNewLoginRequests" xml:space="preserve">
+    <value>Receive push notifications for new login requests</value>
+  </data>
+  <data name="NoThanks" xml:space="preserve">
+    <value>No thanks</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirm login attempt for {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>All notifications</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Password type</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>What would you like to generate?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Username type</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus addressed email</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all email</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Forwarded email alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Random word</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (required)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domain name (required)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API key (required)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="AddyIo" xml:space="preserve">
+    <value>addy.io</value>
+    <comment>"addy.io" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="DuckDuckGo" xml:space="preserve">
+    <value>DuckDuckGo</value>
+    <comment>"DuckDuckGo" is the product name and should not be translated.</comment>
+  </data>
+  <data name="Fastmail" xml:space="preserve">
+    <value>Fastmail</value>
+    <comment>"Fastmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="ForwardEmail" xml:space="preserve">
+    <value>ForwardEmail</value>
+    <comment>"ForwardEmail" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API access token</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Are you sure you want to overwrite the current username?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generate username</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email Type</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (required)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Unknown {0} error occurred.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Use your email provider's subaddress capabilities</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Use your domain's configured catch-all inbox.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generate an email alias with an external forwarding service.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Random</value>
+  </data>
+  <data name="ConnectToWatch" xml:space="preserve">
+    <value>Connect to Watch</value>
+  </data>
+  <data name="AccessibilityServiceDisclosure" xml:space="preserve">
+    <value>Accessibility Service Disclosure</value>
+  </data>
+  <data name="AccessibilityDisclosureText" xml:space="preserve">
+    <value>Bitwarden uses the Accessibility Service to search for login fields in apps and websites, then establish the appropriate field IDs for entering a username &amp; password when a match for the app or site is found. We do not store any of the information presented to us by the service, nor do we make any attempt to control any on-screen elements beyond text entry of credentials.</value>
+  </data>
+  <data name="Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Decline" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="LoginRequestHasAlreadyExpired" xml:space="preserve">
+    <value>Login request has already expired.</value>
+  </data>
+  <data name="LoginAttemptFromXDoYouWantToSwitchToThisAccount" xml:space="preserve">
+    <value>Login attempt from:
+{0}
+Do you want to switch to this account?</value>
+  </data>
+  <data name="NewAroundHere" xml:space="preserve">
+    <value>New around here?</value>
+  </data>
+  <data name="GetMasterPasswordwordHint" xml:space="preserve">
+    <value>Get master password hint</value>
+  </data>
+  <data name="LoggingInAsXOnY" xml:space="preserve">
+    <value>Logging in as {0} on {1}</value>
+  </data>
+  <data name="NotYou" xml:space="preserve">
+    <value>Not you?</value>
+  </data>
+  <data name="LogInWithMasterPassword" xml:space="preserve">
+    <value>Log in with master password</value>
+  </data>
+  <data name="LogInWithAnotherDevice" xml:space="preserve">
+    <value>Log in with device</value>
+  </data>
+  <data name="LogInInitiated" xml:space="preserve">
+    <value>Login initiated</value>
+  </data>
+  <data name="ANotificationHasBeenSentToYourDevice" xml:space="preserve">
+    <value>A notification has been sent to your device.</value>
+  </data>
+  <data name="PleaseMakeSureYourVaultIsUnlockedAndTheFingerprintPhraseMatchesOnTheOtherDevice" xml:space="preserve">
+    <value>Please make sure your vault is unlocked and the Fingerprint phrase matches on the other device.</value>
+  </data>
+  <data name="ResendNotification" xml:space="preserve">
+    <value>Resend notification</value>
+  </data>
+  <data name="NeedAnotherOption" xml:space="preserve">
+    <value>Need another option?</value>
+  </data>
+  <data name="ViewAllLoginOptions" xml:space="preserve">
+    <value>View all log in options</value>
+  </data>
+  <data name="ThisRequestIsNoLongerValid" xml:space="preserve">
+    <value>This request is no longer valid</value>
+  </data>
+  <data name="PendingLogInRequests" xml:space="preserve">
+    <value>Pending login requests</value>
+  </data>
+  <data name="DeclineAllRequests" xml:space="preserve">
+    <value>Decline all requests</value>
+  </data>
+  <data name="AreYouSureYouWantToDeclineAllPendingLogInRequests" xml:space="preserve">
+    <value>Are you sure you want to decline all pending login requests?</value>
+  </data>
+  <data name="RequestsDeclined" xml:space="preserve">
+    <value>Requests declined</value>
+  </data>
+  <data name="NoPendingRequests" xml:space="preserve">
+    <value>No pending requests</value>  
+  </data>
+  <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
+    <value>Enable camera permission to use the scanner</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="LanguageChangeXDescription" xml:space="preserve">
+    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+  </data>
+  <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
+    <value>Language change requires app restart</value>
+  </data>
+  <data name="DefaultSystem" xml:space="preserve">
+    <value>Default (System)</value>
+  </data>
+  <data name="Important" xml:space="preserve">
+    <value>Important</value>
+  </data>
+  <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
+    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+  </data>
+  <data name="WeakMasterPassword" xml:space="preserve">
+    <value>Weak Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
+    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+  </data>
+  <data name="Weak" xml:space="preserve">
+    <value>Weak</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="Strong" xml:space="preserve">
+    <value>Strong</value>
+  </data>
+  <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
+    <value>Check known data breaches for this password</value>
+  </data>
+  <data name="ExposedMasterPassword" xml:space="preserve">
+    <value>Exposed Master Password</value>
+  </data>
+  <data name="PasswordFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Password found in a data breach. Use a unique password to protect your account. Are you sure you want to use an exposed password?</value>
+  </data>
+  <data name="WeakAndExposedMasterPassword" xml:space="preserve">
+    <value>Weak and Exposed Master Password</value>
+  </data>
+  <data name="WeakPasswordIdentifiedAndFoundInADataBreachAlertDescription" xml:space="preserve">
+    <value>Weak password identified and found in a data breach. Use a strong and unique password to protect your account. Are you sure you want to use this password?</value>
+  </data>
+  <data name="OrganizationSsoIdentifierRequired" xml:space="preserve">
+    <value>Organization SSO identifier required.</value>
+  </data>
+  <data name="AddTheKeyToAnExistingOrNewItem" xml:space="preserve">
+    <value>Add the key to an existing or new item</value>
+  </data>
+  <data name="ThereAreNoItemsInYourVaultThatMatchX" xml:space="preserve">
+    <value>There are no items in your vault that match "{0}"</value>
+  </data>
+  <data name="SearchForAnItemOrAddANewItem" xml:space="preserve">
+    <value>Search for an item or add a new item</value>
+  </data>
+  <data name="ThereAreNoItemsThatMatchTheSearch" xml:space="preserve">
+    <value>There are no items that match the search</value>
+  </data>
+  <data name="US" xml:space="preserve">
+    <value>US</value>
+  </data>
+  <data name="EU" xml:space="preserve">
+    <value>EU</value>
+  </data>
+  <data name="SelfHosted" xml:space="preserve">
+    <value>Self-hosted</value>
+  </data>
+  <data name="DataRegion" xml:space="preserve">
+    <value>Data region</value>
+  </data>
+  <data name="Region" xml:space="preserve">
+    <value>Region</value>
+  </data>
+  <data name="UpdateWeakMasterPasswordWarning" xml:space="preserve">
+    <value>Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="CurrentMasterPassword" xml:space="preserve">
+    <value>Current master password</value>
+  </data>
+  <data name="LoggedIn" xml:space="preserve">
+    <value>Logged in!</value>
+  </data>
+  <data name="ApproveWithMyOtherDevice" xml:space="preserve">
+    <value>Approve with my other device</value>
+  </data>
+  <data name="RequestAdminApproval" xml:space="preserve">
+    <value>Request admin approval</value>
+  </data>
+  <data name="ApproveWithMasterPassword" xml:space="preserve">
+    <value>Approve with master password</value>
+  </data>
+  <data name="TurnOffUsingPublicDevice" xml:space="preserve">
+    <value>Turn off using a public device</value>
+  </data>
+  <data name="RememberThisDevice" xml:space="preserve">
+    <value>Remember this device</value>
+  </data>
+  <data name="Passkey" xml:space="preserve">
+    <value>Passkey</value>
+  </data>
+  <data name="Passkeys" xml:space="preserve">
+    <value>Passkeys</value>
+  </data>
+  <data name="Application" xml:space="preserve">
+    <value>Application</value>
+  </data>
+  <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
+    <value>You cannot edit passkey application because it would invalidate the passkey</value>
+  </data>
+  <data name="PasskeyWillNotBeCopied" xml:space="preserve">
+    <value>Passkey will not be copied</value>
+  </data>
+  <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
+    <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
+  </data>
+  <data name="CopyApplication" xml:space="preserve">
+    <value>Copy application</value>
+  </data>
+  <data name="AvailableForTwoStepLogin" xml:space="preserve">
+    <value>Available for two-step login</value>
+  </data>
+  <data name="MasterPasswordRePromptHelp" xml:space="preserve">
+    <value>Master password re-prompt help</value>
+  </data>
+  <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
+    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+  </data>
+  <data name="InvalidAPIKey" xml:space="preserve">
+    <value>Invalid API key</value>
+  </data>
+  <data name="InvalidAPIToken" xml:space="preserve">
+    <value>Invalid API token</value>
+  </data>
+  <data name="AdminApprovalRequested" xml:space="preserve">
+    <value>Admin approval requested</value>
+  </data>
+  <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
+    <value>Your request has been sent to your admin.</value>
+  </data>
+  <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
+    <value>You will be notified once approved. </value>
+  </data>
+  <data name="TroubleLoggingIn" xml:space="preserve">
+    <value>Trouble logging in?</value>
+  </data>
+  <data name="LoggingInAsX" xml:space="preserve">
+    <value>Logging in as {0}</value>
+  </data>
+  <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
+    <value>Vault timeout action changed to log out</value>
+  </data>
+  <data name="BlockAutoFill" xml:space="preserve">
+    <value>Block auto-fill</value>
+  </data>
+  <data name="AutoFillWillNotBeOfferedForTheseURIs" xml:space="preserve">
+    <value>Auto-fill will not be offered for these URIs.</value>
+  </data>
+  <data name="NewBlockedURI" xml:space="preserve">
+    <value>New blocked URI</value>
+  </data>
+  <data name="URISaved" xml:space="preserve">
+    <value>URI saved</value>
+  </data>
+  <data name="InvalidFormatUseHttpsHttpOrAndroidApp" xml:space="preserve">
+    <value>Invalid format. Use https://, http://, or androidapp://</value>
+    <comment>https://, http://, androidapp:// should not be translated</comment>
+  </data>
+  <data name="EditURI" xml:space="preserve">
+    <value>Edit URI</value>
+  </data>
+  <data name="EnterURI" xml:space="preserve">
+    <value>Enter URI</value>
+  </data>
+  <data name="FormatXSeparateMultipleURIsWithAComma" xml:space="preserve">
+    <value>Format: {0}. Separate multiple URIs with a comma.</value>
+  </data>
+  <data name="FormatX" xml:space="preserve">
+    <value>Format: {0}</value>
+  </data>
+  <data name="InvalidURI" xml:space="preserve">
+    <value>Invalid URI</value>
+  </data>
+  <data name="URIRemoved" xml:space="preserve">
+    <value>URI removed</value>
+  </data>
+  <data name="ThereAreNoBlockedURIs" xml:space="preserve">
+    <value>There are no blocked URIs</value>
+  </data>
+  <data name="TheURIXIsAlreadyBlocked" xml:space="preserve">
+    <value>The URI {0} is already blocked</value>
+  </data>
+  <data name="CannotEditMultipleURIsAtOnce" xml:space="preserve">
+    <value>Cannot edit multiple URIs at once</value>
+  </data>
+  <data name="LoginApproved" xml:space="preserve">
+    <value>Login approved</value>
+  </data>
+  <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
+    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+  </data>
+  <data name="LogInWithDevice" xml:space="preserve">
+    <value>Log in with device</value>
+  </data>
+  <data name="LoggingInOn" xml:space="preserve">
+    <value>Logging in on</value>
+  </data>
+  <data name="Vault" xml:space="preserve">
+    <value>Vault</value>
+  </data>
+  <data name="Appearance" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="AccountSecurity" xml:space="preserve">
+    <value>Account security</value>
+  </data>
+  <data name="BitwardenHelpCenter" xml:space="preserve">
+    <value>Bitwarden Help Center</value>
+  </data>
+  <data name="ContactBitwardenSupport" xml:space="preserve">
+    <value>Contact Bitwarden support</value>
+  </data>
+  <data name="CopyAppInformation" xml:space="preserve">
+    <value>Copy app information</value>
+  </data>
+  <data name="SyncNow" xml:space="preserve">
+    <value>Sync now</value>
+  </data>
+  <data name="UnlockOptions" xml:space="preserve">
+    <value>Unlock options</value>
+  </data>
+  <data name="SessionTimeout" xml:space="preserve">
+    <value>Session timeout</value>
+  </data>
+  <data name="SessionTimeoutAction" xml:space="preserve">
+    <value>Session timeout action</value>
+  </data>
+  <data name="AccountFingerprintPhrase" xml:space="preserve">
+    <value>Account fingerprint phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="OneHourAndOneMinute" xml:space="preserve">
+    <value>One hour and one minute</value>
+  </data>
+  <data name="OneHourAndXMinute" xml:space="preserve">
+    <value>One hour and {0} minutes</value>
+  </data>
+  <data name="XHoursAndOneMinute" xml:space="preserve">
+    <value>{0} hours and one minute</value>
+  </data>
+  <data name="XHoursAndYMinutes" xml:space="preserve">
+    <value>{0} hours and {1} minutes</value>
+  </data>
+  <data name="XHours" xml:space="preserve">
+    <value>{0} hours</value>
+  </data>
+  <data name="AutofillServicesExplanationLong" xml:space="preserve">
+    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+  </data>
+  <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
+    <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
+  </data>
+  <data name="AdditionalOptions" xml:space="preserve">
+    <value>Additional options</value>
+  </data>
+  <data name="ContinueToWebApp" xml:space="preserve">
+    <value>Continue to web app?</value>
+  </data>
+  <data name="ContinueToX" xml:space="preserve">
+    <value>Continue to {0}?</value>
+    <comment>The parameter is an URL, like bitwarden.com.</comment>
+  </data>
+  <data name="ContinueToHelpCenter" xml:space="preserve">
+    <value>Continue to Help center?</value>
+  </data>
+  <data name="ContinueToContactSupport" xml:space="preserve">
+    <value>Continue to contact support?</value>
+  </data>
+  <data name="ContinueToPrivacyPolicy" xml:space="preserve">
+    <value>Continue to privacy policy?</value>
+  </data>
+  <data name="ContinueToAppStore" xml:space="preserve">
+    <value>Continue to app store?</value>
+  </data>
+  <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
+    <value>Make your account more secure by setting up two-step login in the Bitwarden web app.</value>
+  </data>
+  <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
+    <value>You can change your master password on the Bitwarden web app.</value>
+  </data>
+  <data name="YouCanImportDataToYourVaultOnX" xml:space="preserve">
+    <value>You can import data to your vault on {0}.</value>
+    <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
+  </data>
+  <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
+    <value>Learn more about how to use Bitwarden on the Help center.</value>
+  </data>
+  <data name="ContactSupportDescriptionLong" xml:space="preserve">
+    <value>Can’t find what you are looking for? Reach out to Bitwarden support on bitwarden.com.</value>
+  </data>
+  <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
+    <value>Check out our privacy policy on bitwarden.com.</value>
+  </data>
+  <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
+    <value>Explore more features of your Bitwarden account on the web app.</value>
+  </data>
+  <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</value>
+  </data>
+  <data name="RateAppDescriptionLong" xml:space="preserve">
+    <value>Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</value>
+  </data>
+  <data name="DefaultDarkThemeDescriptionLong" xml:space="preserve">
+    <value>Choose the dark theme to use when your device’s dark mode is in use</value>
+  </data>
+  <data name="CreatedXY" xml:space="preserve">
+    <value>Created {0}, {1}</value>
+    <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
+  </data>
+  <data name="TooManyAttempts" xml:space="preserve">
+    <value>Too many attempts</value>
+  </data>
+  <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
+    <value>Account logged out.</value>
+  </data>
+  <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+  </data>
+  <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
+    <value>Your organization requires you to set a master password.</value> 
+  </data>
+  <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
+    <value>Set up an unlock option to change your vault timeout action.</value>
+  </data>
+</root>

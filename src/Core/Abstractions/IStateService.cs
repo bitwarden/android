@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
-using Bit.Core.Services;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Abstractions
 {
@@ -186,9 +183,9 @@ namespace Bit.Core.Abstractions
         Task<bool> GetShouldTrustDeviceAsync();
         Task SetShouldTrustDeviceAsync(bool value);
         Task SetUserHasMasterPasswordAsync(bool value, string userId = null);
-        Task<Region?> GetActiveUserRegionAsync();
-        Task<Region?> GetPreAuthRegionAsync();
-        Task SetPreAuthRegionAsync(Region value);
+        Task<BwRegion?> GetActiveUserRegionAsync();
+        Task<BwRegion?> GetPreAuthRegionAsync();
+        Task SetPreAuthRegionAsync(BwRegion value);
         [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         Task<string> GetPinProtectedAsync(string userId = null);
         [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
