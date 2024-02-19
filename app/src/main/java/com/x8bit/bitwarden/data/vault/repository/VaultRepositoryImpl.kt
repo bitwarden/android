@@ -317,6 +317,27 @@ class VaultRepositoryImpl(
         mutableCollectionsStateFlow.updateToPendingOrLoading()
         mutableSendDataStateFlow.updateToPendingOrLoading()
         syncJob = ioScope.launch {
+            val lastSyncInstant = settingsDiskSource
+                .getLastSyncTime(userId = userId)
+                ?.toEpochMilli()
+                ?: 0
+
+            syncService
+                .getAccountRevisionDateMillis()
+                .fold(
+                    onSuccess = { serverRevisionDate ->
+                        if (serverRevisionDate < lastSyncInstant) {
+                            // We can skip the actual sync call if there is no new data
+                            vaultDiskSource.resyncVaultData(userId)
+                            return@launch
+                        }
+                    },
+                    onFailure = {
+                        updateVaultStateFlowsToError(it)
+                        return@launch
+                    },
+                )
+
             syncService
                 .sync()
                 .fold(
@@ -350,31 +371,7 @@ class VaultRepositoryImpl(
                         settingsDiskSource.storeLastSyncTime(userId = userId, clock.instant())
                     },
                     onFailure = { throwable ->
-                        mutableCiphersStateFlow.update { currentState ->
-                            throwable.toNetworkOrErrorState(
-                                data = currentState.data,
-                            )
-                        }
-                        mutableDomainsStateFlow.update { currentState ->
-                            throwable.toNetworkOrErrorState(
-                                data = currentState.data,
-                            )
-                        }
-                        mutableFoldersStateFlow.update { currentState ->
-                            throwable.toNetworkOrErrorState(
-                                data = currentState.data,
-                            )
-                        }
-                        mutableCollectionsStateFlow.update { currentState ->
-                            throwable.toNetworkOrErrorState(
-                                data = currentState.data,
-                            )
-                        }
-                        mutableSendDataStateFlow.update { currentState ->
-                            throwable.toNetworkOrErrorState(
-                                data = currentState.data,
-                            )
-                        }
+                        updateVaultStateFlowsToError(throwable)
                     },
                 )
         }
@@ -1406,6 +1403,34 @@ class VaultRepositoryImpl(
                     )
             }
             .onEach { mutableSendDataStateFlow.value = it }
+
+    private fun updateVaultStateFlowsToError(throwable: Throwable) {
+        mutableCiphersStateFlow.update { currentState ->
+            throwable.toNetworkOrErrorState(
+                data = currentState.data,
+            )
+        }
+        mutableDomainsStateFlow.update { currentState ->
+            throwable.toNetworkOrErrorState(
+                data = currentState.data,
+            )
+        }
+        mutableFoldersStateFlow.update { currentState ->
+            throwable.toNetworkOrErrorState(
+                data = currentState.data,
+            )
+        }
+        mutableCollectionsStateFlow.update { currentState ->
+            throwable.toNetworkOrErrorState(
+                data = currentState.data,
+            )
+        }
+        mutableSendDataStateFlow.update { currentState ->
+            throwable.toNetworkOrErrorState(
+                data = currentState.data,
+            )
+        }
+    }
 
     //region Push notification helpers
     /**

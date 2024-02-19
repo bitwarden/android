@@ -22,7 +22,20 @@ class SyncServiceTest : BaseServiceTest() {
         val result = syncService.sync()
         assertEquals(createMockSyncResponse(number = 1), result.getOrThrow())
     }
+
+    @Test
+    fun `revision date should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody(REVISION_DATE_SUCCESS_JSON))
+        val result = syncService.getAccountRevisionDateMillis()
+        assertEquals(
+            REVISION_DATE_MILLISECONDS,
+            result.getOrThrow(),
+        )
+    }
 }
+
+private const val REVISION_DATE_MILLISECONDS = 1707847670747L
+private const val REVISION_DATE_SUCCESS_JSON = """1707847670747"""
 
 private const val SYNC_SUCCESS_JSON = """
 {

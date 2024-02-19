@@ -7,4 +7,7 @@ class SyncServiceImpl(
     private val syncApi: SyncApi,
 ) : SyncService {
     override suspend fun sync(): Result<SyncResponseJson> = syncApi.sync()
+
+    override suspend fun getAccountRevisionDateMillis(): Result<Long> =
+        syncApi.getAccountRevisionDateMillis()
 }

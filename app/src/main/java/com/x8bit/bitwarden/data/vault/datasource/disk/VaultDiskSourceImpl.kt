@@ -16,6 +16,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
@@ -261,6 +262,20 @@ class VaultDiskSourceImpl(
             if (!deferredSends.await()) {
                 forceSendFlow.tryEmit(emptyList())
             }
+        }
+    }
+
+    override suspend fun resyncVaultData(userId: String) {
+        coroutineScope {
+            val deferredCiphers = async { getCiphers(userId = userId).first() }
+            val deferredCollections = async { getCollections(userId = userId).first() }
+            val deferredFolders = async { getFolders(userId = userId).first() }
+            val deferredSends = async { getSends(userId = userId).first() }
+
+            forceCiphersFlow.tryEmit(deferredCiphers.await())
+            forceCollectionsFlow.tryEmit(deferredCollections.await())
+            forceFolderFlow.tryEmit(deferredFolders.await())
+            forceSendFlow.tryEmit(deferredSends.await())
         }
     }
 

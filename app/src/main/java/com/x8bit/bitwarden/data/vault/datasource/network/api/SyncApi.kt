@@ -14,4 +14,7 @@ interface SyncApi {
      */
     @GET("sync")
     suspend fun sync(): Result<SyncResponseJson>
+
+    @GET("/accounts/revision-date")
+    suspend fun getAccountRevisionDateMillis(): Result<Long>
 }

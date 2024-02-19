@@ -156,12 +156,22 @@ class VaultRepositoryTest {
     }
     private val fileManager: FileManager = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
-    private val settingsDiskSource = mockk<SettingsDiskSource>()
-    private val syncService: SyncService = mockk()
+    private val settingsDiskSource = mockk<SettingsDiskSource> {
+        every {
+            getLastSyncTime(userId = any())
+        } returns clock.instant()
+    }
+    private val syncService: SyncService = mockk {
+        coEvery {
+            getAccountRevisionDateMillis()
+        } returns clock.instant().plus(1, ChronoUnit.MINUTES).toEpochMilli().asSuccess()
+    }
     private val sendsService: SendsService = mockk()
     private val ciphersService: CiphersService = mockk()
     private val folderService: FolderService = mockk()
-    private val vaultDiskSource: VaultDiskSource = mockk()
+    private val vaultDiskSource: VaultDiskSource = mockk {
+        coEvery { resyncVaultData(any()) } just runs
+    }
     private val totpCodeManager: TotpCodeManager = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs
@@ -257,6 +267,7 @@ class VaultRepositoryTest {
         vaultRepository.sync()
         coVerify(exactly = 2) {
             // A second sync should have happened now since it was cancelled by the userState change
+            syncService.getAccountRevisionDateMillis()
             syncService.sync()
         }
     }
@@ -929,6 +940,35 @@ class VaultRepositoryTest {
         coEvery { syncService.sync() } just awaits
 
         vaultRepository.syncIfNecessary()
+
+        coVerify(exactly = 0) { syncService.sync() }
+    }
+
+    @Test
+    fun `sync when the last sync time is older than the revision date should sync the vault`() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        every {
+            settingsDiskSource.getLastSyncTime(userId = userId)
+        } returns clock.instant().minus(1, ChronoUnit.MINUTES)
+
+        coEvery { syncService.sync() } just awaits
+
+        vaultRepository.sync()
+
+        coVerify { syncService.sync() }
+    }
+
+    @Test
+    fun `sync when the last sync time is more recent than the revision date should not sync `() {
+        val userId = "mockId-1"
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        coEvery { syncService.sync() } just awaits
+        every {
+            settingsDiskSource.getLastSyncTime(userId = userId)
+        } returns clock.instant().plus(2, ChronoUnit.MINUTES)
+
+        vaultRepository.sync()
 
         coVerify(exactly = 0) { syncService.sync() }
     }
