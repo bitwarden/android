@@ -50,8 +50,8 @@ namespace Bit.Core.Test.Services
                 [0xc0, 0x7c, 0x71, 0xc4, 0x03, 0x0f, 0x4e, 0x24, 0xb2, 0x84, 0xc8, 0x53, 0xaa, 0xd7, 0x2e, 0x2b]
              ];
             _ciphers = [
-                CreateCipherView(_credentialIds[0].ToString(), _rpId, false),
-                CreateCipherView(_credentialIds[1].ToString(), _rpId, true),
+                CreateCipherView(_credentialIds[0].ToString(), _rpId, false, false),
+                CreateCipherView(_credentialIds[1].ToString(), _rpId, true, true),
             ];
             _selectedCipher = _ciphers[0];
             _selectedCipherCredentialId = _credentialIds[0];
@@ -71,7 +71,7 @@ namespace Bit.Core.Test.Services
                 requireUserVerification: false
             );
             _sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(_ciphers);
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((_ciphers[0].Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, false));
         }
 
         public void Dispose() 
@@ -124,10 +124,9 @@ namespace Bit.Core.Test.Services
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(
-                Arg.Is<string[]>((cipherIds) => cipherIds.SequenceEqual(_ciphers.Select((cipher) => cipher.Id))),
-                Arg.Any<bool>()
-            );
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+                (credentials) => credentials.Select(c => c.CipherId).SequenceEqual(_ciphers.Select((c) => c.Id))
+            ));
         }
 
         [Fact]
@@ -136,16 +135,15 @@ namespace Bit.Core.Test.Services
             // Arrange
             _params.AllowCredentialDescriptorList = null;
             var discoverableCiphers = _ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((discoverableCiphers[0].Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((discoverableCiphers[0].Id, true));
 
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(
-                Arg.Is<string[]>((cipherIds) => cipherIds.SequenceEqual(discoverableCiphers.Select((cipher) => cipher.Id))),
-                Arg.Any<bool>()
-            );
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+                (credentials) => credentials.Select(c => c.CipherId).SequenceEqual(discoverableCiphers.Select((c) => c.Id))
+            ));
         }
 
         [Fact]
@@ -154,22 +152,22 @@ namespace Bit.Core.Test.Services
         public async Task GetAssertionAsync_RequestsUserVerification_ParamsRequireUserVerification() {
             // Arrange
             _params.RequireUserVerification = true;
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((_ciphers[0].Id, true));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, true));
 
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(
-                Arg.Any<string[]>(),
-                Arg.Is<bool>((userVerification) => userVerification == true)
-            );
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+                (credentials) => credentials.All((c) => c.RequireUserVerification == true)
+            ));
         }
 
         [Fact]
         // Spec: Prompt the user to select a public key credential source `selectedCredential` from `credentialOptions`.
         //       If `requireUserPresence` is true, the authorization gesture MUST include a test of user presence.
         // Comment: User presence is implied by the UI returning a credential.
+        // Extension: UserVerification is required if the cipher requires reprompting.
         public async Task GetAssertionAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification() {
             // Arrange
             _params.RequireUserVerification = false;
@@ -178,17 +176,16 @@ namespace Bit.Core.Test.Services
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(
-                Arg.Any<string[]>(),
-                Arg.Is<bool>((userVerification) => userVerification == false)
-            );
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+                (credentials) => credentials.Select(c => c.RequireUserVerification).SequenceEqual(_ciphers.Select((c) => c.Reprompt == CipherRepromptType.Password))
+            ));
         }
 
         [Fact]
         // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
         public async Task GetAssertionAsync_ThrowsNotAllowed_UserDoesNotConsent() {
             // Arrange
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((null, false));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((null, false));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
@@ -199,7 +196,7 @@ namespace Bit.Core.Test.Services
         public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationWhenRequired() {
             // Arrange
             _params.RequireUserVerification = true;
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((_selectedCipher.Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
 
             // Act and assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
@@ -211,7 +208,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             _selectedCipher.Reprompt = CipherRepromptType.Password;
             _params.RequireUserVerification = false;
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((_selectedCipher.Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
@@ -267,7 +264,7 @@ namespace Bit.Core.Test.Services
             _selectedCipher.Login.MainFido2Credential.CounterValue = 9000;
             _selectedCipher.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
             _sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(_params.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
-            _userInterface.PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>()).Returns((_selectedCipher.Id, true));
+            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, true));
             
             // Act
             var result = await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
@@ -313,12 +310,12 @@ namespace Bit.Core.Test.Services
         }
 
         #nullable enable
-        private CipherView CreateCipherView(string credentialId, string? rpId, bool? discoverable)
+        private CipherView CreateCipherView(string credentialId, string? rpId, bool? discoverable, bool reprompt = false)
         {
             return new CipherView {
                 Type = CipherType.Login,
                 Id = Guid.NewGuid().ToString(),
-                Reprompt = CipherRepromptType.None,
+                Reprompt = reprompt ? CipherRepromptType.Password : CipherRepromptType.None,
                 Login = new LoginView {
                     Fido2Credentials = new List<Fido2CredentialView> {
                         new Fido2CredentialView {

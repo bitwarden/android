@@ -25,9 +25,9 @@ namespace Bit.Core.Utilities.Fido2
             _ensureUnlockedVaultCallback = ensureUnlockedVaultCallback;
         }
 
-        public Task<(string CipherId, bool UserVerified)> PickCredentialAsync(string[] cipherIds, bool userVerification) 
+        public Task<(string CipherId, bool UserVerified)> PickCredentialAsync(IFido2GetAssertionUserInterfaceCredential[] credentials) 
         {
-            if (cipherIds.Length == 0 || !cipherIds.Contains(_cipherId))
+            if (credentials.Length == 0 || !credentials.Any(c => c.CipherId == _cipherId))
             {
                 throw new NotAllowedError();
             }

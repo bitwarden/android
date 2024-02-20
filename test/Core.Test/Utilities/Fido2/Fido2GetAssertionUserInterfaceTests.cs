@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities.Fido2;
 using Xunit;
 
@@ -13,7 +14,7 @@ namespace Bit.Core.Test.Utilities.Fido2
             var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null);
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotAllowedError>(() => userInterface.PickCredentialAsync(["notMatching"], false));
+            await Assert.ThrowsAsync<NotAllowedError>(() => userInterface.PickCredentialAsync([CreateCredential("notMatching", false)]));
         }
 
         [Fact]
@@ -23,7 +24,7 @@ namespace Bit.Core.Test.Utilities.Fido2
             var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null);
 
             // Act
-            var result = await userInterface.PickCredentialAsync(["cipherId", "cipherId2"], true);
+            var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", true)]);
 
             // Assert
             Assert.Equal("cipherId", result.CipherId);
@@ -43,6 +44,15 @@ namespace Bit.Core.Test.Utilities.Fido2
 
             // Assert
             Assert.True(called);
+        }
+
+        private IFido2GetAssertionUserInterfaceCredential CreateCredential(string cipherId, bool requireUserVerification)
+        {
+            return new IFido2GetAssertionUserInterfaceCredential
+            {
+                CipherId = cipherId,
+                RequireUserVerification = requireUserVerification
+            };
         }
     }
 }
