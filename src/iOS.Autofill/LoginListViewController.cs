@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.iOS.Autofill.ListItems;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Controllers;
@@ -20,7 +21,7 @@ namespace Bit.iOS.Autofill
 {
     public partial class LoginListViewController : ExtendedUIViewController
     {
-        //internal const string HEADER_SECTION_IDENTIFIER = "headerSectionId";
+        internal const string HEADER_SECTION_IDENTIFIER = "headerSectionId";
 
         UIBarButtonItem _cancelButton;
         UIControl _accountSwitchButton;
@@ -48,59 +49,71 @@ namespace Bit.iOS.Autofill
 
         public async override void ViewDidLoad()
         {
-            _cancelButton = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, CancelButton_TouchUpInside);
-
-            base.ViewDidLoad();
-
-            SubscribeSyncCompleted();
-
-            NavItem.Title = Context.IsCreatingPasskey ? AppResources.SavePasskey : AppResources.Items;
-            _cancelButton.Title = AppResources.Cancel;
-
-            TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 44;
-            TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
-            TableView.Source = new TableSource(this);
-            //TableView.RegisterClassForHeaderFooterViewReuse(typeof(AccountViewCell), HEADER_SECTION_IDENTIFIER);
-
-            await ((TableSource)TableView.Source).LoadAsync();
-
-            if (Context.IsCreatingPasskey)
+            try
             {
-                _headerLabel.Text = AppResources.ChooseALoginToSaveThisPasskeyTo;
-                _emptyViewLabel.Text = string.Format(AppResources.NoItemsForUri, Context.UrlString);
+                _cancelButton = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, CancelButton_TouchUpInside);
 
-                _emptyViewButton.SetTitle(AppResources.SavePasskeyAsNewLogin, UIControlState.Normal);
-                _emptyViewButton.Layer.BorderWidth = 2;
-                _emptyViewButton.Layer.BorderColor = UIColor.FromName(ColorConstants.LIGHT_TEXT_MUTED).CGColor;
-                _emptyViewButton.Layer.CornerRadius = 10;
-                _emptyViewButton.ClipsToBounds = true;
+                base.ViewDidLoad();
 
-                _headerView.Hidden = false;
+                SubscribeSyncCompleted();
+
+                NavItem.Title = Context.IsCreatingPasskey ? AppResources.SavePasskey : AppResources.Items;
+                _cancelButton.Title = AppResources.Cancel;
+
+                TableView.RowHeight = UITableView.AutomaticDimension;
+                TableView.EstimatedRowHeight = 44;
+                TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
+                TableView.Source = new TableSource(this);
+                TableView.SectionHeaderHeight = 55;
+                TableView.RegisterClassForHeaderFooterViewReuse(typeof(HeaderItemView), HEADER_SECTION_IDENTIFIER);
+                if (UIDevice.CurrentDevice.CheckSystemVersion(15, 0))
+                {
+                    TableView.SectionHeaderTopPadding = 0;
+                }
+
+                await ((TableSource)TableView.Source).LoadAsync();
+
+                if (Context.IsCreatingPasskey)
+                {
+                    _headerLabel.Text = AppResources.ChooseALoginToSaveThisPasskeyTo;
+                    _emptyViewLabel.Text = string.Format(AppResources.NoItemsForUri, Context.UrlString);
+
+                    _emptyViewButton.SetTitle(AppResources.SavePasskeyAsNewLogin, UIControlState.Normal);
+                    _emptyViewButton.Layer.BorderWidth = 2;
+                    _emptyViewButton.Layer.BorderColor = UIColor.FromName(ColorConstants.LIGHT_TEXT_MUTED).CGColor;
+                    _emptyViewButton.Layer.CornerRadius = 10;
+                    _emptyViewButton.ClipsToBounds = true;
+
+                    _headerView.Hidden = false;
+                }
+
+                _alreadyLoadItemsOnce = true;
+
+                var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                var needsAutofillReplacement = await storageService.GetAsync<bool?>(
+                    Core.Constants.AutofillNeedsIdentityReplacementKey);
+                if (needsAutofillReplacement.GetValueOrDefault())
+                {
+                    await ASHelpers.ReplaceAllIdentitiesAsync();
+                }
+
+                _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
+
+                _accountSwitchButton = await _accountSwitchingOverlayHelper.CreateAccountSwitchToolbarButtonItemCustomViewAsync();
+                _accountSwitchButton.TouchUpInside += AccountSwitchedButton_TouchUpInside;
+
+                NavItem.SetLeftBarButtonItems(new UIBarButtonItem[]
+                {
+                    _cancelButton,
+                    new UIBarButtonItem(_accountSwitchButton)
+                }, false);
+
+                _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
             }
-
-            _alreadyLoadItemsOnce = true;
-
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            var needsAutofillReplacement = await storageService.GetAsync<bool?>(
-                Core.Constants.AutofillNeedsIdentityReplacementKey);
-            if (needsAutofillReplacement.GetValueOrDefault())
+            catch (Exception ex)
             {
-                await ASHelpers.ReplaceAllIdentitiesAsync();
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
-
-            _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
-
-            _accountSwitchButton = await _accountSwitchingOverlayHelper.CreateAccountSwitchToolbarButtonItemCustomViewAsync();
-            _accountSwitchButton.TouchUpInside += AccountSwitchedButton_TouchUpInside;
-
-            NavItem.SetLeftBarButtonItems(new UIBarButtonItem[]
-            {
-                _cancelButton,
-                new UIBarButtonItem(_accountSwitchButton)
-            }, false);
-
-            _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
         }
 
         private void CancelButton_TouchUpInside(object sender, EventArgs e)
@@ -130,7 +143,6 @@ namespace Bit.iOS.Autofill
 
         partial void EmptyButton_Activated(UIButton sender)
         {
-            ClipLogger.Log($"EmptyButton_Activated");
             SavePasskeyAsNewLoginAsync().FireAndForget(ex =>
             {
                 _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred).FireAndForget();
@@ -145,11 +157,7 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            ClipLogger.Log($"SavePasskeyAsNewLoginAsync ");
-
             var cipherId = await _cipherService.Value.CreateNewLoginForPasskeyAsync(Context.PasskeyCredentialIdentity.RelyingPartyIdentifier);
-
-            ClipLogger.Log($"SavePasskeyAsNewLoginAsync -> setting result {cipherId}");
             Context.ConfirmNewCredentialTcs.TrySetResult(new Fido2ConfirmNewCredentialResult
             {
                 CipherId = cipherId,
@@ -203,7 +211,6 @@ namespace Bit.iOS.Autofill
 
         public void OnEmptyList()
         {
-            ClipLogger.Log($"OnEmptyList");
             _emptyView.Hidden = false;
             _headerView.Hidden = false;
             TableView.Hidden = true;
@@ -262,42 +269,43 @@ namespace Bit.iOS.Autofill
 
             private Context Context => (Context)_context;
 
-            //protected override async Task<IEnumerable<CipherViewModel>> LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
-            //{
-            //    if (!Context.IsCreatingPasskey)
-            //    {
-            //        return await base.LoadItemsAsync(urlFilter, searchFilter);
-            //    }
-
-
-            //}
-
             public override async Task LoadAsync(bool urlFilter = true, string searchFilter = null)
             {
-                await base.LoadAsync(urlFilter, searchFilter);
-
-                if (Context.IsCreatingPasskey && !Items.Any())
+                try
                 {
-                    _controller?.OnEmptyList();
+                    await base.LoadAsync(urlFilter, searchFilter);
+
+                    if (Context.IsCreatingPasskey && !Items.Any())
+                    {
+                        _controller?.OnEmptyList();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             }
 
-            //public override nint NumberOfSections(UITableView tableView)
-            //{
-            //    return Context.IsCreatingPasskey ? 1 : 0;
-            //}
+            public override UIView GetViewForHeader(UITableView tableView, nint section)
+            {
+                try
+                {
+                    if (Context.IsCreatingPasskey
+                        &&
+                        tableView.DequeueReusableHeaderFooterView(LoginListViewController.HEADER_SECTION_IDENTIFIER) is HeaderItemView headerItemView)
+                    {
+                        headerItemView.SetHeaderText(AppResources.ChooseALoginToSaveThisPasskeyTo);
+                        return headerItemView;
+                    }
 
-            //public override UIView GetViewForHeader(UITableView tableView, nint section)
-            //{
-            //    if (Context.IsCreatingPasskey)
-            //    {
-            //        var view = tableView.DequeueReusableHeaderFooterView(LoginListViewController.HEADER_SECTION_IDENTIFIER);
-
-            //        return view;
-            //    }
-
-            //    return base.GetViewForHeader(tableView, section);
-            //}
+                    return base.GetViewForHeader(tableView, section);
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    return new UIView();
+                }
+            }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
@@ -311,27 +319,31 @@ namespace Bit.iOS.Autofill
 
             public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
-                if (Context.IsCreatingPasskey)
+                try
                 {
-                    await SelectRowForPasskeyCreationAsync(tableView, indexPath);
-                    return;
-                }
+                    if (Context.IsCreatingPasskey)
+                    {
+                        await SelectRowForPasskeyCreationAsync(tableView, indexPath);
+                        return;
+                    }
 
-                await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
-                    _controller.CPViewController, _controller, _controller.PasswordRepromptService, "loginAddSegue");
+                    await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
+                        _controller.CPViewController, _controller, _controller.PasswordRepromptService, "loginAddSegue");
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
             }
 
             private async Task SelectRowForPasskeyCreationAsync(UITableView tableView, NSIndexPath indexPath)
             {
-                ClipLogger.Log($"SelectRowForPasskeyCreationAsync");
-
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
 
                 var item = Items.ElementAt(indexPath.Row);
                 if (item is null)
                 {
-                    ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> item is null");
                     await _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred);
                     return;
                 }
@@ -344,19 +356,16 @@ namespace Bit.iOS.Autofill
                         AppResources.Yes,
                         AppResources.No))
                 {
-                    ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> don't want to overwrite");
                     return;
                 }
 
                 if (!await _passwordRepromptService.Value.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
                 {
-                    ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> PromptAndCheckPasswordIfNeededAsync -> false");
                     return;
                 }
 
                 // TODO: Check user verification
 
-                ClipLogger.Log($"SelectRowForPasskeyCreationAsync -> Setting result {item.Id}");
                 Context.ConfirmNewCredentialTcs.SetResult(new Fido2ConfirmNewCredentialResult
                 {
                     CipherId = item.Id,

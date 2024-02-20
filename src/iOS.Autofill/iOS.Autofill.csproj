@@ -44,6 +44,9 @@
 	<ItemGroup>
 		<TrimmerRootAssembly Include="System.Security.Cryptography" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="ListItems\" />
+	</ItemGroup>
   <ItemGroup>
     <Compile Include="CredentialProviderViewController.cs" />
     <Compile Include="CredentialProviderViewController.designer.cs">
@@ -84,6 +87,7 @@
     <Compile Include="CredentialProviderViewController.Passkeys.cs" />
     <Compile Include="SegueConstants.cs" />
     <Compile Include="ColorConstants.cs" />
+    <Compile Include="ListItems\HeaderItemView.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\check.png" />
@@ -181,5 +185,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\iOS.Core\iOS.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ListItems\" />
   </ItemGroup>
 </Project>
