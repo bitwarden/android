@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
@@ -47,6 +48,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * in order to receive updates whenever [setCaptchaCallbackTokenResult] is called.
      */
     val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult>
+
+    /**
+     * Flow of the current [DuoCallbackTokenResult]. Subscribers should listen to the flow
+     * in order to receive updates whenever [setDuoCallbackTokenResult] is called.
+     */
+    val duoTokenResultFlow: Flow<DuoCallbackTokenResult>
 
     /**
      * Flow of the current [SsoCallbackResult]. Subscribers should listen to the flow in order to
@@ -205,6 +212,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Set the value of [captchaTokenResultFlow].
      */
     fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult)
+
+    /**
+     * Set the value of [duoTokenResultFlow].
+     */
+    fun setDuoCallbackTokenResult(tokenResult: DuoCallbackTokenResult)
 
     /**
      * Set the value of [yubiKeyResultFlow].

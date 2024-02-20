@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -209,6 +210,10 @@ class AuthRepositoryImpl(
     private val captchaTokenChannel = Channel<CaptchaCallbackTokenResult>(capacity = Int.MAX_VALUE)
     override val captchaTokenResultFlow: Flow<CaptchaCallbackTokenResult> =
         captchaTokenChannel.receiveAsFlow()
+
+    private val duoTokenChannel = Channel<DuoCallbackTokenResult>(capacity = Int.MAX_VALUE)
+    override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> =
+        duoTokenChannel.receiveAsFlow()
 
     private val yubiKeyResultChannel = Channel<YubiKeyResult>(capacity = Int.MAX_VALUE)
     override val yubiKeyResultFlow: Flow<YubiKeyResult> = yubiKeyResultChannel.receiveAsFlow()
@@ -768,6 +773,10 @@ class AuthRepositoryImpl(
 
     override fun setCaptchaCallbackTokenResult(tokenResult: CaptchaCallbackTokenResult) {
         captchaTokenChannel.trySend(tokenResult)
+    }
+
+    override fun setDuoCallbackTokenResult(tokenResult: DuoCallbackTokenResult) {
+        duoTokenChannel.trySend(tokenResult)
     }
 
     override fun setYubiKeyResult(yubiKeyResult: YubiKeyResult) {

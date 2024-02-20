@@ -100,6 +100,10 @@ fun TwoFactorLoginScreen(
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
+            is TwoFactorLoginEvent.NavigateToDuo -> {
+                intentManager.startCustomTabsActivity(uri = event.uri)
+            }
+
             is TwoFactorLoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
@@ -191,6 +195,7 @@ private fun TwoFactorLoginDialogs(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun TwoFactorLoginScreenContent(
     state: TwoFactorLoginState,
@@ -218,19 +223,21 @@ private fun TwoFactorLoginScreenContent(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        BitwardenPasswordField(
-            value = state.codeInput,
-            onValueChange = onCodeInputChange,
-            label = stringResource(id = R.string.verification_code),
-            keyboardType = KeyboardType.Number,
-            imeAction = ImeAction.Done,
-            autoFocus = true,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
+        if (state.shouldShowCodeInput) {
+            BitwardenPasswordField(
+                value = state.codeInput,
+                onValueChange = onCodeInputChange,
+                label = stringResource(id = R.string.verification_code),
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
+                autoFocus = true,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+        }
 
         BitwardenWideSwitch(
             label = stringResource(id = R.string.remember_me),
@@ -244,7 +251,7 @@ private fun TwoFactorLoginScreenContent(
         Spacer(modifier = Modifier.height(12.dp))
 
         BitwardenFilledButton(
-            label = stringResource(id = R.string.continue_text),
+            label = state.buttonText(),
             onClick = onContinueButtonClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier

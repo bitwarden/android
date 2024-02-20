@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -22,6 +23,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
@@ -34,21 +36,26 @@ import org.junit.jupiter.api.Test
 class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     private val mutableCaptchaTokenResultFlow =
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
+    private val mutableDuoTokenResultFlow =
+        bufferedMutableSharedFlow<DuoCallbackTokenResult>()
     private val mutableYubiKeyResultFlow = bufferedMutableSharedFlow<YubiKeyResult>()
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
+        every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
     }
 
     @BeforeEach
     fun setUp() {
         mockkStatic(::generateUriForCaptcha)
+        mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(::generateUriForCaptcha)
+        unmockkStatic(Uri::class)
     }
 
     @Test
@@ -100,6 +107,40 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     remember = false,
                 ),
                 captchaToken = "token",
+            )
+        }
+    }
+
+    @Test
+    fun `duoTokenResultFlow success update should trigger a login`() = runTest {
+        coEvery {
+            authRepository.login(
+                email = "example@email.com",
+                password = "password123",
+                twoFactorData = TwoFactorDataModel(
+                    code = "token",
+                    method = TwoFactorAuthMethod.DUO.value.toString(),
+                    remember = false,
+                ),
+                captchaToken = null,
+            )
+        } returns LoginResult.Success
+        createViewModel(
+            state = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.DUO,
+            ),
+        )
+        mutableDuoTokenResultFlow.tryEmit(DuoCallbackTokenResult.Success("token"))
+        coVerify {
+            authRepository.login(
+                email = "example@email.com",
+                password = "password123",
+                twoFactorData = TwoFactorDataModel(
+                    code = "token",
+                    method = TwoFactorAuthMethod.DUO.value.toString(),
+                    remember = false,
+                ),
+                captchaToken = null,
             )
         }
     }
@@ -205,6 +246,38 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 ),
                 captchaToken = null,
             )
+        }
+    }
+
+    @Test
+    fun `ContinueButtonClick login should emit NavigateToDuo when auth method is Duo`() = runTest {
+        val authMethodsData = mapOf(
+            TwoFactorAuthMethod.DUO to JsonObject(
+                mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")),
+            ),
+        )
+        val response = GetTokenResponseJson.TwoFactorRequired(
+            authMethodsData = authMethodsData,
+            captchaToken = null,
+            ssoToken = null,
+        )
+        every { authRepository.twoFactorResponse } returns response
+        val mockkUri = mockk<Uri>()
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.DUO,
+            ),
+        )
+        every { Uri.parse("bitwarden.com") } returns mockkUri
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+            assertEquals(
+                TwoFactorLoginEvent.NavigateToDuo(mockkUri),
+                awaitItem(),
+            )
+        }
+        verify {
+            Uri.parse("bitwarden.com")
         }
     }
 

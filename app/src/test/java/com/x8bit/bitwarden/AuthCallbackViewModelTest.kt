@@ -3,8 +3,10 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.getYubiKeyResultOrNull
@@ -24,6 +26,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
     private val authRepository = mockk<AuthRepository> {
         every { setCaptchaCallbackTokenResult(any()) } just runs
         every { setSsoCallbackResult(any()) } just runs
+        every { setDuoCallbackTokenResult(any()) } just runs
         every { setYubiKeyResult(any()) } just runs
     }
 
@@ -32,6 +35,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         mockkStatic(
             Intent::getYubiKeyResultOrNull,
             Intent::getCaptchaCallbackTokenResult,
+            Intent::getDuoCallbackTokenResult,
             Intent::getSsoCallbackResult,
         )
     }
@@ -41,6 +45,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         unmockkStatic(
             Intent::getYubiKeyResultOrNull,
             Intent::getCaptchaCallbackTokenResult,
+            Intent::getDuoCallbackTokenResult,
             Intent::getSsoCallbackResult,
         )
     }
@@ -51,12 +56,29 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         val mockIntent = mockk<Intent>()
         val captchaCallbackTokenResult = CaptchaCallbackTokenResult.Success(token = "mockk_token")
         every { mockIntent.getCaptchaCallbackTokenResult() } returns captchaCallbackTokenResult
+        every { mockIntent.getDuoCallbackTokenResult() } returns null
         every { mockIntent.getYubiKeyResultOrNull() } returns null
         every { mockIntent.getSsoCallbackResult() } returns null
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
             authRepository.setCaptchaCallbackTokenResult(tokenResult = captchaCallbackTokenResult)
+        }
+    }
+
+    @Test
+    fun `on IntentReceive with duo host should call setDuoCallbackToken`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent>()
+        val duoCallbackTokenResult = DuoCallbackTokenResult.Success(token = "mockk_token")
+        every { mockIntent.getCaptchaCallbackTokenResult() } returns null
+        every { mockIntent.getDuoCallbackTokenResult() } returns duoCallbackTokenResult
+        every { mockIntent.getYubiKeyResultOrNull() } returns null
+        every { mockIntent.getSsoCallbackResult() } returns null
+
+        viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
+        verify(exactly = 1) {
+            authRepository.setDuoCallbackTokenResult(tokenResult = duoCallbackTokenResult)
         }
     }
 
@@ -71,6 +93,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         every { mockIntent.getSsoCallbackResult() } returns sseCallbackResult
         every { mockIntent.getYubiKeyResultOrNull() } returns null
         every { mockIntent.getCaptchaCallbackTokenResult() } returns null
+        every { mockIntent.getDuoCallbackTokenResult() } returns null
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
         verify(exactly = 1) {
@@ -85,6 +108,7 @@ class AuthCallbackViewModelTest : BaseViewModelTest() {
         val yubiKeyResult = mockk<YubiKeyResult>()
         every { mockIntent.getYubiKeyResultOrNull() } returns yubiKeyResult
         every { mockIntent.getCaptchaCallbackTokenResult() } returns null
+        every { mockIntent.getDuoCallbackTokenResult() } returns null
         every { mockIntent.getSsoCallbackResult() } returns null
 
         viewModel.trySendAction(AuthCallbackAction.IntentReceive(intent = mockIntent))
