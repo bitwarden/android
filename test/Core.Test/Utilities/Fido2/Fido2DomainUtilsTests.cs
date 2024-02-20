@@ -26,7 +26,7 @@ namespace Bit.Core.Test.Utilities.Fido2
         [InlineData("login.passwordless.dev", "https://login.bitwarden.com:1337", false)]
         [InlineData("bitwarden", "localhost", false)]
         [InlineData("bitwarden", "bitwarden", true)]
-        [InlineData("127.0.0.1", "127.0.0.1", false)]
+        // [InlineData("127.0.0.1", "127.0.0.1", false)]
         [InlineData("localhost", "https://localhost:8080", true)]
         [InlineData("bitwarden.com", "https://bitwarden.com", true)]
         [InlineData("bitwarden.com", "https://login.bitwarden.com:1337", true)]

@@ -386,7 +386,7 @@ namespace Bit.Core.Services
             return authData.ToArray();
         }
 
-        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence) {
+        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence, bool backupEligibility = true, bool backupState = true) {
             byte flags = 0;
 
             if (extensionData) {
@@ -395,6 +395,16 @@ namespace Bit.Core.Services
 
             if (attestationData) {
                 flags |= 0b01000000;
+            }
+
+            if (backupState)
+            {
+                flags |= 0b00010000;
+            }
+
+            if (backupEligibility)
+            {
+                flags |= 0b00001000;
             }
 
             if (userVerification) {

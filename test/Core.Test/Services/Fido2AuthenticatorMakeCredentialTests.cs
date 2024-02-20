@@ -303,7 +303,7 @@ namespace Bit.Core.Test.Services
 
             Assert.Equal(71 + 77, authData.Length);
             Assert.Equal(rpIdHashMock, rpIdHash);
-            Assert.Equal([0b01000001], flags); // UP = true, AD = true
+            Assert.Equal([0b01011001], flags); // UP = true, AD = true, BS = true, BE = true
             Assert.Equal([0, 0, 0, 0], counter);
             Assert.Equal(Fido2AuthenticatorService.AAGUID, aaguid);
             Assert.Equal([0, 16], credentialIdLength); // 16 bytes because we're using GUIDs
