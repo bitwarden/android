@@ -204,7 +204,7 @@ namespace Bit.Core.Test.Services
                 PublicKeyAlgorithm = -7,
             };
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
-                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>())
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
                 .Returns(authenticatorResult);
 
             // Act
@@ -213,12 +213,15 @@ namespace Bit.Core.Test.Services
             // Assert
             await _sutProvider.GetDependency<IFido2AuthenticatorService>()
                 .Received()
-                .MakeCredentialAsync(Arg.Is<Fido2AuthenticatorMakeCredentialParams>(x =>
-                    x.RequireResidentKey == true &&
-                    x.RequireUserVerification == true &&
-                    x.RpEntity.Id == _params.Rp.Id &&
-                    x.UserEntity.DisplayName == _params.User.DisplayName
-                ));
+                .MakeCredentialAsync(
+                    Arg.Is<Fido2AuthenticatorMakeCredentialParams>(x =>
+                        x.RequireResidentKey == true &&
+                        x.RequireUserVerification == true &&
+                        x.RpEntity.Id == _params.Rp.Id &&
+                        x.UserEntity.DisplayName == _params.User.DisplayName
+                    ),
+                    _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>()
+                );
             Assert.Equal(authenticatorResult.CredentialId, result.CredentialId);
             Assert.Equal(authenticatorResult.AttestationObject, result.AttestationObject);
             Assert.Equal(authenticatorResult.AuthData, result.AuthData);
@@ -242,7 +245,7 @@ namespace Bit.Core.Test.Services
                 UserVerification = "required"
             };
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
-                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>())
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
                 .Throws(new InvalidStateError());
 
             // Act
@@ -258,7 +261,7 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
-                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>())
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
                 .Throws(new Exception("unknown error"));
 
             // Act

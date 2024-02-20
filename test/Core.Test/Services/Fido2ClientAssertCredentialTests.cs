@@ -116,7 +116,7 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
-                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>())
+                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
                 .Throws(new InvalidStateError());
 
             // Act
@@ -132,7 +132,7 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
-                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>())
+                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
                 .Throws(new Exception("unknown error"));
 
             // Act
@@ -183,7 +183,7 @@ namespace Bit.Core.Test.Services
                 Signature = RandomBytes(32)
             };
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
-                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>())
+                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
                 .Returns(authenticatorResult);
 
             // Act
@@ -192,13 +192,16 @@ namespace Bit.Core.Test.Services
             // Assert
             await _sutProvider.GetDependency<IFido2AuthenticatorService>()
                 .Received()
-                .GetAssertionAsync(Arg.Is<Fido2AuthenticatorGetAssertionParams>(x =>
-                    x.RpId == _params.RpId &&
-                    x.RequireUserPresence == true &&
-                    x.RequireUserVerification == true &&
-                    x.AllowCredentialDescriptorList.Length == 1 &&
-                    x.AllowCredentialDescriptorList[0].Id == _params.AllowCredentials[0].Id
-                ));
+                .GetAssertionAsync(
+                    Arg.Is<Fido2AuthenticatorGetAssertionParams>(x =>
+                        x.RpId == _params.RpId &&
+                        x.RequireUserPresence == true &&
+                        x.RequireUserVerification == true &&
+                        x.AllowCredentialDescriptorList.Length == 1 &&
+                        x.AllowCredentialDescriptorList[0].Id == _params.AllowCredentials[0].Id
+                    ), 
+                    _sutProvider.GetDependency<IFido2GetAssertionUserInterface>()
+                );
 
             Assert.Equal(authenticatorResult.SelectedCredential.Id, result.RawId);
             Assert.Equal(CoreHelpers.Base64UrlEncode(authenticatorResult.SelectedCredential.Id), result.Id);

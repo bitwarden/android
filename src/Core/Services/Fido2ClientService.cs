@@ -13,17 +13,23 @@ namespace Bit.Core.Services
         private readonly IEnvironmentService _environmentService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IFido2AuthenticatorService _fido2AuthenticatorService;
+        private readonly IFido2GetAssertionUserInterface _getAssertionUserInterface;
+        private readonly IFido2MakeCredentialUserInterface _makeCredentialUserInterface;
 
         public Fido2ClientService(
             IStateService stateService,
             IEnvironmentService environmentService,
             ICryptoFunctionService cryptoFunctionService,
-            IFido2AuthenticatorService fido2AuthenticatorService)
+            IFido2AuthenticatorService fido2AuthenticatorService,
+            IFido2GetAssertionUserInterface getAssertionUserInterface,
+            IFido2MakeCredentialUserInterface makeCredentialUserInterface)
         {
             _stateService = stateService;
             _environmentService = environmentService;
             _cryptoFunctionService = cryptoFunctionService;
             _fido2AuthenticatorService = fido2AuthenticatorService;
+            _getAssertionUserInterface = getAssertionUserInterface;
+            _makeCredentialUserInterface = makeCredentialUserInterface;
         }
 
         public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams) 
@@ -114,7 +120,7 @@ namespace Bit.Core.Services
             var makeCredentialParams = MapToMakeCredentialParams(createCredentialParams, credTypesAndPubKeyAlgs, clientDataHash);
 
             try {
-                var makeCredentialResult = await _fido2AuthenticatorService.MakeCredentialAsync(makeCredentialParams);
+                var makeCredentialResult = await _fido2AuthenticatorService.MakeCredentialAsync(makeCredentialParams, _makeCredentialUserInterface);
 
                 return new Fido2ClientCreateCredentialResult {
                     CredentialId = makeCredentialResult.CredentialId,
@@ -182,7 +188,7 @@ namespace Bit.Core.Services
             var getAssertionParams = MapToGetAssertionParams(assertCredentialParams, clientDataHash);
 
             try {
-                var getAssertionResult = await _fido2AuthenticatorService.GetAssertionAsync(getAssertionParams);
+                var getAssertionResult = await _fido2AuthenticatorService.GetAssertionAsync(getAssertionParams, _getAssertionUserInterface);
 
                 return new Fido2ClientAssertCredentialResult {
                     AuthenticatorData = getAssertionResult.AuthenticatorData,

@@ -21,6 +21,7 @@ namespace Bit.Core.Test.Services
     {
         private readonly string _rpId = "bitwarden.com";
         private readonly SutProvider<Fido2AuthenticatorService> _sutProvider = new SutProvider<Fido2AuthenticatorService>().Create();
+        private readonly IFido2MakeCredentialUserInterface _userInterface = Substitute.For<IFido2MakeCredentialUserInterface>();
 
         private Fido2AuthenticatorMakeCredentialParams _params;
         private List<string> _credentialIds;
@@ -69,10 +70,7 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(_ciphers);
             _sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns(_encryptedSelectedCipher);
             _sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedSelectedCipher.Id)).Returns(_encryptedSelectedCipher);
-            _sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
-                CipherId = _selectedCipherView.Id,
-                UserVerified = false
-            });
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_selectedCipherView.Id, false));
 
             var cryptoServiceMock = Substitute.For<ICryptoService>();
             ServiceContainer.Register(typeof(CryptoService), cryptoServiceMock);
@@ -98,7 +96,7 @@ namespace Bit.Core.Test.Services
             ];
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotSupportedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params));
+            await Assert.ThrowsAsync<NotSupportedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
 
         #endregion
@@ -121,12 +119,12 @@ namespace Bit.Core.Test.Services
             // Act
             try
             { 
-                await _sutProvider.Sut.MakeCredentialAsync(_params);
+                await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
             }
             catch {}
 
             // Assert
-            await _sutProvider.GetDependency<IFido2UserInterface>().Received().InformExcludedCredential(Arg.Is<string[]>(
+            await _userInterface.Received().InformExcludedCredential(Arg.Is<string[]>(
                 (c) => c.SequenceEqual(new string[] { _ciphers[0].Id })
             ));
         }
@@ -142,7 +140,7 @@ namespace Bit.Core.Test.Services
                 }
             ];
 
-            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params));
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
 
         [Fact]
@@ -157,9 +155,9 @@ namespace Bit.Core.Test.Services
                 }
             ];
 
-            await _sutProvider.Sut.MakeCredentialAsync(_params);
+            await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
-            await _sutProvider.GetDependency<IFido2UserInterface>().DidNotReceive().InformExcludedCredential(Arg.Any<string[]>());
+            await _userInterface.DidNotReceive().InformExcludedCredential(Arg.Any<string[]>());
         }
 
         #endregion
@@ -171,16 +169,13 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _params.RequireUserVerification = true;
-            _sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
-                CipherId = _selectedCipherView.Id,
-                UserVerified = true
-            });
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_selectedCipherView.Id, true));
 
             // Act
-            await _sutProvider.Sut.MakeCredentialAsync(_params);
+            await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
             // Assert
-            await _sutProvider.GetDependency<IFido2UserInterface>().Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
+            await _userInterface.Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
                 (p) => p.UserVerification == true
             ));
         }
@@ -192,10 +187,10 @@ namespace Bit.Core.Test.Services
             _params.RequireUserVerification = false;
 
             // Act
-            await _sutProvider.Sut.MakeCredentialAsync(_params);
+            await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
             // Assert
-            await _sutProvider.GetDependency<IFido2UserInterface>().Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
+            await _userInterface.Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
                 (p) => p.UserVerification == false
             ));
         }
@@ -207,7 +202,7 @@ namespace Bit.Core.Test.Services
             _params.RequireResidentKey = true;
 
             // Act
-            await _sutProvider.Sut.MakeCredentialAsync(_params);
+            await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
             // Assert
             await _sutProvider.GetDependency<ICipherService>().Received().EncryptAsync(Arg.Is<CipherView>(
@@ -231,13 +226,10 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_ThrowsNotAllowed_RequestNotConfirmedByUser()
         {
             // Arrange
-            _sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
-                CipherId = null,
-                UserVerified = false
-            });
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((null, false));
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params));
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
 
         [Fact]
@@ -245,13 +237,10 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _params.RequireUserVerification = true;
-            _sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
-                CipherId = _encryptedSelectedCipher.Id,
-                UserVerified = false
-            });
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params));
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
 
         [Fact]
@@ -260,13 +249,10 @@ namespace Bit.Core.Test.Services
             // Arrange
             _params.RequireUserVerification = false;
             _encryptedSelectedCipher.Reprompt = CipherRepromptType.Password;
-            _sutProvider.GetDependency<IFido2UserInterface>().ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns(new Fido2ConfirmNewCredentialResult {
-                CipherId = _encryptedSelectedCipher.Id,
-                UserVerified = false
-            });
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params));
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
 
         [Fact]
@@ -276,7 +262,7 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<ICipherService>().SaveWithServerAsync(Arg.Any<Cipher>()).Throws(new Exception("Error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<UnknownError>(() => _sutProvider.Sut.MakeCredentialAsync(_params));
+            await Assert.ThrowsAsync<UnknownError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
 
         [Fact]
@@ -292,7 +278,7 @@ namespace Bit.Core.Test.Services
             });
 
             // Act
-            var result = await _sutProvider.Sut.MakeCredentialAsync(_params);
+            var result = await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
             // Assert
             var credentialIdBytes = generatedCipherView.Login.MainFido2Credential.CredentialId.GuidToRawFormat();

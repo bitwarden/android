@@ -16,17 +16,15 @@ namespace Bit.Core.Services
         private readonly ICipherService _cipherService;
         private readonly ISyncService _syncService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
-        private readonly IFido2UserInterface _userInterface;
 
-        public Fido2AuthenticatorService(ICipherService cipherService, ISyncService syncService, ICryptoFunctionService cryptoFunctionService, IFido2UserInterface userInterface)
+        public Fido2AuthenticatorService(ICipherService cipherService, ISyncService syncService, ICryptoFunctionService cryptoFunctionService)
         {
             _cipherService = cipherService;
             _syncService = syncService;
             _cryptoFunctionService = cryptoFunctionService;
-            _userInterface = userInterface;
         }
 
-        public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams) 
+        public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams, IFido2MakeCredentialUserInterface userInterface)
         {
             if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Alg != (int) Fido2AlgorithmIdentifier.ES256))
             {
@@ -37,7 +35,7 @@ namespace Bit.Core.Services
                 throw new NotSupportedError();
             }
 
-            await _userInterface.EnsureUnlockedVaultAsync();
+            await userInterface.EnsureUnlockedVaultAsync();
             await _syncService.FullSyncAsync(false);
 
             var existingCipherIds = await FindExcludedCredentialsAsync(
@@ -47,11 +45,11 @@ namespace Bit.Core.Services
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting due to excluded credential found in vault."
                 // );
-                await _userInterface.InformExcludedCredential(existingCipherIds);
+                await userInterface.InformExcludedCredential(existingCipherIds);
                 throw new NotAllowedError();
             }
 
-            var response = await _userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams {
+            var response = await userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams {
                 CredentialName = makeCredentialParams.RpEntity.Name,
                 UserName = makeCredentialParams.UserEntity.Name,
                 UserVerification = makeCredentialParams.RequireUserVerification
@@ -114,11 +112,11 @@ namespace Bit.Core.Services
             }
         }
         
-        public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams)
+        public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams, IFido2GetAssertionUserInterface userInterface)
         {
             List<CipherView> cipherOptions;
 
-            await _userInterface.EnsureUnlockedVaultAsync();
+            await userInterface.EnsureUnlockedVaultAsync();
             await _syncService.FullSyncAsync(false);
 
             if (assertionParams.AllowCredentialDescriptorList?.Length > 0) {
@@ -150,10 +148,10 @@ namespace Bit.Core.Services
             }
             else
             {
-                var response = await _userInterface.PickCredentialAsync(new Fido2PickCredentialParams {
-                    CipherIds = cipherOptions.Select((cipher) => cipher.Id).ToArray(),
-                    UserVerification = assertionParams.RequireUserVerification
-                });
+                var response = await userInterface.PickCredentialAsync(
+                    cipherIds: cipherOptions.Select((cipher) => cipher.Id).ToArray(),
+                    userVerification: assertionParams.RequireUserVerification
+                );
                 selectedCipherId = response.CipherId;
                 userVerified = response.UserVerified;
                 userPresence = true;
