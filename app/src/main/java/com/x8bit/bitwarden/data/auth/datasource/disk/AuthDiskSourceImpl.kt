@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
@@ -16,6 +17,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.UUID
 
+private const val ACCOUNT_TOKENS_KEY = "$ENCRYPTED_BASE_KEY:accountTokens"
 private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
@@ -60,6 +62,8 @@ class AuthDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutablePoliciesFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
+    private val mutableAccountTokensFlowMap =
+        mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
@@ -111,6 +115,7 @@ class AuthDiskSourceImpl(
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
+        storeAccountTokens(userId = userId, accountTokens = null)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
@@ -308,6 +313,22 @@ class AuthDiskSourceImpl(
         getMutablePoliciesFlow(userId = userId).tryEmit(policies)
     }
 
+    override fun getAccountTokens(userId: String): AccountTokensJson? =
+        getEncryptedString(key = "${ACCOUNT_TOKENS_KEY}_$userId")
+            ?.let { json.decodeFromStringOrNull(it) }
+
+    override fun getAccountTokensFlow(userId: String): Flow<AccountTokensJson?> =
+        getMutableAccountTokensFlow(userId = userId)
+            .onSubscription { emit(getAccountTokens(userId = userId)) }
+
+    override fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
+        putEncryptedString(
+            key = "${ACCOUNT_TOKENS_KEY}_$userId",
+            value = accountTokens?.let { json.encodeToString(it) },
+        )
+        getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
+    }
+
     private fun generateAndStoreUniqueAppId(): String =
         UUID
             .randomUUID()
@@ -327,6 +348,13 @@ class AuthDiskSourceImpl(
         userId: String,
     ): MutableSharedFlow<List<SyncResponseJson.Policy>?> =
         mutablePoliciesFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableAccountTokensFlow(
+        userId: String,
+    ): MutableSharedFlow<AccountTokensJson?> =
+        mutableAccountTokensFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 }
