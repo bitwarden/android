@@ -10,12 +10,15 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.util.availableAuthMethods
 import com.x8bit.bitwarden.data.auth.datasource.network.util.preferredAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.util.twoFactorDisplayEmail
+import com.x8bit.bitwarden.data.auth.datasource.network.util.twoFactorDuoAuthUrl
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isDuo
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -47,7 +50,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             codeInput = "",
             displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
             dialogState = null,
-            isContinueButtonEnabled = false,
+            isContinueButtonEnabled = authRepository.twoFactorResponse.preferredAuthMethod.isDuo,
             isRememberMeEnabled = false,
             captchaToken = null,
             email = TwoFactorLoginArgs(savedStateHandle).emailAddress,
@@ -66,6 +69,14 @@ class TwoFactorLoginViewModel @Inject constructor(
             .map { TwoFactorLoginAction.Internal.ReceiveCaptchaToken(tokenResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        // Process the Duo result when it is received.
+        authRepository
+            .duoTokenResultFlow
+            .map { TwoFactorLoginAction.Internal.ReceiveDuoResult(duoResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
         // Fill in the verification code input field when a Yubi Key code is received.
         authRepository
             .yubiKeyResultFlow
@@ -92,6 +103,10 @@ class TwoFactorLoginViewModel @Inject constructor(
             is TwoFactorLoginAction.Internal.ReceiveLoginResult -> handleReceiveLoginResult(action)
             is TwoFactorLoginAction.Internal.ReceiveCaptchaToken -> {
                 handleCaptchaTokenReceived(action)
+            }
+
+            is TwoFactorLoginAction.Internal.ReceiveDuoResult -> {
+                handleReceiveDuoResult(action)
             }
 
             is TwoFactorLoginAction.Internal.ReceiveYubiKeyResult -> {
@@ -123,7 +138,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(captchaToken = tokenResult.token)
                 }
-                handleContinueButtonClick()
+                initiateLogin()
             }
         }
     }
@@ -141,49 +156,17 @@ class TwoFactorLoginViewModel @Inject constructor(
     }
 
     /**
-     * Verify the input and attempt to authenticate with the code.
+     * Navigates to the Duo webpage if appropriate, else processes the login.
      */
     private fun handleContinueButtonClick() {
-        mutableStateFlow.update {
-            it.copy(
-                dialogState = TwoFactorLoginState.DialogState.Loading(
-                    message = R.string.logging_in.asText(),
+        if (state.authMethod.isDuo) {
+            sendEvent(
+                event = TwoFactorLoginEvent.NavigateToDuo(
+                    uri = Uri.parse(authRepository.twoFactorResponse.twoFactorDuoAuthUrl),
                 ),
             )
-        }
-
-        // If the user is manually entering a code, remove any white spaces, just in case.
-        val code = when (state.authMethod) {
-            TwoFactorAuthMethod.AUTHENTICATOR_APP,
-            TwoFactorAuthMethod.EMAIL,
-            -> state.codeInput.replace(" ", "")
-
-            TwoFactorAuthMethod.YUBI_KEY,
-            TwoFactorAuthMethod.DUO,
-            TwoFactorAuthMethod.U2F,
-            TwoFactorAuthMethod.REMEMBER,
-            TwoFactorAuthMethod.DUO_ORGANIZATION,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP,
-            TwoFactorAuthMethod.RECOVERY_CODE,
-            -> state.codeInput
-        }
-
-        viewModelScope.launch {
-            val result = authRepository.login(
-                email = state.email,
-                password = state.password,
-                twoFactorData = TwoFactorDataModel(
-                    code = code,
-                    method = state.authMethod.value.toString(),
-                    remember = state.isRememberMeEnabled,
-                ),
-                captchaToken = state.captchaToken,
-            )
-            sendAction(
-                TwoFactorLoginAction.Internal.ReceiveLoginResult(
-                    loginResult = result,
-                ),
-            )
+        } else {
+            initiateLogin()
         }
     }
 
@@ -235,6 +218,35 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             // NO-OP: Let the auth flow handle navigation after this.
             is LoginResult.Success -> Unit
+        }
+    }
+
+    /**
+     * Handles the Duo callback result.
+     */
+    private fun handleReceiveDuoResult(
+        action: TwoFactorLoginAction.Internal.ReceiveDuoResult,
+    ) {
+        when (val result = action.duoResult) {
+            is DuoCallbackTokenResult.MissingToken -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is DuoCallbackTokenResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        codeInput = result.token,
+                    )
+                }
+                initiateLogin()
+            }
         }
     }
 
@@ -339,6 +351,53 @@ class TwoFactorLoginViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * Verify the input and attempt to authenticate with the code.
+     */
+    private fun initiateLogin() {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TwoFactorLoginState.DialogState.Loading(
+                    message = R.string.logging_in.asText(),
+                ),
+            )
+        }
+
+        // If the user is manually entering a code, remove any white spaces, just in case.
+        val code = when (state.authMethod) {
+            TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            TwoFactorAuthMethod.EMAIL,
+            -> state.codeInput.replace(" ", "")
+
+            TwoFactorAuthMethod.DUO,
+            TwoFactorAuthMethod.DUO_ORGANIZATION,
+            TwoFactorAuthMethod.YUBI_KEY,
+            TwoFactorAuthMethod.U2F,
+            TwoFactorAuthMethod.REMEMBER,
+            TwoFactorAuthMethod.FIDO_2_WEB_APP,
+            TwoFactorAuthMethod.RECOVERY_CODE,
+            -> state.codeInput
+        }
+
+        viewModelScope.launch {
+            val result = authRepository.login(
+                email = state.email,
+                password = state.password,
+                twoFactorData = TwoFactorDataModel(
+                    code = code,
+                    method = state.authMethod.value.toString(),
+                    remember = state.isRememberMeEnabled,
+                ),
+                captchaToken = state.captchaToken,
+            )
+            sendAction(
+                TwoFactorLoginAction.Internal.ReceiveLoginResult(
+                    loginResult = result,
+                ),
+            )
+        }
+    }
 }
 
 /**
@@ -360,9 +419,24 @@ data class TwoFactorLoginState(
 ) : Parcelable {
 
     /**
+     * The text to display for the button given the [authMethod].
+     */
+    val buttonText: Text
+        get() = if (authMethod.isDuo) {
+            "Launch Duo".asText() // TODO BIT-1927 replace with string resource
+        } else {
+            R.string.continue_text.asText()
+        }
+
+    /**
      * Indicates if the screen should be listening for NFC events from the operating system.
      */
     val shouldListenForNfc: Boolean get() = authMethod.shouldUseNfc
+
+    /**
+     * Indicates whether the code input should be displayed.
+     */
+    val shouldShowCodeInput: Boolean get() = !authMethod.isDuo
 
     /**
      * Represents the current state of any dialogs on the screen.
@@ -401,6 +475,11 @@ sealed class TwoFactorLoginEvent {
      * Navigates to the captcha verification screen.
      */
     data class NavigateToCaptcha(val uri: Uri) : TwoFactorLoginEvent()
+
+    /**
+     * Navigates to the Duo 2-factor authentication screen.
+     */
+    data class NavigateToDuo(val uri: Uri) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the recovery code help page.
@@ -469,6 +548,13 @@ sealed class TwoFactorLoginAction {
          */
         data class ReceiveCaptchaToken(
             val tokenResult: CaptchaCallbackTokenResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a Dup callback token has been received.
+         */
+        data class ReceiveDuoResult(
+            val duoResult: DuoCallbackTokenResult,
         ) : Internal()
 
         /**

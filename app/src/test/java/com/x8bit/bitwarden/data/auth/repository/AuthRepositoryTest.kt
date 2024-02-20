@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -2461,11 +2462,22 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `setCaptchaCallbackToken should change the value of captchaTokenFlow`() = runTest {
+    fun `setCaptchaCallbackToken should change the value of captchaTokenResultFlow`() = runTest {
         repository.captchaTokenResultFlow.test {
             repository.setCaptchaCallbackTokenResult(CaptchaCallbackTokenResult.Success("mockk"))
             assertEquals(
                 CaptchaCallbackTokenResult.Success("mockk"),
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `setDuoCallbackToken should change the value of duoTokenResultFlow`() = runTest {
+        repository.duoTokenResultFlow.test {
+            repository.setDuoCallbackTokenResult(DuoCallbackTokenResult.Success("mockk"))
+            assertEquals(
+                DuoCallbackTokenResult.Success("mockk"),
                 awaitItem(),
             )
         }

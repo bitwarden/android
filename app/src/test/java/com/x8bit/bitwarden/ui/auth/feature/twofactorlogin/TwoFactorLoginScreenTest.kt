@@ -113,6 +113,18 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `continue button text should update according to the state`() {
+        composeTestRule.onNodeWithText("Continue").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(authMethod = TwoFactorAuthMethod.DUO)
+        }
+
+        composeTestRule.onNodeWithText("Launch Duo").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Continue").assertDoesNotExist()
+    }
+
+    @Test
     fun `description text should update according to state`() {
         val emailDetails =
             "Enter the 6 digit verification code that was emailed to ex***@email.com."
@@ -181,6 +193,16 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `input field visibility should update according to state`() {
+        composeTestRule.onNodeWithText("Verification code").assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(authMethod = TwoFactorAuthMethod.DUO)
+        }
+        composeTestRule.onNodeWithText("Verification code").assertIsNotDisplayed()
+    }
+
+    @Test
     fun `options menu icon click should show the auth method options`() {
         composeTestRule.onNodeWithContentDescription("More").performClick()
         composeTestRule.onNodeWithText("Recovery code").assertIsDisplayed()
@@ -221,6 +243,13 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     fun `NavigateToCaptcha should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToCaptcha(mockUri))
+        verify { intentManager.startCustomTabsActivity(mockUri) }
+    }
+
+    @Test
+    fun `NavigateToDuo should call intentManager startCustomTabsActivity`() {
+        val mockUri = mockk<Uri>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri))
         verify { intentManager.startCustomTabsActivity(mockUri) }
     }
 

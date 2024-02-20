@@ -3,6 +3,7 @@ package com.x8bit.bitwarden
 import android.content.Intent
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
 import com.x8bit.bitwarden.data.auth.util.getYubiKeyResultOrNull
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -25,6 +26,7 @@ class AuthCallbackViewModel @Inject constructor(
     private fun handleIntentReceived(action: AuthCallbackAction.IntentReceive) {
         val yubiKeyResult = action.intent.getYubiKeyResultOrNull()
         val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
+        val duoCallbackTokenResult = action.intent.getDuoCallbackTokenResult()
         val ssoCallbackResult = action.intent.getSsoCallbackResult()
         when {
             yubiKeyResult != null -> {
@@ -34,6 +36,12 @@ class AuthCallbackViewModel @Inject constructor(
             captchaCallbackTokenResult != null -> {
                 authRepository.setCaptchaCallbackTokenResult(
                     tokenResult = captchaCallbackTokenResult,
+                )
+            }
+
+            duoCallbackTokenResult != null -> {
+                authRepository.setDuoCallbackTokenResult(
+                    tokenResult = duoCallbackTokenResult,
                 )
             }
 
