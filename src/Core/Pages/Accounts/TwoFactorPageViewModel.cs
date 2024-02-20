@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -34,6 +35,7 @@ namespace Bit.App.Pages
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _enableContinue = false;
         private bool _showContinue = true;
+        private bool _isDuoFrameless = false;
         private double _duoWebViewHeight;
 
         public TwoFactorPageViewModel()
@@ -56,6 +58,7 @@ namespace Bit.App.Pages
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(async () => await SubmitAsync()), allowsMultipleExecutions: false);
             MoreCommand = CreateDefaultAsyncRelayCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            AuthenticateWithDuoFramelessCommand = CreateDefaultAsyncRelayCommand(DuoFramelessAuthenticateAsync, allowsMultipleExecutions: false);
         }
 
         public string TotpInstruction
@@ -103,6 +106,16 @@ namespace Bit.App.Pages
             set => SetProperty(ref _enableContinue, value);
         }
 
+        public bool IsDuoFrameless
+        {
+            get => _isDuoFrameless;
+            set => SetProperty(ref _isDuoFrameless, value, additionalPropertyNames: new string[] { nameof(DuoFramelessLabel) });
+        }
+
+        public string DuoFramelessLabel => SelectedProviderType == TwoFactorProviderType.OrganizationDuo ?
+            $"{AppResources.DuoTwoStepLoginIsRequiredForYourAccount} {AppResources.FollowTheStepsFromDuoToFinishLoggingIn}" :
+            AppResources.FollowTheStepsFromDuoToFinishLoggingIn;
+
 #if IOS
         public string YubikeyInstruction => AppResources.YubiKeyInstructionIos;
 #else
@@ -125,6 +138,7 @@ namespace Bit.App.Pages
         }
         public ICommand SubmitCommand { get; }
         public ICommand MoreCommand { get; }
+        public ICommand AuthenticateWithDuoFramelessCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action LockAction { get; set; }
         public Action StartDeviceApprovalOptionsAction { get; set; }
@@ -179,15 +193,29 @@ namespace Bit.App.Pages
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
-                    SetDuoWebViewHeight();
-                    var host = WebUtility.UrlEncode(providerData["Host"] as string);
-                    var req = WebUtility.UrlEncode(providerData["Signature"] as string);
-                    page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
-                    page.DuoWebView.RegisterAction(sig =>
+                    IsDuoFrameless = providerData.ContainsKey("AuthUrl");
+                    if (!IsDuoFrameless)
                     {
-                        Token = sig;
-                        SubmitCommand.Execute(null);
-                    });
+                        SetDuoWebViewHeight();
+                        var host = WebUtility.UrlEncode(providerData["Host"] as string);
+                        var req = WebUtility.UrlEncode(providerData["Signature"] as string);
+                        page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
+                        page.DuoWebView.RegisterAction(sig =>
+                        {
+                            Token = sig;
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                try
+                                {
+                                    await SubmitAsync();
+                                }
+                                catch (Exception ex)
+                                {
+                                    HandleException(ex);
+                                }
+                            });
+                        });
+                    }
                     break;
                 case TwoFactorProviderType.Email:
                     TotpInstruction = string.Format(AppResources.EnterVerificationCodeEmail,
@@ -211,6 +239,77 @@ namespace Bit.App.Pages
             ShowContinue = !(SelectedProviderType == null || DuoMethod || Fido2Method);
         }
 
+        private async Task DuoFramelessAuthenticateAsync()
+        {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
+
+            if (!_authService.TwoFactorProvidersData.TryGetValue(SelectedProviderType.Value, out var providerData) ||
+                !providerData.TryGetValue("AuthUrl", out var urlObject))
+            {
+                throw new InvalidOperationException("Duo authentication error: Could not get ProviderData or AuthUrl");
+            }
+
+            var url = urlObject as string;
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentNullException("Duo authentication error: Could not get valid auth url");
+            }
+
+            WebAuthenticatorResult authResult;
+            try
+            {
+                authResult = await WebAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions
+                {
+                    Url = new Uri(url),
+                    CallbackUrl = new Uri(Constants.DuoCallback)
+                });
+            }
+            catch (TaskCanceledException)
+            {
+                // user canceled
+                await _deviceActionService.HideLoadingAsync();
+                return;
+            }
+
+            await _deviceActionService.HideLoadingAsync();
+            if (authResult == null || authResult.Properties == null)
+            {
+                throw new InvalidOperationException("Duo authentication error: Could not get result from authentication");
+            }
+
+            if (authResult.Properties.TryGetValue("error", out var resultError))
+            {
+                _logger.Error(resultError);
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred, AppResources.Ok);
+                return;
+            }
+
+            string code = null;
+            if (authResult.Properties.TryGetValue("code", out var resultCodeData))
+            {
+                code = Uri.UnescapeDataString(resultCodeData);
+            }
+
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                throw new ArgumentException("Duo authentication error: response code is null or empty/whitespace");
+            }
+
+            string state = null;
+            if (authResult.Properties.TryGetValue("state", out var resultStateData))
+            {
+                state = Uri.UnescapeDataString(resultStateData);
+            }
+
+            if (string.IsNullOrWhiteSpace(state))
+            {
+                throw new ArgumentException("Duo authentication error: response state is null or empty/whitespace");
+            }
+
+            Token = $"{code}|{state}";
+            await SubmitAsync(true);
+        }
+        
         public void SetDuoWebViewHeight()
         {
             var screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
