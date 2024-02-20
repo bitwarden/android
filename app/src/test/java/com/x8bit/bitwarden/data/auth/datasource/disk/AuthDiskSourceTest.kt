@@ -190,6 +190,13 @@ class AuthDiskSourceTest {
             userId = userId,
             policies = listOf(createMockPolicy()),
         )
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = AccountTokensJson(
+                accessToken = "accessToken",
+                refreshToken = "refreshToken",
+            ),
+        )
 
         authDiskSource.clearData(userId = userId)
 
@@ -202,6 +209,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getOrganizationKeys(userId = userId))
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
+        assertNull(authDiskSource.getAccountTokens(userId = userId))
     }
 
     @Test
@@ -823,6 +831,71 @@ class AuthDiskSourceTest {
         )
         assertEquals(
             json.encodeToJsonElement(mockPoliciesMap),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
+    }
+
+    @Test
+    fun `getAccountTokens should pull from SharedPreferences`() {
+        val baseKey = "bwSecureStorage:accountTokens"
+        val mockUserId = "mockUserId"
+        val accountTokens = AccountTokensJson(
+            accessToken = "accessToken",
+            refreshToken = "refreshToken",
+        )
+        fakeEncryptedSharedPreferences.edit {
+            putString("${baseKey}_$mockUserId", json.encodeToString(accountTokens))
+        }
+        val actual = authDiskSource.getAccountTokens(userId = mockUserId)
+        assertEquals(accountTokens, actual)
+    }
+
+    @Test
+    fun `getAccountTokensFlow should react to changes from storeAccountTokens`() = runTest {
+        val mockUserId = "mockUserId"
+        val accountTokens = AccountTokensJson(
+            accessToken = "accessToken",
+            refreshToken = "refreshToken",
+        )
+        authDiskSource.getAccountTokensFlow(userId = mockUserId).test {
+            // The initial values of the Flow and the property are in sync
+            assertNull(authDiskSource.getAccountTokens(userId = mockUserId))
+            assertNull(awaitItem())
+
+            // Updating the repository updates shared preferences
+            authDiskSource.storeAccountTokens(
+                userId = mockUserId,
+                accountTokens = accountTokens,
+            )
+            assertEquals(accountTokens, awaitItem())
+
+            // clear the repository clears shared preferences
+            authDiskSource.storeAccountTokens(
+                userId = mockUserId,
+                accountTokens = null,
+            )
+            assertNull(awaitItem())
+        }
+    }
+
+    @Test
+    fun `storeAccountTokens should update SharedPreferences`() {
+        val baseKey = "bwSecureStorage:accountTokens"
+        val mockUserId = "mockUserId"
+        val accountTokens = AccountTokensJson(
+            accessToken = "accessToken",
+            refreshToken = "refreshToken",
+        )
+        authDiskSource.storeAccountTokens(
+            userId = mockUserId,
+            accountTokens = accountTokens,
+        )
+        val actual = fakeEncryptedSharedPreferences.getString(
+            key = "${baseKey}_$mockUserId",
+            defaultValue = null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(accountTokens),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

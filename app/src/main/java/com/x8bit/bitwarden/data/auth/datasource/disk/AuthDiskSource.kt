@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
@@ -209,4 +210,19 @@ interface AuthDiskSource {
      * Stores the [policies] for the given [userId].
      */
     fun storePolicies(userId: String, policies: List<SyncResponseJson.Policy>?)
+
+    /**
+     * Gets the account tokens for the given [userId].
+     */
+    fun getAccountTokens(userId: String): AccountTokensJson?
+
+    /**
+     * Emits updates that track [getAccountTokens]. This will replay the last known value, if any.
+     */
+    fun getAccountTokensFlow(userId: String): Flow<AccountTokensJson?>
+
+    /**
+     * Stores the [accountTokens] for the given [userId].
+     */
+    fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?)
 }

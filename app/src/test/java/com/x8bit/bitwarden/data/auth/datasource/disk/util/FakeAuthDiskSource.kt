@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -20,6 +21,8 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
     private val mutablePoliciesFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
+    private val mutableAccountTokensFlowMap =
+        mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     private val storedLastActiveTimeMillis = mutableMapOf<String, Long?>()
@@ -33,6 +36,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOrganizations =
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
+    private val storedAccountTokens = mutableMapOf<String, AccountTokensJson?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
@@ -57,10 +61,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedEncryptedPins.remove(userId)
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
+        storedAccountTokens.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
+
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
+        mutableAccountTokensFlowMap.remove(userId)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
@@ -178,6 +185,18 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun storePolicies(userId: String, policies: List<SyncResponseJson.Policy>?) {
         storedPolicies[userId] = policies
         getMutablePoliciesFlow(userId = userId).tryEmit(policies)
+    }
+
+    override fun getAccountTokens(userId: String): AccountTokensJson? =
+        storedAccountTokens[userId]
+
+    override fun getAccountTokensFlow(userId: String): Flow<AccountTokensJson?> =
+        getMutableAccountTokensFlow(userId = userId)
+            .onSubscription { emit(getAccountTokens(userId)) }
+
+    override fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
+        storedAccountTokens[userId] = accountTokens
+        getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
     }
 
     /**
@@ -301,6 +320,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         userId: String,
     ): MutableSharedFlow<List<SyncResponseJson.Policy>?> =
         mutablePoliciesFlowMap.getOrPut(userId) {
+            bufferedMutableSharedFlow(replay = 1)
+        }
+
+    private fun getMutableAccountTokensFlow(
+        userId: String,
+    ): MutableSharedFlow<AccountTokensJson?> =
+        mutableAccountTokensFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
 
