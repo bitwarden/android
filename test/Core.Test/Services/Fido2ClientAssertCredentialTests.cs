@@ -195,7 +195,6 @@ namespace Bit.Core.Test.Services
                 .GetAssertionAsync(
                     Arg.Is<Fido2AuthenticatorGetAssertionParams>(x =>
                         x.RpId == _params.RpId &&
-                        x.RequireUserPresence == true &&
                         x.RequireUserVerification == true &&
                         x.AllowCredentialDescriptorList.Length == 1 &&
                         x.AllowCredentialDescriptorList[0].Id == _params.AllowCredentials[0].Id

@@ -287,30 +287,6 @@ namespace Bit.Core.Test.Services
         }
 
         [Fact]
-        public async Task GetAssertionAsync_DoesNotAskForConfirmation_ParamsContainsOneAllowedCredentialAndUserPresenceIsFalse()
-        {
-            // Arrange
-            var rpIdHashMock = RandomBytes(32);
-            _params.RequireUserPresence = false;
-            _params.AllowCredentialDescriptorList = [
-                new PublicKeyCredentialDescriptor {
-                    Id = _rawCredentialIds[0],
-                    Type = "public-key"
-                },
-            ];
-            _sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(_params.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
-            
-            // Act
-            var result = await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
-
-            // Assert
-            await _userInterface.DidNotReceive().PickCredentialAsync(Arg.Any<string[]>(), Arg.Any<bool>());
-            var authData = result.AuthenticatorData;
-            var flags = authData.Skip(32).Take(1);
-            Assert.Equal(new byte[] { 0b00011000 }, flags); // UP = false, UV = false, BE = true, BS = true
-        }
-
-        [Fact]
         public async Task GetAssertionAsync_ThrowsUnknownError_SaveFails() {
             // Arrange
             _sutProvider.GetDependency<ICipherService>().SaveWithServerAsync(Arg.Any<Cipher>()).Throws(new Exception());
@@ -363,7 +339,6 @@ namespace Bit.Core.Test.Services
                 RpId = rpId ?? "bitwarden.com",
                 Hash = hash ?? RandomBytes(32),
                 AllowCredentialDescriptorList = allowCredentialDescriptorList ?? null,
-                RequireUserPresence = requireUserPresence ?? true,
                 RequireUserVerification = requireUserPresence ?? false
             };
         }

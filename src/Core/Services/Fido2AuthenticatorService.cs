@@ -136,39 +136,17 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
 
-            string selectedCipherId;
-            bool userVerified;
-            bool userPresence;
-            // TODO: We might want reconsider allowing user presence to be optional
-            if (assertionParams.AllowCredentialDescriptorList?.Length == 1 && assertionParams.RequireUserPresence == false)
-            {
-                selectedCipherId = cipherOptions[0].Id;
-                userVerified = false;
-                userPresence = false;
-            }
-            else
-            {
-                var response = await userInterface.PickCredentialAsync(
-                    cipherIds: cipherOptions.Select((cipher) => cipher.Id).ToArray(),
-                    userVerification: assertionParams.RequireUserVerification
-                );
-                selectedCipherId = response.CipherId;
-                userVerified = response.UserVerified;
-                userPresence = true;
-            }
+            var response = await userInterface.PickCredentialAsync(
+                cipherIds: cipherOptions.Select((cipher) => cipher.Id).ToArray(),
+                userVerification: assertionParams.RequireUserVerification
+            );
+            var selectedCipherId = response.CipherId;
+            var userVerified = response.UserVerified;
 
             var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
             if (selectedCipher == null) {
                 // _logService.Info(
                 //     "[Fido2Authenticator] Aborting because the selected credential could not be found."
-                // );
-
-                throw new NotAllowedError();
-            }
-
-            if (!userPresence && assertionParams.RequireUserPresence) {
-                // _logService.Info(
-                //     "[Fido2Authenticator] Aborting because user presence was required but not detected."
                 // );
 
                 throw new NotAllowedError();
@@ -196,7 +174,7 @@ namespace Bit.Core.Services
 
                 var authenticatorData = await GenerateAuthDataAsync(
                     rpId: selectedFido2Credential.RpId,
-                    userPresence: userPresence,
+                    userPresence: true,
                     userVerification: userVerified,
                     counter: selectedFido2Credential.CounterValue
                 );

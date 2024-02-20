@@ -14,11 +14,6 @@
         /// Instructs the authenticator to require a user-verifying gesture in order to complete the request. Examples of such gestures are fingerprint scan or a PIN.
         /// </summary>
         public bool RequireUserVerification { get; set; }
-        
-        /// <summary>
-        /// Instructs the authenticator to require user consent to complete the operation.
-        /// </summary>
-        public bool RequireUserPresence { get; set; }
 
         /// <summary>
         /// The challenge to be signed by the authenticator.

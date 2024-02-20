@@ -245,7 +245,6 @@ namespace Bit.Core.Services
                 RpId = assertCredentialParams.RpId,
                 Challenge = assertCredentialParams.Challenge,
                 AllowCredentialDescriptorList = assertCredentialParams.AllowCredentials,
-                RequireUserPresence = true,
                 RequireUserVerification = requireUserVerification,
                 Hash = cliendDataHash
             };
