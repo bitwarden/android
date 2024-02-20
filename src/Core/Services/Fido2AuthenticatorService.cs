@@ -28,10 +28,6 @@ namespace Bit.Core.Services
         {
             if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Alg != (int) Fido2AlgorithmIdentifier.ES256))
             {
-                // var requestedAlgorithms = string.Join(", ", makeCredentialParams.CredTypesAndPubKeyAlgs.Select((p) => p.Algorithm).ToArray());
-                // _logService.Warning(
-                //     $"[Fido2Authenticator] No compatible algorithms found, RP requested: {requestedAlgorithms}"
-                // );
                 throw new NotSupportedError();
             }
 
@@ -42,9 +38,6 @@ namespace Bit.Core.Services
                 makeCredentialParams.ExcludeCredentialDescriptorList
             );
             if (existingCipherIds.Length > 0) {
-                // _logService.Info(
-                //     "[Fido2Authenticator] Aborting due to excluded credential found in vault."
-                // );
                 await userInterface.InformExcludedCredential(existingCipherIds);
                 throw new NotAllowedError();
             }
@@ -59,9 +52,6 @@ namespace Bit.Core.Services
             var userVerified = response.UserVerified;
             string credentialId;
             if (cipherId == null) {
-                // _logService.Info(
-                //     "[Fido2Authenticator] Aborting because user confirmation was not recieved."
-                // );
                 throw new NotAllowedError();
             }
             
@@ -73,9 +63,6 @@ namespace Bit.Core.Services
                 var cipher = await encrypted.DecryptAsync();
 
                 if (!userVerified && (makeCredentialParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None)) {
-                    // _logService.Info(
-                    //     "[Fido2Authenticator] Aborting because user verification was unsuccessful."
-                    // );
                     throw new NotAllowedError();
                 }
 
@@ -104,10 +91,6 @@ namespace Bit.Core.Services
             } catch (NotAllowedError) {
                 throw;
             } catch (Exception) {
-                // _logService.Error(
-                //     $"[Fido2Authenticator] Unknown error occured during attestation: {e.Message}"
-                // );
-
                 throw new UnknownError();
             }
         }
@@ -129,10 +112,6 @@ namespace Bit.Core.Services
             }
 
             if (cipherOptions.Count == 0) {
-                // _logService.Info(
-                //     "[Fido2Authenticator] Aborting because no matching credentials were found in the vault."
-                // );
-
                 throw new NotAllowedError();
             }
 
@@ -145,18 +124,10 @@ namespace Bit.Core.Services
 
             var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
             if (selectedCipher == null) {
-                // _logService.Info(
-                //     "[Fido2Authenticator] Aborting because the selected credential could not be found."
-                // );
-
                 throw new NotAllowedError();
             }
 
             if (!userVerified && (assertionParams.RequireUserVerification || selectedCipher.Reprompt != CipherRepromptType.None)) {
-                // _logService.Info(
-                //     "[Fido2Authenticator] Aborting because user verification was unsuccessful."
-                // );
-
                 throw new NotAllowedError();
             }
             
@@ -196,10 +167,6 @@ namespace Bit.Core.Services
                     Signature = signature
                 };
             } catch (Exception) {
-                // _logService.Error(
-                //     $"[Fido2Authenticator] Unknown error occured during assertion: {e.Message}"
-                // );
-
                 throw new UnknownError();
             }
         }
