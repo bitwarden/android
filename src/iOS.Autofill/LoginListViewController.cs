@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
@@ -19,7 +18,7 @@ using UIKit;
 
 namespace Bit.iOS.Autofill
 {
-    public partial class LoginListViewController : ExtendedUIViewController
+    public partial class LoginListViewController : ExtendedUIViewController, ILoginListViewController
     {
         internal const string HEADER_SECTION_IDENTIFIER = "headerSectionId";
 
@@ -30,12 +29,10 @@ namespace Bit.iOS.Autofill
             : base(handle)
         {
             DismissModalAction = Cancel;
-            PasswordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
         }
 
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
-        public IPasswordRepromptService PasswordRepromptService { get; private set; }
 
         AccountSwitchingOverlayView _accountSwitchingOverlayView;
         AccountSwitchingOverlayHelper _accountSwitchingOverlayHelper;
@@ -254,20 +251,14 @@ namespace Bit.iOS.Autofill
             base.Dispose(disposing);
         }
 
-        public class TableSource : ExtensionTableSource
+        public class TableSource : BaseLoginListTableSource<LoginListViewController>
         {
-            private readonly LoginListViewController _controller;
-
-            private readonly LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
-            private readonly LazyResolve<IPasswordRepromptService> _passwordRepromptService = new LazyResolve<IPasswordRepromptService>();
-
             public TableSource(LoginListViewController controller)
-                : base(controller.Context, controller)
+                : base(controller)
             {
-                _controller = controller;
             }
 
-            private Context Context => (Context)_context;
+            protected override string LoginAddSegue => SegueConstants.ADD_LOGIN;
 
             public override async Task LoadAsync(bool urlFilter = true, string searchFilter = null)
             {
@@ -277,7 +268,7 @@ namespace Bit.iOS.Autofill
 
                     if (Context.IsCreatingPasskey && !Items.Any())
                     {
-                        _controller?.OnEmptyList();
+                        Controller?.OnEmptyList();
                     }
                 }
                 catch (Exception ex)
@@ -315,62 +306,6 @@ namespace Bit.iOS.Autofill
                 }
 
                 return base.RowsInSection(tableview, section);
-            }
-
-            public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-            {
-                try
-                {
-                    if (Context.IsCreatingPasskey)
-                    {
-                        await SelectRowForPasskeyCreationAsync(tableView, indexPath);
-                        return;
-                    }
-
-                    await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
-                        _controller.CPViewController, _controller, _controller.PasswordRepromptService, "loginAddSegue");
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                }
-            }
-
-            private async Task SelectRowForPasskeyCreationAsync(UITableView tableView, NSIndexPath indexPath)
-            {
-                tableView.DeselectRow(indexPath, true);
-                tableView.EndEditing(true);
-
-                var item = Items.ElementAt(indexPath.Row);
-                if (item is null)
-                {
-                    await _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred);
-                    return;
-                }
-
-                if (item.CipherView.Login.HasFido2Credentials
-                    &&
-                    !await _platformUtilsService.Value.ShowDialogAsync(
-                        AppResources.ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey,
-                        AppResources.OverwritePasskey,
-                        AppResources.Yes,
-                        AppResources.No))
-                {
-                    return;
-                }
-
-                if (!await _passwordRepromptService.Value.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
-                {
-                    return;
-                }
-
-                // TODO: Check user verification
-
-                Context.ConfirmNewCredentialTcs.SetResult(new Fido2ConfirmNewCredentialResult
-                {
-                    CipherId = item.Id,
-                    UserVerified = true
-                });
             }
         }
     }

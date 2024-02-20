@@ -88,6 +88,8 @@
     <Compile Include="SegueConstants.cs" />
     <Compile Include="ColorConstants.cs" />
     <Compile Include="ListItems\HeaderItemView.cs" />
+    <Compile Include="Utilities\BaseLoginListTableSource.cs" />
+    <Compile Include="ILoginListViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\check.png" />

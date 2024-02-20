@@ -21,7 +21,7 @@ namespace Bit.iOS.Core.Views
         protected IStateService _stateService;
         protected ISearchService _searchService;
         protected AppExtensionContext _context;
-        private UIViewController _controller;
+        protected UIViewController _controller;
 
         public ExtensionTableSource(AppExtensionContext context, UIViewController controller)
         {
