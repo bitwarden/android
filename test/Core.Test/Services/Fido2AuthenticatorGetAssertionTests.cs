@@ -71,7 +71,7 @@ namespace Bit.Core.Test.Services
                 requireUserVerification: false
             );
             _sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(_ciphers);
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, false));
         }
 
         public void Dispose() 
@@ -124,7 +124,7 @@ namespace Bit.Core.Test.Services
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<Fido2GetAssertionUserInterfaceCredential[]>(
                 (credentials) => credentials.Select(c => c.CipherId).SequenceEqual(_ciphers.Select((c) => c.Id))
             ));
         }
@@ -135,13 +135,13 @@ namespace Bit.Core.Test.Services
             // Arrange
             _params.AllowCredentialDescriptorList = null;
             var discoverableCiphers = _ciphers.Where((cipher) => cipher.Login.MainFido2Credential.DiscoverableValue).ToList();
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((discoverableCiphers[0].Id, true));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((discoverableCiphers[0].Id, true));
 
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<Fido2GetAssertionUserInterfaceCredential[]>(
                 (credentials) => credentials.Select(c => c.CipherId).SequenceEqual(discoverableCiphers.Select((c) => c.Id))
             ));
         }
@@ -152,13 +152,13 @@ namespace Bit.Core.Test.Services
         public async Task GetAssertionAsync_RequestsUserVerification_ParamsRequireUserVerification() {
             // Arrange
             _params.RequireUserVerification = true;
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, true));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, true));
 
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<Fido2GetAssertionUserInterfaceCredential[]>(
                 (credentials) => credentials.All((c) => c.RequireUserVerification == true)
             ));
         }
@@ -176,7 +176,7 @@ namespace Bit.Core.Test.Services
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _userInterface.Received().PickCredentialAsync(Arg.Is<IFido2GetAssertionUserInterfaceCredential[]>(
+            await _userInterface.Received().PickCredentialAsync(Arg.Is<Fido2GetAssertionUserInterfaceCredential[]>(
                 (credentials) => credentials.Select(c => c.RequireUserVerification).SequenceEqual(_ciphers.Select((c) => c.Reprompt == CipherRepromptType.Password))
             ));
         }
@@ -185,7 +185,7 @@ namespace Bit.Core.Test.Services
         // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
         public async Task GetAssertionAsync_ThrowsNotAllowed_UserDoesNotConsent() {
             // Arrange
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((null, false));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((null, false));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
@@ -196,7 +196,7 @@ namespace Bit.Core.Test.Services
         public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationWhenRequired() {
             // Arrange
             _params.RequireUserVerification = true;
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
 
             // Act and assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
@@ -208,7 +208,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             _selectedCipher.Reprompt = CipherRepromptType.Password;
             _params.RequireUserVerification = false;
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
@@ -264,7 +264,7 @@ namespace Bit.Core.Test.Services
             _selectedCipher.Login.MainFido2Credential.CounterValue = 9000;
             _selectedCipher.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
             _sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(_params.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
-            _userInterface.PickCredentialAsync(Arg.Any<IFido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, true));
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, true));
             
             // Act
             var result = await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);

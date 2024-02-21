@@ -124,7 +124,7 @@ namespace Bit.Core.Test.Services
             catch {}
 
             // Assert
-            await _userInterface.Received().InformExcludedCredential(Arg.Is<string[]>(
+            await _userInterface.Received().InformExcludedCredentialAsync(Arg.Is<string[]>(
                 (c) => c.SequenceEqual(new string[] { _ciphers[0].Id })
             ));
         }
@@ -157,7 +157,7 @@ namespace Bit.Core.Test.Services
 
             await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
-            await _userInterface.DidNotReceive().InformExcludedCredential(Arg.Any<string[]>());
+            await _userInterface.DidNotReceive().InformExcludedCredentialAsync(Arg.Any<string[]>());
         }
 
         #endregion

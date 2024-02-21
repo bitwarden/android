@@ -97,9 +97,9 @@ namespace Bit.Core.Test.Utilities.Fido2
             Assert.True(called);
         }
 
-        private IFido2GetAssertionUserInterfaceCredential CreateCredential(string cipherId, bool requireUserVerification)
+        private Fido2GetAssertionUserInterfaceCredential CreateCredential(string cipherId, bool requireUserVerification)
         {
-            return new IFido2GetAssertionUserInterfaceCredential
+            return new Fido2GetAssertionUserInterfaceCredential
             {
                 CipherId = cipherId,
                 RequireUserVerification = requireUserVerification

@@ -25,7 +25,7 @@ namespace Bit.Core.Abstractions
         /// </summary>
         /// <param name="existingCipherIds">The IDs of the excluded credentials.</param>
         /// <returns>When user has confirmed the message</returns>
-        Task InformExcludedCredential(string[] existingCipherIds);
+        Task InformExcludedCredentialAsync(string[] existingCipherIds);
 
         /// <summary>
         /// Ask the user to confirm the creation of a new credential.

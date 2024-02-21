@@ -27,7 +27,7 @@ namespace Bit.Core.Utilities.Fido2
             _verifyUserCallback = verifyUserCallback;
         }
 
-        public async Task<(string CipherId, bool UserVerified)> PickCredentialAsync(IFido2GetAssertionUserInterfaceCredential[] credentials) 
+        public async Task<(string CipherId, bool UserVerified)> PickCredentialAsync(Fido2GetAssertionUserInterfaceCredential[] credentials) 
         {
             if (credentials.Length == 0 || !credentials.Any(c => c.CipherId == _cipherId))
             {

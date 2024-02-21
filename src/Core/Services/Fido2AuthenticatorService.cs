@@ -38,7 +38,7 @@ namespace Bit.Core.Services
                 makeCredentialParams.ExcludeCredentialDescriptorList
             );
             if (existingCipherIds.Length > 0) {
-                await userInterface.InformExcludedCredential(existingCipherIds);
+                await userInterface.InformExcludedCredentialAsync(existingCipherIds);
                 throw new NotAllowedError();
             }
 
@@ -116,7 +116,7 @@ namespace Bit.Core.Services
             }
 
             var response = await userInterface.PickCredentialAsync(
-                cipherOptions.Select((cipher) => new IFido2GetAssertionUserInterfaceCredential {
+                cipherOptions.Select((cipher) => new Fido2GetAssertionUserInterfaceCredential {
                     CipherId = cipher.Id,
                     RequireUserVerification = assertionParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None
                 }).ToArray()
