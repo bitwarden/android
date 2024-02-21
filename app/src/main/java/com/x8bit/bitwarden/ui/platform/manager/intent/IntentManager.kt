@@ -76,9 +76,9 @@ interface IntentManager {
     fun createFileChooserIntent(withCameraIntents: Boolean): Intent
 
     /**
-     * Creates an intent to use when selecting to save an attachment with [fileName] to disk.
+     * Creates an intent to use when selecting to save an item with [fileName] to disk.
      */
-    fun createAttachmentChooserIntent(fileName: String): Intent
+    fun createDocumentIntent(fileName: String): Intent
 
     /**
      * Represents file information.

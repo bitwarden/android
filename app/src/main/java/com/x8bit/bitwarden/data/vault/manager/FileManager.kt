@@ -29,6 +29,12 @@ interface FileManager {
     suspend fun fileToUri(fileUri: Uri, file: File): Boolean
 
     /**
+     * Writes an [dataString] to a [fileUri]. `true` will be returned if the file was
+     * successfully saved.
+     */
+    suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean
+
+    /**
      * Reads the [fileUri] into memory and returns the raw [ByteArray]
      */
     suspend fun uriToByteArray(fileUri: Uri): ByteArray

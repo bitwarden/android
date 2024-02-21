@@ -10,6 +10,7 @@ import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -344,4 +345,15 @@ interface VaultSdkSource {
         userId: String,
         newPassword: String,
     ): Result<UpdatePasswordResponse>
+
+    /**
+     * Exports the users vault data and returns it as a string in the selected format
+     * (JSON, CSV, encrypted JSON).
+     */
+    suspend fun exportVaultDataToString(
+        userId: String,
+        folders: List<Folder>,
+        ciphers: List<Cipher>,
+        format: ExportFormat,
+    ): Result<String>
 }

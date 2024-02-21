@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +46,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
@@ -56,16 +59,35 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun ExportVaultScreen(
     onNavigateBack: () -> Unit,
+    intentManager: IntentManager = LocalIntentManager.current,
     viewModel: ExportVaultViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    val exportVaultLocationReceived: (Uri) -> Unit = remember {
+        { viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(it)) }
+    }
+    val fileSaverLauncher = intentManager.getActivityResultLauncher { activityResult ->
+        intentManager.getFileDataFromActivityResult(activityResult)?.let {
+            exportVaultLocationReceived.invoke(it.uri)
+        }
+    }
+
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             ExportVaultEvent.NavigateBack -> onNavigateBack()
 
             is ExportVaultEvent.ShowToast -> {
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
+            }
+
+            is ExportVaultEvent.NavigateToSelectExportDataLocation -> {
+                fileSaverLauncher.launch(
+                    intentManager.createDocumentIntent(
+                        fileName = event.fileName,
+                    ),
+                )
             }
         }
     }

@@ -10,6 +10,7 @@ import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -370,6 +371,21 @@ class VaultSdkSourceImpl(
         getClient(userId = userId)
             .crypto()
             .updatePassword(newPassword)
+    }
+
+    override suspend fun exportVaultDataToString(
+        userId: String,
+        folders: List<Folder>,
+        ciphers: List<Cipher>,
+        format: ExportFormat,
+    ): Result<String> = runCatching {
+        getClient(userId = userId)
+            .exporters()
+            .exportVault(
+                folders = folders,
+                ciphers = ciphers,
+                format = format,
+            )
     }
 
     private fun getClient(

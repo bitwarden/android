@@ -19,4 +19,19 @@ class ExportVaultFormatExtensionTest {
                 )
             }
     }
+
+    @Test
+    fun `fileExtension should return the correct value for each type`() {
+        mapOf(
+            ExportVaultFormat.JSON to "json",
+            ExportVaultFormat.CSV to "csv",
+            ExportVaultFormat.JSON_ENCRYPTED to "json",
+        )
+            .forEach { (type, label) ->
+                assertEquals(
+                    label,
+                    type.fileExtension,
+                )
+            }
+    }
 }

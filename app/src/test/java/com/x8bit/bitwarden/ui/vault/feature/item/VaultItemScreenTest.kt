@@ -145,11 +145,11 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToSelectAttachmentSaveLocation should invoke createAttachmentChooserIntent`() {
+    fun `NavigateToSelectAttachmentSaveLocation should invoke createDocumentIntent`() {
         mutableEventFlow.tryEmit(VaultItemEvent.NavigateToSelectAttachmentSaveLocation("test.mp4"))
 
         verify(exactly = 1) {
-            intentManager.createAttachmentChooserIntent("test.mp4")
+            intentManager.createDocumentIntent("test.mp4")
         }
     }
 

@@ -6,6 +6,7 @@ import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
@@ -64,6 +65,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
+import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -1213,6 +1215,35 @@ class VaultRepositoryImpl(
                 )
             }
         }
+    }
+
+    @Suppress("ReturnCount")
+    override suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult {
+        val userId = activeUserId ?: return ExportVaultDataResult.Error
+        val folders = vaultDiskSource
+            .getFolders(userId)
+            .firstOrNull()
+            .orEmpty()
+            .map { it.toEncryptedSdkFolder() }
+
+        val ciphers = vaultDiskSource
+            .getCiphers(userId)
+            .firstOrNull()
+            .orEmpty()
+            .map { it.toEncryptedSdkCipher() }
+            .filter { it.collectionIds.isEmpty() }
+
+        return vaultSdkSource
+            .exportVaultDataToString(
+                userId = userId,
+                folders = folders,
+                ciphers = ciphers,
+                format = format,
+            )
+            .fold(
+                onSuccess = { ExportVaultDataResult.Success(it) },
+                onFailure = { ExportVaultDataResult.Error },
+            )
     }
 
     /**
