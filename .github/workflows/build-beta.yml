@@ -7,7 +7,7 @@ on:
       ref:
         description: 'Branch or tag to build'
         required: true
-        default: 'refs/heads/main'
+        default: 'main'
         type: string
 
 env:
@@ -16,21 +16,6 @@ env:
   target-net-version: net8.0
 
 jobs:
-  cloc:
-    name: CLOC
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
-
-      - name: Set up CLOC
-        run: |
-          sudo apt-get update
-          sudo apt-get -y install cloc
-
-      - name: Print lines of code
-        run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
-
   setup:
     name: Setup
     runs-on: ubuntu-22.04
@@ -369,8 +354,6 @@ jobs:
     name: Crowdin Push
     if: github.ref == 'refs/heads/main'
     needs:
-      - android
-      - f-droid
       - ios
     runs-on: ubuntu-22.04
     env:
@@ -408,9 +391,6 @@ jobs:
     if: always()
     runs-on: ubuntu-22.04
     needs:
-      - cloc
-      - android
-      - f-droid
       - ios
       - crowdin-push
     steps:
