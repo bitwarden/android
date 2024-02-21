@@ -438,7 +438,7 @@ namespace Bit.App.Utilities
                 {
                     appOptions.FromPasskeyFramework = false;
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
-                    deviceActionService.ReturnToPasskeyAfterUnlock().FireAndForget();
+                    deviceActionService.ReturnToPasskeyAfterUnlockAsync().FireAndForget();
                     return true;
                 }
                 if (appOptions.Uri != null

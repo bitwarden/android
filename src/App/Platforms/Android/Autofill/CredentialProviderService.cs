@@ -12,6 +12,7 @@ using AndroidX.Credentials.WebAuthn;
 using Bit.App.Droid.Utilities;
 using Bit.Core.Models.View;
 using Resource = Microsoft.Maui.Resource;
+using Bit.Core.Resources.Localization;
 
 namespace Bit.Droid.Autofill
 {
@@ -53,9 +54,7 @@ namespace Bit.Droid.Autofill
                 var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueRequestCode, intent,
                     AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
-                var i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
-                var unlockText = i18nService.T("Unlock");
-                var unlockAction = new AuthenticationAction(unlockText, pendingIntent);
+                var unlockAction = new AuthenticationAction(AppResources.Unlock, pendingIntent);
 
                 var unlockResponse = new BeginGetCredentialResponse.Builder()
                     .SetAuthenticationActions(new List<AuthenticationAction>() { unlockAction } )
@@ -77,7 +76,7 @@ namespace Bit.Droid.Autofill
         private async Task<BeginGetCredentialResponse> ProcessGetCredentialsRequestAsync(
             BeginGetCredentialRequest request)
         {
-            IList<CredentialEntry> credentialEntries = null;
+            List<CredentialEntry> credentialEntries = null;
 
             foreach (var option in request.BeginGetCredentialOptions)
             {
@@ -85,8 +84,7 @@ namespace Bit.Droid.Autofill
                 if (credentialOption != null)
                 {
                     credentialEntries ??= new List<CredentialEntry>();
-                    ((List<CredentialEntry>)credentialEntries).AddRange(
-                        await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                    credentialEntries.AddRange(await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
                 }
             }
 

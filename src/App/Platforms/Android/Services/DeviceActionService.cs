@@ -559,9 +559,9 @@ namespace Bit.Droid.Services
             return SystemClock.ElapsedRealtime();
         }
 
-        public async Task ReturnToPasskeyAfterUnlock()
+        public async Task ReturnToPasskeyAfterUnlockAsync()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
             if (activity == null)
             {
                 return;
@@ -569,15 +569,14 @@ namespace Bit.Droid.Services
 
             var request = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveBeginGetCredentialRequest(activity.Intent);
             var response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse();;
-            IList<AndroidX.Credentials.Provider.CredentialEntry> credentialEntries = null;
+            List<AndroidX.Credentials.Provider.CredentialEntry> credentialEntries = null;
             foreach (var option in request.BeginGetCredentialOptions)
             {
                 var credentialOption = option as AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption;
                 if (credentialOption != null)
                 {
                     credentialEntries ??= new List<AndroidX.Credentials.Provider.CredentialEntry>();
-                    ((List<AndroidX.Credentials.Provider.CredentialEntry>)credentialEntries).AddRange(
-                        await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                    credentialEntries.AddRange(await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
                 }
             }
 

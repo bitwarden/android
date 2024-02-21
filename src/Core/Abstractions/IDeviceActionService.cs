@@ -40,7 +40,7 @@ namespace Bit.App.Abstractions
         void OpenCredentialProviderSettings();
         void OpenAutofillSettings();
         long GetActiveTime();
-        Task ReturnToPasskeyAfterUnlock();
+        Task ReturnToPasskeyAfterUnlockAsync();
         void CloseMainApp();
         float GetSystemFontSizeScale();
         Task OnAccountSwitchCompleteAsync();
