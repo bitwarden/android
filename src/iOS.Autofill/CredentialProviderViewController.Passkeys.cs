@@ -33,22 +33,22 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            // TODO: Generate the credential Signature and Auth data accordingly
-            var fido2AssertionResult = await _fido2AuthService.Value.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
-            {
-                RpId = cipherView.Login.MainFido2Credential.RpId,
-                Counter = cipherView.Login.MainFido2Credential.Counter,
-                CredentialId = cipherView.Login.MainFido2Credential.CredentialId
-            });
+            // // TODO: Generate the credential Signature and Auth data accordingly
+            // var fido2AssertionResult = await _fido2AuthService.Value.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
+            // {
+            //     RpId = cipherView.Login.MainFido2Credential.RpId,
+            //     Counter = cipherView.Login.MainFido2Credential.Counter,
+            //     CredentialId = cipherView.Login.MainFido2Credential.CredentialId
+            // });
 
-            CompleteAssertionRequest(new ASPasskeyAssertionCredential(
-                cipherView.Login.MainFido2Credential.UserHandle,
-                cipherView.Login.MainFido2Credential.RpId,
-                NSData.FromArray(fido2AssertionResult.Signature),
-                _context.PasskeyCredentialRequest?.ClientDataHash,
-                NSData.FromArray(fido2AssertionResult.AuthenticatorData),
-                cipherView.Login.MainFido2Credential.CredentialId
-            ));
+            // CompleteAssertionRequest(new ASPasskeyAssertionCredential(
+            //     cipherView.Login.MainFido2Credential.UserHandle,
+            //     cipherView.Login.MainFido2Credential.RpId,
+            //     NSData.FromArray(fido2AssertionResult.Signature),
+            //     _context.PasskeyCredentialRequest?.ClientDataHash,
+            //     NSData.FromArray(fido2AssertionResult.AuthenticatorData),
+            //     cipherView.Login.MainFido2Credential.CredentialId
+            // ));
         }
 
         public void CompleteAssertionRequest(ASPasskeyAssertionCredential assertionCredential)

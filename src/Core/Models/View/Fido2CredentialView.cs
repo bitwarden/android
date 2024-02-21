@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.View
 {
@@ -27,9 +28,28 @@ namespace Bit.Core.Models.View
         public string Counter { get; set; }
         public DateTime CreationDate { get; set; }
 
+        public int CounterValue {
+            get => int.TryParse(Counter, out var counter) ? counter : 0;
+            set => Counter = value.ToString();
+        }
+
+        public byte[] UserHandleValue {
+            get => UserHandle == null ? null : CoreHelpers.Base64UrlDecode(UserHandle);
+            set => UserHandle = value == null ? null : CoreHelpers.Base64UrlEncode(value);
+        }
+
+        public byte[] KeyBytes {
+            get => KeyValue == null ? null : CoreHelpers.Base64UrlDecode(KeyValue);
+            set => KeyValue = value == null ? null : CoreHelpers.Base64UrlEncode(value);
+        }
+
+        public bool DiscoverableValue {
+            get => bool.TryParse(Discoverable, out var discoverable) && discoverable;
+            set => Discoverable = value.ToString().ToLower();
+        }
+
         public override string SubTitle => UserName;
         public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => new List<KeyValuePair<string, LinkedIdType>>();
-        public bool IsDiscoverable => !string.IsNullOrWhiteSpace(Discoverable);
         public bool CanLaunch => !string.IsNullOrEmpty(RpId);
         public string LaunchUri => $"https://{RpId}";
 
