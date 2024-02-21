@@ -20,13 +20,18 @@ namespace Bit.Core.Test.Utilities.Fido2
         [InlineData("example.compute.amazonaws.com", "www.example.compute.amazonaws.com", false)]
         [InlineData("amazonaws.com", "www.example.compute.amazonaws.com", false)]
         [InlineData("amazonaws.com", "test.amazonaws.com", true)]
+        // Overrides by the WebAuthn spec
+        [InlineData("0.0.0.0", "0.0.0.0", false)] // IPs not allowed
+        [InlineData("0x10203", "0.1.2.3", false)]
+        [InlineData("[0::1]", "::1", false)]
+        [InlineData("127.0.0.1", "127.0.0.1", false)]
+        [InlineData("", "", false)]
         // Custom tests
         [InlineData("sub.login.bitwarden.com", "https://login.bitwarden.com:1337", false)]
         [InlineData("passwordless.dev", "https://login.bitwarden.com:1337", false)]
         [InlineData("login.passwordless.dev", "https://login.bitwarden.com:1337", false)]
         [InlineData("bitwarden", "localhost", false)]
         [InlineData("bitwarden", "bitwarden", true)]
-        // [InlineData("127.0.0.1", "127.0.0.1", false)]
         [InlineData("localhost", "https://localhost:8080", true)]
         [InlineData("bitwarden.com", "https://bitwarden.com", true)]
         [InlineData("bitwarden.com", "https://login.bitwarden.com:1337", true)]
