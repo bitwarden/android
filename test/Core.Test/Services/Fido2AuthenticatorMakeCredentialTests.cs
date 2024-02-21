@@ -33,7 +33,7 @@ namespace Bit.Core.Test.Services
         private byte[] _selectedCipherRawCredentialId;
 
         public Fido2AuthenticatorMakeCredentialTests() {
-            _credentialIds = [ "21d6aa04-92bd-4def-bf81-33f046924599", "f70c01ca-d1bf-4704-86e1-b07573aa17fa" ];
+            _credentialIds = new List<string> { "21d6aa04-92bd-4def-bf81-33f046924599", "f70c01ca-d1bf-4704-86e1-b07573aa17fa" };
             _rawCredentialIds = [
                 [0x21, 0xd6, 0xaa, 0x04, 0x92, 0xbd, 0x4d, 0xef, 0xbf, 0x81, 0x33, 0xf0, 0x46, 0x92, 0x45, 0x99],
                 [0xf7, 0x0c, 0x01, 0xca, 0xd1, 0xbf, 0x47, 0x04, 0x86, 0xe1, 0xb0, 0x75, 0x73, 0xaa, 0x17, 0xfa]

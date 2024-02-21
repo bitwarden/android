@@ -11,7 +11,7 @@ namespace Bit.Core.Services
     public class Fido2AuthenticatorService : IFido2AuthenticatorService
     {
         // AAGUID: d548826e-79b4-db40-a3d8-11116f7e8349
-        public static readonly byte[] AAGUID = [ 0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49 ];
+        public static readonly byte[] AAGUID = new byte[] { 0xd5, 0x48, 0x82, 0x6e, 0x79, 0xb4, 0xdb, 0x40, 0xa3, 0xd8, 0x11, 0x11, 0x6f, 0x7e, 0x83, 0x49 };
 
         private readonly ICipherService _cipherService;
         private readonly ISyncService _syncService;
@@ -193,7 +193,7 @@ namespace Bit.Core.Services
             PublicKeyCredentialDescriptor[] credentials
         ) {
             if (credentials == null || credentials.Length == 0) {
-                return [];
+                return Array.Empty<string>();
             }
 
             var ids = new List<string>();
@@ -207,7 +207,7 @@ namespace Bit.Core.Services
             }
 
             if (ids.Count == 0) {
-                return [];
+                return Array.Empty<string>();
             }
 
             var ciphers = await _cipherService.GetAllDecryptedAsync();
