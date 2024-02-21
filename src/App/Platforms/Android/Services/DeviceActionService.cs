@@ -22,6 +22,7 @@ using Bit.App.Droid.Utilities;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
+using static Android.Content.Res.Resources;
 
 namespace Bit.Droid.Services
 {
@@ -34,6 +35,10 @@ namespace Bit.Droid.Services
 
         private Toast _toast;
         private string _userAgent;
+
+        //TODO: These consts need to be moved somewhere else where they can be shared with the code in CredentialProviderService.cs
+        private const string GetPasskeyIntentAction = "PACKAGE_NAME.GET_PASSKEY";
+        private const int UniqueRequestCode = 94556023;
 
         public DeviceActionService(
             IStateService stateService,
@@ -553,6 +558,98 @@ namespace Bit.Droid.Services
             // ref: https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime()
             return SystemClock.ElapsedRealtime();
         }
+
+        public async Task ReturnToPasskeyAfterUnlock()
+        {
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            if (activity == null)
+            {
+                return;
+            }
+
+            var request = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveBeginGetCredentialRequest(activity.Intent);
+            var response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse();;
+            IList<AndroidX.Credentials.Provider.CredentialEntry> credentialEntries = null;
+            foreach (var option in request.BeginGetCredentialOptions)
+            {
+                var credentialOption = option as AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption;
+                if (credentialOption != null)
+                {
+                    credentialEntries ??= new List<AndroidX.Credentials.Provider.CredentialEntry>();
+                    ((List<AndroidX.Credentials.Provider.CredentialEntry>)credentialEntries).AddRange(
+                        await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                }
+            }
+
+            if (credentialEntries != null)
+            {
+                response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse.Builder()
+                    .SetCredentialEntries(credentialEntries)
+                    .Build();
+            }
+
+            var result = new Android.Content.Intent();
+            AndroidX.Credentials.Provider.PendingIntentHandler.SetBeginGetCredentialResponse(result, response);
+
+            activity.SetResult(Result.Ok, result);
+            activity.Finish();
+        }
+
+        #region CODE_THAT_NEEDS_TO_BE_MOVED_ELSEWHERE
+        //TODO: This region needs to be moved somewhere else where it can be shared with the code in CredentialProviderService.cs
+        private async Task<List<AndroidX.Credentials.Provider.CredentialEntry>> PopulatePasskeyDataAsync(AndroidX.Credentials.Provider.CallingAppInfo callingAppInfo,
+            AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption option)
+        {
+            var origin = callingAppInfo.Origin;
+            var passkeyEntries = new List<AndroidX.Credentials.Provider.CredentialEntry>();
+
+            var cipherService = Bit.Core.Utilities.ServiceContainer.Resolve<ICipherService>();
+            var ciphers = await cipherService.GetAllDecryptedForUrlAsync(origin);
+            if (ciphers == null)
+            {
+                return passkeyEntries;
+            }
+
+            var passkeyCiphers = ciphers.Where(cipher => cipher.HasFido2Credential).ToList();
+            if (!passkeyCiphers.Any())
+            {
+                return passkeyEntries;
+            }
+
+            foreach (var cipher in passkeyCiphers)
+            {
+                var passkeyEntry = GetPasskey(cipher, option);
+                passkeyEntries.Add(passkeyEntry);
+            }
+
+            return passkeyEntries;
+        }
+
+        private AndroidX.Credentials.Provider.PublicKeyCredentialEntry GetPasskey(Bit.Core.Models.View.CipherView cipher, AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption option)
+        {
+            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+
+            var credDataBundle = new Bundle();
+            credDataBundle.PutString(Bit.Droid.Autofill.CredentialProviderConstants.CredentialIdIntentExtra,
+                cipher.Login.MainFido2Credential.CredentialId);
+
+            var intent = new Intent(activity.ApplicationContext, typeof(Bit.Droid.Autofill.CredentialProviderSelectionActivity))
+                .SetAction(GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
+            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
+            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
+            var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, UniqueRequestCode, intent,
+                PendingIntentFlags.Immutable | PendingIntentFlags.UpdateCurrent);
+
+            return new AndroidX.Credentials.Provider.PublicKeyCredentialEntry.Builder(
+                    activity.ApplicationContext,
+                    cipher.Login.Username ?? "No username",
+                    pendingIntent,
+                    option)
+                .SetDisplayName(cipher.Name)
+                .SetIcon(Android.Graphics.Drawables.Icon.CreateWithResource(activity.ApplicationContext, Microsoft.Maui.Resource.Drawable.icon))
+                .Build();
+        }
+        #endregion
         
         public void CloseMainApp()
         {

@@ -434,6 +434,13 @@ namespace Bit.App.Utilities
                     App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
+                if (appOptions.FromPasskeyFramework)
+                {
+                    appOptions.FromPasskeyFramework = false;
+                    var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
+                    deviceActionService.ReturnToPasskeyAfterUnlock().FireAndForget();
+                    return true;
+                }
                 if (appOptions.Uri != null
                     ||
                     appOptions.OtpData != null)

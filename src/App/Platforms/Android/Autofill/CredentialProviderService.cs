@@ -9,6 +9,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using AndroidX.Credentials.Exceptions;
 using AndroidX.Credentials.WebAuthn;
+using Bit.App.Droid.Utilities;
 using Bit.Core.Models.View;
 using Resource = Microsoft.Maui.Resource;
 
@@ -44,8 +45,22 @@ namespace Bit.Droid.Autofill
                 {
                     var response = await ProcessGetCredentialsRequestAsync(request);
                     callback.OnResult(response);
+                    return;
                 }
-                // TODO handle auth/unlock account flow
+
+                var intent = new Intent(ApplicationContext, typeof(MainActivity));
+                intent.PutExtra(CredentialProviderConstants.PasskeyFramework, true);
+                var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueRequestCode, intent,
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
+
+                var i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+                var unlockText = i18nService.T("Unlock");
+                var unlockAction = new AuthenticationAction(unlockText, pendingIntent);
+
+                var unlockResponse = new BeginGetCredentialResponse.Builder()
+                    .SetAuthenticationActions(new List<AuthenticationAction>() { unlockAction } )
+                    .Build();
+                callback.OnResult(unlockResponse);
             }
             catch (GetCredentialException e)
             {

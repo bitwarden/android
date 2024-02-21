@@ -331,6 +331,7 @@ namespace Bit.Droid
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra(AutofillConstants.AutofillFramework, false),
+                FromPasskeyFramework = Intent.GetBooleanExtra(CredentialProviderConstants.PasskeyFramework, false),
                 CreateSend = GetCreateSendRequest(Intent)
             };
             var fillType = Intent.GetIntExtra(AutofillConstants.AutofillFrameworkFillType, 0);
