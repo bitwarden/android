@@ -108,7 +108,7 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/watchOS/bitwarden/GoogleService-Info.plist \ ./.github/secrets/GoogleService-Info.plist.gpg
+            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_beta_native_autofill.mobileprovision \
             ./.github/secrets/dist_beta_native_autofill.mobileprovision.gpg
