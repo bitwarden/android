@@ -315,6 +315,11 @@ namespace Bit.iOS.Core.Services
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
+        public async Task ReturnToPasskeyAfterUnlock()
+        {
+            throw new NotImplementedException();
+        }
+
         public void CloseMainApp()
         {
             throw new NotImplementedException();
