@@ -163,6 +163,7 @@ class UserStateJsonExtensionsTest {
                     hasPendingAccountAddition = false,
                     isBiometricsEnabledProvider = { false },
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
+                    isLoggedInProvider = { true },
                 ),
         )
     }
@@ -234,6 +235,7 @@ class UserStateJsonExtensionsTest {
                     hasPendingAccountAddition = true,
                     isBiometricsEnabledProvider = { true },
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isLoggedInProvider = { false },
                 ),
         )
     }

@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class AuthDiskSourceExtensionsTest {
@@ -190,6 +191,24 @@ class AuthDiskSourceExtensionsTest {
                 ),
                 awaitItem(),
             )
+        }
+    }
+
+    @Test
+    fun `activeUserIdChangesFlow should emit changes when active user changes`() = runTest {
+        authDiskSource.activeUserIdChangesFlow.test {
+            assertNull(awaitItem())
+            authDiskSource.userState = MOCK_USER_STATE
+            assertEquals(MOCK_USER_ID, awaitItem())
+            authDiskSource.userState = MOCK_USER_STATE.copy(
+                accounts = mapOf(
+                    MOCK_USER_ID to MOCK_ACCOUNT,
+                    "mockId-2" to mockk(),
+                ),
+            )
+            expectNoEvents()
+            authDiskSource.userState = null
+            assertNull(awaitItem())
         }
     }
 }

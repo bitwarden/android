@@ -32,6 +32,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(MainDispatcherExtension::class)
 class UserLogoutManagerTest {
     private val authDiskSource: AuthDiskSource = mockk {
+        every { storeAccountTokens(userId = any(), accountTokens = null) } just runs
         every { userState = any() } just runs
         every { clearData(any()) } just runs
     }
@@ -121,11 +122,10 @@ class UserLogoutManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `softLogout should clear most data associated with the given user and remove token data from the account in the user state`() {
+    fun `softLogout should clear most data associated with the given user and remove token data in the authDiskSource`() {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOCK
-        every { authDiskSource.userState } returns SINGLE_USER_STATE_1
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         } returns vaultTimeoutInMinutes
@@ -135,22 +135,7 @@ class UserLogoutManagerTest {
 
         userLogoutManager.softLogout(userId = userId)
 
-        val updatedAccount = ACCOUNT_1
-            .copy(
-                tokens = AccountTokensJson(
-                    accessToken = null,
-                    refreshToken = null,
-                ),
-            )
-        val updatedUserState = SINGLE_USER_STATE_1
-            .copy(
-                accounts = SINGLE_USER_STATE_1
-                    .accounts
-                    .toMutableMap().apply {
-                        set(userId, updatedAccount)
-                    },
-            )
-        verify { authDiskSource.userState = updatedUserState }
+        verify { authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null) }
         assertDataCleared(userId = userId)
 
         verify {

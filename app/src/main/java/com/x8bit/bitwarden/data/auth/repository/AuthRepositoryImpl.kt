@@ -6,6 +6,7 @@ import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -51,6 +52,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -75,6 +77,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -83,6 +86,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -148,17 +153,22 @@ class AuthRepositoryImpl(
 
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     override val authStateFlow: StateFlow<AuthState> = authDiskSource
-        .userStateFlow
-        .map { userState ->
-            userState
-                ?.activeAccount
-                ?.tokens
-                ?.accessToken
-                ?.let {
-                    AuthState.Authenticated(accessToken = it)
+        .activeUserIdChangesFlow
+        .flatMapLatest { activeUserId ->
+            activeUserId
+                ?.let { userId ->
+                    authDiskSource
+                        .getAccountTokensFlow(userId)
+                        .map { accountTokens ->
+                            accountTokens
+                                ?.accessToken
+                                ?.let { AuthState.Authenticated(it) }
+                                ?: AuthState.Unauthenticated
+                        }
                 }
-                ?: AuthState.Unauthenticated
+                ?: flowOf(AuthState.Unauthenticated)
         }
         .stateIn(
             scope = unconfinedScope,
@@ -186,6 +196,7 @@ class AuthRepositoryImpl(
                 hasPendingAccountAddition = hasPendingAccountAddition,
                 isBiometricsEnabledProvider = ::isBiometricsEnabled,
                 vaultUnlockTypeProvider = ::getVaultUnlockType,
+                isLoggedInProvider = ::isUserLoggedIn,
             )
     }
         .filter {
@@ -204,6 +215,7 @@ class AuthRepositoryImpl(
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
+                    isLoggedInProvider = ::isUserLoggedIn,
                 ),
         )
 
@@ -522,6 +534,13 @@ class AuthRepositoryImpl(
                             // it is validated.
                         }
 
+                        authDiskSource.storeAccountTokens(
+                            userId = userStateJson.activeUserId,
+                            accountTokens = AccountTokensJson(
+                                accessToken = loginResponse.accessToken,
+                                refreshToken = loginResponse.refreshToken,
+                            ),
+                        )
                         authDiskSource.userState = userStateJson
                         authDiskSource.storeUserKey(
                             userId = userStateJson.activeUserId,
@@ -548,16 +567,20 @@ class AuthRepositoryImpl(
 
     override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> {
         val refreshToken = authDiskSource
-            .userState
-            ?.accounts
-            ?.get(userId)
-            ?.tokens
+            .getAccountTokens(userId = userId)
             ?.refreshToken
             ?: return IllegalStateException("Must be logged in.").asFailure()
         return identityService
             .refreshTokenSynchronously(refreshToken)
             .onSuccess {
                 // Update the existing UserState with updated token information
+                authDiskSource.storeAccountTokens(
+                    userId = userId,
+                    accountTokens = AccountTokensJson(
+                        accessToken = it.accessToken,
+                        refreshToken = it.refreshToken,
+                    ),
+                )
                 authDiskSource.userState = it.toUserStateJson(
                     userId = userId,
                     previousUserState = requireNotNull(authDiskSource.userState),
@@ -977,6 +1000,10 @@ class AuthRepositoryImpl(
     private fun isBiometricsEnabled(
         userId: String,
     ): Boolean = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
+
+    private fun isUserLoggedIn(
+        userId: String,
+    ): Boolean = authDiskSource.getAccountTokens(userId = userId)?.isLoggedIn == true
 
     private fun getVaultUnlockType(
         userId: String,

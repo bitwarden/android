@@ -61,10 +61,7 @@ val AuthDiskSource.userOrganizationsListFlow: Flow<List<UserOrganizations>>
 val AuthDiskSource.userSwitchingChangesFlow: Flow<UserSwitchingData>
     get() {
         var lastActiveUserId: String? = null
-        return this
-            .userStateFlow
-            .map { it?.activeUserId }
-            .distinctUntilChanged()
+        return activeUserIdChangesFlow
             .map { activeUserId ->
                 val previousActiveUserId = lastActiveUserId
                 lastActiveUserId = activeUserId
@@ -74,3 +71,12 @@ val AuthDiskSource.userSwitchingChangesFlow: Flow<UserSwitchingData>
                 )
             }
     }
+
+/**
+ * Returns a [Flow] that emits every time the active user ID is changed.
+ */
+val AuthDiskSource.activeUserIdChangesFlow: Flow<String?>
+    get() = this
+        .userStateFlow
+        .map { it?.activeUserId }
+        .distinctUntilChanged()

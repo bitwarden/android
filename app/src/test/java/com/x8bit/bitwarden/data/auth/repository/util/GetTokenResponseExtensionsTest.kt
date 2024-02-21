@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
@@ -55,7 +54,6 @@ class GetTokenResponseExtensionsTest {
 }
 
 private const val ACCESS_TOKEN_1 = "accessToken1"
-private const val ACCESS_TOKEN_2 = "accessToken2"
 private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
 private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
 
@@ -103,10 +101,6 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
     ),
-    tokens = AccountTokensJson(
-        accessToken = ACCESS_TOKEN_1,
-        refreshToken = "refreshToken",
-    ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
     ),
@@ -127,10 +121,6 @@ private val ACCOUNT_2 = AccountJson(
         kdfMemory = null,
         kdfParallelism = null,
         userDecryptionOptions = null,
-    ),
-    tokens = AccountTokensJson(
-        accessToken = ACCESS_TOKEN_2,
-        refreshToken = "refreshToken",
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,

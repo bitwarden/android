@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -19,9 +18,7 @@ fun GetTokenResponseJson.Success.toUserState(
     environmentUrlData: EnvironmentUrlDataJson,
 ): UserStateJson {
     val accessToken = this.accessToken
-
-    @Suppress("UnsafeCallOnNullableType")
-    val jwtTokenData = parseJwtTokenDataOrNull(jwtToken = accessToken)!!
+    val jwtTokenData = requireNotNull(parseJwtTokenDataOrNull(jwtToken = accessToken))
     val userId = jwtTokenData.userId
 
     val account = AccountJson(
@@ -44,10 +41,6 @@ fun GetTokenResponseJson.Success.toUserState(
             kdfMemory = this.kdfMemory,
             kdfParallelism = this.kdfParallelism,
             userDecryptionOptions = this.userDecryptionOptions,
-        ),
-        tokens = AccountTokensJson(
-            accessToken = accessToken,
-            refreshToken = this.refreshToken,
         ),
         settings = AccountJson.Settings(
             environmentUrlData = environmentUrlData,

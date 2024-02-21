@@ -20,6 +20,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.encodeToJsonElement
@@ -48,7 +49,7 @@ class AuthDiskSourceTest {
 
     @Test
     fun `initialization should kick off a legacy migration if necessary`() {
-        every { legacySecureStorageMigrator.migrateIfNecessary() }
+        verify(exactly = 1) { legacySecureStorageMigrator.migrateIfNecessary() }
     }
 
     @Test
@@ -148,6 +149,9 @@ class AuthDiskSourceTest {
         authDiskSource.userStateFlow.test {
             // The initial values of the Flow and the property are in sync
             assertNull(authDiskSource.userState)
+            assertNull(awaitItem())
+
+            // Extra emission from migration logic
             assertNull(awaitItem())
 
             // Updating the repository updates shared preferences

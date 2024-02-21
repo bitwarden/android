@@ -51,12 +51,6 @@ class AuthDiskSourceImpl(
 ),
     AuthDiskSource {
 
-    init {
-        // We must migrate if necessary before any of the migrated values would be initialized
-        // and accessed.
-        legacySecureStorageMigrator.migrateIfNecessary()
-    }
-
     private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
@@ -64,6 +58,27 @@ class AuthDiskSourceImpl(
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Policy>?>>()
     private val mutableAccountTokensFlowMap =
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
+    private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
+
+    override var userState: UserStateJson?
+        get() = getString(key = STATE_KEY)?.let { json.decodeFromStringOrNull(it) }
+        set(value) {
+            putString(
+                key = STATE_KEY,
+                value = value?.let { json.encodeToString(value) },
+            )
+            mutableUserStateFlow.tryEmit(value)
+        }
+
+    init {
+        // We must migrate if necessary before any of the migrated values would be initialized
+        // and accessed.
+        legacySecureStorageMigrator.migrateIfNecessary()
+
+        // We must migrate the tokens from being stored in the UserState(shared preferences) to
+        // being stored separately in encrypted shared preferences.
+        migrateAccountTokens()
+    }
 
     override val uniqueAppId: String
         get() = getString(key = UNIQUE_APP_ID_KEY) ?: generateAndStoreUniqueAppId()
@@ -86,21 +101,9 @@ class AuthDiskSourceImpl(
             )
         }
 
-    override var userState: UserStateJson?
-        get() = getString(key = STATE_KEY)?.let { json.decodeFromStringOrNull(it) }
-        set(value) {
-            putString(
-                key = STATE_KEY,
-                value = value?.let { json.encodeToString(value) },
-            )
-            mutableUserStateFlow.tryEmit(value)
-        }
-
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
-
-    private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     override fun clearData(userId: String) {
         storeLastActiveTimeMillis(userId = userId, lastActiveTimeMillis = null)
@@ -357,4 +360,21 @@ class AuthDiskSourceImpl(
         mutableAccountTokensFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
+
+    private fun migrateAccountTokens() {
+        userState
+            ?.accounts
+            .orEmpty()
+            .values
+            .forEach { accountJson ->
+                @Suppress("DEPRECATION")
+                accountJson.tokens?.let { storeAccountTokens(accountJson.profile.userId, it) }
+            }
+        userState = userState?.copy(
+            accounts = userState
+                ?.accounts
+                ?.mapValues { (_, accountJson) -> accountJson.copy(tokens = null) }
+                .orEmpty(),
+        )
+    }
 }

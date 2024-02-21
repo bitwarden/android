@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -27,7 +28,6 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -78,10 +78,12 @@ class PushManagerTest {
 
         @BeforeEach
         fun setup() {
-            val account = mockk<AccountJson> {
-                every { isLoggedIn } returns false
-            }
-            authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
+            val accountTokens = AccountTokensJson(
+                accessToken = "accessToken",
+                refreshToken = "refreshToken",
+            )
+            authDiskSource.storeAccountTokens(userId, accountTokens)
+            authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk<AccountJson>()))
         }
 
         @Test
@@ -159,10 +161,12 @@ class PushManagerTest {
 
         @Test
         fun `onMessageReceived logout should emit to logoutFlow`() = runTest {
-            val account = mockk<AccountJson> {
-                every { isLoggedIn } returns true
-            }
-            authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
+            val accountTokens = AccountTokensJson(
+                accessToken = "accessToken",
+                refreshToken = "refreshToken",
+            )
+            authDiskSource.storeAccountTokens(userId, accountTokens)
+            authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk<AccountJson>()))
 
             pushManager.logoutFlow.test {
                 pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
@@ -178,10 +182,9 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 val userId = "any user ID"
-                val account = mockk<AccountJson> {
-                    every { isLoggedIn } returns false
-                }
-                authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
+                authDiskSource.storeAccountTokens(userId, null)
+                authDiskSource.userState =
+                    UserStateJson(userId, mapOf(userId to mockk<AccountJson>()))
             }
 
             @Test
@@ -242,9 +245,12 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 val userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"
-                val account = mockk<AccountJson> {
-                    every { isLoggedIn } returns true
-                }
+                val accountTokens = AccountTokensJson(
+                    accessToken = "accessToken",
+                    refreshToken = "refreshToken",
+                )
+                authDiskSource.storeAccountTokens(userId, accountTokens)
+                val account = mockk<AccountJson>()
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
@@ -410,9 +416,12 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 val userId = "bad user ID"
-                val account = mockk<AccountJson> {
-                    every { isLoggedIn } returns true
-                }
+                val accountTokens = AccountTokensJson(
+                    accessToken = "accessToken",
+                    refreshToken = "refreshToken",
+                )
+                authDiskSource.storeAccountTokens(userId, accountTokens)
+                val account = mockk<AccountJson>()
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
@@ -550,9 +559,12 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 val userId = "any user ID"
-                val account = mockk<AccountJson> {
-                    every { isLoggedIn } returns true
-                }
+                val accountTokens = AccountTokensJson(
+                    accessToken = "accessToken",
+                    refreshToken = "refreshToken",
+                )
+                authDiskSource.storeAccountTokens(userId, accountTokens)
+                val account = mockk<AccountJson>()
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
@@ -620,9 +632,8 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 val userId = "any user ID"
-                val account = mockk<AccountJson> {
-                    every { isLoggedIn } returns false
-                }
+                authDiskSource.storeAccountTokens(userId = userId, accountTokens = null)
+                val account = mockk<AccountJson>()
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
@@ -677,9 +688,12 @@ class PushManagerTest {
             @BeforeEach
             fun setUp() {
                 pushDiskSource.storeCurrentPushToken(userId, existingToken)
-                val account = mockk<AccountJson> {
-                    every { isLoggedIn } returns true
-                }
+                val accountTokens = AccountTokensJson(
+                    accessToken = "accessToken",
+                    refreshToken = "refreshToken",
+                )
+                authDiskSource.storeAccountTokens(userId, accountTokens)
+                val account = mockk<AccountJson>()
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
