@@ -6,6 +6,7 @@ import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class TwoFactorRequiredExtensionTest {
@@ -62,7 +63,7 @@ class TwoFactorRequiredExtensionTest {
     }
 
     @Test
-    fun `twoFactorDuoAuthUrl returns empty string when no DUO AuthUrl is present`() {
+    fun `twoFactorDuoAuthUrl returns null when no DUO AuthUrl is present`() {
         val subject = GetTokenResponseJson.TwoFactorRequired(
             authMethodsData = mapOf(
                 TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("AuthUrl" to JsonNull)),
@@ -70,7 +71,7 @@ class TwoFactorRequiredExtensionTest {
             captchaToken = null,
             ssoToken = null,
         )
-        assertEquals("", subject.twoFactorDuoAuthUrl)
+        assertNull(subject.twoFactorDuoAuthUrl)
     }
 
     @Test

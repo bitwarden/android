@@ -249,8 +249,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick login should emit NavigateToDuo when auth method is Duo`() = runTest {
+    fun `ContinueButtonClick login should emit NavigateToDuo when auth method is Duo and authUrl is non-null`() = runTest {
         val authMethodsData = mapOf(
             TwoFactorAuthMethod.DUO to JsonObject(
                 mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")),
@@ -278,6 +279,35 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
         verify {
             Uri.parse("bitwarden.com")
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick login should emit ShowToast when auth method is Duo and authUrl is null`() = runTest {
+        val authMethodsData = mapOf(
+            TwoFactorAuthMethod.DUO to JsonObject(
+                mapOf("Nothing" to JsonPrimitive("Nothing")),
+            ),
+        )
+        val response = GetTokenResponseJson.TwoFactorRequired(
+            authMethodsData = authMethodsData,
+            captchaToken = null,
+            ssoToken = null,
+        )
+        every { authRepository.twoFactorResponse } returns response
+        val mockkUri = mockk<Uri>()
+        val viewModel = createViewModel(
+            state = DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.DUO,
+            ),
+        )
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+            assertEquals(
+                TwoFactorLoginEvent.ShowToast("Duo not yet supported".asText()),
+                awaitItem(),
+            )
         }
     }
 
