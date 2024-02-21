@@ -1,5 +1,5 @@
 ---
-name: Build
+name: Build Beta
 
 on:
   workflow_dispatch:
