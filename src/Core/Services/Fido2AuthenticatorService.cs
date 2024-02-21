@@ -66,7 +66,7 @@ namespace Bit.Core.Services
                     throw new NotAllowedError();
                 }
 
-                cipher.Login.Fido2Credentials = [fido2Credential];
+                cipher.Login.Fido2Credentials = new List<Fido2CredentialView> { fido2Credential };
                 var reencrypted = await _cipherService.EncryptAsync(cipher);
                 await _cipherService.SaveWithServerAsync(reencrypted);
                 credentialId = fido2Credential.CredentialId;
@@ -287,7 +287,7 @@ namespace Bit.Core.Services
                 UserName = makeCredentialsParams.UserEntity.Name,
                 CounterValue = 0,
                 RpName = makeCredentialsParams.RpEntity.Name,
-                // UserDisplayName = makeCredentialsParams.UserEntity.DisplayName,
+                UserDisplayName = makeCredentialsParams.UserEntity.DisplayName,
                 DiscoverableValue = makeCredentialsParams.RequireResidentKey,
                 CreationDate = DateTime.UtcNow
             };
@@ -316,12 +316,12 @@ namespace Bit.Core.Services
             );
             authData.Add(flags);
 
-            authData.AddRange([
+            authData.AddRange(new List<byte> {
                 (byte)(counter >> 24),
                 (byte)(counter >> 16),
                 (byte)(counter >> 8),
                 (byte)counter
-            ]);
+            });
 
             if (isAttestation)
             {

@@ -12,19 +12,17 @@ using Bit.Core.Utilities;
 
 namespace Bit.iOS.Autofill
 {
-    public partial class LoginSearchViewController : ExtendedUITableViewController
+    public partial class LoginSearchViewController : ExtendedUITableViewController, ILoginListViewController
     {
         public LoginSearchViewController(IntPtr handle)
             : base(handle)
         {
             DismissModalAction = Cancel;
-            PasswordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
         }
 
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
         public bool FromList { get; set; }
-        public IPasswordRepromptService PasswordRepromptService { get; private set; }
 
         public async override void ViewDidLoad()
         {
@@ -39,7 +37,7 @@ namespace Bit.iOS.Autofill
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
             SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
-            await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
+            await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
         }
 
         public override void ViewDidAppear(bool animated)
@@ -61,13 +59,13 @@ namespace Bit.iOS.Autofill
             }
             else
             {
-                CPViewController.CompleteRequest();
+                CPViewController.CancelRequest(AuthenticationServices.ASExtensionErrorCode.UserCanceled);
             }
         }
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("loginAddFromSearchSegue", this);
+            PerformSegue(SegueConstants.ADD_LOGIN_FROM_SEARCH, this);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -88,29 +86,19 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
+                await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
                 TableView.ReloadData();
             });
         }
 
-        public class TableSource : ExtensionTableSource
+        public class TableSource : BaseLoginListTableSource<LoginSearchViewController>
         {
-            private Context _context;
-            private LoginSearchViewController _controller;
-
             public TableSource(LoginSearchViewController controller)
-                : base(controller.Context, controller)
+                : base(controller)
             {
-                _context = controller.Context;
-                _controller = controller;
             }
 
-            public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-            {
-                await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
-                    _controller.CPViewController, _controller, _controller.PasswordRepromptService,
-                    "loginAddFromSearchSegue");
-            }
+            protected override string LoginAddSegue => SegueConstants.ADD_LOGIN_FROM_SEARCH;
         }
     }
 }

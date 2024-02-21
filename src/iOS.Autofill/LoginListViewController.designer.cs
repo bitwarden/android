@@ -13,6 +13,24 @@ namespace Bit.iOS.Autofill
 	partial class LoginListViewController
 	{
 		[Outlet]
+		UIKit.UIView _emptyView { get; set; }
+
+		[Outlet]
+		UIKit.UIButton _emptyViewButton { get; set; }
+
+		[Outlet]
+		UIKit.UIImageView _emptyViewImage { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _emptyViewLabel { get; set; }
+
+		[Outlet]
+		UIKit.UILabel _headerLabel { get; set; }
+
+		[Outlet]
+		UIKit.UIView _headerView { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIBarButtonItem AddBarButton { get; set; }
 
@@ -32,11 +50,44 @@ namespace Bit.iOS.Autofill
 		[Action ("AddBarButton_Activated:")]
 		partial void AddBarButton_Activated (UIKit.UIBarButtonItem sender);
 
+		[Action ("EmptyButton_Activated:")]
+		partial void EmptyButton_Activated (UIKit.UIButton sender);
+
 		[Action ("SearchBarButton_Activated:")]
 		partial void SearchBarButton_Activated (UIKit.UIBarButtonItem sender);
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_emptyView != null) {
+				_emptyView.Dispose ();
+				_emptyView = null;
+			}
+
+			if (_emptyViewButton != null) {
+				_emptyViewButton.Dispose ();
+				_emptyViewButton = null;
+			}
+
+			if (_emptyViewImage != null) {
+				_emptyViewImage.Dispose ();
+				_emptyViewImage = null;
+			}
+
+			if (_emptyViewLabel != null) {
+				_emptyViewLabel.Dispose ();
+				_emptyViewLabel = null;
+			}
+
+			if (_headerLabel != null) {
+				_headerLabel.Dispose ();
+				_headerLabel = null;
+			}
+
+			if (_headerView != null) {
+				_headerView.Dispose ();
+				_headerView = null;
+			}
+
 			if (AddBarButton != null) {
 				AddBarButton.Dispose ();
 				AddBarButton = null;

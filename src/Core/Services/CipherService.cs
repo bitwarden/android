@@ -1286,6 +1286,34 @@ namespace Bit.Core.Services
             cipher.PasswordHistory = encPhs;
         }
 
+        public async Task<string> CreateNewLoginForPasskeyAsync(string rpId)
+        {
+            var newCipher = new CipherView
+            {
+                Name = rpId,
+                Type = CipherType.Login,
+                Login = new LoginView
+                {
+                    Uris = new List<LoginUriView>
+                    {
+                        new LoginUriView { Uri = rpId }
+                    }
+                },
+                Card = new CardView(),
+                Identity = new IdentityView(),
+                SecureNote = new SecureNoteView
+                {
+                    Type = SecureNoteType.Generic
+                },
+                Reprompt = CipherRepromptType.None
+            };
+
+            var encryptedCipher = await EncryptAsync(newCipher);
+            await SaveWithServerAsync(encryptedCipher);
+
+            return encryptedCipher.Id;
+        }
+
         private class CipherLocaleComparer : IComparer<CipherView>
         {
             private readonly II18nService _i18nService;

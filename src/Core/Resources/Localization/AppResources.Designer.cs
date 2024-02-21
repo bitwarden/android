@@ -167,15 +167,6 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Credential Provider service
-        /// </summary>
-        public static string CredentialProviderService {
-            get {
-                return ResourceManager.GetString("CredentialProviderService", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Bitwarden needs attention - See &quot;Auto-fill Accessibility Service&quot; from Bitwarden settings.
         /// </summary>
         public static string AccessibilityOverlayPermissionAlert {
@@ -1328,6 +1319,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services..
+        /// </summary>
+        public static string BitwardenCredentialProviderGoToSettings {
+            get {
+                return ResourceManager.GetString("BitwardenCredentialProviderGoToSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitwarden Help Center.
         /// </summary>
         public static string BitwardenHelpCenter {
@@ -1540,6 +1540,15 @@ namespace Bit.Core.Resources.Localization {
         public static string CheckPassword {
             get {
                 return ResourceManager.GetString("CheckPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose a login to save this passkey to.
+        /// </summary>
+        public static string ChooseALoginToSaveThisPasskeyTo {
+            get {
+                return ResourceManager.GetString("ChooseALoginToSaveThisPasskeyTo", resourceCulture);
             }
         }
         
@@ -1900,6 +1909,24 @@ namespace Bit.Core.Resources.Localization {
         public static string CreatingAccount {
             get {
                 return ResourceManager.GetString("CreatingAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credential Provider service.
+        /// </summary>
+        public static string CredentialProviderService {
+            get {
+                return ResourceManager.GetString("CredentialProviderService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Android Credential Provider is used for managing passkeys for use with websites and other apps on your device..
+        /// </summary>
+        public static string CredentialProviderServiceExplanationLong {
+            get {
+                return ResourceManager.GetString("CredentialProviderServiceExplanationLong", resourceCulture);
             }
         }
         
@@ -5111,6 +5138,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwrite passkey?.
+        /// </summary>
+        public static string OverwritePasskey {
+            get {
+                return ResourceManager.GetString("OverwritePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ownership.
         /// </summary>
         public static string Ownership {
@@ -5134,6 +5170,15 @@ namespace Bit.Core.Resources.Localization {
         public static string Passkeys {
             get {
                 return ResourceManager.GetString("Passkeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkeys for {0}.
+        /// </summary>
+        public static string PasskeysForX {
+            get {
+                return ResourceManager.GetString("PasskeysForX", resourceCulture);
             }
         }
         
@@ -5323,6 +5368,15 @@ namespace Bit.Core.Resources.Localization {
         public static string PasswordSafe {
             get {
                 return ResourceManager.GetString("PasswordSafe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords for {0}.
+        /// </summary>
+        public static string PasswordsForX {
+            get {
+                return ResourceManager.GetString("PasswordsForX", resourceCulture);
             }
         }
         
@@ -5828,6 +5882,24 @@ namespace Bit.Core.Resources.Localization {
         public static string SaveAttachmentSuccess {
             get {
                 return ResourceManager.GetString("SaveAttachmentSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save passkey.
+        /// </summary>
+        public static string SavePasskey {
+            get {
+                return ResourceManager.GetString("SavePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save passkey as new login.
+        /// </summary>
+        public static string SavePasskeyAsNewLogin {
+            get {
+                return ResourceManager.GetString("SavePasskeyAsNewLogin", resourceCulture);
             }
         }
         
@@ -6701,6 +6773,15 @@ namespace Bit.Core.Resources.Localization {
         public static string ThirtySeconds {
             get {
                 return ResourceManager.GetString("ThirtySeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item already contains a passkey. Are you sure you want to overwrite the current passkey?.
+        /// </summary>
+        public static string ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey {
+            get {
+                return ResourceManager.GetString("ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey", resourceCulture);
             }
         }
         
@@ -7695,15 +7776,6 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.
-        /// </summary>
-        public static string BitwardenCredentialProviderGoToSettings {
-            get {
-                return ResourceManager.GetString("BitwardenCredentialProviderGoToSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Word separator.
         /// </summary>
         public static string WordSeparator {
@@ -7718,15 +7790,6 @@ namespace Bit.Core.Resources.Localization {
         public static string XHours {
             get {
                 return ResourceManager.GetString("XHours", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The Android Credential Provider is used for managing passkeys for use with websites and other apps on your device.
-        /// </summary>
-        public static string CredentialProviderServiceExplanationLong {
-            get {
-                return ResourceManager.GetString("CredentialProviderServiceExplanationLong", resourceCulture);
             }
         }
         
