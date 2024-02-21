@@ -1574,6 +1574,103 @@ class VaultRepositoryTest {
         }
 
     @Test
+    fun `vaultDataStateFlow should return empty when last sync time is populated`() =
+        runTest {
+            val userId = "mockId-1"
+            coEvery {
+                vaultLockManager.waitUntilUnlocked(userId = userId)
+            } just runs
+            every {
+                settingsDiskSource.getLastSyncTime(userId = userId)
+            } returns clock.instant()
+
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setupEmptyDecryptionResults()
+            setupVaultDiskSourceFlows(
+                ciphersFlow = flowOf(emptyList()),
+                collectionsFlow = flowOf(emptyList()),
+                domainsFlow = flowOf(
+                    SyncResponseJson.Domains(
+                        globalEquivalentDomains = emptyList(),
+                        equivalentDomains = emptyList(),
+                    ),
+                ),
+                foldersFlow = flowOf(emptyList()),
+                sendsFlow = flowOf(emptyList()),
+            )
+
+            turbineScope {
+                val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+                val collectionsStateFlow =
+                    vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+                val foldersStateFlow = vaultRepository.foldersStateFlow.testIn(backgroundScope)
+                val sendsStateFlow = vaultRepository.sendDataStateFlow.testIn(backgroundScope)
+                val domainsStateFlow = vaultRepository.domainsStateFlow.testIn(backgroundScope)
+
+                assertEquals(
+                    DataState.Loaded(emptyList<CipherView>()),
+                    ciphersStateFlow.awaitItem(),
+                )
+                assertEquals(
+                    DataState.Loaded(emptyList<CollectionView>()),
+                    collectionsStateFlow.awaitItem(),
+                )
+                assertEquals(
+                    DataState.Loaded(emptyList<FolderView>()),
+                    foldersStateFlow.awaitItem(),
+                )
+                assertEquals(
+                    DataState.Loaded(SendData(sendViewList = emptyList())),
+                    sendsStateFlow.awaitItem(),
+                )
+                assertEquals(
+                    DataState.Loaded(
+                        DomainsData(
+                            equivalentDomains = emptyList(),
+                            globalEquivalentDomains = emptyList(),
+                        ),
+                    ),
+                    domainsStateFlow.awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `vaultDataStateFlow should return loading when last sync time is null`() =
+        runTest {
+            val userId = "mockId-1"
+            coEvery {
+                vaultLockManager.waitUntilUnlocked(userId = userId)
+            } just runs
+            every {
+                settingsDiskSource.getLastSyncTime(userId = userId)
+            } returns null
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            setupEmptyDecryptionResults()
+            setupVaultDiskSourceFlows(
+                ciphersFlow = flowOf(emptyList()),
+                collectionsFlow = flowOf(emptyList()),
+                domainsFlow = flowOf(),
+                foldersFlow = flowOf(emptyList()),
+                sendsFlow = flowOf(emptyList()),
+            )
+            turbineScope {
+                val ciphersStateFlow = vaultRepository.ciphersStateFlow.testIn(backgroundScope)
+                val collectionsStateFlow =
+                    vaultRepository.collectionsStateFlow.testIn(backgroundScope)
+                val foldersStateFlow = vaultRepository.foldersStateFlow.testIn(backgroundScope)
+                val sendsStateFlow = vaultRepository.sendDataStateFlow.testIn(backgroundScope)
+                val domainsStateFlow = vaultRepository.domainsStateFlow.testIn(backgroundScope)
+
+                assertEquals(DataState.Loading, ciphersStateFlow.awaitItem())
+                assertEquals(DataState.Loading, collectionsStateFlow.awaitItem())
+                assertEquals(DataState.Loading, foldersStateFlow.awaitItem())
+                assertEquals(DataState.Loading, sendsStateFlow.awaitItem())
+                assertEquals(DataState.Loading, domainsStateFlow.awaitItem())
+            }
+        }
+
+    @Test
     fun `getVaultFolderStateFlow should update to NoNetwork when a sync fails from no network`() =
         runTest {
             val folderId = 1234
@@ -5461,6 +5558,34 @@ class VaultRepositoryTest {
         coEvery { vaultDiskSource.getDomains(MOCK_USER_STATE.activeUserId) } returns domainsFlow
         coEvery { vaultDiskSource.getFolders(MOCK_USER_STATE.activeUserId) } returns foldersFlow
         coEvery { vaultDiskSource.getSends(MOCK_USER_STATE.activeUserId) } returns sendsFlow
+    }
+
+    private fun setupEmptyDecryptionResults() {
+        coEvery {
+            vaultSdkSource.decryptCipherList(
+                userId = MOCK_USER_STATE.activeUserId,
+                cipherList = emptyList(),
+            )
+        } returns emptyList<CipherView>().asSuccess()
+        coEvery {
+            vaultSdkSource.decryptFolderList(
+                userId = MOCK_USER_STATE.activeUserId,
+                folderList = emptyList(),
+            )
+        } returns emptyList<FolderView>().asSuccess()
+        coEvery {
+            vaultSdkSource.decryptCollectionList(
+                userId = MOCK_USER_STATE.activeUserId,
+                collectionList = emptyList(),
+            )
+        } returns emptyList<CollectionView>().asSuccess()
+
+        coEvery {
+            vaultSdkSource.decryptSendList(
+                userId = MOCK_USER_STATE.activeUserId,
+                sendList = emptyList(),
+            )
+        } returns emptyList<SendView>().asSuccess()
     }
 
     private suspend fun setupDataStateFlow(userId: String) {
