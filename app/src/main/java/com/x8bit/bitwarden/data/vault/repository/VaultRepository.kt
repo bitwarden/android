@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
+import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
@@ -323,4 +325,9 @@ interface VaultRepository : VaultLockManager {
      * Attempt to update a folder.
      */
     suspend fun updateFolder(folderId: String, folderView: FolderView): UpdateFolderResult
+
+    /**
+     *  Attempt to get the user's vault data for export.
+     */
+    suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult
 }

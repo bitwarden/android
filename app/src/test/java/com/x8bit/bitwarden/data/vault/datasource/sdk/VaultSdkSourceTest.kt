@@ -10,6 +10,7 @@ import com.bitwarden.core.Collection
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -24,6 +25,7 @@ import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientCrypto
+import com.bitwarden.sdk.ClientExporters
 import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
 import com.bitwarden.sdk.ClientVault
@@ -31,6 +33,8 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -49,14 +53,18 @@ class VaultSdkSourceTest {
     private val clientCrypto = mockk<ClientCrypto>()
     private val clientPlatform = mockk<ClientPlatform>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
-    private val clientVault = mockk<ClientVault>() {
+    private val clientVault = mockk<ClientVault> {
         every { passwordHistory() } returns clientPasswordHistory
     }
-    private val client = mockk<Client>() {
+    private val clientExporters = mockk<ClientExporters> {
+        coEvery { exportVault(any(), any(), any()) }
+    }
+    private val client = mockk<Client> {
         every { auth() } returns clientAuth
         every { vault() } returns clientVault
         every { platform() } returns clientPlatform
         every { crypto() } returns clientCrypto
+        every { exporters() } returns clientExporters
     }
     private val sdkClientManager = mockk<SdkClientManager> {
         every { getOrCreateClient(any()) } returns client
@@ -847,4 +855,43 @@ class VaultSdkSourceTest {
             result,
         )
     }
+
+    @Test
+    fun `exportVaultDataToString should call SDK and return a Result with the correct data`() =
+        runTest {
+            val userId = "userId"
+            val expected = "TestResult"
+
+            val format = ExportFormat.Json
+            val ciphers = listOf(createMockSdkCipher(1))
+            val folders = listOf(createMockSdkFolder(1))
+
+            coEvery {
+                clientExporters.exportVault(
+                    folders = folders,
+                    ciphers = ciphers,
+                    format = format,
+                )
+            } returns expected
+
+            val result = vaultSdkSource.exportVaultDataToString(
+                userId = userId,
+                folders = folders,
+                ciphers = ciphers,
+                format = ExportFormat.Json,
+            )
+
+            coVerify {
+                clientExporters.exportVault(
+                    folders = folders,
+                    ciphers = ciphers,
+                    format = format,
+                )
+            }
+
+            assertEquals(
+                expected.asSuccess(),
+                result,
+            )
+        }
 }

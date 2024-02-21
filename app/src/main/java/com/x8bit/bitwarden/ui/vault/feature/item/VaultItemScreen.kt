@@ -114,7 +114,7 @@ fun VaultItemScreen(
 
             is VaultItemEvent.NavigateToSelectAttachmentSaveLocation -> {
                 fileChooserLauncher.launch(
-                    intentManager.createAttachmentChooserIntent(event.fileName),
+                    intentManager.createDocumentIntent(event.fileName),
                 )
             }
         }

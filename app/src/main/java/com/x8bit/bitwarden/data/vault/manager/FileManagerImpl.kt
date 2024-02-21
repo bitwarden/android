@@ -96,6 +96,23 @@ class FileManagerImpl(
         }
     }
 
+    override suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean {
+        @Suppress("TooGenericExceptionCaught")
+        return try {
+            withContext(dispatcherManager.io) {
+                context
+                    .contentResolver
+                    .openOutputStream(fileUri)
+                    ?.use { outputStream ->
+                        outputStream.write(dataString.toByteArray())
+                    }
+            }
+            true
+        } catch (exception: RuntimeException) {
+            false
+        }
+    }
+
     override suspend fun uriToByteArray(fileUri: Uri): ByteArray =
         withContext(dispatcherManager.io) {
             context

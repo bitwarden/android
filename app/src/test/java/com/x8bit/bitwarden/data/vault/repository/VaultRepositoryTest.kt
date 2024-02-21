@@ -8,6 +8,7 @@ import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.Folder
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
@@ -92,6 +93,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
+import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
@@ -5448,6 +5450,63 @@ class VaultRepositoryTest {
                     folder = folder,
                 )
             }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `exportVaultDataToString should return a success result when data is successfully converted for export`() =
+        runTest {
+            val format = ExportFormat.Json
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+
+            coEvery {
+                vaultDiskSource.getCiphers(userId)
+            } returns flowOf(listOf(createMockCipher(1)))
+
+            coEvery {
+                vaultDiskSource.getFolders(userId)
+            } returns flowOf(listOf(createMockFolder(1)))
+
+            coEvery {
+                vaultSdkSource.exportVaultDataToString(userId, any(), any(), format)
+            } returns "TestResult".asSuccess()
+
+            val expected = ExportVaultDataResult.Success(vaultData = "TestResult")
+            val result = vaultRepository.exportVaultDataToString(format = format)
+
+            assertEquals(
+                expected,
+                result,
+            )
+        }
+
+    @Test
+    fun `exportVaultDataToString should return a failure result when the data conversion fails`() =
+        runTest {
+            val format = ExportFormat.Json
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+
+            coEvery {
+                vaultDiskSource.getCiphers(userId)
+            } returns flowOf(listOf(createMockCipher(1)))
+
+            coEvery {
+                vaultDiskSource.getFolders(userId)
+            } returns flowOf(listOf(createMockFolder(1)))
+
+            coEvery {
+                vaultSdkSource.exportVaultDataToString(userId, any(), any(), format)
+            } returns Throwable("Fail").asFailure()
+
+            val expected = ExportVaultDataResult.Error
+            val result = vaultRepository.exportVaultDataToString(format = format)
+
+            assertEquals(
+                expected,
+                result,
+            )
         }
 
     //region Helper functions

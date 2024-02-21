@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
@@ -36,13 +37,25 @@ class ExportVaultScreenTest : BaseComposeTest() {
         every { stateFlow } returns mutableStateFlow
     }
 
+    private val intentManager = mockk<IntentManager>(relaxed = true)
+
     @Before
     fun setUp() {
         composeTestRule.setContent {
             ExportVaultScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
                 viewModel = viewModel,
+                intentManager = intentManager,
             )
+        }
+    }
+
+    @Test
+    fun `NavigateToSelectExportDataLocation should invoke createDocumentIntent`() {
+        mutableEventFlow.tryEmit(ExportVaultEvent.NavigateToSelectExportDataLocation("test.json"))
+
+        verify(exactly = 1) {
+            intentManager.createDocumentIntent("test.json")
         }
     }
 
@@ -60,6 +73,23 @@ class ExportVaultScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.onNodeWithText("Error message").isDisplayed()
+    }
+
+    @Test
+    fun `progress dialog should be displayed according to state`() {
+        val loadingMessage = "loading..."
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = ExportVaultState.DialogState.Loading(loadingMessage.asText()),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(loadingMessage)
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
     }
 
     @Test
@@ -199,5 +229,6 @@ private val DEFAULT_STATE = ExportVaultState(
     dialogState = null,
     exportFormat = ExportVaultFormat.JSON,
     passwordInput = "",
+    exportData = "",
     policyPreventsExport = false,
 )

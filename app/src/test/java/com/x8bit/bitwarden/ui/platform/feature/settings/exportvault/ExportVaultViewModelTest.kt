@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
@@ -8,15 +9,25 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
+import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import java.util.TimeZone
 
 class ExportVaultViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk()
@@ -27,7 +38,25 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns emptyList()
     }
 
-    private val savedStateHandle = SavedStateHandle()
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
+
+    private val vaultRepository: VaultRepository = mockk {
+        coEvery { exportVaultDataToString(any()) } returns mockk()
+    }
+    private val fileManager: FileManager = mockk()
+
+    @BeforeEach
+    fun setup() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
+    }
+
+    @AfterEach
+    fun teardown() {
+        TimeZone.setDefault(null)
+    }
 
     @Test
     fun `initial state should be correct`() = runTest {
@@ -59,25 +88,26 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ConfirmExportVaultClicked correct password should emit ShowToast`() = runTest {
-        val password = "password"
-        coEvery {
-            authRepository.validatePassword(
-                password = password,
-            )
-        } returns ValidatePasswordResult.Success(isValid = true)
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.validatePassword(
+                    password = password,
+                )
+            } returns ValidatePasswordResult.Success(isValid = true)
 
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
 
-            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
-            assertEquals(
-                ExportVaultEvent.ShowToast("Not yet implemented".asText()),
-                awaitItem(),
-            )
+                viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+                coVerify {
+                    vaultRepository.exportVaultDataToString(any())
+                }
+            }
         }
-    }
 
     @Test
     fun `ConfirmExportVaultClicked blank password should show an error`() = runTest {
@@ -191,11 +221,135 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel(): ExportVaultViewModel =
+    @Test
+    fun `ReceiveExportVaultDataToStringResult should update state to error if result is error`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult(
+                    result = ExportVaultDataResult.Error,
+                ),
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = ExportVaultState.DialogState.Error(
+                        title = null,
+                        message = R.string.export_vault_failure.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ReceiveExportVaultDataToStringResult should emit NavigateToSelectExportDataLocation on result success`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult(
+                        result = ExportVaultDataResult.Success(vaultData = "TestVaultData"),
+                    ),
+                )
+
+                assertEquals(
+                    ExportVaultEvent.NavigateToSelectExportDataLocation(
+                        fileName = "bitwarden_export_20231027120000.json",
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ExportLocationReceive should update state to error if exportData is null`() {
+        val viewModel = createViewModel()
+        val uri = mockk<Uri>()
+
+        viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(fileUri = uri))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = null,
+                    message = R.string.export_vault_failure.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `ExportLocationReceive should update state to error if saving the data fails`() =
+        runTest {
+            val exportData = "TestExportVaultData"
+            val viewModel = createViewModel(
+                DEFAULT_STATE.copy(
+                    exportData = exportData,
+                ),
+            )
+            val uri = mockk<Uri>()
+            coEvery {
+                fileManager.stringToUri(fileUri = any(), dataString = exportData)
+            } returns false
+
+            viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(fileUri = uri))
+
+            coVerify {
+                fileManager.stringToUri(fileUri = any(), dataString = exportData)
+            }
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    exportData = exportData,
+                    dialogState = ExportVaultState.DialogState.Error(
+                        title = null,
+                        message = R.string.export_vault_failure.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Test
+    fun `ExportLocationReceive should emit ShowToast on success`() = runTest {
+        val exportData = "TestExportVaultData"
+        val viewModel = createViewModel(
+            DEFAULT_STATE.copy(
+                exportData = exportData,
+            ),
+        )
+        val uri = mockk<Uri>()
+        coEvery { fileManager.stringToUri(fileUri = any(), dataString = exportData) } returns true
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(uri))
+
+            coVerify { fileManager.stringToUri(fileUri = any(), dataString = exportData) }
+
+            assertEquals(
+                ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()),
+                awaitItem(),
+            )
+        }
+    }
+
+    private fun createViewModel(
+        initialState: ExportVaultState? = null,
+    ): ExportVaultViewModel =
         ExportVaultViewModel(
             authRepository = authRepository,
             policyManager = policyManager,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = SavedStateHandle(
+                initialState = mapOf("state" to initialState),
+            ),
+            fileManager = fileManager,
+            vaultRepository = vaultRepository,
+            clock = clock,
         )
 }
 
@@ -203,5 +357,6 @@ private val DEFAULT_STATE = ExportVaultState(
     dialogState = null,
     exportFormat = ExportVaultFormat.JSON,
     passwordInput = "",
+    exportData = null,
     policyPreventsExport = false,
 )

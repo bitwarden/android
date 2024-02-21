@@ -172,7 +172,7 @@ class IntentManagerImpl(
         return chooserIntent
     }
 
-    override fun createAttachmentChooserIntent(fileName: String): Intent =
+    override fun createDocumentIntent(fileName: String): Intent =
         Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             // Attempt to get the MIME type from the file extension
             val extension = MimeTypeMap.getFileExtensionFromUrl(fileName)

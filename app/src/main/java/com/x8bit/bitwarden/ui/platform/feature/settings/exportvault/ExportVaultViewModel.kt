@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -8,16 +9,24 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
+import com.x8bit.bitwarden.data.vault.manager.FileManager
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
+import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.toExportFormat
+import com.x8bit.bitwarden.ui.platform.util.fileExtension
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -25,15 +34,20 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the Export Vault screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class ExportVaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
+    private val vaultRepository: VaultRepository,
+    private val fileManager: FileManager,
+    private val clock: Clock,
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ExportVaultState(
             dialogState = null,
+            exportData = null,
             exportFormat = ExportVaultFormat.JSON,
             passwordInput = "",
             policyPreventsExport = policyManager
@@ -55,9 +69,18 @@ class ExportVaultViewModel @Inject constructor(
             ExportVaultAction.DialogDismiss -> handleDialogDismiss()
             is ExportVaultAction.ExportFormatOptionSelect -> handleExportFormatOptionSelect(action)
             is ExportVaultAction.PasswordInputChanged -> handlePasswordInputChanged(action)
+            is ExportVaultAction.ExportLocationReceive -> handleExportLocationReceive(action)
 
             is ExportVaultAction.Internal.ReceiveValidatePasswordResult -> {
                 handleReceiveValidatePasswordResult(action)
+            }
+
+            is ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult -> {
+                handleReceivePrepareVaultDataResult(action)
+            }
+
+            is ExportVaultAction.Internal.SaveExportDataToUriResultReceive -> {
+                handleExportDataFinishedSavingToDisk(action)
             }
         }
     }
@@ -75,16 +98,11 @@ class ExportVaultViewModel @Inject constructor(
     private fun handleConfirmExportVaultClicked() {
         // Display an error alert if the user hasn't entered a password.
         if (mutableStateFlow.value.passwordInput.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
-                        message = R.string.validation_field_required.asText(
-                            R.string.master_password.asText(),
-                        ),
-                    ),
-                )
-            }
+            updateStateWithError(
+                R.string.validation_field_required.asText(
+                    R.string.master_password.asText(),
+                ),
+            )
             return
         }
 
@@ -117,6 +135,27 @@ class ExportVaultViewModel @Inject constructor(
     }
 
     /**
+     * Save the vault data in the location.
+     */
+    private fun handleExportLocationReceive(action: ExportVaultAction.ExportLocationReceive) {
+        val exportData = state.exportData
+        if (exportData == null) {
+            updateStateWithError(R.string.export_vault_failure.asText())
+            return
+        }
+
+        viewModelScope.launch {
+            val result = fileManager
+                .stringToUri(
+                    fileUri = action.fileUri,
+                    dataString = exportData,
+                )
+
+            sendAction(ExportVaultAction.Internal.SaveExportDataToUriResultReceive(result))
+        }
+    }
+
+    /**
      * Update the state with the new password input.
      */
     private fun handlePasswordInputChanged(action: ExportVaultAction.PasswordInputChanged) {
@@ -133,32 +172,89 @@ class ExportVaultViewModel @Inject constructor(
     ) {
         when (action.result) {
             ValidatePasswordResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = ExportVaultState.DialogState.Error(
-                            title = null,
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                updateStateWithError(R.string.generic_error_message.asText())
             }
 
             is ValidatePasswordResult.Success -> {
                 // Display an error dialog if the password is invalid.
                 if (!action.result.isValid) {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialogState = ExportVaultState.DialogState.Error(
-                                title = null,
-                                message = R.string.invalid_master_password.asText(),
-                            ),
-                        )
-                    }
-                } else {
-                    // TODO: BIT-1274, BIT-1275, and BIT-1276
-                    sendEvent(ExportVaultEvent.ShowToast("Not yet implemented".asText()))
+                    updateStateWithError(R.string.invalid_master_password.asText())
+                    return
+                }
+
+                mutableStateFlow.update {
+                    it.copy(dialogState = ExportVaultState.DialogState.Loading())
+                }
+
+                viewModelScope.launch {
+                    val result = vaultRepository.exportVaultDataToString(
+                        format = state.exportFormat.toExportFormat(state.passwordInput),
+                    )
+
+                    sendAction(
+                        ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult(
+                            result = result,
+                        ),
+                    )
                 }
             }
+        }
+    }
+
+    /**
+     * Show an error message or proceed to export the vault after receiving the data.
+     */
+    private fun handleReceivePrepareVaultDataResult(
+        action: ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult,
+    ) {
+        when (val result = action.result) {
+            is ExportVaultDataResult.Error -> {
+                updateStateWithError(
+                    message = R.string.export_vault_failure.asText(),
+                )
+            }
+
+            is ExportVaultDataResult.Success -> {
+                val date = clock.instant().toFormattedPattern(
+                    pattern = "yyyyMMddHHmmss",
+                )
+                val extension = state.exportFormat.fileExtension
+                val fileName = "bitwarden_export_$date.$extension"
+
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = null,
+                        passwordInput = "",
+                        exportData = result.vaultData,
+                    )
+                }
+
+                sendEvent(
+                    ExportVaultEvent.NavigateToSelectExportDataLocation(fileName),
+                )
+            }
+        }
+    }
+
+    private fun handleExportDataFinishedSavingToDisk(
+        action: ExportVaultAction.Internal.SaveExportDataToUriResultReceive,
+    ) {
+        if (!action.result) {
+            updateStateWithError(R.string.export_vault_failure.asText())
+            return
+        }
+
+        sendEvent(ExportVaultEvent.ShowToast(R.string.export_vault_success.asText()))
+    }
+
+    private fun updateStateWithError(message: Text) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = null,
+                    message = message,
+                ),
+            )
         }
     }
 }
@@ -168,6 +264,8 @@ class ExportVaultViewModel @Inject constructor(
  */
 @Parcelize
 data class ExportVaultState(
+    @IgnoredOnParcel
+    val exportData: String? = null,
     val dialogState: DialogState?,
     val exportFormat: ExportVaultFormat,
     val passwordInput: String,
@@ -192,7 +290,7 @@ data class ExportVaultState(
          */
         @Parcelize
         data class Loading(
-            val message: Text,
+            val message: Text = R.string.loading.asText(),
         ) : DialogState()
     }
 }
@@ -210,6 +308,11 @@ sealed class ExportVaultEvent {
      * Shows a toast with the given [message].
      */
     data class ShowToast(val message: Text) : ExportVaultEvent()
+
+    /**
+     *  Navigates to select a location where to save the vault data with the [fileName].
+     */
+    data class NavigateToSelectExportDataLocation(val fileName: String) : ExportVaultEvent()
 }
 
 /**
@@ -237,6 +340,13 @@ sealed class ExportVaultAction {
     data class ExportFormatOptionSelect(val option: ExportVaultFormat) : ExportVaultAction()
 
     /**
+     * Indicates the user has selected a location to save the file.
+     */
+    data class ExportLocationReceive(
+        val fileUri: Uri,
+    ) : ExportVaultAction()
+
+    /**
      * Indicates that the password input has changed.
      */
     data class PasswordInputChanged(val input: String) : ExportVaultAction()
@@ -245,6 +355,21 @@ sealed class ExportVaultAction {
      * Models actions that the [ExportVaultViewModel] might send itself.
      */
     sealed class Internal : ExportVaultAction() {
+
+        /**
+         * Indicates that the item has finished saving to disk.
+         */
+        data class SaveExportDataToUriResultReceive(
+            val result: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates that the result for exporting the vault data has been received.
+         */
+        data class ReceiveExportVaultDataToStringResult(
+            val result: ExportVaultDataResult,
+        ) : Internal()
+
         /**
          * Indicates that a validate password result has been received.
          */
