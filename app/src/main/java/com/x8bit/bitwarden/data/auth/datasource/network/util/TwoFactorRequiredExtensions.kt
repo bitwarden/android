@@ -32,14 +32,13 @@ val GetTokenResponseJson.TwoFactorRequired?.preferredAuthMethod: TwoFactorAuthMe
 /**
  * If it exists, return the value of the Duo auth url.
  */
-val GetTokenResponseJson.TwoFactorRequired?.twoFactorDuoAuthUrl: String
+val GetTokenResponseJson.TwoFactorRequired?.twoFactorDuoAuthUrl: String?
     get() = this
         ?.authMethodsData
         ?.duo
         ?.get("AuthUrl")
         ?.jsonPrimitive
         ?.contentOrNull
-        .orEmpty()
 
 /**
  * If it exists, return the value to display for the email used with two-factor authentication.

@@ -160,10 +160,19 @@ class TwoFactorLoginViewModel @Inject constructor(
      */
     private fun handleContinueButtonClick() {
         if (state.authMethod.isDuo) {
+            val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
+            // The url should not be empty unless the environment is somehow not supported.
             sendEvent(
-                event = TwoFactorLoginEvent.NavigateToDuo(
-                    uri = Uri.parse(authRepository.twoFactorResponse.twoFactorDuoAuthUrl),
-                ),
+                event = authUrl
+                    ?.let {
+                        TwoFactorLoginEvent.NavigateToDuo(
+                            uri = Uri.parse(it),
+                        )
+                    }
+                    ?: TwoFactorLoginEvent.ShowToast(
+                        // TODO BIT-1927 Update to use string resource
+                        message = "Duo not yet supported".asText(),
+                    ),
             )
         } else {
             initiateLogin()
