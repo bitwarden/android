@@ -110,17 +110,17 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_autofill.mobileprovision ./.github/secrets/dist_beta_native_autofill.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_autofill.mobileprovision ./.github/secrets/dist_beta_autofill.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_bitwarden.mobileprovision ./.github/secrets/dist_beta_native_bitwarden.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_bitwarden.mobileprovision ./.github/secrets/dist_beta_bitwarden.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_extension.mobileprovision ./.github/secrets/dist_beta_native_extension.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_extension.mobileprovision ./.github/secrets/dist_beta_extension.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_share_extension.mobileprovision ./.github/secrets/dist_beta_native_share_extension.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_share_extension.mobileprovision ./.github/secrets/dist_beta_share_extension.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_watch_app.mobileprovision ./.github/secrets/dist_beta_native_watch_app.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_watch_app.mobileprovision ./.github/secrets/dist_beta_watch_app.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_watch_app_extension.mobileprovision ./.github/secrets/dist_beta_native_watch_app_extension.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_watch_app_extension.mobileprovision ./.github/secrets/dist_beta_watch_app_extension.mobileprovision.gpg
 
       - name: Increment version
         run: |
@@ -145,7 +145,8 @@ jobs:
           echo "##### Updating Entitlements"
           echo "########################################"
 
-          perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+          perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>beta<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+          
         
       - name: Set up Keychain
         env:
@@ -165,12 +166,12 @@ jobs:
 
       - name: Set up provisioning profiles
         run: |
-          AUTOFILL_PROFILE_PATH=$HOME/secrets/dist_beta_native_autofill.mobileprovision
-          BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_beta_native_bitwarden.mobileprovision
-          EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_native_extension.mobileprovision
-          SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_native_share_extension.mobileprovision
-          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_beta_native_watch_app.mobileprovision
-          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_native_watch_app_extension.mobileprovision
+          AUTOFILL_PROFILE_PATH=$HOME/secrets/dist_beta_autofill.mobileprovision
+          BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden.mobileprovision
+          EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_extension.mobileprovision
+          SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_share_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_beta_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_watch_app_extension.mobileprovision
           PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
           mkdir -p "$PROFILES_DIR_PATH"
@@ -194,7 +195,9 @@ jobs:
           cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
 
       - name: Restore packages
-        run: dotnet restore
+        run: |
+          dotnet restore
+          dotnet build.cake --target iOS --variant beta
 
       - name: Bulid WatchApp
         run: |
