@@ -17,17 +17,16 @@ data class AccountJson(
     @SerialName("profile")
     val profile: Profile,
 
+    @Deprecated(
+        "This is always null except the first time after migrating from the Xamarin app. " +
+            "Please use the accountTokens stored in the AuthDiskSource.",
+    )
     @SerialName("tokens")
-    val tokens: AccountTokensJson,
+    val tokens: AccountTokensJson? = null,
 
     @SerialName("settings")
     val settings: Settings,
 ) {
-    /**
-     * Whether or not the account should be considered logged in.
-     */
-    val isLoggedIn: Boolean get() = tokens.accessToken != null
-
     /**
      * Represents a user's personal profile.
      *

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
 
@@ -26,10 +25,6 @@ fun RefreshTokenResponseJson.toUserStateJson(
             isEmailVerified = jwtTokenData.isEmailVerified,
             name = jwtTokenData.name,
             hasPremium = jwtTokenData.hasPremium,
-        ),
-        tokens = AccountTokensJson(
-            accessToken = accessToken,
-            refreshToken = this.refreshToken,
         ),
     )
 

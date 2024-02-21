@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -54,9 +53,7 @@ class RefreshTokenResponseJsonTest {
     }
 }
 
-private const val ACCESS_TOKEN = "accessToken"
 private const val ACCESS_TOKEN_UPDATED = "updatedAccessToken"
-private const val REFRESH_TOKEN = "refreshToken"
 private const val REFRESH_TOKEN_UPDATED = "updatedRefreshToken"
 private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
 private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
@@ -95,10 +92,6 @@ private val ACCOUNT_1 = AccountJson(
         kdfParallelism = 4,
         userDecryptionOptions = null,
     ),
-    tokens = AccountTokensJson(
-        accessToken = ACCESS_TOKEN,
-        refreshToken = REFRESH_TOKEN,
-    ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
     ),
@@ -111,10 +104,6 @@ private val ACCOUNT_1_UPDATED = ACCOUNT_1.copy(
         isEmailVerified = JWT_TOKEN_DATA.isEmailVerified,
         name = JWT_TOKEN_DATA.name,
         hasPremium = JWT_TOKEN_DATA.hasPremium,
-    ),
-    tokens = AccountTokensJson(
-        accessToken = ACCESS_TOKEN_UPDATED,
-        refreshToken = REFRESH_TOKEN_UPDATED,
     ),
 )
 
@@ -134,10 +123,6 @@ private val ACCOUNT_2 = AccountJson(
         kdfMemory = null,
         kdfParallelism = null,
         userDecryptionOptions = null,
-    ),
-    tokens = AccountTokensJson(
-        accessToken = "accessToken2",
-        refreshToken = "refreshToken2",
     ),
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,

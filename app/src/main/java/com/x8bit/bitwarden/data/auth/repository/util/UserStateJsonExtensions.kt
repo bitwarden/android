@@ -43,12 +43,14 @@ fun UserStateJson.toUpdatedUserStateJson(
 /**
  * Converts the given [UserStateJson] to a [UserState] using the given [vaultState].
  */
+@Suppress("LongParameterList")
 fun UserStateJson.toUserState(
     vaultState: List<VaultUnlockData>,
     userOrganizationsList: List<UserOrganizations>,
     hasPendingAccountAddition: Boolean,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
+    isLoggedInProvider: (userId: String) -> Boolean,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -71,7 +73,7 @@ fun UserStateJson.toUserState(
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
                     isPremium = accountJson.profile.hasPremium == true,
-                    isLoggedIn = accountJson.isLoggedIn,
+                    isLoggedIn = isLoggedInProvider(userId),
                     isVaultUnlocked = vaultUnlocked && !needsPasswordReset,
                     needsPasswordReset = needsPasswordReset,
                     organizations = userOrganizationsList

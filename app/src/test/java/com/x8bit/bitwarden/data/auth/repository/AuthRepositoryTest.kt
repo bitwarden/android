@@ -238,46 +238,49 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `authStateFlow should react to user state changes`() {
-        assertEquals(
-            AuthState.Unauthenticated,
-            repository.authStateFlow.value,
-        )
+    fun `authStateFlow should react to user state changes and account token changes`() = runTest {
+        repository.authStateFlow.test {
+            assertEquals(AuthState.Unauthenticated, awaitItem())
 
-        // Update the active user updates the state
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-        assertEquals(
-            AuthState.Authenticated(ACCESS_TOKEN),
-            repository.authStateFlow.value,
-        )
+            // Store the tokens, nothing happens yet since there is technically no active user yet
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1,
+            )
+            expectNoEvents()
+            // Update the active user, we are now authenticated
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), awaitItem())
 
-        // Updating the non-active user does not update the state
-        fakeAuthDiskSource.userState = MULTI_USER_STATE
-        assertEquals(
-            AuthState.Authenticated(ACCESS_TOKEN),
-            repository.authStateFlow.value,
-        )
+            // Adding a tokens for the non-active user does not update the state
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_2,
+                accountTokens = ACCOUNT_TOKENS_2,
+            )
+            expectNoEvents()
+            // Adding a non-active user does not update the state
+            fakeAuthDiskSource.userState = MULTI_USER_STATE
+            expectNoEvents()
 
-        // Clearing the tokens of the active state results in the Unauthenticated state
-        val updatedAccount = ACCOUNT_1.copy(
-            tokens = AccountTokensJson(
-                accessToken = null,
-                refreshToken = null,
-            ),
-        )
-        val updatedState = MULTI_USER_STATE.copy(
-            accounts = MULTI_USER_STATE
-                .accounts
-                .toMutableMap()
-                .apply {
-                    set(USER_ID_1, updatedAccount)
-                },
-        )
-        fakeAuthDiskSource.userState = updatedState
-        assertEquals(
-            AuthState.Unauthenticated,
-            repository.authStateFlow.value,
-        )
+            // Changing the active users tokens causes an update
+            val newAccessToken = "new_access_token"
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_1,
+                accountTokens = ACCOUNT_TOKENS_1.copy(accessToken = newAccessToken),
+            )
+            assertEquals(AuthState.Authenticated(newAccessToken), awaitItem())
+
+            // Change the active user causes an update
+            fakeAuthDiskSource.userState = MULTI_USER_STATE.copy(activeUserId = USER_ID_2)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN_2), awaitItem())
+
+            // Clearing the tokens of the active state results in the Unauthenticated state
+            fakeAuthDiskSource.storeAccountTokens(
+                userId = USER_ID_2,
+                accountTokens = null,
+            )
+            assertEquals(AuthState.Unauthenticated, awaitItem())
+        }
     }
 
     @Test
@@ -297,6 +300,7 @@ class AuthRepositoryTest {
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                isLoggedInProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -319,6 +323,7 @@ class AuthRepositoryTest {
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
+                isLoggedInProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -332,6 +337,7 @@ class AuthRepositoryTest {
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
+                isLoggedInProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -357,6 +363,7 @@ class AuthRepositoryTest {
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                isLoggedInProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -535,6 +542,7 @@ class AuthRepositoryTest {
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+            isLoggedInProvider = { false },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -542,6 +550,7 @@ class AuthRepositoryTest {
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+            isLoggedInProvider = { false },
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -648,7 +657,10 @@ class AuthRepositoryTest {
 
     @Test
     fun `refreshTokenSynchronously returns failure and logs out on failure`() = runTest {
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeAccountTokens(
+            userId = USER_ID_1,
+            accountTokens = ACCOUNT_TOKENS_1,
+        )
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
         } returns Throwable("Fail").asFailure()
@@ -662,6 +674,10 @@ class AuthRepositoryTest {
 
     @Test
     fun `refreshTokenSynchronously returns success and update user state on success`() = runTest {
+        fakeAuthDiskSource.storeAccountTokens(
+            userId = USER_ID_1,
+            accountTokens = ACCOUNT_TOKENS_1,
+        )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
@@ -2674,6 +2690,7 @@ class AuthRepositoryTest {
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+            isLoggedInProvider = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -2704,6 +2721,7 @@ class AuthRepositoryTest {
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+            isLoggedInProvider = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -2732,6 +2750,7 @@ class AuthRepositoryTest {
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+            isLoggedInProvider = { false },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         assertEquals(
@@ -3043,6 +3062,7 @@ class AuthRepositoryTest {
     @Test
     fun `syncOrgKeysFlow emissions should refresh access token and sync`() {
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = ACCOUNT_TOKENS_1)
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
         } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
@@ -3210,10 +3230,6 @@ class AuthRepositoryTest {
                 kdfParallelism = 4,
                 userDecryptionOptions = null,
             ),
-            tokens = AccountTokensJson(
-                accessToken = ACCESS_TOKEN,
-                refreshToken = REFRESH_TOKEN,
-            ),
             settings = AccountJson.Settings(
                 environmentUrlData = null,
             ),
@@ -3234,10 +3250,6 @@ class AuthRepositoryTest {
                 kdfMemory = null,
                 kdfParallelism = null,
                 userDecryptionOptions = null,
-            ),
-            tokens = AccountTokensJson(
-                accessToken = ACCESS_TOKEN_2,
-                refreshToken = "refreshToken",
             ),
             settings = AccountJson.Settings(
                 environmentUrlData = null,
@@ -3261,6 +3273,14 @@ class AuthRepositoryTest {
                 USER_ID_1 to ACCOUNT_1,
                 USER_ID_2 to ACCOUNT_2,
             ),
+        )
+        private val ACCOUNT_TOKENS_1: AccountTokensJson = AccountTokensJson(
+            accessToken = ACCESS_TOKEN,
+            refreshToken = REFRESH_TOKEN,
+        )
+        private val ACCOUNT_TOKENS_2: AccountTokensJson = AccountTokensJson(
+            accessToken = ACCESS_TOKEN_2,
+            refreshToken = "refreshToken",
         )
         private val USER_ORGANIZATIONS = listOf(
             UserOrganizations(

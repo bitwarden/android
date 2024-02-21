@@ -5,7 +5,6 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -72,25 +71,10 @@ class UserLogoutManagerImpl(
     }
 
     override fun softLogout(userId: String) {
-        val userState = authDiskSource.userState ?: return
-        val updatedAccount = userState
-            .accounts[userId]
-            // Clear the tokens for the current user if present
-            ?.copy(
-                tokens = AccountTokensJson(
-                    accessToken = null,
-                    refreshToken = null,
-                ),
-            )
-        authDiskSource.userState = userState
-            .copy(
-                accounts = userState
-                    .accounts
-                    .toMutableMap()
-                    .apply {
-                        updatedAccount?.let { set(userId, updatedAccount) }
-                    },
-            )
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = null,
+        )
 
         // Save any data that will still need to be retained after otherwise clearing all dat
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
