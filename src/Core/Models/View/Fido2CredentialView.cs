@@ -45,7 +45,7 @@ namespace Bit.Core.Models.View
 
         public bool DiscoverableValue {
             get => bool.TryParse(Discoverable, out var discoverable) && discoverable;
-            set => Discoverable = value.ToString();
+            set => Discoverable = value.ToString().ToLower();
         }
 
         public override string SubTitle => UserName;
