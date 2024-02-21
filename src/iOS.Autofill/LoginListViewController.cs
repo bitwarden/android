@@ -13,6 +13,7 @@ using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using CoreFoundation;
+using CoreGraphics;
 using Foundation;
 using UIKit;
 
@@ -61,8 +62,12 @@ namespace Bit.iOS.Autofill
                 TableView.EstimatedRowHeight = 44;
                 TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
                 TableView.Source = new TableSource(this);
-                TableView.SectionHeaderHeight = 55;
-                TableView.RegisterClassForHeaderFooterViewReuse(typeof(HeaderItemView), HEADER_SECTION_IDENTIFIER);
+                if (Context.IsCreatingPasskey)
+                {
+                    TableView.SectionHeaderHeight = 55;
+                    TableView.RegisterClassForHeaderFooterViewReuse(typeof(HeaderItemView), HEADER_SECTION_IDENTIFIER);
+                }
+
                 if (UIDevice.CurrentDevice.CheckSystemVersion(15, 0))
                 {
                     TableView.SectionHeaderTopPadding = 0;
@@ -289,7 +294,7 @@ namespace Bit.iOS.Autofill
                         return headerItemView;
                     }
 
-                    return base.GetViewForHeader(tableView, section);
+                    return new UIView(CGRect.Empty);// base.GetViewForHeader(tableView, section);
                 }
                 catch (Exception ex)
                 {
