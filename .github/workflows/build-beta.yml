@@ -110,23 +110,17 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_autofill.mobileprovision \
-            ./.github/secrets/dist_beta_native_autofill.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_native_autofill.mobileprovision ./.github/secrets/dist_beta_native_autofill.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_bitwarden.mobileprovision \
-            ./.github/secrets/dist_beta_native_bitwarden.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_native_bitwarden.mobileprovision ./.github/secrets/dist_beta_native_bitwarden.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_extension.mobileprovision \
-            ./.github/secrets/dist_beta_native_extension.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_native_extension.mobileprovision ./.github/secrets/dist_beta_native_extension.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_share_extension.mobileprovision \
-            ./.github/secrets/dist_beta_native_share_extension.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_native_share_extension.mobileprovision ./.github/secrets/dist_beta_native_share_extension.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_watch_app.mobileprovision \
-            ./.github/secrets/dist_beta_native_watch_app.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_native_watch_app.mobileprovision ./.github/secrets/dist_beta_native_watch_app.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_native_watch_app_extension.mobileprovision \
-            ./.github/secrets/dist_beta_native_watch_app_extension.mobileprovision.gpg
+            --output $HOME/secrets/dist_beta_native_watch_app_extension.mobileprovision ./.github/secrets/dist_beta_native_watch_app_extension.mobileprovision.gpg
 
       - name: Increment version
         run: |
