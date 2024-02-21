@@ -3,6 +3,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Foundation;
 using UIKit;
 
 namespace Bit.iOS.Core.Utilities
@@ -146,7 +147,7 @@ namespace Bit.iOS.Core.Utilities
 
             return new ASPasskeyCredentialIdentity(cipher.Login.MainFido2Credential.RpId,
                 cipher.Login.MainFido2Credential.UserName,
-                cipher.Login.MainFido2Credential.CredentialId,
+                NSData.FromArray(cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat()),
                 cipher.Login.MainFido2Credential.UserHandle,
                 cipher.Id);
         }
