@@ -29,8 +29,8 @@ namespace Bit.Core.Test.Services
                 Challenge = RandomBytes(32),
                 PubKeyCredParams = [
                     new PublicKeyCredentialParameters {
-                        Type = "public-key",
-                        Alg = -7
+                        Type = Constants.DefaultFido2CredentialType,
+                        Alg = (int) Fido2AlgorithmIdentifier.ES256
                     }
                 ],
                 Rp = new PublicKeyCredentialRpEntity {
@@ -169,10 +169,10 @@ namespace Bit.Core.Test.Services
             _params.PubKeyCredParams = [
                 new PublicKeyCredentialParameters {
                     Type = "not-supported",
-                    Alg = -7
+                    Alg = (int) Fido2AlgorithmIdentifier.ES256
                 },
                 new PublicKeyCredentialParameters {
-                    Type = "public-key",
+                    Type = Constants.DefaultFido2CredentialType,
                     Alg = -9001
                 }
             ];
@@ -201,7 +201,7 @@ namespace Bit.Core.Test.Services
                 AttestationObject = RandomBytes(32),
                 AuthData = RandomBytes(32),
                 PublicKey = RandomBytes(32),
-                PublicKeyAlgorithm = -7,
+                PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
             };
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
                 .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())

@@ -176,7 +176,7 @@ namespace Bit.Core.Services
         public async Task<Fido2AuthenticatorDiscoverableCredentialMetadata[]> SilentCredentialDiscoveryAsync(string rpId)
         {
             var credentials = (await FindCredentialsByRpAsync(rpId)).Select(cipher => new Fido2AuthenticatorDiscoverableCredentialMetadata {
-                Type = "public-key",
+                Type = Constants.DefaultFido2CredentialType,
                 Id = cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                 RpId = cipher.Login.MainFido2Credential.RpId,
                 UserHandle = cipher.Login.MainFido2Credential.UserHandleValue,
@@ -278,9 +278,9 @@ namespace Bit.Core.Services
         {
             return new Fido2CredentialView {
                 CredentialId = Guid.NewGuid().ToString(),
-                KeyType = "public-key",
-                KeyAlgorithm = "ECDSA",
-                KeyCurve = "P-256",
+                KeyType = Constants.DefaultFido2CredentialType,
+                KeyAlgorithm = Constants.DefaultFido2CredentialAlgorithm,
+                KeyCurve = Constants.DefaultFido2CredentialCurve,
                 KeyValue = CoreHelpers.Base64UrlEncode(privateKey),
                 RpId = makeCredentialsParams.RpEntity.Id,
                 UserHandle = CoreHelpers.Base64UrlEncode(makeCredentialsParams.UserEntity.Id),
@@ -433,7 +433,7 @@ namespace Bit.Core.Services
 
                 // alg = ES256
                 result.WriteInt32(3);
-                result.WriteInt32(-7);
+                result.WriteInt32((int) Fido2AlgorithmIdentifier.ES256);
 
                 // crv = P-256
                 result.WriteInt32(-1);

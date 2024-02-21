@@ -30,7 +30,7 @@ namespace Bit.Core.Test.Services
                 AllowCredentials = [
                     new PublicKeyCredentialDescriptor {
                         Id = RandomBytes(32),
-                        Type = "public-key"
+                        Type = Constants.DefaultFido2CredentialType
                     }
                 ],
                 Timeout = 60000,

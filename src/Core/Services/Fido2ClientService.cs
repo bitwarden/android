@@ -91,15 +91,15 @@ namespace Bit.Core.Services
             {
                 // Filter out all unsupported algorithms
                 credTypesAndPubKeyAlgs = createCredentialParams.PubKeyCredParams
-                    .Where(kp => kp.Alg == -7 && kp.Type == "public-key")
+                    .Where(kp => kp.Alg == (int) Fido2AlgorithmIdentifier.ES256 && kp.Type == Constants.DefaultFido2CredentialType)
                     .ToArray();
             }
             else
             {
                 // Assign default algorithms
                 credTypesAndPubKeyAlgs = [
-                    new PublicKeyCredentialParameters { Alg = -7, Type = "public-key" },
-                    new PublicKeyCredentialParameters { Alg = -257, Type = "public-key" }
+                    new PublicKeyCredentialParameters { Alg = (int) Fido2AlgorithmIdentifier.ES256, Type = Constants.DefaultFido2CredentialType },
+                    new PublicKeyCredentialParameters { Alg = (int) Fido2AlgorithmIdentifier.RS256, Type = Constants.DefaultFido2CredentialType }
                 ];
             }
 

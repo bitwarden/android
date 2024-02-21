@@ -58,8 +58,8 @@ namespace Bit.Core.Test.Services
                 },
                 CredTypesAndPubKeyAlgs = [
                     new PublicKeyCredentialParameters {
-                        Type = "public-key",
-                        Alg = -7 // ES256
+                        Type = Constants.DefaultFido2CredentialType,
+                        Alg = (int) Fido2AlgorithmIdentifier.ES256
                     }
                 ],
                 RequireResidentKey = false,
@@ -90,7 +90,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             _params.CredTypesAndPubKeyAlgs = [
                 new PublicKeyCredentialParameters {
-                    Type = "public-key",
+                    Type = Constants.DefaultFido2CredentialType,
                     Alg = -257 // RS256 which we do not support
                 }
             ];
@@ -111,7 +111,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             _params.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
-                    Type = "public-key",
+                    Type = Constants.DefaultFido2CredentialType,
                     Id = _rawCredentialIds[0]
                 }
             ];
@@ -135,7 +135,7 @@ namespace Bit.Core.Test.Services
         {
             _params.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
-                    Type = "public-key",
+                    Type = Constants.DefaultFido2CredentialType,
                     Id = _rawCredentialIds[0]
                 }
             ];
@@ -150,7 +150,7 @@ namespace Bit.Core.Test.Services
             _ciphers[0].OrganizationId = "someOrganizationId";
             _params.ExcludeCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
-                    Type = "public-key",
+                    Type = Constants.DefaultFido2CredentialType,
                     Id = _rawCredentialIds[0]
                 }
             ];
@@ -207,9 +207,9 @@ namespace Bit.Core.Test.Services
             // Assert
             await _sutProvider.GetDependency<ICipherService>().Received().EncryptAsync(Arg.Is<CipherView>(
                 (c) => 
-                    c.Login.MainFido2Credential.KeyType == "public-key" &&
-                    c.Login.MainFido2Credential.KeyAlgorithm == "ECDSA" &&
-                    c.Login.MainFido2Credential.KeyCurve == "P-256" &&
+                    c.Login.MainFido2Credential.KeyType == Constants.DefaultFido2CredentialType &&
+                    c.Login.MainFido2Credential.KeyAlgorithm == Constants.DefaultFido2CredentialAlgorithm &&
+                    c.Login.MainFido2Credential.KeyCurve == Constants.DefaultFido2CredentialCurve &&
                     c.Login.MainFido2Credential.RpId == _params.RpEntity.Id &&
                     c.Login.MainFido2Credential.RpName == _params.RpEntity.Name &&
                     c.Login.MainFido2Credential.UserHandle == CoreHelpers.Base64UrlEncode(_params.UserEntity.Id) &&

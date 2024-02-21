@@ -76,7 +76,7 @@ namespace Bit.Core.Test.Services
 
             Assert.True(
                 result.SequenceEqual(matchingCredentials.Select(c => new Fido2AuthenticatorDiscoverableCredentialMetadata {
-                    Type = "public-key",
+                    Type = Constants.DefaultFido2CredentialType,
                     Id = c.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                     RpId = "bitwarden.com",
                     UserHandle = c.Login.MainFido2Credential.UserHandleValue,

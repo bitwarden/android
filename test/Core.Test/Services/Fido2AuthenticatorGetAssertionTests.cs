@@ -61,11 +61,11 @@ namespace Bit.Core.Test.Services
                 allowCredentialDescriptorList: [
                     new PublicKeyCredentialDescriptor {
                         Id = _rawCredentialIds[0],
-                        Type = "public-key"
+                        Type = Constants.DefaultFido2CredentialType
                     },
                     new PublicKeyCredentialDescriptor {
                         Id = _rawCredentialIds[1],
-                        Type = "public-key"
+                        Type = Constants.DefaultFido2CredentialType
                     },
                 ],
                 requireUserVerification: false
@@ -112,11 +112,11 @@ namespace Bit.Core.Test.Services
             _params.AllowCredentialDescriptorList = [
                 new PublicKeyCredentialDescriptor {
                     Id = _rawCredentialIds[0],
-                    Type = "public-key"
+                    Type = Constants.DefaultFido2CredentialType
                 },
                 new PublicKeyCredentialDescriptor {
                     Id = _rawCredentialIds[1],
-                    Type = "public-key"
+                    Type = Constants.DefaultFido2CredentialType
                 },
             ];
 
