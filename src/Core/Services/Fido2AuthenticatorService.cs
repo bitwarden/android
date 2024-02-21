@@ -289,7 +289,7 @@ namespace Bit.Core.Services
                 RpName = makeCredentialsParams.RpEntity.Name,
                 // UserDisplayName = makeCredentialsParams.UserEntity.DisplayName,
                 DiscoverableValue = makeCredentialsParams.RequireResidentKey,
-                CreationDate = DateTime.Now
+                CreationDate = DateTime.UtcNow
             };
         }
 
