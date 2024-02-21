@@ -13,8 +13,8 @@ namespace Bit.Core.Utilities.Fido2
             UnknownError
         }
 
-        public readonly ErrorCode Code;
-        public readonly string Reason;
+        public ErrorCode Code { get; }
+        public string Reason { get; }
 
         public Fido2ClientException(ErrorCode code, string reason) : base($"{code} ({reason})")
         {
