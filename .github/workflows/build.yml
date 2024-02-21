@@ -495,25 +495,26 @@ jobs:
 
       - name: Decrypt secrets
         env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: profiles
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
+          profiles=(
+              "dist_autofill.mobileprovision"
+              "dist_bitwarden.mobileprovision"
+              "dist_extension.mobileprovision"
+              "dist_share_extension.mobileprovision"
+              "dist_watch_app.mobileprovision"
+              "dist_watch_app_extension.mobileprovision"
+          )
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_share_extension.mobileprovision \
-            ./.github/secrets/dist_share_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_watch_app.mobileprovision \
-            ./.github/secrets/dist_watch_app.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
-            ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
+          for file in "${profiles[@]}"
+          do
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+              --file $HOME/secrets/$FILE --output none
+          done
+
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
 
@@ -538,10 +539,10 @@ jobs:
 
       - name: Get certificates
         run: |
-          mkdir -p ~/secrets
+          mkdir -p $HOME/certificates
 
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution | jq -r .value |
-            base64 -d > ~/secrets/iphone-distribution-cert.p12
+            base64 -d > $HOME/certificates/iphone-distribution-cert.p12
         
       - name: Set up Keychain
         env:
@@ -552,7 +553,7 @@ jobs:
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
 
-          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P "" -T /usr/bin/codesign \
+          security import $HOME/certificates/iphone-distribution-cert.p12 -k build.keychain -P "" -T /usr/bin/codesign \
             -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
 
