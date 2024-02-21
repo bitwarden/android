@@ -493,7 +493,7 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "appcenter-ios-token"
 
-      - name: Decrypt secrets
+      - name: Set up provisioning profiles
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: profiles
@@ -509,7 +509,7 @@ jobs:
               "dist_watch_app_extension.mobileprovision"
           )
 
-          for file in "${profiles[@]}"
+          for FILE in "${profiles[@]}"
           do
             az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
               --file $HOME/secrets/$FILE --output none
