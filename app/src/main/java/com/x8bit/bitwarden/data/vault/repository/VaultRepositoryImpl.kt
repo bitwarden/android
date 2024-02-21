@@ -367,8 +367,8 @@ class VaultRepositoryImpl(
                             userId = userId,
                             policies = syncResponse.policies,
                         )
-                        vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                         settingsDiskSource.storeLastSyncTime(userId = userId, clock.instant())
+                        vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                     },
                     onFailure = { throwable ->
                         updateVaultStateFlowsToError(throwable)
@@ -1335,6 +1335,7 @@ class VaultRepositoryImpl(
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
+            .map { it.orLoadingIfNotSynced(userId = userId) }
             .onEach { mutableCiphersStateFlow.value = it }
 
     private fun observeVaultDiskDomains(
@@ -1368,6 +1369,7 @@ class VaultRepositoryImpl(
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
+            .map { it.orLoadingIfNotSynced(userId = userId) }
             .onEach { mutableFoldersStateFlow.value = it }
 
     private fun observeVaultDiskCollections(
@@ -1392,6 +1394,7 @@ class VaultRepositoryImpl(
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
+            .map { it.orLoadingIfNotSynced(userId = userId) }
             .onEach { mutableCollectionsStateFlow.value = it }
 
     private fun observeVaultDiskSends(
@@ -1408,10 +1411,12 @@ class VaultRepositoryImpl(
                         sendList = it.toEncryptedSdkSendList(),
                     )
                     .fold(
-                        onSuccess = { sends -> DataState.Loaded(SendData(sends)) },
+                        onSuccess = { sends -> DataState.Loaded(sends) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
+            .map { it.orLoadingIfNotSynced(userId = userId) }
+            .map { dataState -> dataState.map { SendData(it) } }
             .onEach { mutableSendDataStateFlow.value = it }
 
     private fun updateVaultStateFlowsToError(throwable: Throwable) {
@@ -1441,6 +1446,20 @@ class VaultRepositoryImpl(
             )
         }
     }
+
+    /**
+     * Returns the given [DataState] as-is, or [DataState.Loading] if vault data for the given
+     * [userId] has not synced. This can be used to distinguish between empty data in the database
+     * because we are in the process of syncing from legitimately having no vault data.
+     */
+    private fun <T> DataState<List<T>>.orLoadingIfNotSynced(
+        userId: String,
+    ): DataState<List<T>> =
+        this
+            .takeUnless {
+                settingsDiskSource.getLastSyncTime(userId = userId) == null
+            }
+            ?: DataState.Loading
 
     //region Push notification helpers
     /**
