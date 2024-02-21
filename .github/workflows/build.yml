@@ -499,10 +499,6 @@ jobs:
         run: |
           mkdir -p ~/secrets
 
-          # gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-          #   --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
@@ -525,10 +521,7 @@ jobs:
         run: |
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
-          echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
-          echo "########################################"
-
           echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
 
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
@@ -536,30 +529,31 @@ jobs:
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
           cd src/watchOS/bitwarden
-          agvtool new-version -all  $BUILD_NUMBER
+          agvtool new-version -all $BUILD_NUMBER
 
       - name: Update Entitlements
         run: |
-          echo "#################################"
-          echo "##### Updating Entitlements #####"
-          echo "#################################"
-
+          echo "##### Updating Entitlements"
           perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+
+      - name: Get certificates
+        run: |
+          mkdir -p ~/secrets
+
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution | jq -r .value |
+            base64 -d > ~/secrets/iphone-distribution-cert.p12
         
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
-          #MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
-          DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
         run: |
           security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
-          # security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD \
-          #   -T /usr/bin/codesign -T /usr/bin/security
-          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD \
-            -T /usr/bin/codesign -T /usr/bin/security
+
+          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P "" -T /usr/bin/codesign \
+            -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
 
       - name: Set up provisioning profiles
