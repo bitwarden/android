@@ -335,7 +335,7 @@ jobs:
           FILE: app_fdroid-keystore.jks
         run: |
           mkdir -p $HOME/secrets
-          az storage blob download --acount-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
             --file $HOME/secrets/$FILE --output none
         shell: bash
 
@@ -501,7 +501,7 @@ jobs:
           FILE: GoogleService-Info.plist
         run: |
           mkdir -p $HOME/secrets
-          az storage blob download --acount-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
             --file $HOME/secrets/$FILE --output none
 
       - name: Increment version
