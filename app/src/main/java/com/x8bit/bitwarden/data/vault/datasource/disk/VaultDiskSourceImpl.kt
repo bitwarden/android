@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CiphersDao
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.CollectionsDao
@@ -20,13 +21,14 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 /**
  * Default implementation of [VaultDiskSource].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 class VaultDiskSourceImpl(
     private val ciphersDao: CiphersDao,
     private val collectionsDao: CollectionsDao,
@@ -34,6 +36,7 @@ class VaultDiskSourceImpl(
     private val foldersDao: FoldersDao,
     private val sendsDao: SendsDao,
     private val json: Json,
+    private val dispatcherManager: DispatcherManager,
 ) : VaultDiskSource {
 
     private val forceCiphersFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Cipher>>()
@@ -64,7 +67,9 @@ class VaultDiskSourceImpl(
                 .getAllCiphers(userId = userId)
                 .map { entities ->
                     entities.map { entity ->
-                        json.decodeFromString<SyncResponseJson.Cipher>(entity.cipherJson)
+                        withContext(dispatcherManager.default) {
+                            json.decodeFromString<SyncResponseJson.Cipher>(entity.cipherJson)
+                        }
                     }
                 },
         )
@@ -112,7 +117,9 @@ class VaultDiskSourceImpl(
         domainsDao
             .getDomains(userId)
             .map { entity ->
-                json.decodeFromString<SyncResponseJson.Domains>(entity.domainsJson)
+                withContext(dispatcherManager.default) {
+                    json.decodeFromString<SyncResponseJson.Domains>(entity.domainsJson)
+                }
             }
 
     override suspend fun deleteFolder(userId: String, folderId: String) {
@@ -174,7 +181,9 @@ class VaultDiskSourceImpl(
                 .getAllSends(userId = userId)
                 .map { entities ->
                     entities.map { entity ->
-                        json.decodeFromString<SyncResponseJson.Send>(entity.sendJson)
+                        withContext(dispatcherManager.default) {
+                            json.decodeFromString<SyncResponseJson.Send>(entity.sendJson)
+                        }
                     }
                 },
         )

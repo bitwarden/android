@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.datasource.disk.di
 
 import android.app.Application
 import androidx.room.Room
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSourceImpl
 import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
@@ -67,6 +68,7 @@ class VaultDiskModule {
         foldersDao: FoldersDao,
         sendsDao: SendsDao,
         json: Json,
+        dispatcherManager: DispatcherManager,
     ): VaultDiskSource = VaultDiskSourceImpl(
         ciphersDao = ciphersDao,
         collectionsDao = collectionsDao,
@@ -74,5 +76,6 @@ class VaultDiskModule {
         foldersDao = foldersDao,
         sendsDao = sendsDao,
         json = json,
+        dispatcherManager = dispatcherManager,
     )
 }

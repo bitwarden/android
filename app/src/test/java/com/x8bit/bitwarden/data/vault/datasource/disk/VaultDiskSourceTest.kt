@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.disk
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.util.assertJsonEquals
 import com.x8bit.bitwarden.data.vault.datasource.disk.dao.FakeCiphersDao
@@ -34,6 +35,7 @@ import java.time.ZonedDateTime
 class VaultDiskSourceTest {
 
     private val json = PlatformNetworkModule.providesJson()
+    private val dispatcherManager: FakeDispatcherManager = FakeDispatcherManager()
     private lateinit var ciphersDao: FakeCiphersDao
     private lateinit var collectionsDao: FakeCollectionsDao
     private lateinit var domainsDao: FakeDomainsDao
@@ -56,6 +58,7 @@ class VaultDiskSourceTest {
             foldersDao = foldersDao,
             sendsDao = sendsDao,
             json = json,
+            dispatcherManager = dispatcherManager,
         )
     }
 
