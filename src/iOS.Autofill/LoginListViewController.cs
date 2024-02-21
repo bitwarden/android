@@ -290,7 +290,7 @@ namespace Bit.iOS.Autofill
                         return headerItemView;
                     }
 
-                    return new UIView(CGRect.Empty);// base.GetViewForHeader(tableView, section);
+                    return new UIView(CGRect.Empty);
                 }
                 catch (Exception ex)
                 {
