@@ -66,7 +66,6 @@ namespace Bit.Core.Services
 
             if (createCredentialParams.User.Id.Length < 1 || createCredentialParams.User.Id.Length > 64)
             {
-                // TODO: Should we use ArgumentException here instead?
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.TypeError,
                     "The length of user.id is not between 1 and 64 bytes (inclusive)");
