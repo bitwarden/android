@@ -26,7 +26,7 @@ namespace Bit.Core.Services
 
         public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams, IFido2MakeCredentialUserInterface userInterface)
         {
-            if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Alg != (int) Fido2AlgorithmIdentifier.ES256))
+            if (makeCredentialParams.CredTypesAndPubKeyAlgs.All((p) => p.Alg != (int)Fido2AlgorithmIdentifier.ES256))
             {
                 throw new NotSupportedError();
             }
@@ -37,12 +37,14 @@ namespace Bit.Core.Services
             var existingCipherIds = await FindExcludedCredentialsAsync(
                 makeCredentialParams.ExcludeCredentialDescriptorList
             );
-            if (existingCipherIds.Length > 0) {
+            if (existingCipherIds.Length > 0)
+            {
                 await userInterface.InformExcludedCredentialAsync(existingCipherIds);
                 throw new NotAllowedError();
             }
 
-            var response = await userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams {
+            var response = await userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams
+            {
                 CredentialName = makeCredentialParams.RpEntity.Name,
                 UserName = makeCredentialParams.UserEntity.Name,
                 UserVerification = makeCredentialParams.RequireUserVerification
@@ -51,18 +53,21 @@ namespace Bit.Core.Services
             var cipherId = response.CipherId;
             var userVerified = response.UserVerified;
             string credentialId;
-            if (cipherId == null) {
+            if (cipherId == null)
+            {
                 throw new NotAllowedError();
             }
-            
-            try {
+
+            try
+            {
                 var keyPair = GenerateKeyPair();
                 var fido2Credential = CreateCredentialView(makeCredentialParams, keyPair.privateKey);
 
                 var encrypted = await _cipherService.GetAsync(cipherId);
                 var cipher = await encrypted.DecryptAsync();
 
-                if (!userVerified && (makeCredentialParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None)) {
+                if (!userVerified && (makeCredentialParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None))
+                {
                     throw new NotAllowedError();
                 }
 
@@ -86,15 +91,19 @@ namespace Bit.Core.Services
                     AttestationObject = EncodeAttestationObject(authData),
                     AuthData = authData,
                     PublicKey = keyPair.publicKey.ExportDer(),
-                    PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
+                    PublicKeyAlgorithm = (int)Fido2AlgorithmIdentifier.ES256,
                 };
-            } catch (NotAllowedError) {
+            }
+            catch (NotAllowedError)
+            {
                 throw;
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 throw new UnknownError();
             }
         }
-        
+
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams, IFido2GetAssertionUserInterface userInterface)
         {
             List<CipherView> cipherOptions;
@@ -102,21 +111,26 @@ namespace Bit.Core.Services
             await userInterface.EnsureUnlockedVaultAsync();
             await _syncService.FullSyncAsync(false);
 
-            if (assertionParams.AllowCredentialDescriptorList?.Length > 0) {
+            if (assertionParams.AllowCredentialDescriptorList?.Length > 0)
+            {
                 cipherOptions = await FindCredentialsByIdAsync(
                     assertionParams.AllowCredentialDescriptorList,
                     assertionParams.RpId
                 );
-            } else {
+            }
+            else
+            {
                 cipherOptions = await FindCredentialsByRpAsync(assertionParams.RpId);
             }
 
-            if (cipherOptions.Count == 0) {
+            if (cipherOptions.Count == 0)
+            {
                 throw new NotAllowedError();
             }
 
             var response = await userInterface.PickCredentialAsync(
-                cipherOptions.Select((cipher) => new Fido2GetAssertionUserInterfaceCredential {
+                cipherOptions.Select((cipher) => new Fido2GetAssertionUserInterfaceCredential
+                {
                     CipherId = cipher.Id,
                     RequireUserVerification = assertionParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None
                 }).ToArray()
@@ -125,25 +139,29 @@ namespace Bit.Core.Services
             var userVerified = response.UserVerified;
 
             var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
-            if (selectedCipher == null) {
+            if (selectedCipher == null)
+            {
                 throw new NotAllowedError();
             }
 
-            if (!userVerified && (assertionParams.RequireUserVerification || selectedCipher.Reprompt != CipherRepromptType.None)) {
+            if (!userVerified && (assertionParams.RequireUserVerification || selectedCipher.Reprompt != CipherRepromptType.None))
+            {
                 throw new NotAllowedError();
             }
-            
-            try {
+
+            try
+            {
                 var selectedFido2Credential = selectedCipher.Login.MainFido2Credential;
                 var selectedCredentialId = selectedFido2Credential.CredentialId;
 
-                if (selectedFido2Credential.CounterValue != 0) {
-                    ++selectedFido2Credential.CounterValue;
-                }
-
                 await _cipherService.UpdateLastUsedDateAsync(selectedCipher.Id);
-                var encrypted = await _cipherService.EncryptAsync(selectedCipher);
-                await _cipherService.SaveWithServerAsync(encrypted);
+
+                if (selectedFido2Credential.CounterValue != 0)
+                {
+                    ++selectedFido2Credential.CounterValue;
+                    var encrypted = await _cipherService.EncryptAsync(selectedCipher);
+                    await _cipherService.SaveWithServerAsync(encrypted);
+                }
 
                 var authenticatorData = await GenerateAuthDataAsync(
                     rpId: selectedFido2Credential.RpId,
@@ -168,14 +186,17 @@ namespace Bit.Core.Services
                     AuthenticatorData = authenticatorData,
                     Signature = signature
                 };
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 throw new UnknownError();
             }
         }
 
         public async Task<Fido2AuthenticatorDiscoverableCredentialMetadata[]> SilentCredentialDiscoveryAsync(string rpId)
         {
-            var credentials = (await FindCredentialsByRpAsync(rpId)).Select(cipher => new Fido2AuthenticatorDiscoverableCredentialMetadata {
+            var credentials = (await FindCredentialsByRpAsync(rpId)).Select(cipher => new Fido2AuthenticatorDiscoverableCredentialMetadata
+            {
                 Type = Constants.DefaultFido2CredentialType,
                 Id = cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                 RpId = cipher.Login.MainFido2Credential.RpId,
@@ -191,22 +212,26 @@ namespace Bit.Core.Services
         /// </summary>
         private async Task<string[]> FindExcludedCredentialsAsync(
             PublicKeyCredentialDescriptor[] credentials
-        ) {
-            if (credentials == null || credentials.Length == 0) {
+        )
+        {
+            if (credentials == null || credentials.Length == 0)
+            {
                 return Array.Empty<string>();
             }
 
             var ids = new List<string>();
 
-            foreach (var credential in credentials) 
+            foreach (var credential in credentials)
             {
                 try
                 {
                     ids.Add(credential.Id.GuidToStandardFormat());
-                } catch {}
+                }
+                catch { }
             }
 
-            if (ids.Count == 0) {
+            if (ids.Count == 0)
+            {
                 return Array.Empty<string>();
             }
 
@@ -234,7 +259,7 @@ namespace Bit.Core.Services
                 {
                     ids.Add(credential.Id.GuidToStandardFormat());
                 }
-                catch {}
+                catch { }
             }
 
             if (ids.Count == 0)
@@ -276,7 +301,8 @@ namespace Bit.Core.Services
 
         private Fido2CredentialView CreateCredentialView(Fido2AuthenticatorMakeCredentialParams makeCredentialsParams, byte[] privateKey)
         {
-            return new Fido2CredentialView {
+            return new Fido2CredentialView
+            {
                 CredentialId = Guid.NewGuid().ToString(),
                 KeyType = Constants.DefaultFido2CredentialType,
                 KeyAlgorithm = Constants.DefaultFido2CredentialAlgorithm,
@@ -300,7 +326,8 @@ namespace Bit.Core.Services
             int counter,
             byte[] credentialId = null,
             PublicKey publicKey = null
-        ) {
+        )
+        {
             var isAttestation = credentialId != null && publicKey != null;
 
             List<byte> authData = new List<byte>();
@@ -328,7 +355,7 @@ namespace Bit.Core.Services
                 var attestedCredentialData = new List<byte>();
 
                 attestedCredentialData.AddRange(AAGUID);
-                
+
                 // credentialIdLength (2 bytes) and credential Id
                 var credentialIdLength = new byte[] {
                     (byte)((credentialId.Length - (credentialId.Length & 0xff)) / 256),
@@ -344,14 +371,17 @@ namespace Bit.Core.Services
             return authData.ToArray();
         }
 
-        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence, bool backupEligibility = true, bool backupState = true) {
+        private byte AuthDataFlags(bool extensionData, bool attestationData, bool userVerification, bool userPresence, bool backupEligibility = true, bool backupState = true)
+        {
             byte flags = 0;
 
-            if (extensionData) {
+            if (extensionData)
+            {
                 flags |= 0b1000000;
             }
 
-            if (attestationData) {
+            if (attestationData)
+            {
                 flags |= 0b01000000;
             }
 
@@ -365,18 +395,21 @@ namespace Bit.Core.Services
                 flags |= 0b00001000;
             }
 
-            if (userVerification) {
+            if (userVerification)
+            {
                 flags |= 0b00000100;
             }
 
-            if (userPresence) {
+            if (userPresence)
+            {
                 flags |= 0b00000001;
             }
 
             return flags;
         }
 
-        private byte[] EncodeAttestationObject(byte[] authData) {
+        private byte[] EncodeAttestationObject(byte[] authData)
+        {
             var attestationObject = new CborWriter(CborConformanceMode.Ctap2Canonical);
             attestationObject.WriteStartMap(3);
             attestationObject.WriteTextString("fmt");
@@ -398,7 +431,7 @@ namespace Bit.Core.Services
             var dsa = ECDsa.Create();
             dsa.ImportPkcs8PrivateKey(privateKey, out var bytesRead);
 
-            if (bytesRead == 0) 
+            if (bytesRead == 0)
             {
                 throw new Exception("Failed to import private key");
             }
@@ -410,7 +443,8 @@ namespace Bit.Core.Services
         {
             private readonly ECDsa _dsa;
 
-            public PublicKey(ECDsa dsa) {
+            public PublicKey(ECDsa dsa)
+            {
                 _dsa = dsa;
             }
 
@@ -426,14 +460,14 @@ namespace Bit.Core.Services
             {
                 var result = new CborWriter(CborConformanceMode.Ctap2Canonical);
                 result.WriteStartMap(5);
-                
+
                 // kty = EC2
                 result.WriteInt32(1);
                 result.WriteInt32(2);
 
                 // alg = ES256
                 result.WriteInt32(3);
-                result.WriteInt32((int) Fido2AlgorithmIdentifier.ES256);
+                result.WriteInt32((int)Fido2AlgorithmIdentifier.ES256);
 
                 // crv = P-256
                 result.WriteInt32(-1);

@@ -57,7 +57,7 @@ namespace Bit.Core.Test.Services
             _selectedCipherCredentialId = _credentialIds[0];
             _selectedCipherRawCredentialId = _rawCredentialIds[0];
             _params = CreateParams(
-                rpId: _rpId, 
+                rpId: _rpId,
                 allowCredentialDescriptorList: [
                     new PublicKeyCredentialDescriptor {
                         Id = _rawCredentialIds[0],
@@ -74,7 +74,7 @@ namespace Bit.Core.Test.Services
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, false));
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
         }
 
@@ -149,7 +149,8 @@ namespace Bit.Core.Test.Services
         [Fact]
         // Spec: Prompt the user to select a public key credential source `selectedCredential` from `credentialOptions`.
         //       If requireUserVerification is true, the authorization gesture MUST include user verification.
-        public async Task GetAssertionAsync_RequestsUserVerification_ParamsRequireUserVerification() {
+        public async Task GetAssertionAsync_RequestsUserVerification_ParamsRequireUserVerification()
+        {
             // Arrange
             _params.RequireUserVerification = true;
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, true));
@@ -168,7 +169,8 @@ namespace Bit.Core.Test.Services
         //       If `requireUserPresence` is true, the authorization gesture MUST include a test of user presence.
         // Comment: User presence is implied by the UI returning a credential.
         // Extension: UserVerification is required if the cipher requires reprompting.
-        public async Task GetAssertionAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification() {
+        public async Task GetAssertionAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification()
+        {
             // Arrange
             _params.RequireUserVerification = false;
 
@@ -183,7 +185,8 @@ namespace Bit.Core.Test.Services
 
         [Fact]
         // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
-        public async Task GetAssertionAsync_ThrowsNotAllowed_UserDoesNotConsent() {
+        public async Task GetAssertionAsync_ThrowsNotAllowed_UserDoesNotConsent()
+        {
             // Arrange
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((null, false));
 
@@ -193,7 +196,8 @@ namespace Bit.Core.Test.Services
 
         [Fact]
         // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
-        public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationWhenRequired() {
+        public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationWhenRequired()
+        {
             // Arrange
             _params.RequireUserVerification = true;
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
@@ -204,7 +208,8 @@ namespace Bit.Core.Test.Services
 
         [Fact]
         // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
-        public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationForCipherWithReprompt() {
+        public async Task GetAssertionAsync_ThrowsNotAllowed_NoUserVerificationForCipherWithReprompt()
+        {
             // Arrange
             _selectedCipher.Reprompt = CipherRepromptType.Password;
             _params.RequireUserVerification = false;
@@ -221,11 +226,12 @@ namespace Bit.Core.Test.Services
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         // Spec: Increment the credential associated signature counter
-        public async Task GetAssertionAsync_IncrementsCounter_CounterIsLargerThanZero(Cipher encryptedCipher) {
+        public async Task GetAssertionAsync_IncrementsCounter_CounterIsLargerThanZero(Cipher encryptedCipher)
+        {
             // Arrange
             _selectedCipher.Login.MainFido2Credential.CounterValue = 9000;
             _sutProvider.GetDependency<ICipherService>().EncryptAsync(_selectedCipher).Returns(encryptedCipher);
-            
+
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
@@ -238,24 +244,23 @@ namespace Bit.Core.Test.Services
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
-        // Spec: Increment the credential associated signature counter
-        public async Task GetAssertionAsync_DoesNotIncrementsCounter_CounterIsZero(Cipher encryptedCipher) {
+        // Spec: Authenticators that do not implement a signature counter leave the signCount in the authenticator data constant at zero.
+        public async Task GetAssertionAsync_DoesNotIncrementsCounter_CounterIsZero(Cipher encryptedCipher)
+        {
             // Arrange
             _selectedCipher.Login.MainFido2Credential.CounterValue = 0;
             _sutProvider.GetDependency<ICipherService>().EncryptAsync(_selectedCipher).Returns(encryptedCipher);
-            
+
             // Act
             await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
             // Assert
-            await _sutProvider.GetDependency<ICipherService>().Received().SaveWithServerAsync(encryptedCipher);
-            await _sutProvider.GetDependency<ICipherService>().Received().EncryptAsync(Arg.Is<CipherView>(
-                (cipher) => cipher.Login.MainFido2Credential.CounterValue == 0
-            ));
+            await _sutProvider.GetDependency<ICipherService>().DidNotReceive().SaveWithServerAsync(Arg.Any<Cipher>());
         }
 
         [Fact]
-        public async Task GetAssertionAsync_ReturnsAssertion() {
+        public async Task GetAssertionAsync_ReturnsAssertion()
+        {
             // Arrange
             var keyPair = GenerateKeyPair();
             var rpIdHashMock = RandomBytes(32);
@@ -265,7 +270,7 @@ namespace Bit.Core.Test.Services
             _selectedCipher.Login.MainFido2Credential.KeyValue = CoreHelpers.Base64UrlEncode(keyPair.ExportPkcs8PrivateKey());
             _sutProvider.GetDependency<ICryptoFunctionService>().HashAsync(_params.RpId, CryptoHashAlgorithm.Sha256).Returns(rpIdHashMock);
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, true));
-            
+
             // Act
             var result = await _sutProvider.Sut.GetAssertionAsync(_params, _userInterface);
 
@@ -284,8 +289,10 @@ namespace Bit.Core.Test.Services
         }
 
         [Fact]
-        public async Task GetAssertionAsync_ThrowsUnknownError_SaveFails() {
+        public async Task GetAssertionAsync_ThrowsUnknownError_SaveFails()
+        {
             // Arrange
+            _selectedCipher.Login.MainFido2Credential.CounterValue = 1;
             _sutProvider.GetDependency<ICipherService>().SaveWithServerAsync(Arg.Any<Cipher>()).Throws(new Exception());
 
             // Act & Assert
@@ -309,14 +316,16 @@ namespace Bit.Core.Test.Services
             return dsa;
         }
 
-        #nullable enable
+#nullable enable
         private CipherView CreateCipherView(string credentialId, string? rpId, bool? discoverable, bool reprompt = false)
         {
-            return new CipherView {
+            return new CipherView
+            {
                 Type = CipherType.Login,
                 Id = Guid.NewGuid().ToString(),
                 Reprompt = reprompt ? CipherRepromptType.Password : CipherRepromptType.None,
-                Login = new LoginView {
+                Login = new LoginView
+                {
                     Fido2Credentials = new List<Fido2CredentialView> {
                         new Fido2CredentialView {
                             CredentialId = credentialId,
@@ -332,7 +341,8 @@ namespace Bit.Core.Test.Services
 
         private Fido2AuthenticatorGetAssertionParams CreateParams(string? rpId = null, byte[]? hash = null, PublicKeyCredentialDescriptor[]? allowCredentialDescriptorList = null, bool? requireUserPresence = null, bool? requireUserVerification = null)
         {
-            return new Fido2AuthenticatorGetAssertionParams {
+            return new Fido2AuthenticatorGetAssertionParams
+            {
                 RpId = rpId ?? "bitwarden.com",
                 Hash = hash ?? RandomBytes(32),
                 AllowCredentialDescriptorList = allowCredentialDescriptorList ?? null,
