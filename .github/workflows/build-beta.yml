@@ -148,6 +148,12 @@ jobs:
 
           perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>beta<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
 
+      - name: Get certificates
+        run: |
+          mkdir -p $HOME/certificates
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution |
+            jq -r .value | base64 -d > $HOME/certificates/ios-distribution.p12
+
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
@@ -158,10 +164,9 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
-          security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD \
-            -T /usr/bin/codesign -T /usr/bin/security
-          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD \
-            -T /usr/bin/codesign -T /usr/bin/security
+
+          security import $HOME/certificates/ios-distribution.p12 -k build.keychain -P "" -T /usr/bin/codesign \
+            -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
 
       - name: Set up provisioning profiles
@@ -226,32 +231,33 @@ jobs:
           dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "##### Done"
-          ls ~/Library/Developer/Xcode/Archives
+          ls $HOME/Library/Developer/Xcode/Archives
 
       - name: Export .ipa for App Store
+        env:
+          EXPORT_OPTIONS_PATH: ./.github/resources/export-options-app-store.plist
+          EXPORT_PATH: ./bitwarden-export
         run: |
-          EXPORT_OPTIONS_PATH="./.github/resources/export-options-app-store.plist"
           ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
-          EXPORT_PATH="./bitwarden-export"
 
           xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
 
       - name: Export .app for Automation CI
+        env:
+          ARCHIVE_PATH: ./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64
+          EXPORT_PATH: ./bitwarden-export
         run: |
-          ARCHIVE_PATH="./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64"
-          EXPORT_PATH="./bitwarden-export"
-
           zip -r -q ${{ env.app_ci_output_filename }}.app.zip $ARCHIVE_PATH
           mv ${{ env.app_ci_output_filename }}.app.zip $EXPORT_PATH
 
       - name: Copy all dSYMs files to upload
+        env:
+          EXPORT_PATH: ./bitwarden-export
+          WATCH_ARCHIVE_DSYMS_PATH: ./src/watchOS/bitwarden.xcarchive/dSYMs/
+          WATCH_DSYMS_EXPORT_PATH: ./bitwarden-export/Watch_dSYMs
         run: |
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
-          EXPORT_PATH="./bitwarden-export"
-
-          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
-          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
 
           cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
           mkdir $WATCH_DSYMS_EXPORT_PATH
