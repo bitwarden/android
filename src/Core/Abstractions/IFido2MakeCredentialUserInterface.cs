@@ -16,6 +16,11 @@ namespace Bit.Core.Abstractions
         /// Whether or not the user must be verified before completing the operation.
         /// </summary>
         public bool UserVerification { get; set; }
+
+        /// <summary>
+        /// The relying party identifier
+        /// </summary>
+        public string RpId { get; set; }
     }
 
     public interface IFido2MakeCredentialUserInterface : IFido2UserInterface

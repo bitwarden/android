@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Controls;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -16,6 +17,7 @@ using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using UIKit;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bit.iOS.Autofill
 {
@@ -147,7 +149,13 @@ namespace Bit.iOS.Autofill
         {
             SavePasskeyAsNewLoginAsync().FireAndForget(ex =>
             {
-                _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred).FireAndForget();
+                var message = AppResources.AnErrorHasOccurred;
+                if (ex is ApiException apiEx && apiEx.Error != null)
+                {
+                    message = apiEx.Error.GetSingleMessage();
+                }
+
+                _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, message).FireAndForget();
             });
         }
 
@@ -159,8 +167,26 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            var cipherId = await _cipherService.Value.CreateNewLoginForPasskeyAsync(Context.PasskeyCredentialIdentity.RelyingPartyIdentifier);
-            Context.ConfirmNewCredentialTcs.TrySetResult((cipherId, true));
+            if (Context.PasskeyCreationParams is null)
+            {
+                Context?.ConfirmNewCredentialTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login wihout creation params."));
+                return;
+            }
+
+            var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
+
+            try
+            {
+                PresentViewController(loadingAlert, true, null);
+
+                var cipherId = await _cipherService.Value.CreateNewLoginForPasskeyAsync(Context.PasskeyCreationParams.Value);
+                Context.ConfirmNewCredentialTcs.TrySetResult((cipherId, true));
+            }
+            catch
+            {
+                await loadingAlert.DismissViewControllerAsync(false);
+                throw;
+            }
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

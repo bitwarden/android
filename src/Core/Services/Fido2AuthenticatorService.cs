@@ -45,7 +45,8 @@ namespace Bit.Core.Services
             var response = await userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams {
                 CredentialName = makeCredentialParams.RpEntity.Name,
                 UserName = makeCredentialParams.UserEntity.Name,
-                UserVerification = makeCredentialParams.RequireUserVerification
+                UserVerification = makeCredentialParams.RequireUserVerification,
+                RpId = makeCredentialParams.RpEntity.Id
             });
 
             var cipherId = response.CipherId;
