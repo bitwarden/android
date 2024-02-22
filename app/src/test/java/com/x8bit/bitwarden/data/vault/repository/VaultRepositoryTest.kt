@@ -5460,9 +5460,16 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
 
+            val userCipher = createMockCipher(1).copy(
+                collectionIds = null,
+                deletedDate = null,
+            )
+            val deletedCipher = createMockCipher(2).copy(collectionIds = null)
+            val orgCipher = createMockCipher(3).copy(deletedDate = null)
+
             coEvery {
                 vaultDiskSource.getCiphers(userId)
-            } returns flowOf(listOf(createMockCipher(1)))
+            } returns flowOf(listOf(userCipher, deletedCipher, orgCipher))
 
             coEvery {
                 vaultDiskSource.getFolders(userId)
@@ -5474,6 +5481,15 @@ class VaultRepositoryTest {
 
             val expected = ExportVaultDataResult.Success(vaultData = "TestResult")
             val result = vaultRepository.exportVaultDataToString(format = format)
+
+            coVerify {
+                vaultSdkSource.exportVaultDataToString(
+                    userId = userId,
+                    ciphers = listOf(userCipher.toEncryptedSdkCipher()),
+                    folders = listOf(createMockSdkFolder(1)),
+                    format = ExportFormat.Json,
+                )
+            }
 
             assertEquals(
                 expected,

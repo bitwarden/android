@@ -1231,7 +1231,7 @@ class VaultRepositoryImpl(
             .firstOrNull()
             .orEmpty()
             .map { it.toEncryptedSdkCipher() }
-            .filter { it.collectionIds.isEmpty() }
+            .filter { it.collectionIds.isEmpty() && it.deletedDate == null }
 
         return vaultSdkSource
             .exportVaultDataToString(
