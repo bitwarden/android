@@ -183,7 +183,6 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on AddAccountClick should send NavigateBack`() = runTest {
         val viewModel = createViewModel()

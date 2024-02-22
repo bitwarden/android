@@ -95,7 +95,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `UserState updates with a non-null unlocked account should not update the state`() {
         val viewModel = createViewModel()
@@ -180,7 +179,6 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on AddAccountClick should set hasPendingAccountAddition to true on the AuthRepository`() {
         val viewModel = createViewModel()

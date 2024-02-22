@@ -365,7 +365,6 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    @Suppress("MaxLineLength")
     fun `ContinueWithBreachedPasswordClick should call repository with checkDataBreaches false`() {
         val repo = mockk<AuthRepository> {
             every { captchaTokenResultFlow } returns flowOf()

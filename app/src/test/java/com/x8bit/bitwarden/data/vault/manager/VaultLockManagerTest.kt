@@ -64,8 +64,7 @@ class VaultLockManagerTest {
     }
     private val mutableVaultTimeoutStateFlow =
         MutableStateFlow<VaultTimeout>(VaultTimeout.ThirtyMinutes)
-    private val mutableVaultTimeoutActionStateFlow =
-        MutableStateFlow<VaultTimeoutAction>(VaultTimeoutAction.LOCK)
+    private val mutableVaultTimeoutActionStateFlow = MutableStateFlow(VaultTimeoutAction.LOCK)
     private val settingsRepository: SettingsRepository = mockk {
         every { getVaultTimeoutStateFlow(any()) } returns mutableVaultTimeoutStateFlow
         every { getVaultTimeoutActionStateFlow(any()) } returns mutableVaultTimeoutActionStateFlow

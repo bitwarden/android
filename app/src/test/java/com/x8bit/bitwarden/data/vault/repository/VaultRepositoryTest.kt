@@ -2241,7 +2241,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipher = createMockCipher(number = 1),
                 )
-            } returns Unit
+            } just runs
             val cipherView = createMockCipherView(number = 1)
             mockkStatic(Instant::class)
             every { Instant.now() } returns fixedInstant
@@ -2328,7 +2328,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipher = createMockCipher(number = 1),
                 )
-            } returns Unit
+            } just runs
             val cipherView = createMockCipherView(number = 1)
             mockkStatic(Instant::class)
             every { Instant.now() } returns fixedInstant
@@ -2405,7 +2405,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipher = createMockCipher(number = 1),
                 )
-            } returns Unit
+            } just runs
             val cipherView = createMockCipherView(number = 1)
             mockkStatic(Instant::class)
             every { Instant.now() } returns fixedInstant

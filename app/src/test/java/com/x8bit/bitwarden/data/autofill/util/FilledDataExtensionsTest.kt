@@ -47,7 +47,7 @@ class FilledDataExtensionsTest {
         every { this@mockk.resources } returns res
     }
     private val dataset: Dataset = mockk()
-    private val filledItem: FilledItem = mockk() {
+    private val filledItem: FilledItem = mockk {
         every { autofillId } returns mockk()
     }
     private val filledItemPlaceholder = FilledItem(
@@ -83,7 +83,7 @@ class FilledDataExtensionsTest {
         isVaultLocked = false,
     )
     private val mockIntentSender: IntentSender = mockk()
-    private val pendingIntent: PendingIntent = mockk() {
+    private val pendingIntent: PendingIntent = mockk {
         every { intentSender } returns mockIntentSender
     }
     private val presentations: Presentations = mockk()

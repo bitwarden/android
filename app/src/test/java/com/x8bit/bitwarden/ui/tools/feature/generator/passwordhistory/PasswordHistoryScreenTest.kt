@@ -158,16 +158,12 @@ class PasswordHistoryScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-               viewState = PasswordHistoryState.ViewState.Content(
+                viewState = PasswordHistoryState.ViewState.Content(
                     passwords = passwords,
                 ),
             )
         }
 
         composeTestRule.onNodeWithText("Password1").assertIsDisplayed()
-    }
-
-    private fun updateState(state: PasswordHistoryState) {
-        mutableStateFlow.value = state
     }
 }

@@ -30,6 +30,7 @@ class AutofillActivityManagerTest {
     }
 
     // We will construct an instance here just to hook the various dependencies together internally
+    @Suppress("unused")
     private val autofillActivityManager: AutofillActivityManager = AutofillActivityManagerImpl(
         autofillManager = autofillManager,
         appForegroundManager = appForegroundManager,
@@ -39,7 +40,6 @@ class AutofillActivityManagerTest {
 
     private var isAutofillEnabledAndSupported = false
 
-    @Suppress("MaxLineLength")
     @Test
     fun `changes in app foreground status should update the AutofillEnabledManager as necessary`() =
         runTest {

@@ -1939,7 +1939,6 @@ class VaultItemScreenTest : BaseComposeTest() {
 
 //region Helper functions
 
-@Suppress("MaxLineLength")
 private fun updateLoginType(
     currentState: VaultItemState,
     transform: VaultItemState.ViewState.Content.ItemType.Login.() ->
@@ -1963,7 +1962,6 @@ private fun updateLoginType(
     return currentState.copy(viewState = updatedType)
 }
 
-@Suppress("MaxLineLength")
 private fun updateIdentityType(
     currentState: VaultItemState,
     transform: VaultItemState.ViewState.Content.ItemType.Identity.() ->
@@ -1987,7 +1985,6 @@ private fun updateIdentityType(
     return currentState.copy(viewState = updatedType)
 }
 
-@Suppress("MaxLineLength")
 private fun updateCardType(
     currentState: VaultItemState,
     transform: VaultItemState.ViewState.Content.ItemType.Card.() ->
@@ -2011,7 +2008,6 @@ private fun updateCardType(
     return currentState.copy(viewState = updatedType)
 }
 
-@Suppress("MaxLineLength")
 private fun updateCommonContent(
     currentState: VaultItemState,
     transform: VaultItemState.ViewState.Content.Common.()
