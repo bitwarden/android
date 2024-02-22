@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Bitwarden Dev</string>
+    <string name="duo_title" translatable="false">Duo</string>
+    <string name="duo_org_title" translatable="false">Duo (%1$s)</string>
 </resources>

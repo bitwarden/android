@@ -200,7 +200,7 @@
   <string name="on" tools:override="true">På</string>
   <string name="status">Status</string>
   <string name="bitwarden_autofill_service_alert2">Det lättaste sättet att lägga till nya inloggningar till ditt valv är från Bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder Bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till fliken \"Inställningar\".</string>
-  <string name="autofill">Automatisk ifyllnad</string>
+  <string name="autofill">Autofyll</string>
   <string name="autofill_or_view">Vill du automatiskt fylla i den här inloggningen eller visa den?</string>
   <string name="bitwarden_autofill_service_match_confirm">Är du säker på att du vill automatiskt fylla i den här inloggningen? Det är inte en fullständig träff för \"%1$s\".</string>
   <string name="matching_items">Matchande objekt</string>
@@ -707,7 +707,7 @@ välj Lägg till TOTP för att lagra nyckeln på ett säkert sätt</string>
   <string name="confim_log_in_attemp_for_x">Bekräfta inloggningsförsök för %1$s</string>
   <string name="all_notifications">Alla aviseringar</string>
   <string name="password_type">Lösenordstyp</string>
-  <string name="what_would_you_like_to_generate">Vad vill du skapa?</string>
+  <string name="what_would_you_like_to_generate">Vad skulle du vilja generera?</string>
   <string name="username_type">Typ av användarnamn</string>
   <string name="plus_addressed_email">Plusadresserad e-post</string>
   <string name="catch_all_email">E-post med catch-all</string>

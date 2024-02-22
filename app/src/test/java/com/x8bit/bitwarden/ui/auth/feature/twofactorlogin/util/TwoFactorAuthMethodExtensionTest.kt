@@ -13,14 +13,13 @@ class TwoFactorAuthMethodExtensionTest {
         mapOf(
             TwoFactorAuthMethod.AUTHENTICATOR_APP to R.string.authenticator_app_title.asText(),
             TwoFactorAuthMethod.EMAIL to R.string.email.asText(),
-            TwoFactorAuthMethod.DUO to "Duo".asText(), // TODO BIT-1927 replace with string resource
+            TwoFactorAuthMethod.DUO to R.string.duo_title.asText(),
             TwoFactorAuthMethod.YUBI_KEY to R.string.yubi_key_title.asText(),
             TwoFactorAuthMethod.U2F to "".asText(),
             TwoFactorAuthMethod.REMEMBER to "".asText(),
-            // TODO BIT-1927 replace with string resource
-            TwoFactorAuthMethod.DUO_ORGANIZATION to "Duo (".asText()
-                .concat(R.string.organization.asText())
-                .concat(")".asText()),
+            TwoFactorAuthMethod.DUO_ORGANIZATION to R.string.duo_org_title.asText(
+                R.string.organization.asText(),
+            ),
             TwoFactorAuthMethod.FIDO_2_WEB_APP to "".asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to R.string.recovery_code_title.asText(),
         )
@@ -39,14 +38,16 @@ class TwoFactorAuthMethodExtensionTest {
                 R.string.enter_verification_code_app.asText(),
             TwoFactorAuthMethod.EMAIL to
                 R.string.enter_verification_code_email.asText("ex***@email.com"),
-            // TODO BIT-1927 replace with string resource
-            TwoFactorAuthMethod.DUO to "Follow the steps from Duo to finish logging in.".asText(),
+            TwoFactorAuthMethod.DUO to
+                R.string.follow_the_steps_from_duo_to_finish_logging_in.asText(),
             TwoFactorAuthMethod.YUBI_KEY to R.string.yubi_key_instruction.asText(),
             TwoFactorAuthMethod.U2F to "".asText(),
             TwoFactorAuthMethod.REMEMBER to "".asText(),
-            // TODO BIT-1927 replace with string resource
             TwoFactorAuthMethod.DUO_ORGANIZATION to
-                "Follow the steps from Duo to finish logging in.".asText(),
+                R.string.duo_two_step_login_is_required_for_your_account
+                    .asText()
+                    .concat(" ".asText())
+                    .concat(R.string.follow_the_steps_from_duo_to_finish_logging_in.asText()),
             TwoFactorAuthMethod.FIDO_2_WEB_APP to "".asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to "".asText(),
         )
