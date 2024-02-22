@@ -483,7 +483,7 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "appcenter-ios-token"
 
-      - name: Set up provisioning profiles
+      - name: Download Provisioning Profiles secrets
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: profiles
