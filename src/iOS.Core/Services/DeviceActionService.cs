@@ -315,8 +315,9 @@ namespace Bit.iOS.Core.Services
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
-        public async Task ReturnToPasskeyAfterUnlockAsync()
+        public Task ReturnToPasskeyAfterUnlockAsync()
         {
+            // only used by Android
             throw new NotImplementedException();
         }
 
