@@ -27,9 +27,9 @@ class AuthRequestNotificationManagerImpl(
     private val context: Context,
     private val authDiskSource: AuthDiskSource,
     pushManager: PushManager,
-    dispatchers: DispatcherManager,
+    dispatcherManager: DispatcherManager,
 ) : AuthRequestNotificationManager {
-    private val ioScope = CoroutineScope(dispatchers.io)
+    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     init {
         pushManager

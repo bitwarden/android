@@ -40,13 +40,13 @@ object AuthManagerModule {
         @ApplicationContext context: Context,
         authDiskSource: AuthDiskSource,
         pushManager: PushManager,
-        dispatchers: DispatcherManager,
+        dispatcherManager: DispatcherManager,
     ): AuthRequestNotificationManager =
         AuthRequestNotificationManagerImpl(
             context = context,
             authDiskSource = authDiskSource,
             pushManager = pushManager,
-            dispatchers = dispatchers,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides
