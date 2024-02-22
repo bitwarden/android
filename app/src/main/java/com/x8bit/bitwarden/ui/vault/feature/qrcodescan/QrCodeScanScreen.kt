@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -183,6 +185,7 @@ private fun PortraitQRCodeContent(
             BottomClickableText(
                 onEnterCodeManuallyClick = onEnterCodeManuallyClick,
             )
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -209,6 +212,7 @@ private fun LandscapeQRCodeContent(
                 .fillMaxSize()
                 .background(color = Color.Black.copy(alpha = .4f))
                 .padding(horizontal = 16.dp)
+                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
