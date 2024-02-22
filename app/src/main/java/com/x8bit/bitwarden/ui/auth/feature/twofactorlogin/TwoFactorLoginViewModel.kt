@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
 import android.net.Uri
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -18,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isDuo
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -446,6 +448,12 @@ data class TwoFactorLoginState(
      * Indicates whether the code input should be displayed.
      */
     val shouldShowCodeInput: Boolean get() = !authMethod.isDuo
+
+    /**
+     * The image to display for the given the [authMethod].
+     */
+    @get:DrawableRes
+    val imageRes: Int? get() = authMethod.imageRes
 
     /**
      * Represents the current state of any dialogs on the screen.
