@@ -504,7 +504,7 @@ jobs:
               --file $HOME/secrets/$FILE --output none
           done
 
-      - name: Set up Google Services
+      - name: Download Google Services secret
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
