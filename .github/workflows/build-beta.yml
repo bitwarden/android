@@ -203,6 +203,9 @@ jobs:
         run: |
           dotnet restore
 
+      - name: Restore tools
+        run: dotnet tool restore
+
       - name: Setup iOS build CAKE (Testing)
         run: dotnet cake build.cake --target iOS --variant beta
 
