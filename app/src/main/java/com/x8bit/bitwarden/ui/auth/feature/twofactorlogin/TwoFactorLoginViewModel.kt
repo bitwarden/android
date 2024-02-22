@@ -172,8 +172,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                         )
                     }
                     ?: TwoFactorLoginEvent.ShowToast(
-                        // TODO BIT-1927 Update to use string resource
-                        message = "Duo not yet supported".asText(),
+                        message = R.string.generic_error_message.asText(),
                     ),
             )
         } else {
@@ -434,7 +433,7 @@ data class TwoFactorLoginState(
      */
     val buttonText: Text
         get() = if (authMethod.isDuo) {
-            "Launch Duo".asText() // TODO BIT-1927 replace with string resource
+            R.string.launch_duo.asText()
         } else {
             R.string.continue_text.asText()
         }

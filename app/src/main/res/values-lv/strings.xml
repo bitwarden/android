@@ -14,14 +14,14 @@
   <string name="credits">Izmantotie risinājumi</string>
   <string name="delete">Izdzēst</string>
   <string name="deleting">Dzēš...</string>
-  <string name="do_you_really_want_to_delete">Vai jūs tiešām vēlaties dzēst? Šo darbību nav iespējams atsaukt.</string>
+  <string name="do_you_really_want_to_delete">Vai tiešām izdzēst? To nevar atsaukt.</string>
   <string name="edit">Labot</string>
   <string name="edit_folder">Labot mapi</string>
   <string name="email">E-pasts</string>
   <string name="email_address">E-pasta adrese</string>
   <string name="email_us">Nosūtīt mums e-pasta ziņu</string>
-  <string name="email_us_description">Sūti mums e-pasta ziņu, lai saņemtu palīdzību vai sniegtu atsauksmes!</string>
-  <string name="enter_pin">Ievadīt PIN kodu.</string>
+  <string name="email_us_description">Nosūtīt mums e-pasta ziņu, lai saņemtu palīdzību vai sniegtu atsauksmes.</string>
+  <string name="enter_pin">Jāievada PIN kods.</string>
   <string name="favorites">Izlase</string>
   <string name="file_bug_report">Iesniegt kļūdas ziņojumu</string>
   <string name="file_bug_report_description">Atvērt pieteikumu mūsu GitHub glabātavā.</string>
@@ -32,13 +32,13 @@
   <string name="folder_none">Nav mapes</string>
   <string name="folders">Mapes</string>
   <string name="folder_updated">Mape atjaunota.</string>
-  <string name="go_to_website">Doties uz tīmekļa vietni</string>
+  <string name="go_to_website">Doties uz tīmekļvietni</string>
   <string name="help_and_feedback">Palīdzība un atsauksmes</string>
   <string name="hide">Paslēpt</string>
-  <string name="internet_connection_required_message">Lūgums izveidot savienojumu ar tīmekli, lai varētu turpināt.</string>
-  <string name="internet_connection_required_title">Nepieciešams tīmekļa savienojums</string>
-  <string name="invalid_master_password">Nederīga galvenā parole. Mēģini vēlreiz!</string>
-  <string name="invalid_pin">Nederīgs PIN. Mēģini vēlreiz!</string>
+  <string name="internet_connection_required_message">Lūgums izveidot savienojumu ar internetu, lai varētu turpināt.</string>
+  <string name="internet_connection_required_title">Nepieciešams interneta savienojums</string>
+  <string name="invalid_master_password">Nederīga galvenā parole. Jāmēģina vēlreiz.</string>
+  <string name="invalid_pin">Nederīgs PIN. Jāmēģina vēlreiz.</string>
   <string name="launch">Palaist</string>
   <string name="log_in">Pieteikties</string>
   <string name="log_in_noun">Pieteikšanās vienums</string>
@@ -77,23 +77,23 @@
   <string name="verify_pin">Apstiprināt PIN</string>
   <string name="version">Laidiens</string>
   <string name="view">Skatīt</string>
-  <string name="visit_our_website">Apmeklēt mūsu tīmekļa vietni</string>
-  <string name="website">Tīmekļa vietne</string>
+  <string name="visit_our_website">Apmeklēt mūsu tīmekļvietni</string>
+  <string name="website">Tīmekļvietne</string>
   <string name="yes">Jā</string>
   <string name="account">Konts</string>
   <string name="account_created">Jaunais konts ir izveidots. Tagad vari pieteikties.</string>
   <string name="add_an_item">Pievienot vienumu</string>
   <string name="app_extension">Lietotņu paplašinājums</string>
   <string name="autofill_accessibility_description">Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes dažādās lietotnēs un tīmeklī.</string>
-  <string name="autofill_service">Automātiskā aizpilde</string>
+  <string name="autofill_service">Automātiskās aizpildes pakalpojums</string>
   <string name="avoid_ambiguous_characters">Izvairīties no viegli sajaucamām rakstzīmēm</string>
   <string name="bitwarden_app_extension">Bitwarden lietotņu paplašinājums</string>
   <string name="bitwarden_app_extension_alert2">Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir no Bitwarden lietotnes paplašinājuma. Vairāk par Bitwarden lietotnes paplašinājumu var uzzināt iestatījumu skatā.</string>
   <string name="bitwarden_app_extension_description">Izmantot Bitwarden Safari un citās lietotnēs, lai automātiski ievadītu pieteikšanās vienumus.</string>
-  <string name="bitwarden_autofill_service">Bitwarden automātiskā aizpilde</string>
+  <string name="bitwarden_autofill_service">Bitwarden automātiskās aizpildes pakalpojums</string>
   <string name="bitwarden_autofill_accessibility_service_description">Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes.</string>
   <string name="change_email">Mainīt e-pasta adresi</string>
-  <string name="change_email_confirmation">E-pasta adresi ir iespējams nomainīt bitwarden.com tīmekļa glabātavā. Vai apmeklēt tīmekļa vietni?</string>
+  <string name="change_email_confirmation">E-pasta adresi ir iespējams nomainīt bitwarden.com tīmekļa glabātavā. Vai tagad apmeklēt tīmekļvietni?</string>
   <string name="change_master_password">Mainīt galveno paroli</string>
   <string name="close">Aizvērt</string>
   <string name="continue_text">Turpināt</string>
@@ -117,7 +117,7 @@
   <string name="generate_password">Veidot paroli</string>
   <string name="get_password_hint">Saņemt galvenās paroles norādi</string>
   <string name="import_items">Ievietot vienumus</string>
-  <string name="import_items_confirmation">Daudzu vienumu ievietošanu var veikt bitwarden.com tīmekļa glabātavā. Vai apmeklēt tīmekļa vietni?</string>
+  <string name="import_items_confirmation">Daudzu vienumu ievietošanu var veikt bitwarden.com tīmekļa glabātavā. Vai tagad apmeklēt tīmekļvietni?</string>
   <string name="import_items_description">Ātri ievietot daudzus vienumus no citām paroļu pārvaldības lietotnēm.</string>
   <string name="last_sync">Pēdējā sinhronizēšana:</string>
   <string name="length">Garums</string>
@@ -146,7 +146,7 @@
   <string name="new_item_created">Izveidots jauns vienums.</string>
   <string name="no_favorites">Glabātavas izlasē nav vienumu.</string>
   <string name="no_items">Glabātavā nav vienumu.</string>
-  <string name="no_items_tap">Glabātāvā nav vienumu, ko izmantot šajā tīmekļa vietnē/lietotnē. Piesist, lai pievienotu.</string>
+  <string name="no_items_tap">Glabātāvā nav vienumu, ko izmantot šajā tīmekļvietnē/lietotnē. Piesist, lai pievienotu.</string>
   <string name="no_username_password_configured">Šajā pieteikšanās vienumā nav norādīts lietotājvārds vai parole.</string>
   <string name="ok_got_it">Labi, sapratu!</string>
   <string name="option_defaults">Iespēju noklusējuma vērtības tiek iegūtas no galvenās Bitwarden lietotnes paroļu veidotāja rīka.</string>
@@ -190,7 +190,7 @@
   <string name="items_for_uri">%1$s vienumi</string>
   <string name="no_items_for_uri">Glabātavā nav %1$s vienumu.</string>
   <string name="bitwarden_autofill_service_overlay">Kad tiek atlasīts ievades lauks un parādās Bitwarden automātiskās aizpildes lodziņš, jāpiesit tam, lai palaistu automātiskās aizpildes pakalpojumu.</string>
-  <string name="bitwarden_autofill_service_notification_content">Piesist šim paziņojumam, lai automātiski aizpildītu, izmantojot vienumu no glabātavas.</string>
+  <string name="bitwarden_autofill_service_notification_content">Jāpiesit šim paziņojumam, lai automātiski aizpildītu ar vienumu no glabātavas.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Atvērt pieejamības iestatījumus</string>
   <string name="bitwarden_autofill_service_step1">1. Android pieejamības iestatījumu skatā jāpieskaras \"Bitwarden\", kas atrodas zem virsraksta \"Pakalpojumi\".</string>
   <string name="bitwarden_autofill_service_step2">2. Jāpārbīda slēdzis un jāspiež \"Labi\", lai apstiprinātu.</string>
@@ -199,7 +199,7 @@
   <string name="off" tools:override="true">Izslēgts</string>
   <string name="on" tools:override="true">Ieslēgts</string>
   <string name="status">Stāvoklis</string>
-  <string name="bitwarden_autofill_service_alert2">Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir no Bitwarden automātiskās aizpildes pakalpojuma. Vairāk par Bitwarden automātiskās aizpildi var uzzināt iestatījumu skatā.</string>
+  <string name="bitwarden_autofill_service_alert2">Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir ar Bitwarden automātiskās aizpildes pakalpojumu. Vairāk par Bitwarden automātisko aizpildi var uzzināt iestatījumu skatā.</string>
   <string name="autofill">Automātiskā aizpilde</string>
   <string name="autofill_or_view">Automātiski aizpildīt vai apskatīt šo vienumu?</string>
   <string name="bitwarden_autofill_service_match_confirm">Vai tiešām automātiski aizpildīt ar šo vienumu? Tam nav pilnīgas saderības ar \"%1$s\".</string>
@@ -314,10 +314,10 @@ Nolasīšana notiks automātiski.</string>
   <string name="zip_postal_code">Pasta indekss</string>
   <string name="address">Adrese</string>
   <string name="expiration">Derīgums</string>
-  <string name="show_website_icons">Rādīt vietņu ikonas</string>
+  <string name="show_website_icons">Rādīt tīmekļvietņu ikonas</string>
   <string name="show_website_icons_description">Attēlot atpazīstamu attēlu pie katra pieteikšanās vienuma.</string>
   <string name="icons_url">Ikonu servera URL</string>
-  <string name="autofill_with_bitwarden">Automātiskā aizpilde ar Bitwarden</string>
+  <string name="autofill_with_bitwarden">Automātiski aizpildīt ar Bitwarden</string>
   <string name="vault_is_locked">Glabātava ir slēgta</string>
   <string name="go_to_my_vault">Doties uz manu glabātavu</string>
   <string name="collections">Krājumi</string>
@@ -326,7 +326,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="no_items_trash">Atkritnē nav vienumu.</string>
   <string name="autofill_accessibility_service">Automātiskās aizpildes pieejamības pakalpojums</string>
   <string name="autofill_service_description">Bitwarden automātiskās aizpildes pakalpojums izmanto Android automātiskās aizpildes ietvaru, lai palīdzētu aizpildīt pieteikšanās, kredītkartes, un identitātes informācijas veidnes citās ierīces lietotnēs.</string>
-  <string name="bitwarden_autofill_service_description">Bitwarden automātiskās aizpilde tiek izmantota, lai aizpildītu pieteikšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</string>
+  <string name="bitwarden_autofill_service_description">Bitwarden automātiskā aizpilde ir izmantojama, lai aizpildītu pieteikšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</string>
   <string name="bitwarden_autofill_service_open_autofill_settings">Atvērt automātiskās aizpildes iestatījumus</string>
   <string name="face_id">Face ID</string>
   <string name="face_id_direction">Izmantot Face ID, lai apstiprinātu.</string>
@@ -363,7 +363,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="date_updated">Atjaunināts</string>
   <string name="autofill_activated">Automātiskā aizpilde iespējota!</string>
   <string name="must_log_in_main_app_autofill">Vispirms ir jāpiesakās galvenajā Bitwarden lietotnē, lai varētu izmantot automātisko aizpildi.</string>
-  <string name="autofill_setup">Pieteikšanāš vienumi tagad ir viegli pieejami tastatūrā, kad notiek pieteikšanās lietotnēs un tīmekļa vietnēs.</string>
+  <string name="autofill_setup">Pieteikšanās vienumi tagad ir viegli pieejami tastatūrā, kad notiek pieteikšanās lietotnēs un tīmekļvietnēs.</string>
   <string name="autofill_setup2">Mēs iesakām atspējot jebkuras citas automātiskās aizpildes lietotnes iestatījumos, ja nav iecerēts izmantot tās.</string>
   <string name="bitwarden_autofill_description">Piekļūšana glabātavai no tastatūras, lai ātri ievadītu paroles.</string>
   <string name="autofill_turn_on">Lai ierīcē iespējotu paroļu automātisku aizpildīšanu, jāveic šādas darbības:</string>
@@ -418,7 +418,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="no_folders_to_list">Nav mapju, ko parādīt</string>
   <string name="fingerprint_phrase">Atpazīšanas vārdkopa</string>
   <string name="your_accounts_fingerprint">Konta atpazīšanas vārdkopa</string>
-  <string name="learn_org_confirmation">Bitwarden nodrošina iespēju kopīgot glabātavas vienumus ar citiem, kad tiek izmantots apvienības konts. Vai apmeklēt bitwarden.com tīmekļa vietni, lai uzzinātu vairāk?</string>
+  <string name="learn_org_confirmation">Bitwarden nodrošina iespēju kopīgot glabātavas vienumus ar citiem, kad tiek izmantots apvienības konts. Vai apmeklēt bitwarden.com tīmekļvietni, lai uzzinātu vairāk?</string>
   <string name="export_vault">Izgūt glabātavas saturu</string>
   <string name="lock_now">Aizslēgt</string>
   <string name="pin">PIN</string>
@@ -456,7 +456,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="ask_to_add_login">Vaicāt, lai pievienotu pieteikšanās vienumu</string>
   <string name="ask_to_add_login_description">Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</string>
   <string name="on_restart">Pārsāknējot lietotni</string>
-  <string name="autofill_service_not_enabled">Automātiskā aizpilde padara drošu piekļuvi Bitwarden galbātavai vienkāršu no citām 0tīmekļa vietnēm un lietotnēm. Izskatās, ka nav iespējota Bitwarden automātiskā aizpilde. To var izdarīt iestatījumu sadaļā.</string>
+  <string name="autofill_service_not_enabled">Automātiskā aizpildīšana padara drošu piekļuvi Bitwarden galbātavai vienkāršu no citām tīmekļvietnēm un lietotnēm. Izskatās, ka nav iespējota Bitwarden automātiskā aizpildīšana. To var izdarīt iestatījumu sadaļā.</string>
   <string name="theme_applied_on_restart">Izskata izmaiņas tiks pielietotas pēc lietotnes pārsāknēšanas.</string>
   <string name="capitalize">Izmantot lielos sākumburtus</string>
   <string name="include_number">Iekļaut ciparu</string>
@@ -500,7 +500,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="item_restored">Vienums tika atjaunots.</string>
   <string name="trash">Atkritne</string>
   <string name="search_trash">Meklēt atkritnē</string>
-  <string name="do_you_really_want_to_permanently_delete_cipher">Vai tiešām vēlaties neatgriezeniski dzēst? To nevar atsaukt.</string>
+  <string name="do_you_really_want_to_permanently_delete_cipher">Vai tiešām neatgriezeniski izdzēst? To nevar atsaukt.</string>
   <string name="do_you_really_want_to_restore_cipher">Vai tiešām vēlaties atjaunot šo vienumu?</string>
   <string name="do_you_really_want_to_soft_delete_cipher">Vai tiešām pārvietot uz atkritni?</string>
   <string name="account_biometric_invalidated">Šī konta atslēgšana ar biometriju ir atspējota, tiek gaidīts galvenās paroles apstiprinājums.</string>
@@ -651,7 +651,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="resend_code">Atkārtoti nosūtīt kodu</string>
   <string name="a_verification_code_was_sent_to_your_email">Pārbaudes kods tika nosūtīts e-pastā</string>
   <string name="an_error_occurred_while_sending_a_verification_code_to_your_email_please_try_again">Atgadījās kļūda, kad apliecinājuma kods tika sūtīts uz e-pastu. Lūgums mēģināt vēlreiz</string>
-  <string name="enter_the_verification_code_that_was_sent_to_your_email">Ievadīt pārbaudes kodu, kas tika nosūtīts e-pastā</string>
+  <string name="enter_the_verification_code_that_was_sent_to_your_email">Jāievada apliecinājuma kods, kas tika nosūtīts e-pastā</string>
   <string name="submit_crash_logs">Iesniegt avāriju ierakstus</string>
   <string name="submit_crash_logs_description">Avāriju ziņojumu iesniegšana palīdz Bitwarden uzlabot lietotnes noturību.</string>
   <string name="options_expanded">Iespējas ir izvērstas, piesist, lai sakļautu.</string>
@@ -726,7 +726,7 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Vai tiešām pārrakstīt pašreizējo lietotājvārdu?</string>
   <string name="generate_username">Izveidot lietotājvārdu</string>
   <string name="email_type">E-pasta veids</string>
-  <string name="website_required">Mājaslapa (nepieciešama)</string>
+  <string name="website_required">Tīmekļviente (nepieciešama)</string>
   <string name="unknown_x_error_message">Notika nezināma kļūda %1$s.</string>
   <string name="plus_addressed_email_description">Izmantot e-pasta pakalpojuma nodrošinātāja apakšadrešu spējas</string>
   <string name="catch_all_email_description">Izmantot uzstādīto domēna visu tverošo iesūtni.</string>
@@ -734,7 +734,7 @@ jāizvēlas \"Pievienot TOTP\", lai droši glabātu atslēgu.</string>
   <string name="random">Nejauši</string>
   <string name="connect_to_watch">Savienoties ar pulksteni</string>
   <string name="accessibility_service_disclosure">Pieejamības pakalpojuma izmantošanas skaidrojums</string>
-  <string name="accessibility_disclosure_text">Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pieteikšanās laukus lietotnēs un tīmekļa vietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pieteikšanās datu ievadi.</string>
+  <string name="accessibility_disclosure_text">Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pieteikšanās laukus lietotnēs un tīmekļvietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pieteikšanās datu ievadi.</string>
   <string name="accept">Pieņemt</string>
   <string name="decline">Noraidīt</string>
   <string name="login_request_has_already_expired">Pieteikšanās pieprasījuma derīgums jau ir beidzies.</string>
@@ -862,7 +862,7 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="contact_support_description_long">Meklējamais nav atrodams? Ir iespēja sazināties ar Bitwarden atbalstu bitwarden.com.</string>
   <string name="privacy_policy_description_long">Mūsu privātuma nosacījumi ir pārskatāmi bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</string>
-  <string name="learn_about_organizations_description_long">Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt bitwarden.com tīmekļa vietnē.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt bitwarden.com tīmekļvietnē.</string>
   <string name="rate_app_description_long">Var palīdzēt citiem noskaidrot, vai Bitwarden tiem der. To var izdarīt lietotņu veikalā, atstājot vērtējumu.</string>
   <string name="default_dark_theme_description_long">Izvēlēties izmantot tumšo izskatu, kad tiek izmantots ierīces tumšais izskats</string>
   <string name="created_xy">Izveidots %1$s, %2$s</string>

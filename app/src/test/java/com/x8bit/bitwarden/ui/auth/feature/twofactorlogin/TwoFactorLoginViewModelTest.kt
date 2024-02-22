@@ -296,7 +296,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             ssoToken = null,
         )
         every { authRepository.twoFactorResponse } returns response
-        val mockkUri = mockk<Uri>()
         val viewModel = createViewModel(
             state = DEFAULT_STATE.copy(
                 authMethod = TwoFactorAuthMethod.DUO,
@@ -305,7 +304,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
             assertEquals(
-                TwoFactorLoginEvent.ShowToast("Duo not yet supported".asText()),
+                TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
                 awaitItem(),
             )
         }
