@@ -12,7 +12,9 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Assert.assertTrue
@@ -31,7 +33,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
         ),
     )
     private val intentManager: IntentManager = mockk(relaxed = true) {
-        every { launchUri(any()) } returns Unit
+        every { launchUri(any()) } just runs
     }
 
     val viewModel = mockk<VaultSettingsViewModel>(relaxed = true) {
@@ -54,7 +56,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
 
     @Test
     fun `on back click should send BackClick`() {
-        every { viewModel.trySendAction(VaultSettingsAction.BackClick) } returns Unit
+        every { viewModel.trySendAction(VaultSettingsAction.BackClick) } just runs
         composeTestRule.onNodeWithContentDescription("Back").performClick()
         verify { viewModel.trySendAction(VaultSettingsAction.BackClick) }
     }

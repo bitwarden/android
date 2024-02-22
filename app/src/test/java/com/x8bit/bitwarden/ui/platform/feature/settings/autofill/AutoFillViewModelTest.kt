@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 class AutoFillViewModelTest : BaseViewModelTest() {
 
     private val mutableIsAutofillEnabledStateFlow = MutableStateFlow(false)
-    private val settingsRepository: SettingsRepository = mockk() {
+    private val settingsRepository: SettingsRepository = mockk {
         every { isInlineAutofillEnabled } returns true
         every { isInlineAutofillEnabled = any() } just runs
         every { isAutoCopyTotpDisabled } returns true

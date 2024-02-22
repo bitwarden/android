@@ -180,27 +180,24 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `LogInClick with invalid organization should show error dialog`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        dialogState = EnterpriseSignOnState.DialogState.Error(
-                            message = R.string.validation_field_required.asText(
-                                R.string.org_identifier.asText(),
-                            ),
+    fun `LogInClick with invalid organization should show error dialog`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        message = R.string.validation_field_required.asText(
+                            R.string.org_identifier.asText(),
                         ),
                     ),
-                    viewModel.stateFlow.value,
-                )
-            }
+                ),
+                viewModel.stateFlow.value,
+            )
         }
+    }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `LogInClick with no Internet should show error dialog`() = runTest {
         val viewModel = createViewModel(isNetworkConnected = false)
@@ -591,120 +588,124 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OrganizationDomainSsoDetails failure should make a request, hide the dialog, and update the org input based on the remembered org`() = runTest {
-        coEvery {
-            authRepository.getOrganizationDomainSsoDetails(any())
-        } returns OrganizationDomainSsoDetailsResult.Failure
+    fun `OrganizationDomainSsoDetails failure should make a request, hide the dialog, and update the org input based on the remembered org`() =
+        runTest {
+            coEvery {
+                authRepository.getOrganizationDomainSsoDetails(any())
+            } returns OrganizationDomainSsoDetailsResult.Failure
 
-        coEvery {
-            authRepository.rememberedOrgIdentifier
-        } returns "Bitwarden"
+            coEvery {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
 
-        val viewModel = createViewModel(dismissInitialDialog = false)
-        assertEquals(
-            DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
-            viewModel.stateFlow.value,
-        )
+            val viewModel = createViewModel(dismissInitialDialog = false)
+            assertEquals(
+                DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
+                viewModel.stateFlow.value,
+            )
 
-        coVerify(exactly = 1) {
-            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
-            authRepository.rememberedOrgIdentifier
+            coVerify(exactly = 1) {
+                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.rememberedOrgIdentifier
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OrganizationDomainSsoDetails success with no SSO available should make a request, hide the dialog, and update the org input based on the remembered org`() = runTest {
-        val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-            isSsoAvailable = false,
-            organizationIdentifier = "Bitwarden without SSO",
-        )
+    fun `OrganizationDomainSsoDetails success with no SSO available should make a request, hide the dialog, and update the org input based on the remembered org`() =
+        runTest {
+            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+                isSsoAvailable = false,
+                organizationIdentifier = "Bitwarden without SSO",
+            )
 
-        coEvery {
-            authRepository.getOrganizationDomainSsoDetails(any())
-        } returns orgDetails
+            coEvery {
+                authRepository.getOrganizationDomainSsoDetails(any())
+            } returns orgDetails
 
-        coEvery {
-            authRepository.rememberedOrgIdentifier
-        } returns "Bitwarden"
+            coEvery {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
 
-        val viewModel = createViewModel(dismissInitialDialog = false)
-        assertEquals(
-            DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
-            viewModel.stateFlow.value,
-        )
+            val viewModel = createViewModel(dismissInitialDialog = false)
+            assertEquals(
+                DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden"),
+                viewModel.stateFlow.value,
+            )
 
-        coVerify(exactly = 1) {
-            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
-            authRepository.rememberedOrgIdentifier
+            coVerify(exactly = 1) {
+                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.rememberedOrgIdentifier
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OrganizationDomainSsoDetails success with blank identifier should make a request, show the error dialog, and update the org input based on the remembered org`() = runTest {
-        val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-            isSsoAvailable = true,
-            organizationIdentifier = "",
-        )
+    fun `OrganizationDomainSsoDetails success with blank identifier should make a request, show the error dialog, and update the org input based on the remembered org`() =
+        runTest {
+            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+                isSsoAvailable = true,
+                organizationIdentifier = "",
+            )
 
-        coEvery {
-            authRepository.getOrganizationDomainSsoDetails(any())
-        } returns orgDetails
+            coEvery {
+                authRepository.getOrganizationDomainSsoDetails(any())
+            } returns orgDetails
 
-        coEvery {
-            authRepository.rememberedOrgIdentifier
-        } returns "Bitwarden"
+            coEvery {
+                authRepository.rememberedOrgIdentifier
+            } returns "Bitwarden"
 
-        val viewModel = createViewModel(dismissInitialDialog = false)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                dialogState = EnterpriseSignOnState.DialogState.Error(
-                    message = R.string.organization_sso_identifier_required.asText(),
+            val viewModel = createViewModel(dismissInitialDialog = false)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = EnterpriseSignOnState.DialogState.Error(
+                        message = R.string.organization_sso_identifier_required.asText(),
+                    ),
+                    orgIdentifierInput = "Bitwarden",
                 ),
-                orgIdentifierInput = "Bitwarden",
-            ),
-            viewModel.stateFlow.value,
-        )
+                viewModel.stateFlow.value,
+            )
 
-        coVerify(exactly = 1) {
-            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
-            authRepository.rememberedOrgIdentifier
+            coVerify(exactly = 1) {
+                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+                authRepository.rememberedOrgIdentifier
+            }
         }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `OrganizationDomainSsoDetails success with valid organization should make a request then attempt to login`() = runTest {
-        val orgDetails = OrganizationDomainSsoDetailsResult.Success(
-            isSsoAvailable = true,
-            organizationIdentifier = "Bitwarden with SSO",
-        )
+    fun `OrganizationDomainSsoDetails success with valid organization should make a request then attempt to login`() =
+        runTest {
+            val orgDetails = OrganizationDomainSsoDetailsResult.Success(
+                isSsoAvailable = true,
+                organizationIdentifier = "Bitwarden with SSO",
+            )
 
-        coEvery {
-            authRepository.getOrganizationDomainSsoDetails(any())
-        } returns orgDetails
+            coEvery {
+                authRepository.getOrganizationDomainSsoDetails(any())
+            } returns orgDetails
 
-        // Just hang on this request; login is tested elsewhere
-        coEvery {
-            authRepository.prevalidateSso(any())
-        } just awaits
+            // Just hang on this request; login is tested elsewhere
+            coEvery {
+                authRepository.prevalidateSso(any())
+            } just awaits
 
-        val viewModel = createViewModel(dismissInitialDialog = false)
-        assertEquals(
-            DEFAULT_STATE.copy(
-                orgIdentifierInput = "Bitwarden with SSO",
-                dialogState = EnterpriseSignOnState.DialogState.Loading(
-                    message = R.string.logging_in.asText(),
+            val viewModel = createViewModel(dismissInitialDialog = false)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    orgIdentifierInput = "Bitwarden with SSO",
+                    dialogState = EnterpriseSignOnState.DialogState.Loading(
+                        message = R.string.logging_in.asText(),
+                    ),
                 ),
-            ),
-            viewModel.stateFlow.value,
-        )
+                viewModel.stateFlow.value,
+            )
 
-        coVerify(exactly = 1) {
-            authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+            coVerify(exactly = 1) {
+                authRepository.getOrganizationDomainSsoDetails(DEFAULT_EMAIL)
+            }
         }
-    }
 
     @Suppress("LongParameterList")
     private fun createViewModel(

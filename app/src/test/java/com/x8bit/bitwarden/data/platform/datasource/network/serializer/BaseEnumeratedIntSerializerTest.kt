@@ -47,4 +47,4 @@ private enum class TestEnum {
 }
 
 private class TestEnumSerializer :
-    BaseEnumeratedIntSerializer<TestEnum>(values = TestEnum.values())
+    BaseEnumeratedIntSerializer<TestEnum>(values = TestEnum.entries.toTypedArray())

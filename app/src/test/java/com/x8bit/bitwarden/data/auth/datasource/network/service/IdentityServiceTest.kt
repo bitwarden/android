@@ -30,7 +30,7 @@ import retrofit2.create
 class IdentityServiceTest : BaseServiceTest() {
 
     private val identityApi: IdentityApi = retrofit.create()
-    private val deviceModelProvider = mockk<DeviceModelProvider>() {
+    private val deviceModelProvider = mockk<DeviceModelProvider> {
         every { deviceModel } returns "Test Device"
     }
 

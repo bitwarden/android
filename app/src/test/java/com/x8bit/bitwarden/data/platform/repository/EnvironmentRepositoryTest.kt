@@ -90,7 +90,7 @@ class EnvironmentRepositoryTest {
     @Test
     fun `environment should pull from and update EnvironmentDiskSource`() {
         val environmentUrlDataJson = mockk<EnvironmentUrlDataJson>()
-        val environment = mockk<Environment>() {
+        val environment = mockk<Environment> {
             every { environmentUrlData } returns environmentUrlDataJson
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
@@ -125,7 +125,7 @@ class EnvironmentRepositoryTest {
     @Test
     fun `environmentStateFow should react to changes in environment`() = runTest {
         val environmentUrlDataJson = mockk<EnvironmentUrlDataJson>()
-        val environment = mockk<Environment>() {
+        val environment = mockk<Environment> {
             every { environmentUrlData } returns environmentUrlDataJson
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment

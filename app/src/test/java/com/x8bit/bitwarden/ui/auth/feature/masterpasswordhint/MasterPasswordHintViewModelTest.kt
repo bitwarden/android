@@ -20,7 +20,6 @@ class MasterPasswordHintViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk()
     private val networkConnectionManager: NetworkConnectionManager = mockk()
 
-    @Suppress("MaxLineLength")
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
@@ -29,7 +28,6 @@ class MasterPasswordHintViewModelTest : BaseViewModelTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `SubmitClick with valid email should show success dialog`() = runTest {
         val validEmail = "test@example.com"

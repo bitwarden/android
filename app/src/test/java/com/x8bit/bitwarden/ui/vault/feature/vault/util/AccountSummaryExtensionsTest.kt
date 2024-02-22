@@ -15,7 +15,7 @@ class AccountSummaryExtensionsTest {
     fun `initials should return the starting letters of the first two words for a multi-word name`() {
         assertEquals(
             "FS",
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { name } returns "First Second Third"
             }
                 .initials,
@@ -26,7 +26,7 @@ class AccountSummaryExtensionsTest {
     fun `initials should return the first two letters of the name for a single word name`() {
         assertEquals(
             "FI",
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { name } returns "First"
             }
                 .initials,
@@ -38,7 +38,7 @@ class AccountSummaryExtensionsTest {
     fun `initials should return the first two letters of the user's email if the name is not present`() {
         assertEquals(
             "TE",
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { name } returns null
                 every { email } returns "test@bitwarden.com"
             }
@@ -50,7 +50,7 @@ class AccountSummaryExtensionsTest {
     fun `iconRes returns a checkmark for active accounts`() {
         assertEquals(
             R.drawable.ic_check_mark,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.ACTIVE
             }
                 .iconRes,
@@ -61,7 +61,7 @@ class AccountSummaryExtensionsTest {
     fun `iconRes returns a locked lock for locked accounts`() {
         assertEquals(
             R.drawable.ic_locked,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOCKED
             }
                 .iconRes,
@@ -72,7 +72,7 @@ class AccountSummaryExtensionsTest {
     fun `iconRes returns a locked lock for logged out accounts`() {
         assertEquals(
             R.drawable.ic_locked,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOGGED_OUT
             }
                 .iconRes,
@@ -83,7 +83,7 @@ class AccountSummaryExtensionsTest {
     fun `iconRes returns an unlocked lock for unlocked accounts`() {
         assertEquals(
             R.drawable.ic_unlocked,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.UNLOCKED
             }
                 .iconRes,
@@ -93,7 +93,7 @@ class AccountSummaryExtensionsTest {
     @Test
     fun `supportingTextResOrNull returns a null for active accounts`() {
         assertNull(
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.ACTIVE
             }
                 .supportingTextResOrNull,
@@ -104,7 +104,7 @@ class AccountSummaryExtensionsTest {
     fun `supportingTextResOrNull returns Locked locked accounts`() {
         assertEquals(
             R.string.account_locked,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOCKED
             }
                 .supportingTextResOrNull,
@@ -115,7 +115,7 @@ class AccountSummaryExtensionsTest {
     fun `supportingTextResOrNull returns Logged Out for logged out accounts`() {
         assertEquals(
             R.string.account_logged_out,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.LOGGED_OUT
             }
                 .supportingTextResOrNull,
@@ -126,7 +126,7 @@ class AccountSummaryExtensionsTest {
     fun `supportingTextResOrNull returns Unlocked for unlocked accounts`() {
         assertEquals(
             R.string.account_unlocked,
-            mockk<AccountSummary>() {
+            mockk<AccountSummary> {
                 every { status } returns AccountSummary.Status.UNLOCKED
             }
                 .supportingTextResOrNull,

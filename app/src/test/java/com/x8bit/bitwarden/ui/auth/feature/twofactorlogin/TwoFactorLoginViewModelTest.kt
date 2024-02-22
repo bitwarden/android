@@ -175,32 +175,31 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CodeInputChanged should update input and disable button if code is blank`() =
-        runTest {
-            val input = "123456"
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                // Set it to true.
-                viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(input))
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        codeInput = input,
-                        isContinueButtonEnabled = true,
-                    ),
-                    viewModel.stateFlow.value,
-                )
+    fun `CodeInputChanged should update input and disable button if code is blank`() = runTest {
+        val input = "123456"
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            // Set it to true.
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(input))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    codeInput = input,
+                    isContinueButtonEnabled = true,
+                ),
+                viewModel.stateFlow.value,
+            )
 
-                // Set it to false.
-                viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(""))
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        codeInput = "",
-                        isContinueButtonEnabled = false,
-                    ),
-                    viewModel.stateFlow.value,
-                )
-            }
+            // Set it to false.
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(""))
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    codeInput = "",
+                    isContinueButtonEnabled = false,
+                ),
+                viewModel.stateFlow.value,
+            )
         }
+    }
 
     @Test
     fun `ContinueButtonClick login returns success should update loadingDialogState`() = runTest {
@@ -251,64 +250,66 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick login should emit NavigateToDuo when auth method is Duo and authUrl is non-null`() = runTest {
-        val authMethodsData = mapOf(
-            TwoFactorAuthMethod.DUO to JsonObject(
-                mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")),
-            ),
-        )
-        val response = GetTokenResponseJson.TwoFactorRequired(
-            authMethodsData = authMethodsData,
-            captchaToken = null,
-            ssoToken = null,
-        )
-        every { authRepository.twoFactorResponse } returns response
-        val mockkUri = mockk<Uri>()
-        val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(
-                authMethod = TwoFactorAuthMethod.DUO,
-            ),
-        )
-        every { Uri.parse("bitwarden.com") } returns mockkUri
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
-            assertEquals(
-                TwoFactorLoginEvent.NavigateToDuo(mockkUri),
-                awaitItem(),
+    fun `ContinueButtonClick login should emit NavigateToDuo when auth method is Duo and authUrl is non-null`() =
+        runTest {
+            val authMethodsData = mapOf(
+                TwoFactorAuthMethod.DUO to JsonObject(
+                    mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")),
+                ),
             )
+            val response = GetTokenResponseJson.TwoFactorRequired(
+                authMethodsData = authMethodsData,
+                captchaToken = null,
+                ssoToken = null,
+            )
+            every { authRepository.twoFactorResponse } returns response
+            val mockkUri = mockk<Uri>()
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    authMethod = TwoFactorAuthMethod.DUO,
+                ),
+            )
+            every { Uri.parse("bitwarden.com") } returns mockkUri
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    TwoFactorLoginEvent.NavigateToDuo(mockkUri),
+                    awaitItem(),
+                )
+            }
+            verify {
+                Uri.parse("bitwarden.com")
+            }
         }
-        verify {
-            Uri.parse("bitwarden.com")
-        }
-    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick login should emit ShowToast when auth method is Duo and authUrl is null`() = runTest {
-        val authMethodsData = mapOf(
-            TwoFactorAuthMethod.DUO to JsonObject(
-                mapOf("Nothing" to JsonPrimitive("Nothing")),
-            ),
-        )
-        val response = GetTokenResponseJson.TwoFactorRequired(
-            authMethodsData = authMethodsData,
-            captchaToken = null,
-            ssoToken = null,
-        )
-        every { authRepository.twoFactorResponse } returns response
-        val viewModel = createViewModel(
-            state = DEFAULT_STATE.copy(
-                authMethod = TwoFactorAuthMethod.DUO,
-            ),
-        )
-        viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
-            assertEquals(
-                TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
-                awaitItem(),
+    fun `ContinueButtonClick login should emit ShowToast when auth method is Duo and authUrl is null`() =
+        runTest {
+            val authMethodsData = mapOf(
+                TwoFactorAuthMethod.DUO to JsonObject(
+                    mapOf("Nothing" to JsonPrimitive("Nothing")),
+                ),
             )
+            val response = GetTokenResponseJson.TwoFactorRequired(
+                authMethodsData = authMethodsData,
+                captchaToken = null,
+                ssoToken = null,
+            )
+            every { authRepository.twoFactorResponse } returns response
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    authMethod = TwoFactorAuthMethod.DUO,
+                ),
+            )
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `ContinueButtonClick login returns CaptchaRequired should emit NavigateToCaptcha`() =

@@ -4,7 +4,9 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
@@ -17,7 +19,7 @@ class SettingsScreenTest : BaseComposeTest() {
     fun `on about row click should emit SettingsClick`() {
         val viewModel = mockk<SettingsViewModel> {
             every { eventFlow } returns emptyFlow()
-            every { trySendAction(SettingsAction.SettingsClick(Settings.ABOUT)) } returns Unit
+            every { trySendAction(SettingsAction.SettingsClick(Settings.ABOUT)) } just runs
         }
         composeTestRule.setContent {
             SettingsScreen(
@@ -40,7 +42,7 @@ class SettingsScreenTest : BaseComposeTest() {
             every { eventFlow } returns emptyFlow()
             every {
                 trySendAction(SettingsAction.SettingsClick(Settings.ACCOUNT_SECURITY))
-            } returns Unit
+            } just runs
         }
         composeTestRule.setContent {
             SettingsScreen(
@@ -61,7 +63,7 @@ class SettingsScreenTest : BaseComposeTest() {
     fun `on appearance row click should emit SettingsClick`() {
         val viewModel = mockk<SettingsViewModel> {
             every { eventFlow } returns emptyFlow()
-            every { trySendAction(SettingsAction.SettingsClick(Settings.APPEARANCE)) } returns Unit
+            every { trySendAction(SettingsAction.SettingsClick(Settings.APPEARANCE)) } just runs
         }
         composeTestRule.setContent {
             SettingsScreen(
@@ -82,7 +84,7 @@ class SettingsScreenTest : BaseComposeTest() {
     fun `on auto-fill row click should emit SettingsClick`() {
         val viewModel = mockk<SettingsViewModel> {
             every { eventFlow } returns emptyFlow()
-            every { trySendAction(SettingsAction.SettingsClick(Settings.AUTO_FILL)) } returns Unit
+            every { trySendAction(SettingsAction.SettingsClick(Settings.AUTO_FILL)) } just runs
         }
         composeTestRule.setContent {
             SettingsScreen(
@@ -103,7 +105,7 @@ class SettingsScreenTest : BaseComposeTest() {
     fun `on other row click should emit SettingsClick`() {
         val viewModel = mockk<SettingsViewModel> {
             every { eventFlow } returns emptyFlow()
-            every { trySendAction(SettingsAction.SettingsClick(Settings.OTHER)) } returns Unit
+            every { trySendAction(SettingsAction.SettingsClick(Settings.OTHER)) } just runs
         }
         composeTestRule.setContent {
             SettingsScreen(
@@ -124,7 +126,7 @@ class SettingsScreenTest : BaseComposeTest() {
     fun `on vault row click should emit SettingsClick`() {
         val viewModel = mockk<SettingsViewModel> {
             every { eventFlow } returns emptyFlow()
-            every { trySendAction(SettingsAction.SettingsClick(Settings.VAULT)) } returns Unit
+            every { trySendAction(SettingsAction.SettingsClick(Settings.VAULT)) } just runs
         }
         composeTestRule.setContent {
             SettingsScreen(

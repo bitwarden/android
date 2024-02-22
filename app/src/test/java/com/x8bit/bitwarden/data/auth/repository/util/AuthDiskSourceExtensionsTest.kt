@@ -27,7 +27,7 @@ class AuthDiskSourceExtensionsTest {
             "userId2" to mockk<AccountJson>(),
             "userId3" to mockk<AccountJson>(),
         )
-        val userStateJson = mockk<UserStateJson>() {
+        val userStateJson = mockk<UserStateJson> {
             every { accounts } returns mockAccounts
         }
         authDiskSource.apply {
@@ -88,7 +88,7 @@ class AuthDiskSourceExtensionsTest {
                 "userId2" to mockk<AccountJson>(),
                 "userId3" to mockk<AccountJson>(),
             )
-            val userStateJson = mockk<UserStateJson>() {
+            val userStateJson = mockk<UserStateJson> {
                 every { accounts } returns mockAccounts
             }
             authDiskSource.apply {

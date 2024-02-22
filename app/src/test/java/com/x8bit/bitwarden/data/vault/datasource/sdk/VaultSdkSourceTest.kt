@@ -105,7 +105,6 @@ class VaultSdkSourceTest {
         verify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `derivePinProtectedUserKey should call SDK and return a Result with the correct data`() =
         runBlocking {
@@ -179,7 +178,7 @@ class VaultSdkSourceTest {
                 clientCrypto.initializeUserCrypto(
                     req = mockInitCryptoRequest,
                 )
-            } returns Unit
+            } just runs
             val result = vaultSdkSource.initializeCrypto(
                 userId = userId,
                 request = mockInitCryptoRequest,
@@ -258,7 +257,7 @@ class VaultSdkSourceTest {
                 clientCrypto.initializeOrgCrypto(
                     req = mockInitCryptoRequest,
                 )
-            } returns Unit
+            } just runs
             val result = vaultSdkSource.initializeOrganizationCrypto(
                 userId = userId,
                 request = mockInitCryptoRequest,
@@ -759,32 +758,31 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `generateTotp should call SDK and return a Result with correct data`() =
-        runTest {
-            val userId = "userId"
-            val totpResponse = TotpResponse("TestCode", 30u)
-            coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
+    fun `generateTotp should call SDK and return a Result with correct data`() = runTest {
+        val userId = "userId"
+        val totpResponse = TotpResponse("TestCode", 30u)
+        coEvery { clientVault.generateTotp(any(), any()) } returns totpResponse
 
-            val time = DateTime.now()
-            val result = vaultSdkSource.generateTotp(
-                userId = userId,
-                totp = "Totp",
+        val time = DateTime.now()
+        val result = vaultSdkSource.generateTotp(
+            userId = userId,
+            totp = "Totp",
+            time = time,
+        )
+
+        assertEquals(
+            Result.success(totpResponse),
+            result,
+        )
+        coVerify {
+            clientVault.generateTotp(
+                key = "Totp",
                 time = time,
             )
-
-            assertEquals(
-                Result.success(totpResponse),
-                result,
-            )
-            coVerify {
-                clientVault.generateTotp(
-                    key = "Totp",
-                    time = time,
-                )
-            }
-
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
+
+        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+    }
 
     @Test
     fun `validatePassword should call SDK and a Result with correct data`() = runTest {

@@ -54,7 +54,7 @@ fun createMockSdkCipher(number: Int): Cipher =
     )
 
 /**
- * Create a mock [SecureNote] with a given [number].
+ * Create a mock [SecureNote].
  */
 fun createMockSdkSecureNote(): SecureNote =
     SecureNote(

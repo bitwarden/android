@@ -31,7 +31,7 @@ import org.junit.Test
 
 class TwoFactorLoginScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
-        every { launchUri(any()) } returns Unit
+        every { launchUri(any()) } just runs
     }
     private val nfcManager: NfcManager = mockk {
         every { start() } just runs
