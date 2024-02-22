@@ -243,7 +243,7 @@ class LoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `master password hint text click should send MasterPasswordHintClick action`() {
-        composeTestRule.onNodeWithText("Get your master password hint").performClick()
+        composeTestRule.onNodeWithText("Get master password hint").performClick()
         verify {
             viewModel.trySendAction(LoginAction.MasterPasswordHintClick)
         }

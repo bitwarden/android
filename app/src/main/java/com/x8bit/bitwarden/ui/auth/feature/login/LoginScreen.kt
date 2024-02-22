@@ -231,7 +231,7 @@ private fun LoginScreenContent(
         )
 
         BitwardenClickableText(
-            label = stringResource(id = R.string.get_password_hint),
+            label = stringResource(id = R.string.get_master_passwordword_hint),
             onClick = onMasterPasswordClick,
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
