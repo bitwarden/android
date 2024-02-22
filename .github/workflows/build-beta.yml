@@ -203,6 +203,9 @@ jobs:
         run: |
           dotnet restore
 
+      - name: Setup iOS build CAKE (Testing)
+        run: dotnet cake build.cake --target iOS --variant beta
+
       - name: Bulid WatchApp
         run: |
           echo "##### Build WatchApp with Release Configuration"
@@ -210,9 +213,6 @@ jobs:
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "##### Done"
-
-      - name: Setup iOS build CAKE (Testing)
-        run: dotnet cake build.cake --target iOS --variant beta
 
       - name: Archive Build for App Store
         shell: pwsh
@@ -280,44 +280,20 @@ jobs:
           if-no-files-found: error
 
       - name: Install AppCenter CLI
-        # if: |
-        #   (github.ref == 'refs/heads/main'
-        #     && needs.setup.outputs.rc_branch_exists == 0
-        #     && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || github.ref == 'refs/heads/hotfix-rc'
         run: npm install -g appcenter-cli
 
       - name: Upload dSYMs to App Center
-        # if: |
-        #   (github.ref == 'refs/heads/main'
-        #     && needs.setup.outputs.rc_branch_exists == 0
-        #     && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
 
       - name: Upload Watch dSYMs to Firebase Crashlytics
-        # if: |
-        #   (github.ref == 'refs/heads/main'
-        #     && needs.setup.outputs.rc_branch_exists == 0
-        #     && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || github.ref == 'refs/heads/hotfix-rc'
         run: |
           echo "##### Uploading Watch dSYMs to Firebase"
 
           find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
 
       - name: Validate app in App Store
-        # if: |
-        #   (github.ref == 'refs/heads/master'
-        #     && needs.setup.outputs.rc_branch_exists == 0
-        #     && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -327,12 +303,6 @@ jobs:
         shell: bash
 
       - name: Deploy to App Store
-        # if: |
-        #   (github.ref == 'refs/heads/main'
-        #     && needs.setup.outputs.rc_branch_exists == 0
-        #     && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
