@@ -27,6 +27,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -196,6 +198,7 @@ private fun ExportVaultScreenContent(
             BitwardenPolicyWarningText(
                 text = stringResource(id = R.string.disable_personal_vault_export_policy_in_effect),
                 modifier = Modifier
+                    .semantics { testTag = "DisablePrivateVaultPolicyLabel" }
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -215,6 +218,7 @@ private fun ExportVaultScreenContent(
             },
             isEnabled = !state.policyPreventsExport,
             modifier = Modifier
+                .semantics { testTag = "FileFormatPicker" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -227,6 +231,7 @@ private fun ExportVaultScreenContent(
             readOnly = state.policyPreventsExport,
             onValueChange = onPasswordInputChanged,
             modifier = Modifier
+                .semantics { testTag = "MasterPasswordEntry" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -250,6 +255,7 @@ private fun ExportVaultScreenContent(
             onClick = onExportVaultClick,
             isEnabled = !state.policyPreventsExport,
             modifier = Modifier
+                .semantics { testTag = "ExportVaultButton" }
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
