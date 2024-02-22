@@ -97,38 +97,41 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "appcenter-ios-token"
 
-      - name: Decrypt secrets
+      - name: Download Provisioning Profiles secrets
         env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: profiles
         run: |
-          mkdir -p ~/secrets
+          mkdir -p $HOME/secrets
+          profiles=(
+              "dist_beta_autofill.mobileprovision"
+              "dist_beta_bitwarden.mobileprovision"
+              "dist_beta_extension.mobileprovision"
+              "dist_beta_share_extension.mobileprovision"
+              "dist_beta_bitwarden_watch_app.mobileprovision"
+              "dist_beta_bitwarden_watch_app_extension.mobileprovision"
+          )
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_autofill.mobileprovision ./.github/secrets/dist_beta_autofill.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_bitwarden.mobileprovision ./.github/secrets/dist_beta_bitwarden.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_extension.mobileprovision ./.github/secrets/dist_beta_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_share_extension.mobileprovision ./.github/secrets/dist_beta_share_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_watch_app.mobileprovision ./.github/secrets/dist_beta_watch_app.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_beta_watch_app_extension.mobileprovision ./.github/secrets/dist_beta_watch_app_extension.mobileprovision.gpg
+          for FILE in "${profiles[@]}"
+          do
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+              --file $HOME/secrets/$FILE --output none
+          done
+
+      - name: Download Google Services secret
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+          FILE: GoogleService-Info.plist
+        run: |
+          mkdir -p $HOME/secrets
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+            --file $HOME/secrets/$FILE --output none
 
       - name: Increment version
         run: |
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
-
-          echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
-          echo "########################################"
 
           echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
 
@@ -141,13 +144,10 @@ jobs:
 
       - name: Update Entitlements
         run: |
-          echo "########################################"
           echo "##### Updating Entitlements"
-          echo "########################################"
 
           perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>beta<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
-          
-        
+
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
@@ -170,8 +170,8 @@ jobs:
           BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden.mobileprovision
           EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_extension.mobileprovision
           SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_share_extension.mobileprovision
-          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_beta_watch_app.mobileprovision
-          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_watch_app_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden_watch_app_extension.mobileprovision
           PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
           mkdir -p "$PROFILES_DIR_PATH"
@@ -197,46 +197,36 @@ jobs:
       - name: Restore packages
         run: |
           dotnet restore
-          dotnet build.cake --target iOS --variant beta
 
       - name: Bulid WatchApp
         run: |
-          echo "########################################"
           echo "##### Build WatchApp with Release Configuration"
-          echo "########################################"
 
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
-          echo "########################################"
           echo "##### Done"
-          echo "########################################"
+
+      - name: Setup iOS build CAKE (Testing)
+        run: dotnet cake build.cake --target iOS --variant beta
 
       - name: Archive Build for App Store
+        shell: pwsh
         run: |
-          Write-Output "########################################"
           Write-Output "##### Archive for Release ios-arm64
-          Write-Output "########################################"
 
           dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
-          Write-Output "########################################"
           Write-Output "##### Done"
-          Write-Output "########################################"
-        shell: pwsh
 
       - name: Archive Build for Mobile Automation
+        shell: pwsh
         run: |
-          Write-Output "########################################"
           Write-Output "##### Archive Debug for iossimulator-x64
-          Write-Output "########################################"
 
           dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
-          Write-Output "########################################"
           Write-Output "##### Done"
-          Write-Output "########################################"
           ls ~/Library/Developer/Xcode/Archives
-        shell: pwsh
 
       - name: Export .ipa for App Store
         run: |
@@ -311,9 +301,7 @@ jobs:
         #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
         #   || github.ref == 'refs/heads/hotfix-rc'
         run: |
-          echo "########################################"
           echo "##### Uploading Watch dSYMs to Firebase"
-          echo "########################################"
 
           find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
 
