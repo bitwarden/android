@@ -130,6 +130,12 @@ class AuthRepositoryImpl(
     private var identityTokenAuthModel: IdentityTokenAuthModel? = null
 
     /**
+     * The device auth information to unlock the vault when logging in with device in the case
+     * of two-factor authentication.
+     */
+    private var twoFactorDeviceData: DeviceDataModel? = null
+
+    /**
      * The information necessary to resend the verification code email for two-factor login.
      */
     private var resendEmailRequestJson: ResendEmailRequestJson? = null
@@ -381,6 +387,7 @@ class AuthRepositoryImpl(
                 authModel = it,
                 twoFactorData = twoFactorData,
                 captchaToken = captchaToken ?: twoFactorResponse?.captchaToken,
+                deviceData = twoFactorDeviceData,
             )
         }
         ?: LoginResult.Error(errorMessage = null)
@@ -431,6 +438,7 @@ class AuthRepositoryImpl(
                         // Cache the data necessary for the remaining two-factor auth flow.
                         identityTokenAuthModel = authModel
                         twoFactorResponse = loginResponse
+                        twoFactorDeviceData = deviceData
                         resendEmailRequestJson = ResendEmailRequestJson(
                             deviceIdentifier = authDiskSource.uniqueAppId,
                             email = email,
@@ -468,6 +476,7 @@ class AuthRepositoryImpl(
                         identityTokenAuthModel = null
                         twoFactorResponse = null
                         resendEmailRequestJson = null
+                        twoFactorDeviceData = null
 
                         // Attempt to unlock the vault with password if possible.
                         password?.let {

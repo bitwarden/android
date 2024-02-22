@@ -1532,6 +1532,22 @@ class AuthRepositoryTest {
                 environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
             )
         } returns SINGLE_USER_STATE_1
+        coEvery {
+            vaultRepository.unlockVault(
+                userId = SINGLE_USER_STATE_1.activeUserId,
+                email = SINGLE_USER_STATE_1.activeAccount.profile.email,
+                kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                privateKey = successResponse.privateKey,
+                initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                    requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                    method = AuthRequestMethod.MasterKey(
+                        protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
+                        authRequestKey = successResponse.key,
+                    ),
+                ),
+                organizationKeys = null,
+            )
+        } returns VaultUnlockResult.Success
         val finalResult = repository.login(
             email = EMAIL,
             password = null,
