@@ -11,11 +11,15 @@
                 Value="{DynamicResource TextColor}" />
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
+        <Setter Property="FontSize"
+                Value="18" />
     </Style>
     <Style TargetType="Picker"
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>
@@ -39,6 +43,8 @@
                 Value="{DynamicResource TextColor}" />
         <Setter Property="PlaceholderColor"
                 Value="{DynamicResource InputPlaceholderColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>
@@ -46,6 +52,8 @@
            ApplyToDerivedTypes="True">
         <Setter Property="BackgroundColor"
                 Value="Transparent" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="TextColor"
                 Value="{DynamicResource TitleEntryTextColor}" />
         <Setter Property="CancelButtonColor"
