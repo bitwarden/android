@@ -93,4 +93,22 @@ class TwoFactorAuthMethodExtensionTest {
                 assertEquals(shouldUseNfc, type.shouldUseNfc)
             }
     }
+
+    @Test
+    fun `imageRes returns the expected value`() {
+        mapOf(
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to null,
+            TwoFactorAuthMethod.EMAIL to null,
+            TwoFactorAuthMethod.DUO to null,
+            TwoFactorAuthMethod.YUBI_KEY to R.drawable.yubi_key,
+            TwoFactorAuthMethod.U2F to null,
+            TwoFactorAuthMethod.REMEMBER to null,
+            TwoFactorAuthMethod.DUO_ORGANIZATION to null,
+            TwoFactorAuthMethod.FIDO_2_WEB_APP to null,
+            TwoFactorAuthMethod.RECOVERY_CODE to null,
+        )
+            .forEach { (type, imageRes) ->
+                assertEquals(imageRes, type.imageRes)
+            }
+    }
 }

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util
 
+import androidx.annotation.DrawableRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -55,4 +56,14 @@ val TwoFactorAuthMethod.shouldUseNfc: Boolean
     get() = when (this) {
         TwoFactorAuthMethod.YUBI_KEY -> true
         else -> false
+    }
+
+/**
+ * Gets a drawable resource for the image to be displayed or `null` if nothing should be displayed.
+ */
+@get:DrawableRes
+val TwoFactorAuthMethod.imageRes: Int?
+    get() = when (this) {
+        TwoFactorAuthMethod.YUBI_KEY -> R.drawable.yubi_key
+        else -> null
     }

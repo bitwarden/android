@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -20,7 +22,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -222,6 +226,21 @@ private fun TwoFactorLoginScreenContent(
         )
 
         Spacer(modifier = Modifier.height(12.dp))
+
+        state.imageRes?.let {
+            Spacer(modifier = Modifier.height(12.dp))
+            Image(
+                painter = painterResource(id = it),
+                contentDescription = null,
+                alignment = Alignment.Center,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+        }
 
         if (state.shouldShowCodeInput) {
             BitwardenPasswordField(
