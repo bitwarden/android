@@ -2372,6 +2372,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duo two-step login is required for your account. .
+        /// </summary>
+        public static string DuoTwoStepLoginIsRequiredForYourAccount {
+            get {
+                return ResourceManager.GetString("DuoTwoStepLoginIsRequiredForYourAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string Edit {
@@ -3236,6 +3245,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Follow the steps from Duo to finish logging in..
+        /// </summary>
+        public static string FollowTheStepsFromDuoToFinishLoggingIn {
+            get {
+                return ResourceManager.GetString("FollowTheStepsFromDuoToFinishLoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} is not correctly formatted..
         /// </summary>
         public static string FormattedIncorrectly {
@@ -3826,6 +3844,15 @@ namespace Bit.Core.Resources.Localization {
         public static string Launch {
             get {
                 return ResourceManager.GetString("Launch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Launch Duo.
+        /// </summary>
+        public static string LaunchDuo {
+            get {
+                return ResourceManager.GetString("LaunchDuo", resourceCulture);
             }
         }
         

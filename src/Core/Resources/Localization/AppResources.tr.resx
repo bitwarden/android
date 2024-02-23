@@ -2353,7 +2353,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Giriş isteklerini onayla</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Diğer cihazlardan yapılan giriş isteklerini onaylamak için bu cihazı kullan</value>
+    <value>Diğer cihazlardan yapılan giriş isteklerini bu cihazdan onayla</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Bildirimlere izin ver</value>
@@ -2820,7 +2820,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Destek ekibiyle iletişim kurmak ister misiniz?</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>Continue to privacy policy?</value>
+    <value>Gizlilik ilkelerine gidilsin mi?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>App Store'a gitmek ister misiniz?</value>
@@ -2842,7 +2842,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Aradığınızı bulamadınız mı? bitwarden.com sitesinden Bitwarden destek ekibine ulaşabilirsiniz.</value>
   </data>
   <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
-    <value>Check out our privacy policy on bitwarden.com.</value>
+    <value>Gizlilik ilkelerimizi bitwarden.com'da bulabilirsiniz.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Web uygulamasında Bitwarden hesabınızın diğer özelliklerini keşfedin.</value>

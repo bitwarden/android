@@ -50,6 +50,7 @@
                           x:DataType="pages:SendGroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
                                               StyleClass="list-row, list-row-platform"
+                                              Spacing="6"
                                               AutomationId="{Binding AutomationId}">
                     <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                       HorizontalOptions="Start"

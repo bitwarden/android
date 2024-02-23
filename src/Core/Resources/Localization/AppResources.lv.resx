@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Vai jūs tiešām vēlaties dzēst? Šo darbību nav iespējams atsaukt.</value>
+    <value>Vai tiešām izdzēst? To nevar atsaukt.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -193,10 +193,10 @@
     <value>Nosūtīt mums e-pasta ziņu</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Sūti mums e-pasta ziņu, lai saņemtu palīdzību vai sniegtu atsauksmes!</value>
+    <value>Nosūtīt mums e-pasta ziņu, lai saņemtu palīdzību vai sniegtu atsauksmes.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Ievadīt PIN kodu.</value>
+    <value>Jāievada PIN kods.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Izlase</value>
@@ -232,7 +232,7 @@
     <value>Mape atjaunota.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Doties uz tīmekļa vietni</value>
+    <value>Doties uz tīmekļvietni</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -243,18 +243,18 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Lūgums izveidot savienojumu ar tīmekli, lai varētu turpināt.</value>
+    <value>Lūgums izveidot savienojumu ar internetu, lai varētu turpināt.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Nepieciešams tīmekļa savienojums</value>
+    <value>Nepieciešams interneta savienojums</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Nederīga galvenā parole. Mēģini vēlreiz!</value>
+    <value>Nederīga galvenā parole. Jāmēģina vēlreiz.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Nederīgs PIN. Mēģini vēlreiz!</value>
+    <value>Nederīgs PIN. Jāmēģina vēlreiz.</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>Palaist</value>
@@ -394,10 +394,10 @@
     <value>Skatīt</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Apmeklēt mūsu tīmekļa vietni</value>
+    <value>Apmeklēt mūsu tīmekļvietni</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Tīmekļa vietne</value>
+    <value>Tīmekļvietne</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -419,7 +419,7 @@
     <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes dažādās lietotnēs un tīmeklī.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Automātiskā aizpilde</value>
+    <value>Automātiskās aizpildes pakalpojums</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Izvairīties no viegli sajaucamām rakstzīmēm</value>
@@ -434,7 +434,7 @@
     <value>Izmantot Bitwarden Safari un citās lietotnēs, lai automātiski ievadītu pieteikšanās vienumus.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden automātiskā aizpilde</value>
+    <value>Bitwarden automātiskās aizpildes pakalpojums</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Izmantot Bitwarden pieejamības pakalpojumu, lai automātiski aizpildītu pieteikšanās veidnes.</value>
@@ -443,7 +443,7 @@
     <value>Mainīt e-pasta adresi</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>E-pasta adresi ir iespējams nomainīt bitwarden.com tīmekļa glabātavā. Vai apmeklēt tīmekļa vietni?</value>
+    <value>E-pasta adresi ir iespējams nomainīt bitwarden.com tīmekļa glabātavā. Vai tagad apmeklēt tīmekļvietni?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Mainīt galveno paroli</value>
@@ -517,7 +517,7 @@
     <value>Ievietot vienumus</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Daudzu vienumu ievietošanu var veikt bitwarden.com tīmekļa glabātavā. Vai apmeklēt tīmekļa vietni?</value>
+    <value>Daudzu vienumu ievietošanu var veikt bitwarden.com tīmekļa glabātavā. Vai tagad apmeklēt tīmekļvietni?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Ātri ievietot daudzus vienumus no citām paroļu pārvaldības lietotnēm.</value>
@@ -607,7 +607,7 @@
     <value>Glabātavā nav vienumu.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Glabātāvā nav vienumu, ko izmantot šajā tīmekļa vietnē/lietotnē. Piesist, lai pievienotu.</value>
+    <value>Glabātāvā nav vienumu, ko izmantot šajā tīmekļvietnē/lietotnē. Piesist, lai pievienotu.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Šajā pieteikšanās vienumā nav norādīts lietotājvārds vai parole.</value>
@@ -748,7 +748,7 @@
     <value>Kad tiek atlasīts ievades lauks un parādās Bitwarden automātiskās aizpildes lodziņš, jāpiesit tam, lai palaistu automātiskās aizpildes pakalpojumu.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Piesist šim paziņojumam, lai automātiski aizpildītu, izmantojot vienumu no glabātavas.</value>
+    <value>Jāpiesit šim paziņojumam, lai automātiski aizpildītu ar vienumu no glabātavas.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Atvērt pieejamības iestatījumus</value>
@@ -775,7 +775,7 @@
     <value>Stāvoklis</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir no Bitwarden automātiskās aizpildes pakalpojuma. Vairāk par Bitwarden automātiskās aizpildi var uzzināt iestatījumu skatā.</value>
+    <value>Vieglākais veids, kā glabātavā pievienot jaunus pieteikšanās vienumus, ir ar Bitwarden automātiskās aizpildes pakalpojumu. Vairāk par Bitwarden automātisko aizpildi var uzzināt iestatījumu skatā.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automātiskā aizpilde</value>
@@ -1134,7 +1134,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Derīgums</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Rādīt vietņu ikonas</value>
+    <value>Rādīt tīmekļvietņu ikonas</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Attēlot atpazīstamu attēlu pie katra pieteikšanās vienuma.</value>
@@ -1143,7 +1143,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Ikonu servera URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Automātiskā aizpilde ar Bitwarden</value>
+    <value>Automātiski aizpildīt ar Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Glabātava ir slēgta</value>
@@ -1170,7 +1170,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Bitwarden automātiskās aizpildes pakalpojums izmanto Android automātiskās aizpildes ietvaru, lai palīdzētu aizpildīt pieteikšanās, kredītkartes, un identitātes informācijas veidnes citās ierīces lietotnēs.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden automātiskās aizpilde tiek izmantota, lai aizpildītu pieteikšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</value>
+    <value>Bitwarden automātiskā aizpilde ir izmantojama, lai aizpildītu pieteikšanās, kredītkaršu un identitātes informācijas veidnes citās lietotnēs.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Atvērt automātiskās aizpildes iestatījumus</value>
@@ -1289,7 +1289,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Vispirms ir jāpiesakās galvenajā Bitwarden lietotnē, lai varētu izmantot automātisko aizpildi.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Pieteikšanāš vienumi tagad ir viegli pieejami tastatūrā, kad notiek pieteikšanās lietotnēs un tīmekļa vietnēs.</value>
+    <value>Pieteikšanās vienumi tagad ir viegli pieejami tastatūrā, kad notiek pieteikšanās lietotnēs un tīmekļvietnēs.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Mēs iesakām atspējot jebkuras citas automātiskās aizpildes lietotnes iestatījumos, ja nav iecerēts izmantot tās.</value>
@@ -1462,7 +1462,7 @@ Nolasīšana notiks automātiski.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden nodrošina iespēju kopīgot glabātavas vienumus ar citiem, kad tiek izmantots apvienības konts. Vai apmeklēt bitwarden.com tīmekļa vietni, lai uzzinātu vairāk?</value>
+    <value>Bitwarden nodrošina iespēju kopīgot glabātavas vienumus ar citiem, kad tiek izmantots apvienības konts. Vai apmeklēt bitwarden.com tīmekļvietni, lai uzzinātu vairāk?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Izgūt glabātavas saturu</value>
@@ -1586,7 +1586,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Pārsāknējot lietotni</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automātiskā aizpilde padara drošu piekļuvi Bitwarden galbātavai vienkāršu no citām 0tīmekļa vietnēm un lietotnēm. Izskatās, ka nav iespējota Bitwarden automātiskā aizpilde. To var izdarīt iestatījumu sadaļā.</value>
+    <value>Automātiskā aizpildīšana padara drošu piekļuvi Bitwarden galbātavai vienkāršu no citām tīmekļvietnēm un lietotnēm. Izskatās, ka nav iespējota Bitwarden automātiskā aizpildīšana. To var izdarīt iestatījumu sadaļā.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Izskata izmaiņas tiks pielietotas pēc lietotnes pārsāknēšanas.</value>
@@ -1729,7 +1729,7 @@ Nolasīšana notiks automātiski.</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Vai tiešām vēlaties neatgriezeniski dzēst? To nevar atsaukt.</value>
+    <value>Vai tiešām neatgriezeniski izdzēst? To nevar atsaukt.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
@@ -2213,7 +2213,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Atgadījās kļūda, kad apliecinājuma kods tika sūtīts uz e-pastu. Lūgums mēģināt vēlreiz</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Ievadīt pārbaudes kodu, kas tika nosūtīts e-pastā</value>
+    <value>Jāievada apliecinājuma kods, kas tika nosūtīts e-pastā</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
     <value>Iesniegt avāriju ierakstus</value>
@@ -2442,7 +2442,7 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>E-pasta veids</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Mājaslapa (nepieciešama)</value>
+    <value>Tīmekļviente (nepieciešama)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
     <value>Notika nezināma kļūda {0}.</value>
@@ -2466,7 +2466,7 @@ jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
     <value>Pieejamības pakalpojuma izmantošanas skaidrojums</value>
   </data>
   <data name="AccessibilityDisclosureText" xml:space="preserve">
-    <value>Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pieteikšanās laukus lietotnēs un tīmekļa vietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pieteikšanās datu ievadi.</value>
+    <value>Bitwarden izmanto pieejamības pakalpojumu, lai meklētu pieteikšanās laukus lietotnēs un tīmekļvietnēs, tad noskaidro atbistošus lauku identifikatorus lietotājvārda un paroles ievadīšanai, kad ir atrasta atbilstība lietotnei vai vietnei. Bitwarden neglabā neko no informācijas, ko nodrošina pakalpojums, kā arī nemēģina pārvaldīt ekrānā redzamās daļas, kas nav saistītas ar pieteikšanās datu ievadi.</value>
   </data>
   <data name="Accept" xml:space="preserve">
     <value>Pieņemt</value>
@@ -2850,7 +2850,7 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt bitwarden.com tīmekļa vietnē.</value>
+    <value>Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt bitwarden.com tīmekļvietnē.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
     <value>Var palīdzēt citiem noskaidrot, vai Bitwarden tiem der. To var izdarīt lietotņu veikalā, atstājot vērtējumu.</value>

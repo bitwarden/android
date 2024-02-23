@@ -77,7 +77,9 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: |
+            3.1.x
+            8.0.x
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
@@ -283,7 +285,7 @@ jobs:
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
           || github.ref == 'refs/heads/hotfix-rc' ) }}
         run: |
-          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/net7.0/Publisher.dll"
+          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
           AAB_PATH="$GITHUB_WORKSPACE/com.x8bit.bitwarden.aab"
           TRACK="internal"
@@ -770,7 +772,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@198daeb2d30636c4608d6a6bb96c009dbefc02a2 # v1.18.0
+        uses: crowdin/github-action@c953b17499daa6be3e5afbf7a63616fb02d8b18d # v1.19.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
