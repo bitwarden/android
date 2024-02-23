@@ -1,11 +1,12 @@
 ﻿#if IOS
 
+using System.Diagnostics;
 using Foundation;
 using Security;
 
 namespace Bit.Core.Services;
 
-class KeyChain
+internal class KeyChain
 {
     SecAccessible accessible;
 

@@ -1,5 +1,8 @@
 ﻿#nullable enable
-#if ANDROID || IOS
+
+#if IOS
+using Security;
+#endif
 
 namespace Bit.Core.Services;
 
@@ -7,12 +10,15 @@ public class LegacySecureStorage
 {
     internal static readonly string Alias = $"{AppInfo.PackageName}.xamarinessentials";
 
-    public static Task<string> GetAsync(string key)
+#if IOS
+    private static SecAccessible DefaultAccessible { get; set; } = SecAccessible.AfterFirstUnlock;
+#endif
+
+
+    public static Task<string?> GetAsync(string key)
     {
         if (string.IsNullOrWhiteSpace(key))
             throw new ArgumentNullException(nameof(key));
-
-        string result = null;
 
 #if ANDROID
         object locker = new object();
@@ -24,14 +30,16 @@ public class LegacySecureStorage
             lock (locker)
             {
                 AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
-                result = keyStore.Decrypt(encData);
+                return Task.FromResult<string?>(keyStore.Decrypt(encData));
             }
         }
+        return Task.FromResult((string?)null);
 #elif IOS
-        KeyChain keyChain = new KeyChain();
-        result = keyChain.ValueForKey(key, Alias);
+        var keyChain = new KeyChain(DefaultAccessible);
+        return Task.FromResult<string?>(keyChain.ValueForKey(key, Alias));
+#else
+        return Task.FromResult((string?)null);
 #endif
-        return Task.FromResult(result);
     }
 
     public static Task SetAsync(string key, string value)
@@ -50,24 +58,23 @@ public class LegacySecureStorage
         var encStr = Convert.ToBase64String(encryptedData);
         Preferences.Set(key, encStr, Alias);
 #elif IOS
-        KeyChain keyChain = new KeyChain();
-        result = keyChain.SetValueForKey(value, key, Alias);
+        KeyChain keyChain = new KeyChain(DefaultAccessible);
+        keyChain.SetValueForKey(value, key, Alias);
 #endif
         return Task.CompletedTask;
     }
 
     public static bool Remove(string key)
     {
-        bool result = false;
-
 #if ANDROID
         Preferences.Remove(key, Alias);
-        result = true;
+        return true;
 #elif IOS
-        KeyChain keyChain = new KeyChain();
-        result = keyChain.Remove(key, Alias);
+        var keyChain = new KeyChain(DefaultAccessible);
+        return keyChain.Remove(key, Alias);
+#else
+        return false;
 #endif
-        return result;
     }
     
     public static void RemoveAll()
@@ -75,9 +82,8 @@ public class LegacySecureStorage
 #if ANDROID
         Preferences.Clear(Alias);
 #elif IOS
-        KeyChain keyChain = new KeyChain();
+        var keyChain = new KeyChain(DefaultAccessible);
         keyChain.RemoveAll(Alias);
 #endif
     }
 }
-#endif
