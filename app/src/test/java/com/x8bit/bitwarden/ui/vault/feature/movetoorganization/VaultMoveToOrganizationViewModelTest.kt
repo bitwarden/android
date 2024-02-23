@@ -368,6 +368,15 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 VaultMoveToOrganizationEvent.NavigateBack,
                 awaitItem(),
             )
+            assertEquals(
+                VaultMoveToOrganizationEvent.ShowToast(
+                    text = R.string.moved_item_to_org.asText(
+                        "mockName-1",
+                        "mockOrganizationName-1",
+                    ),
+                ),
+                awaitItem(),
+            )
         }
         coVerify {
             vaultRepository.shareCipher(
@@ -401,6 +410,10 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.MoveClick)
                 assertEquals(
                     VaultMoveToOrganizationEvent.NavigateBack,
+                    awaitItem(),
+                )
+                assertEquals(
+                    VaultMoveToOrganizationEvent.ShowToast(R.string.item_updated.asText()),
                     awaitItem(),
                 )
             }
