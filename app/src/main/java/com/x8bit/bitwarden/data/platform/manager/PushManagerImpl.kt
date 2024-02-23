@@ -27,7 +27,6 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromJsonElement
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -128,7 +127,7 @@ class PushManagerImpl @Inject constructor(
             -> {
                 if (settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId) == true) {
                     val payload: NotificationPayload.PasswordlessRequestNotification =
-                        json.decodeFromJsonElement(notification.payload)
+                        json.decodeFromString(string = notification.payload)
                     mutablePasswordlessRequestSharedFlow.tryEmit(
                         PasswordlessRequestData(
                             loginRequestId = payload.id,
@@ -140,7 +139,7 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.LOG_OUT -> {
                 val payload: NotificationPayload.UserNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 mutableLogoutSharedFlow.tryEmit(
                     NotificationLogoutData(payload.userId),
                 )
@@ -150,7 +149,7 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_CIPHER_UPDATE,
             -> {
                 val payload: NotificationPayload.SyncCipherNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
                 mutableSyncCipherUpsertSharedFlow.tryEmit(
                     SyncCipherUpsertData(
@@ -167,7 +166,7 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_LOGIN_DELETE,
             -> {
                 val payload: NotificationPayload.SyncCipherNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
                 mutableSyncCipherDeleteSharedFlow.tryEmit(
                     SyncCipherDeleteData(payload.id),
@@ -185,7 +184,7 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_FOLDER_UPDATE,
             -> {
                 val payload: NotificationPayload.SyncFolderNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
                 mutableSyncFolderUpsertSharedFlow.tryEmit(
                     SyncFolderUpsertData(
@@ -198,7 +197,7 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.SYNC_FOLDER_DELETE -> {
                 val payload: NotificationPayload.SyncFolderNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
 
                 mutableSyncFolderDeleteSharedFlow.tryEmit(
@@ -215,7 +214,7 @@ class PushManagerImpl @Inject constructor(
             NotificationType.SYNC_SEND_UPDATE,
             -> {
                 val payload: NotificationPayload.SyncSendNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
                 mutableSyncSendUpsertSharedFlow.tryEmit(
                     SyncSendUpsertData(
@@ -228,7 +227,7 @@ class PushManagerImpl @Inject constructor(
 
             NotificationType.SYNC_SEND_DELETE -> {
                 val payload: NotificationPayload.SyncSendNotification =
-                    json.decodeFromJsonElement(notification.payload)
+                    json.decodeFromString(notification.payload)
                 if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
                 mutableSyncSendDeleteSharedFlow.tryEmit(
                     SyncSendDeleteData(payload.id),

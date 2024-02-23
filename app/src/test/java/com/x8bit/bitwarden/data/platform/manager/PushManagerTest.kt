@@ -844,10 +844,10 @@ private const val AUTH_REQUEST_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 15,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\"
+      }"
     }
 """
 
@@ -855,10 +855,10 @@ private const val AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 16,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\"
+      }"
     }
 """
 
@@ -870,10 +870,10 @@ private const val LOGOUT_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 11,
-      "payload": {
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "date": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"Date\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -881,13 +881,13 @@ private const val SYNC_CIPHER_CREATE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 1,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "organizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
-        "collectionIds": [],
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
+        \"CollectionIds\": [],
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -895,13 +895,13 @@ private const val SYNC_CIPHER_DELETE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 9,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "organizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
-        "collectionIds": [],
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
+        \"CollectionIds\": [],
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -909,13 +909,13 @@ private const val SYNC_CIPHER_UPDATE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 0,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "organizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
-        "collectionIds": [],
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
+        \"CollectionIds\": [],
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -923,10 +923,10 @@ private const val SYNC_CIPHERS_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 4,
-      "payload": {
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "date": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"Date\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -934,11 +934,11 @@ private const val SYNC_FOLDER_CREATE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 7,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -946,11 +946,11 @@ private const val SYNC_FOLDER_DELETE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 3,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -958,11 +958,11 @@ private const val SYNC_FOLDER_UPDATE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 8,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -970,13 +970,13 @@ private const val SYNC_LOGIN_DELETE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 2,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "organizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
-        "collectionIds": [],
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
+        \"CollectionIds\": [],
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -984,10 +984,10 @@ private const val SYNC_ORG_KEYS_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 6,
-      "payload": {
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "date": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"Date\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -995,11 +995,11 @@ private const val SYNC_SEND_CREATE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 12,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -1007,11 +1007,11 @@ private const val SYNC_SEND_DELETE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 14,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -1019,11 +1019,11 @@ private const val SYNC_SEND_UPDATE_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 13,
-      "payload": {
-        "id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "revisionDate": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -1031,10 +1031,10 @@ private const val SYNC_SETTINGS_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 10,
-      "payload": {
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "date": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"Date\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
 
@@ -1042,9 +1042,9 @@ private const val SYNC_VAULT_NOTIFICATION_JSON = """
     {
       "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
       "type": 5,
-      "payload": {
-        "userId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
-        "date": "2023-10-27T12:00:00.000Z"
-      }
+      "payload": "{
+        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
+        \"Date\": \"2023-10-27T12:00:00.000Z\"
+      }"
     }
 """
