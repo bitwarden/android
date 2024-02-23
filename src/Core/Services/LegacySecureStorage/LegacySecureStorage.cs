@@ -4,6 +4,10 @@
 using Security;
 #endif
 
+#if ANDROID
+using Javax.Crypto;
+#endif
+
 namespace Bit.Core.Services;
 
 public class LegacySecureStorage
@@ -26,11 +30,19 @@ public class LegacySecureStorage
 
         if (!string.IsNullOrEmpty(encVal))
         {
-            byte[] encData = Convert.FromBase64String(encVal);
-            lock (locker)
+            try
             {
-                AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
-                return Task.FromResult<string?>(keyStore.Decrypt(encData));
+                byte[] encData = Convert.FromBase64String(encVal);
+                lock (locker)
+                {
+                    AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
+                    return Task.FromResult<string?>(keyStore.Decrypt(encData));
+                }
+            }
+            catch (AEADBadTagException)
+            {
+                System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
+                Remove(key);
             }
         }
         return Task.FromResult((string?)null);
