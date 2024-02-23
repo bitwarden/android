@@ -471,7 +471,7 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
 
-            CustomFieldAction.DELETE -> {
+            CustomFieldAction.REMOVE -> {
                 updateCommonContent { commonContent ->
                     commonContent.copy(
                         customFieldData = commonContent.customFieldData.filter {

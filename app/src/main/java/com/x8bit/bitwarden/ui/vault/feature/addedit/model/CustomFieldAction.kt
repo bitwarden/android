@@ -12,5 +12,5 @@ enum class CustomFieldAction(val actionText: Text) {
     EDIT(R.string.edit.asText()),
     MOVE_UP(R.string.move_up.asText()),
     MOVE_DOWN(R.string.move_down.asText()),
-    DELETE(R.string.delete.asText()),
+    REMOVE(R.string.remove.asText()),
 }
