@@ -15,6 +15,7 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasSetTextAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
@@ -1864,7 +1865,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Name")
+            .onAllNodes(hasAnyAncestor(isDialog()))
+            .filterToOne(hasText("Name"))
             .performTextInput("TestLinked")
 
         composeTestRule
@@ -2239,7 +2241,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Name")
+            .onAllNodes(hasAnyAncestor(isDialog()))
+            .filterToOne(hasText("Name"))
             .performTextInput("TestText")
 
         composeTestRule
@@ -2294,7 +2297,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Name")
+            .onAllNodes(hasAnyAncestor(isDialog()))
+            .filterToOne(hasText("Name"))
             .performTextInput("TestBoolean")
 
         composeTestRule
@@ -2329,7 +2333,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Name")
+            .onAllNodes(hasAnyAncestor(isDialog()))
+            .filterToOne(hasText("Name"))
             .performTextInput("TestHidden")
 
         composeTestRule
@@ -2443,7 +2448,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `clicking custom field edit icon and Delete option sends a CustomFieldActionSelect delete action`() {
+    fun `clicking custom field edit icon and Remove option sends a CustomFieldActionSelect remove action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
 
         composeTestRule
@@ -2452,13 +2457,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNodeWithText("Delete")
+            .onNodeWithText("Remove")
             .performClick()
 
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
-                    customFieldAction = CustomFieldAction.DELETE,
+                    customFieldAction = CustomFieldAction.REMOVE,
                     customField = VaultAddEditState.Custom.BooleanField(
                         itemId = "Test ID 1",
                         name = "TestBoolean",

@@ -2105,7 +2105,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `CustomFieldActionSelect with delete action should delete the item`() = runTest {
+        fun `CustomFieldActionSelect with remove action should remove the item`() = runTest {
             val customFieldData = VaultAddEditState.Custom.BooleanField(
                 "TestId 3",
                 "Boolean Field",
@@ -2136,7 +2136,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.actionChannel.trySend(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
-                    CustomFieldAction.DELETE,
+                    CustomFieldAction.REMOVE,
                     customFieldData,
                 ),
             )
