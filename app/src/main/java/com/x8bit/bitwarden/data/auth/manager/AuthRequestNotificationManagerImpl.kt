@@ -41,7 +41,6 @@ class AuthRequestNotificationManagerImpl(
     @SuppressLint("MissingPermission")
     private fun handlePasswordlessRequestData(data: PasswordlessRequestData) {
         val notificationManager = NotificationManagerCompat.from(context)
-        if (notificationManager.areNotificationsEnabled(NOTIFICATION_CHANNEL_ID)) return
         // Construct the channel, calling this more than once is safe
         notificationManager.createNotificationChannel(
             NotificationChannelCompat
@@ -52,6 +51,7 @@ class AuthRequestNotificationManagerImpl(
                 .setName(context.getString(R.string.pending_log_in_requests))
                 .build(),
         )
+        if (!notificationManager.areNotificationsEnabled(NOTIFICATION_CHANNEL_ID)) return
         // Create the notification
         val builder = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setContentIntent(createContentIntent(data))
