@@ -895,6 +895,7 @@ class VaultRepositoryImpl(
                         )
                     }
             }
+            .map { it.copy(collectionIds = cipherView.collectionIds) }
             .onSuccess {
                 // Save the send immediately, regardless of whether the decrypt succeeds
                 vaultDiskSource.saveCipher(userId = userId, cipher = it)

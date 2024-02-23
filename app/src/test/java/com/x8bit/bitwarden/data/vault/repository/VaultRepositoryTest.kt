@@ -3382,7 +3382,10 @@ class VaultRepositoryTest {
             val mockByteArray = byteArrayOf(1, 2)
             val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
-            val mockCipherResponse = createMockCipher(number = 1)
+            val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
+            val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
+                collectionIds = listOf("mockId-1"),
+            )
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -3412,12 +3415,12 @@ class VaultRepositoryTest {
                 )
             } returns mockCipherResponse.asSuccess()
             coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = mockCipherResponse)
+                vaultDiskSource.saveCipher(userId = userId, cipher = mockUpdatedCipherResponse)
             } just runs
             coEvery {
                 vaultSdkSource.decryptCipher(
                     userId = userId,
-                    cipher = mockCipherResponse.toEncryptedSdkCipher(),
+                    cipher = mockUpdatedCipherResponse.toEncryptedSdkCipher(),
                 )
             } returns Throwable("Fail").asFailure()
 
@@ -3453,7 +3456,10 @@ class VaultRepositoryTest {
             val mockByteArray = byteArrayOf(1, 2)
             val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
-            val mockCipherResponse = createMockCipher(number = 1)
+            val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
+            val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
+                collectionIds = listOf("mockId-1"),
+            )
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
@@ -3483,12 +3489,12 @@ class VaultRepositoryTest {
                 )
             } returns mockCipherResponse.asSuccess()
             coEvery {
-                vaultDiskSource.saveCipher(userId = userId, cipher = mockCipherResponse)
+                vaultDiskSource.saveCipher(userId = userId, cipher = mockUpdatedCipherResponse)
             } just runs
             coEvery {
                 vaultSdkSource.decryptCipher(
                     userId = userId,
-                    cipher = mockCipherResponse.toEncryptedSdkCipher(),
+                    cipher = mockUpdatedCipherResponse.toEncryptedSdkCipher(),
                 )
             } returns mockCipherView.asSuccess()
 
