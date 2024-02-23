@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
-import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -165,6 +164,7 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
 
             is ShareCipherResult.Success -> {
                 sendEvent(VaultMoveToOrganizationEvent.NavigateBack)
+                sendEvent(VaultMoveToOrganizationEvent.ShowToast(action.successToast))
             }
         }
     }
@@ -285,23 +285,30 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
         }
         viewModelScope.launch {
             trySendAction(
-                VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
-                    if (state.onlyShowCollections) {
-                        vaultRepository.updateCipherCollections(
-                            cipherId = mutableStateFlow.value.vaultItemId,
+                if (state.onlyShowCollections) {
+                    VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
+                        shareCipherResult = vaultRepository.updateCipherCollections(
+                            cipherId = state.vaultItemId,
                             cipherView = cipherView,
                             collectionIds = collectionIds,
-                        )
-                    } else {
-                        vaultRepository.shareCipher(
-                            cipherId = mutableStateFlow.value.vaultItemId,
+                        ),
+                        successToast = R.string.item_updated.asText(),
+                    )
+                } else {
+                    VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
+                        shareCipherResult = vaultRepository.shareCipher(
+                            cipherId = state.vaultItemId,
                             cipherView = cipherView.copy(
                                 organizationId = contentState.selectedOrganizationId,
                             ),
                             collectionIds = collectionIds,
-                        )
-                    },
-                ),
+                        ),
+                        successToast = R.string.moved_item_to_org.asText(
+                            requireNotNull(contentState.cipherToMove).name,
+                            contentState.selectedOrganization.name,
+                        ),
+                    )
+                },
             )
         }
     }
@@ -491,6 +498,7 @@ sealed class VaultMoveToOrganizationAction {
          */
         data class ShareCipherResultReceive(
             val shareCipherResult: ShareCipherResult,
+            val successToast: Text,
         ) : Internal()
     }
 }
