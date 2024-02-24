@@ -25,27 +25,31 @@ public class LegacySecureStorage
             throw new ArgumentNullException(nameof(key));
 
 #if ANDROID
-        object locker = new object();
-        string? encVal = Preferences.Get(key, null, Alias);
-
-        if (!string.IsNullOrEmpty(encVal))
+        return Task.Run(() =>
         {
-            try
+            object locker = new object();
+            string? encVal = Preferences.Get(key, null, Alias);
+
+            if (!string.IsNullOrEmpty(encVal))
             {
-                byte[] encData = Convert.FromBase64String(encVal);
-                lock (locker)
+                try
                 {
-                    AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
-                    return Task.FromResult<string?>(keyStore.Decrypt(encData));
+                    byte[] encData = Convert.FromBase64String(encVal);
+                    lock (locker)
+                    {
+                        AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
+                        return keyStore.Decrypt(encData);
+                    }
+                }
+                catch (AEADBadTagException)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
+                    Remove(key);
                 }
             }
-            catch (AEADBadTagException)
-            {
-                System.Diagnostics.Debug.WriteLine($"Unable to decrypt key, {key}, which is likely due to an app uninstall. Removing old key and returning null.");
-                Remove(key);
-            }
-        }
-        return Task.FromResult((string?)null);
+
+            return null;
+        });
 #elif IOS
         var keyChain = new KeyChain(DefaultAccessible);
         return Task.FromResult<string?>(keyChain.ValueForKey(key, Alias));
@@ -57,18 +61,21 @@ public class LegacySecureStorage
     public static Task SetAsync(string key, string value)
     {
 #if ANDROID
-        var context = Platform.AppContext;
-
-        byte[] encryptedData = null;
-        object locker = new object();
-        lock (locker)
+        return Task.Run(() =>
         {
-            AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
-            encryptedData = keyStore.Encrypt(value);
-        }
+            var context = Platform.AppContext;
 
-        var encStr = Convert.ToBase64String(encryptedData);
-        Preferences.Set(key, encStr, Alias);
+            byte[] encryptedData = null;
+            object locker = new object();
+            lock (locker)
+            {
+                AndroidKeyStore keyStore = new AndroidKeyStore(Platform.AppContext, Alias, false);
+                encryptedData = keyStore.Encrypt(value);
+            }
+
+            var encStr = Convert.ToBase64String(encryptedData);
+            Preferences.Set(key, encStr, Alias);
+        });
 #elif IOS
         KeyChain keyChain = new KeyChain(DefaultAccessible);
         keyChain.SetValueForKey(value, key, Alias);
