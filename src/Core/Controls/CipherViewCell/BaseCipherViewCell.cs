@@ -53,12 +53,13 @@ namespace Bit.App.Controls
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
                 cipherItemVM.IconImageSuccesfullyLoaded = true;
+
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Icon.IsVisible = cipherItemVM.ShowIconImage;
+                    IconPlaceholder.IsVisible = !cipherItemVM.ShowIconImage;
+                });
             }
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                Icon.IsVisible = true;
-                IconPlaceholder.IsVisible = false;
-            });
         }
 
         public void Icon_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
