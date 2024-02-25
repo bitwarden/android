@@ -2907,4 +2907,13 @@ Do you want to switch to this account?</value>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
     <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
+  </data>
 </root>
