@@ -15,6 +15,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
+private const val MAX_LOG_MESSAGE_LENGTH: Int = 4000
+
 /**
  * Primary implementation of [Retrofits].
  */
@@ -67,7 +69,11 @@ class RetrofitsImpl(
 
     //region Helper properties and functions
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
-        HttpLoggingInterceptor { Log.d("BitwardenNetworkClient", it) }
+        HttpLoggingInterceptor { message ->
+            message.chunked(size = MAX_LOG_MESSAGE_LENGTH).forEach { chunk ->
+                Log.d("BitwardenNetworkClient", chunk)
+            }
+        }
             .apply {
                 setLevel(
                     if (BuildConfig.DEBUG) {
