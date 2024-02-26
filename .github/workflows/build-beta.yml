@@ -235,7 +235,6 @@ jobs:
           dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "##### Done"
-          ls $HOME/Library/Developer/Xcode/Archives
 
       - name: Export .ipa for App Store
         env:
