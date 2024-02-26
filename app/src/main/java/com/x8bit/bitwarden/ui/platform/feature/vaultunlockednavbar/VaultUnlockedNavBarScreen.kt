@@ -30,6 +30,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -248,6 +251,7 @@ private fun VaultUnlockedNavBarScaffold(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultBottomAppBar(
     navController: NavHostController,
@@ -290,7 +294,11 @@ private fun VaultBottomAppBar(
                     )
                 },
                 label = {
-                    Text(text = stringResource(id = destination.labelRes))
+                    Text(
+                        text = stringResource(id = destination.labelRes),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
                 },
                 selected = isSelected,
                 onClick = {
@@ -308,6 +316,7 @@ private fun VaultBottomAppBar(
                     selectedTextColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurface,
                 ),
+                modifier = Modifier.semantics { testTag = destination.testTag },
             )
         }
     }
@@ -353,6 +362,11 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
     abstract val route: String
 
     /**
+     * The test tag of the tab.
+     */
+    abstract val testTag: String
+
+    /**
      * Show the Generator screen.
      */
     @Parcelize
@@ -362,6 +376,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val labelRes get() = R.string.generator
         override val contentDescriptionRes get() = R.string.generator
         override val route get() = GENERATOR_GRAPH_ROUTE
+        override val testTag get() = "GeneratorTab"
     }
 
     /**
@@ -374,6 +389,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val labelRes get() = R.string.send
         override val contentDescriptionRes get() = R.string.send
         override val route get() = SEND_GRAPH_ROUTE
+        override val testTag get() = "SendTab"
     }
 
     /**
@@ -386,6 +402,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val labelRes get() = R.string.my_vault
         override val contentDescriptionRes get() = R.string.my_vault
         override val route get() = VAULT_GRAPH_ROUTE
+        override val testTag get() = "VaultTab"
     }
 
     /**
@@ -398,6 +415,7 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
         override val labelRes get() = R.string.settings
         override val contentDescriptionRes get() = R.string.settings
         override val route get() = SETTINGS_GRAPH_ROUTE
+        override val testTag get() = "SettingsTab"
     }
 }
 
