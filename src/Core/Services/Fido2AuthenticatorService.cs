@@ -47,7 +47,8 @@ namespace Bit.Core.Services
             {
                 CredentialName = makeCredentialParams.RpEntity.Name,
                 UserName = makeCredentialParams.UserEntity.Name,
-                UserVerification = makeCredentialParams.RequireUserVerification
+                UserVerification = makeCredentialParams.RequireUserVerification,
+                RpId = makeCredentialParams.RpEntity.Id
             });
 
             var cipherId = response.CipherId;

@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AuthenticationServices;
-using Bit.App.Models;
+﻿using Bit.App.Models;
 using Bit.App.Pages;
-using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
-using UIKit;
 using Microsoft.Maui.Controls.Compatibility;
+using UIKit;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -28,7 +24,7 @@ namespace Bit.iOS.Core.Controllers
         private IStorageService _storageService;
         private IEnumerable<FolderView> _folders;
 
-        public LoginAddViewController(IntPtr handle)
+        protected LoginAddViewController(IntPtr handle)
             : base(handle)
         { }
 
@@ -46,6 +42,8 @@ namespace Bit.iOS.Core.Controllers
         public abstract UIBarButtonItem BaseCancelButton { get; }
         public abstract UIBarButtonItem BaseSaveButton { get; }
         public abstract Action<string> Success { get; }
+
+        protected bool IsCreatingPasskey { get; set; }
 
         public override void ViewDidLoad()
         {
@@ -127,63 +125,84 @@ namespace Bit.iOS.Core.Controllers
             base.ViewDidAppear(animated);
         }
 
-        protected async Task SaveAsync()
+        protected virtual async Task SaveAsync()
         {
-            /*
-            if (!_connectivity.IsConnected)
-            {
-                AlertNoConnection();
-                return;
-            }
-            */
-
-            if (string.IsNullOrWhiteSpace(PasswordCell?.TextField?.Text))
-            {
-                DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
-                    AppResources.Password), AppResources.Ok);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(NameCell?.TextField?.Text))
-            {
-                DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
-                    AppResources.Name), AppResources.Ok);
-                return;
-            }
-
-            var cipher = new CipherView
-            {
-                Name = NameCell.TextField.Text,
-                Notes = string.IsNullOrWhiteSpace(NotesCell?.TextView?.Text) ? null : NotesCell.TextView.Text,
-                Favorite = FavoriteCell.Switch.On,
-                FolderId = FolderCell.SelectedIndex == 0 ?
-                    null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id,
-                Type = Bit.Core.Enums.CipherType.Login,
-                Login = new LoginView
-                {
-                    Uris = null,
-                    Username = string.IsNullOrWhiteSpace(UsernameCell?.TextField?.Text) ?
-                        null : UsernameCell.TextField.Text,
-                    Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ?
-                        null : PasswordCell.TextField.Text,
-                }
-            };
-
-            if (!string.IsNullOrWhiteSpace(UriCell?.TextField?.Text))
-            {
-                cipher.Login.Uris = new List<LoginUriView>
-                {
-                    new LoginUriView
-                    {
-                        Uri = UriCell.TextField.Text
-                    }
-                };
-            }
-
-            var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
-            PresentViewController(loadingAlert, true, null);
             try
             {
+                /*
+                if (!_connectivity.IsConnected)
+                {
+                    AlertNoConnection();
+                    return;
+                }
+                */
+
+                if (!IsCreatingPasskey && string.IsNullOrWhiteSpace(PasswordCell?.TextField?.Text))
+                {
+                    DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                        AppResources.Password), AppResources.Ok);
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(NameCell?.TextField?.Text))
+                {
+                    DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                        AppResources.Name), AppResources.Ok);
+                    return;
+                }
+
+                var cipher = new CipherView
+                {
+                    Name = NameCell.TextField.Text,
+                    Notes = string.IsNullOrWhiteSpace(NotesCell?.TextView?.Text) ? null : NotesCell.TextView.Text,
+                    Favorite = FavoriteCell.Switch.On,
+                    FolderId = FolderCell.SelectedIndex == 0 ?
+                        null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id,
+                    Type = Bit.Core.Enums.CipherType.Login,
+                    Login = new LoginView
+                    {
+                        Uris = null,
+                        Username = string.IsNullOrWhiteSpace(UsernameCell?.TextField?.Text) ?
+                            null : UsernameCell.TextField.Text,
+                        Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ?
+                            null : PasswordCell.TextField.Text,
+                    }
+                };
+
+                if (!string.IsNullOrWhiteSpace(UriCell?.TextField?.Text))
+                {
+                    cipher.Login.Uris = new List<LoginUriView>
+                    {
+                        new LoginUriView
+                        {
+                            Uri = UriCell.TextField.Text
+                        }
+                    };
+                }
+
+                await EncryptAndSaveAsync(cipher);
+            }
+            catch (ApiException e)
+            {
+                if (e?.Error != null)
+                {
+                    DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+            }
+        }
+
+        protected virtual async Task EncryptAndSaveAsync(CipherView cipher)
+        {
+            var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
+            try
+            {
+                PresentViewController(loadingAlert, true, null);
+
                 var cipherDomain = await _cipherService.EncryptAsync(cipher);
                 await _cipherService.SaveWithServerAsync(cipherDomain);
                 await loadingAlert.DismissViewControllerAsync(true);
@@ -202,12 +221,10 @@ namespace Bit.iOS.Core.Controllers
                 }
                 Success(cipherDomain.Id);
             }
-            catch (ApiException e)
+            catch
             {
-                if (e?.Error != null)
-                {
-                    DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
-                }
+                await loadingAlert.DismissViewControllerAsync(false);
+                throw;
             }
         }
 
