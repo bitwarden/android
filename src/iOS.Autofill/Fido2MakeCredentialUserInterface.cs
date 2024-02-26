@@ -22,6 +22,7 @@ namespace Bit.iOS.Autofill
         {
             _context.ConfirmNewCredentialTcs?.SetCanceled();
             _context.ConfirmNewCredentialTcs = new TaskCompletionSource<(string CipherId, bool UserVerified)>();
+            _context.PasskeyCreationParams = confirmNewCredentialParams;
 
             _onConfirmingNewCredential();
 

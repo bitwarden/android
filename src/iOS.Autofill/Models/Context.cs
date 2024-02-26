@@ -15,7 +15,9 @@ namespace Bit.iOS.Autofill.Models
         public ASPasswordCredentialIdentity PasswordCredentialIdentity { get; set; }
         public ASPasskeyCredentialRequest PasskeyCredentialRequest { get; set; }
         public bool Configuring { get; set; }
+
         public bool IsCreatingPasskey { get; set; }
+        public Fido2ConfirmNewCredentialParams? PasskeyCreationParams { get; set; }
         public TaskCompletionSource<bool> UnlockVaultTcs { get; set; }
         public TaskCompletionSource<(string CipherId, bool UserVerified)> ConfirmNewCredentialTcs { get; set; }
 

@@ -1286,17 +1286,18 @@ namespace Bit.Core.Services
             cipher.PasswordHistory = encPhs;
         }
 
-        public async Task<string> CreateNewLoginForPasskeyAsync(string rpId)
+        public async Task<string> CreateNewLoginForPasskeyAsync(Fido2ConfirmNewCredentialParams newPasskeyParams)
         {
             var newCipher = new CipherView
             {
-                Name = rpId,
+                Name = newPasskeyParams.CredentialName,
                 Type = CipherType.Login,
                 Login = new LoginView
                 {
+                    Username = newPasskeyParams.UserName,
                     Uris = new List<LoginUriView>
                     {
-                        new LoginUriView { Uri = rpId }
+                        new LoginUriView { Uri = newPasskeyParams.RpId }
                     }
                 },
                 Card = new CardView(),
