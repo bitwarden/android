@@ -5,7 +5,8 @@ namespace Bit.Core.Abstractions
 {
     public enum AwaiterPrecondition
     {
-        EnvironmentUrlsInited
+        EnvironmentUrlsInited,
+        AndroidWindowCreated
     }
 
     public interface IConditionedAwaiterManager
