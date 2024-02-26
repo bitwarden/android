@@ -2447,7 +2447,7 @@
     <value>Сталася невідома помилка {0}.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Використовуйте розширені можливості адрес вашого постачальника електронної пошти</value>
+    <value>Використовуйте розширені можливості адрес вашого провайдера електронної пошти</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
     <value>Використовуйте свою скриньку вхідних Catch-All власного домену.</value>
