@@ -15,16 +15,17 @@ abstract record VariantConfig(
     string AppName, 
     string AndroidPackageName,
     string iOSBundleId,
-    string ApsEnvironment
+    string ApsEnvironment,
+    string DistProvisioningProfilePrefix
     );
 
 const string BASE_BUNDLE_ID_DROID = "com.x8bit.bitwarden";
 const string BASE_BUNDLE_ID_IOS = "com.8bit.bitwarden";
 
-record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development");
-record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development");
-record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production");
-record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production");
+record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development", "Dist:");
+record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development", "Dist:");
+record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production", "Dist: Beta");
+record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production", "Dist:");
 
 VariantConfig GetVariant() => variant.ToLower() switch{
     "qa" => new QA(),
@@ -272,9 +273,10 @@ private void UpdateWatchPbxproj(string pbxprojPath, string newVersion)
     const string pattern = @"MARKETING_VERSION = [^;]*;";
 
     fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersion};");
-
+    
     FileWriteText(pbxprojPath, fileText);
-    Information($"{pbxprojPath} modified successfully.");
+
+    Information($"{pbxprojPath} modified Marketing Version successfully.");
 }
 
 /// <summary>
@@ -397,6 +399,22 @@ Task("UpdateWatchKitAppInfoPlist")
         UpdateWatchKitAppInfoPlist(infoPath, buildVariant);
     });
 
+Task("UpdateDistProfiles")
+    .IsDependentOn("UpdateiOSCodeFiles")
+    .Does(()=> {
+        var buildVariant = GetVariant();
+    
+        var filesToReplace = new string[] {
+            Path.Combine(".github", "resources", "export-options-app-store.plist"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj")
+        };
+
+        foreach(string path in filesToReplace)
+        {
+            ReplaceInFile(path, "Dist:", buildVariant.DistProvisioningProfilePrefix);
+        }
+    });
+
 #endregion iOS
 
 #region Main Tasks
@@ -418,6 +436,7 @@ Task("iOS")
     .IsDependentOn("UpdateiOSCodeFiles")
     .IsDependentOn("UpdateWatchProject")
     .IsDependentOn("UpdateWatchKitAppInfoPlist")
+    .IsDependentOn("UpdateDistProfiles")
     .Does(()=>
     {
         Information("iOS app updated");
