@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>عن التطبيق</value>
+    <value>عن</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>أضِف</value>
@@ -2822,7 +2822,7 @@
     <value>مواصلة الاتصال بالدعم؟</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>Continue to privacy policy?</value>
+    <value>هل تريد المتابعة إلى سياسة الخصوصية؟</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>هل تريد المتابعة إلى متجر التطبيقات؟</value>
@@ -2844,7 +2844,7 @@
     <value>لا يمكن العثور على ما تبحث عنه؟ قم بالتواصل مع دعم Bitwarden على bitwarden.com.</value>
   </data>
   <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
-    <value>Check out our privacy policy on bitwarden.com.</value>
+    <value>اطلع على سياستنا للخصوصية على bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>استكشف المزيد من الميزات لحساب Bitwarden الخاص بك على تطبيق الويب.</value>
