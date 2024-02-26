@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
@@ -58,6 +60,7 @@ fun VaultAddEditContent(
                     text = stringResource(R.string.personal_ownership_policy_in_effect),
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
+                        .semantics { testTag = "PersonalOwnershipPolicyLabel" }
                         .fillMaxWidth(),
                 )
             }
@@ -77,7 +80,9 @@ fun VaultAddEditContent(
                 TypeOptionsItem(
                     itemType = state.type,
                     onTypeOptionClicked = onTypeOptionClicked,
-                    modifier = Modifier.padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .semantics { testTag = "ItemTypePicker" }
+                        .padding(horizontal = 16.dp),
                 )
             }
         }
