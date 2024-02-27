@@ -284,12 +284,11 @@ jobs:
           if-no-files-found: error
 
       - name: Deploy to Play Store
-        if: ${{ matrix.variant == 'prod' }}
-        # if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/main'
-        #   && needs.setup.outputs.rc_branch_exists == 0
-        #   && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-        #   || github.ref == 'refs/heads/hotfix-rc' ) }}
+        if: ${{ matrix.variant == 'prod' && (( github.ref == 'refs/heads/main'
+          && needs.setup.outputs.rc_branch_exists == 0
+          && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc' ) }}
         run: |
           $publisherPath = "$($env:GITHUB_WORKSPACE)\store\google\Publisher\bin\Release\net8.0\Publisher.dll"
           $credsPath = "$($HOME)\secrets\play_creds.json"
