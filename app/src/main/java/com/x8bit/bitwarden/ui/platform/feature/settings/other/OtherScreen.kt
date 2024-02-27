@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
@@ -96,6 +98,7 @@ fun OtherScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "SyncOnRefreshSwitch" }
                     .padding(horizontal = 16.dp),
             )
 
@@ -108,6 +111,7 @@ fun OtherScreen(
                 label = stringResource(id = R.string.sync_now),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "SyncNowButton" }
                     .padding(horizontal = 16.dp),
             )
 
@@ -116,6 +120,7 @@ fun OtherScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "LastSyncLabel" }
                     .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start,
@@ -138,7 +143,9 @@ fun OtherScreen(
                 onFrequencySelection = remember(viewModel) {
                     { viewModel.trySendAction(OtherAction.ClearClipboardFrequencyChange(it)) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "ClearClipboardChooser" }
+                    .fillMaxWidth(),
             )
 
             ScreenCaptureRow(
@@ -148,6 +155,7 @@ fun OtherScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "AllowScreenCaptureSwitch" }
                     .padding(horizontal = 16.dp),
             )
         }
@@ -209,6 +217,7 @@ private fun ClearClipboardFrequencyRow(
             text = currentSelection.displayLabel.invoke(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.semantics { testTag = "ClearClipboardAfterLabel" },
         )
     }
 
