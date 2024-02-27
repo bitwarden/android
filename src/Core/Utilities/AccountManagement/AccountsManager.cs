@@ -60,7 +60,9 @@ namespace Bit.App.Utilities.AccountManagement
         public async Task StartDefaultNavigationFlowAsync(Action<AppOptions> appOptionsAction)
         {
             await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
-
+#if ANDROID
+            await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.AndroidWindowCreated);
+#endif
             appOptionsAction(Options);
 
             await NavigateOnAccountChangeAsync();
@@ -69,6 +71,9 @@ namespace Bit.App.Utilities.AccountManagement
         public async Task NavigateOnAccountChangeAsync(bool? isAuthed = null)
         {
             await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.EnvironmentUrlsInited);
+#if ANDROID
+            await _conditionedAwaiterManager.GetAwaiterForPrecondition(AwaiterPrecondition.AndroidWindowCreated);
+#endif
 
             // TODO: this could be improved by doing chain of responsability pattern
             // but for now it may be an overkill, if logic gets more complex consider refactoring it
