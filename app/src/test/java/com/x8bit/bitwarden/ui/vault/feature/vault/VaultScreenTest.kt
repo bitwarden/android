@@ -125,6 +125,21 @@ class VaultScreenTest : BaseComposeTest() {
         mutableStateFlow.update {
             it.copy(
                 vaultFilterData = VAULT_FILTER_DATA.copy(
+                    vaultFilterTypes = listOf(
+                        VaultFilterType.AllVaults,
+                        ORGANIZATION_VAULT_FILTER,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule.onNodeWithText("Vault: All").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: My vault").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vault: Test Organization").assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                vaultFilterData = VAULT_FILTER_DATA.copy(
                     selectedVaultFilterType = VaultFilterType.MyVault,
                 ),
             )

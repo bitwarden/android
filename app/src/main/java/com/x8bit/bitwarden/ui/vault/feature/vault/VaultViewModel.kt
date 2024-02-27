@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.vaultFilterDataIfRequired
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
@@ -626,6 +627,12 @@ data class VaultState(
         get() = isPullToRefreshSettingEnabled && viewState.isPullToRefreshEnabled
 
     /**
+     * VaultFilterData that the user has access to.
+     */
+    val vaultFilterDataWithFilter: VaultFilterData?
+        get() = viewState.vaultFilterDataIfRequired(vaultFilterData = vaultFilterData)
+
+    /**
      * Represents the specific view states for the [VaultScreen].
      */
     @Parcelize
@@ -638,11 +645,6 @@ data class VaultState(
         abstract val hasFab: Boolean
 
         /**
-         * Determines whether or not the the Vault Filter may be shown (when applicable).
-         */
-        abstract val hasVaultFilter: Boolean
-
-        /**
          * Indicates the pull-to-refresh feature should be available during the current state.
          */
         abstract val isPullToRefreshEnabled: Boolean
@@ -653,7 +655,6 @@ data class VaultState(
         @Parcelize
         data object Loading : ViewState() {
             override val hasFab: Boolean get() = false
-            override val hasVaultFilter: Boolean get() = false
             override val isPullToRefreshEnabled: Boolean get() = false
         }
 
@@ -663,7 +664,6 @@ data class VaultState(
         @Parcelize
         data object NoItems : ViewState() {
             override val hasFab: Boolean get() = true
-            override val hasVaultFilter: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
         }
 
@@ -676,7 +676,6 @@ data class VaultState(
             val message: Text,
         ) : ViewState() {
             override val hasFab: Boolean get() = false
-            override val hasVaultFilter: Boolean get() = false
             override val isPullToRefreshEnabled: Boolean get() = true
         }
 
@@ -708,7 +707,6 @@ data class VaultState(
             val trashItemsCount: Int,
         ) : ViewState() {
             override val hasFab: Boolean get() = true
-            override val hasVaultFilter: Boolean get() = true
             override val isPullToRefreshEnabled: Boolean get() = true
         }
 

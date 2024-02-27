@@ -272,11 +272,10 @@ private fun VaultScreenScaffold(
                 .fillMaxSize()
                 .padding(paddingValues)
             Column(modifier = outerModifier) {
-                val vaultFilterData = state.vaultFilterData
-                if (state.viewState.hasVaultFilter && vaultFilterData != null) {
+                state.vaultFilterDataWithFilter?.let {
                     VaultFilter(
-                        selectedVaultFilterType = vaultFilterData.selectedVaultFilterType,
-                        vaultFilterTypes = vaultFilterData.vaultFilterTypes.toImmutableList(),
+                        selectedVaultFilterType = it.selectedVaultFilterType,
+                        vaultFilterTypes = it.vaultFilterTypes.toImmutableList(),
                         onVaultFilterTypeSelect = vaultHandlers.vaultFilterTypeSelect,
                         topAppBarScrollBehavior = scrollBehavior,
                         modifier = Modifier
