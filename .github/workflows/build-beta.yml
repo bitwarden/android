@@ -277,7 +277,7 @@ jobs:
         with:
           name: Bitwarden iOS
           path: |
-            ./bitwarden-export/Bitwarden.ipa
+            ./bitwarden-export/Bitwarden*.ipa
             ./bitwarden-export/dSYMs/*.*
           if-no-files-found: error
 
@@ -307,7 +307,7 @@ jobs:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         run: |
-          xcrun altool --validate-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+          xcrun altool --validate-app --type ios --file "./bitwarden-export/Bitwarden Beta.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
         shell: bash
 
@@ -316,7 +316,7 @@ jobs:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         run: |
-          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden Beta.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
 
 
