@@ -229,12 +229,15 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     Information($"{plistPath} updated with success!");
 }
 
-private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant)
+private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant, bool updateApsEnv)
 {
     var EntitlementlistFile = File(entitlementsPath);
     dynamic Entitlements = DeserializePlist(EntitlementlistFile);
 
-    Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    if (updateApsEnv)
+    {
+        Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    }
     Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
     Entitlements["com.apple.security.application-groups"] = new List<string>() { $"group.{buildVariant.iOSBundleId}" };;
 
@@ -329,7 +332,7 @@ Task("UpdateiOSPlist")
         var infoPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, true);
     });
 
 Task("UpdateiOSAutofillPlist")
@@ -340,7 +343,7 @@ Task("UpdateiOSAutofillPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Autofill);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSExtensionPlist")
@@ -351,7 +354,7 @@ Task("UpdateiOSExtensionPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Extension);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSShareExtensionPlist")
@@ -362,7 +365,7 @@ Task("UpdateiOSShareExtensionPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.ShareExtension);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSCodeFiles")
