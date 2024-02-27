@@ -28,6 +28,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
@@ -150,6 +152,10 @@ fun DeleteAccountScreen(
                 onConfirmationClick = remember(viewModel) {
                     { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(it)) }
                 },
+                modifier = Modifier
+                    .semantics { testTag = "DELETE ACCOUNT" }
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(12.dp))
             BitwardenOutlinedButton(
@@ -158,6 +164,7 @@ fun DeleteAccountScreen(
                     { viewModel.trySendAction(DeleteAccountAction.CancelClick) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "CANCEL" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -169,6 +176,7 @@ fun DeleteAccountScreen(
 @Composable
 private fun DeleteAccountButton(
     onConfirmationClick: (masterPassword: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var showPasswordDialog by remember { mutableStateOf(false) }
     if (showPasswordDialog) {
@@ -184,8 +192,6 @@ private fun DeleteAccountButton(
     BitwardenErrorButton(
         label = stringResource(id = R.string.delete_account),
         onClick = { showPasswordDialog = true },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+        modifier = modifier,
     )
 }
