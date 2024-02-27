@@ -140,7 +140,7 @@ jobs:
           CONTAINER_NAME: mobile
         run: |
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name google-services.json --file ./${{ env.android_folder_path }}/google-services.json --output none
+          --name google-services.json --file ./${{ env.android_folder_path_bash }}/google-services.json --output none
         shell: bash
 
       - name: Increment version
