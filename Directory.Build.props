@@ -1,6 +1,6 @@
 <Project>
  <PropertyGroup>
-   <MauiVersion>8.0.4-nightly.*</MauiVersion>
+   <MauiVersion>8.0.7</MauiVersion>
    <ReleaseCodesignProvision>Automatic:AppStore</ReleaseCodesignProvision>
    <ReleaseCodesignKey>iPhone Distribution</ReleaseCodesignKey>
    <IncludeBitwardeniOSExtensions>True</IncludeBitwardeniOSExtensions>

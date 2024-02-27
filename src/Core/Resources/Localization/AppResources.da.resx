@@ -907,7 +907,7 @@ Skanning vil ske automatisk.</value>
     <value>Kopiér TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Har et login en godkendelsesnøgle, så kopiér TOTP-bekræftelseskoden til udklipsholderen, når login auto-udfyldes.</value>
+    <value>Har et login en godkendelsesnøgle, kopiér da TOTP-bekræftelseskoden til udklipsholderen, når login autoudfyldes.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Kopiér TOTP automatisk</value>
@@ -2128,7 +2128,7 @@ Skanning vil ske automatisk.</value>
     <value>Denne organisation har en virksomhedspolitik, der automatisk tilmelder dig til nulstilling af adgangskode. Tilmelding giver organisationsadministratorer mulighed for at skifte din hovedadgangskode.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Dine organisationspolitikker påvirker din boks-timeout. Maksimum tilladte boks-timeout er {0} time(r) og {1} minut(ter)</value>
+    <value>Organisationspolitikkerne har sat den maksimalt tilladte bokstimeout til {0} tim(er) og {1} minut(ter).</value>
   </data>
   <data name="VaultTimeoutPolicyWithActionInEffect" xml:space="preserve">
     <value>Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er {0} time(r) og {1} minut(ter). Boks-timeout er pt. sat til {2}.</value>
@@ -2354,7 +2354,7 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</value>
     <value>Godkend loginanmodninger</value>
   </data>
   <data name="UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices" xml:space="preserve">
-    <value>Brug denne enhed til at godkende loginanmodninger fra andre enheder.</value>
+    <value>Brug denne enhed til at godkende loginanmodninger fra andre enheder</value>
   </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Tillad notifikationer</value>
@@ -2668,7 +2668,7 @@ Vil du skifte til denne konto?</value>
     <value>Hjælp til genanmodning om hovedadgangskode</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Oplåsning kan fejle grundet utilstrækkelig hukommelse. Reducér KDF-hukommelsesindstillinger eller opsæt biometrisk oplåsning for at afhjælpe.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ugyldig API-nøgle</value>

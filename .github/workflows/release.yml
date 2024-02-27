@@ -68,7 +68,7 @@ jobs:
 
       - name: Download all artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
+        uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -76,7 +76,7 @@ jobs:
 
       - name: Dry Run - Download all artifacts
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
+        uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -130,7 +130,7 @@ jobs:
 
       - name: Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
+        uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -139,7 +139,7 @@ jobs:
 
       - name: Dry Run - Download F-Droid .apk artifact
         if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@72aaadce3bc708349fc665eee3785cbb1b6e51d0 # v3.1.1
+        uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
           workflow_conclusion: success
