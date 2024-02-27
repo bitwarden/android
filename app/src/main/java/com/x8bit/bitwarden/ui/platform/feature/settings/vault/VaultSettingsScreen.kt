@@ -17,6 +17,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -89,7 +91,9 @@ fun VaultSettingsScreen(
                     { viewModel.trySendAction(VaultSettingsAction.FoldersButtonClick) }
                 },
                 withDivider = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "FoldersLabel" }
+                    .fillMaxWidth(),
             )
 
             BitwardenTextRow(
@@ -98,7 +102,9 @@ fun VaultSettingsScreen(
                     { viewModel.trySendAction(VaultSettingsAction.ExportVaultClick) }
                 },
                 withDivider = true,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "ExportVaultLabel" }
+                    .fillMaxWidth(),
             )
 
             BitwardenExternalLinkRow(
@@ -113,7 +119,9 @@ fun VaultSettingsScreen(
                     id = R.string.you_can_import_data_to_your_vault_on_x,
                     state.value.baseUrl,
                 ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "ImportItemsLinkItemView" }
+                    .fillMaxWidth(),
             )
         }
     }
