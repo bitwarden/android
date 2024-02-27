@@ -82,8 +82,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
         with:
-          submodules: 'true'
+          fetch-depth: 0
           ref: ${{ inputs.ref }}
+          submodules: 'true'
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
@@ -220,7 +221,7 @@ jobs:
       - name: Archive Build for App Store
         shell: pwsh
         run: |
-          Write-Output "##### Archive for Release ios-arm64
+          Write-Output "##### Archive for Release ios-arm64"
 
           dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
@@ -229,13 +230,13 @@ jobs:
       - name: Archive Build for Mobile Automation
         shell: pwsh
         run: |
-          Write-Output "##### Archive Debug for iossimulator-x64
+          Write-Output "##### Archive Debug for iossimulator-x64"
 
           dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "##### Done"
-          ls $HOME/Library/Developer/Xcode/Archives
-
+          ls ~/Library/Developer/Xcode/Archives
+          
       - name: Export .ipa for App Store
         env:
           EXPORT_OPTIONS_PATH: ./.github/resources/export-options-app-store.plist
