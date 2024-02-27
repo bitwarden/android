@@ -29,6 +29,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -169,6 +171,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "ApproveLoginRequestsSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -178,7 +181,9 @@ fun AccountSecurityScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .semantics { testTag = "PendingLogInRequestsLabel" }
+                        .fillMaxWidth(),
                 )
             }
 
@@ -196,6 +201,7 @@ fun AccountSecurityScreen(
                 },
                 biometricsManager = biometricsManager,
                 modifier = Modifier
+                    .semantics { testTag = "UnlockWithBiometricsSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -205,6 +211,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(it) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "UnlockWithPinSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -228,7 +235,9 @@ fun AccountSecurityScreen(
                 onVaultTimeoutTypeSelect = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "VaultTimeoutActionChooser" }
+                    .fillMaxWidth(),
             )
             (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
                 SessionCustomTimeoutRow(
@@ -250,7 +259,9 @@ fun AccountSecurityScreen(
                 onVaultTimeoutActionSelect = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it)) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "VaultTimeoutActionChooser" }
+                    .fillMaxWidth(),
             )
 
             Spacer(Modifier.height(16.dp))
@@ -265,7 +276,9 @@ fun AccountSecurityScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "AccountFingerprintPhraseLabel" }
+                    .fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
                 text = stringResource(id = R.string.two_step_login),
@@ -275,7 +288,9 @@ fun AccountSecurityScreen(
                 withDivider = false,
                 dialogTitle = stringResource(id = R.string.continue_to_web_app),
                 dialogMessage = stringResource(id = R.string.two_step_login_description_long),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "TwoStepLoginLinkItemView" }
+                    .fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
                 text = stringResource(id = R.string.change_master_password),
@@ -294,21 +309,27 @@ fun AccountSecurityScreen(
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "LockNowLabel" }
+                    .fillMaxWidth(),
             )
             BitwardenTextRow(
                 text = stringResource(id = R.string.log_out),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "LogOutLabel" }
+                    .fillMaxWidth(),
             )
             BitwardenTextRow(
                 text = stringResource(id = R.string.delete_account),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "DeleteAccountLabel" }
+                    .fillMaxWidth(),
             )
         }
     }
@@ -536,6 +557,7 @@ private fun SessionTimeoutRow(
             text = selectedVaultTimeoutType.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.semantics { testTag = "SessionTimeoutStatusLabel" },
         )
     }
 
@@ -682,6 +704,7 @@ private fun SessionTimeoutActionRow(
             text = selectedVaultTimeoutAction.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.semantics { testTag = "SessionTimeoutActionStatusLabel" },
         )
     }
     when {
