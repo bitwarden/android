@@ -66,7 +66,6 @@ namespace Bit.App.Pages
         {
             try
             {
-                IsRefreshing = true;
                 LoginRequests.ReplaceRange(await _authService.GetActivePasswordlessLoginRequestsAsync());
             }
             catch (Exception ex)

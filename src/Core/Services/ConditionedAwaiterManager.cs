@@ -10,7 +10,8 @@ namespace Bit.Core.Services
     {
         private readonly ConcurrentDictionary<AwaiterPrecondition, TaskCompletionSource<bool>> _preconditionsTasks = new ConcurrentDictionary<AwaiterPrecondition, TaskCompletionSource<bool>>
         {
-            [AwaiterPrecondition.EnvironmentUrlsInited] = new TaskCompletionSource<bool>()
+            [AwaiterPrecondition.EnvironmentUrlsInited] = new TaskCompletionSource<bool>(),
+            [AwaiterPrecondition.AndroidWindowCreated] = new TaskCompletionSource<bool>()
         };
 
         public Task GetAwaiterForPrecondition(AwaiterPrecondition awaiterPrecondition)
