@@ -65,7 +65,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: ["prod", "qa"]
+        #variant: ["prod", "qa"]
+        variant: ["qa"]
     env:
       android_folder_path: src/App/Platforms/Android
     steps:
