@@ -364,6 +364,7 @@ private fun AddSendOptions(
                 Spacer(modifier = Modifier.height(8.dp))
                 AddSendCustomDateChooser(
                     modifier = Modifier
+                        .semantics { testTag = "SendCustomDeletionDatePicker" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateFormatPattern = state.common.dateFormatPattern,
@@ -392,6 +393,7 @@ private fun AddSendOptions(
                 Spacer(modifier = Modifier.height(8.dp))
                 AddSendCustomDateChooser(
                     modifier = Modifier
+                        .semantics { testTag = "SendCustomExpirationDatePicker" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateFormatPattern = state.common.dateFormatPattern,
@@ -418,7 +420,9 @@ private fun AddSendOptions(
                         label = stringResource(id = R.string.clear),
                         onClick = addSendHandlers.onClearExpirationDateClick,
                         isEnabled = state.common.expirationDate != null && !sendRestrictionPolicy,
-                        modifier = Modifier.wrapContentWidth(),
+                        modifier = Modifier
+                            .semantics { testTag = "SendClearExpirationDateButton" }
+                            .wrapContentWidth(),
                     )
                 }
             }
