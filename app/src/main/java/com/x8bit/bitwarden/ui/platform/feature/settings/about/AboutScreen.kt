@@ -33,6 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -154,6 +155,7 @@ private fun ContentColumn(
                 isChecked = state.isSubmitCrashLogsEnabled,
                 onCheckedChange = onSubmitCrashLogsCheckedChange,
                 modifier = Modifier
+                    .semantics { testTag = "SubmitCrashLogsSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 contentDescription = stringResource(id = R.string.submit_crash_logs),
