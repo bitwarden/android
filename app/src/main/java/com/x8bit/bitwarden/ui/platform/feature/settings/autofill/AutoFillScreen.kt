@@ -26,6 +26,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
@@ -129,6 +131,7 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "AutofillServicesSwitch" }
                     .padding(horizontal = 16.dp),
             )
             BitwardenWideSwitch(
@@ -141,6 +144,7 @@ fun AutoFillScreen(
                 enabled = state.canInteractWithInlineAutofillToggle,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "InlineAutofillSwitch" }
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -159,6 +163,7 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "CopyTotpAutomaticallySwitch" }
                     .padding(horizontal = 16.dp),
             )
             BitwardenWideSwitch(
@@ -170,6 +175,7 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .semantics { testTag = "AskToAddLoginSwitch" }
                     .padding(horizontal = 16.dp),
             )
             DefaultUriMatchTypeRow(
@@ -177,6 +183,9 @@ fun AutoFillScreen(
                 onUriMatchTypeSelect = remember(viewModel) {
                     { viewModel.trySendAction(AutoFillAction.DefaultUriMatchTypeSelect(it)) }
                 },
+                modifier = Modifier
+                    .semantics { testTag = "DefaultUriMatchDetectionChooser" }
+                    .fillMaxWidth(),
             )
             BitwardenTextRow(
                 text = stringResource(id = R.string.block_auto_fill),
@@ -197,6 +206,7 @@ fun AutoFillScreen(
 private fun DefaultUriMatchTypeRow(
     selectedUriMatchType: UriMatchType,
     onUriMatchTypeSelect: (UriMatchType) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -204,7 +214,7 @@ private fun DefaultUriMatchTypeRow(
         text = stringResource(id = R.string.default_uri_match_detection),
         description = stringResource(id = R.string.default_uri_match_detection_description),
         onClick = { shouldShowDialog = true },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
     ) {
         Text(
             text = selectedUriMatchType.displayLabel(),
