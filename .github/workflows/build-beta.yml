@@ -255,6 +255,11 @@ jobs:
           zip -r -q ${{ env.app_ci_output_filename }}.app.zip $ARCHIVE_PATH
           mv ${{ env.app_ci_output_filename }}.app.zip $EXPORT_PATH
 
+      - name: Show Bitwarden Export
+        shell: bash
+        run: |
+          ls -a -R ./bitwarden-export
+
       - name: Copy all dSYMs files to upload
         env:
           EXPORT_PATH: ./bitwarden-export
