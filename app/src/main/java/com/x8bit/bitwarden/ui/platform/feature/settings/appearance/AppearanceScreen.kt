@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -84,7 +86,9 @@ fun AppearanceScreen(
                 onLanguageSelection = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.LanguageChange(it)) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "LanguageChooser" }
+                    .fillMaxWidth(),
             )
 
             ThemeSelectionRow(
@@ -92,7 +96,9 @@ fun AppearanceScreen(
                 onThemeSelection = remember(viewModel) {
                     { viewModel.trySendAction(AppearanceAction.ThemeChange(it)) }
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .semantics { testTag = "ThemeChooser" }
+                    .fillMaxWidth(),
             )
 
             BitwardenWideSwitch(
@@ -103,6 +109,7 @@ fun AppearanceScreen(
                     { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it)) }
                 },
                 modifier = Modifier
+                    .semantics { testTag = "ShowWebsiteIconsSwitch" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
