@@ -76,6 +76,7 @@ fun SendListItem(
             SelectionItemData(
                 text = stringResource(id = R.string.copy_link),
                 onClick = onCopyClick,
+                testTag = "Copy",
             ),
             SelectionItemData(
                 text = stringResource(id = R.string.share_link),
@@ -95,6 +96,7 @@ fun SendListItem(
             // Only show options if allowed
             .filter { showMoreOptions }
             .toPersistentList(),
+        optionsTestTag = "Options",
         modifier = modifier,
     )
     if (shouldShowDeleteConfirmationDialog) {

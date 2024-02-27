@@ -26,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,6 +48,7 @@ import kotlinx.collections.immutable.persistentListOf
  * dialog.
  * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
  * This allows the caller to specify things like padding, size, etc.
+ * @param optionsTestTag The optional test tag for the options button.
  * @param supportingLabel An optional secondary text label to display beneath the label.
  * @param trailingLabelIcons An optional list of small icons to be displayed after the [label].
  */
@@ -57,6 +60,7 @@ fun BitwardenListItem(
     onClick: () -> Unit,
     selectionDataList: ImmutableList<SelectionItemData>,
     modifier: Modifier = Modifier,
+    optionsTestTag: String? = null,
     supportingLabel: String? = null,
     trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
 ) {
@@ -117,6 +121,7 @@ fun BitwardenListItem(
         if (selectionDataList.isNotEmpty()) {
             IconButton(
                 onClick = { shouldShowDialog = true },
+                modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_more_horizontal),
@@ -133,12 +138,13 @@ fun BitwardenListItem(
             title = label,
             onDismissRequest = { shouldShowDialog = false },
             selectionItems = {
-                selectionDataList.forEach {
+                selectionDataList.forEach { itemData ->
                     BitwardenBasicDialogRow(
-                        text = it.text,
+                        modifier = Modifier.semantics { itemData.testTag?.let { testTag = it } },
+                        text = itemData.text,
                         onClick = {
                             shouldShowDialog = false
-                            it.onClick()
+                            itemData.onClick()
                         },
                     )
                 }
@@ -153,6 +159,7 @@ fun BitwardenListItem(
 data class SelectionItemData(
     val text: String,
     val onClick: () -> Unit,
+    val testTag: String? = null,
 )
 
 @Preview(showBackground = true)
