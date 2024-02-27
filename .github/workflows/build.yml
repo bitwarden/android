@@ -126,9 +126,9 @@ jobs:
           mkdir -p $HOME/secrets
 
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name app_play-keystore.jks --file ./${{ env.main_app_folder_path }}/app_play-keystore.jks --output none
+          --name app_play-keystore.jks --file ./${{ env.android_folder_path_bash }}/app_play-keystore.jks --output none
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
-          --name app_upload-keystore.jks --file ./${{ env.main_app_folder_path }}/app_upload-keystore.jks --output none
+          --name app_upload-keystore.jks --file ./${{ env.android_folder_path_bash }}/app_upload-keystore.jks --output none
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
           --name play_creds.json --file $HOME/secrets/play_creds.json --output none
         shell: bash
