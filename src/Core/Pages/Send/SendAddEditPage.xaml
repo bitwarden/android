@@ -266,6 +266,8 @@
                                 AutomationId="SendShowHideOptionsButton" />
                             <controls:IconButton
                                 x:Name="_btnOptionsUp"
+                                InputTransparent="True"
+                                MinimumWidthRequest="25"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
@@ -274,6 +276,8 @@
                                 AutomationId="SendOptionsDisplayed" />
                             <controls:IconButton
                                 x:Name="_btnOptionsDown"
+                                InputTransparent="True"
+                                MinimumWidthRequest="25"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
