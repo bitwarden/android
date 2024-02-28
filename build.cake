@@ -198,7 +198,8 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     var prevBundleId = plist["CFBundleIdentifier"];
     var prevBundleName = plist["CFBundleName"];
     //var newVersion = CreateBuildNumber(prevVersion).ToString();
-    var newVersionName = GetVersionName(prevVersionName, buildVariant, git);
+    // we need to maintain version formatting here composed of one to three period-separated integers, so we cannot use the GetVersionName method as in Android for non-Prod.
+    var newVersionName = prevVersionName;
     var newBundleId = GetiOSBundleId(buildVariant, projectType);
     var newBundleName = GetiOSBundleName(buildVariant, projectType);
 
