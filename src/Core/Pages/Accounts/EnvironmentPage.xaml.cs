@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
+using Microsoft.Maui.Platform;
 
 namespace Bit.App.Pages
 {
@@ -37,6 +38,12 @@ namespace Bit.App.Pages
         {
             _platformUtilsService.ShowToast("success", null, AppResources.EnvironmentSaved);
             await Navigation.PopModalAsync();
+#if ANDROID
+            if (Platform.CurrentActivity.CurrentFocus != null)
+            {
+                Platform.CurrentActivity.HideKeyboard(Platform.CurrentActivity.CurrentFocus);
+            }
+#endif
         }
 
         private void Close_Clicked(object sender, EventArgs e)
