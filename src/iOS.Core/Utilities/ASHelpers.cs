@@ -2,6 +2,7 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Foundation;
 using UIKit;
@@ -135,21 +136,29 @@ namespace Bit.iOS.Core.Utilities
 
         public static IASCredentialIdentity? ToCredentialIdentity(CipherView cipher)
         {
-            if (!cipher.HasFido2Credential)
+            try
             {
-                return ToPasswordCredentialIdentity(cipher);
-            }
+                if (!cipher.HasFido2Credential)
+                {
+                    return ToPasswordCredentialIdentity(cipher);
+                }
 
-            if (!cipher.Login.MainFido2Credential.DiscoverableValue)
+                if (!cipher.Login.MainFido2Credential.DiscoverableValue)
+                {
+                    return null;
+                }
+
+                return new ASPasskeyCredentialIdentity(cipher.Login.MainFido2Credential.RpId,
+                    cipher.Login.MainFido2Credential.UserName,
+                    NSData.FromArray(cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat()),
+                    cipher.Login.MainFido2Credential.UserHandle,
+                    cipher.Id);
+            }
+            catch (Exception ex)
             {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
                 return null;
             }
-
-            return new ASPasskeyCredentialIdentity(cipher.Login.MainFido2Credential.RpId,
-                cipher.Login.MainFido2Credential.UserName,
-                NSData.FromArray(cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat()),
-                cipher.Login.MainFido2Credential.UserHandle,
-                cipher.Id);
         }
     }
 }
