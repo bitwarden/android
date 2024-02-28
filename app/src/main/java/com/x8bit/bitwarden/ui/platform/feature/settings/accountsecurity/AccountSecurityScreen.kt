@@ -236,7 +236,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "VaultTimeoutActionChooser" }
+                    .semantics { testTag = "VaultTimeoutChooser" }
                     .fillMaxWidth(),
             )
             (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
