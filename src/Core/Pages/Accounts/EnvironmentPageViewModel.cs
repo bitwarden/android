@@ -73,7 +73,10 @@ namespace Bit.App.Pages
             IconsUrl = resUrls.Icons;
             NotificationsUrls = resUrls.Notifications;
 
-            await SubmitSuccessTask();
+            if (SubmitSuccessTask != null)
+            {
+                await SubmitSuccessTask();
+            }
         }
 
         public bool ValidateUrls()
