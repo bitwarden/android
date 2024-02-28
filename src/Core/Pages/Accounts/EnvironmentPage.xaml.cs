@@ -26,7 +26,7 @@ namespace Bit.App.Pages
             _apiEntry.ReturnCommand = new Command(() => _identityEntry.Focus());
             _identityEntry.ReturnType = ReturnType.Next;
             _identityEntry.ReturnCommand = new Command(() => _iconsEntry.Focus());
-            _vm.SubmitSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await SubmitSuccessAsync());
+            _vm.SubmitSuccessTask = () => MainThread.InvokeOnMainThreadAsync(SubmitSuccessAsync);
             _vm.CloseAction = async () =>
             {
                 await Navigation.PopModalAsync();
