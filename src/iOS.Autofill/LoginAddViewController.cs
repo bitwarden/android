@@ -5,6 +5,7 @@ using Bit.Core.Models.View;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Utilities;
@@ -118,7 +119,7 @@ namespace Bit.iOS.Autofill
                 }
 
                 return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
-                    new Fido2VerificationOptions(
+                    new Fido2UserVerificationOptions(
                         false,
                         true,
                         Context.VaultUnlockedDuringThisSession,

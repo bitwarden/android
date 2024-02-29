@@ -249,7 +249,7 @@ namespace Bit.iOS.Autofill
                 var cipher = await encrypted.DecryptAsync();
 
                 return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
-                    new Fido2VerificationOptions(
+                    new Fido2UserVerificationOptions(
                         cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
                         true,
                         _context.VaultUnlockedDuringThisSession,
