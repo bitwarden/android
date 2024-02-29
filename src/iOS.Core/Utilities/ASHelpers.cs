@@ -148,8 +148,19 @@ namespace Bit.iOS.Core.Utilities
                     return null;
                 }
 
+                var userName = cipher.Login.MainFido2Credential.UserName;
+                if (string.IsNullOrWhiteSpace(userName))
+                {
+                    userName = cipher.Login.MainFido2Credential.UserDisplayName;
+
+                    if (string.IsNullOrWhiteSpace(userName))
+                    {
+                        userName = cipher.Login.Username;
+                    }
+                }
+
                 return new ASPasskeyCredentialIdentity(cipher.Login.MainFido2Credential.RpId,
-                    cipher.Login.MainFido2Credential.UserName,
+                    userName,
                     NSData.FromArray(cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat()),
                     cipher.Login.MainFido2Credential.UserHandle,
                     cipher.Id);
