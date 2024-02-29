@@ -36,8 +36,11 @@ namespace Bit.Core.Test.Utilities.Fido2
         {
             // Arrange
             var called = false;
-            var callback = () => { called = true; return Task.FromResult(true); };
-            var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null, callback);
+            var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null, _ =>
+            {
+                called = true;
+                return Task.FromResult(true);
+            });
 
             // Act
             var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", false)]);
@@ -53,8 +56,11 @@ namespace Bit.Core.Test.Utilities.Fido2
         {
             // Arrange
             var called = false;
-            var callback = () => { called = true; return Task.FromResult(true); };
-            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", true, null, callback);
+            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", true, null, _ =>
+            {
+                called = true;
+                return Task.FromResult(true);
+            });
 
             // Act
             var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", false)]);
@@ -70,8 +76,11 @@ namespace Bit.Core.Test.Utilities.Fido2
         {
             // Arrange
             var called = false;
-            var callback = () => { called = true; return Task.FromResult(true); };
-            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", false, null, callback);
+            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", false, null, _ =>
+            {
+                called = true;
+                return Task.FromResult(true);
+            });
 
             // Act
             var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", false)]);
