@@ -85,6 +85,12 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IWatchDeviceService>(),
                     ServiceContainer.Resolve<IConditionedAwaiterManager>());
                 ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+
+                var userPinService = new UserPinService(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<ICryptoService>(),
+                    ServiceContainer.Resolve<IVaultTimeoutService>());
+                ServiceContainer.Register<IUserPinService>(userPinService);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
@@ -160,7 +166,6 @@ namespace Bit.Droid
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService, logger);
             var biometricService = new BiometricService(stateService, cryptoService);
-            var userPinService = new UserPinService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
@@ -184,7 +189,6 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
-            ServiceContainer.Register<IUserPinService>(userPinService);
 
             // Push
 #if FDROID

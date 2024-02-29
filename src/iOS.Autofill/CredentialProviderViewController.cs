@@ -51,6 +51,7 @@ namespace Bit.iOS.Autofill
 
                 Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
                 View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
+
                 _context = new Context
                 {
                     ExtContext = ExtensionContext
@@ -109,6 +110,7 @@ namespace Bit.iOS.Autofill
             try
             {
                 InitAppIfNeeded();
+                _context.VaultUnlockedDuringThisSession = false;
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
                 {
@@ -153,6 +155,9 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
+            _context.VaultUnlockedDuringThisSession = false;
+            _context.IsExecutingWithoutUserInteraction = true;
+
             try
             {
                 switch (credentialRequest?.Type)
@@ -196,6 +201,8 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
+            _context.VaultUnlockedDuringThisSession = false;
+
             try
             {
                 switch (credentialRequest?.Type)
@@ -237,6 +244,8 @@ namespace Bit.iOS.Autofill
             {
                 InitAppIfNeeded();
                 _context.Configuring = true;
+                _context.VaultUnlockedDuringThisSession = false;
+
                 if (!await IsAuthed())
                 {
                     await _accountsManager.NavigateOnAccountChangeAsync(false);
@@ -325,7 +334,7 @@ namespace Bit.iOS.Autofill
         {
             if (_context?.IsPasskey == true)
             {
-                _context.ConfirmNewCredentialTcs?.TrySetCanceled();
+                _context.PickCredentialForFido2CreationTcs?.TrySetCanceled();
                 _context.UnlockVaultTcs?.TrySetCanceled();
             }
 
@@ -394,6 +403,8 @@ namespace Bit.iOS.Autofill
         {
             try
             {
+                _context.VaultUnlockedDuringThisSession = true;
+
                 if (_context.IsCreatingPasskey)
                 {
                     _context.UnlockVaultTcs.SetResult(true);

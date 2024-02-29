@@ -161,7 +161,6 @@ namespace Bit.iOS.Core.Utilities
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService, logger);
             var biometricService = new BiometricService(stateService, cryptoService);
-            var userPinService = new UserPinService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
@@ -185,16 +184,28 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
-            ServiceContainer.Register<IUserPinService>(userPinService);
         }
 
         public static void RegisterFinallyBeforeBootstrap()
         {
+            var userPinService = new UserPinService(
+                ServiceContainer.Resolve<IStateService>(),
+                ServiceContainer.Resolve<ICryptoService>(),
+                ServiceContainer.Resolve<IVaultTimeoutService>());
+            ServiceContainer.Register<IUserPinService>(userPinService);
+
             ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
                 ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<ISyncService>(),
                 ServiceContainer.Resolve<ICryptoFunctionService>()));
 
+            ServiceContainer.Register<IUserVerificationMediatorService>(new UserVerificationMediatorService(
+                ServiceContainer.Resolve<IPlatformUtilsService>(),
+                ServiceContainer.Resolve<IPasswordRepromptService>(),
+                userPinService,
+                ServiceContainer.Resolve<IDeviceActionService>(),
+                ServiceContainer.Resolve<IUserVerificationService>()));
+            
             ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<IEnvironmentService>(),
                 ServiceContainer.Resolve<IStateService>(),

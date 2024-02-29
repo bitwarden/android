@@ -17,7 +17,6 @@ using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using UIKit;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bit.iOS.Autofill
 {
@@ -44,6 +43,7 @@ namespace Bit.iOS.Autofill
         LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
         LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
         LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
+        LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
 
         bool _alreadyLoadItemsOnce = false;
 
@@ -163,29 +163,58 @@ namespace Bit.iOS.Autofill
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
             {
-                Context?.ConfirmNewCredentialTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login on iOS less than 17."));
+                Context?.PickCredentialForFido2CreationTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login on iOS less than 17."));
                 return;
             }
 
             if (Context.PasskeyCreationParams is null)
             {
-                Context?.ConfirmNewCredentialTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login wihout creation params."));
+                Context?.PickCredentialForFido2CreationTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login wihout creation params."));
                 return;
             }
 
-            var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
+            bool? isUserVerified = null;
+            if (Context?.PasskeyCreationParams?.UserVerification == true)
+            {
+                isUserVerified = await VerifyUserAsync();
+            }
 
+            var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
             try
             {
                 PresentViewController(loadingAlert, true, null);
 
                 var cipherId = await _cipherService.Value.CreateNewLoginForPasskeyAsync(Context.PasskeyCreationParams.Value);
-                Context.ConfirmNewCredentialTcs.TrySetResult((cipherId, true));
+                Context.PickCredentialForFido2CreationTcs.TrySetResult((cipherId, isUserVerified));
             }
             catch
             {
                 await loadingAlert.DismissViewControllerAsync(false);
                 throw;
+            }
+        }
+
+        private async Task<bool> VerifyUserAsync()
+        {
+            try
+            {
+                if (Context is null)
+                {
+                    return false;
+                }
+
+                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
+                    new Fido2VerificationOptions(
+                        false,
+                        true,
+                        Context.VaultUnlockedDuringThisSession,
+                        Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier)
+                    );
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                return false;
             }
         }
 

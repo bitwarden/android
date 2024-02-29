@@ -96,10 +96,11 @@ namespace Bit.Core.Services
             else
             {
                 // Assign default algorithms
-                credTypesAndPubKeyAlgs = [
+                credTypesAndPubKeyAlgs = new PublicKeyCredentialParameters[]
+                {
                     new PublicKeyCredentialParameters { Alg = (int) Fido2AlgorithmIdentifier.ES256, Type = Constants.DefaultFido2CredentialType },
                     new PublicKeyCredentialParameters { Alg = (int) Fido2AlgorithmIdentifier.RS256, Type = Constants.DefaultFido2CredentialType }
-                ];
+                };
             }
 
             if (credTypesAndPubKeyAlgs.Length == 0)
@@ -128,7 +129,7 @@ namespace Bit.Core.Services
                     ClientDataJSON = clientDataJSONBytes,
                     PublicKey = makeCredentialResult.PublicKey,
                     PublicKeyAlgorithm = makeCredentialResult.PublicKeyAlgorithm,
-                    Transports = createCredentialParams.Rp.Id == "google.com" ? ["internal", "usb"] : ["internal"] // workaround for a bug on Google's side
+                    Transports = createCredentialParams.Rp.Id == "google.com" ? new string[] { "internal", "usb" } : new string[] { "internal" } // workaround for a bug on Google's side
                 };
             } catch (InvalidStateError) {
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.InvalidStateError, "Unknown invalid state encountered");
