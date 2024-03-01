@@ -31,6 +31,7 @@ jobs:
       - name: Print lines of code
         run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
 
+
   setup:
     name: Setup
     runs-on: ubuntu-22.04
@@ -58,6 +59,7 @@ jobs:
             echo "hotfix_branch_exists=0" >> $GITHUB_OUTPUT
           fi
 
+
   android:
     name: Android
     runs-on: windows-2022
@@ -67,7 +69,8 @@ jobs:
       matrix:
         variant: ["prod", "qa"]
     env:
-      android_folder_path: src/App/Platforms/Android
+      android_folder_path: src\App\Platforms\Android
+      android_folder_path_bash: src/App/Platforms/Android
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
@@ -77,9 +80,7 @@ jobs:
       - name: Set up .NET
         uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
         with:
-          dotnet-version: |
-            3.1.x
-            8.0.x
+          dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
@@ -95,7 +96,8 @@ jobs:
       - name: Install Microsoft OpenJDK 11
         run: |
           choco install microsoft-openjdk11 --no-progress
-          Write-Output "JAVA_HOME=$(Get-ChildItem -Path 'C:\Program Files\Microsoft\jdk*' | Select -First 1 -ExpandProperty FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+          Write-Output "JAVA_HOME=$(Get-ChildItem -Path 'C:\Program Files\Microsoft\jdk*' | `
+            Select -First 1 -ExpandProperty FullName)" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
           Write-Output "Java Home: $env:JAVA_HOME"
 
       - name: Print environment
@@ -111,27 +113,34 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Decrypt secrets
-        env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
-        run: |
-          mkdir -p ~/secrets
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./${{ env.main_app_folder_path }}/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./${{ env.main_app_folder_path }}/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
+      - name: Download secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p $HOME/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_play-keystore.jks --file ./${{ env.android_folder_path_bash }}/app_play-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_upload-keystore.jks --file ./${{ env.android_folder_path_bash }}/app_upload-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name play_creds.json --file $HOME/secrets/play_creds.json --output none
         shell: bash
 
-      - name: Decrypt secrets - Google Services
+      - name: Download secrets - Google Services
         if: ${{ matrix.variant == 'prod' }}
         env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
         run: |
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./${{ env.android_folder_path }}/google-services.json ./.github/secrets/google-services.json.gpg
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name google-services.json --file ./${{ env.android_folder_path_bash }}/google-services.json --output none
         shell: bash
 
       - name: Increment version
@@ -143,7 +152,7 @@ jobs:
           echo "########################################"
           
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
-            ./${{ env.android_folder_path }}/AndroidManifest.xml
+            ./${{ env.android_folder_path_bash }}/AndroidManifest.xml
         shell: bash
 
       - name: Restore packages
@@ -152,78 +161,70 @@ jobs:
       - name: Restore tools
         run: dotnet tool restore
 
-      # - name: Verify Format
-      #   run: dotnet tool run dotnet-format --check
+      # - name: Run Core tests
+      #   run: |
+      #     dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" `
+      #       /p:CustomConstants=UT
 
-      - name: Run Core tests
-        run: dotnet test test/Core.Test/Core.Test.csproj --logger "trx;LogFileName=test-results.trx" /p:CustomConstants=UT
-
-      - name: Report test results
-        uses: dorny/test-reporter@eaa763f6ffc21c7a37837f56cd5f9737f27fc6c8 # v1.8.0
-        if: always()
-        with:
-          name: Test Results
-          path: "**/test-results.trx"
-          reporter: dotnet-trx
-          fail-on-error: true
+      # - name: Report test results
+      #   uses: dorny/test-reporter@eaa763f6ffc21c7a37837f56cd5f9737f27fc6c8 # v1.8.0
+      #   if: always()
+      #   with:
+      #     name: Test Results
+      #     path: "**/test-results.trx"
+      #     reporter: dotnet-trx
+      #     fail-on-error: true
 
       - name: Build Play Store publisher
         if: ${{ matrix.variant == 'prod' }}
-        run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
+        run: dotnet build .\store\google\Publisher\Publisher.csproj /p:Configuration=Release
 
       - name: Setup Android build  (${{ matrix.variant }})
         run: dotnet cake build.cake --target Android --variant ${{ matrix.variant }}
 
-      - name: Build Android
-        run: |
-          $configuration = "Release";
-          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
-
-          Write-Output "########################################"
-          Write-Output "##### Build $configuration Configuration"
-          Write-Output "########################################"
-          
-          dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android
-
-      - name: Sign Android Build
+      - name: Build & Sign Android
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
         run: |
-          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
+          $projToBuild = "$($env:GITHUB_WORKSPACE)/${{ env.main_app_project_path }}";
           $packageName = "com.x8bit.bitwarden";
 
           if ("${{ matrix.variant }}" -ne "prod")
           {
             $packageName = "com.x8bit.bitwarden.${{ matrix.variant }}";
           }
-          Write-Output "########################################"
           Write-Output "##### Sign Google Play Bundle Release Configuration"
-          Write-Output "########################################"
 
-          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidPackageFormats=aab /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_upload-keystore.jks") /p:AndroidSigningKeyAlias=upload /p:AndroidSigningKeyPass="$($env:UPLOAD_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:UPLOAD_KEYSTORE_PASSWORD)" --no-restore
+          $signingUploadKeyStore = "$($env:GITHUB_WORKSPACE)\${{ env.android_folder_path }}\app_upload-keystore.jks"
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android `
+            /p:AndroidPackageFormats=aab `
+            /p:AndroidKeyStore=true `
+            /p:AndroidSigningKeyStore=$signingUploadKeyStore `
+            /p:AndroidSigningKeyAlias=upload `
+            /p:AndroidSigningKeyPass="$($env:UPLOAD_KEYSTORE_PASSWORD)" `
+            /p:AndroidSigningStorePass="$($env:UPLOAD_KEYSTORE_PASSWORD)" --no-restore
 
-          Write-Output "########################################"
           Write-Output "##### Copy Google Play Bundle to project root"
-          Write-Output "########################################"
 
-          $signedAabPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.aab");
-          $signedAabDestPath = $($env:GITHUB_WORKSPACE + "/$($packageName).aab");
+          $signedAabPath = "$($env:GITHUB_WORKSPACE)\${{ env.main_app_folder_path }}\bin\Release\${{ env.target-net-version }}-android\publish\$($packageName)-Signed.aab";
+          $signedAabDestPath = "$($env:GITHUB_WORKSPACE)\$($packageName).aab";
           Copy-Item $signedAabPath $signedAabDestPath
 
-          Write-Output "########################################"
           Write-Output "##### Sign APK Release Configuration"
-          Write-Output "########################################"
 
-          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_play-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:PLAY_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:PLAY_KEYSTORE_PASSWORD)" --no-restore
+          $signingPlayKeyStore = "$($env:GITHUB_WORKSPACE)\${{ env.android_folder_path }}\app_play-keystore.jks"
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android `
+            /p:AndroidKeyStore=true `
+            /p:AndroidSigningKeyStore=$signingPlayKeyStore `
+            /p:AndroidSigningKeyAlias=bitwarden `
+            /p:AndroidSigningKeyPass="$($env:PLAY_KEYSTORE_PASSWORD)" `
+            /p:AndroidSigningStorePass="$($env:PLAY_KEYSTORE_PASSWORD)" --no-restore
 
-          Write-Output "########################################"
           Write-Output "##### Copy Release APK to project root"
-          Write-Output "########################################"
 
-          $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
-          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/$($packageName).apk");
-
+          $signedApkPath = "$($env:GITHUB_WORKSPACE)\${{ env.main_app_folder_path }}\bin\Release\${{ env.target-net-version }}-android\publish\$($packageName)-Signed.apk";
+          $signedApkDestPath = "$($env:GITHUB_WORKSPACE)\$($packageName).apk";
           Copy-Item $signedApkPath $signedApkDestPath
 
       - name: Upload Prod .aab artifact
@@ -285,13 +286,12 @@ jobs:
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
           || github.ref == 'refs/heads/hotfix-rc' ) }}
         run: |
-          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
-          CREDS_PATH="$HOME/secrets/play_creds.json"
-          AAB_PATH="$GITHUB_WORKSPACE/com.x8bit.bitwarden.aab"
-          TRACK="internal"
+          $publisherPath = "$($env:GITHUB_WORKSPACE)\store\google\Publisher\bin\Release\net8.0\Publisher.dll"
+          $credsPath = "$($HOME)\secrets\play_creds.json"
+          $aabPath = "$($env:GITHUB_WORKSPACE)\com.x8bit.bitwarden.aab"
+          $track = "internal"
 
-          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
-        shell: bash
+          dotnet $publisherPath $credsPath $aabPath $track
 
 
   f-droid:
@@ -339,23 +339,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
 
-      - name: Decrypt secrets
-        env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
-        run: |
-          mkdir -p ~/secrets
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./${{ env.main_app_folder_path }}/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
+      - name: Download secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+          FILE: app_fdroid-keystore.jks
+        run: |
+          mkdir -p $HOME/secrets
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+            --file $HOME/secrets/$FILE --output none
         shell: bash
 
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
-
-          echo "########################################"
           echo "##### Setting Version Code $BUILD_NUMBER"
-          echo "########################################"
 
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./${{ env.android_manifest_path }}
@@ -368,16 +371,12 @@ jobs:
 
           $androidManifest = $($env:GITHUB_WORKSPACE + "/${{ env.android_manifest_path }}");
 
-          Write-Output "########################################"
-          Write-Output "##### Backup project files"
-          Write-Output "########################################"
+          Write-Output "##### Back up project files"
 
           Copy-Item $androidManifest $($androidManifest + ".original");
           Copy-Item $appPath $($appPath + ".original");
 
-          Write-Output "########################################"
           Write-Output "##### Cleanup Android Manifest"
-          Write-Output "########################################"
 
           $xml=New-Object XML;
           $xml.Load($androidManifest);
@@ -395,9 +394,7 @@ jobs:
           $configuration = "Release";
           $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
 
-          Write-Output "########################################"
-          Write-Output "##### Build $configuration FDROID
-          Write-Output "########################################"
+          Write-Output "##### Build $configuration FDROID"
           
           dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android /p:CustomConstants="FDROID"
 
@@ -408,15 +405,11 @@ jobs:
           $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
           $packageName = "com.x8bit.bitwarden";
 
-          Write-Output "########################################"
           Write-Output "##### Sign FDroid"
-          Write-Output "########################################"
 
           dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:CustomConstants="FDROID" --no-restore
 
-          Write-Output "########################################"
           Write-Output "##### Copy FDroid apk to project root"
-          Write-Output "########################################"
 
           $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
           $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden-fdroid.apk");
@@ -441,6 +434,7 @@ jobs:
           name: bw-fdroid-apk-sha256.txt
           path: ./bw-fdroid-apk-sha256.txt
           if-no-files-found: error
+
 
   ios:
     name: Apple iOS
@@ -495,42 +489,42 @@ jobs:
           keyvault: "bitwarden-ci"
           secrets: "appcenter-ios-token"
 
-      - name: Decrypt secrets
+      - name: Download Provisioning Profiles secrets
         env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: profiles
         run: |
-          mkdir -p ~/secrets
+          mkdir -p $HOME/secrets
+          profiles=(
+              "dist_autofill.mobileprovision"
+              "dist_bitwarden.mobileprovision"
+              "dist_extension.mobileprovision"
+              "dist_share_extension.mobileprovision"
+              "dist_bitwarden_watch_app.mobileprovision"
+              "dist_bitwarden_watch_app_extension.mobileprovision"
+          )
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_share_extension.mobileprovision \
-            ./.github/secrets/dist_share_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_watch_app.mobileprovision \
-            ./.github/secrets/dist_watch_app.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output $HOME/secrets/dist_watch_app_extension.mobileprovision \
-            ./.github/secrets/dist_watch_app_extension.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./src/watchOS/bitwarden/GoogleService-Info.plist ./.github/secrets/GoogleService-Info.plist.gpg
+          for FILE in "${profiles[@]}"
+          do
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+              --file $HOME/secrets/$FILE --output none
+          done
+
+      - name: Download Google Services secret
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+          FILE: GoogleService-Info.plist
+        run: |
+          mkdir -p $HOME/secrets
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+            --file $HOME/secrets/$FILE --output none
 
       - name: Increment version
         run: |
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
-          echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
-          echo "########################################"
-
           echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
 
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
@@ -538,30 +532,30 @@ jobs:
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
           cd src/watchOS/bitwarden
-          agvtool new-version -all  $BUILD_NUMBER
+          agvtool new-version -all $BUILD_NUMBER
 
       - name: Update Entitlements
         run: |
-          echo "########################################"
           echo "##### Updating Entitlements"
-          echo "########################################"
-
           perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>production<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+
+      - name: Get certificates
+        run: |
+          mkdir -p $HOME/certificates
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution |
+            jq -r .value | base64 -d > $HOME/certificates/ios-distribution.p12
         
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
-          MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
-          DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
         run: |
           security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security default-keychain -s build.keychain
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
-          security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD \
-            -T /usr/bin/codesign -T /usr/bin/security
-          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD \
-            -T /usr/bin/codesign -T /usr/bin/security
+
+          security import $HOME/certificates/ios-distribution.p12 -k build.keychain -P "" -T /usr/bin/codesign \
+            -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
 
       - name: Set up provisioning profiles
@@ -570,8 +564,8 @@ jobs:
           BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_bitwarden.mobileprovision
           EXTENSION_PROFILE_PATH=$HOME/secrets/dist_extension.mobileprovision
           SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_share_extension.mobileprovision
-          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_watch_app.mobileprovision
-          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_watch_app_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_bitwarden_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_bitwarden_watch_app_extension.mobileprovision
           PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
           mkdir -p "$PROFILES_DIR_PATH"
@@ -599,68 +593,44 @@ jobs:
 
       - name: Bulid WatchApp
         run: |
-          echo "########################################"
           echo "##### Build WatchApp with Release Configuration"
-          echo "########################################"
-
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
-
-          echo "########################################"
-          echo "##### Done"
-          echo "########################################"
 
       - name: Archive Build for App Store
         run: |
-          Write-Output "########################################"
-          Write-Output "##### Archive for Release ios-arm64
-          Write-Output "########################################"
-
+          echo "##### Archive for Release ios-arm64"
           dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
-
-          Write-Output "########################################"
-          Write-Output "##### Done"
-          Write-Output "########################################"
-        shell: pwsh
 
       - name: Archive Build for Mobile Automation
         run: |
-          Write-Output "########################################"
-          Write-Output "##### Archive Debug for iossimulator-x64
-          Write-Output "########################################"
-
+          echo "##### Archive Debug for iossimulator-x64"
           dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
-
-          Write-Output "########################################"
-          Write-Output "##### Done"
-          Write-Output "########################################"
-          ls ~/Library/Developer/Xcode/Archives
-        shell: pwsh
+          ls $HOME/Library/Developer/Xcode/Archives
 
       - name: Export .ipa for App Store
+        env:
+          EXPORT_OPTIONS_PATH: ./.github/resources/export-options-app-store.plist
+          EXPORT_PATH: ./bitwarden-export
         run: |
-          EXPORT_OPTIONS_PATH="./.github/resources/export-options-app-store.plist"
           ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
-          EXPORT_PATH="./bitwarden-export"
-
           xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
 
       - name: Export .app for Automation CI
+        env:
+          ARCHIVE_PATH: ./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64
+          EXPORT_PATH: ./bitwarden-export
         run: |
-          ARCHIVE_PATH="./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64"
-          EXPORT_PATH="./bitwarden-export"
-
           zip -r -q ${{ env.app_ci_output_filename }}.app.zip $ARCHIVE_PATH
           mv ${{ env.app_ci_output_filename }}.app.zip $EXPORT_PATH
 
       - name: Copy all dSYMs files to upload
+        env:
+          EXPORT_PATH: ./bitwarden-export
+          WATCH_ARCHIVE_DSYMS_PATH: ./src/watchOS/bitwarden.xcarchive/dSYMs/
+          WATCH_DSYMS_EXPORT_PATH: ./bitwarden-export/Watch_dSYMs
         run: |
           ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
-          EXPORT_PATH="./bitwarden-export"
-
-          WATCH_ARCHIVE_DSYMS_PATH="./src/watchOS/bitwarden.xcarchive/dSYMs/"
-          WATCH_DSYMS_EXPORT_PATH="$EXPORT_PATH/Watch_dSYMs"
-
           cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
           mkdir $WATCH_DSYMS_EXPORT_PATH
           cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
@@ -709,10 +679,7 @@ jobs:
           || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
           || github.ref == 'refs/heads/hotfix-rc'
         run: |
-          echo "########################################"
           echo "##### Uploading Watch dSYMs to Firebase"
-          echo "########################################"
-
           find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
 
       - name: Validate app in App Store
@@ -728,7 +695,6 @@ jobs:
         run: |
           xcrun altool --validate-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
-        shell: bash
 
       - name: Deploy to App Store
         if: |

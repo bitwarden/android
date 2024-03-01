@@ -2876,4 +2876,13 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>保管庫のタイムアウト動作を変更するには、ロック解除方法を設定してください。</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>アカウントには Duo 二段階認証が必要です。</value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Duo の手順に従ってログインを完了してください。</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Duo を起動</value>
+  </data>
 </root>
