@@ -2876,4 +2876,13 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Налаштуйте спосіб розблокування, щоб змінити час очікування сховища.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Для вашого облікового запису необхідна двоетапна перевірка з Duo. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Виконайте дії з Duo для завершення входу.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Запустити Duo</value>
+  </data>
 </root>
