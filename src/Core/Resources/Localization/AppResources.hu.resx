@@ -2875,4 +2875,13 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Állítsunk be egy feloldási módot a széf időkifutási műveletének módosításához.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>DUO kétlépéses bejelentkezés szükséges a fiókhoz. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Kövessük a Duo lépéseit a bejelentkezés befejezéséhez.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Duo indítása</value>
+  </data>
 </root>

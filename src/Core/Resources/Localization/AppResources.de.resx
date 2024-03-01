@@ -2875,4 +2875,13 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Richte eine Entsperroption ein, um deine Aktion bei Tresor-Timeout zu ändern.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Für dein Konto ist die Duo Zwei-Faktor-Authentifizierung erforderlich. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Folge den Schritten von Duo, um die Anmeldung abzuschließen.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Duo starten</value>
+  </data>
 </root>
