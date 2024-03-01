@@ -4,6 +4,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Utilities.AccountManagement
