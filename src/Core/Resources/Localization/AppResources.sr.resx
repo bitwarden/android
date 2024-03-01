@@ -2878,4 +2878,13 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Подесите опцију откључавања да бисте променили радњу временског ограничења сефа.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo пријава у два корака је потребна за ваш налог. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Пратите кораке од Duo да завршите пријављивање.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Покренути Duo</value>
+  </data>
 </root>

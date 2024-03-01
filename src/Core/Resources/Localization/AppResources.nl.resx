@@ -2876,4 +2876,13 @@ Wilt u naar dit account wisselen?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Stel een ontgrendelingsmethode in om je kluis time-out actie te wijzigen.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Jouw account vereist Duo-tweestapsaanmelding. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Volg de stappen van Duo om in te loggen.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Duo starten</value>
+  </data>
 </root>
