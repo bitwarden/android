@@ -2876,4 +2876,13 @@ Chcete prepnúť na toto konto?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Pre váš účet je potrebné dvojstupňové prihlásenie Duo. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Postupujte podľa krokov z aplikácie Duo a dokončite prihlasovanie.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Spustiť Duo</value>
+  </data>
 </root>

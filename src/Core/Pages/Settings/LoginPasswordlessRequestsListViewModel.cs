@@ -66,7 +66,6 @@ namespace Bit.App.Pages
         {
             try
             {
-                IsRefreshing = true;
                 LoginRequests.ReplaceRange(await _authService.GetActivePasswordlessLoginRequestsAsync());
             }
             catch (Exception ex)
@@ -108,7 +107,7 @@ namespace Bit.App.Pages
                 Origin = loginRequestData.Origin
             });
 
-            await Device.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
+            await MainThread.InvokeOnMainThreadAsync(() => Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
         }
 
         private async Task DeclineAllRequestsAsync()

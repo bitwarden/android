@@ -2820,7 +2820,7 @@
     <value>Συνέχεια στην επικοινωνία με την υποστήριξη;</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>Continue to privacy policy?</value>
+    <value>Συνέχεια στην πολιτική απορρήτου;</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Συνέχεια στο κατάστημα εφαρμογών;</value>
@@ -2842,7 +2842,7 @@
     <value>Δεν μπορείτε να βρείτε αυτό που ψάχνετε; Επικοινωνήστε με την υποστήριξη Bitwarden στο bitwarden.com.</value>
   </data>
   <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
-    <value>Check out our privacy policy on bitwarden.com.</value>
+    <value>Δείτε την πολιτική απορρήτου μας στο bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Εξερευνήστε περισσότερες δυνατότητες του Bitwarden λογαριασμού σας, στην εφαρμογή διαδικτύου.</value>
@@ -2874,5 +2874,14 @@
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Ρυθμίστε μια επιλογή κλειδώματος για να αλλάξετε την ενέργεια στη λήξη χρόνου του vault σας.</value>
+  </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
   </data>
 </root>

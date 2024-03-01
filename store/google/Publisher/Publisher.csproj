@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Bit.Publisher</RootNamespace>
     <Configurations>Debug;Release;FDroid</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.AndroidPublisher.v3" Version="1.52.0.2350" />
+    <PackageReference Include="Google.Apis.AndroidPublisher.v3" Version="1.66.0.3338" />
   </ItemGroup>
 
 </Project>

@@ -2877,4 +2877,13 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Muuta holvisi aikakatkaisutoimintoa määrittämällä lukituksen avaustapa.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Tilillesi kirjautuminen vaatii Duo-vahvistuksen.</value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Viimeistele kirjautuminen seuraamalla Duon ohjeita.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Avaa Duo</value>
+  </data>
 </root>

@@ -2875,4 +2875,13 @@ Chcete se přepnout na tento účet?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Nastavte volbu odemknutí, abyste změnili časový limit Vašeho trezoru.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Pro Váš účet je vyžadováno dvoufázové přihlášení DUO. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Postupujte podle kroků od DUO pro dokončení přihlášení.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Spustit DUO</value>
+  </data>
 </root>

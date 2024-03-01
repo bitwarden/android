@@ -9,6 +9,8 @@
                 Value="{DynamicResource InputPlaceholderColor}" />
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 12" />
     </Style>
@@ -16,6 +18,8 @@
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 12" />
     </Style>
@@ -37,6 +41,8 @@
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="BackgroundColor"
                 Value="{DynamicResource BackgroundColor}" />
         <Setter Property="PlaceholderColor"
@@ -51,6 +57,8 @@
     </Style>
     <Style TargetType="SearchBar"
            ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="BackgroundColor"
                 Value="{DynamicResource ListHeaderBackgroundColor}" />
         <Setter Property="TextColor"
@@ -135,6 +143,10 @@
                 Value="Medium" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="MinimumHeightRequest"
+                Value="45" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -175,10 +187,6 @@
                 Value="Bold" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
-        <Setter Property="CornerRadius"
-                Value="5" />
-        <Setter Property="MinimumHeightRequest"
-                Value="45" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
@@ -215,8 +223,6 @@
                 Value="{DynamicResource ButtonTextColorOpacity}" />
         <Setter Property="FontSize"
                 Value="Medium" />
-        <Setter Property="CornerRadius"
-                Value="5" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">

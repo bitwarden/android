@@ -132,14 +132,26 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
-            <StackLayout Spacing="0" Padding="0" IsVisible="{Binding DuoMethod, Mode=OneWay}"
-                         VerticalOptions="StartAndExpand">
+            <StackLayout
+                Spacing="0"
+                Padding="0"
+                IsVisible="{Binding DuoMethod, Mode=OneWay}"
+                VerticalOptions="FillAndExpand">
+                <Label
+                    StyleClass="box"
+                    Text="{Binding DuoFramelessLabel}"
+                    HorizontalOptions="StartAndExpand" 
+                    Margin="10,21"
+                    IsVisible="{Binding IsDuoFrameless}"/>
                 <controls:HybridWebView
                     x:Name="_duoWebView"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
-                    HeightRequest="{Binding DuoWebViewHeight, Mode=OneWay}" />
-                <StackLayout StyleClass="box" VerticalOptions="End">
+                    HeightRequest="{Binding DuoWebViewHeight, Mode=OneWay}"
+                    IsVisible="{Binding IsDuoFrameless, Converter={StaticResource inverseBool}}"/>
+                <StackLayout
+                    StyleClass="box"
+                    VerticalOptions="End">
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n RememberMe}"
@@ -151,6 +163,12 @@
                             HorizontalOptions="End" />
                     </StackLayout>
                 </StackLayout>
+                <Button Text="{u:I18n LaunchDuo}"
+                    Margin="10,21"
+                    StyleClass="btn-primary"
+                    Command="{Binding AuthenticateWithDuoFramelessCommand}"
+                    AutomationId="DuoFramelessButton"
+                    IsVisible="{Binding IsDuoFrameless}"/>
             </StackLayout>
             <StackLayout
                 Spacing="0"

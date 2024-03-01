@@ -12,12 +12,14 @@ namespace Bit.App.Pages
         private readonly HomeViewModel _vm;
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
+        private IConditionedAwaiterManager _conditionedAwaiterManager;
 
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public HomePage(AppOptions appOptions = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
+            _conditionedAwaiterManager = ServiceContainer.Resolve<IConditionedAwaiterManager>();
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
@@ -56,6 +58,8 @@ namespace Bit.App.Pages
                 PerformNavigationOnAccountChangedOnLoad = false;
                 accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             }
+
+            _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.AndroidWindowCreated);
 #endif
         }
 

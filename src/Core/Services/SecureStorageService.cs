@@ -1,5 +1,5 @@
-﻿using System.Threading.Tasks;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -16,7 +16,7 @@ namespace Bit.App.Services
         public async Task<T> GetAsync<T>(string key)
         {
             var formattedKey = string.Format(_keyFormat, key);
-            var val = await Microsoft.Maui.Storage.SecureStorage.GetAsync(formattedKey);
+            var val = await LegacySecureStorage.GetAsync(formattedKey);
             if (typeof(T) == typeof(string))
             {
                 return (T)(object)val;
@@ -37,11 +37,11 @@ namespace Bit.App.Services
             var formattedKey = string.Format(_keyFormat, key);
             if (typeof(T) == typeof(string))
             {
-                await Microsoft.Maui.Storage.SecureStorage.SetAsync(formattedKey, obj as string);
+                await LegacySecureStorage.SetAsync(formattedKey, obj as string);
             }
             else
             {
-                await Microsoft.Maui.Storage.SecureStorage.SetAsync(formattedKey,
+                await LegacySecureStorage.SetAsync(formattedKey,
                     JsonConvert.SerializeObject(obj, _jsonSettings));
             }
         }
@@ -49,7 +49,7 @@ namespace Bit.App.Services
         public Task RemoveAsync(string key)
         {
             var formattedKey = string.Format(_keyFormat, key);
-            Microsoft.Maui.Storage.SecureStorage.Remove(formattedKey);
+            LegacySecureStorage.Remove(formattedKey);
             return Task.FromResult(0);
         }
     }

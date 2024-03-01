@@ -30,14 +30,14 @@ src/watchOS @bitwarden/team-vault-dev
 src/Core/Services/EmailForwarders @bitwarden/team-tools-dev
 
 ## Crowdin Sync files ##
-src/App/Resources @bitwarden/team-tools-dev
+src/Core/Resources/Localization @bitwarden/team-tools-dev
 src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization @bitwarden/team-tools-dev
 store/apple @bitwarden/team-tools-dev
 store/google @bitwarden/team-tools-dev
 
 ## Locales ## 
-src/App/Resources/AppResources.Designer.cs
-src/App/Resources/AppResources.resx
+src/Core/Resources/Localization/AppResources.Designer.cs
+src/Core/Resources/Localization/AppResources.resx
 src/watchOS/bitwarden/bitwarden\ WatchKit\ Extension/Localization/en.lproj
 store/apple/en
 store/google/en
