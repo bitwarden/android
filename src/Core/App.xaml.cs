@@ -108,6 +108,8 @@ namespace Bit.App
             }
         }
 
+        public bool HasNavigatedToAccessibilitySettings { get; set; }
+
         protected override Window CreateWindow(IActivationState activationState)
         {
             //When executing from AutofillExternalActivity we don't have "Options" so we need to filter "manually"
@@ -144,6 +146,18 @@ namespace Bit.App
                 // and it performs it directly.
                 _isResumed = true; 
                 _hasNavigatedToAutofillWindow = false;
+            }
+
+            // WORKAROUND: This workaround is similar to the one above (_hasNavigatedToAutofillWindow) related with Accessibility Services but this one specifically
+            // is due to trying to open the Accessibility Settings Page for enabled/disabling
+            if(HasNavigatedToAccessibilitySettings)
+            {
+                homePage.PerformNavigationOnAccountChangedOnLoad = true;
+                // this is needed because when coming back from AutofillWindow OnResume won't be called and we need this flag
+                // so that void Navigate(NavigationTarget navTarget, INavigationParams navParams) doesn't enqueue the navigation
+                // and it performs it directly.
+                _isResumed = true; 
+                HasNavigatedToAccessibilitySettings = false;
             }
 
             //If we have an existing MainAppWindow we can use that one
