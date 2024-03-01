@@ -18,6 +18,7 @@ using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Platform;
 using MobileCoreServices;
@@ -528,7 +529,11 @@ namespace Bit.iOS.Extension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.SubmitSuccessTask = async () =>
+                {
+                    await DismissViewControllerAsync(false);
+                    await MainThread.InvokeOnMainThreadAsync(() => LaunchHomePage());
+                };
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 

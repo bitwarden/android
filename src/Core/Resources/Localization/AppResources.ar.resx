@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>عن</value>
+    <value>عن التطبيق</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>أضِف</value>
@@ -276,7 +276,7 @@
     <value>هل أنت متأكد من أنك تريد تسجيل الخروج؟</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>إزالة الحساب</value>
+    <value>أزِل الحساب</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>هل أنت متأكد من أنك تريد إزالة هذا الحساب؟</value>
@@ -2876,5 +2876,14 @@
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>أعدنّ ميزة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك.</value>
+  </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
   </data>
 </root>

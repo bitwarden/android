@@ -2876,4 +2876,13 @@ Vuoi passare a questo account?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Imposta un metodo di sblocco per modificare l'azione timeout cassaforte.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
+  </data>
 </root>

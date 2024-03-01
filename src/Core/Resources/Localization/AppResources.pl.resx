@@ -2876,4 +2876,13 @@ Czy chcesz przełączyć się na to konto?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Ustaw opcje odblokowania, aby zmienić czas blokowania sejfu.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Dwustopniowe logowanie Duo jest wymagane dla Twojego konta. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Wykonaj kroki od Duo, aby zakończyć logowanie.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Uruchom Duo</value>
+  </data>
 </root>

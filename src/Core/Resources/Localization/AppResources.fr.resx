@@ -2877,4 +2877,13 @@ Voulez-vous basculer vers ce compte ?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Configurez une méthode de déverrouillage pour modifier l'action après délai d'expiration de votre coffre.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
+  </data>
 </root>

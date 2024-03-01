@@ -2876,4 +2876,13 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Задайте начин за отключване, за да може да промените действието при изтичане на времето за достъп до трезора.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Вашата регистрация изисква двустепенно удостоверяване чрез Duo. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Следвайте стъпките от Duo, за да завършите вписването.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Стартиране на Duo</value>
+  </data>
 </root>

@@ -2876,4 +2876,13 @@ Do you want to switch to this account?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Set up an unlock option to change your vault timeout action.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
+  </data>
 </root>

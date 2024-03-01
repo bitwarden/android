@@ -176,13 +176,14 @@ jobs:
       - name: Install Node dependencies
         run: npm install
 
-      - name: Decrypt secrets
+      - name: Download secrets
         env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
         run: |
-          mkdir -p ~/secrets
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./store/fdroid/keystore.jks ./.github/secrets/store_fdroid-keystore.jks.gpg
+          mkdir -p $HOME/secrets
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name store_fdroid-keystore.jks --file ./store/fdroid/keystore.jks --output none
 
       - name: Compile for F-Droid Store
         env:
