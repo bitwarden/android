@@ -1,4 +1,6 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Pages;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 
@@ -6,19 +8,28 @@ namespace Bit.Core.Pages;
 
 public partial class AndroidNavigationRedirectPage : ContentPage
 {
-    private readonly IAccountsManager _accountsManager;
-    private readonly IConditionedAwaiterManager _conditionedAwaiterManager;
-
-	public AndroidNavigationRedirectPage()
+    private AppOptions _options;
+	public AndroidNavigationRedirectPage(AppOptions options)
     {
-        _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
-        _conditionedAwaiterManager = ServiceContainer.Resolve<IConditionedAwaiterManager>();
+        _options = options ?? new AppOptions();
+
 		InitializeComponent();
 	}
 
     private void AndroidNavigationRedirectPage_OnLoaded(object sender, EventArgs e)
     {
-        _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
-        _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.AndroidWindowCreated);
+        if (ServiceContainer.TryResolve<IAccountsManager>(out var accountsManager))
+        {
+            accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
+        }
+        else
+        {
+            Bit.App.App.MainPage = new NavigationPage(new HomePage(_options)); //Fallback scenario to load HomePage just in case something goes wrong when resolving IAccountsManager
+        }
+
+        if (ServiceContainer.TryResolve<IConditionedAwaiterManager>(out var conditionedAwaiterManager))
+        {
+            conditionedAwaiterManager?.SetAsCompleted(AwaiterPrecondition.AndroidWindowCreated);
+        }
     }
 }
