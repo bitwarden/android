@@ -46,6 +46,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials

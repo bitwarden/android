@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
-import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
-import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import kotlinx.collections.immutable.ImmutableList
 
