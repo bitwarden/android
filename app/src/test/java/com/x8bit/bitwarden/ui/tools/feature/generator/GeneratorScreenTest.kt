@@ -1429,6 +1429,92 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //endregion SimpleLogin Service Type Tests
 
+    //region ForwardEmail Service Type Tests
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_ForwardEmail state, updating api key text input should send ApiKeyTextChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .ForwardEmail(),
+                    ),
+                ),
+            ),
+        )
+
+        val newApiKey = "apiKey"
+
+        composeTestRule
+            .onNodeWithText("API key (required)")
+            .performScrollTo()
+            .performTextInput(newApiKey)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .ForwardEmail
+                    .ApiKeyTextChange(
+                        apiKey = newApiKey,
+                    ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in Username_ForwardedEmailAlias_ForwardEmail state, updating domain name text input should send DomainNameChange action`() {
+        updateState(
+            DEFAULT_STATE.copy(
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .ForwardEmail(),
+                    ),
+                ),
+            ),
+        )
+
+        val newDomainName = "domainName"
+
+        composeTestRule
+            .onNodeWithText("Domain name (required)")
+            .performScrollTo()
+            .performTextInput(newDomainName)
+
+        verify {
+            viewModel.trySendAction(
+                GeneratorAction
+                    .MainType
+                    .Username
+                    .UsernameType
+                    .ForwardedEmailAlias
+                    .ForwardEmail
+                    .DomainNameTextChange(
+                        domainName = newDomainName,
+                    ),
+            )
+        }
+    }
+
+    //endregion ForwardEmail Service Type Tests
+
     //region Username Type Tests
 
     @Test

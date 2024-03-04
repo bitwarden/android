@@ -1589,6 +1589,99 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     }
 
     @Nested
+    inner class ForwardEmailActions {
+        private val defaultForwardEmailState = createForwardEmailState()
+        private lateinit var viewModel: GeneratorViewModel
+
+        @BeforeEach
+        fun setUp() {
+            viewModel = createViewModel(defaultForwardEmailState)
+        }
+
+        @Test
+        fun `ApiKeyTextChange should update api key text correctly`() {
+            val newApiKey = "newApiKey"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .ForwardEmail
+                .ApiKeyTextChange(
+                    apiKey = newApiKey,
+                )
+
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultForwardEmail",
+                ),
+            )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultForwardEmailState.copy(
+                generatedText = "-",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .ForwardEmail(
+                                apiKey = newApiKey,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `DomainNameTextChange should update domain name text correctly`() {
+            val newDomainName = "newDomainName"
+            val action = GeneratorAction
+                .MainType
+                .Username
+                .UsernameType
+                .ForwardedEmailAlias
+                .ForwardEmail
+                .DomainNameTextChange(
+                    domainName = newDomainName,
+                )
+
+            fakeGeneratorRepository.setMockGenerateForwardedServiceResult(
+                GeneratedForwardedServiceUsernameResult.Success(
+                    generatedEmailAddress = "defaultForwardEmail",
+                ),
+            )
+
+            viewModel.actionChannel.trySend(action)
+
+            val expectedState = defaultForwardEmailState.copy(
+                generatedText = "-",
+                selectedType = GeneratorState.MainType.Username(
+                    GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                        selectedServiceType = GeneratorState
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ServiceType
+                            .ForwardEmail(
+                                domainName = newDomainName,
+                            ),
+                    ),
+                ),
+            )
+
+            assertEquals(expectedState, viewModel.stateFlow.value)
+        }
+    }
+
+    @Nested
     inner class SimpleLoginActions {
         private val defaultSimpleLoginState = createSimpleLoginState()
         private lateinit var viewModel: GeneratorViewModel
@@ -1938,6 +2031,25 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         .ForwardedEmailAlias
                         .ServiceType
                         .FirefoxRelay(),
+                ),
+            ),
+            currentEmailAddress = "currentEmail",
+        )
+
+    private fun createForwardEmailState(
+        generatedText: String = "defaultForwardEmail",
+    ): GeneratorState =
+        GeneratorState(
+            generatedText = generatedText,
+            selectedType = GeneratorState.MainType.Username(
+                GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias(
+                    selectedServiceType = GeneratorState
+                        .MainType
+                        .Username
+                        .UsernameType
+                        .ForwardedEmailAlias
+                        .ServiceType
+                        .ForwardEmail(),
                 ),
             ),
             currentEmailAddress = "currentEmail",
