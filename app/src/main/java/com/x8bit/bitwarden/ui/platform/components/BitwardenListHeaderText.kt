@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun BitwardenListHeaderText(
     label: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = label,

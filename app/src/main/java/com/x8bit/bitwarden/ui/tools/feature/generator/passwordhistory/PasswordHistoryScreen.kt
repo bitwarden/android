@@ -189,7 +189,7 @@ private fun PasswordHistoryContent(
 @Composable
 private fun PasswordHistoryError(
     state: PasswordHistoryState.ViewState.Error,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier,

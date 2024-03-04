@@ -28,8 +28,8 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenFilledTonalButton(
     label: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
-    modifier: Modifier,
 ) {
     Button(
         onClick = onClick,

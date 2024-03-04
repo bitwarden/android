@@ -153,7 +153,7 @@ fun QrCodeScanScreen(
 @Composable
 private fun PortraitQRCodeContent(
     onEnterCodeManuallyClick: () -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -193,7 +193,7 @@ private fun PortraitQRCodeContent(
 @Composable
 private fun LandscapeQRCodeContent(
     onEnterCodeManuallyClick: () -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -234,7 +234,7 @@ private fun LandscapeQRCodeContent(
 private fun CameraPreview(
     cameraErrorReceive: () -> Unit,
     qrCodeAnalyzer: QrCodeAnalyzer,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current

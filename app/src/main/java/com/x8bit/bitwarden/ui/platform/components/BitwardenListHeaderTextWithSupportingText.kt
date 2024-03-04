@@ -23,7 +23,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 fun BitwardenListHeaderTextWithSupportLabel(
     label: String,
     supportingLabel: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier

@@ -137,7 +137,7 @@ fun FoldersScreen(
 private fun FoldersContent(
     foldersList: List<FolderDisplayItem>,
     onItemClick: (folderId: String) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     if (foldersList.isEmpty()) {
         Column(

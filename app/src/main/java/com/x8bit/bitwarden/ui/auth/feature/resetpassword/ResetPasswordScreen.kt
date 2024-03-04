@@ -151,7 +151,7 @@ private fun ResetPasswordScreeContent(
     onPasswordInputChanged: (String) -> Unit,
     onRetypePasswordInputChanged: (String) -> Unit,
     onPasswordHintInputChanged: (String) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
