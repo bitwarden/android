@@ -36,7 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.util.displayLabel

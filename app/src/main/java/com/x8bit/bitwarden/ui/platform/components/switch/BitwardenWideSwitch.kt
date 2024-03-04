@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.switch
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource

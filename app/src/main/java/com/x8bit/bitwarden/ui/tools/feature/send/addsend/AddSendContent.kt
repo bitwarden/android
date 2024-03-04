@@ -43,8 +43,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSegmentedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.SegmentedButtonState
+import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers

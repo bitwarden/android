@@ -42,8 +42,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
 
 /**
  * Displays the other screen.

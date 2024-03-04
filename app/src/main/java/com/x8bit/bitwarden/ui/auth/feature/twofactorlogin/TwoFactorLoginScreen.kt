@@ -52,9 +52,9 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.OverflowMenuItemData
+import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
