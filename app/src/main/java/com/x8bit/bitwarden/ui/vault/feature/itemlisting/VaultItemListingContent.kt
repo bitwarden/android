@@ -19,10 +19,10 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
-import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList

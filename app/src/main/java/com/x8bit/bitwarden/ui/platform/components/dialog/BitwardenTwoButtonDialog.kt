@@ -1,10 +1,11 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
 
 /**
  * Represents a Bitwarden-styled dialog with two buttons.

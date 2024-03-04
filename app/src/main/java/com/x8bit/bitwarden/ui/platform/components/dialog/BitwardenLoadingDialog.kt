@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.dialog
 
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Arrangement
