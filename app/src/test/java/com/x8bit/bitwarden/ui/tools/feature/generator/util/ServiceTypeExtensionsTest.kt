@@ -122,6 +122,48 @@ internal class ServiceTypeExtensionsTest {
     }
 
     @Test
+    fun `toUsernameGeneratorRequest for ForwardEmail returns null when apiKey is blank`() {
+        val forwardMailServiceType = ServiceType.ForwardEmail(
+            apiKey = "",
+            domainName = "domainName",
+        )
+        val request = forwardMailServiceType.toUsernameGeneratorRequest()
+
+        assertNull(request)
+    }
+
+    @Test
+    fun `toUsernameGeneratorRequest for ForwardEmail returns null when domainName is blank`() {
+        val forwardMailServiceType = ServiceType.ForwardEmail(
+            apiKey = "apiKey",
+            domainName = "",
+        )
+        val request = forwardMailServiceType.toUsernameGeneratorRequest()
+
+        assertNull(request)
+    }
+
+    @Test
+    fun `toUsernameGeneratorRequest for ForwardEmail returns correct request`() {
+        val forwardEmailServiceType = ServiceType.ForwardEmail(
+            apiKey = "apiKey",
+            domainName = "domainName",
+        )
+        val request = forwardEmailServiceType.toUsernameGeneratorRequest()
+
+        assertEquals(
+            UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.ForwardEmail(
+                    apiToken = "apiKey",
+                    domain = "domainName",
+                ),
+                website = null,
+            ),
+            request,
+        )
+    }
+
+    @Test
     fun `toUsernameGeneratorRequest for SimpleLogin returns null when apiKey is blank`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "")
         val request = simpleLoginServiceType.toUsernameGeneratorRequest()

@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.DuckDuckGo
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.FastMail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.FirefoxRelay
+import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.ForwardEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType.SimpleLogin
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.RandomWord
@@ -167,6 +168,10 @@ class GeneratorViewModel @Inject constructor(
 
             is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.SimpleLogin.ApiKeyTextChange -> {
                 handleSimpleLoginTextInputChange(action)
+            }
+
+            is GeneratorAction.MainType.Username.UsernameType.ForwardedEmailAlias.ForwardEmail -> {
+                handleForwardEmailSpecificAction(action)
             }
 
             is GeneratorAction.MainType.Username.UsernameType.PlusAddressedEmail.EmailTextChange -> {
@@ -971,6 +976,15 @@ class GeneratorViewModel @Inject constructor(
                 )
             }
 
+            ForwardedEmailAlias.ServiceTypeOption.FORWARD_EMAIL -> updateForwardedEmailAliasType {
+                ForwardedEmailAlias(
+                    selectedServiceType = ForwardEmail(
+                        apiKey = options.forwardEmailApiAccessToken.orEmpty(),
+                        domainName = options.forwardEmailDomainName.orEmpty(),
+                    ),
+                )
+            }
+
             ForwardedEmailAlias.ServiceTypeOption.SIMPLE_LOGIN -> updateForwardedEmailAliasType {
                 ForwardedEmailAlias(
                     selectedServiceType = SimpleLogin(
@@ -1101,6 +1115,73 @@ class GeneratorViewModel @Inject constructor(
     }
 
     //endregion FirefoxRelay Service Specific Handlers
+
+    //region ForwardEmail Email Specific Handlers
+
+    private fun handleForwardEmailSpecificAction(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .ForwardEmail,
+    ) {
+        when (action) {
+            is GeneratorAction
+            .MainType
+            .Username
+            .UsernameType
+            .ForwardedEmailAlias
+            .ForwardEmail
+            .ApiKeyTextChange,
+            -> {
+                handleForwardEmailApiKeyTextChange(action)
+            }
+
+            is GeneratorAction
+            .MainType
+            .Username
+            .UsernameType
+            .ForwardedEmailAlias
+            .ForwardEmail
+            .DomainNameTextChange,
+            -> {
+                handleForwardEmailDomainNameTextChange(action)
+            }
+        }
+    }
+
+    private fun handleForwardEmailApiKeyTextChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .ForwardEmail
+        .ApiKeyTextChange,
+    ) {
+        updateForwardEmailServiceType { forwardEmailServiceType ->
+            val newApiKey = action.apiKey
+            forwardEmailServiceType.copy(apiKey = newApiKey)
+        }
+    }
+
+    private fun handleForwardEmailDomainNameTextChange(
+        action: GeneratorAction
+        .MainType
+        .Username
+        .UsernameType
+        .ForwardedEmailAlias
+        .ForwardEmail
+        .DomainNameTextChange,
+    ) {
+        updateForwardEmailServiceType { forwardEmailServiceType ->
+            val newDomainName = action.domainName
+            forwardEmailServiceType.copy(domainName = newDomainName)
+        }
+    }
+
+    //endregion ForwardEmail Email Specific Handlers
 
     //region SimpleLogin Service Specific Handlers
 
@@ -1485,6 +1566,28 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
+    private inline fun updateForwardEmailServiceType(
+        crossinline block: (ForwardEmail) -> ForwardEmail,
+    ) {
+        updateGeneratorMainTypeUsername { currentUsernameType ->
+            if (currentUsernameType.selectedType !is ForwardedEmailAlias) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            val currentServiceType = currentUsernameType.selectedType.selectedServiceType
+            if (currentServiceType !is ForwardEmail) {
+                return@updateGeneratorMainTypeUsername currentUsernameType
+            }
+
+            currentUsernameType.copy(
+                selectedType = ForwardedEmailAlias(
+                    selectedServiceType = block(currentServiceType),
+                    obfuscatedText = currentUsernameType.selectedType.obfuscatedText,
+                ),
+            )
+        }
+    }
+
     private inline fun updateCatchAllEmailType(
         crossinline block: (CatchAllEmail) -> CatchAllEmail,
     ) {
@@ -1810,6 +1913,7 @@ data class GeneratorState(
                         DUCK_DUCK_GO(R.string.duck_duck_go),
                         FAST_MAIL(R.string.fastmail),
                         FIREFOX_RELAY(R.string.firefox_relay),
+                        FORWARD_EMAIL(R.string.forward_email),
                         SIMPLE_LOGIN(R.string.simple_login),
                     }
 
@@ -1884,6 +1988,22 @@ data class GeneratorState(
                         ) : ServiceType(), Parcelable {
                             override val displayStringResId: Int
                                 get() = ServiceTypeOption.FIREFOX_RELAY.labelRes
+                        }
+
+                        /**
+                         * Represents the ForwardEmail service type, with configurable options for
+                         * api key and domain name.
+                         *
+                         * @property apiKey The api key used for generation.
+                         * @property domainName The domain name used for generation.
+                         */
+                        @Parcelize
+                        data class ForwardEmail(
+                            val apiKey: String = "",
+                            val domainName: String = "",
+                        ) : ServiceType(), Parcelable {
+                            override val displayStringResId: Int
+                                get() = ServiceTypeOption.FORWARD_EMAIL.labelRes
                         }
 
                         /**
@@ -2204,6 +2324,26 @@ sealed class GeneratorAction {
                          * @property accessToken The new access token text.
                          */
                         data class AccessTokenTextChange(val accessToken: String) : FirefoxRelay()
+                    }
+
+                    /**
+                     * Represents actions specifically related to the ForwardEmail service.
+                     */
+                    sealed class ForwardEmail : ForwardedEmailAlias() {
+
+                        /**
+                         * Fired when the api key input text is changed.
+                         *
+                         * @property apiKey The new api key text.
+                         */
+                        data class ApiKeyTextChange(val apiKey: String) : ForwardEmail()
+
+                        /**
+                         * Fires when the domain name input text is changed.
+                         *
+                         * @property domainName The new domain name text.
+                         */
+                        data class DomainNameTextChange(val domainName: String) : ForwardEmail()
                     }
 
                     /**

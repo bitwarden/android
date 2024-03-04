@@ -1062,6 +1062,31 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
             )
         }
 
+        is ServiceType.ForwardEmail -> {
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.api_key_required_parenthesis),
+                value = usernameTypeState.selectedServiceType.apiKey,
+                onValueChange = forwardedEmailAliasHandlers.onForwardEmailApiKeyTextChange,
+                showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            BitwardenTextField(
+                label = stringResource(id = R.string.domain_name_required_parenthesis),
+                value = usernameTypeState.selectedServiceType.domainName,
+                onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ForwardedEmailDomainNameEntry" }
+                    .fillMaxWidth(),
+            )
+        }
+
         is ServiceType.SimpleLogin -> {
             BitwardenPasswordField(
                 label = stringResource(id = R.string.api_key_required_parenthesis),
@@ -1429,6 +1454,8 @@ private data class ForwardedEmailAliasHandlers(
     val onDuckDuckGoApiKeyTextChange: (String) -> Unit,
     val onFastMailApiKeyTextChange: (String) -> Unit,
     val onFirefoxRelayAccessTokenTextChange: (String) -> Unit,
+    val onForwardEmailApiKeyTextChange: (String) -> Unit,
+    val onForwardEmailDomainNameTextChange: (String) -> Unit,
     val onSimpleLoginApiKeyTextChange: (String) -> Unit,
 ) {
     companion object {
@@ -1509,6 +1536,32 @@ private data class ForwardedEmailAliasHandlers(
                             .FirefoxRelay
                             .AccessTokenTextChange(
                                 accessToken = newAccessToken,
+                            ),
+                    )
+                },
+                onForwardEmailApiKeyTextChange = { newApiKey ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ForwardEmail
+                            .ApiKeyTextChange(
+                                apiKey = newApiKey,
+                            ),
+                    )
+                },
+                onForwardEmailDomainNameTextChange = { newDomainName ->
+                    viewModel.trySendAction(
+                        GeneratorAction
+                            .MainType
+                            .Username
+                            .UsernameType
+                            .ForwardedEmailAlias
+                            .ForwardEmail
+                            .DomainNameTextChange(
+                                domainName = newDomainName,
                             ),
                     )
                 },

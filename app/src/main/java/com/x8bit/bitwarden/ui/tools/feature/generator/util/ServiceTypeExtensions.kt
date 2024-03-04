@@ -60,6 +60,15 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                 }
         }
 
+        is ServiceType.ForwardEmail -> {
+            val apiKey = this.apiKey.orNullIfBlank() ?: return null
+            val domainName = this.domainName.orNullIfBlank() ?: return null
+            UsernameGeneratorRequest.Forwarded(
+                service = ForwarderServiceType.ForwardEmail(apiKey, domainName),
+                website = null,
+            )
+        }
+
         is ServiceType.SimpleLogin -> {
             this
                 .apiKey
