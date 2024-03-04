@@ -37,13 +37,13 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.BitwardenBasicDialog
-import com.x8bit.bitwarden.ui.platform.components.BitwardenErrorButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMasterPasswordDialog
-import com.x8bit.bitwarden.ui.platform.components.BitwardenOutlinedButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenErrorButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
 
 /**
  * Displays the delete account screen.
