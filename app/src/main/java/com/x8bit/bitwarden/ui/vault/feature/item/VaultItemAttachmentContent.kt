@@ -123,6 +123,7 @@ fun AttachmentItemContent(
                 onAttachmentDownloadClick(attachmentItem)
             },
             onDismissClick = { shouldShowSizeWarningDialog = false },
-            onDismissRequest = { shouldShowSizeWarningDialog = false },)
+            onDismissRequest = { shouldShowSizeWarningDialog = false },
+        )
     }
 }

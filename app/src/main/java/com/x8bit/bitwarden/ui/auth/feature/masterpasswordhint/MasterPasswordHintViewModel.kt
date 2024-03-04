@@ -127,6 +127,7 @@ class MasterPasswordHintViewModel @Inject constructor(
                     it.copy(dialog = MasterPasswordHintState.DialogState.PasswordHintSent)
                 }
             }
+
             is PasswordHintResult.Error -> {
                 val errorMessage = action.result.message?.asText()
                     ?: R.string.generic_error_message.asText()

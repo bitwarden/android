@@ -19,7 +19,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
-import java.lang.NumberFormatException
 import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 

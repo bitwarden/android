@@ -40,6 +40,7 @@ val SyncResponseJson.Policy.policyInformation: PolicyInformation?
             PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT -> {
                 Json.decodeFromStringOrNull<PolicyInformation.VaultTimeout>(it)
             }
+
             PolicyTypeJson.SEND_OPTIONS -> {
                 Json.decodeFromStringOrNull<PolicyInformation.SendOptions>(it)
             }
