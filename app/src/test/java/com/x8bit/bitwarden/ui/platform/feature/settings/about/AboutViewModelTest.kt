@@ -54,6 +54,15 @@ class AboutViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on PrivacyPolicyClick should emit NavigateToPrivacyPolicy`() = runTest {
+        val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AboutAction.PrivacyPolicyClick)
+            assertEquals(AboutEvent.NavigateToPrivacyPolicy, awaitItem())
+        }
+    }
+
+    @Test
     fun `on LearnAboutOrganizationsClick should emit NavigateToLearnAboutOrganizations`() =
         runTest {
             val viewModel = createViewModel(DEFAULT_ABOUT_STATE)

@@ -75,6 +75,10 @@ fun AboutScreen(
                 intentManager.launchUri("https://bitwarden.com/help".toUri())
             }
 
+            AboutEvent.NavigateToPrivacyPolicy -> {
+                intentManager.launchUri("https://bitwarden.com/privacy".toUri())
+            }
+
             AboutEvent.NavigateToLearnAboutOrganizations -> {
                 intentManager.launchUri("https://bitwarden.com/help/about-organizations".toUri())
             }
@@ -113,6 +117,9 @@ fun AboutScreen(
             onHelpCenterClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.HelpCenterClick) }
             },
+            onPrivacyPolicyClick = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.PrivacyPolicyClick) }
+            },
             onLearnAboutOrgsClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.LearnAboutOrganizationsClick) }
             },
@@ -137,6 +144,7 @@ fun AboutScreen(
 private fun ContentColumn(
     state: AboutState,
     onHelpCenterClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
     onLearnAboutOrgsClick: () -> Unit,
     onRateTheAppClick: () -> Unit,
     onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
@@ -168,6 +176,14 @@ private fun ContentColumn(
             dialogTitle = stringResource(id = R.string.continue_to_help_center),
             dialogMessage = stringResource(
                 id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
+            ),
+        )
+        BitwardenExternalLinkRow(
+            text = stringResource(id = R.string.privacy_policy),
+            onConfirmClick = onPrivacyPolicyClick,
+            dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
+            dialogMessage = stringResource(
+                id = R.string.privacy_policy_description_long,
             ),
         )
         BitwardenExternalLinkRow(
