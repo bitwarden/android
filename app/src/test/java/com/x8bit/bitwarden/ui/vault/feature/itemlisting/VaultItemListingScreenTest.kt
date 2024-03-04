@@ -12,7 +12,6 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -985,9 +984,8 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNode(isDialog())
-            .onChildren()
-            .filterToOne(hasText("mockTitle-$number"))
+            .onAllNodesWithText("mockTitle-$number")
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 

@@ -15,9 +15,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.x8bit.bitwarden.R
@@ -32,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
  * [BitwardenSelectionRow].
  */
 @Suppress("LongMethod")
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenSelectionDialog(
     title: String,
@@ -45,6 +49,7 @@ fun BitwardenSelectionDialog(
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
+                .semantics { testTagsAsResourceId = true }
                 .requiredHeightIn(
                     max = configuration.maxDialogHeight,
                 )
