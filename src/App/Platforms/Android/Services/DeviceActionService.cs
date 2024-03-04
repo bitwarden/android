@@ -567,31 +567,41 @@ namespace Bit.Droid.Services
                 return;
             }
 
-            var request = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveBeginGetCredentialRequest(activity.Intent);
-            var response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse();;
-            List<AndroidX.Credentials.Provider.CredentialEntry> credentialEntries = null;
-            foreach (var option in request.BeginGetCredentialOptions)
+            try
             {
-                var credentialOption = option as AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption;
-                if (credentialOption != null)
+                var request = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveBeginGetCredentialRequest(activity.Intent);
+                var response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse();;
+                List<AndroidX.Credentials.Provider.CredentialEntry> credentialEntries = null;
+                foreach (var option in request.BeginGetCredentialOptions)
                 {
-                    credentialEntries ??= new List<AndroidX.Credentials.Provider.CredentialEntry>();
-                    credentialEntries.AddRange(await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                    var credentialOption = option as AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption;
+                    if (credentialOption != null)
+                    {
+                        credentialEntries ??= new List<AndroidX.Credentials.Provider.CredentialEntry>();
+                        credentialEntries.AddRange(await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                    }
                 }
-            }
 
-            if (credentialEntries != null)
+                if (credentialEntries != null)
+                {
+                    response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse.Builder()
+                        .SetCredentialEntries(credentialEntries)
+                        .Build();
+                }
+
+                var result = new Android.Content.Intent();
+                AndroidX.Credentials.Provider.PendingIntentHandler.SetBeginGetCredentialResponse(result, response);
+
+                activity.SetResult(Result.Ok, result);
+                activity.Finish();
+            }
+            catch (Exception ex)
             {
-                response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse.Builder()
-                    .SetCredentialEntries(credentialEntries)
-                    .Build();
+                Bit.Core.Services.LoggerHelper.LogEvenIfCantBeResolved(ex);
+
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
             }
-
-            var result = new Android.Content.Intent();
-            AndroidX.Credentials.Provider.PendingIntentHandler.SetBeginGetCredentialResponse(result, response);
-
-            activity.SetResult(Result.Ok, result);
-            activity.Finish();
         }
 
         #region CODE_THAT_NEEDS_TO_BE_MOVED_ELSEWHERE
@@ -637,7 +647,7 @@ namespace Bit.Droid.Services
             intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
             intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
             var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, UniqueRequestCode, intent,
-                PendingIntentFlags.Immutable | PendingIntentFlags.UpdateCurrent);
+                PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
             return new AndroidX.Credentials.Provider.PublicKeyCredentialEntry.Builder(
                     activity.ApplicationContext,
