@@ -90,6 +90,22 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on privacy policy click should display confirmation dialog and confirm click should emit PrivacyPolicyClick`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText("Privacy Policy").performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        verify {
+            viewModel.trySendAction(AboutAction.PrivacyPolicyClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on bitwarden web vault click should display confirmation dialog and confirm click should emit WebVaultClick`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Bitwarden web vault").performClick()
@@ -131,6 +147,14 @@ class AboutScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(AboutEvent.NavigateToHelpCenter)
         verify {
             intentManager.launchUri("https://bitwarden.com/help".toUri())
+        }
+    }
+
+    @Test
+    fun `on NavigateToPrivacyPolicy should call launchUri on IntentManager`() {
+        mutableEventFlow.tryEmit(AboutEvent.NavigateToPrivacyPolicy)
+        verify {
+            intentManager.launchUri("https://bitwarden.com/privacy".toUri())
         }
     }
 
@@ -209,7 +233,9 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Test
     fun `on version info click should send VersionClick`() {
-        composeTestRule.onNodeWithText("Version: 1.0.0 (1)").performClick()
+        composeTestRule.onNodeWithText("Version: 1.0.0 (1)")
+            .performScrollTo()
+            .performClick()
         verify {
             viewModel.trySendAction(AboutAction.VersionClick)
         }
@@ -217,7 +243,9 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Test
     fun `version should update according to the state`() = runTest {
-        composeTestRule.onNodeWithText("Version: 1.0.0 (1)").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Version: 1.0.0 (1)")
+            .performScrollTo()
+            .assertIsDisplayed()
 
         mutableStateFlow.update { it.copy(version = "Version: 1.1.0 (2)".asText()) }
 
