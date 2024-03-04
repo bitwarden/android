@@ -9,8 +9,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResourc
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
-import com.x8bit.bitwarden.ui.platform.components.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
 
 /**
  * Custom Field UI common for all item types.
