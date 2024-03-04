@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -27,16 +28,18 @@ namespace Bit.Core.Test.Services
                 Challenge = RandomBytes(32),
                 RpId = "bitwarden.com",
                 UserVerification = "required",
-                AllowCredentials = [
-                    new PublicKeyCredentialDescriptor {
+                AllowCredentials = new PublicKeyCredentialDescriptor[]
+                {
+                    new PublicKeyCredentialDescriptor
+                    {
                         Id = RandomBytes(32),
                         Type = Constants.DefaultFido2CredentialType
                     }
-                ],
+                },
                 Timeout = 60000,
             };
 
-            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns([]);
+            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns(Task.FromResult(new List<string>()));
             _sutProvider.GetDependency<IStateService>().IsAuthenticatedAsync().Returns(true);
         }
 
@@ -100,9 +103,11 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _params.Origin = "https://sub.bitwarden.com";
-            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns([
+            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns(Task.FromResult(new List<string>
+            {
                 "sub.bitwarden.com"
-            ]);
+
+            }));
 
             // Act
             var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
@@ -195,7 +200,7 @@ namespace Bit.Core.Test.Services
                 .GetAssertionAsync(
                     Arg.Is<Fido2AuthenticatorGetAssertionParams>(x =>
                         x.RpId == _params.RpId &&
-                        x.RequireUserVerification == true &&
+                        x.UserVerificationPreference == Fido2UserVerificationPreference.Required &&
                         x.AllowCredentialDescriptorList.Length == 1 &&
                         x.AllowCredentialDescriptorList[0].Id == _params.AllowCredentials[0].Id
                     ), 

@@ -47,7 +47,7 @@ namespace Bit.Core.Services
             {
                 CredentialName = makeCredentialParams.RpEntity.Name,
                 UserName = makeCredentialParams.UserEntity.Name,
-                UserVerification = makeCredentialParams.RequireUserVerification,
+                UserVerificationPreference = makeCredentialParams.UserVerificationPreference,
                 RpId = makeCredentialParams.RpEntity.Id
             });
 
@@ -67,7 +67,7 @@ namespace Bit.Core.Services
                 var encrypted = await _cipherService.GetAsync(cipherId);
                 var cipher = await encrypted.DecryptAsync();
 
-                if (!userVerified && (makeCredentialParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None))
+                if (!userVerified && (makeCredentialParams.UserVerificationPreference == Fido2UserVerificationPreference.Required || cipher.Reprompt != CipherRepromptType.None))
                 {
                     throw new NotAllowedError();
                 }
@@ -133,7 +133,7 @@ namespace Bit.Core.Services
                 cipherOptions.Select((cipher) => new Fido2GetAssertionUserInterfaceCredential
                 {
                     CipherId = cipher.Id,
-                    RequireUserVerification = assertionParams.RequireUserVerification || cipher.Reprompt != CipherRepromptType.None
+                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.GetUserVerificationPreferenceFrom(assertionParams.UserVerificationPreference, cipher.Reprompt)
                 }).ToArray()
             );
             var selectedCipherId = response.CipherId;
@@ -145,7 +145,7 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
 
-            if (!userVerified && (assertionParams.RequireUserVerification || selectedCipher.Reprompt != CipherRepromptType.None))
+            if (!userVerified && (assertionParams.UserVerificationPreference == Fido2UserVerificationPreference.Required || selectedCipher.Reprompt != CipherRepromptType.None))
             {
                 throw new NotAllowedError();
             }

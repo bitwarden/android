@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Utilities.Fido2;
 using Bit.iOS.Autofill.Models;
 
 namespace Bit.iOS.Autofill
@@ -10,12 +11,12 @@ namespace Bit.iOS.Autofill
         private readonly Func<Task> _ensureUnlockedVaultCallback;
         private readonly Context _context;
         private readonly Action _onConfirmingNewCredential;
-        private readonly Func<string, Task<bool>> _verifyUserCallback;
+        private readonly Func<string, Fido2UserVerificationPreference, Task<bool>> _verifyUserCallback;
 
         public Fido2MakeCredentialUserInterface(Func<Task> ensureUnlockedVaultCallback,
             Context context,
             Action onConfirmingNewCredential,
-            Func<string, Task<bool>> verifyUserCallback)
+            Func<string, Fido2UserVerificationPreference, Task<bool>> verifyUserCallback)
         {
             _ensureUnlockedVaultCallback = ensureUnlockedVaultCallback;
             _context = context;
@@ -33,9 +34,19 @@ namespace Bit.iOS.Autofill
 
             var (cipherId, isUserVerified) = await _context.PickCredentialForFido2CreationTcs.Task;
 
-            var verified = isUserVerified ?? (confirmNewCredentialParams.UserVerification && await _verifyUserCallback(cipherId));
+            var verified = isUserVerified ?? await VerifyUserAsync(cipherId, confirmNewCredentialParams);
 
             return (cipherId, verified);
+        }
+
+        private async Task<bool> VerifyUserAsync(string cipherId, Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
+        {
+            if (confirmNewCredentialParams.UserVerificationPreference == Fido2UserVerificationPreference.Discouraged)
+            {
+                return false;
+            }
+
+            return await _verifyUserCallback(cipherId, confirmNewCredentialParams.UserVerificationPreference);
         }
 
         // iOS doesn't seem to provide the ExcludeCredentialDescriptorList so nothing to do here currently.

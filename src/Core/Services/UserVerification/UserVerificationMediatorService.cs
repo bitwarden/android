@@ -39,12 +39,15 @@ namespace Bit.Core.Services.UserVerification
                 return await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(Enums.CipherRepromptType.Password);
             }
 
-            if (options.IsUserVerificationRequired)
+            switch (options.UserVerificationPreference)
             {
-                return await new Fido2UserVerificationRequiredServiceStrategy(this, _platformUtilsService).VerifyUserForFido2Async(options);
+                case Fido2UserVerificationPreference.Required:
+                    return await new Fido2UserVerificationRequiredServiceStrategy(this, _platformUtilsService).VerifyUserForFido2Async(options);
+                case Fido2UserVerificationPreference.Preferred:
+                    return await new Fido2UserVerificationPreferredServiceStrategy(this).VerifyUserForFido2Async(options);
+                default:
+                    return false;
             }
-
-            return await new Fido2UserVerificationPreferredServiceStrategy(this).VerifyUserForFido2Async(options);
         }
 
         public async Task<(bool CanPerfom, bool IsUnlocked)> PerformOSUnlockAsync()

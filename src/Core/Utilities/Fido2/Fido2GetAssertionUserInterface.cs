@@ -15,11 +15,14 @@ namespace Bit.Core.Utilities.Fido2
         private readonly string _cipherId;
         private readonly bool _userVerified = false;
         private readonly Func<Task> _ensureUnlockedVaultCallback;
-        private readonly Func<string, Task<bool>> _verifyUserCallback;
+        private readonly Func<string, Fido2UserVerificationPreference, Task<bool>> _verifyUserCallback;
 
         /// <param name="cipherId">The cipherId for the credential that the user has already picker</param>
         /// <param name="userVerified">True if the user has already been verified by the operating system</param>
-        public Fido2GetAssertionUserInterface(string cipherId, bool userVerified, Func<Task> ensureUnlockedVaultCallback, Func<string, Task<bool>> verifyUserCallback)
+        public Fido2GetAssertionUserInterface(string cipherId,
+            bool userVerified,
+            Func<Task> ensureUnlockedVaultCallback,
+            Func<string, Fido2UserVerificationPreference, Task<bool>> verifyUserCallback)
         {
             _cipherId = cipherId;
             _userVerified = userVerified;
@@ -35,14 +38,19 @@ namespace Bit.Core.Utilities.Fido2
             }
 
             var credential = credentials.First(c => c.CipherId == _cipherId);
-            var verified = _userVerified;
-
-            if (credential.RequireUserVerification && !verified)
-            {
-                verified = await _verifyUserCallback(_cipherId);
-            }
+            var verified = _userVerified || await VerifyUserAsync(_cipherId, credential);
 
             return (CipherId: _cipherId, UserVerified: verified);
+        }
+
+        private async Task<bool> VerifyUserAsync(string cipherId, Fido2GetAssertionUserInterfaceCredential credential)
+        {
+            if (credential.UserVerificationPreference == Fido2UserVerificationPreference.Discouraged)
+            {
+                return false;
+            }
+
+            return await _verifyUserCallback(cipherId, credential.UserVerificationPreference);
         }
 
         public Task EnsureUnlockedVaultAsync() 

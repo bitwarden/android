@@ -14,7 +14,7 @@ namespace Bit.Core.Test.Utilities.Fido2
             var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null, null);
 
             // Act & Assert
-            await Assert.ThrowsAsync<NotAllowedError>(() => userInterface.PickCredentialAsync([CreateCredential("notMatching", false)]));
+            await Assert.ThrowsAsync<NotAllowedError>(() => userInterface.PickCredentialAsync(new Fido2GetAssertionUserInterfaceCredential[] { CreateCredential("notMatching", Fido2UserVerificationPreference.Discouraged) }));
         }
 
         [Fact]
@@ -24,7 +24,11 @@ namespace Bit.Core.Test.Utilities.Fido2
             var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null, null);
 
             // Act
-            var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", false), CreateCredential("cipherId2", true)]);
+            var result = await userInterface.PickCredentialAsync(new Fido2GetAssertionUserInterfaceCredential[]
+            {
+                CreateCredential("cipherId", Fido2UserVerificationPreference.Discouraged),
+                CreateCredential("cipherId2", Fido2UserVerificationPreference.Required)
+            });
 
             // Assert
             Assert.Equal("cipherId", result.CipherId);
@@ -36,14 +40,18 @@ namespace Bit.Core.Test.Utilities.Fido2
         {
             // Arrange
             var called = false;
-            var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null, _ =>
+            var userInterface = new Fido2GetAssertionUserInterface("cipherId", false, null, (_, __) =>
             {
                 called = true;
                 return Task.FromResult(true);
             });
 
             // Act
-            var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", false)]);
+            var result = await userInterface.PickCredentialAsync(new Fido2GetAssertionUserInterfaceCredential[]
+            {
+                CreateCredential("cipherId", Fido2UserVerificationPreference.Required),
+                CreateCredential("cipherId2", Fido2UserVerificationPreference.Discouraged)
+            });
 
             // Assert
             Assert.Equal("cipherId", result.CipherId);
@@ -56,14 +64,18 @@ namespace Bit.Core.Test.Utilities.Fido2
         {
             // Arrange
             var called = false;
-            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", true, null, _ =>
+            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", true, null, (_, __) =>
             {
                 called = true;
                 return Task.FromResult(true);
             });
 
             // Act
-            var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", false)]);
+            var result = await userInterface.PickCredentialAsync(new Fido2GetAssertionUserInterfaceCredential[]
+            {
+                CreateCredential("cipherId", Fido2UserVerificationPreference.Required),
+                CreateCredential("cipherId2", Fido2UserVerificationPreference.Discouraged)
+            });
 
             // Assert
             Assert.Equal("cipherId2", result.CipherId);
@@ -76,14 +88,18 @@ namespace Bit.Core.Test.Utilities.Fido2
         {
             // Arrange
             var called = false;
-            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", false, null, _ =>
+            var userInterface = new Fido2GetAssertionUserInterface("cipherId2", false, null, (_, __) =>
             {
                 called = true;
                 return Task.FromResult(true);
             });
 
             // Act
-            var result = await userInterface.PickCredentialAsync([CreateCredential("cipherId", true), CreateCredential("cipherId2", false)]);
+            var result = await userInterface.PickCredentialAsync(new Fido2GetAssertionUserInterfaceCredential[]
+            {
+                CreateCredential("cipherId", Fido2UserVerificationPreference.Required),
+                CreateCredential("cipherId2", Fido2UserVerificationPreference.Discouraged)
+            });
 
             // Assert
             Assert.Equal("cipherId2", result.CipherId);
@@ -106,12 +122,12 @@ namespace Bit.Core.Test.Utilities.Fido2
             Assert.True(called);
         }
 
-        private Fido2GetAssertionUserInterfaceCredential CreateCredential(string cipherId, bool requireUserVerification)
+        private Fido2GetAssertionUserInterfaceCredential CreateCredential(string cipherId, Fido2UserVerificationPreference userVerificationPreference)
         {
             return new Fido2GetAssertionUserInterfaceCredential
             {
                 CipherId = cipherId,
-                RequireUserVerification = requireUserVerification
+                UserVerificationPreference = userVerificationPreference
             };
         }
     }

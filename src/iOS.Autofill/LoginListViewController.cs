@@ -175,7 +175,7 @@ namespace Bit.iOS.Autofill
             }
 
             bool? isUserVerified = null;
-            if (Context?.PasskeyCreationParams?.UserVerification == true)
+            if (Context?.PasskeyCreationParams?.UserVerificationPreference != Fido2UserVerificationPreference.Discouraged)
             {
                 isUserVerified = await VerifyUserAsync();
             }
@@ -199,7 +199,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                if (Context is null)
+                if (Context?.PasskeyCreationParams is null)
                 {
                     return false;
                 }
@@ -207,7 +207,7 @@ namespace Bit.iOS.Autofill
                 return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
                     new Fido2UserVerificationOptions(
                         false,
-                        true,
+                        Context.PasskeyCreationParams.Value.UserVerificationPreference,
                         Context.VaultUnlockedDuringThisSession,
                         Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier)
                     );

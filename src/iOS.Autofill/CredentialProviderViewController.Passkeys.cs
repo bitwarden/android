@@ -82,7 +82,7 @@ namespace Bit.iOS.Autofill
                 {
                     Hash = passkeyRegistrationRequest.ClientDataHash.ToArray(),
                     CredTypesAndPubKeyAlgs = GetCredTypesAndPubKeyAlgs(passkeyRegistrationRequest.SupportedAlgorithms),
-                    RequireUserVerification = RequiresUserVerification(passkeyRegistrationRequest),
+                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(passkeyRegistrationRequest.UserVerificationPreference),
                     RequireResidentKey = true,
                     RpEntity = new PublicKeyCredentialRpEntity
                     {
@@ -120,15 +120,6 @@ namespace Bit.iOS.Autofill
 
                 throw;
             }
-        }
-
-        private bool RequiresUserVerification(ASPasskeyCredentialRequest passkeyRegistrationRequest)
-        {
-#pragma warning disable CA1416 // Validate platform compatibility
-            return passkeyRegistrationRequest.UserVerificationPreference is null
-                || passkeyRegistrationRequest.UserVerificationPreference == "required"
-                || passkeyRegistrationRequest.UserVerificationPreference == "preferred";
-#pragma warning restore CA1416 // Validate platform compatibility
         }
 
         private PublicKeyCredentialParameters[] GetCredTypesAndPubKeyAlgs(NSNumber[] supportedAlgorithms)
@@ -193,7 +184,7 @@ namespace Bit.iOS.Autofill
                 {
                     RpId = rpId,
                     Hash = _context.PasskeyCredentialRequest.ClientDataHash.ToArray(),
-                    RequireUserVerification = RequiresUserVerification(_context.PasskeyCredentialRequest),
+                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(_context.PasskeyCredentialRequest.UserVerificationPreference),
                     AllowCredentialDescriptorList = new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor[]
                     {
                         new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor
@@ -241,7 +232,7 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private async Task<bool> VerifyUserAsync(string selectedCipherId)
+        private async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference)
         {
             try
             {
@@ -251,7 +242,7 @@ namespace Bit.iOS.Autofill
                 return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
                     new Fido2UserVerificationOptions(
                         cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
-                        true,
+                        userVerificationPreference,
                         _context.VaultUnlockedDuringThisSession,
                         _context.PasskeyCredentialIdentity?.RelyingPartyIdentifier,
                         () =>

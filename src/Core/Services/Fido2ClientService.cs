@@ -216,14 +216,10 @@ namespace Bit.Core.Services
                 createCredentialParams.AuthenticatorSelection?.ResidentKey == "preferred" ||
                 (createCredentialParams.AuthenticatorSelection?.ResidentKey == null &&
                 createCredentialParams.AuthenticatorSelection?.RequireResidentKey == true);
-            
-            var requireUserVerification = createCredentialParams.AuthenticatorSelection?.UserVerification == "required" ||
-                createCredentialParams.AuthenticatorSelection?.UserVerification == "preferred" ||
-                createCredentialParams.AuthenticatorSelection?.UserVerification == null;
 
             return new Fido2AuthenticatorMakeCredentialParams {
                 RequireResidentKey = requireResidentKey,
-                RequireUserVerification = requireUserVerification,
+                UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(createCredentialParams.AuthenticatorSelection?.UserVerification),
                 ExcludeCredentialDescriptorList = createCredentialParams.ExcludeCredentials,
                 CredTypesAndPubKeyAlgs = credTypesAndPubKeyAlgs,
                 Hash = clientDataHash,
@@ -237,15 +233,11 @@ namespace Bit.Core.Services
             Fido2ClientAssertCredentialParams assertCredentialParams,
             byte[] cliendDataHash)
         {
-            var requireUserVerification = assertCredentialParams.UserVerification == "required" ||
-                assertCredentialParams.UserVerification == "preferred" ||
-                assertCredentialParams.UserVerification == null;
-
             return new Fido2AuthenticatorGetAssertionParams {
                 RpId = assertCredentialParams.RpId,
                 Challenge = assertCredentialParams.Challenge,
                 AllowCredentialDescriptorList = assertCredentialParams.AllowCredentials,
-                RequireUserVerification = requireUserVerification,
+                UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(assertCredentialParams?.UserVerification),
                 Hash = cliendDataHash
             };
         }

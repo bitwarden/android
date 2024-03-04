@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -22,17 +23,20 @@ namespace Bit.Core.Test.Services
 
         public Fido2ClientCreateCredentialTests()
         {
-            _params = new Fido2ClientCreateCredentialParams {
+            _params = new Fido2ClientCreateCredentialParams
+            {
                 Origin = "https://bitwarden.com",
                 SameOriginWithAncestors = true,
                 Attestation = "none",
                 Challenge = RandomBytes(32),
-                PubKeyCredParams = [
-                    new PublicKeyCredentialParameters {
+                PubKeyCredParams = new PublicKeyCredentialParameters[]
+                {
+                    new PublicKeyCredentialParameters
+                    {
                         Type = Constants.DefaultFido2CredentialType,
                         Alg = (int) Fido2AlgorithmIdentifier.ES256
                     }
-                ],
+                },
                 Rp = new PublicKeyCredentialRpEntity {
                     Id = "bitwarden.com",
                     Name = "Bitwarden"
@@ -44,7 +48,7 @@ namespace Bit.Core.Test.Services
                 }
             };
 
-            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns([]);
+            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns(Task.FromResult(new List<string>()));
             _sutProvider.GetDependency<IStateService>().IsAuthenticatedAsync().Returns(true);
         }
 
@@ -150,9 +154,10 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             _params.Origin = "https://sub.bitwarden.com";
-            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns([
+            _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns(Task.FromResult(new List<string>
+            {
                 "sub.bitwarden.com"
-            ]);
+            }));
 
             // Act
             var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.CreateCredentialAsync(_params));
@@ -166,7 +171,8 @@ namespace Bit.Core.Test.Services
         public async Task CreateCredentialAsync_ThrowsNotSupportedError_CredTypesAndPubKeyAlgsIsEmpty()
         {
             // Arrange
-            _params.PubKeyCredParams = [
+            _params.PubKeyCredParams = new PublicKeyCredentialParameters[]
+            {
                 new PublicKeyCredentialParameters {
                     Type = "not-supported",
                     Alg = (int) Fido2AlgorithmIdentifier.ES256
@@ -175,7 +181,7 @@ namespace Bit.Core.Test.Services
                     Type = Constants.DefaultFido2CredentialType,
                     Alg = -9001
                 }
-            ];
+            };
 
             // Act
             var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.CreateCredentialAsync(_params));
@@ -216,7 +222,7 @@ namespace Bit.Core.Test.Services
                 .MakeCredentialAsync(
                     Arg.Is<Fido2AuthenticatorMakeCredentialParams>(x =>
                         x.RequireResidentKey == true &&
-                        x.RequireUserVerification == true &&
+                        x.UserVerificationPreference == Fido2UserVerificationPreference.Required &&
                         x.RpEntity.Id == _params.Rp.Id &&
                         x.UserEntity.DisplayName == _params.User.DisplayName
                     ),
@@ -227,7 +233,7 @@ namespace Bit.Core.Test.Services
             Assert.Equal(authenticatorResult.AuthData, result.AuthData);
             Assert.Equal(authenticatorResult.PublicKey, result.PublicKey);
             Assert.Equal(authenticatorResult.PublicKeyAlgorithm, result.PublicKeyAlgorithm);
-            Assert.Equal(["internal"], result.Transports);
+            Assert.Equal(new string[] { "internal" }, result.Transports);
 
             var clientDataJSON = JsonSerializer.Deserialize<JsonObject>(Encoding.UTF8.GetString(result.ClientDataJSON));
             Assert.Equal("webauthn.create", clientDataJSON["type"].GetValue<string>());
