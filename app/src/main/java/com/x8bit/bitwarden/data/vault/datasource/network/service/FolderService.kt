@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 
 /**
  * Provides an API for querying folder endpoints.

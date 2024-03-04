@@ -57,6 +57,7 @@ class PasswordHistoryViewModel @Inject constructor(
                     .onEach(::sendAction)
                     .launchIn(viewModelScope)
             }
+
             is GeneratorPasswordHistoryMode.Item -> {
                 vaultRepository
                     .getVaultItemStateFlow(passwordHistoryMode.itemId)
@@ -103,11 +104,13 @@ class PasswordHistoryViewModel @Inject constructor(
             is DataState.Error -> {
                 PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
             }
+
             is DataState.Loaded -> action.state.data?.passwordHistory.toViewState()
             is DataState.Loading -> PasswordHistoryState.ViewState.Loading
             is DataState.NoNetwork -> {
                 PasswordHistoryState.ViewState.Error(R.string.an_error_has_occurred.asText())
             }
+
             is DataState.Pending -> action.state.data?.passwordHistory.toViewState()
         }
         mutableStateFlow.update { it.copy(viewState = newState) }
@@ -138,7 +141,7 @@ class PasswordHistoryViewModel @Inject constructor(
                 ),
             )
         }
-       return if (passwords?.isNotEmpty() == true) {
+        return if (passwords?.isNotEmpty() == true) {
             PasswordHistoryState.ViewState.Content(passwords)
         } else {
             PasswordHistoryState.ViewState.Empty
@@ -163,6 +166,7 @@ data class PasswordHistoryState(
      */
     val menuEnabled: Boolean
         get() = passwordHistoryMode is GeneratorPasswordHistoryMode.Default
+
     /**
      * Represents the specific view states for the password history screen.
      */

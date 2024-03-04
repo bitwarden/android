@@ -27,6 +27,7 @@ class BitwardenAutofillService : AutofillService() {
      */
     @Inject
     lateinit var processor: AutofillProcessor
+
     /**
      * App information for the autofill feature.
      */
