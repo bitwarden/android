@@ -31,5 +31,9 @@ public partial class AndroidNavigationRedirectPage : ContentPage
         {
             conditionedAwaiterManager?.SetAsCompleted(AwaiterPrecondition.AndroidWindowCreated);
         }
+        else
+        {
+            LoggerHelper.LogEvenIfCantBeResolved(new InvalidOperationException("ConditionedAwaiterManager can't be resolved on Android Navigation redirection"));
+        }
     }
 }
