@@ -21,8 +21,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenFilledTonalButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.BitwardenHiddenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
@@ -31,6 +29,8 @@ import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordFieldWithActi
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenSwitchWithActions
