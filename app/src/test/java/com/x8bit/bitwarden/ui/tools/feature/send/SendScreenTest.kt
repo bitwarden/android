@@ -12,7 +12,6 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -444,9 +443,8 @@ class SendScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNode(isDialog())
-            .onChildren()
-            .filterToOne(hasText(DEFAULT_SEND_ITEM.name))
+            .onAllNodesWithText(DEFAULT_SEND_ITEM.name)
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 

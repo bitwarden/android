@@ -9,7 +9,6 @@ import androidx.compose.ui.test.hasScrollToNodeAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -492,9 +491,8 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNode(isDialog())
-            .onChildren()
-            .filterToOne(hasText("mockName-$number"))
+            .onAllNodesWithText("mockName-$number")
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 
@@ -703,9 +701,8 @@ class SearchScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule
-            .onNode(isDialog())
-            .onChildren()
-            .filterToOne(hasText("mockName-$number"))
+            .onAllNodesWithText("mockName-$number")
+            .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
     }
 
