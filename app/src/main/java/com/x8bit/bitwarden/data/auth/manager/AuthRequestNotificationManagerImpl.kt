@@ -66,7 +66,7 @@ class AuthRequestNotificationManagerImpl(
                     ?.let { context.getString(R.string.confim_log_in_attemp_for_x, it) }
                     ?: context.getString(R.string.confirm_log_in),
             )
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification)
             .setColor(Color.White.value.toInt())
             .setAutoCancel(true)
             .setTimeoutAfter(NOTIFICATION_DEFAULT_TIMEOUT_MILLIS)
