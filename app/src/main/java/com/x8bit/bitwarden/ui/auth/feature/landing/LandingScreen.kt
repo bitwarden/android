@@ -345,7 +345,7 @@ private fun LandingScreenContent(
 private fun EnvironmentSelector(
     selectedOption: Environment.Type,
     onOptionSelected: (Environment.Type) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     val options = Environment.Type.entries.toTypedArray()
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }

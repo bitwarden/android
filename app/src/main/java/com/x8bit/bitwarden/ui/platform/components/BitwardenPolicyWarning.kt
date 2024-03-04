@@ -22,9 +22,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BitwardenPolicyWarningText(
     text: String,
+    modifier: Modifier = Modifier,
     textAlign: TextAlign = TextAlign.Center,
     style: TextStyle = MaterialTheme.typography.bodySmall,
-    modifier: Modifier,
 ) {
     Text(
         text = text,

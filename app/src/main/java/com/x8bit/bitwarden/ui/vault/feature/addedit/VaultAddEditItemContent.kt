@@ -144,7 +144,7 @@ fun VaultAddEditContent(
 private fun TypeOptionsItem(
     itemType: VaultAddEditState.ViewState.Content.ItemType,
     onTypeOptionClicked: (VaultAddEditState.ItemTypeOption) -> Unit,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
 ) {
     val possibleMainStates = VaultAddEditState.ItemTypeOption.entries.toList()
     val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }
