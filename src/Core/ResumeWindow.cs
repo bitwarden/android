@@ -32,14 +32,4 @@
             IsActive = false;
         }
     }
-
-    public class MainAppWindow : ResumeWindow
-    {
-        public MainAppWindow(Page page) : base(page) { }
-    }
-
-    public class AutoFillWindow : ResumeWindow
-    {       
-        public AutoFillWindow(Page page) : base(page){ }
-    }
 }
