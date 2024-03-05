@@ -14,9 +14,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers

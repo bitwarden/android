@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenOverflowActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.BitwardenSearchActionItem
@@ -32,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.handlers.VerificationCodeHandlers
 import kotlinx.collections.immutable.persistentListOf
 
