@@ -237,6 +237,7 @@ namespace Bit.iOS.Autofill
             {
                 InitAppIfNeeded();
                 _context.Configuring = true;
+
                 if (!await IsAuthed())
                 {
                     await _accountsManager.NavigateOnAccountChangeAsync(false);
@@ -668,8 +669,9 @@ namespace Bit.iOS.Autofill
 
         private void LaunchLoginSsoFlow()
         {
-            var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var loginPage = new LoginSsoPage(appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
