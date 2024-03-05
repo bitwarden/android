@@ -25,12 +25,6 @@ namespace Bit.iOS.Autofill
 		UIKit.UILabel _emptyViewLabel { get; set; }
 
 		[Outlet]
-		UIKit.UILabel _headerLabel { get; set; }
-
-		[Outlet]
-		UIKit.UIView _headerView { get; set; }
-
-		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIBarButtonItem AddBarButton { get; set; }
 
@@ -76,16 +70,6 @@ namespace Bit.iOS.Autofill
 			if (_emptyViewLabel != null) {
 				_emptyViewLabel.Dispose ();
 				_emptyViewLabel = null;
-			}
-
-			if (_headerLabel != null) {
-				_headerLabel.Dispose ();
-				_headerLabel = null;
-			}
-
-			if (_headerView != null) {
-				_headerView.Dispose ();
-				_headerView = null;
 			}
 
 			if (AddBarButton != null) {

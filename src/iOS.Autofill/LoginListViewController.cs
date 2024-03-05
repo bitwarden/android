@@ -79,7 +79,6 @@ namespace Bit.iOS.Autofill
 
                 if (Context.IsCreatingPasskey)
                 {
-                    _headerLabel.Text = AppResources.ChooseALoginToSaveThisPasskeyTo;
                     _emptyViewLabel.Text = string.Format(AppResources.NoItemsForUri, Context.UrlString);
 
                     _emptyViewButton.SetTitle(AppResources.SavePasskeyAsNewLogin, UIControlState.Normal);
@@ -87,8 +86,6 @@ namespace Bit.iOS.Autofill
                     _emptyViewButton.Layer.BorderColor = UIColor.FromName(ColorConstants.LIGHT_TEXT_MUTED).CGColor;
                     _emptyViewButton.Layer.CornerRadius = 10;
                     _emptyViewButton.ClipsToBounds = true;
-
-                    _headerView.Hidden = false;
                 }
 
                 _alreadyLoadItemsOnce = true;
@@ -236,7 +233,6 @@ namespace Bit.iOS.Autofill
         public void OnEmptyList()
         {
             _emptyView.Hidden = false;
-            _headerView.Hidden = false;
             TableView.Hidden = true;
         }
 
