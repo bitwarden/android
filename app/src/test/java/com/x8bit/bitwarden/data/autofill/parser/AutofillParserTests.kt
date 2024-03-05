@@ -182,6 +182,19 @@ class AutofillParserTests {
             every { this@mockk.toAutofillView() } returns null
             every { this@mockk.website } returns null
         }
+        // `invalidChildViewNode` simulates the OS assigning a node's idPackage to "android", which
+        // is not considered a valid app package name.
+        val invalidChildAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_DATE
+        val invalidChildAutofillId: AutofillId = mockk()
+        val invalidChildViewNode: AssistStructure.ViewNode = mockk {
+            every { this@mockk.autofillHints } returns arrayOf(invalidChildAutofillHint)
+            every { this@mockk.autofillId } returns invalidChildAutofillId
+            every { this@mockk.childCount } returns 0
+            every { this@mockk.idPackage } returns ID_PACKAGE_ANDROID
+            every { this@mockk.isFocused } returns false
+            every { this@mockk.toAutofillView() } returns null
+            every { this@mockk.website } returns null
+        }
         val parentAutofillHint = View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_YEAR
         val parentAutofillId: AutofillId = mockk()
         val parentAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
@@ -199,8 +212,9 @@ class AutofillParserTests {
             every { this@mockk.autofillId } returns parentAutofillId
             every { this@mockk.idPackage } returns null
             every { this@mockk.toAutofillView() } returns parentAutofillView
-            every { this@mockk.childCount } returns 1
+            every { this@mockk.childCount } returns 2
             every { this@mockk.getChildAt(0) } returns childViewNode
+            every { this@mockk.getChildAt(1) } returns invalidChildViewNode
             every { this@mockk.website } returns null
         }
         val windowNode: AssistStructure.WindowNode = mockk {
@@ -210,7 +224,7 @@ class AutofillParserTests {
             views = listOf(parentAutofillView),
         )
         val expected = AutofillRequest.Fillable(
-            ignoreAutofillIds = listOf(childAutofillId),
+            ignoreAutofillIds = listOf(childAutofillId, invalidChildAutofillId),
             inlinePresentationSpecs = inlinePresentationSpecs,
             maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
             partition = autofillPartition,
@@ -239,6 +253,9 @@ class AutofillParserTests {
             )
             any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
             any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+        }
+        verify(exactly = 0) {
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(ID_PACKAGE_ANDROID)
         }
     }
 
@@ -621,3 +638,6 @@ private const val MAX_INLINE_SUGGESTION_COUNT: Int = 42
 private const val PACKAGE_NAME: String = "com.google"
 private const val URI: String = "androidapp://com.google"
 private const val WEBSITE: String = "https://www.google.com"
+
+// ID package assigned to some nodes in the autofill view hierarchy by the OS.
+private const val ID_PACKAGE_ANDROID = "android"
