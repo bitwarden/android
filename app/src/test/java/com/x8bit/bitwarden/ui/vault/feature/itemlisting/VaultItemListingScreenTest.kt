@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -72,6 +73,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private var onNavigateToVaultItemId: String? = null
     private var onNavigateToVaultEditItemScreenId: String? = null
     private var onNavigateToSearchType: SearchType? = null
+    private var onNavigateToVaultItemListingScreenType: VaultItemListingType? = null
 
     private val intentManager: IntentManager = mockk {
         every { shareText(any()) } just runs
@@ -99,6 +101,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 onNavigateToEditSendItem = { onNavigateToEditSendItemId = it },
                 onNavigateToSearch = { onNavigateToSearchType = it },
                 onNavigateToVaultEditItemScreen = { onNavigateToVaultEditItemScreenId = it },
+                onNavigateToVaultItemListing = { this.onNavigateToVaultItemListingScreenType = it },
             )
         }
     }
@@ -404,6 +407,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `NavigateToFolderItem should call onNavigateToVaultItemListing`() {
+        val itemListingType = VaultItemListingType.Folder("testId")
+        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToFolderItem("testId"))
+        assertEquals(itemListingType, onNavigateToVaultItemListingScreenType)
+    }
+
+    @Test
     fun `NavigateToUrl should call launchUri on the IntentManager`() {
         val url = "www.test.com"
         mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToUrl(url))
@@ -540,6 +550,122 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `Folders text should be displayed according to state`() {
+        val folders = "Folders"
+        mutableStateFlow.update { DEFAULT_STATE }
+        composeTestRule
+            .onNodeWithText(text = folders)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = listOf(
+                        VaultItemListingState.FolderDisplayItem(
+                            name = "test", id = "1", count = 0,
+                        ),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText(folders))
+        composeTestRule
+            .onNodeWithText(text = folders)
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `Folders text count should be displayed according to state`() {
+        val folders = "Folders"
+        mutableStateFlow.update { DEFAULT_STATE }
+        composeTestRule
+            .onNodeWithText(text = folders)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = listOf(
+                        VaultItemListingState.FolderDisplayItem(name = "test", id = "1", count = 0),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText(folders))
+        composeTestRule
+            .onNodeWithText(text = folders)
+            .assertIsDisplayed()
+            .assertTextEquals(folders, 1.toString())
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = listOf(
+                        VaultItemListingState.FolderDisplayItem(
+                            name = "test",
+                            id = "1",
+                            count = 0,
+                        ),
+                        VaultItemListingState.FolderDisplayItem(
+                            name = "test1",
+                            id = "2",
+                            count = 0,
+                        ),
+                        VaultItemListingState.FolderDisplayItem(
+                            name = "test2",
+                            id = "3",
+                            count = 0,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(hasScrollToNodeAction())
+            .performScrollToNode(hasText(folders))
+        composeTestRule
+            .onNodeWithText(text = folders)
+            .assertIsDisplayed()
+            .assertTextEquals(folders, 3.toString())
+    }
+
+    @Test
+    fun `folderDisplayItems should be displayed according to state`() {
+        val folderName = "TestFolder"
+        mutableStateFlow.update { DEFAULT_STATE }
+        composeTestRule
+            .onNodeWithText(text = folderName)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultItemListingState.ViewState.Content(
+                    displayItemList = emptyList(),
+                    displayFolderList = listOf(
+                        VaultItemListingState.FolderDisplayItem(
+                            name = folderName,
+                            id = "1",
+                            count = 0,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = folderName)
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `Items text should be displayed according to state`() {
         val items = "Items"
         mutableStateFlow.update { DEFAULT_STATE }
@@ -553,6 +679,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                     displayItemList = listOf(
                         createDisplayItem(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -578,6 +705,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                     displayItemList = listOf(
                         createDisplayItem(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -598,6 +726,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                         createDisplayItem(number = 3),
                         createDisplayItem(number = 4),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -619,6 +748,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                     displayItemList = listOf(
                         createDisplayItem(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -644,6 +774,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                                 shouldShowMasterPasswordReprompt = false,
                             ),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -670,6 +801,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                                 shouldShowMasterPasswordReprompt = true,
                             ),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -720,6 +852,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                                 shouldShowMasterPasswordReprompt = true,
                             ),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -749,6 +882,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                                 shouldShowMasterPasswordReprompt = true,
                             ),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -882,6 +1016,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(createCipherDisplayItem(number = 1)),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -921,6 +1056,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                         createCipherDisplayItem(number = 1)
                             .copy(shouldShowMasterPasswordReprompt = true),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -948,6 +1084,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 itemListingType = VaultItemListingState.ItemListingType.Send.SendFile,
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(createDisplayItem(number = 1)),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -973,6 +1110,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             it.copy(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(createDisplayItem(number = number)),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -996,6 +1134,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             it.copy(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(createDisplayItem(number = number)),
+                    displayFolderList = emptyList(),
                 ),
             )
         }
@@ -1084,6 +1223,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             it.copy(
                 viewState = VaultItemListingState.ViewState.Content(
                     displayItemList = listOf(createDisplayItem(number = 1)),
+                    displayFolderList = emptyList(),
                 ),
             )
         }

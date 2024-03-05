@@ -138,6 +138,7 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             is VaultItemListingsAction.DismissDialogClick -> handleDismissDialogClick()
             is VaultItemListingsAction.BackClick -> handleBackClick()
+            is VaultItemListingsAction.FolderClick -> handleFolderClick(action)
             is VaultItemListingsAction.LockClick -> handleLockClick()
             is VaultItemListingsAction.SyncClick -> handleSyncClick()
             is VaultItemListingsAction.SearchIconClick -> handleSearchIconClick()
@@ -165,6 +166,10 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleSwitchAccountClick(action: VaultItemListingsAction.SwitchAccountClick) {
         authRepository.switchAccount(userId = action.accountSummary.userId)
+    }
+
+    private fun handleFolderClick(action: VaultItemListingsAction.FolderClick) {
+        sendEvent(VaultItemListingEvent.NavigateToFolderItem(action.id))
     }
 
     private fun handleRefreshClick() {
@@ -671,18 +676,13 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 viewState = when (val listingType = currentState.itemListingType) {
                     is VaultItemListingState.ItemListingType.Vault -> {
-                        vaultData
-                            .cipherViewList
-                            .filter { cipherView ->
-                                cipherView.determineListingPredicate(listingType)
-                            }
-                            .toFilteredList(state.vaultFilterType)
-                            .toViewState(
-                                itemListingType = listingType,
-                                baseIconUrl = state.baseIconUrl,
-                                isIconLoadingDisabled = state.isIconLoadingDisabled,
-                                autofillSelectionData = state.autofillSelectionData,
-                            )
+                        vaultData.toViewState(
+                            vaultFilterType = state.vaultFilterType,
+                            itemListingType = listingType,
+                            baseIconUrl = state.baseIconUrl,
+                            isIconLoadingDisabled = state.isIconLoadingDisabled,
+                            autofillSelectionData = state.autofillSelectionData,
+                        )
                     }
 
                     is VaultItemListingState.ItemListingType.Send -> {
@@ -842,6 +842,7 @@ data class VaultItemListingState(
          */
         data class Content(
             val displayItemList: List<DisplayItem>,
+            val displayFolderList: List<FolderDisplayItem>,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
         }
@@ -879,6 +880,19 @@ data class VaultItemListingState(
         val overflowOptions: List<ListingItemOverflowAction>,
         val isAutofill: Boolean,
         val shouldShowMasterPasswordReprompt: Boolean,
+    )
+
+    /**
+     * The folder that is displayed to the user on the ItemListingScreen.
+     *
+     * @property id the id of the folder.
+     * @property name the name of the folder.
+     * @property count the amount of ciphers in the folder.
+     */
+    data class FolderDisplayItem(
+        val id: String,
+        val name: String,
+        val count: Int,
     )
 
     /**
@@ -1018,6 +1032,11 @@ sealed class VaultItemListingEvent {
     data object NavigateToAddVaultItem : VaultItemListingEvent()
 
     /**
+     * Navigates to the folder.
+     */
+    data class NavigateToFolderItem(val folderId: String) : VaultItemListingEvent()
+
+    /**
      * Navigates to the AddSendItemScreen.
      */
     data object NavigateToAddSendItem : VaultItemListingEvent()
@@ -1145,6 +1164,13 @@ sealed class VaultItemListingsAction {
      * @property id the id of the item that has been clicked.
      */
     data class ItemClick(val id: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the folder.
+     *
+     * @property id the id of the folder that has been clicked
+     */
+    data class FolderClick(val id: String) : VaultItemListingsAction()
 
     /**
      * A master password prompt was encountered when trying to perform a senstive action described
