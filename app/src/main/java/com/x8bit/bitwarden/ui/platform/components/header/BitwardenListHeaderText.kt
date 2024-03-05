@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.header
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
