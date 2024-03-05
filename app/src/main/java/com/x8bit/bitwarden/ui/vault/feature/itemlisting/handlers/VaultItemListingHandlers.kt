@@ -18,6 +18,7 @@ data class VaultItemListingHandlers(
     val searchIconClick: () -> Unit,
     val addVaultItemClick: () -> Unit,
     val itemClick: (id: String) -> Unit,
+    val folderClick: (id: String) -> Unit,
     val masterPasswordRepromptSubmit: (password: String, MasterPasswordRepromptData) -> Unit,
     val refreshClick: () -> Unit,
     val syncClick: () -> Unit,
@@ -50,6 +51,7 @@ data class VaultItemListingHandlers(
                     viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
                 },
                 itemClick = { viewModel.trySendAction(VaultItemListingsAction.ItemClick(it)) },
+                folderClick = { viewModel.trySendAction(VaultItemListingsAction.FolderClick(it)) },
                 masterPasswordRepromptSubmit = { password, data ->
                     viewModel.trySendAction(
                         VaultItemListingsAction.MasterPasswordRepromptSubmit(

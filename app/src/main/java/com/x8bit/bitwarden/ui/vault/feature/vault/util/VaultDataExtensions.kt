@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.vault.feature.util.getFilteredFolders
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
@@ -43,7 +44,9 @@ fun VaultData.toViewState(
 
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
-    val filteredFolderViewList = folderViewList.toFilteredList(vaultFilterType)
+
+    val filteredFolderViewList = folderViewList.toFilteredList(vaultFilterType).getFilteredFolders()
+
     val filteredCollectionViewList = collectionViewList.toFilteredList(vaultFilterType)
     val noFolderItems = filteredCipherViewList
         .filter { it.folderId.isNullOrBlank() }

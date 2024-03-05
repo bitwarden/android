@@ -308,6 +308,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
             assertEquals(
@@ -356,6 +357,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             )
             val viewModel = createVaultItemListingViewModel()
@@ -469,6 +471,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultItemListingsAction.AddVaultItemClick)
             assertEquals(VaultItemListingEvent.NavigateToAddSendItem, awaitItem())
+        }
+    }
+
+    @Test
+    fun `FolderClick for vault item should emit NavigateToFolderItem`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+        val testId = "1"
+
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VaultItemListingsAction.FolderClick(testId))
+            assertEquals(VaultItemListingEvent.NavigateToFolderItem(testId), awaitItem())
         }
     }
 
@@ -832,6 +845,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1),
                         ),
+                        displayFolderList = emptyList(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -878,6 +892,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1).copy(isAutofill = true),
                         ),
+                        displayFolderList = emptyList(),
                     ),
                 )
                     .copy(
@@ -978,6 +993,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1084,6 +1100,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1197,6 +1214,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
+                    displayFolderList = emptyList(),
                 ),
             ),
             viewModel.stateFlow.value,

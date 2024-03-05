@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
 import com.bitwarden.core.CipherType
+import com.bitwarden.core.FolderView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.UriMatchType
 import com.x8bit.bitwarden.R
@@ -22,8 +23,16 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class VaultDataExtensionsTest {
+
+    private val clock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
 
     @Suppress("MaxLineLength")
     @Test
@@ -31,7 +40,13 @@ class VaultDataExtensionsTest {
         val vaultData = VaultData(
             cipherViewList = listOf(createMockCipherView(number = 1)),
             collectionViewList = listOf(createMockCollectionView(number = 1)),
-            folderViewList = listOf(createMockFolderView(number = 1)),
+            folderViewList = listOf(
+                FolderView("1", "test", clock.instant()),
+                FolderView("2", "test/test", clock.instant()),
+                FolderView("3", "test/", clock.instant()),
+                FolderView("4", "test/test/test/", clock.instant()),
+                FolderView("5", "Folder", clock.instant()),
+            ),
             sendViewList = listOf(createMockSendView(number = 1)),
         )
 
@@ -51,11 +66,22 @@ class VaultDataExtensionsTest {
                 favoriteItems = listOf(),
                 folderItems = listOf(
                     VaultState.ViewState.FolderItem(
-                        id = "mockId-1",
-                        name = "mockName-1".asText(),
-                        itemCount = 1,
+                        id = "1",
+                        name = "test".asText(),
+                        itemCount = 0,
                     ),
-                ),
+                    VaultState.ViewState.FolderItem(
+                        id = "3",
+                        name = "test/".asText(),
+                        itemCount = 0,
+                    ),
+                    VaultState.ViewState.FolderItem(
+                        id = "5",
+                        name = "Folder".asText(),
+                        itemCount = 0,
+                    ),
+
+                    ),
                 collectionItems = listOf(
                     VaultState.ViewState.CollectionItem(
                         id = "mockId-1",
@@ -465,5 +491,61 @@ class VaultDataExtensionsTest {
             actual,
         )
         unmockkStatic(Uri::class)
+    }
+
+    @Test
+    fun `toViewState should properly filter nested folders out`() {
+        val vaultData = VaultData(
+            listOf(createMockCipherView(number = 1)),
+            collectionViewList = emptyList(),
+            folderViewList = listOf(
+                FolderView("1", "test", clock.instant()),
+                FolderView("2", "test/test", clock.instant()),
+                FolderView("3", "test/", clock.instant()),
+                FolderView("4", "test/test/test/", clock.instant()),
+                FolderView("5", "Folder", clock.instant()),
+            ),
+            sendViewList = emptyList(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(
+                    VaultState.ViewState.FolderItem(
+                        id = "1",
+                        name = "test".asText(),
+                        itemCount = 0,
+                    ),
+                    VaultState.ViewState.FolderItem(
+                        id = "3",
+                        name = "test/".asText(),
+                        itemCount = 0,
+                    ),
+                    VaultState.ViewState.FolderItem(
+                        id = "5",
+                        name = "Folder".asText(),
+                        itemCount = 0,
+                    ),
+
+                    ),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
     }
 }

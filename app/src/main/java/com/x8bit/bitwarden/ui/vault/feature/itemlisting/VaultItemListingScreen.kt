@@ -47,6 +47,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -55,10 +56,12 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+@Suppress("LongMethod")
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItem: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
+    onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -116,6 +119,10 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToSearchScreen -> {
                 onNavigateToSearch(event.searchType)
+            }
+
+            is VaultItemListingEvent.NavigateToFolderItem -> {
+                onNavigateToVaultItemListing(VaultItemListingType.Folder(event.folderId))
             }
         }
     }
@@ -237,6 +244,7 @@ private fun VaultItemListingScaffold(
                     policyDisablesSend = state.policyDisablesSend &&
                         state.itemListingType is VaultItemListingState.ItemListingType.Send,
                     vaultItemClick = vaultItemListingHandlers.itemClick,
+                    folderClick = vaultItemListingHandlers.folderClick,
                     masterPasswordRepromptSubmit =
                     vaultItemListingHandlers.masterPasswordRepromptSubmit,
                     onOverflowItemClick = vaultItemListingHandlers.overflowItemClick,

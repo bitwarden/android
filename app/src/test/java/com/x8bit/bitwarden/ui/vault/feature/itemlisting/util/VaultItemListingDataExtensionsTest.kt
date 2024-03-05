@@ -4,6 +4,7 @@ import android.net.Uri
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -15,8 +16,10 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -28,6 +31,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class VaultItemListingDataExtensionsTest {
 
     private val clock: Clock = Clock.fixed(
@@ -355,27 +359,37 @@ class VaultItemListingDataExtensionsTest {
                 number = 1,
                 isDeleted = false,
                 cipherType = CipherType.LOGIN,
+                folderId = "mockId-1",
             )
                 .copy(reprompt = CipherRepromptType.PASSWORD),
             createMockCipherView(
                 number = 2,
                 isDeleted = false,
                 cipherType = CipherType.CARD,
+                folderId = "mockId-1",
             ),
             createMockCipherView(
                 number = 3,
                 isDeleted = false,
                 cipherType = CipherType.SECURE_NOTE,
+                folderId = "mockId-1",
             ),
             createMockCipherView(
                 number = 4,
                 isDeleted = false,
                 cipherType = CipherType.IDENTITY,
+                folderId = "mockId-1",
             ),
         )
 
-        val result = cipherViewList.toViewState(
-            itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+        val result = VaultData(
+            cipherViewList = cipherViewList,
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        ).toViewState(
+            vaultFilterType = VaultFilterType.AllVaults,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("mockId-1"),
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             autofillSelectionData = null,
@@ -406,6 +420,7 @@ class VaultItemListingDataExtensionsTest {
                         subtitle = null,
                     ),
                 ),
+                displayFolderList = emptyList(),
             ),
             result,
         )
@@ -425,17 +440,25 @@ class VaultItemListingDataExtensionsTest {
                 number = 1,
                 isDeleted = false,
                 cipherType = CipherType.LOGIN,
+                folderId = "mockId-1",
             )
                 .copy(reprompt = CipherRepromptType.PASSWORD),
             createMockCipherView(
                 number = 2,
                 isDeleted = false,
                 cipherType = CipherType.CARD,
+                folderId = "mockId-1",
             ),
         )
 
-        val result = cipherViewList.toViewState(
-            itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+        val result = VaultData(
+            cipherViewList = cipherViewList,
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        ).toViewState(
+            vaultFilterType = VaultFilterType.AllVaults,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("mockId-1"),
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             autofillSelectionData = AutofillSelectionData(
@@ -463,6 +486,7 @@ class VaultItemListingDataExtensionsTest {
                     )
                         .copy(isAutofill = true),
                 ),
+                displayFolderList = emptyList(),
             ),
             result,
         )
@@ -471,7 +495,12 @@ class VaultItemListingDataExtensionsTest {
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform an empty list of CipherViews into a NoItems ViewState with the appropriate data`() {
-        val cipherViewList = emptyList<CipherView>()
+        val vaultData = VaultData(
+            cipherViewList = listOf(),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
 
         // Trash
         assertEquals(
@@ -479,7 +508,8 @@ class VaultItemListingDataExtensionsTest {
                 message = R.string.no_items_trash.asText(),
                 shouldShowAddButton = false,
             ),
-            cipherViewList.toViewState(
+            vaultData.toViewState(
+                vaultFilterType = VaultFilterType.AllVaults,
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Trash,
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
@@ -493,7 +523,8 @@ class VaultItemListingDataExtensionsTest {
                 message = R.string.no_items_folder.asText(),
                 shouldShowAddButton = false,
             ),
-            cipherViewList.toViewState(
+            vaultData.toViewState(
+                vaultFilterType = VaultFilterType.AllVaults,
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Folder(
                     folderId = "folderId",
                 ),
@@ -509,7 +540,8 @@ class VaultItemListingDataExtensionsTest {
                 message = R.string.no_items.asText(),
                 shouldShowAddButton = true,
             ),
-            cipherViewList.toViewState(
+            vaultData.toViewState(
+                vaultFilterType = VaultFilterType.AllVaults,
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
@@ -523,7 +555,8 @@ class VaultItemListingDataExtensionsTest {
                 message = R.string.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
             ),
-            cipherViewList.toViewState(
+            vaultData.toViewState(
+                vaultFilterType = VaultFilterType.AllVaults,
                 itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
@@ -553,6 +586,7 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
                     createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
                 ),
+                displayFolderList = emptyList(),
             ),
             result,
         )
@@ -643,6 +677,44 @@ class VaultItemListingDataExtensionsTest {
         assertEquals(
             VaultItemListingState.ItemListingType.Vault.Login,
             result,
+        )
+    }
+
+    @Test
+    fun `toViewState should properly filter and return the correct folders`() {
+        val vaultData = VaultData(
+            listOf(createMockCipherView(number = 1)),
+            collectionViewList = emptyList(),
+            folderViewList = listOf(
+                FolderView("1", "test", clock.instant()),
+                FolderView("2", "test/test", clock.instant()),
+                FolderView("3", "test/", clock.instant()),
+                FolderView("4", "test/test/test/", clock.instant()),
+                FolderView("5", "Folder", clock.instant()),
+            ),
+            sendViewList = emptyList(),
+        )
+
+        val actual = vaultData.toViewState(
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            autofillSelectionData = null,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("1"),
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayItemList = listOf(),
+                displayFolderList = listOf(
+                    VaultItemListingState.FolderDisplayItem(
+                        name = "test",
+                        id = "2",
+                        count = 0,
+                    ),
+                ),
+            ),
+            actual,
         )
     }
 }

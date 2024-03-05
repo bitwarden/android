@@ -72,8 +72,8 @@ fun NavGraphBuilder.composableWithPushTransitions(
         arguments = arguments,
         deepLinks = deepLinks,
         enterTransition = TransitionProviders.Enter.pushLeft,
-        exitTransition = TransitionProviders.Exit.pushLeft,
-        popEnterTransition = TransitionProviders.Enter.pushLeft,
+        exitTransition = TransitionProviders.Exit.stay,
+        popEnterTransition = TransitionProviders.Enter.stay,
         popExitTransition = TransitionProviders.Exit.pushRight,
         content = content,
     )

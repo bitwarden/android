@@ -11,6 +11,7 @@ import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.util.subtitle
+import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
@@ -18,8 +19,12 @@ import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import com.x8bit.bitwarden.ui.vault.feature.util.getFolders
+import com.x8bit.bitwarden.ui.vault.feature.util.toFolderDisplayName
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
+import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import java.time.Clock
 
@@ -82,19 +87,47 @@ fun SendView.determineListingPredicate(
 /**
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
-fun List<CipherView>.toViewState(
+@Suppress("CyclomaticComplexMethod", "LongMethod")
+fun VaultData.toViewState(
     itemListingType: VaultItemListingState.ItemListingType.Vault,
+    vaultFilterType: VaultFilterType,
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
-): VaultItemListingState.ViewState =
-    if (isNotEmpty()) {
+): VaultItemListingState.ViewState {
+    val filteredCipherViewList = cipherViewList
+        .filter { cipherView ->
+            cipherView.determineListingPredicate(itemListingType)
+        }
+        .toFilteredList(vaultFilterType)
+
+    val folderList = if (itemListingType is VaultItemListingState.ItemListingType.Vault.Folder &&
+        !itemListingType.folderId.isNullOrBlank()
+    ) {
+        folderViewList.getFolders(itemListingType.folderId)
+    } else {
+        emptyList()
+    }
+
+    return if (folderList.isNotEmpty() || filteredCipherViewList.isNotEmpty()) {
         VaultItemListingState.ViewState.Content(
-            displayItemList = toDisplayItemList(
+            displayItemList = filteredCipherViewList.toDisplayItemList(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = autofillSelectionData != null,
             ),
+            displayFolderList = folderList.map { folderView ->
+                VaultItemListingState.FolderDisplayItem(
+                    id = requireNotNull(folderView.id),
+                    name = folderView.name,
+                    count = this.cipherViewList
+                        .count {
+                            it.deletedDate == null &&
+                                !it.id.isNullOrBlank() &&
+                                folderView.id == it.folderId
+                        },
+                )
+            },
         )
     } else {
         // Use the autofill empty message if necessary, otherwise use normal type-specific message
@@ -128,6 +161,7 @@ fun List<CipherView>.toViewState(
             shouldShowAddButton = shouldShowAddButton,
         )
     }
+}
 
 /**
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
@@ -142,6 +176,7 @@ fun List<SendView>.toViewState(
                 baseWebSendUrl = baseWebSendUrl,
                 clock = clock,
             ),
+            displayFolderList = emptyList(),
         )
     } else {
         VaultItemListingState.ViewState.NoItems(
@@ -168,6 +203,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
             folderName = folderList
                 .find { it.id == folderId }
                 ?.name
+                ?.toFolderDisplayName(folderList)
                 .orEmpty(),
         )
 

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -14,9 +16,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
@@ -35,6 +39,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     policyDisablesSend: Boolean,
+    folderClick: (id: String) -> Unit,
     vaultItemClick: (id: String) -> Unit,
     masterPasswordRepromptSubmit: (password: String, data: MasterPasswordRepromptData) -> Unit,
     onOverflowItemClick: (action: ListingItemOverflowAction) -> Unit,
@@ -106,75 +111,116 @@ fun VaultItemListingContent(
             }
         }
 
-        item {
-            BitwardenListHeaderTextWithSupportLabel(
-                label = stringResource(id = R.string.items),
-                supportingLabel = state.displayItemList.size.toString(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
+        if (state.displayFolderList.isNotEmpty()) {
+            item {
+                BitwardenListHeaderTextWithSupportLabel(
+                    label = stringResource(id = R.string.folders),
+                    supportingLabel = state.displayFolderList.count().toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+
+            items(state.displayFolderList) { folder ->
+                BitwardenGroupItem(
+                    startIcon = painterResource(id = R.drawable.ic_folder),
+                    label = folder.name,
+                    supportingLabel = folder.count.toString(),
+                    onClick = { folderClick(folder.id) },
+                    showDivider = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
         }
-        items(state.displayItemList) {
-            BitwardenListItem(
-                startIcon = it.iconData,
-                label = it.title,
-                supportingLabel = it.subtitle,
-                onClick = {
-                    if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
-                        masterPasswordRepromptData =
-                            MasterPasswordRepromptData.Autofill(
-                                cipherId = it.id,
-                            )
-                    } else {
-                        vaultItemClick(it.id)
-                    }
-                },
-                trailingLabelIcons = it
-                    .extraIconList
-                    .toIconResources()
-                    .toPersistentList(),
-                selectionDataList = it
-                    .overflowOptions
-                    .map { option ->
-                        SelectionItemData(
-                            text = option.title(),
-                            onClick = {
-                                when (option) {
-                                    is ListingItemOverflowAction.SendAction.DeleteClick -> {
-                                        showConfirmationDialog = option
-                                    }
 
-                                    is ListingItemOverflowAction.VaultAction -> {
-                                        if (option.requiresPasswordReprompt &&
-                                            it.shouldShowMasterPasswordReprompt
-                                        ) {
-                                            masterPasswordRepromptData =
-                                                MasterPasswordRepromptData.OverflowItem(
-                                                    action = option,
-                                                )
-                                        } else {
-                                            onOverflowItemClick(option)
+        if (state.displayItemList.isNotEmpty()) {
+            item {
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
+                )
+            }
+
+            item {
+                BitwardenListHeaderTextWithSupportLabel(
+                    label = stringResource(id = R.string.items),
+                    supportingLabel = state.displayItemList.size.toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+            items(state.displayItemList) {
+                BitwardenListItem(
+                    startIcon = it.iconData,
+                    label = it.title,
+                    supportingLabel = it.subtitle,
+                    onClick = {
+                        if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
+                            masterPasswordRepromptData =
+                                MasterPasswordRepromptData.Autofill(
+                                    cipherId = it.id,
+                                )
+                        } else {
+                            vaultItemClick(it.id)
+                        }
+                    },
+                    trailingLabelIcons = it
+                        .extraIconList
+                        .toIconResources()
+                        .toPersistentList(),
+                    selectionDataList = it
+                        .overflowOptions
+                        .map { option ->
+                            SelectionItemData(
+                                text = option.title(),
+                                onClick = {
+                                    when (option) {
+                                        is ListingItemOverflowAction.SendAction.DeleteClick -> {
+                                            showConfirmationDialog = option
                                         }
-                                    }
 
-                                    else -> onOverflowItemClick(option)
-                                }
-                            },
-                        )
-                    }
-                    // Only show options if allowed
-                    .filter { !policyDisablesSend }
-                    .toPersistentList(),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(
-                        start = 16.dp,
-                        // There is some built-in padding to the menu button that makes up
-                        // the visual difference here.
-                        end = 12.dp,
-                    ),
-            )
+                                        is ListingItemOverflowAction.VaultAction -> {
+                                            if (option.requiresPasswordReprompt &&
+                                                it.shouldShowMasterPasswordReprompt
+                                            ) {
+                                                masterPasswordRepromptData =
+                                                    MasterPasswordRepromptData.OverflowItem(
+                                                        action = option,
+                                                    )
+                                            } else {
+                                                onOverflowItemClick(option)
+                                            }
+                                        }
+
+                                        else -> onOverflowItemClick(option)
+                                    }
+                                },
+                            )
+                        }
+                        // Only show options if allowed
+                        .filter { !policyDisablesSend }
+                        .toPersistentList(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            start = 16.dp,
+                            // There is some built-in padding to the menu button that makes up
+                            // the visual difference here.
+                            end = 12.dp,
+                        ),
+                )
+            }
         }
 
         item {

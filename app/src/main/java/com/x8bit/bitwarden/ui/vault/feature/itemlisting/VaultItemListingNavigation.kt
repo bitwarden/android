@@ -56,10 +56,12 @@ data class VaultItemListingArgs(
 /**
  * Add the [VaultItemListingScreen] to the nav graph.
  */
+@Suppress("LongParameterList")
 fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
+    onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
@@ -69,6 +71,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
         onNavigateToAddSendItem = { },
         onNavigateToEditSendItem = { },
         onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+        onNavigateToVaultItemListing = onNavigateToVaultItemListing,
         onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
         onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
         onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
@@ -102,6 +105,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToSearch = { onNavigateToSearchVault(it as SearchType.Vault) },
+            onNavigateToVaultItemListing = {},
             onNavigateToAddSendItem = {},
             onNavigateToEditSendItem = {},
         )
@@ -125,6 +129,7 @@ fun NavGraphBuilder.sendItemListingDestination(
         onNavigateToVaultAddItemScreen = { },
         onNavigateToVaultItemScreen = { },
         onNavigateToVaultEditItemScreen = { },
+        onNavigateToVaultItemListing = { },
         onNavigateToSearch = { onNavigateToSearchSend(it as SearchType.Sends) },
     )
 }
@@ -138,6 +143,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
+    onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
     onNavigateToVaultAddItemScreen: () -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
@@ -168,6 +174,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
             onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
             onNavigateToAddSendItem = onNavigateToAddSendItem,
             onNavigateToEditSendItem = onNavigateToEditSendItem,
+            onNavigateToVaultItemListing = onNavigateToVaultItemListing,
             onNavigateToSearch = onNavigateToSearch,
         )
     }
