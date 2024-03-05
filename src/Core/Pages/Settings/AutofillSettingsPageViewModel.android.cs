@@ -158,6 +158,11 @@ namespace Bit.App.Pages
                 await MainThread.InvokeOnMainThreadAsync(() => TriggerPropertyChanged(nameof(UseAccessibility)));
                 return;
             }
+
+#if ANDROID
+            // WORKAROUND: Set workaround property to avoid an issue when launching the app after being in Accessibility Settings. More Info on App.xaml.cs
+            ((App)Application.Current).HasNavigatedToAccessibilitySettings = true;
+#endif
             _deviceActionService.OpenAccessibilitySettings();
         }
 
