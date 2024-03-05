@@ -18,6 +18,7 @@ using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
 using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Platform;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -239,7 +240,7 @@ namespace Bit.iOS.Core.Controllers
             ThemeManager.ApplyResourcesTo(generatorPage);
 
             var navigationPage = new NavigationPage(generatorPage);
-            var generatorController = navigationPage.CreateViewController();
+            var generatorController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             generatorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(generatorController, true, null);
         }
