@@ -34,7 +34,7 @@ import kotlinx.collections.immutable.toPersistentList
 /**
  * Content view for the [VaultItemListingScreen].
  */
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
@@ -140,7 +140,7 @@ fun VaultItemListingContent(
             }
         }
 
-        if (state.displayItemList.isNotEmpty()) {
+        if (state.displayItemList.isNotEmpty() && state.displayFolderList.isNotEmpty()) {
             item {
                 HorizontalDivider(
                     thickness = 1.dp,
@@ -150,7 +150,9 @@ fun VaultItemListingContent(
                         .padding(all = 16.dp),
                 )
             }
+        }
 
+        if (state.displayItemList.isNotEmpty()) {
             item {
                 BitwardenListHeaderTextWithSupportLabel(
                     label = stringResource(id = R.string.items),
