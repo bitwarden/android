@@ -168,7 +168,11 @@ private fun AssistStructure.ViewNode.traverse(): ViewNodeTraversalData {
                 viewNodeTraversalData.ignoreAutofillIds.forEach(mutableIgnoreAutofillIdList::add)
 
                 // Get the first non-null idPackage.
-                if (idPackage.isNullOrBlank()) {
+                if (idPackage.isNullOrBlank() &&
+                    // OS sometimes defaults node.idPackage to "android", which is not a valid
+                    // package name so it is ignored to prevent auto-filling unknown applications.
+                    viewNodeTraversalData.idPackage?.equals("android") == false
+                ) {
                     idPackage = viewNodeTraversalData.idPackage
                 }
                 // Get the first non-null website.
