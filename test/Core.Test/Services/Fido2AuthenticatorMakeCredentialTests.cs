@@ -75,6 +75,8 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns(_encryptedSelectedCipher);
             _sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedSelectedCipher.Id)).Returns(_encryptedSelectedCipher);
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_selectedCipherView.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().ShouldPerformMasterPasswordRepromptAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(false));
 
             var cryptoServiceMock = Substitute.For<ICryptoService>();
             ServiceContainer.Register(typeof(CryptoService), cryptoServiceMock);
@@ -278,6 +280,24 @@ namespace Bit.Core.Test.Services
             _params.UserVerificationPreference = Fido2UserVerificationPreference.Discouraged;
             _encryptedSelectedCipher.Reprompt = CipherRepromptType.Password;
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>()
+                .ShouldPerformMasterPasswordRepromptAsync(Arg.Is<Fido2UserVerificationOptions>(opt => opt.ShouldCheckMasterPasswordReprompt))
+                .Returns(Task.FromResult(true));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
+        }
+
+        [Fact]
+        public async Task MakeCredentialAsync_ThrowsNotAllowed_PreferredUserVerificationPreference_CanPerformUserVerification()
+        {
+            // Arrange
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Preferred;
+            _encryptedSelectedCipher.Reprompt = CipherRepromptType.Password;
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>()
+                .CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>())
+                .Returns(Task.FromResult(true));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));

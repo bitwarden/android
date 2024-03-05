@@ -15,6 +15,7 @@ namespace Bit.Core.Utilities.Fido2
         private readonly string _cipherId;
         private readonly bool _userVerified = false;
         private readonly Func<Task> _ensureUnlockedVaultCallback;
+        private readonly Func<bool> _hasVaultBeenUnlockedInThisTransaction;
         private readonly Func<string, Fido2UserVerificationPreference, Task<bool>> _verifyUserCallback;
 
         /// <param name="cipherId">The cipherId for the credential that the user has already picker</param>
@@ -22,13 +23,17 @@ namespace Bit.Core.Utilities.Fido2
         public Fido2GetAssertionUserInterface(string cipherId,
             bool userVerified,
             Func<Task> ensureUnlockedVaultCallback,
+            Func<bool> hasVaultBeenUnlockedInThisTransaction,
             Func<string, Fido2UserVerificationPreference, Task<bool>> verifyUserCallback)
         {
             _cipherId = cipherId;
             _userVerified = userVerified;
             _ensureUnlockedVaultCallback = ensureUnlockedVaultCallback;
+            _hasVaultBeenUnlockedInThisTransaction = hasVaultBeenUnlockedInThisTransaction;
             _verifyUserCallback = verifyUserCallback;
         }
+
+        public bool HasVaultBeenUnlockedInThisTransaction { get; private set; }
 
         public async Task<(string CipherId, bool UserVerified)> PickCredentialAsync(Fido2GetAssertionUserInterfaceCredential[] credentials)
         {
@@ -38,24 +43,16 @@ namespace Bit.Core.Utilities.Fido2
             }
 
             var credential = credentials.First(c => c.CipherId == _cipherId);
-            var verified = _userVerified || await VerifyUserAsync(_cipherId, credential);
+            var verified = _userVerified || await _verifyUserCallback(_cipherId, credential.UserVerificationPreference);
 
             return (CipherId: _cipherId, UserVerified: verified);
         }
 
-        private async Task<bool> VerifyUserAsync(string cipherId, Fido2GetAssertionUserInterfaceCredential credential)
+        public async Task EnsureUnlockedVaultAsync() 
         {
-            if (credential.UserVerificationPreference == Fido2UserVerificationPreference.Discouraged)
-            {
-                return false;
-            }
+            await _ensureUnlockedVaultCallback();
 
-            return await _verifyUserCallback(cipherId, credential.UserVerificationPreference);
-        }
-
-        public Task EnsureUnlockedVaultAsync() 
-        {
-            return _ensureUnlockedVaultCallback();
+            HasVaultBeenUnlockedInThisTransaction = _hasVaultBeenUnlockedInThisTransaction();
         }
     }
 }

@@ -16,12 +16,17 @@ namespace Bit.Core.Services
         private readonly ICipherService _cipherService;
         private readonly ISyncService _syncService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
+        private readonly IUserVerificationMediatorService _userVerificationMediatorService;
 
-        public Fido2AuthenticatorService(ICipherService cipherService, ISyncService syncService, ICryptoFunctionService cryptoFunctionService)
+        public Fido2AuthenticatorService(ICipherService cipherService,
+            ISyncService syncService,
+            ICryptoFunctionService cryptoFunctionService,
+            IUserVerificationMediatorService userVerificationMediatorService)
         {
             _cipherService = cipherService;
             _syncService = syncService;
             _cryptoFunctionService = cryptoFunctionService;
+            _userVerificationMediatorService = userVerificationMediatorService;
         }
 
         public async Task<Fido2AuthenticatorMakeCredentialResult> MakeCredentialAsync(Fido2AuthenticatorMakeCredentialParams makeCredentialParams, IFido2MakeCredentialUserInterface userInterface)
@@ -67,7 +72,12 @@ namespace Bit.Core.Services
                 var encrypted = await _cipherService.GetAsync(cipherId);
                 var cipher = await encrypted.DecryptAsync();
 
-                if (!userVerified && (makeCredentialParams.UserVerificationPreference == Fido2UserVerificationPreference.Required || cipher.Reprompt != CipherRepromptType.None))
+                if (!userVerified
+                &&
+                await ShouldEnforceRequiredUserVerificationAsync(new Fido2UserVerificationOptions(
+                    cipher.Reprompt != CipherRepromptType.None,
+                    makeCredentialParams.UserVerificationPreference,
+                    userInterface.HasVaultBeenUnlockedInThisTransaction)))
                 {
                     throw new NotAllowedError();
                 }
@@ -145,7 +155,12 @@ namespace Bit.Core.Services
                 throw new NotAllowedError();
             }
 
-            if (!userVerified && (assertionParams.UserVerificationPreference == Fido2UserVerificationPreference.Required || selectedCipher.Reprompt != CipherRepromptType.None))
+            if (!userVerified
+                &&
+                await ShouldEnforceRequiredUserVerificationAsync(new Fido2UserVerificationOptions(
+                    selectedCipher.Reprompt != CipherRepromptType.None,
+                    assertionParams.UserVerificationPreference,
+                    userInterface.HasVaultBeenUnlockedInThisTransaction)))
             {
                 throw new NotAllowedError();
             }
@@ -438,6 +453,19 @@ namespace Bit.Core.Services
             }
 
             return dsa.SignData(sigBase, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
+        }
+
+        private async Task<bool> ShouldEnforceRequiredUserVerificationAsync(Fido2UserVerificationOptions options)
+        {
+            switch (options.UserVerificationPreference)
+            {
+                case Fido2UserVerificationPreference.Required:
+                    return true;
+                case Fido2UserVerificationPreference.Discouraged:
+                    return await _userVerificationMediatorService.ShouldPerformMasterPasswordRepromptAsync(options);
+                default:
+                    return await _userVerificationMediatorService.CanPerformUserVerificationPreferredAsync(options);
+            }
         }
 
         private class PublicKey

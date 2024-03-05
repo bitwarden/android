@@ -78,6 +78,8 @@ namespace Bit.Core.Test.Services
             );
             _sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(_ciphers);
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_ciphers[0].Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().ShouldPerformMasterPasswordRepromptAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(false));
         }
 
         public void Dispose()
@@ -196,9 +198,10 @@ namespace Bit.Core.Test.Services
 
         [Fact]
         // Spec: Prompt the user to select a public key credential source `selectedCredential` from `credentialOptions`.
-        //       If `UserVerificationPreference` is Fido2UserVerificationPreference.Discouraged, the authorization gesture MUST include a test of user presence.
+        //       If `requireUserPresence` is true, the authorization gesture MUST include a test of user presence.
         // Comment: User presence is implied by the UI returning a credential.
         // Extension: UserVerification is required if the cipher requires reprompting.
+        // Deviation: We send the actual preference instead of just a boolean, user presence (not user verification) is therefore required when that value is `discouraged`
         public async Task GetAssertionAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification()
         {
             // Arrange
@@ -244,6 +247,25 @@ namespace Bit.Core.Test.Services
             _selectedCipher.Reprompt = CipherRepromptType.Password;
             _params.UserVerificationPreference = Fido2UserVerificationPreference.Discouraged;
             _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>()
+                .ShouldPerformMasterPasswordRepromptAsync(Arg.Is<Fido2UserVerificationOptions>(opt => opt.ShouldCheckMasterPasswordReprompt))
+                .Returns(Task.FromResult(true));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));
+        }
+
+        [Fact]
+        // Spec: If the user does not consent, return an error code equivalent to "NotAllowedError" and terminate the operation.
+        public async Task GetAssertionAsync_ThrowsNotAllowed_PreferredUserVerificationPreference_CanPerformUserVerification()
+        {
+            // Arrange
+            _selectedCipher.Reprompt = CipherRepromptType.Password;
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Preferred;
+            _userInterface.PickCredentialAsync(Arg.Any<Fido2GetAssertionUserInterfaceCredential[]>()).Returns((_selectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>()
+                .CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>())
+                .Returns(Task.FromResult(true));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.GetAssertionAsync(_params, _userInterface));

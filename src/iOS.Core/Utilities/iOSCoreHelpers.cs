@@ -195,18 +195,20 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IVaultTimeoutService>());
             ServiceContainer.Register<IUserPinService>(userPinService);
 
-            ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
-                ServiceContainer.Resolve<ICipherService>(),
-                ServiceContainer.Resolve<ISyncService>(),
-                ServiceContainer.Resolve<ICryptoFunctionService>()));
-
-            ServiceContainer.Register<IUserVerificationMediatorService>(new UserVerificationMediatorService(
+            var userVerificationMediatorService = new UserVerificationMediatorService(
                 ServiceContainer.Resolve<IPlatformUtilsService>(),
                 ServiceContainer.Resolve<IPasswordRepromptService>(),
                 userPinService,
                 ServiceContainer.Resolve<IDeviceActionService>(),
-                ServiceContainer.Resolve<IUserVerificationService>()));
-            
+                ServiceContainer.Resolve<IUserVerificationService>());
+            ServiceContainer.Register<IUserVerificationMediatorService>(userVerificationMediatorService);
+
+            ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
+                ServiceContainer.Resolve<ICipherService>(),
+                ServiceContainer.Resolve<ISyncService>(),
+                ServiceContainer.Resolve<ICryptoFunctionService>(),
+                userVerificationMediatorService));
+
             ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<IEnvironmentService>(),
                 ServiceContainer.Resolve<IStateService>(),

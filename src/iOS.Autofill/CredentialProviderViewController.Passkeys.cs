@@ -95,7 +95,11 @@ namespace Bit.iOS.Autofill
                         Name = credIdentity.UserName,
                         DisplayName = credIdentity.UserName
                     }
-                }, new Fido2MakeCredentialUserInterface(EnsureUnlockedVaultAsync, _context, OnConfirmingNewCredential, VerifyUserAsync));
+                }, new Fido2MakeCredentialUserInterface(EnsureUnlockedVaultAsync,
+                    () => _context.VaultUnlockedDuringThisSession,
+                    _context,
+                    OnConfirmingNewCredential,
+                    VerifyUserAsync));
 
                 await ASHelpers.ReplaceAllIdentitiesAsync();
 
@@ -192,7 +196,10 @@ namespace Bit.iOS.Autofill
                             Id = credentialIdData.ToArray()
                         }
                     }
-                }, new Fido2GetAssertionUserInterface(cipherId, false, EnsureUnlockedVaultAsync, VerifyUserAsync));
+                }, new Fido2GetAssertionUserInterface(cipherId, false,
+                    EnsureUnlockedVaultAsync,
+                    () => _context?.VaultUnlockedDuringThisSession ?? false,
+                    VerifyUserAsync));
 
                 if (fido2AssertionResult.SelectedCredential is null)
                 {

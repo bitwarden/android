@@ -5,7 +5,7 @@
         public Fido2UserVerificationOptions(bool shouldCheckMasterPasswordReprompt,
             Fido2UserVerificationPreference userVerificationPreference,
             bool hasVaultBeenUnlockedInTransaction,
-            string rpId,
+            string rpId = null,
             Action onNeedUI = null)
         {
             ShouldCheckMasterPasswordReprompt = shouldCheckMasterPasswordReprompt;

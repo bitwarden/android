@@ -16,6 +16,8 @@ namespace Bit.Core.Services.UserVerification
         private readonly IDeviceActionService _deviceActionService;
         private readonly IUserVerificationService _userVerificationService;
 
+        private readonly Dictionary<Fido2UserVerificationPreference, IUserVerificationServiceStrategy> _fido2UserVerificationStrategies = new Dictionary<Fido2UserVerificationPreference, IUserVerificationServiceStrategy>();
+
         public UserVerificationMediatorService(
             IPlatformUtilsService platformUtilsService,
             IPasswordRepromptService passwordRepromptService,
@@ -28,26 +30,44 @@ namespace Bit.Core.Services.UserVerification
             _userPinService = userPinService;
             _deviceActionService = deviceActionService;
             _userVerificationService = userVerificationService;
+
+            _fido2UserVerificationStrategies.Add(Fido2UserVerificationPreference.Required, new Fido2UserVerificationRequiredServiceStrategy(this, _platformUtilsService));
+            _fido2UserVerificationStrategies.Add(Fido2UserVerificationPreference.Preferred, new Fido2UserVerificationPreferredServiceStrategy(this));
         }
 
         public async Task<bool> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
         {
-            // Master Password Reprompt if enabled and shouldn't be bypassed (because of TDE)
-            if (options.ShouldCheckMasterPasswordReprompt && !await _passwordRepromptService.ShouldByPassMasterPasswordRepromptAsync())
+            if (await ShouldPerformMasterPasswordRepromptAsync(options))
             {
                 options.OnNeedUI?.Invoke();
                 return await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(Enums.CipherRepromptType.Password);
             }
 
-            switch (options.UserVerificationPreference)
+            if (!_fido2UserVerificationStrategies.TryGetValue(options.UserVerificationPreference, out var userVerificationServiceStrategy))
             {
-                case Fido2UserVerificationPreference.Required:
-                    return await new Fido2UserVerificationRequiredServiceStrategy(this, _platformUtilsService).VerifyUserForFido2Async(options);
-                case Fido2UserVerificationPreference.Preferred:
-                    return await new Fido2UserVerificationPreferredServiceStrategy(this).VerifyUserForFido2Async(options);
-                default:
-                    return false;
+                return false;
             }
+
+            return await userVerificationServiceStrategy.VerifyUserForFido2Async(options);
+        }
+
+        public async Task<bool> CanPerformUserVerificationPreferredAsync(Fido2UserVerificationOptions options)
+        {
+            if (await ShouldPerformMasterPasswordRepromptAsync(options))
+            {
+                return true;
+            }
+
+            return options.HasVaultBeenUnlockedInTransaction
+                   ||
+                   await CrossFingerprint.Current.GetAvailabilityAsync() == FingerprintAvailability.Available
+                   ||
+                   await CrossFingerprint.Current.GetAvailabilityAsync(true) == FingerprintAvailability.Available;
+        }
+
+        public async Task<bool> ShouldPerformMasterPasswordRepromptAsync(Fido2UserVerificationOptions options)
+        {
+            return options.ShouldCheckMasterPasswordReprompt && !await _passwordRepromptService.ShouldByPassMasterPasswordRepromptAsync();
         }
 
         public async Task<(bool CanPerfom, bool IsUnlocked)> PerformOSUnlockAsync()
