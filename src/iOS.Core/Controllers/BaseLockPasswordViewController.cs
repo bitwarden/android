@@ -16,6 +16,7 @@ using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
 using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Platform;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -222,20 +223,27 @@ namespace Bit.iOS.Core.Controllers
 
         public override void ViewDidAppear(bool animated)
         {
-            base.ViewDidAppear(animated);
-
-            // Users with key connector and without biometric or pin has no MP to unlock with
-            if (!_hasMasterPassword)
+            try
             {
-                if (!(_pinEnabled || _biometricEnabled) ||
-                    (_biometricEnabled && !_biometricIntegrityValid))
+                base.ViewDidAppear(animated);
+
+                // Users with key connector and without biometric or pin has no MP to unlock with
+                if (!_hasMasterPassword)
                 {
-                    PromptSSO();
+                    if (!(_pinEnabled || _biometricEnabled) ||
+                        (_biometricEnabled && !_biometricIntegrityValid))
+                    {
+                        PromptSSO();
+                    }
+                }
+                else if (!_biometricEnabled || !_biometricIntegrityValid)
+                {
+                    MasterPasswordCell.TextField.BecomeFirstResponder();
                 }
             }
-            else if (!_biometricEnabled || !_biometricIntegrityValid)
+            catch (Exception ex)
             {
-                MasterPasswordCell.TextField.BecomeFirstResponder();
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 
@@ -433,8 +441,9 @@ namespace Bit.iOS.Core.Controllers
 
         public void PromptSSO()
         {
-            var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var loginPage = new LoginSsoPage(appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
@@ -444,7 +453,7 @@ namespace Bit.iOS.Core.Controllers
             }
 
             var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
         }
