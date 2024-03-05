@@ -2,6 +2,7 @@
 using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Pages;
