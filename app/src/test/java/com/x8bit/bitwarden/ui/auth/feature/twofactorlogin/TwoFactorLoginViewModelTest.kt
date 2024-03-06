@@ -467,7 +467,11 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         } returns ResendEmailResult.Error(message = null)
 
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE,
+                awaitItem(),
+            )
             viewModel.actionChannel.trySend(
                 TwoFactorLoginAction.SelectAuthMethod(
                     TwoFactorAuthMethod.EMAIL,
@@ -475,11 +479,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
             assertEquals(
                 DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.EMAIL),
-                viewModel.stateFlow.value,
+                awaitItem(),
             )
-
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
-
             assertEquals(
                 DEFAULT_STATE.copy(
                     authMethod = TwoFactorAuthMethod.EMAIL,
@@ -488,7 +489,29 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                         message = R.string.verification_email_not_sent.asText(),
                     ),
                 ),
-                viewModel.stateFlow.value,
+                awaitItem(),
+            )
+
+            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    authMethod = TwoFactorAuthMethod.EMAIL,
+                    dialogState = TwoFactorLoginState.DialogState.Loading(
+                        message = R.string.submitting.asText(),
+                    ),
+                ),
+                awaitItem(),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    authMethod = TwoFactorAuthMethod.EMAIL,
+                    dialogState = TwoFactorLoginState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.verification_email_not_sent.asText(),
+                    ),
+                ),
+                awaitItem(),
             )
         }
     }
@@ -527,6 +550,67 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ReceiveResendEmailResult with ResendEmailResult Success and isUserInitiated true should ShowToast`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(
+                    TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                        resendEmailResult = ResendEmailResult.Success,
+                        isUserInitiated = true,
+                    ),
+                )
+                assertEquals(
+                    TwoFactorLoginEvent.ShowToast(
+                        message = R.string.verification_email_sent.asText(),
+                    ),
+                    awaitItem(),
+                )
+        }
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `ReceiveResendEmailResult with ResendEmailResult Success and isUserInitiated false should not emit any events`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.eventFlow.test {
+                viewModel.actionChannel.trySend(
+                    TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                        resendEmailResult = ResendEmailResult.Success,
+                        isUserInitiated = false,
+                    ),
+                )
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `ReceiveResendEmailResult with ResendEmailResult Error should not emit any events`() =
+        runTest {
+            val viewModel = createViewModel()
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.actionChannel.trySend(
+                    TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                        resendEmailResult = ResendEmailResult.Error(message = null),
+                        isUserInitiated = true,
+                    ),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.verification_email_not_sent.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     private fun createViewModel(
         state: TwoFactorLoginState? = null,
