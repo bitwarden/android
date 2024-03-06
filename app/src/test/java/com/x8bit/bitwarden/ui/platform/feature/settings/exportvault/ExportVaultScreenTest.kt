@@ -163,7 +163,7 @@ class ExportVaultScreenTest : BaseComposeTest() {
     fun `file format selection button should send ExportFormatOptionSelect action`() {
         // Open the menu.
         composeTestRule
-            .onNodeWithContentDescription(label = "File format, .json")
+            .onNodeWithContentDescription(label = ".json. File format")
             .performClick()
 
         // Choose the option from the menu.
@@ -182,7 +182,7 @@ class ExportVaultScreenTest : BaseComposeTest() {
     @Test
     fun `file format selection button should update according to state`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "File format, .json")
+            .onNodeWithContentDescription(label = ".json. File format")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -190,7 +190,7 @@ class ExportVaultScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "File format, .csv")
+            .onNodeWithContentDescription(label = ".csv. File format")
             .assertIsDisplayed()
     }
 
