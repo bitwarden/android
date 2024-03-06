@@ -5,9 +5,11 @@ using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
+using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Utilities;
 using Foundation;
 using Microsoft.Maui.ApplicationModel;
@@ -19,13 +21,18 @@ namespace Bit.iOS.Autofill
     public partial class CredentialProviderViewController : ASCredentialProviderViewController, IAccountsManagerHost
     {
         private readonly LazyResolve<IFido2AuthenticatorService> _fido2AuthService = new LazyResolve<IFido2AuthenticatorService>();
-
+        private readonly LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
+        private readonly LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
+        private readonly LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
+        
         public override async void PrepareInterfaceForPasskeyRegistration(IASCredentialRequest registrationRequest)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
             {
                 return;
             }
+
+            _context.VaultUnlockedDuringThisSession = false;
 
             try
             {
@@ -68,33 +75,55 @@ namespace Bit.iOS.Autofill
             var credIdentity = Runtime.GetNSObject<ASPasskeyCredentialIdentity>(passkeyRegistrationRequest.CredentialIdentity.GetHandle());
 
             _context.UrlString = credIdentity?.RelyingPartyIdentifier;
-
-            var result = await _fido2AuthService.Value.MakeCredentialAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorMakeCredentialParams
+            
+            try
             {
-                Hash = passkeyRegistrationRequest.ClientDataHash.ToArray(),
-                CredTypesAndPubKeyAlgs = GetCredTypesAndPubKeyAlgs(passkeyRegistrationRequest.SupportedAlgorithms),
-                RequireUserVerification = passkeyRegistrationRequest.UserVerificationPreference == "required",
-                RequireResidentKey = true,
-                RpEntity = new PublicKeyCredentialRpEntity
+                var result = await _fido2AuthService.Value.MakeCredentialAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorMakeCredentialParams
                 {
-                    Id = credIdentity.RelyingPartyIdentifier,
-                    Name = credIdentity.RelyingPartyIdentifier
-                },
-                UserEntity = new PublicKeyCredentialUserEntity
+                    Hash = passkeyRegistrationRequest.ClientDataHash.ToArray(),
+                    CredTypesAndPubKeyAlgs = GetCredTypesAndPubKeyAlgs(passkeyRegistrationRequest.SupportedAlgorithms),
+                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(passkeyRegistrationRequest.UserVerificationPreference),
+                    RequireResidentKey = true,
+                    RpEntity = new PublicKeyCredentialRpEntity
+                    {
+                        Id = credIdentity.RelyingPartyIdentifier,
+                        Name = credIdentity.RelyingPartyIdentifier
+                    },
+                    UserEntity = new PublicKeyCredentialUserEntity
+                    {
+                        Id = credIdentity.UserHandle.ToArray(),
+                        Name = credIdentity.UserName,
+                        DisplayName = credIdentity.UserName
+                    }
+                }, new Fido2MakeCredentialUserInterface(EnsureUnlockedVaultAsync,
+                    () => _context.VaultUnlockedDuringThisSession,
+                    _context,
+                    OnConfirmingNewCredential,
+                    VerifyUserAsync));
+
+                await ASHelpers.ReplaceAllIdentitiesAsync();
+
+                var expired = await ExtensionContext.CompleteRegistrationRequestAsync(new ASPasskeyRegistrationCredential(
+                                credIdentity.RelyingPartyIdentifier,
+                                passkeyRegistrationRequest.ClientDataHash,
+                                NSData.FromArray(result.CredentialId),
+                                NSData.FromArray(result.AttestationObject)));
+            }
+            catch
+            {
+                try
                 {
-                    Id = credIdentity.UserHandle.ToArray(),
-                    Name = credIdentity.UserName,
-                    DisplayName = credIdentity.UserName
+                    await _platformUtilsService.Value.ShowDialogAsync(
+                        string.Format(AppResources.ThereWasAProblemCreatingAPasskeyForXTryAgainLater, credIdentity?.RelyingPartyIdentifier),
+                        AppResources.ErrorCreatingPasskey);
                 }
-            }, new Fido2MakeCredentialUserInterface(EnsureUnlockedVaultAsync, _context, OnConfirmingNewCredential));
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
 
-            await ASHelpers.ReplaceAllIdentitiesAsync();
-
-            var expired = await ExtensionContext.CompleteRegistrationRequestAsync(new ASPasskeyRegistrationCredential(
-                            credIdentity.RelyingPartyIdentifier,
-                            passkeyRegistrationRequest.ClientDataHash,
-                            NSData.FromArray(result.CredentialId),
-                            NSData.FromArray(result.AttestationObject)));
+                throw;
+            }
         }
 
         private PublicKeyCredentialParameters[] GetCredTypesAndPubKeyAlgs(NSNumber[] supportedAlgorithms)
@@ -155,12 +184,11 @@ namespace Bit.iOS.Autofill
 
             try
             {
-                // TODO: Add user verification and remove hardcoding on the user interface "userVerified"
                 var fido2AssertionResult = await _fido2AuthService.Value.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
                 {
                     RpId = rpId,
                     Hash = _context.PasskeyCredentialRequest.ClientDataHash.ToArray(),
-                    RequireUserVerification = _context.PasskeyCredentialRequest.UserVerificationPreference == "required",
+                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(_context.PasskeyCredentialRequest.UserVerificationPreference),
                     AllowCredentialDescriptorList = new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor[]
                     {
                         new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor
@@ -168,28 +196,80 @@ namespace Bit.iOS.Autofill
                             Id = credentialIdData.ToArray()
                         }
                     }
-                }, new Fido2GetAssertionUserInterface(cipherId, true, EnsureUnlockedVaultAsync, () => Task.FromResult(true)));
+                }, new Fido2GetAssertionUserInterface(cipherId, false,
+                    EnsureUnlockedVaultAsync,
+                    () => _context?.VaultUnlockedDuringThisSession ?? false,
+                    VerifyUserAsync));
 
-                var selectedUserHandleData = fido2AssertionResult.SelectedCredential != null
-                    ? NSData.FromArray(fido2AssertionResult.SelectedCredential.UserHandle)
-                    : (NSData)userHandleData;
-
-                var selectedCredentialIdData = fido2AssertionResult.SelectedCredential != null
-                    ? NSData.FromArray(fido2AssertionResult.SelectedCredential.Id)
-                    : credentialIdData;
+                if (fido2AssertionResult.SelectedCredential is null)
+                {
+                    throw new NullReferenceException("SelectedCredential must have a value");
+                }
 
                 await CompleteAssertionRequest(new ASPasskeyAssertionCredential(
-                    selectedUserHandleData,
+                    NSData.FromArray(fido2AssertionResult.SelectedCredential.UserHandle),
                     rpId,
                     NSData.FromArray(fido2AssertionResult.Signature),
                     _context.PasskeyCredentialRequest.ClientDataHash,
                     NSData.FromArray(fido2AssertionResult.AuthenticatorData),
-                    selectedCredentialIdData
+                    NSData.FromArray(fido2AssertionResult.SelectedCredential.Id)
                 ));
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationNeedsUIException)
             {
                 return;
+            }
+            catch
+            {
+                try
+                {
+                    if (_context?.IsExecutingWithoutUserInteraction == false)
+                    {
+                        await _platformUtilsService.Value.ShowDialogAsync(
+                            string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, rpId),
+                            AppResources.ErrorReadingPasskey);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
+
+                throw;
+            }
+        }
+
+        private async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference)
+        {
+            try
+            {
+                var encrypted = await _cipherService.Value.GetAsync(selectedCipherId);
+                var cipher = await encrypted.DecryptAsync();
+
+                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
+                    new Fido2UserVerificationOptions(
+                        cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
+                        userVerificationPreference,
+                        _context.VaultUnlockedDuringThisSession,
+                        _context.PasskeyCredentialIdentity?.RelyingPartyIdentifier,
+                        () =>
+                        {
+                            if (_context.IsExecutingWithoutUserInteraction)
+                            {
+                                CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
+                                throw new InvalidOperationNeedsUIException();
+                            }
+                        })
+                    );
+            }
+            catch (InvalidOperationNeedsUIException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                return false;
             }
         }
 
@@ -266,7 +346,7 @@ namespace Bit.iOS.Autofill
             if (!await IsAuthed() || await IsLocked())
             {
                 CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
-                throw new InvalidOperationException("Not authed or locked");
+                throw new InvalidOperationNeedsUIException("Not authed or locked");
             }
         }
     }

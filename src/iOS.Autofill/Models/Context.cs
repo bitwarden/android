@@ -15,11 +15,21 @@ namespace Bit.iOS.Autofill.Models
         public ASPasswordCredentialIdentity PasswordCredentialIdentity { get; set; }
         public ASPasskeyCredentialRequest PasskeyCredentialRequest { get; set; }
         public bool Configuring { get; set; }
+        public bool IsExecutingWithoutUserInteraction { get; set; }
 
         public bool IsCreatingPasskey { get; set; }
         public Fido2ConfirmNewCredentialParams? PasskeyCreationParams { get; set; }
+        /// <summary>
+        /// This is used to defer the completion until the vault is unlocked.
+        /// </summary>
         public TaskCompletionSource<bool> UnlockVaultTcs { get; set; }
-        public TaskCompletionSource<(string CipherId, bool UserVerified)> ConfirmNewCredentialTcs { get; set; }
+        /// <summary>
+        /// This is used to defer the completion until a vault item is chosen to add the passkey to.
+        /// Param: cipher ID to add the passkey to.
+        /// Param: isUserVerified if the user was verified. If null then the verification hasn't been done.
+        /// </summary>
+        public TaskCompletionSource<(string cipherId, bool? isUserVerified)> PickCredentialForFido2CreationTcs { get; set; }
+        public bool VaultUnlockedDuringThisSession { get; set; }
 
         public ASPasskeyCredentialIdentity PasskeyCredentialIdentity
         {

@@ -34,14 +34,16 @@ namespace Bit.Core.Test.Services
 
         public Fido2AuthenticatorMakeCredentialTests() {
             _credentialIds = new List<string> { "21d6aa04-92bd-4def-bf81-33f046924599", "f70c01ca-d1bf-4704-86e1-b07573aa17fa" };
-            _rawCredentialIds = [
-                [0x21, 0xd6, 0xaa, 0x04, 0x92, 0xbd, 0x4d, 0xef, 0xbf, 0x81, 0x33, 0xf0, 0x46, 0x92, 0x45, 0x99],
-                [0xf7, 0x0c, 0x01, 0xca, 0xd1, 0xbf, 0x47, 0x04, 0x86, 0xe1, 0xb0, 0x75, 0x73, 0xaa, 0x17, 0xfa]
-            ];
-            _ciphers = [ 
+            _rawCredentialIds = new List<byte[]>
+            {
+                new byte[] { 0x21, 0xd6, 0xaa, 0x04, 0x92, 0xbd, 0x4d, 0xef, 0xbf, 0x81, 0x33, 0xf0, 0x46, 0x92, 0x45, 0x99 },
+                new byte[] { 0xf7, 0x0c, 0x01, 0xca, 0xd1, 0xbf, 0x47, 0x04, 0x86, 0xe1, 0xb0, 0x75, 0x73, 0xaa, 0x17, 0xfa }
+            };
+            _ciphers = new List<CipherView>
+            {
                 CreateCipherView(true, _credentialIds[0], "bitwarden.com", false),
                 CreateCipherView(true, _credentialIds[1], "bitwarden.com", true)
-            ];
+            };
             _selectedCipherView = _ciphers[0];
             _selectedCipherCredentialId = _credentialIds[0];
             _selectedCipherRawCredentialId = _rawCredentialIds[0];
@@ -56,14 +58,16 @@ namespace Bit.Core.Test.Services
                     Id = _rpId,
                     Name = "Bitwarden"
                 },
-                CredTypesAndPubKeyAlgs = [
-                    new PublicKeyCredentialParameters {
+                CredTypesAndPubKeyAlgs = new PublicKeyCredentialParameters[]
+                {
+                    new PublicKeyCredentialParameters
+                    {
                         Type = Constants.DefaultFido2CredentialType,
                         Alg = (int) Fido2AlgorithmIdentifier.ES256
                     }
-                ],
+                },
                 RequireResidentKey = false,
-                RequireUserVerification = false,
+                UserVerificationPreference = Fido2UserVerificationPreference.Discouraged,
                 ExcludeCredentialDescriptorList = null
             };
 
@@ -71,6 +75,8 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<ICipherService>().EncryptAsync(Arg.Any<CipherView>()).Returns(_encryptedSelectedCipher);
             _sutProvider.GetDependency<ICipherService>().GetAsync(Arg.Is(_encryptedSelectedCipher.Id)).Returns(_encryptedSelectedCipher);
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_selectedCipherView.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().ShouldPerformMasterPasswordRepromptAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(false));
 
             var cryptoServiceMock = Substitute.For<ICryptoService>();
             ServiceContainer.Register(typeof(CryptoService), cryptoServiceMock);
@@ -80,7 +86,7 @@ namespace Bit.Core.Test.Services
         {
             ServiceContainer.Reset();
         }
-        
+
         #region invalid input parameters
 
         [Fact]
@@ -88,12 +94,14 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_ThrowsNotSupported_NoSupportedAlgorithm()
         {
             // Arrange
-            _params.CredTypesAndPubKeyAlgs = [
-                new PublicKeyCredentialParameters {
+            _params.CredTypesAndPubKeyAlgs = new PublicKeyCredentialParameters[]
+            {
+                new PublicKeyCredentialParameters
+                {
                     Type = Constants.DefaultFido2CredentialType,
                     Alg = -257 // RS256 which we do not support
                 }
-            ];
+            };
 
             // Act & Assert
             await Assert.ThrowsAsync<NotSupportedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
@@ -109,12 +117,14 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_InformsUser_ExcludedCredentialFound()
         {
             // Arrange
-            _params.ExcludeCredentialDescriptorList = [
-                new PublicKeyCredentialDescriptor {
+            _params.ExcludeCredentialDescriptorList = new PublicKeyCredentialDescriptor[]
+            {
+                new PublicKeyCredentialDescriptor
+                {
                     Type = Constants.DefaultFido2CredentialType,
                     Id = _rawCredentialIds[0]
                 }
-            ];
+            };
 
             // Act
             try
@@ -133,12 +143,14 @@ namespace Bit.Core.Test.Services
         // Spec: return an error code equivalent to "NotAllowedError" and terminate the operation.
         public async Task MakeCredentialAsync_ThrowsNotAllowed_ExcludedCredentialFound()
         {
-            _params.ExcludeCredentialDescriptorList = [
-                new PublicKeyCredentialDescriptor {
+            _params.ExcludeCredentialDescriptorList = new PublicKeyCredentialDescriptor[]
+            {
+                new PublicKeyCredentialDescriptor
+                {
                     Type = Constants.DefaultFido2CredentialType,
                     Id = _rawCredentialIds[0]
                 }
-            ];
+            };
 
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
         }
@@ -148,12 +160,14 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_DoesNotInformAboutExcludedCredential_ExcludedCredentialBelongsToOrganization()
         {
             _ciphers[0].OrganizationId = "someOrganizationId";
-            _params.ExcludeCredentialDescriptorList = [
-                new PublicKeyCredentialDescriptor {
+            _params.ExcludeCredentialDescriptorList = new PublicKeyCredentialDescriptor[]
+            {
+                new PublicKeyCredentialDescriptor
+                {
                     Type = Constants.DefaultFido2CredentialType,
                     Id = _rawCredentialIds[0]
                 }
-            ];
+            };
 
             await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
@@ -168,7 +182,7 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_RequestsUserVerification_ParamsRequireUserVerification()
         {
             // Arrange
-            _params.RequireUserVerification = true;
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Required;
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_selectedCipherView.Id, true));
 
             // Act
@@ -176,7 +190,23 @@ namespace Bit.Core.Test.Services
 
             // Assert
             await _userInterface.Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
-                (p) => p.UserVerification == true
+                (p) => p.UserVerificationPreference == Fido2UserVerificationPreference.Required
+            ));
+        }
+
+        [Fact]
+        public async Task MakeCredentialAsync_RequestsUserVerificationPreferred_ParamsPrefersUserVerification()
+        {
+            // Arrange
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Preferred;
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_selectedCipherView.Id, true));
+
+            // Act
+            await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
+
+            // Assert
+            await _userInterface.Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
+                (p) => p.UserVerificationPreference == Fido2UserVerificationPreference.Preferred
             ));
         }
 
@@ -184,14 +214,14 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_DoesNotRequestUserVerification_ParamsDoNotRequireUserVerification()
         {
             // Arrange
-            _params.RequireUserVerification = false;
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Discouraged;
 
             // Act
             await _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface);
 
             // Assert
             await _userInterface.Received().ConfirmNewCredentialAsync(Arg.Is<Fido2ConfirmNewCredentialParams>(
-                (p) => p.UserVerification == false
+                (p) => p.UserVerificationPreference == Fido2UserVerificationPreference.Discouraged
             ));
         }
 
@@ -236,7 +266,7 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_ThrowsNotAllowed_NoUserVerificationWhenRequiredByParams()
         {
             // Arrange
-            _params.RequireUserVerification = true;
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Required;
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
 
             // Act & Assert
@@ -247,9 +277,27 @@ namespace Bit.Core.Test.Services
         public async Task MakeCredentialAsync_ThrowsNotAllowed_NoUserVerificationForCipherWithReprompt()
         {
             // Arrange
-            _params.RequireUserVerification = false;
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Discouraged;
             _encryptedSelectedCipher.Reprompt = CipherRepromptType.Password;
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>()
+                .ShouldPerformMasterPasswordRepromptAsync(Arg.Is<Fido2UserVerificationOptions>(opt => opt.ShouldCheckMasterPasswordReprompt))
+                .Returns(Task.FromResult(true));
+
+            // Act & Assert
+            await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
+        }
+
+        [Fact]
+        public async Task MakeCredentialAsync_ThrowsNotAllowed_PreferredUserVerificationPreference_CanPerformUserVerification()
+        {
+            // Arrange
+            _params.UserVerificationPreference = Fido2UserVerificationPreference.Preferred;
+            _encryptedSelectedCipher.Reprompt = CipherRepromptType.Password;
+            _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>()
+                .CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>())
+                .Returns(Task.FromResult(true));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
@@ -297,10 +345,10 @@ namespace Bit.Core.Test.Services
 
             Assert.Equal(71 + 77, authData.Length);
             Assert.Equal(rpIdHashMock, rpIdHash);
-            Assert.Equal([0b01011001], flags); // UP = true, AD = true, BS = true, BE = true
-            Assert.Equal([0, 0, 0, 0], counter);
+            Assert.Equal(new byte[] { 0b01011001 }, flags); // UP = true, AD = true, BS = true, BE = true
+            Assert.Equal(new byte[] { 0, 0, 0, 0 }, counter);
             Assert.Equal(Fido2AuthenticatorService.AAGUID, aaguid);
-            Assert.Equal([0, 16], credentialIdLength); // 16 bytes because we're using GUIDs
+            Assert.Equal(new byte[] { 0, 16 }, credentialIdLength); // 16 bytes because we're using GUIDs
             Assert.Equal(credentialIdBytes, credentialId);
         }
 
@@ -339,7 +387,7 @@ namespace Bit.Core.Test.Services
                 Id = Guid.NewGuid().ToString(),
                 Type = CipherType.Login,
                 Key = null,
-                Attachments = [],
+                Attachments = new List<Attachment>(),
                 Login = new Login {},
             };
         }

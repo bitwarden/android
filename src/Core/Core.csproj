@@ -80,6 +80,7 @@
     <Folder Include="Utilities\Fido2\" />
     <Folder Include="Controls\Picker\" />
     <Folder Include="Controls\Avatar\" />
+    <Folder Include="Services\UserVerification\" />
     <Folder Include="Utilities\WebAuthenticatorMAUI\" />
   </ItemGroup>
 	<ItemGroup>
@@ -112,6 +113,7 @@
 	  <None Remove="Utilities\Fido2\" />
 	  <None Remove="Controls\Picker\" />
 	  <None Remove="Controls\Avatar\" />
+	  <None Remove="Services\UserVerification\" />
 	  <None Remove="Utilities\WebAuthenticatorMAUI\" />
 	</ItemGroup>
 </Project>

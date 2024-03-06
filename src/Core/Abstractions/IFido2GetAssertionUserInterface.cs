@@ -1,9 +1,11 @@
+using Bit.Core.Utilities.Fido2;
+
 namespace Bit.Core.Abstractions 
 {
     public struct Fido2GetAssertionUserInterfaceCredential
     {
         public string CipherId { get; set; }
-        public bool RequireUserVerification { get; set; }
+        public Fido2UserVerificationPreference UserVerificationPreference { get; set; }
     }
 
     public interface IFido2GetAssertionUserInterface : IFido2UserInterface
