@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.icon
 
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
