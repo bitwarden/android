@@ -41,9 +41,11 @@ namespace Bit.iOS.Extension
             {
                 CancelBarButton.Title = AppResources.Cancel;
             }
-            TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 44;
-            TableView.Source = new TableSource(this);
+
+            var tableSource = new TableSource(this);
+            TableView.Source = tableSource;
+            tableSource.RegisterTableViewCells(TableView);
+
             await ((TableSource)TableView.Source).LoadAsync();
         }
 

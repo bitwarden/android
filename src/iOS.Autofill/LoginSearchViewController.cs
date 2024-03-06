@@ -35,7 +35,11 @@ namespace Bit.iOS.Autofill
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
-            TableView.Source = new TableSource(this);
+                
+            var tableSource = new TableSource(this);
+            TableView.Source = tableSource;
+            tableSource.RegisterTableViewCells(TableView);
+            
             SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
             await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
         }

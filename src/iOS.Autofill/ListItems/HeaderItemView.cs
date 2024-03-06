@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Services;
+using Bit.iOS.Core.Utilities;
 using Foundation;
 using ObjCRuntime;
 using UIKit;
@@ -27,9 +28,9 @@ namespace Bit.iOS.Autofill.ListItems
         {
             try
             {
-                _header.TextColor = UIColor.FromName(ColorConstants.LIGHT_TEXT_MUTED);
-                _header.Font = UIFont.SystemFontOfSize(15);
-                _separator.BackgroundColor = UIColor.FromName(ColorConstants.LIGHT_SECONDARY_300);
+                _header.TextColor = ThemeHelpers.TextColor;
+                _header.Font = UIFont.SystemFontOfSize(15, UIFontWeight.Semibold);
+                _separator.BackgroundColor = ThemeHelpers.SeparatorColor;
 
                 _header.TranslatesAutoresizingMaskIntoConstraints = false;
                 _separator.TranslatesAutoresizingMaskIntoConstraints = false;
@@ -41,12 +42,12 @@ namespace Bit.iOS.Autofill.ListItems
                 {
                     _header.LeadingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.LeadingAnchor, 9),
                     _header.TrailingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TrailingAnchor, 9),
-                    _header.TopAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TopAnchor, 3),
+                    _header.TopAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TopAnchor, 10),
 
                     _separator.HeightAnchor.ConstraintEqualTo(2),
-                    _separator.TopAnchor.ConstraintEqualTo(_header.BottomAnchor, 8),
-                    _separator.LeadingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.LeadingAnchor, 5),
-                    _separator.TrailingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TrailingAnchor, 5),
+                    _separator.TopAnchor.ConstraintEqualTo(_header.BottomAnchor, 12),
+                    _separator.LeadingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.LeadingAnchor, 0),
+                    _separator.TrailingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TrailingAnchor, 0),
                     _separator.BottomAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.BottomAnchor, 2)
                 });
             }
