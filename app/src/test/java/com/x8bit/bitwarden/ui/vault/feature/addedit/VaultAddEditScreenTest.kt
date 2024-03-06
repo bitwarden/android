@@ -134,14 +134,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on NavigateToQrCodeScan event should invoke NavigateToQrCodeScan`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToQrCodeScan)
         assertTrue(onNavigateQrCodeScanScreenCalled)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `on NavigateToManualCodeEntry event should invoke NavigateToManualCodeEntry`() {
         mutableEventFlow.tryEmit(VaultAddEditEvent.NavigateToManualCodeEntry)
@@ -347,7 +345,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `clicking a Type Option should send TypeOptionSelect action`() {
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
+            .onNodeWithContentDescriptionAfterScroll(label = "Login. Type")
             .performClick()
 
         // Choose the option from the menu
@@ -367,7 +365,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `the Type Option field should display the text of the selected item type`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Type, Login")
+            .onNodeWithContentDescriptionAfterScroll(label = "Login. Type")
             .assertIsDisplayed()
 
         mutableStateFlow.update {
@@ -381,7 +379,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Type, Card")
+            .onNodeWithContentDescriptionAfterScroll(label = "Card. Type")
             .assertIsDisplayed()
     }
 
@@ -642,7 +640,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextContains("•••••••••••")
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login state the totp text field should be present based on state`() {
         mutableStateFlow.update { currentState ->
@@ -844,7 +841,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextContains("NewURI")
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Login Uri settings dialog should be dismissed on cancel click`() {
         composeTestRule
@@ -1042,7 +1038,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Title, -- Select --")
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Title")
             .performClick()
 
         // Choose the option from the menu
@@ -1065,7 +1061,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Identity the Title should display the selected title from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Title, -- Select --")
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Title")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1077,7 +1073,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Title, Mx")
+            .onNodeWithContentDescriptionAfterScroll(label = "Mx. Title")
             .assertIsDisplayed()
     }
 
@@ -1497,7 +1493,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Identity the city text field should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
@@ -1530,7 +1525,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Identity the zip text field should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_IDENTITY
@@ -1688,7 +1682,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Brand, -- Select --")
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Brand")
             .performClick()
 
         // Choose the option from the menu
@@ -1707,12 +1701,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Card the Brand should display the selected brand from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Brand, -- Select --")
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Brand")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1724,17 +1717,16 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Brand, American Express")
+            .onNodeWithContentDescriptionAfterScroll(label = "American Express. Brand")
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `in ItemType_Card selecting an expiration month should trigger ExpirationMonthSelected`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Expiration month, -- Select --")
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Expiration month")
             .performClick()
 
         // Choose the option from the menu
@@ -1758,7 +1750,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Card the Expiration month should display the selected expiration month from the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Expiration month, -- Select --")
+            .onNodeWithContentDescriptionAfterScroll(label = "-- Select --. Expiration month")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -1770,7 +1762,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Expiration month, 03 - March")
+            .onNodeWithContentDescriptionAfterScroll(label = "03 - March. Expiration month")
             .assertIsDisplayed()
     }
 
@@ -1890,7 +1882,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         // Opens the menu
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "Who owns this item?, placeholder@email.com",
+                label = "placeholder@email.com. Who owns this item?",
             )
             .performClick()
 
@@ -1919,7 +1911,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         updateStateWithOwners()
         composeTestRule
             .onNodeWithContentDescriptionAfterScroll(
-                label = "Who owns this item?, placeholder@email.com",
+                label = "placeholder@email.com. Who owns this item?",
             )
             .assertIsDisplayed()
 
@@ -1928,7 +1920,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, mockOwnerName-2")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOwnerName-2. Who owns this item?")
             .assertIsDisplayed()
     }
 
@@ -2009,7 +2001,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
             .performClick()
 
         // Choose the option from the menu
@@ -2031,13 +2023,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `the folder control should display the text provided by the state`() {
         updateStateWithFolders()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, No Folder")
+            .onNodeWithContentDescriptionAfterScroll(label = "No Folder. Folder")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2045,11 +2036,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Folder, mockFolderName-1")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockFolderName-1. Folder")
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toggling the favorite toggle should send ToggleFavorite action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
@@ -2104,7 +2094,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `the master password re-prompt toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
@@ -2172,7 +2161,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextContains("NewNote")
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `Ownership option should send OwnershipChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
@@ -2181,7 +2169,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, placeholder@email.com")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "placeholder@email.com. Who owns this item?",
+            )
             .performClick()
 
         // Choose the option from the menu
@@ -2210,7 +2200,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         updateStateWithOwners()
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, placeholder@email.com")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "placeholder@email.com. Who owns this item?",
+            )
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -2218,11 +2210,12 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Who owns this item?, mockOwnerName-2")
+            .onNodeWithContentDescriptionAfterScroll(
+                label = "mockOwnerName-2. Who owns this item?",
+            )
             .assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking New Custom Field button should allow creation of Text type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
@@ -2259,7 +2252,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking New Custom Field button should not display linked type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
@@ -2278,7 +2270,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertIsNotDisplayed()
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking New Custom Field button should allow creation of Boolean type`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
@@ -2352,7 +2343,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking and changing the custom text field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
@@ -2370,7 +2360,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking and changing the custom hidden field will send a CustomFieldValueChange event`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS
@@ -2406,7 +2395,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `clicking custom field edit icon and Edit option sends a CustomFieldValueChange action`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES_CUSTOM_FIELDS

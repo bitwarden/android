@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.dropdown
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,11 +22,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.role
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,95 +71,102 @@ fun BitwardenMultiSelectButton(
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    Box(
+    OutlinedTextField(
         modifier = modifier
-            .semantics(mergeDescendants = true) {},
-    ) {
-        OutlinedTextField(
-            // TODO: Update with final accessibility reading (BIT-752)
-            modifier = Modifier
-                .clearAndSetSemantics {
-                    this.role = Role.DropdownList
-                    contentDescription = "$label, $selectedOption"
-                }
-                .fillMaxWidth()
-                .clickable(
-                    indication = null,
-                    enabled = isEnabled,
-                    interactionSource = remember { MutableInteractionSource() },
-                ) {
-                    shouldShowDialog = !shouldShowDialog
-                },
-            textStyle = MaterialTheme.typography.bodyLarge,
-            readOnly = true,
-            label = {
-                Row {
-                    Text(
-                        text = label,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+            .clearAndSetSemantics {
+                role = Role.DropdownList
+                contentDescription = supportingText
+                    ?.let { "$selectedOption. $label. $it" }
+                    ?: "$selectedOption. $label"
+                customActions = listOfNotNull(
                     tooltip?.let {
-                        Spacer(modifier = Modifier.width(3.dp))
-                        IconButton(
-                            onClick = it.onClick,
-                            enabled = isEnabled,
-                            colors = IconButtonDefaults.iconButtonColors(
-                                contentColor = MaterialTheme.colorScheme.primary,
-                            ),
-                            modifier = Modifier.size(16.dp),
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.ic_tooltip_small),
-                                contentDescription = it.contentDescription,
-                            )
-                        }
+                        CustomAccessibilityAction(
+                            label = it.contentDescription,
+                            action = {
+                                it.onClick()
+                                true
+                            },
+                        )
+                    },
+                )
+            }
+            .fillMaxWidth()
+            .clickable(
+                indication = null,
+                enabled = isEnabled,
+                interactionSource = remember { MutableInteractionSource() },
+            ) {
+                shouldShowDialog = !shouldShowDialog
+            },
+        textStyle = MaterialTheme.typography.bodyLarge,
+        readOnly = true,
+        label = {
+            Row {
+                Text(
+                    text = label,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                tooltip?.let {
+                    Spacer(modifier = Modifier.width(3.dp))
+                    IconButton(
+                        onClick = it.onClick,
+                        enabled = isEnabled,
+                        colors = IconButtonDefaults.iconButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary,
+                        ),
+                        modifier = Modifier.size(16.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_tooltip_small),
+                            contentDescription = it.contentDescription,
+                        )
                     }
                 }
-            },
-            value = selectedOption ?: "",
-            onValueChange = onOptionSelected,
-            enabled = shouldShowDialog,
-            trailingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_region_select_dropdown),
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            }
+        },
+        value = selectedOption.orEmpty(),
+        onValueChange = onOptionSelected,
+        enabled = shouldShowDialog,
+        trailingIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_region_select_dropdown),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            disabledTextColor = MaterialTheme.colorScheme.onSurface,
+            disabledBorderColor = MaterialTheme.colorScheme.outline,
+            disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        ),
+        supportingText = supportingText?.let {
+            {
+                Text(
+                    text = supportingText,
+                    style = MaterialTheme.typography.bodySmall,
                 )
-            },
-            colors = OutlinedTextFieldDefaults.colors(
-                disabledTextColor = MaterialTheme.colorScheme.onSurface,
-                disabledBorderColor = MaterialTheme.colorScheme.outline,
-                disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
-            supportingText = supportingText?.let {
-                {
-                    Text(
-                        text = supportingText,
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-            },
-        )
-        if (shouldShowDialog) {
-            BitwardenSelectionDialog(
-                title = label,
-                onDismissRequest = { shouldShowDialog = false },
-            ) {
-                options.forEach { optionString ->
-                    BitwardenSelectionRow(
-                        text = optionString.asText(),
-                        isSelected = optionString == selectedOption,
-                        onClick = {
-                            shouldShowDialog = false
-                            onOptionSelected(optionString)
-                        },
-                    )
-                }
+            }
+        },
+    )
+    if (shouldShowDialog) {
+        BitwardenSelectionDialog(
+            title = label,
+            onDismissRequest = { shouldShowDialog = false },
+        ) {
+            options.forEach { optionString ->
+                BitwardenSelectionRow(
+                    text = optionString.asText(),
+                    isSelected = optionString == selectedOption,
+                    onClick = {
+                        shouldShowDialog = false
+                        onOptionSelected(optionString)
+                    },
+                )
             }
         }
     }

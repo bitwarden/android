@@ -103,7 +103,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     @Test
     fun `the organization option field should update according to state`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "Organization, mockOrganizationName-1")
+            .onNodeWithContentDescription(label = "mockOrganizationName-1. Organization")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -111,7 +111,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Organization, mockOrganizationName-1")
+            .onNodeWithContentDescription(label = "mockOrganizationName-1. Organization")
             .assertIsNotDisplayed()
     }
 
@@ -166,7 +166,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     @Test
     fun `selecting an organization should send OrganizationSelect action`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Organization, mockOrganizationName-1")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
             .performClick()
         // Choose the option from the menu
         composeTestRule
@@ -197,7 +197,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
     @Test
     fun `the organization option field should display according to state`() {
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Organization, mockOrganizationName-1")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-1. Organization")
             .assertIsDisplayed()
 
         mutableStateFlow.update { currentState ->
@@ -210,7 +210,7 @@ class VaultMoveToOrganizationScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithContentDescriptionAfterScroll(label = "Organization, mockOrganizationName-2")
+            .onNodeWithContentDescriptionAfterScroll(label = "mockOrganizationName-2. Organization")
             .assertIsDisplayed()
     }
 

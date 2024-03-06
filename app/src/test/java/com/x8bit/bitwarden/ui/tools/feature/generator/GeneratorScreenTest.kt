@@ -189,7 +189,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `clicking a MainStateOption should send MainTypeOptionSelect action`() {
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "What would you like to generate?, Password")
+            .onNodeWithContentDescription(label = "Password. What would you like to generate?")
             .performClick()
 
         // Choose the option from the menu
@@ -216,7 +216,7 @@ class GeneratorScreenTest : BaseComposeTest() {
     fun `clicking a PasscodeOption should send PasscodeTypeOption action`() {
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Password type, Password")
+            .onNodeWithContentDescription(label = "Password. Password type")
             .performClick()
 
         // Choose the option from the menu
@@ -240,6 +240,7 @@ class GeneratorScreenTest : BaseComposeTest() {
             .assertDoesNotExist()
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `clicking a UsernameOption should send UsernameTypeOption action`() {
         updateState(
@@ -256,7 +257,9 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Username type, Plus addressed email")
+            .onNodeWithContentDescription(
+                label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
+            )
             .performClick()
 
         // Choose the option from the menu
@@ -285,11 +288,11 @@ class GeneratorScreenTest : BaseComposeTest() {
     @Test
     fun `in Passcode_Password state, the ViewModel state should update the UI correctly`() {
         composeTestRule
-            .onNodeWithContentDescription(label = "What would you like to generate?, Password")
+            .onNodeWithContentDescription(label = "Password. What would you like to generate?")
             .assertIsDisplayed()
 
         composeTestRule
-            .onNodeWithContentDescription(label = "Password type, Password")
+            .onNodeWithContentDescription(label = "Password. Password type")
             .assertIsDisplayed()
 
         composeTestRule
@@ -1154,7 +1157,7 @@ class GeneratorScreenTest : BaseComposeTest() {
 
         // Opens the menu
         composeTestRule
-            .onNodeWithContentDescription(label = "Service, null")
+            .onNodeWithContentDescription(label = "null. Service")
             .performScrollTo()
             .performClick()
 
@@ -1517,13 +1520,14 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     //region Username Type Tests
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `in Username state, clicking the toolitp icon should send the TooltipClick action`() {
+    fun `in Username state, clicking the tooltip icon should send the TooltipClick action`() {
         updateState(DEFAULT_STATE.copy(selectedType = GeneratorState.MainType.Username()))
 
         composeTestRule
             .onNodeWithContentDescription(
-                label = "Username type, Plus addressed email",
+                label = "Plus addressed email. Username type. Use your email provider's subaddress capabilities",
                 useUnmergedTree = true,
             )
             // Find the button
