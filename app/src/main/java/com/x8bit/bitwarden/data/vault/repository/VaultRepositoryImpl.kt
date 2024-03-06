@@ -868,12 +868,16 @@ class VaultRepositoryImpl(
                 cipherView = cipherView,
             )
             .flatMap { cipher ->
-                vaultSdkSource.encryptAttachment(
-                    userId = userId,
-                    cipher = cipher,
-                    attachmentView = attachmentView,
-                    fileBuffer = fileManager.uriToByteArray(fileUri = fileUri),
-                )
+                fileManager
+                    .uriToByteArray(fileUri = fileUri)
+                    .flatMap {
+                        vaultSdkSource.encryptAttachment(
+                            userId = userId,
+                            cipher = cipher,
+                            attachmentView = attachmentView,
+                            fileBuffer = it,
+                        )
+                    }
             }
             .flatMap { attachmentEncryptResult ->
                 ciphersService
@@ -990,12 +994,16 @@ class VaultRepositoryImpl(
                             "File URI must be present to create a File Send.",
                         )
                             .asFailure()
-                        vaultSdkSource
-                            .encryptBuffer(
-                                userId = userId,
-                                send = send,
-                                fileBuffer = fileManager.uriToByteArray(fileUri = uri),
-                            )
+
+                        fileManager
+                            .uriToByteArray(fileUri = uri)
+                            .flatMap {
+                                vaultSdkSource.encryptBuffer(
+                                    userId = userId,
+                                    send = send,
+                                    fileBuffer = it,
+                                )
+                            }
                             .flatMap { encryptedFile ->
                                 sendsService
                                     .createFileSend(
