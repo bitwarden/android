@@ -32,6 +32,9 @@ googleServices = "4.4.1"
 hilt = "2.50"
 junit5 = "5.8.2"
 jvmTarget = "17"
+# kotlin and kotlinCompileExtensions **must** use compatible versions. Do not update either without
+# first checking the Compose to Kotlin Compatibility Map.
+# https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 kotlin = "1.9.22"
 kotlinCompilerExtensionVersion = "1.5.9"
 kotlinxCollectionsImmutable = "0.3.6"
