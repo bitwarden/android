@@ -26,7 +26,7 @@ jobs:
         uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
 
       - name: Cache Gradle Files
-        uses: actions/cache@13aacd865c20de90d75de3b17ebe84f7a17d57d2 # v4.0.0
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
         with:
           path: |
             ~/.gradle/caches
@@ -36,13 +36,13 @@ jobs:
             ${{ runner.os }}-gradle-v2-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@22fdc77bf4148f810455b226c90fb81b5cbc00a7 # v1.171.0
+        uses: ruby/setup-ruby@d4526a55538b775af234ba4af27118ed6f8f6677 # v1.172.0
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
 
       - name: Configure JDK
-        uses: actions/setup-java@387ac29b308b003ca37ba93a6cab5eb57c8f5f93 # v4.0.0
+        uses: actions/setup-java@9704b39bf258b59bc04b50fa2dd55e9ed76b47a8 # v4.1.0
         with:
           distribution: 'temurin'
           java-version: ${{ env.JAVA_VERSION }}
