@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.appbar.action
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

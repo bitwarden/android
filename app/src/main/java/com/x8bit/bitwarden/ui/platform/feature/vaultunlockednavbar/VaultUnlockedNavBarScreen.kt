@@ -47,8 +47,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.max
 import com.x8bit.bitwarden.ui.platform.base.util.toDp
-import com.x8bit.bitwarden.ui.platform.components.BitwardenAnimatedScrim
-import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.platform.feature.settings.navigateToSettingsGraph

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.stepper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 
 /**

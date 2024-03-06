@@ -11,9 +11,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenListItem
-import com.x8bit.bitwarden.ui.platform.components.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
+import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource

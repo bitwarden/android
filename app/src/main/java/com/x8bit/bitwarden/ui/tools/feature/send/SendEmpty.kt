@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 
 /**
  * Content for the empty state of the [SendScreen].

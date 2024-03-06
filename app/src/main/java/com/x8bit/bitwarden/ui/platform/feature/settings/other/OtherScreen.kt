@@ -34,8 +34,6 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
 import com.x8bit.bitwarden.data.platform.repository.util.displayLabel
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -43,7 +41,9 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
-import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
+import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 
 /**
  * Displays the other screen.
