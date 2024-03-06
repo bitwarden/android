@@ -298,11 +298,13 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             // Display a toast for a successful result.
             ResendEmailResult.Success -> {
-                sendEvent(
-                    TwoFactorLoginEvent.ShowToast(
-                        message = R.string.verification_email_sent.asText(),
-                    ),
-                )
+                if (action.isUserInitiated) {
+                    sendEvent(
+                        TwoFactorLoginEvent.ShowToast(
+                            message = R.string.verification_email_sent.asText(),
+                        ),
+                    )
+                }
             }
         }
     }
@@ -342,6 +344,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             sendAction(
                 TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                     resendEmailResult = result,
+                    isUserInitiated = true,
                 ),
             )
         }
@@ -351,13 +354,35 @@ class TwoFactorLoginViewModel @Inject constructor(
      * Update the state with the auth method or opens the url for the recovery code.
      */
     private fun handleSelectAuthMethod(action: TwoFactorLoginAction.SelectAuthMethod) {
-        if (action.authMethod == TwoFactorAuthMethod.RECOVERY_CODE) {
-            sendEvent(TwoFactorLoginEvent.NavigateToRecoveryCode)
-        } else {
-            mutableStateFlow.update {
-                it.copy(
-                    authMethod = action.authMethod,
-                )
+        when (action.authMethod) {
+            TwoFactorAuthMethod.RECOVERY_CODE -> {
+                sendEvent(TwoFactorLoginEvent.NavigateToRecoveryCode)
+            }
+
+            TwoFactorAuthMethod.EMAIL -> {
+                if (state.authMethod != TwoFactorAuthMethod.EMAIL) {
+                    viewModelScope.launch {
+                        val result = authRepository.resendVerificationCodeEmail()
+                        sendAction(
+                            TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
+                                resendEmailResult = result,
+                                isUserInitiated = false,
+                            ),
+                        )
+                    }
+                }
+                mutableStateFlow.update { it.copy(authMethod = action.authMethod) }
+            }
+
+            TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            TwoFactorAuthMethod.DUO,
+            TwoFactorAuthMethod.YUBI_KEY,
+            TwoFactorAuthMethod.U2F,
+            TwoFactorAuthMethod.REMEMBER,
+            TwoFactorAuthMethod.DUO_ORGANIZATION,
+            TwoFactorAuthMethod.FIDO_2_WEB_APP,
+            -> {
+                mutableStateFlow.update { it.copy(authMethod = action.authMethod) }
             }
         }
     }
@@ -592,6 +617,7 @@ sealed class TwoFactorLoginAction {
          */
         data class ReceiveResendEmailResult(
             val resendEmailResult: ResendEmailResult,
+            val isUserInitiated: Boolean,
         ) : Internal()
     }
 }
