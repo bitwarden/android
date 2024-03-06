@@ -9,6 +9,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.ZERO_WIDTH_CHARACTER
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 
 /**

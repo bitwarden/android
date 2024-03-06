@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 
 /**
  * A Bitwarden-themed, re-usable error state.

@@ -17,7 +17,7 @@ import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenSwitchWithActions
