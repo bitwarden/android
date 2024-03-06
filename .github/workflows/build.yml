@@ -85,7 +85,7 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
 
-      # This step might be obsolete at some point as .NET MAUI workloads 
+      # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -150,7 +150,7 @@ jobs:
           echo "########################################"
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
-          
+
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./${{ env.android_folder_path_bash }}/AndroidManifest.xml
         shell: bash
@@ -314,7 +314,7 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
 
-      # This step might be obsolete at some point as .NET MAUI workloads 
+      # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -395,7 +395,7 @@ jobs:
           $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
 
           Write-Output "##### Build $configuration FDROID"
-          
+
           dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android /p:CustomConstants="FDROID"
 
       - name: Sign for F-Droid
@@ -454,13 +454,13 @@ jobs:
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
         with:
           nuget-version: 6.4.0
-      
+
       - name: Set up .NET
         uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
         with:
           dotnet-version: '8.0.x'
-  
-      # This step might be obsolete at some point as .NET MAUI workloads 
+
+      # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -518,7 +518,7 @@ jobs:
         run: |
           mkdir -p $HOME/secrets
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
-            --file $HOME/secrets/$FILE --output none
+            --file src/watchOS/bitwarden/$FILE --output none
 
       - name: Increment version
         run: |
@@ -544,7 +544,7 @@ jobs:
           mkdir -p $HOME/certificates
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution |
             jq -r .value | base64 -d > $HOME/certificates/ios-distribution.p12
-        
+
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
@@ -744,7 +744,7 @@ jobs:
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
         with:
           config: crowdin.yml
-          crowdin_branch_name: main 
+          crowdin_branch_name: main
           upload_sources: true
           upload_translations: false
 
@@ -762,27 +762,11 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-          (github.ref == 'refs/heads/main')
-          || (github.ref == 'refs/heads/rc')
-          || (github.ref == 'refs/heads/hotfix-rc')
-        env:
-          CLOC_STATUS: ${{ needs.cloc.result }}
-          ANDROID_STATUS: ${{ needs.android.result }}
-          F_DROID_STATUS: ${{ needs.f-droid.result }}
-          IOS_STATUS: ${{ needs.ios.result }}
-          CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
-        run: |
-          if [ "$CLOC_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$ANDROID_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$F_DROID_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$IOS_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
-              exit 1
-          fi
+          (github.ref == 'refs/heads/main'
+          || github.ref == 'refs/heads/rc'
+          || github.ref == 'refs/heads/hotfix-rc')
+          && contains(needs.*.result, 'failure')
+        run: exit 1
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
