@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordField
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 
 /**
  * Represents a Bitwarden-styled dialog for entering your master password.

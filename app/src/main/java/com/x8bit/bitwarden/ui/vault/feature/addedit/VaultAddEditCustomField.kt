@@ -15,12 +15,12 @@ import androidx.compose.ui.semantics.semantics
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.BitwardenMultiSelectButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenPasswordFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.BitwardenRowOfActions
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTextEntryDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**

@@ -15,8 +15,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 
 /**
  * Represents a Bitwarden-styled dialog that is used to enter text.

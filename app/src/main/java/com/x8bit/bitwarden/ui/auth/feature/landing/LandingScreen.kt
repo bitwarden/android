@@ -53,15 +53,15 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.BitwardenAccountSwitcher
 import com.x8bit.bitwarden.ui.platform.components.BitwardenPlaceholderAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.switch.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList

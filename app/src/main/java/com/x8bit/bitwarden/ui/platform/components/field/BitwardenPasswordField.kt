@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.platform.components
+package com.x8bit.bitwarden.ui.platform.components.field
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

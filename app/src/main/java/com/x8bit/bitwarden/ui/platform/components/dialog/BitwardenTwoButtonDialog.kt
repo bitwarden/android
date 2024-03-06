@@ -5,7 +5,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.x8bit.bitwarden.ui.platform.components.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 
 /**
  * Represents a Bitwarden-styled dialog with two buttons.
