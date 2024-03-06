@@ -15,6 +15,16 @@ using Bit.Core.Utilities;
 using Microsoft.Maui.Authentication;
 using Microsoft.Maui.Networking;
 using NetworkAccess = Microsoft.Maui.Networking.NetworkAccess;
+using Org.BouncyCastle.Asn1.Ocsp;
+
+#if IOS
+using AuthenticationServices;
+using Foundation;
+using UIKit;
+using WebAuthenticator = Bit.Core.Utilities.MAUI.WebAuthenticator;
+using WebAuthenticatorResult = Bit.Core.Utilities.MAUI.WebAuthenticatorResult;
+using WebAuthenticatorOptions = Bit.Core.Utilities.MAUI.WebAuthenticatorOptions;
+#endif
 
 namespace Bit.App.Pages
 {
@@ -63,6 +73,8 @@ namespace Bit.App.Pages
             get => _orgIdentifier;
             set => SetProperty(ref _orgIdentifier, value);
         }
+
+        public bool FromIosExtension { get; set; }
 
         public ICommand LogInCommand { get; }
         public Action StartTwoFactorAction { get; set; }
@@ -153,6 +165,9 @@ namespace Bit.App.Pages
                     CallbackUrl = new Uri(REDIRECT_URI),
                     Url = new Uri(url),
                     PrefersEphemeralWebBrowserSession = _useEphemeralWebBrowserSession,
+#if IOS
+                    ShouldUseSharedApplicationKeyWindow = FromIosExtension
+#endif
                 });
 
                 var code = GetResultCode(authResult, state);

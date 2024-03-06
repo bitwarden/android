@@ -16,18 +16,18 @@ namespace Bit.Core.Utilities.Fido2
             // We only care about the domain part of the origin, not the protocol or port so we remove them here,
             // while still keeping ipv6 intact.
             // https is enforced in the client, so we don't need to worry about that here
-            var originWithoutProtocolOrPort = Regex.Replace(origin, @"(https?://)?([^:/]+)(:\d+)?(/.*)?", "$2$4");
-            if (Uri.CheckHostName(rpId) != UriHostNameType.Dns || Uri.CheckHostName(originWithoutProtocolOrPort) != UriHostNameType.Dns)
+            var originWithoutProtocolPortOrPath = Regex.Replace(origin, @"(https?://)?([^:/]+)(:\d+)?(/.*)?$", "$2");
+            if (Uri.CheckHostName(rpId) != UriHostNameType.Dns || Uri.CheckHostName(originWithoutProtocolPortOrPath) != UriHostNameType.Dns)
             {
                 return false;
             }
 
-            if (rpId == originWithoutProtocolOrPort)
+            if (rpId == originWithoutProtocolPortOrPath)
             {
                 return true;
             }
 
-            if (!DomainName.TryParse(rpId, out var parsedRpId) || !DomainName.TryParse(originWithoutProtocolOrPort, out var parsedOrgin))
+            if (!DomainName.TryParse(rpId, out var parsedRpId) || !DomainName.TryParse(originWithoutProtocolPortOrPath, out var parsedOrgin))
             {
                 return false;
             }

@@ -37,6 +37,17 @@ namespace Bit.Core.Test.Utilities.Fido2
         [InlineData("bitwarden.com", "https://login.bitwarden.com:1337", true)]
         [InlineData("login.bitwarden.com", "https://login.bitwarden.com:1337", true)]
         [InlineData("login.bitwarden.com", "https://sub.login.bitwarden.com:1337", true)]
+        // Origin with trailing slash
+        [InlineData("sub.login.bitwarden.com", "https://login.bitwarden.com:1337/", false)]
+        [InlineData("passwordless.dev", "https://login.bitwarden.com:1337/", false)]
+        [InlineData("login.passwordless.dev", "https://login.bitwarden.com:1337/", false)]
+        [InlineData("bitwarden", "localhost/", false)]
+        [InlineData("bitwarden", "bitwarden/", true)]
+        [InlineData("localhost", "https://localhost:8080/", true)]
+        [InlineData("bitwarden.com", "https://bitwarden.com/", true)]
+        [InlineData("bitwarden.com", "https://login.bitwarden.com:1337/", true)]
+        [InlineData("login.bitwarden.com", "https://login.bitwarden.com:1337/", true)]
+        [InlineData("login.bitwarden.com", "https://sub.login.bitwarden.com:1337/", true)]
         public void ValidateRpId(string rpId, string origin, bool isValid)
         {
             Assert.Equal(isValid, Fido2DomainUtils.IsValidRpId(rpId, origin));
