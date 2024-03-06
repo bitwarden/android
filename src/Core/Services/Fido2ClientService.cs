@@ -32,11 +32,11 @@ namespace Bit.Core.Services
             _makeCredentialUserInterface = makeCredentialUserInterface;
         }
 
-        public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams) 
+        public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams)
         {
             var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
             var domain = CoreHelpers.GetHostname(createCredentialParams.Origin);
-            if (blockedUris.Contains(domain))
+            if (blockedUris != null && blockedUris.Contains(domain))
             {
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.UriBlockedError,
@@ -90,7 +90,7 @@ namespace Bit.Core.Services
             {
                 // Filter out all unsupported algorithms
                 credTypesAndPubKeyAlgs = createCredentialParams.PubKeyCredParams
-                    .Where(kp => kp.Alg == (int) Fido2AlgorithmIdentifier.ES256 && kp.Type == Constants.DefaultFido2CredentialType)
+                    .Where(kp => kp.Alg == (int)Fido2AlgorithmIdentifier.ES256 && kp.Type == Constants.DefaultFido2CredentialType)
                     .ToArray();
             }
             else
@@ -107,7 +107,8 @@ namespace Bit.Core.Services
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.NotSupportedError, "No supported algorithms found");
             }
 
-            var clientDataJSON = JsonSerializer.Serialize(new {
+            var clientDataJSON = JsonSerializer.Serialize(new
+            {
                 type = "webauthn.create",
                 challenge = CoreHelpers.Base64UrlEncode(createCredentialParams.Challenge),
                 origin = createCredentialParams.Origin,
@@ -118,10 +119,12 @@ namespace Bit.Core.Services
             var clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
             var makeCredentialParams = MapToMakeCredentialParams(createCredentialParams, credTypesAndPubKeyAlgs, clientDataHash);
 
-            try {
+            try
+            {
                 var makeCredentialResult = await _fido2AuthenticatorService.MakeCredentialAsync(makeCredentialParams, _makeCredentialUserInterface);
 
-                return new Fido2ClientCreateCredentialResult {
+                return new Fido2ClientCreateCredentialResult
+                {
                     CredentialId = makeCredentialResult.CredentialId,
                     AttestationObject = makeCredentialResult.AttestationObject,
                     AuthData = makeCredentialResult.AuthData,
@@ -130,9 +133,13 @@ namespace Bit.Core.Services
                     PublicKeyAlgorithm = makeCredentialResult.PublicKeyAlgorithm,
                     Transports = createCredentialParams.Rp.Id == "google.com" ? ["internal", "usb"] : ["internal"] // workaround for a bug on Google's side
                 };
-            } catch (InvalidStateError) {
+            }
+            catch (InvalidStateError)
+            {
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.InvalidStateError, "Unknown invalid state encountered");
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.UnknownError, $"An unknown error occurred");
             }
         }
@@ -141,7 +148,7 @@ namespace Bit.Core.Services
         {
             var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
             var domain = CoreHelpers.GetHostname(assertCredentialParams.Origin);
-            if (blockedUris.Contains(domain))
+            if (blockedUris != null && blockedUris.Contains(domain))
             {
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.UriBlockedError,
@@ -176,7 +183,8 @@ namespace Bit.Core.Services
                     "RP ID cannot be used with this origin");
             }
 
-            var clientDataJSON = JsonSerializer.Serialize(new {
+            var clientDataJSON = JsonSerializer.Serialize(new
+            {
                 type = "webauthn.get",
                 challenge = CoreHelpers.Base64UrlEncode(assertCredentialParams.Challenge),
                 origin = assertCredentialParams.Origin,
@@ -186,10 +194,12 @@ namespace Bit.Core.Services
             var clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
             var getAssertionParams = MapToGetAssertionParams(assertCredentialParams, clientDataHash);
 
-            try {
+            try
+            {
                 var getAssertionResult = await _fido2AuthenticatorService.GetAssertionAsync(getAssertionParams, _getAssertionUserInterface);
 
-                return new Fido2ClientAssertCredentialResult {
+                return new Fido2ClientAssertCredentialResult
+                {
                     AuthenticatorData = getAssertionResult.AuthenticatorData,
                     ClientDataJSON = clientDataJSONBytes,
                     Id = CoreHelpers.Base64UrlEncode(getAssertionResult.SelectedCredential.Id),
@@ -197,9 +207,13 @@ namespace Bit.Core.Services
                     Signature = getAssertionResult.Signature,
                     UserHandle = getAssertionResult.SelectedCredential.UserHandle
                 };
-            } catch (InvalidStateError) {
+            }
+            catch (InvalidStateError)
+            {
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.InvalidStateError, "Unknown invalid state encountered");
-            } catch (Exception) {
+            }
+            catch (Exception)
+            {
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.UnknownError, $"An unknown error occurred");
             }
 
@@ -215,12 +229,13 @@ namespace Bit.Core.Services
                 createCredentialParams.AuthenticatorSelection?.ResidentKey == "preferred" ||
                 (createCredentialParams.AuthenticatorSelection?.ResidentKey == null &&
                 createCredentialParams.AuthenticatorSelection?.RequireResidentKey == true);
-            
+
             var requireUserVerification = createCredentialParams.AuthenticatorSelection?.UserVerification == "required" ||
                 createCredentialParams.AuthenticatorSelection?.UserVerification == "preferred" ||
                 createCredentialParams.AuthenticatorSelection?.UserVerification == null;
 
-            return new Fido2AuthenticatorMakeCredentialParams {
+            return new Fido2AuthenticatorMakeCredentialParams
+            {
                 RequireResidentKey = requireResidentKey,
                 RequireUserVerification = requireUserVerification,
                 ExcludeCredentialDescriptorList = createCredentialParams.ExcludeCredentials,
@@ -240,7 +255,8 @@ namespace Bit.Core.Services
                 assertCredentialParams.UserVerification == "preferred" ||
                 assertCredentialParams.UserVerification == null;
 
-            return new Fido2AuthenticatorGetAssertionParams {
+            return new Fido2AuthenticatorGetAssertionParams
+            {
                 RpId = assertCredentialParams.RpId,
                 Challenge = assertCredentialParams.Challenge,
                 AllowCredentialDescriptorList = assertCredentialParams.AllowCredentials,
