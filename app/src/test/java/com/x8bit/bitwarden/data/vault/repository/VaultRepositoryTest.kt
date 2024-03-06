@@ -2514,7 +2514,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns byteArray
+            coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptBuffer(
                     userId = userId,
@@ -2551,7 +2551,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns byteArray
+            coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptBuffer(
                     userId = userId,
@@ -2568,6 +2568,26 @@ class VaultRepositoryTest {
                     encryptedFile = encryptedByteArray,
                 )
             } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
+
+            assertEquals(CreateSendResult.Error, result)
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `createSend with FILE and fileManager uriToByteArray failure should return CreateSendResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val url = "www.test.com"
+            val uri = setupMockUri(url = url)
+            val mockSendView = createMockSendView(number = 1)
+            val mockSdkSend = createMockSdkSend(number = 1)
+            coEvery {
+                vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
+            } returns mockSdkSend.asSuccess()
+            coEvery { fileManager.uriToByteArray(any()) } returns Throwable("Fail").asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
@@ -2596,7 +2616,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns byteArray
+            coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptBuffer(
                     userId = userId,
@@ -3225,7 +3245,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                fileManager.uriToByteArray(fileUri = mockUri)
+            } returns mockByteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3233,6 +3255,36 @@ class VaultRepositoryTest {
                     attachmentView = mockAttachmentView,
                     fileBuffer = mockByteArray,
                 )
+            } returns Throwable("Fail").asFailure()
+
+            val result = vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            assertEquals(CreateAttachmentResult.Error, result)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `createAttachment with uriToByteArray failure should return CreateAttachmentResult Error`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            coEvery {
+                fileManager.uriToByteArray(fileUri = mockUri)
             } returns Throwable("Fail").asFailure()
 
             val result = vaultRepository.createAttachment(
@@ -3269,7 +3321,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                fileManager.uriToByteArray(fileUri = mockUri)
+            } returns mockByteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3324,7 +3378,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                fileManager.uriToByteArray(fileUri = mockUri)
+            } returns mockByteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3389,7 +3445,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                fileManager.uriToByteArray(fileUri = mockUri)
+            } returns mockByteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
@@ -3463,7 +3521,9 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
-            coEvery { fileManager.uriToByteArray(fileUri = mockUri) } returns mockByteArray
+            coEvery {
+                fileManager.uriToByteArray(fileUri = mockUri)
+            } returns mockByteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,

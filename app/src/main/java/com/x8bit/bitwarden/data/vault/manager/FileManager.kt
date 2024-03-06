@@ -35,7 +35,7 @@ interface FileManager {
     suspend fun stringToUri(fileUri: Uri, dataString: String): Boolean
 
     /**
-     * Reads the [fileUri] into memory and returns the raw [ByteArray]
+     * Reads the [fileUri] into memory. A successful result will contain the raw [ByteArray].
      */
-    suspend fun uriToByteArray(fileUri: Uri): ByteArray
+    suspend fun uriToByteArray(fileUri: Uri): Result<ByteArray>
 }

@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import kotlinx.coroutines.withContext
-import okio.use
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -113,21 +112,23 @@ class FileManagerImpl(
         }
     }
 
-    override suspend fun uriToByteArray(fileUri: Uri): ByteArray =
-        withContext(dispatcherManager.io) {
-            context
-                .contentResolver
-                .openInputStream(fileUri)
-                ?.use { inputStream ->
-                    ByteArrayOutputStream().use { outputStream ->
-                        val buffer = ByteArray(BUFFER_SIZE)
-                        var length: Int
-                        while (inputStream.read(buffer).also { length = it } != -1) {
-                            outputStream.write(buffer, 0, length)
+    override suspend fun uriToByteArray(fileUri: Uri): Result<ByteArray> =
+        runCatching {
+            withContext(dispatcherManager.io) {
+                context
+                    .contentResolver
+                    .openInputStream(fileUri)
+                    ?.use { inputStream ->
+                        ByteArrayOutputStream().use { outputStream ->
+                            val buffer = ByteArray(BUFFER_SIZE)
+                            var length: Int
+                            while (inputStream.read(buffer).also { length = it } != -1) {
+                                outputStream.write(buffer, 0, length)
+                            }
+                            outputStream.toByteArray()
                         }
-                        outputStream.toByteArray()
                     }
-                }
-                ?: byteArrayOf()
+                    ?: throw IllegalStateException("Stream has crashed")
+            }
         }
 }
