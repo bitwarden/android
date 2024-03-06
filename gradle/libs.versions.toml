@@ -30,7 +30,7 @@ firebaseBom = "32.7.3"
 glide = "1.0.0-beta01"
 googleServices = "4.4.1"
 hilt = "2.50"
-junit5 = "5.8.2"
+junit5 = "5.10.2"
 jvmTarget = "17"
 # kotlin and kotlinCompileExtensions **must** use compatible versions. Do not update either without
 # first checking the Compose to Kotlin Compatibility Map.
