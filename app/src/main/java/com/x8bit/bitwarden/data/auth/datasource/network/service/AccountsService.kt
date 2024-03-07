@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 
 /**
  * Provides an API for querying accounts endpoints.
@@ -41,4 +42,9 @@ interface AccountsService {
      * Reset the password.
      */
     suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit>
+
+    /**
+     * Set the password.
+     */
+    suspend fun setPassword(body: SetPasswordRequestJson): Result<Unit>
 }

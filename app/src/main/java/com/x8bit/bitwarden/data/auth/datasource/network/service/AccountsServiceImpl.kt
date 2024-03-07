@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
@@ -71,4 +72,8 @@ class AccountsServiceImpl(
             authenticatedAccountsApi.resetPassword(body = body)
         }
     }
+
+    override suspend fun setPassword(
+        body: SetPasswordRequestJson,
+    ): Result<Unit> = authenticatedAccountsApi.setPassword(body)
 }
