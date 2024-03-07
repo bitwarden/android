@@ -16,8 +16,6 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
@@ -328,8 +326,7 @@ private val DEFAULT_STATE =
         isLoginButtonEnabled = false,
         passwordInput = "",
         environmentLabel = "",
-        loadingDialogState = LoadingDialogState.Hidden,
-        errorDialogState = BasicDialogState.Hidden,
+        dialogState = null,
         accountSummaries = emptyList(),
         shouldShowLoginWithDevice = false,
     )
