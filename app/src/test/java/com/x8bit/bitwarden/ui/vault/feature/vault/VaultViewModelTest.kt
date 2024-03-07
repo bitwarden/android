@@ -176,6 +176,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organiationId",
@@ -253,6 +254,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -1470,6 +1472,7 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
+            needsMasterPassword = false,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -1483,6 +1486,7 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
+            needsMasterPassword = false,
         ),
     ),
 )

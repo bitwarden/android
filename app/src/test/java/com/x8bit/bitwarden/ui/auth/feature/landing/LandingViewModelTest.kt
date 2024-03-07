@@ -74,6 +74,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                     needsPasswordReset = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
+                    needsMasterPassword = false,
                 ),
             ),
         )
@@ -206,6 +207,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
+            needsMasterPassword = false,
         )
         val userState = UserState(
             activeUserId = "activeUserId",
@@ -257,6 +259,7 @@ class LandingViewModelTest : BaseViewModelTest() {
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
+                needsMasterPassword = false,
             )
             val userState = UserState(
                 activeUserId = "activeUserId",

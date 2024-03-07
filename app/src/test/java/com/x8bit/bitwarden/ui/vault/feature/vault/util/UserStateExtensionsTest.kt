@@ -71,6 +71,7 @@ class UserStateExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -89,6 +90,7 @@ class UserStateExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -111,6 +113,7 @@ class UserStateExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -133,6 +136,7 @@ class UserStateExtensionsTest {
                         isVaultUnlocked = false,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -170,6 +174,7 @@ class UserStateExtensionsTest {
                 isVaultUnlocked = true,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
+                needsMasterPassword = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId",
@@ -205,6 +210,7 @@ class UserStateExtensionsTest {
                 isVaultUnlocked = false,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
+                needsMasterPassword = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId",
@@ -244,6 +250,7 @@ class UserStateExtensionsTest {
                         isVaultUnlocked = true,
                         needsPasswordReset = false,
                         isBiometricsEnabled = false,
+                        needsMasterPassword = false,
                         organizations = listOf(
                             Organization(
                                 id = "organizationId",
@@ -272,6 +279,7 @@ class UserStateExtensionsTest {
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
+                needsMasterPassword = false,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -307,6 +315,7 @@ class UserStateExtensionsTest {
                 isVaultUnlocked = true,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
+                needsMasterPassword = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId-B",
@@ -353,6 +362,7 @@ class UserStateExtensionsTest {
                 isVaultUnlocked = true,
                 needsPasswordReset = false,
                 isBiometricsEnabled = false,
+                needsMasterPassword = false,
                 organizations = listOf(
                     Organization(
                         id = "organizationId-B",

@@ -1916,6 +1916,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     needsPasswordReset = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
+                    needsMasterPassword = false,
                 ),
             ),
         )

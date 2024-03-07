@@ -58,21 +58,22 @@ fun UserStateJson.toUserState(
             .accounts
             .values
             .map { accountJson ->
-                val userId = accountJson.profile.userId
+                val profile = accountJson.profile
+                val userId = profile.userId
                 val vaultUnlocked = vaultState.statusFor(userId) == VaultUnlockData.Status.UNLOCKED
-                val needsPasswordReset = accountJson.profile.forcePasswordResetReason != null
+                val needsPasswordReset = profile.forcePasswordResetReason != null
+                val needsMasterPassword = profile.userDecryptionOptions?.hasMasterPassword == false
 
                 UserState.Account(
-                    userId = accountJson.profile.userId,
-                    name = accountJson.profile.name,
-                    email = accountJson.profile.email,
-                    avatarColorHex = accountJson.profile.avatarColorHex
-                        ?: accountJson.profile.userId.toHexColorRepresentation(),
+                    userId = userId,
+                    name = profile.name,
+                    email = profile.email,
+                    avatarColorHex = profile.avatarColorHex ?: userId.toHexColorRepresentation(),
                     environment = accountJson
                         .settings
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
-                    isPremium = accountJson.profile.hasPremium == true,
+                    isPremium = profile.hasPremium == true,
                     isLoggedIn = isLoggedInProvider(userId),
                     isVaultUnlocked = vaultUnlocked && !needsPasswordReset,
                     needsPasswordReset = needsPasswordReset,
@@ -82,6 +83,7 @@ fun UserStateJson.toUserState(
                         .orEmpty(),
                     isBiometricsEnabled = isBiometricsEnabledProvider(userId),
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
+                    needsMasterPassword = needsMasterPassword,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,
