@@ -350,9 +350,8 @@ jobs:
           CONTAINER_NAME: mobile
           FILE: app_fdroid-keystore.jks
         run: |
-          mkdir -p $HOME/secrets
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
-            --file $HOME/secrets/$FILE --output none
+            --file ${{ env.android_folder_path }}/$FILE --output none
         shell: bash
 
       - name: Increment version
@@ -402,17 +401,24 @@ jobs:
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
         run: |
-          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
+          $projToBuild = "$($env:GITHUB_WORKSPACE)/${{ env.main_app_project_path }}";
           $packageName = "com.x8bit.bitwarden";
 
           Write-Output "##### Sign FDroid"
 
-          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:CustomConstants="FDROID" --no-restore
+          $signingFdroidKeyStore = "$($env:GITHUB_WORKSPACE)\${{ env.android_folder_path }}\app_fdroid-keystore.jks"
+          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android `
+            /p:AndroidKeyStore=true `
+            /p:AndroidSigningKeyStore=$signingFdroidKeyStore `
+            /p:AndroidSigningKeyAlias=bitwarden `
+            /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" `
+            /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" `
+            /p:CustomConstants="FDROID" --no-restore
 
           Write-Output "##### Copy FDroid apk to project root"
 
-          $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
-          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden-fdroid.apk");
+          $signedApkPath = "$($env:GITHUB_WORKSPACE)/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk";
+          $signedApkDestPath = "$($env:GITHUB_WORKSPACE)/com.x8bit.bitwarden-fdroid.apk";
 
           Copy-Item $signedApkPath $signedApkDestPath
 
