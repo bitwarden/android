@@ -15,9 +15,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,8 +45,7 @@ class LoginViewModel @Inject constructor(
             isLoginButtonEnabled = false,
             passwordInput = "",
             environmentLabel = environmentRepository.environment.label,
-            loadingDialogState = LoadingDialogState.Shown(R.string.loading.asText()),
-            errorDialogState = BasicDialogState.Hidden,
+            dialogState = LoginState.DialogState.Loading(R.string.loading.asText()),
             captchaToken = LoginArgs(savedStateHandle).captchaToken,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
             shouldShowLoginWithDevice = false,
@@ -130,7 +128,7 @@ class LoginViewModel @Inject constructor(
             is KnownDeviceResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(
-                        loadingDialogState = LoadingDialogState.Hidden,
+                        dialogState = null,
                         shouldShowLoginWithDevice = action.knownDeviceResult.isKnownDevice,
                     )
                 }
@@ -139,7 +137,7 @@ class LoginViewModel @Inject constructor(
             is KnownDeviceResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        loadingDialogState = LoadingDialogState.Hidden,
+                        dialogState = null,
                         shouldShowLoginWithDevice = false,
                     )
                 }
@@ -150,7 +148,7 @@ class LoginViewModel @Inject constructor(
     private fun handleReceiveLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (val loginResult = action.loginResult) {
             is LoginResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     event = LoginEvent.NavigateToCaptcha(
                         uri = generateUriForCaptcha(captchaId = loginResult.captchaId),
@@ -159,7 +157,7 @@ class LoginViewModel @Inject constructor(
             }
 
             is LoginResult.TwoFactorRequired -> {
-                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(
                     LoginEvent.NavigateToTwoFactorLogin(
                         emailAddress = state.emailAddress,
@@ -171,24 +169,23 @@ class LoginViewModel @Inject constructor(
             is LoginResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        errorDialogState = BasicDialogState.Shown(
+                        dialogState = LoginState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = (loginResult.errorMessage)?.asText()
+                            message = loginResult.errorMessage?.asText()
                                 ?: R.string.generic_error_message.asText(),
                         ),
-                        loadingDialogState = LoadingDialogState.Hidden,
                     )
                 }
             }
 
             is LoginResult.Success -> {
-                mutableStateFlow.update { it.copy(loadingDialogState = LoadingDialogState.Hidden) }
+                mutableStateFlow.update { it.copy(dialogState = null) }
             }
         }
     }
 
     private fun handleErrorDialogDismiss() {
-        mutableStateFlow.update { it.copy(errorDialogState = BasicDialogState.Hidden) }
+        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private fun handleCaptchaTokenReceived(tokenResult: CaptchaCallbackTokenResult) {
@@ -196,7 +193,7 @@ class LoginViewModel @Inject constructor(
             CaptchaCallbackTokenResult.MissingToken -> {
                 mutableStateFlow.update {
                     it.copy(
-                        errorDialogState = BasicDialogState.Shown(
+                        dialogState = LoginState.DialogState.Error(
                             title = R.string.log_in_denied.asText(),
                             message = R.string.captcha_failed.asText(),
                         ),
@@ -228,8 +225,8 @@ class LoginViewModel @Inject constructor(
     private fun attemptLogin() {
         mutableStateFlow.update {
             it.copy(
-                loadingDialogState = LoadingDialogState.Shown(
-                    text = R.string.logging_in.asText(),
+                dialogState = LoginState.DialogState.Loading(
+                    message = R.string.logging_in.asText(),
                 ),
             )
         }
@@ -281,11 +278,32 @@ data class LoginState(
     val captchaToken: String?,
     val environmentLabel: String,
     val isLoginButtonEnabled: Boolean,
-    val loadingDialogState: LoadingDialogState,
-    val errorDialogState: BasicDialogState,
+    val dialogState: DialogState?,
     val accountSummaries: List<AccountSummary>,
     val shouldShowLoginWithDevice: Boolean,
-) : Parcelable
+) : Parcelable {
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+    }
+}
 
 /**
  * Models events for the login screen.

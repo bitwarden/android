@@ -17,8 +17,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
-import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import io.mockk.coEvery
@@ -259,19 +257,18 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(LoginAction.LoginButtonClick)
             assertEquals(
                 DEFAULT_STATE.copy(
-                    loadingDialogState = LoadingDialogState.Shown(
-                        text = R.string.logging_in.asText(),
+                    dialogState = LoginState.DialogState.Loading(
+                        message = R.string.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
             )
             assertEquals(
                 DEFAULT_STATE.copy(
-                    errorDialogState = BasicDialogState.Shown(
+                    dialogState = LoginState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
                         message = "mock_error".asText(),
                     ),
-                    loadingDialogState = LoadingDialogState.Hidden,
                 ),
                 awaitItem(),
             )
@@ -296,14 +293,14 @@ class LoginViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(LoginAction.LoginButtonClick)
             assertEquals(
                 DEFAULT_STATE.copy(
-                    loadingDialogState = LoadingDialogState.Shown(
-                        text = R.string.logging_in.asText(),
+                    dialogState = LoginState.DialogState.Loading(
+                        message = R.string.logging_in.asText(),
                     ),
                 ),
                 awaitItem(),
             )
             assertEquals(
-                DEFAULT_STATE.copy(loadingDialogState = LoadingDialogState.Hidden),
+                DEFAULT_STATE.copy(dialogState = null),
                 awaitItem(),
             )
         }
@@ -464,8 +461,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             passwordInput = "",
             isLoginButtonEnabled = false,
             environmentLabel = Environment.Us.label,
-            loadingDialogState = LoadingDialogState.Hidden,
-            errorDialogState = BasicDialogState.Hidden,
+            dialogState = null,
             captchaToken = null,
             accountSummaries = emptyList(),
             shouldShowLoginWithDevice = false,

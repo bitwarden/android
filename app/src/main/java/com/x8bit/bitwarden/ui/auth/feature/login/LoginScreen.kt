@@ -45,8 +45,10 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.action.BitwardenOverflo
 import com.x8bit.bitwarden.ui.platform.components.appbar.action.OverflowMenuItemData
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButtonWithIcon
+import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
@@ -60,7 +62,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("LongMethod")
 fun LoginScreen(
     onNavigateBack: () -> Unit,
     onNavigateToMasterPasswordHint: (String) -> Unit,
@@ -102,6 +104,13 @@ fun LoginScreen(
         }
     }
 
+    LoginDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) }
+        },
+    )
+
     val isAccountButtonVisible = state.accountSummaries.isNotEmpty()
     var isAccountMenuVisible by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -140,9 +149,6 @@ fun LoginScreen(
     ) { innerPadding ->
         LoginScreenContent(
             state = state,
-            onErrorDialogDismiss = remember(viewModel) {
-                { viewModel.trySendAction(LoginAction.ErrorDialogDismiss) }
-            },
             onPasswordInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(LoginAction.PasswordInputChanged(it)) }
             },
@@ -193,11 +199,32 @@ fun LoginScreen(
     }
 }
 
-@Suppress("LongMethod", "LongParameterList")
+@Composable
+private fun LoginDialogs(
+    dialogState: LoginState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is LoginState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is LoginState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(text = dialogState.message),
+        )
+
+        null -> Unit
+    }
+}
+
+@Suppress("LongMethod")
 @Composable
 private fun LoginScreenContent(
     state: LoginState,
-    onErrorDialogDismiss: () -> Unit,
     onPasswordInputChanged: (String) -> Unit,
     onMasterPasswordClick: () -> Unit,
     onLoginButtonClick: () -> Unit,
@@ -211,14 +238,6 @@ private fun LoginScreenContent(
             .imePadding()
             .verticalScroll(rememberScrollState()),
     ) {
-        BitwardenLoadingDialog(
-            visibilityState = state.loadingDialogState,
-        )
-        BitwardenBasicDialog(
-            visibilityState = state.errorDialogState,
-            onDismissRequest = onErrorDialogDismiss,
-        )
-
         BitwardenPasswordField(
             modifier = Modifier
                 .semantics { testTag = "MasterPasswordEntry" }
