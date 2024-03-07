@@ -298,7 +298,8 @@ jobs:
     name: F-Droid Build
     runs-on: windows-2022
     env:
-      android_folder_path: src/App/Platforms/Android
+      android_folder_path: src\App\Platforms\Android
+      android_folder_path_bash: src/App/Platforms/Android
       android_manifest_path: src/App/Platforms/Android/AndroidManifest.xml
     steps:
       - name: Setup NuGet
@@ -351,7 +352,7 @@ jobs:
           FILE: app_fdroid-keystore.jks
         run: |
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
-            --file ${{ env.android_folder_path }}/$FILE --output none
+            --file ${{ env.android_folder_path_bash }}/$FILE --output none
         shell: bash
 
       - name: Increment version
