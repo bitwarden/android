@@ -389,20 +389,11 @@ jobs:
       - name: Restore packages
         run: dotnet restore
 
-      - name: Build for F-Droid
-        run: |
-          $configuration = "Release";
-          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
-
-          Write-Output "##### Build $configuration FDROID"
-
-          dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android /p:CustomConstants="FDROID"
-
-      - name: Sign for F-Droid
+      - name: Build & Sign F-Droid
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
         run: |
-          $projToBuild = "$($env:GITHUB_WORKSPACE)/${{ env.main_app_project_path }}";
+          $projToBuild = "$($env:GITHUB_WORKSPACE)\${{ env.main_app_project_path }}";
           $packageName = "com.x8bit.bitwarden";
 
           Write-Output "##### Sign FDroid"
@@ -418,8 +409,8 @@ jobs:
 
           Write-Output "##### Copy FDroid apk to project root"
 
-          $signedApkPath = "$($env:GITHUB_WORKSPACE)/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk";
-          $signedApkDestPath = "$($env:GITHUB_WORKSPACE)/com.x8bit.bitwarden-fdroid.apk";
+          $signedApkPath = "$($env:GITHUB_WORKSPACE)\${{ env.main_app_folder_path }}\bin\Release\${{ env.target-net-version }}-android\publish\$($packageName)-Signed.apk";
+          $signedApkDestPath = "$($env:GITHUB_WORKSPACE)\com.x8bit.bitwarden-fdroid.apk";
 
           Copy-Item $signedApkPath $signedApkDestPath
 
