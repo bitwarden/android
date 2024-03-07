@@ -40,14 +40,14 @@ namespace Bit.iOS.Autofill.ListItems
 
                 NSLayoutConstraint.ActivateConstraints(new NSLayoutConstraint[]
                 {
-                    _header.LeadingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.LeadingAnchor, 9),
-                    _header.TrailingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TrailingAnchor, 9),
+                    _header.LeadingAnchor.ConstraintEqualTo(ContentView.LeadingAnchor, 9),
+                    _header.TrailingAnchor.ConstraintEqualTo(ContentView.TrailingAnchor, 9),
                     _header.TopAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TopAnchor, 10),
 
-                    _separator.HeightAnchor.ConstraintEqualTo(2),
+                    _separator.HeightAnchor.ConstraintEqualTo(1),
                     _separator.TopAnchor.ConstraintEqualTo(_header.BottomAnchor, 12),
-                    _separator.LeadingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.LeadingAnchor, 0),
-                    _separator.TrailingAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.TrailingAnchor, 0),
+                    _separator.LeadingAnchor.ConstraintEqualTo(ContentView.LeadingAnchor, 7),
+                    _separator.TrailingAnchor.ConstraintEqualTo(ContentView.TrailingAnchor, -7),
                     _separator.BottomAnchor.ConstraintEqualTo(ContentView.LayoutMarginsGuide.BottomAnchor, 2)
                 });
             }

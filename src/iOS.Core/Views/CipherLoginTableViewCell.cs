@@ -45,7 +45,7 @@ namespace Bit.iOS.Core.Views
                 _subtitle.LineBreakMode = UILineBreakMode.TailTruncation;
                 _subtitle.Lines = 1;
 
-                _mainIcon.Font = UIFont.FromName("bwi-font", 28);
+                _mainIcon.Font = UIFont.FromName("bwi-font", 24);
                 _mainIcon.AdjustsFontSizeToFitWidth = true;
                 _mainIcon.TextColor = ThemeHelpers.PrimaryColor;
 
@@ -79,14 +79,14 @@ namespace Bit.iOS.Core.Views
                 {
                     _mainIcon.LeadingAnchor.ConstraintEqualTo(ContentView.LeadingAnchor, 9),
                     _mainIcon.CenterYAnchor.ConstraintEqualTo(ContentView.CenterYAnchor),
-                    _mainIcon.WidthAnchor.ConstraintEqualTo(35),
-                    _mainIcon.HeightAnchor.ConstraintEqualTo(35),
+                    _mainIcon.WidthAnchor.ConstraintEqualTo(31),
+                    _mainIcon.HeightAnchor.ConstraintEqualTo(31),
 
                     _mainStackView.LeadingAnchor.ConstraintEqualTo(_mainIcon.TrailingAnchor, 3),
                     _mainStackView.TopAnchor.ConstraintEqualTo(ContentView.TopAnchor, 8),
                     _mainStackView.TrailingAnchor.ConstraintLessThanOrEqualTo(ContentView.TrailingAnchor, 9),
 
-                    _separator.HeightAnchor.ConstraintEqualTo(2),
+                    _separator.HeightAnchor.ConstraintEqualTo(1),
                     _separator.TopAnchor.ConstraintEqualTo(_mainStackView.BottomAnchor, 8),
                     _separator.LeadingAnchor.ConstraintEqualTo(ContentView.LeadingAnchor, 7),
                     _separator.TrailingAnchor.ConstraintEqualTo(ContentView.TrailingAnchor, -7),
