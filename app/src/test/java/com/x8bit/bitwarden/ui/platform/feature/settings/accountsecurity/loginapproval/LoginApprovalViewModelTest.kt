@@ -297,6 +297,7 @@ private val DEFAULT_USER_STATE = UserState(
             isVaultUnlocked = true,
             needsPasswordReset = false,
             organizations = emptyList(),
+            needsMasterPassword = false,
         ),
     ),
 )

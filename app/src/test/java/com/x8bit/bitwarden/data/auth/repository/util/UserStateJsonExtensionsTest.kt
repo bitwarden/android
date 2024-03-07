@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -117,6 +118,7 @@ class UserStateJsonExtensionsTest {
                         ),
                         isBiometricsEnabled = false,
                         vaultUnlockType = VaultUnlockType.PIN,
+                        needsMasterPassword = false,
                     ),
                 ),
             ),
@@ -131,6 +133,11 @@ class UserStateJsonExtensionsTest {
                             every { avatarColorHex } returns "activeAvatarColorHex"
                             every { hasPremium } returns null
                             every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                            )
                         },
                         tokens = AccountTokensJson(
                             accessToken = "accessToken",
@@ -193,6 +200,7 @@ class UserStateJsonExtensionsTest {
                         ),
                         isBiometricsEnabled = true,
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = true,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -208,6 +216,11 @@ class UserStateJsonExtensionsTest {
                             every { avatarColorHex } returns null
                             every { hasPremium } returns true
                             every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = null,
+                                keyConnectorUserDecryptionOptions = null,
+                            )
                         },
                         tokens = AccountTokensJson(
                             accessToken = null,

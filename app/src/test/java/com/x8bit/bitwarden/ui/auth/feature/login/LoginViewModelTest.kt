@@ -130,6 +130,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     needsPasswordReset = false,
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
+                    needsMasterPassword = false,
                 ),
             ),
         )

@@ -556,6 +556,7 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             isBiometricsEnabled = false,
             organizations = emptyList(),
+            needsMasterPassword = false,
         ),
     ),
 )

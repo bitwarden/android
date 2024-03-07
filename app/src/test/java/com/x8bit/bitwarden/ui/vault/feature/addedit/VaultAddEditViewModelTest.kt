@@ -2454,6 +2454,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                     isBiometricsEnabled = true,
                     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                    needsMasterPassword = false,
                 ),
             ),
             hasPendingAccountAddition = false,

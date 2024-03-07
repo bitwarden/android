@@ -476,6 +476,7 @@ private val DEFAULT_USER_STATE = UserState(
             isVaultUnlocked = true,
             needsPasswordReset = false,
             isBiometricsEnabled = false,
+            needsMasterPassword = false,
             organizations = listOf(
                 Organization(
                     id = "mockOrganizationId-1",
