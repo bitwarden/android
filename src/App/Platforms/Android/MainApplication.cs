@@ -20,6 +20,7 @@ using Bit.App.Utilities;
 using Bit.App.Pages;
 using Bit.App.Utilities.AccountManagement;
 using Bit.App.Controls;
+using Bit.App.Platforms.Android.Autofill;
 using Bit.Core.Enums;
 #if !FDROID
 using Android.Gms.Security;
@@ -85,6 +86,20 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IWatchDeviceService>(),
                     ServiceContainer.Resolve<IConditionedAwaiterManager>());
                 ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+
+                ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
+                    ServiceContainer.Resolve<ICipherService>(),
+                    ServiceContainer.Resolve<ISyncService>(),
+                    ServiceContainer.Resolve<ICryptoFunctionService>()));
+
+                //TODO: WIP: Need to replace 'Fido2GetAssertionUserInterface' and 'Fido2MakeCredentialUserInterface'
+                ServiceContainer.Register<IFido2ClientService>(new Fido2ClientService(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<IEnvironmentService>(),
+                    ServiceContainer.Resolve<ICryptoFunctionService>(),
+                    ServiceContainer.Resolve<IFido2AuthenticatorService>(),
+                    new Fido2GetAssertionUserInterface(),
+                    new Fido2MakeCredentialUserInterface()));
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
