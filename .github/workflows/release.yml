@@ -28,7 +28,7 @@ jobs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
-        if: github.event.inputs.release_type != 'Dry Run'
+        if: inputs.release_type != 'Dry Run'
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc" ]]; then
             echo "==================================="
@@ -44,9 +44,9 @@ jobs:
         id: version
         uses: bitwarden/gh-actions/release-version-check@main
         with:
-          release-type: ${{ github.event.inputs.release_type }}
+          release-type: ${{ inputs.release_type }}
           project-type: xamarin
-          file: src/Android/Properties/AndroidManifest.xml
+          file: src/App/Platforms/Android/AndroidManifest.xml
 
       - name: Get branch name
         id: branch
@@ -55,7 +55,7 @@ jobs:
           echo "branch-name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Create GitHub deployment
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        if: ${{ inputs.release_type != 'Dry Run' }}
         uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1 # v2.0.7
         id: deployment
         with:
@@ -67,7 +67,7 @@ jobs:
 
 
       - name: Download all artifacts
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        if: ${{ inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
@@ -75,7 +75,7 @@ jobs:
           branch: ${{ steps.branch.outputs.branch-name }}
 
       - name: Dry Run - Download all artifacts
-        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        if: ${{ inputs.release_type == 'Dry Run' }}
         uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
@@ -86,7 +86,7 @@ jobs:
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: Create release
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        if: ${{ inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
@@ -103,16 +103,16 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
-        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
+        if: ${{ inputs.release_type != 'Dry Run' && success() }}
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806 # v2.0.3
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'success'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Update deployment status to Failure
-        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
-        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
+        if: ${{ inputs.release_type != 'Dry Run' && failure() }}
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806 # v2.0.3
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'failure'
@@ -129,7 +129,7 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - name: Download F-Droid .apk artifact
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        if: ${{ inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
@@ -138,7 +138,7 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Dry Run - Download F-Droid .apk artifact
-        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        if: ${{ inputs.release_type == 'Dry Run' }}
         uses: dawidd6/action-download-artifact@71072fbb1229e1317f1a8de6b04206afb461bd67 # v3.1.2
         with:
           workflow: build.yml
@@ -212,5 +212,5 @@ jobs:
           cd $GITHUB_WORKSPACE
 
       - name: Deploy to gh-pages
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        if: ${{ inputs.release_type != 'Dry Run' }}
         run: npm run deploy
