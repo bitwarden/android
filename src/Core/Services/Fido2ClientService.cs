@@ -96,10 +96,11 @@ namespace Bit.Core.Services
             else
             {
                 // Assign default algorithms
-                credTypesAndPubKeyAlgs = [
+                credTypesAndPubKeyAlgs = new PublicKeyCredentialParameters[]
+                {
                     new PublicKeyCredentialParameters { Alg = (int) Fido2AlgorithmIdentifier.ES256, Type = Constants.DefaultFido2CredentialType },
                     new PublicKeyCredentialParameters { Alg = (int) Fido2AlgorithmIdentifier.RS256, Type = Constants.DefaultFido2CredentialType }
-                ];
+                };
             }
 
             if (credTypesAndPubKeyAlgs.Length == 0)
@@ -131,7 +132,7 @@ namespace Bit.Core.Services
                     ClientDataJSON = clientDataJSONBytes,
                     PublicKey = makeCredentialResult.PublicKey,
                     PublicKeyAlgorithm = makeCredentialResult.PublicKeyAlgorithm,
-                    Transports = createCredentialParams.Rp.Id == "google.com" ? ["internal", "usb"] : ["internal"] // workaround for a bug on Google's side
+                    Transports = createCredentialParams.Rp.Id == "google.com" ? new string[] { "internal", "usb" } : new string[] { "internal" } // workaround for a bug on Google's side
                 };
             }
             catch (InvalidStateError)
@@ -230,14 +231,10 @@ namespace Bit.Core.Services
                 (createCredentialParams.AuthenticatorSelection?.ResidentKey == null &&
                 createCredentialParams.AuthenticatorSelection?.RequireResidentKey == true);
 
-            var requireUserVerification = createCredentialParams.AuthenticatorSelection?.UserVerification == "required" ||
-                createCredentialParams.AuthenticatorSelection?.UserVerification == "preferred" ||
-                createCredentialParams.AuthenticatorSelection?.UserVerification == null;
-
             return new Fido2AuthenticatorMakeCredentialParams
             {
                 RequireResidentKey = requireResidentKey,
-                RequireUserVerification = requireUserVerification,
+                UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(createCredentialParams.AuthenticatorSelection?.UserVerification),
                 ExcludeCredentialDescriptorList = createCredentialParams.ExcludeCredentials,
                 CredTypesAndPubKeyAlgs = credTypesAndPubKeyAlgs,
                 Hash = clientDataHash,
@@ -251,16 +248,11 @@ namespace Bit.Core.Services
             Fido2ClientAssertCredentialParams assertCredentialParams,
             byte[] cliendDataHash)
         {
-            var requireUserVerification = assertCredentialParams.UserVerification == "required" ||
-                assertCredentialParams.UserVerification == "preferred" ||
-                assertCredentialParams.UserVerification == null;
-
-            return new Fido2AuthenticatorGetAssertionParams
-            {
+            return new Fido2AuthenticatorGetAssertionParams {
                 RpId = assertCredentialParams.RpId,
                 Challenge = assertCredentialParams.Challenge,
                 AllowCredentialDescriptorList = assertCredentialParams.AllowCredentials,
-                RequireUserVerification = requireUserVerification,
+                UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(assertCredentialParams?.UserVerification),
                 Hash = cliendDataHash
             };
         }

@@ -22,6 +22,8 @@ using Bit.App.Utilities.AccountManagement;
 using Bit.App.Controls;
 using Bit.App.Platforms.Android.Autofill;
 using Bit.Core.Enums;
+using Bit.Core.Services.UserVerification;
+
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -87,10 +89,26 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IConditionedAwaiterManager>());
                 ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
+                var userPinService = new UserPinService(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<ICryptoService>(),
+                    ServiceContainer.Resolve<IVaultTimeoutService>());
+                ServiceContainer.Register<IUserPinService>(userPinService);
+
+                var userVerificationMediatorService = new UserVerificationMediatorService(
+                    ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                    ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
+                    userPinService,
+                    deviceActionService,
+                    ServiceContainer.Resolve<IUserVerificationService>());
+                ServiceContainer.Register<IUserVerificationMediatorService>(userVerificationMediatorService);
+
                 ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
                     ServiceContainer.Resolve<ICipherService>(),
                     ServiceContainer.Resolve<ISyncService>(),
-                    ServiceContainer.Resolve<ICryptoFunctionService>()));
+                    ServiceContainer.Resolve<ICryptoFunctionService>(),
+                    userVerificationMediatorService
+                    ));
 
                 //TODO: WIP: Need to replace 'Fido2GetAssertionUserInterface' and 'Fido2MakeCredentialUserInterface'
                 ServiceContainer.Register<IFido2ClientService>(new Fido2ClientService(
@@ -175,7 +193,6 @@ namespace Bit.Droid
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService, logger);
             var biometricService = new BiometricService(stateService, cryptoService);
-            var userPinService = new UserPinService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
@@ -199,7 +216,6 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
-            ServiceContainer.Register<IUserPinService>(userPinService);
 
             // Push
 #if FDROID

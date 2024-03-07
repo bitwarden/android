@@ -78,9 +78,7 @@ namespace Bit.iOS.Autofill.Utilities
                 return;
             }
 
-            // TODO: Check user verification
-
-            Context.ConfirmNewCredentialTcs.SetResult((item.Id, true));
+            Context.PickCredentialForFido2CreationTcs.SetResult((item.Id, null));
         }
     }
 }

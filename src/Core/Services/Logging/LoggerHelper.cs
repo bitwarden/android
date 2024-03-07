@@ -23,7 +23,6 @@ namespace Bit.Core.Services
                 // we need to track the error as well
                 Microsoft.AppCenter.Crashes.Crashes.TrackError(ex);
 #endif
-
             }
         }
     }

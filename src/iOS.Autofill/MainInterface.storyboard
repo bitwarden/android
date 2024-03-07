@@ -132,36 +132,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="830"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bAz-MO-Wzd" userLabel="HeaderView">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="39.5"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ngG-eh-mSP" userLabel="HeaderLabel">
-                                        <rect key="frame" x="18" y="12" width="378" height="20.5"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V7p-E8-7fp" userLabel="SeparatorView">
-                                        <rect key="frame" x="9" y="37.5" width="396" height="2"/>
-                                        <color key="backgroundColor" name="LightSecondary300"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="2" id="5pj-pp-Crd"/>
-                                        </constraints>
-                                    </view>
-                                </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="V7p-E8-7fp" secondAttribute="trailing" constant="9" id="5vq-UE-Ebp"/>
-                                    <constraint firstAttribute="bottom" secondItem="V7p-E8-7fp" secondAttribute="bottom" id="8Jj-Cy-WcG"/>
-                                    <constraint firstItem="V7p-E8-7fp" firstAttribute="leading" secondItem="bAz-MO-Wzd" secondAttribute="leading" constant="9" id="cmb-sZ-Oar"/>
-                                    <constraint firstAttribute="trailing" secondItem="ngG-eh-mSP" secondAttribute="trailing" constant="18" id="f14-Hv-ajq"/>
-                                    <constraint firstItem="ngG-eh-mSP" firstAttribute="leading" secondItem="bAz-MO-Wzd" secondAttribute="leading" constant="18" id="htJ-47-GLg"/>
-                                    <constraint firstItem="V7p-E8-7fp" firstAttribute="top" secondItem="ngG-eh-mSP" secondAttribute="bottom" constant="5" id="rdq-1s-mfF"/>
-                                    <constraint firstItem="ngG-eh-mSP" firstAttribute="top" secondItem="bAz-MO-Wzd" secondAttribute="top" constant="12" id="sCw-FM-uEg"/>
-                                </constraints>
-                            </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wNm-Sy-bJv" userLabel="EmptyView">
-                                <rect key="frame" x="0.0" y="139.5" width="414" height="228"/>
+                                <rect key="frame" x="0.0" y="200" width="414" height="228"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="empty_items_state" translatesAutoresizingMaskIntoConstraints="NO" id="FDN-Dp-jl3">
                                         <rect key="frame" x="128.5" y="0.0" width="157" height="110.5"/>
@@ -246,16 +218,13 @@
                             <constraint firstItem="Tq0-Ep-tHr" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="4wL-FF-CVk"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="Tq0-Ep-tHr" secondAttribute="trailing" id="5BV-0y-vU1"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="bottom" secondItem="2305" secondAttribute="bottom" id="6EB-rh-lLS"/>
-                            <constraint firstItem="wNm-Sy-bJv" firstAttribute="top" secondItem="bAz-MO-Wzd" secondAttribute="bottom" constant="100" id="CWX-uT-sfH"/>
-                            <constraint firstItem="bAz-MO-Wzd" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="SBv-yF-WW2"/>
+                            <constraint firstItem="wNm-Sy-bJv" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" constant="200" id="CWX-uT-sfH"/>
                             <constraint firstItem="wNm-Sy-bJv" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="Ytw-kT-KUB"/>
                             <constraint firstItem="Tq0-Ep-tHr" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" id="eT6-Bv-JaR"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="2305" secondAttribute="trailing" id="ofJ-fL-adF"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="bottom" secondItem="Tq0-Ep-tHr" secondAttribute="bottom" id="pBa-o1-Mtx"/>
                             <constraint firstItem="2305" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" id="pGe-1e-B4s"/>
-                            <constraint firstItem="bAz-MO-Wzd" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" id="uiV-Kh-8Iz"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="wNm-Sy-bJv" secondAttribute="trailing" id="v0x-aS-ymc"/>
-                            <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="bAz-MO-Wzd" secondAttribute="trailing" id="vC6-AI-wVU"/>
                             <constraint firstItem="2305" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="xfQ-VQ-yWe"/>
                         </constraints>
                     </view>
@@ -287,8 +256,6 @@
                         <outlet property="_emptyViewButton" destination="Gv5-Xt-G9l" id="JHd-sV-VJC"/>
                         <outlet property="_emptyViewImage" destination="FDN-Dp-jl3" id="Dzb-p3-tv0"/>
                         <outlet property="_emptyViewLabel" destination="tEp-qe-xvE" id="CPZ-it-kVY"/>
-                        <outlet property="_headerLabel" destination="ngG-eh-mSP" id="1bj-Ii-8OY"/>
-                        <outlet property="_headerView" destination="bAz-MO-Wzd" id="85r-XO-e5h"/>
                         <segue destination="1845" kind="presentation" identifier="loginAddSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="3731"/>
                         <segue destination="11552" kind="show" identifier="loginSearchFromListSegue" id="12574"/>
                     </connections>
@@ -652,16 +619,13 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="12574"/>
+        <segue reference="12959"/>
         <segue reference="3731"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="check.png" width="90" height="90"/>
         <image name="empty_items_state" width="157" height="111"/>
         <image name="logo.png" width="282" height="44"/>
-        <namedColor name="LightSecondary300">
-            <color red="0.80800002813339233" green="0.83099997043609619" blue="0.86299997568130493" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-        </namedColor>
         <namedColor name="LightTextMuted">
             <color red="0.42699998617172241" green="0.45899999141693115" blue="0.49399998784065247" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

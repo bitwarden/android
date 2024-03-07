@@ -762,27 +762,11 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-          (github.ref == 'refs/heads/main')
-          || (github.ref == 'refs/heads/rc')
-          || (github.ref == 'refs/heads/hotfix-rc')
-        env:
-          CLOC_STATUS: ${{ needs.cloc.result }}
-          ANDROID_STATUS: ${{ needs.android.result }}
-          F_DROID_STATUS: ${{ needs.f-droid.result }}
-          IOS_STATUS: ${{ needs.ios.result }}
-          CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
-        run: |
-          if [ "$CLOC_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$ANDROID_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$F_DROID_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$IOS_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
-              exit 1
-          fi
+          (github.ref == 'refs/heads/main'
+          || github.ref == 'refs/heads/rc'
+          || github.ref == 'refs/heads/hotfix-rc')
+          && contains(needs.*.result, 'failure')
+        run: exit 1
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0

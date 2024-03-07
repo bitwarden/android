@@ -21,7 +21,7 @@ namespace Bit.Core.Test.Services
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         public async Task SilentCredentialDiscoveryAsync_ReturnsEmptyArray_NoCredentialsExist(SutProvider<Fido2AuthenticatorService> sutProvider)
         {
-            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns([]);
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(Task.FromResult(new List<CipherView>()));
 
             var result = await sutProvider.Sut.SilentCredentialDiscoveryAsync("bitwarden.com");
 
@@ -32,11 +32,12 @@ namespace Bit.Core.Test.Services
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         public async Task SilentCredentialDiscoveryAsync_ReturnsEmptyArray_OnlyNonDiscoverableCredentialsExist(SutProvider<Fido2AuthenticatorService> sutProvider)
         {
-            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns([
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(Task.FromResult(new List<CipherView>
+            {
                 CreateCipherView("bitwarden.com", false),
                 CreateCipherView("bitwarden.com", false),
                 CreateCipherView("bitwarden.com", false)
-            ]);
+            }));
 
             var result = await sutProvider.Sut.SilentCredentialDiscoveryAsync("bitwarden.com");
 
@@ -47,10 +48,11 @@ namespace Bit.Core.Test.Services
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization) })]
         public async Task SilentCredentialDiscoveryAsync_ReturnsEmptyArray_NoCredentialsWithMatchingRpIdExist(SutProvider<Fido2AuthenticatorService> sutProvider)
         {
-            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns([
+            sutProvider.GetDependency<ICipherService>().GetAllDecryptedAsync().Returns(Task.FromResult(new List<CipherView>
+            {
                 CreateCipherView("a.bitwarden.com", true),
                 CreateCipherView("example.com", true)
-            ]);
+            }));
 
             var result = await sutProvider.Sut.SilentCredentialDiscoveryAsync("bitwarden.com");
 

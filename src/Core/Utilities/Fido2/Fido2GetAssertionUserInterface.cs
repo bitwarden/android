@@ -15,19 +15,27 @@ namespace Bit.Core.Utilities.Fido2
         private readonly string _cipherId;
         private readonly bool _userVerified = false;
         private readonly Func<Task> _ensureUnlockedVaultCallback;
-        private readonly Func<Task<bool>> _verifyUserCallback;
+        private readonly Func<bool> _hasVaultBeenUnlockedInThisTransaction;
+        private readonly Func<string, Fido2UserVerificationPreference, Task<bool>> _verifyUserCallback;
 
         /// <param name="cipherId">The cipherId for the credential that the user has already picker</param>
         /// <param name="userVerified">True if the user has already been verified by the operating system</param>
-        public Fido2GetAssertionUserInterface(string cipherId, bool userVerified, Func<Task> ensureUnlockedVaultCallback, Func<Task<bool>> verifyUserCallback)
+        public Fido2GetAssertionUserInterface(string cipherId,
+            bool userVerified,
+            Func<Task> ensureUnlockedVaultCallback,
+            Func<bool> hasVaultBeenUnlockedInThisTransaction,
+            Func<string, Fido2UserVerificationPreference, Task<bool>> verifyUserCallback)
         {
             _cipherId = cipherId;
             _userVerified = userVerified;
             _ensureUnlockedVaultCallback = ensureUnlockedVaultCallback;
+            _hasVaultBeenUnlockedInThisTransaction = hasVaultBeenUnlockedInThisTransaction;
             _verifyUserCallback = verifyUserCallback;
         }
 
-        public async Task<(string CipherId, bool UserVerified)> PickCredentialAsync(Fido2GetAssertionUserInterfaceCredential[] credentials) 
+        public bool HasVaultBeenUnlockedInThisTransaction { get; private set; }
+
+        public async Task<(string CipherId, bool UserVerified)> PickCredentialAsync(Fido2GetAssertionUserInterfaceCredential[] credentials)
         {
             if (credentials.Length == 0 || !credentials.Any(c => c.CipherId == _cipherId))
             {
@@ -35,18 +43,16 @@ namespace Bit.Core.Utilities.Fido2
             }
 
             var credential = credentials.First(c => c.CipherId == _cipherId);
-            var verified = _userVerified;
-            if (credential.RequireUserVerification && !verified)
-            {
-                verified = await _verifyUserCallback();
-            }
+            var verified = _userVerified || await _verifyUserCallback(_cipherId, credential.UserVerificationPreference);
 
             return (CipherId: _cipherId, UserVerified: verified);
         }
 
-        public Task EnsureUnlockedVaultAsync() 
+        public async Task EnsureUnlockedVaultAsync() 
         {
-            return _ensureUnlockedVaultCallback();
+            await _ensureUnlockedVaultCallback();
+
+            HasVaultBeenUnlockedInThisTransaction = _hasVaultBeenUnlockedInThisTransaction();
         }
     }
 }

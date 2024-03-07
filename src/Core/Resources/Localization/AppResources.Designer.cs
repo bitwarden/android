@@ -2633,6 +2633,24 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error creating passkey.
+        /// </summary>
+        public static string ErrorCreatingPasskey {
+            get {
+                return ResourceManager.GetString("ErrorCreatingPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error reading passkey.
+        /// </summary>
+        public static string ErrorReadingPasskey {
+            get {
+                return ResourceManager.GetString("ErrorReadingPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EU.
         /// </summary>
         public static string EU {
@@ -6768,6 +6786,24 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was a problem creating a passkey for {0}. Try again later..
+        /// </summary>
+        public static string ThereWasAProblemCreatingAPasskeyForXTryAgainLater {
+            get {
+                return ResourceManager.GetString("ThereWasAProblemCreatingAPasskeyForXTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem reading your passkey for {0}. Try again later..
+        /// </summary>
+        public static string ThereWasAProblemReadingAPasskeyForXTryAgainLater {
+            get {
+                return ResourceManager.GetString("ThereWasAProblemReadingAPasskeyForXTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The URI {0} is already blocked.
         /// </summary>
         public static string TheURIXIsAlreadyBlocked {
@@ -7592,6 +7628,24 @@ namespace Bit.Core.Resources.Localization {
         public static string VerificationEmailSent {
             get {
                 return ResourceManager.GetString("VerificationEmailSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification required by {0}.
+        /// </summary>
+        public static string VerificationRequiredByX {
+            get {
+                return ResourceManager.GetString("VerificationRequiredByX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification required for this action. Set up an unlock method in Bitwarden to continue..
+        /// </summary>
+        public static string VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue {
+            get {
+                return ResourceManager.GetString("VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue", resourceCulture);
             }
         }
         

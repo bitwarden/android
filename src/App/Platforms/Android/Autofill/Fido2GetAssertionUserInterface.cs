@@ -5,6 +5,8 @@ namespace Bit.App.Platforms.Android.Autofill
     //TODO: WIP: Temporary Dummy implementation
     public class Fido2GetAssertionUserInterface : IFido2GetAssertionUserInterface
     {
+        public bool HasVaultBeenUnlockedInThisTransaction => true;
+
         public Task EnsureUnlockedVaultAsync()
         {
             return Task.FromResult(true);

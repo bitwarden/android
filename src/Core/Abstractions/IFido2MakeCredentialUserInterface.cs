@@ -1,3 +1,5 @@
+using Bit.Core.Utilities.Fido2;
+
 namespace Bit.Core.Abstractions 
 {
     public struct Fido2ConfirmNewCredentialParams
@@ -13,9 +15,9 @@ namespace Bit.Core.Abstractions
         public string UserName { get; set; }
 
         /// <summary>
-        /// Whether or not the user must be verified before completing the operation.
+        /// The preference to whether or not the user must be verified before completing the operation.
         /// </summary>
-        public bool UserVerification { get; set; }
+        public Fido2UserVerificationPreference UserVerificationPreference { get; set; }
 
         /// <summary>
         /// The relying party identifier

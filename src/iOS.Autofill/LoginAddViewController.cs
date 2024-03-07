@@ -5,7 +5,9 @@ using Bit.Core.Models.View;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Bit.iOS.Autofill.Models;
+using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
@@ -16,6 +18,7 @@ namespace Bit.iOS.Autofill
     public partial class LoginAddViewController : Core.Controllers.LoginAddViewController
     {
         LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
+        LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
 
         public LoginAddViewController(IntPtr handle)
             : base(handle)
@@ -32,11 +35,13 @@ namespace Bit.iOS.Autofill
 
         private new Context Context => (Context)base.Context;
 
+        private bool? _isUserVerified;
+
         public override Action<string> Success => cipherId =>
         {
             if (IsCreatingPasskey)
             {
-                Context.ConfirmNewCredentialTcs.TrySetResult((cipherId, true));
+                Context.PickCredentialForFido2CreationTcs.TrySetResult((cipherId, _isUserVerified));
                 return;
             }
 
@@ -76,8 +81,13 @@ namespace Bit.iOS.Autofill
 
             if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
             {
-                Context?.ConfirmNewCredentialTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login on iOS less than 17."));
+                Context?.PickCredentialForFido2CreationTcs?.TrySetException(new InvalidOperationException("Trying to save passkey as new login on iOS less than 17."));
                 return;
+            }
+
+            if (Context?.PasskeyCreationParams?.UserVerificationPreference != Fido2UserVerificationPreference.Discouraged)
+            {
+                _isUserVerified = await VerifyUserAsync();
             }
 
             var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
@@ -96,6 +106,30 @@ namespace Bit.iOS.Autofill
             {
                 await loadingAlert.DismissViewControllerAsync(false);
                 throw;
+            }
+        }
+
+        private async Task<bool> VerifyUserAsync()
+        {
+            try
+            {
+                if (Context?.PasskeyCreationParams is null)
+                {
+                    return false;
+                }
+
+                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
+                    new Fido2UserVerificationOptions(
+                        false,
+                        Context.PasskeyCreationParams.Value.UserVerificationPreference,
+                        Context.VaultUnlockedDuringThisSession,
+                        Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier)
+                    );
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                return false;
             }
         }
 

@@ -11,9 +11,9 @@
         public PublicKeyCredentialDescriptor[] AllowCredentialDescriptorList { get; set; }
 
         /// <summary>
-        /// Instructs the authenticator to require a user-verifying gesture in order to complete the request. Examples of such gestures are fingerprint scan or a PIN.
+        /// Instructs the authenticator the user verification preference in order to complete the request. Examples of UV gestures are fingerprint scan or a PIN.
         /// </summary>
-        public bool RequireUserVerification { get; set; }
+        public Fido2UserVerificationPreference UserVerificationPreference { get; set; }
 
         /// <summary>
         /// The challenge to be signed by the authenticator.

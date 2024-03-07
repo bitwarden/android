@@ -8,6 +8,7 @@ using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
+using Bit.Core.Services.UserVerification;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
 using CoreNFC;
@@ -161,7 +162,6 @@ namespace Bit.iOS.Core.Utilities
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService, logger);
             var biometricService = new BiometricService(stateService, cryptoService);
-            var userPinService = new UserPinService(stateService, cryptoService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService, stateService);
 
             ServiceContainer.Register<ISynchronousStorageService>(preferencesStorage);
@@ -185,15 +185,29 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
             ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
-            ServiceContainer.Register<IUserPinService>(userPinService);
         }
 
         public static void RegisterFinallyBeforeBootstrap()
         {
+            var userPinService = new UserPinService(
+                ServiceContainer.Resolve<IStateService>(),
+                ServiceContainer.Resolve<ICryptoService>(),
+                ServiceContainer.Resolve<IVaultTimeoutService>());
+            ServiceContainer.Register<IUserPinService>(userPinService);
+
+            var userVerificationMediatorService = new UserVerificationMediatorService(
+                ServiceContainer.Resolve<IPlatformUtilsService>(),
+                ServiceContainer.Resolve<IPasswordRepromptService>(),
+                userPinService,
+                ServiceContainer.Resolve<IDeviceActionService>(),
+                ServiceContainer.Resolve<IUserVerificationService>());
+            ServiceContainer.Register<IUserVerificationMediatorService>(userVerificationMediatorService);
+
             ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
                 ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<ISyncService>(),
-                ServiceContainer.Resolve<ICryptoFunctionService>()));
+                ServiceContainer.Resolve<ICryptoFunctionService>(),
+                userVerificationMediatorService));
 
             ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<IEnvironmentService>(),
