@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
@@ -253,6 +254,29 @@ class AccountsServiceTest : BaseServiceTest() {
                 newPasswordHash = "",
                 passwordHint = null,
                 key = "",
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `setPassword with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.setPassword(
+            body = SetPasswordRequestJson(
+                passwordHash = "passwordHash",
+                passwordHint = "passwordHint",
+                organizationIdentifier = "organizationId",
+                kdfIterations = 7,
+                kdfMemory = 1,
+                kdfParallelism = 2,
+                kdfType = null,
+                key = "encryptedUserKey",
+                keys = RegisterRequestJson.Keys(
+                    publicKey = "public",
+                    encryptedPrivateKey = "private",
+                ),
             ),
         )
         assertTrue(result.isSuccess)
