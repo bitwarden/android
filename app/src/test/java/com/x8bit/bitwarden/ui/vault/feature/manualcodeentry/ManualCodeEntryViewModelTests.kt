@@ -29,7 +29,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
         val viewModel = createViewModel(initialState = ManualCodeEntryState(""))
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(ManualCodeEntryAction.CloseClick)
+            viewModel.trySendAction(ManualCodeEntryAction.CloseClick)
             assertEquals(ManualCodeEntryEvent.NavigateBack, awaitItem())
         }
     }
@@ -40,7 +40,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
             createViewModel(initialState = ManualCodeEntryState("TestCode"))
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(ManualCodeEntryAction.CodeSubmit)
+            viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit)
 
             verify(exactly = 1) {
                 vaultRepository.emitTotpCodeResult(TotpCodeResult.Success("TestCode"))
@@ -56,7 +56,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
 
         val expectedState = ManualCodeEntryState("NewCode")
 
-        viewModel.actionChannel.trySend(ManualCodeEntryAction.CodeTextChange("NewCode"))
+        viewModel.trySendAction(ManualCodeEntryAction.CodeTextChange("NewCode"))
         assertEquals(expectedState, viewModel.stateFlow.value)
     }
 
@@ -67,7 +67,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
         val expectedState = ManualCodeEntryState("")
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(ManualCodeEntryAction.SettingsClick)
+            viewModel.trySendAction(ManualCodeEntryAction.SettingsClick)
 
             assertEquals(ManualCodeEntryEvent.NavigateToAppSettings, awaitItem())
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -79,7 +79,7 @@ class ManualCodeEntryViewModelTests : BaseViewModelTest() {
         val viewModel = createViewModel(initialState = ManualCodeEntryState(""))
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(ManualCodeEntryAction.ScanQrCodeTextClick)
+            viewModel.trySendAction(ManualCodeEntryAction.ScanQrCodeTextClick)
 
             assertEquals(ManualCodeEntryEvent.NavigateToQrCodeScreen, awaitItem())
         }

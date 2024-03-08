@@ -102,7 +102,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VerificationCodeAction.ItemClick(id = "mock"))
+            viewModel.trySendAction(VerificationCodeAction.ItemClick(id = "mock"))
             assertEquals(VerificationCodeEvent.NavigateToVaultItem(id = "mock"), awaitItem())
         }
     }
@@ -122,7 +122,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     @Test
     fun `RefreshClick should sync`() = runTest {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(VerificationCodeAction.RefreshClick)
+        viewModel.trySendAction(VerificationCodeAction.RefreshClick)
         verify { vaultRepository.sync() }
     }
 
@@ -130,7 +130,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     fun `SearchIconClick should emit NavigateToVaultSearchScreen`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VerificationCodeAction.SearchIconClick)
+            viewModel.trySendAction(VerificationCodeAction.SearchIconClick)
             assertEquals(VerificationCodeEvent.NavigateToVaultSearchScreen, awaitItem())
         }
     }

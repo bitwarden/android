@@ -90,7 +90,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `CloseButtonClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.CloseButtonClick)
+            viewModel.trySendAction(EnterpriseSignOnAction.CloseButtonClick)
             assertEquals(
                 EnterpriseSignOnEvent.NavigateBack,
                 awaitItem(),
@@ -112,7 +112,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state)
             viewModel.stateFlow.test {
                 assertEquals(state, awaitItem())
-                viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+                viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
 
                 assertEquals(
                     state.copy(
@@ -156,7 +156,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state)
             viewModel.stateFlow.test {
                 assertEquals(state, awaitItem())
-                viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+                viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
 
                 assertEquals(
                     state.copy(
@@ -184,7 +184,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `LogInClick with invalid organization should show error dialog`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+            viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
@@ -201,7 +201,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `LogInClick with no Internet should show error dialog`() = runTest {
         val viewModel = createViewModel(isNetworkConnected = false)
-        viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+        viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = EnterpriseSignOnState.DialogState.Error(
@@ -217,7 +217,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `OrgIdentifierInputChange should update organization identifier`() = runTest {
         val input = "input"
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(EnterpriseSignOnAction.OrgIdentifierInputChange(input))
+        viewModel.trySendAction(EnterpriseSignOnAction.OrgIdentifierInputChange(input))
         assertEquals(
             DEFAULT_STATE.copy(orgIdentifierInput = input),
             viewModel.stateFlow.value,
@@ -230,7 +230,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
 
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.LogInClick)
+            viewModel.trySendAction(EnterpriseSignOnAction.LogInClick)
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = EnterpriseSignOnState.DialogState.Error(
@@ -241,7 +241,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.actionChannel.trySend(EnterpriseSignOnAction.DialogDismiss)
+            viewModel.trySendAction(EnterpriseSignOnAction.DialogDismiss)
             assertEquals(
                 DEFAULT_STATE,
                 awaitItem(),

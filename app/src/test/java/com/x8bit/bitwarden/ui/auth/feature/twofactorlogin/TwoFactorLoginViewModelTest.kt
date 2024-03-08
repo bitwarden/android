@@ -149,7 +149,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     fun `CloseButtonClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.CloseButtonClick)
+            viewModel.trySendAction(TwoFactorLoginAction.CloseButtonClick)
             assertEquals(
                 TwoFactorLoginEvent.NavigateBack,
                 awaitItem(),
@@ -163,7 +163,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             val input = "123456"
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(input))
+                viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(input))
                 assertEquals(
                     DEFAULT_STATE.copy(
                         codeInput = input,
@@ -180,7 +180,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             // Set it to true.
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(input))
+            viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(input))
             assertEquals(
                 DEFAULT_STATE.copy(
                     codeInput = input,
@@ -190,7 +190,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
 
             // Set it to false.
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.CodeInputChanged(""))
+            viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(""))
             assertEquals(
                 DEFAULT_STATE.copy(
                     codeInput = "",
@@ -271,7 +271,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             )
             every { Uri.parse("bitwarden.com") } returns mockkUri
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
                     TwoFactorLoginEvent.NavigateToDuo(mockkUri),
                     awaitItem(),
@@ -303,7 +303,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 ),
             )
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
                     TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
                     awaitItem(),
@@ -332,7 +332,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             } returns LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(TwoFactorLoginAction.ContinueButtonClick)
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
 
                 assertEquals(
                     DEFAULT_STATE,
@@ -418,7 +418,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     fun `RememberMeToggle should update the state`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.RememberMeToggle(true))
+            viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
             assertEquals(
                 DEFAULT_STATE.copy(
                     isRememberMeEnabled = true,
@@ -436,7 +436,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 TwoFactorLoginAction.SelectAuthMethod(
                     TwoFactorAuthMethod.EMAIL,
                 ),
@@ -446,7 +446,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
 
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
+            viewModel.trySendAction(TwoFactorLoginAction.ResendEmailClick)
 
             assertEquals(
                 DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.EMAIL),
@@ -472,7 +472,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE,
                 awaitItem(),
             )
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 TwoFactorLoginAction.SelectAuthMethod(
                     TwoFactorAuthMethod.EMAIL,
                 ),
@@ -492,7 +492,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
 
-            viewModel.actionChannel.trySend(TwoFactorLoginAction.ResendEmailClick)
+            viewModel.trySendAction(TwoFactorLoginAction.ResendEmailClick)
 
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -521,7 +521,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     TwoFactorLoginAction.SelectAuthMethod(
                         TwoFactorAuthMethod.RECOVERY_CODE,
                     ),
@@ -537,7 +537,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     fun `SelectAuthMethod with other method should update the state`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 TwoFactorLoginAction.SelectAuthMethod(
                     TwoFactorAuthMethod.AUTHENTICATOR_APP,
                 ),
@@ -557,7 +557,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                         resendEmailResult = ResendEmailResult.Success,
                         isUserInitiated = true,
@@ -578,7 +578,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                         resendEmailResult = ResendEmailResult.Success,
                         isUserInitiated = false,
@@ -594,7 +594,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     TwoFactorLoginAction.Internal.ReceiveResendEmailResult(
                         resendEmailResult = ResendEmailResult.Error(message = null),
                         isUserInitiated = true,

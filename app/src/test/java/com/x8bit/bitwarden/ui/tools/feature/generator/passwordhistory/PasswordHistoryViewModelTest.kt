@@ -211,7 +211,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(PasswordHistoryAction.CloseClick)
+            viewModel.trySendAction(PasswordHistoryAction.CloseClick)
             assertEquals(PasswordHistoryEvent.NavigateBack, awaitItem())
         }
     }
@@ -225,7 +225,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         )
         every { clipboardManager.setText(text = generatedPassword.password) } just runs
 
-        viewModel.actionChannel.trySend(PasswordHistoryAction.PasswordCopyClick(generatedPassword))
+        viewModel.trySendAction(PasswordHistoryAction.PasswordCopyClick(generatedPassword))
 
         verify(exactly = 1) {
             clipboardManager.setText(text = generatedPassword.password)
@@ -239,7 +239,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
         val passwordHistoryView = PasswordHistoryView("password", Instant.now())
         fakeGeneratorRepository.storePasswordHistory(passwordHistoryView)
 
-        viewModel.actionChannel.trySend(PasswordHistoryAction.PasswordClearClick)
+        viewModel.trySendAction(PasswordHistoryAction.PasswordClearClick)
 
         assertTrue(fakeGeneratorRepository.passwordHistoryStateFlow.value is LocalDataState.Loaded)
         assertTrue(

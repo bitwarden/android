@@ -366,7 +366,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
-            viewModel.actionChannel.trySend(AttachmentsAction.DeleteClick(attachmentId))
+            viewModel.trySendAction(AttachmentsAction.DeleteClick(attachmentId))
             assertEquals(
                 initialState.copy(
                     dialogState = AttachmentsState.DialogState.Loading(
@@ -403,7 +403,7 @@ class AttachmentsViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(AttachmentsAction.DeleteClick(cipherId))
+            viewModel.trySendAction(AttachmentsAction.DeleteClick(cipherId))
             assertEquals(
                 AttachmentsEvent.ShowToast(R.string.attachment_deleted.asText()),
                 awaitItem(),

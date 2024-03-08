@@ -170,7 +170,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel(initialState)
-        viewModel.actionChannel.trySend(SearchAction.DismissDialogClick)
+        viewModel.trySendAction(SearchAction.DismissDialogClick)
         assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
@@ -178,7 +178,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item should emit NavigateToViewCipher`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(SearchAction.ItemClick(itemId = "mock"))
+            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
             assertEquals(SearchEvent.NavigateToViewCipher(cipherId = "mock"), awaitItem())
         }
     }
@@ -187,7 +187,7 @@ class SearchViewModelTest : BaseViewModelTest() {
     fun `ItemClick for send item should emit NavigateToEditSend`() = runTest {
         val viewModel = createViewModel(DEFAULT_STATE.copy(searchType = SearchTypeData.Sends.All))
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(SearchAction.ItemClick(itemId = "mock"))
+            viewModel.trySendAction(SearchAction.ItemClick(itemId = "mock"))
             assertEquals(SearchEvent.NavigateToEditSend(sendId = "mock"), awaitItem())
         }
     }
@@ -488,7 +488,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val sendId = "sendId"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
                 ),
@@ -502,7 +502,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val sendUrl = "www.test.com"
         every { clipboardManager.setText(sendUrl) } just runs
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             SearchAction.OverflowOptionClick(
                 ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
             ),
@@ -521,7 +521,7 @@ class SearchViewModelTest : BaseViewModelTest() {
 
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     SearchAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
                     ),
@@ -554,7 +554,7 @@ class SearchViewModelTest : BaseViewModelTest() {
 
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     SearchAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
                     ),
@@ -571,7 +571,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val sendUrl = "www.test.com"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = sendUrl),
                 ),
@@ -592,7 +592,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.stateFlow.test {
                 assertEquals(DEFAULT_STATE, awaitItem())
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     SearchAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId),
                     ),
@@ -628,7 +628,7 @@ class SearchViewModelTest : BaseViewModelTest() {
 
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     SearchAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId),
                     ),
@@ -645,7 +645,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         runTest {
             val notes = "notes"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
                 ),
@@ -660,7 +660,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         runTest {
             val number = "12345-4321-9876-6789"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
                 ),
@@ -721,7 +721,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         runTest {
             val password = "passTheWord"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
                 ),
@@ -737,7 +737,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         runTest {
             val securityCode = "234"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
@@ -755,7 +755,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         runTest {
             val username = "bitwarden"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(
                         username = username,
@@ -772,7 +772,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherId = "cipherId-1234"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
                 ),
@@ -786,7 +786,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val url = "www.test.com"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = url),
                 ),
@@ -800,7 +800,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherId = "cipherId-9876"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
                 ),

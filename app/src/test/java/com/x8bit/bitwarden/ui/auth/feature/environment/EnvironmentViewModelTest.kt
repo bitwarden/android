@@ -84,7 +84,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(EnvironmentAction.CloseClick)
+            viewModel.trySendAction(EnvironmentAction.CloseClick)
             assertEquals(EnvironmentEvent.NavigateBack, awaitItem())
         }
     }
@@ -111,7 +111,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
 
-        viewModel.actionChannel.trySend(EnvironmentAction.SaveClick)
+        viewModel.trySendAction(EnvironmentAction.SaveClick)
 
         assertEquals(
             initialState.copy(
@@ -158,7 +158,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 .forEach { viewModel.trySendAction(it) }
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(EnvironmentAction.SaveClick)
+                viewModel.trySendAction(EnvironmentAction.SaveClick)
 
                 assertEquals(
                     EnvironmentEvent.ShowToast(R.string.environment_saved.asText()),
@@ -205,7 +205,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
                 .forEach { viewModel.trySendAction(it) }
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(EnvironmentAction.SaveClick)
+                viewModel.trySendAction(EnvironmentAction.SaveClick)
 
                 assertEquals(
                     EnvironmentEvent.ShowToast(R.string.environment_saved.asText()),
@@ -236,7 +236,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `ServerUrlChange should update the server URL`() {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             EnvironmentAction.ServerUrlChange(serverUrl = "updated-server-url"),
         )
         assertEquals(
@@ -248,7 +248,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `WebVaultServerUrlChange should update the web vault server URL`() {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             EnvironmentAction.WebVaultServerUrlChange(webVaultServerUrl = "updated-web-vault-url"),
         )
         assertEquals(
@@ -260,7 +260,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `ApiServerUrlChange should update the API server URL`() {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             EnvironmentAction.ApiServerUrlChange(apiServerUrl = "updated-api-url"),
         )
         assertEquals(
@@ -272,7 +272,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `IdentityServerUrlChange should update the identity server URL`() {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             EnvironmentAction.IdentityServerUrlChange(identityServerUrl = "updated-identity-url"),
         )
         assertEquals(
@@ -284,7 +284,7 @@ class EnvironmentViewModelTest : BaseViewModelTest() {
     @Test
     fun `IconsServerUrlChange should update the icons server URL`() {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             EnvironmentAction.IconsServerUrlChange(iconsServerUrl = "updated-icons-url"),
         )
         assertEquals(

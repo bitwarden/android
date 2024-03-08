@@ -39,7 +39,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     fun `GeneratorTabClick should navigate to the generator screen`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultUnlockedNavBarAction.GeneratorTabClick)
+            viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
             assertEquals(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen, awaitItem())
         }
     }
@@ -48,7 +48,7 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     fun `SettingsTabClick should navigate to the settings screen`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultUnlockedNavBarAction.SettingsTabClick)
+            viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
             assertEquals(VaultUnlockedNavBarEvent.NavigateToSettingsScreen, awaitItem())
         }
     }
