@@ -21,15 +21,19 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.TimeZone
 
 class LoginApprovalViewModelTest : BaseViewModelTest() {
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val mockSpecialCircumstanceManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance } returns null
     }
@@ -41,18 +45,6 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         } returns mutableAuthRequestSharedFlow
         coEvery { getAuthRequestByIdFlow(REQUEST_ID) } returns mutableAuthRequestSharedFlow
         every { userStateFlow } returns mutableUserStateFlow
-    }
-
-    @BeforeEach
-    fun setup() {
-        // Setting the timezone so the tests pass consistently no matter the environment.
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    }
-
-    @AfterEach
-    fun tearDown() {
-        // Clearing the timezone after the test.
-        TimeZone.setDefault(null)
     }
 
     @Test
@@ -252,6 +244,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
         specialCircumstanceManager: SpecialCircumstanceManager = mockSpecialCircumstanceManager,
         state: LoginApprovalState? = DEFAULT_STATE,
     ): LoginApprovalViewModel = LoginApprovalViewModel(
+        clock = fixedClock,
         authRepository = authRepository,
         specialCircumstanceManager = specialCircumstanceManager,
         savedStateHandle = SavedStateHandle()

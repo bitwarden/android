@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import java.time.format.DateTimeFormatter
-import java.util.TimeZone
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -30,6 +30,7 @@ private const val KEY_STATE = "state"
  */
 @HiltViewModel
 class LoginApprovalViewModel @Inject constructor(
+    private val clock: Clock,
     private val authRepository: AuthRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     savedStateHandle: SavedStateHandle,
@@ -54,7 +55,7 @@ class LoginApprovalViewModel @Inject constructor(
     private val dateTimeFormatter
         get() = DateTimeFormatter
             .ofPattern("M/d/yy hh:mm a")
-            .withZone(TimeZone.getDefault().toZoneId())
+            .withZone(clock.zone)
 
     init {
         state
