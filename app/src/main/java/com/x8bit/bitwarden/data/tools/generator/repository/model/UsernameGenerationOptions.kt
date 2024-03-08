@@ -119,11 +119,11 @@ data class UsernameGenerationOptions(
 @Keep
 private class UsernameTypeSerializer :
     BaseEnumeratedIntSerializer<UsernameGenerationOptions.UsernameType>(
-        UsernameGenerationOptions.UsernameType.values(),
+        UsernameGenerationOptions.UsernameType.entries.toTypedArray(),
     )
 
 @Keep
 private class ForwardedEmailServiceTypeSerializer :
     BaseEnumeratedIntSerializer<UsernameGenerationOptions.ForwardedEmailServiceType>(
-        UsernameGenerationOptions.ForwardedEmailServiceType.values(),
+        UsernameGenerationOptions.ForwardedEmailServiceType.entries.toTypedArray(),
     )

@@ -181,4 +181,4 @@ enum class LinkedIdTypeJson(val value: UInt) {
 
 @Keep
 private class LinkedIdTypeSerializer :
-    BaseEnumeratedIntSerializer<LinkedIdTypeJson>(LinkedIdTypeJson.values())
+    BaseEnumeratedIntSerializer<LinkedIdTypeJson>(LinkedIdTypeJson.entries.toTypedArray())

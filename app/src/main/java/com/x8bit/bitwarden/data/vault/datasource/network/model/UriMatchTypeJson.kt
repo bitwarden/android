@@ -49,4 +49,4 @@ enum class UriMatchTypeJson {
 
 @Keep
 private class UriMatchTypeSerializer :
-    BaseEnumeratedIntSerializer<UriMatchTypeJson>(UriMatchTypeJson.values())
+    BaseEnumeratedIntSerializer<UriMatchTypeJson>(UriMatchTypeJson.entries.toTypedArray())

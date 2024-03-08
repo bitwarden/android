@@ -25,4 +25,4 @@ enum class SendTypeJson {
 
 @Keep
 private class SendTypeSerializer :
-    BaseEnumeratedIntSerializer<SendTypeJson>(SendTypeJson.values())
+    BaseEnumeratedIntSerializer<SendTypeJson>(SendTypeJson.entries.toTypedArray())

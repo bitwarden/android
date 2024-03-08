@@ -79,4 +79,4 @@ enum class PolicyTypeJson {
 
 @Keep
 private class PolicyTypeSerializer :
-    BaseEnumeratedIntSerializer<PolicyTypeJson>(PolicyTypeJson.values())
+    BaseEnumeratedIntSerializer<PolicyTypeJson>(PolicyTypeJson.entries.toTypedArray())

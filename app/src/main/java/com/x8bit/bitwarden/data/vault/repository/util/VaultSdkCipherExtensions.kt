@@ -116,7 +116,7 @@ private fun Field.toEncryptedNetworkField(): SyncResponseJson.Cipher.Field =
     )
 
 private fun UInt.toNetworkLinkedIdType(): LinkedIdTypeJson =
-    LinkedIdTypeJson.values().first { this == it.value }
+    LinkedIdTypeJson.entries.first { this == it.value }
 
 /**
  * Converts a Bitwarden SDK [FieldType] object to a corresponding
