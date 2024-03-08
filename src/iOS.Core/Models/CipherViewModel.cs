@@ -31,6 +31,10 @@ namespace Bit.iOS.Core.Models
         public CipherView CipherView { get; set; }
         public CipherRepromptType Reprompt { get; set; }
 
+        public bool HasFido2Credential => CipherView?.HasFido2Credential ?? false;
+
+        public bool IsShared => CipherView?.Shared ?? false;
+
         public class LoginUriModel
         {
             public LoginUriModel(LoginUriView data)

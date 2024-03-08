@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
@@ -13,7 +12,7 @@ namespace Bit.iOS.Core.Views
 {
     public class ExtensionTableSource : ExtendedUITableViewSource
     {
-        private const string CellIdentifier = "TableCell";
+        public const string CellIdentifier = nameof(CipherLoginTableViewCell);
 
         private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
         protected ICipherService _cipherService;
@@ -89,11 +88,14 @@ namespace Bit.iOS.Core.Views
             }
         }
 
-        //public IEnumerable<CipherViewModel> TableItems { get; set; }
-
         public override nint RowsInSection(UITableView tableview, nint section)
         {
             return Items == null || Items.Count() == 0 ? 1 : Items.Count();
+        }
+
+        public void RegisterTableViewCells(UITableView tableView)
+        {
+            tableView.RegisterClassForCellReuse(typeof(CipherLoginTableViewCell), CellIdentifier);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -110,14 +112,9 @@ namespace Bit.iOS.Core.Views
             }
 
             var cell = tableView.DequeueReusableCell(CellIdentifier);
-
-            // if there are no cells to reuse, create a new one
-            if (cell == null)
+            if (cell is null)
             {
-                Debug.WriteLine("BW Log, Make new cell for list.");
-                cell = new ExtendedUITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
-                cell.TextLabel.TextColor = cell.TextLabel.TintColor = ThemeHelpers.TextColor;
-                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = ThemeHelpers.MutedColor;
+                throw new InvalidOperationException($"The cell {CellIdentifier} has not been registered in the UITableView");
             }
             return cell;
         }
@@ -126,15 +123,35 @@ namespace Bit.iOS.Core.Views
         {
             if (Items == null
                 || !Items.Any()
-                || cell?.TextLabel == null
-                || cell.DetailTextLabel == null)
+                || !(cell is CipherLoginTableViewCell cipherCell))
             {
                 return;
             }
 
             var item = Items.ElementAt(indexPath.Row);
-            cell.TextLabel.Text = item.Name;
-            cell.DetailTextLabel.Text = item.Username;
+            if (item is null)
+            {
+                return;
+            }
+
+            cipherCell.SetTitle(item.Name);
+            cipherCell.SetSubtitle(item.Username);
+            cipherCell.SetHasFido2Credential(item.HasFido2Credential);
+            if (item.IsShared)
+            {
+                cipherCell.ShowOrganizationIcon();
+            }
+        }
+
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
+        {
+            if (Items == null
+                || !Items.Any())
+            {
+                return base.GetHeightForRow(tableView, indexPath);
+            }
+
+            return 55;
         }
 
         public async Task<string?> GetTotpAsync(CipherViewModel item)

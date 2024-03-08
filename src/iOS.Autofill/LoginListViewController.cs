@@ -61,10 +61,12 @@ namespace Bit.iOS.Autofill
                 NavItem.Title = Context.IsCreatingPasskey ? AppResources.SavePasskey : AppResources.Items;
                 _cancelButton.Title = AppResources.Cancel;
 
-                TableView.RowHeight = UITableView.AutomaticDimension;
-                TableView.EstimatedRowHeight = 44;
                 TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
-                TableView.Source = new TableSource(this);
+                
+                var tableSource = new TableSource(this);
+                TableView.Source = tableSource;
+                tableSource.RegisterTableViewCells(TableView);
+
                 if (Context.IsCreatingPasskey)
                 {
                     TableView.SectionHeaderHeight = 55;
