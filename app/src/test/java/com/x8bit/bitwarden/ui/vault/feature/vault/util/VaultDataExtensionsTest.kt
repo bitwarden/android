@@ -494,10 +494,16 @@ class VaultDataExtensionsTest {
     }
 
     @Test
-    fun `toViewState should properly filter nested folders out`() {
+    fun `toViewState should properly filter nested items out`() {
         val vaultData = VaultData(
             listOf(createMockCipherView(number = 1)),
-            collectionViewList = emptyList(),
+            collectionViewList = listOf(
+                createMockCollectionView(1, "test"),
+                createMockCollectionView(2, "test/test"),
+                createMockCollectionView(3, "Collection/test"),
+                createMockCollectionView(4, "test/Collection"),
+                createMockCollectionView(5, "Collection"),
+            ),
             folderViewList = listOf(
                 FolderView("1", "test", clock.instant()),
                 FolderView("2", "test/test", clock.instant()),
@@ -522,6 +528,18 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 favoriteItems = listOf(),
+                collectionItems = listOf(
+                    VaultState.ViewState.CollectionItem(
+                        id = "mockId-1",
+                        name = "test",
+                        itemCount = 1,
+                    ),
+                    VaultState.ViewState.CollectionItem(
+                        id = "mockId-5",
+                        name = "Collection",
+                        itemCount = 0,
+                    ),
+                ),
                 folderItems = listOf(
                     VaultState.ViewState.FolderItem(
                         id = "1",
@@ -540,7 +558,6 @@ class VaultDataExtensionsTest {
                     ),
 
                     ),
-                collectionItems = listOf(),
                 noFolderItems = listOf(),
                 trashItemsCount = 0,
                 totpItemsCount = 1,
