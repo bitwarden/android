@@ -179,7 +179,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `BackClick should emit NavigateBack`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.BackClick)
+            viewModel.trySendAction(VaultItemListingsAction.BackClick)
             assertEquals(VaultItemListingEvent.NavigateBack, awaitItem())
         }
     }
@@ -187,7 +187,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `DismissDialogClick should clear the dialog state`() {
         val viewModel = createVaultItemListingViewModel()
-        viewModel.actionChannel.trySend(VaultItemListingsAction.DismissDialogClick)
+        viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick)
         assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
@@ -196,7 +196,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val searchType = SearchType.Vault.Logins
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.SearchIconClick)
+            viewModel.trySendAction(VaultItemListingsAction.SearchIconClick)
             assertEquals(VaultItemListingEvent.NavigateToSearchScreen(searchType), awaitItem())
         }
     }
@@ -268,7 +268,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.ItemClick(id = "mock"))
+            viewModel.trySendAction(VaultItemListingsAction.ItemClick(id = "mock"))
             assertEquals(VaultItemListingEvent.NavigateToVaultItem(id = "mock"), awaitItem())
         }
     }
@@ -279,7 +279,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendFile),
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.ItemClick(id = "mock"))
+            viewModel.trySendAction(VaultItemListingsAction.ItemClick(id = "mock"))
             assertEquals(VaultItemListingEvent.NavigateToSendItem(id = "mock"), awaitItem())
         }
     }
@@ -460,7 +460,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `AddVaultItemClick for vault item should emit NavigateToAddVaultItem`() = runTest {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.AddVaultItemClick)
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
             assertEquals(VaultItemListingEvent.NavigateToAddVaultItem, awaitItem())
         }
     }
@@ -471,7 +471,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             createSavedStateHandleWithVaultItemListingType(VaultItemListingType.SendText),
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.AddVaultItemClick)
+            viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
             assertEquals(VaultItemListingEvent.NavigateToAddSendItem, awaitItem())
         }
     }
@@ -482,7 +482,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val testId = "1"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.FolderClick(testId))
+            viewModel.trySendAction(VaultItemListingsAction.FolderClick(testId))
             assertEquals(VaultItemListingEvent.NavigateToFolderItem(testId), awaitItem())
         }
     }
@@ -493,7 +493,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val testId = "1"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultItemListingsAction.CollectionClick(testId))
+            viewModel.trySendAction(VaultItemListingsAction.CollectionClick(testId))
             assertEquals(VaultItemListingEvent.NavigateToCollectionItem(testId), awaitItem())
         }
     }
@@ -501,7 +501,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `RefreshClick should sync`() = runTest {
         val viewModel = createVaultItemListingViewModel()
-        viewModel.actionChannel.trySend(VaultItemListingsAction.RefreshClick)
+        viewModel.trySendAction(VaultItemListingsAction.RefreshClick)
         verify { vaultRepository.sync() }
     }
 
@@ -510,7 +510,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val sendId = "sendId"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.SendAction.EditClick(sendId = sendId),
                 ),
@@ -524,7 +524,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val sendUrl = "www.test.com"
         every { clipboardManager.setText(sendUrl) } just runs
         val viewModel = createVaultItemListingViewModel()
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             VaultItemListingsAction.OverflowOptionClick(
                 ListingItemOverflowAction.SendAction.CopyUrlClick(sendUrl = sendUrl),
             ),
@@ -543,7 +543,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
                 assertEquals(initialState, awaitItem())
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     VaultItemListingsAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
                     ),
@@ -576,7 +576,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     VaultItemListingsAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.DeleteClick(sendId = sendId),
                     ),
@@ -593,7 +593,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val sendUrl = "www.test.com"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.SendAction.ShareUrlClick(sendUrl = sendUrl),
                 ),
@@ -614,7 +614,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.stateFlow.test {
                 assertEquals(initialState, awaitItem())
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     VaultItemListingsAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId),
                     ),
@@ -650,7 +650,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     VaultItemListingsAction.OverflowOptionClick(
                         ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = sendId),
                     ),
@@ -667,7 +667,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val notes = "notes"
             val viewModel = createVaultItemListingViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
                 ),
@@ -682,7 +682,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val number = "12345-4321-9876-6789"
             val viewModel = createVaultItemListingViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
                 ),
@@ -698,7 +698,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val password = "passTheWord"
             val viewModel = createVaultItemListingViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
                 ),
@@ -714,7 +714,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val securityCode = "234"
             val viewModel = createVaultItemListingViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
@@ -777,7 +777,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             val username = "bitwarden"
             val viewModel = createVaultItemListingViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(
                         username = username,
@@ -794,7 +794,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val cipherId = "cipherId-1234"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
                 ),
@@ -808,7 +808,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val url = "www.test.com"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = url),
                 ),
@@ -822,7 +822,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val cipherId = "cipherId-9876"
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
                 ),

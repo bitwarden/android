@@ -44,7 +44,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.CloseClick)
+            viewModel.trySendAction(QrCodeScanAction.CloseClick)
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
         }
     }
@@ -54,7 +54,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.CameraSetupErrorReceive)
+            viewModel.trySendAction(QrCodeScanAction.CameraSetupErrorReceive)
             assertEquals(
                 QrCodeScanEvent.NavigateToManualCodeEntry,
                 awaitItem(),
@@ -67,7 +67,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.ManualEntryTextClick)
+            viewModel.trySendAction(QrCodeScanAction.ManualEntryTextClick)
             assertEquals(
                 QrCodeScanEvent.NavigateToManualCodeEntry,
                 awaitItem(),
@@ -86,7 +86,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             val result = TotpCodeResult.Success(validCode)
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(validCode))
+                viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
 
                 verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
                 assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -105,7 +105,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val result = TotpCodeResult.Success(validCode)
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(validCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(validCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -123,7 +123,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
                 "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&algorithm=sha224"
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+                viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
                 verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
                 assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -140,7 +140,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&digits=11"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -157,7 +157,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&period=0"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -173,7 +173,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             "nototpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -190,7 +190,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP1"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -206,7 +206,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val invalidCode = "otpauth://totp/Test:me"
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -222,7 +222,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val invalidCode = "otpauth://totp/Test:me?secret= "
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())
@@ -236,7 +236,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
         val invalidCode = ""
 
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(QrCodeScanAction.QrCodeScanReceive(invalidCode))
+            viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
 
             verify(exactly = 1) { vaultRepository.emitTotpCodeResult(result) }
             assertEquals(QrCodeScanEvent.NavigateBack, awaitItem())

@@ -326,7 +326,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     fun `CloseClick should emit NavigateBack`() = runTest {
         val viewModel = createAddVaultItemViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.CloseClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.CloseClick)
             assertEquals(VaultAddEditEvent.NavigateBack, awaitItem())
         }
     }
@@ -342,7 +342,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.AttachmentsClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.AttachmentsClick)
             assertEquals(
                 VaultAddEditEvent.NavigateToAttachments(DEFAULT_EDIT_ITEM_ID),
                 awaitItem(),
@@ -361,7 +361,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.MoveToOrganizationClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.MoveToOrganizationClick)
             assertEquals(
                 VaultAddEditEvent.NavigateToMoveToOrganization(DEFAULT_EDIT_ITEM_ID),
                 awaitItem(),
@@ -380,7 +380,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             ),
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.CollectionsClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.CollectionsClick)
             assertEquals(
                 VaultAddEditEvent.NavigateToCollections(DEFAULT_EDIT_ITEM_ID),
                 awaitItem(),
@@ -519,7 +519,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
                 val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
 
-                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
@@ -588,7 +588,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
                 val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
 
-                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
@@ -628,7 +628,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.createCipherInOrganization(any(), any())
             } returns CreateCipherResult.Success
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(
                     VaultAddEditEvent.ShowToast(
                         R.string.new_item_created.asText(),
@@ -663,7 +663,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.updateCipher(any(), any())
             } returns UpdateCipherResult.Success
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(
                     VaultAddEditEvent.ShowToast(
                         R.string.item_updated.asText(),
@@ -695,7 +695,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         coEvery {
             vaultRepository.createCipherInOrganization(any(), any())
         } returns CreateCipherResult.Error
-        viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+        viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
         assertEquals(
             stateWithName.copy(
@@ -771,7 +771,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.stateFlow.test {
                 assertEquals(stateWithName, awaitItem())
-                viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
                 assertEquals(stateWithDialog, awaitItem())
                 assertEquals(stateWithName, awaitItem())
             }
@@ -829,7 +829,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
             assertEquals(
                 stateWithName.copy(
@@ -889,7 +889,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
 
             assertEquals(
                 stateWithName.copy(
@@ -930,7 +930,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
         viewModel.stateFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.SaveClick)
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
             assertEquals(stateWithNoName, awaitItem())
             assertEquals(stateWithNoNameAndDialog, awaitItem())
         }
@@ -958,7 +958,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         coEvery { vaultRepository.createCipher(any()) } returns CreateCipherResult.Success
         viewModel.stateFlow.test {
-            viewModel.actionChannel.trySend(VaultAddEditAction.Common.DismissDialog)
+            viewModel.trySendAction(VaultAddEditAction.Common.DismissDialog)
             assertEquals(errorState, awaitItem())
             assertEquals(null, awaitItem().dialog)
         }
@@ -974,7 +974,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             VaultAddEditState.ItemTypeOption.LOGIN,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
@@ -1004,7 +1004,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             VaultAddEditState.ItemTypeOption.CARD,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
@@ -1034,7 +1034,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             VaultAddEditState.ItemTypeOption.IDENTITY,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
@@ -1064,7 +1064,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             VaultAddEditState.ItemTypeOption.SECURE_NOTES,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState = loginInitialState.copy(
             viewState = VaultAddEditState.ViewState.Content(
@@ -1105,7 +1105,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     username = "newUsername",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1114,7 +1114,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `PasswordTextChange should update password in LoginItem`() = runTest {
             val action = VaultAddEditAction.ItemType.LoginType.PasswordTextChange("newPassword")
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = createVaultAddItemState(
                 typeContentViewState = createLoginTypeContentViewState(
@@ -1132,7 +1132,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val viewModel = createAddVaultItemViewModel()
 
                 viewModel.eventFlow.test {
-                    viewModel.actionChannel.trySend(
+                    viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
                     )
                     assertEquals(
@@ -1224,7 +1224,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val viewModel = createAddVaultItemViewModel()
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                         isGranted = true,
                     ),
@@ -1243,7 +1243,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val viewModel = createAddVaultItemViewModel()
 
                 viewModel.eventFlow.test {
-                    viewModel.actionChannel.trySend(
+                    viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.SetupTotpClick(
                             isGranted = false,
                         ),
@@ -1259,7 +1259,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val testKey = "TestKey"
             every { clipboardManager.setText(text = testKey) } just runs
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.CopyTotpKeyClick(
                     testKey,
                 ),
@@ -1293,7 +1293,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick,
             )
 
@@ -1319,7 +1319,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     VaultAddEditAction.Internal.TotpCodeReceive(
                         result,
                     ),
@@ -1455,7 +1455,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     firstName = "newFirstName",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1470,7 +1470,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     middleName = "newMiddleName",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1485,7 +1485,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     lastName = "newLastName",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1500,7 +1500,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     username = "newUsername",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1515,7 +1515,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     company = "newCompany",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1530,7 +1530,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ssn = "newSsn",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1545,7 +1545,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     passportNumber = "newPassportNumber",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1560,7 +1560,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     licenseNumber = "newLicenseNumber",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1575,7 +1575,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     email = "newEmail",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1590,7 +1590,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     phone = "newPhone",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1605,7 +1605,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     address1 = "newAddress1",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1620,7 +1620,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     address2 = "newAddress2",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1635,7 +1635,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     address3 = "newAddress3",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1650,7 +1650,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     city = "newCity",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1665,7 +1665,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     state = "newState",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1680,7 +1680,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     zip = "newZip",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1695,7 +1695,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     country = "newCountry",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1710,7 +1710,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     selectedTitle = VaultIdentityTitle.MX,
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1749,7 +1749,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     cardHolderName = "newCardHolderName",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1764,7 +1764,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     number = "newNumber",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1779,7 +1779,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     brand = VaultCardBrand.VISA,
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1795,7 +1795,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     expirationMonth = VaultCardExpirationMonth.JUNE,
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1810,7 +1810,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     expirationYear = "newExpirationYear",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1825,7 +1825,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     securityCode = "newSecurityCode",
                 ),
             )
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
@@ -1864,7 +1864,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `NameTextChange should update name`() = runTest {
             val action = VaultAddEditAction.Common.NameTextChange("newName")
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -1888,7 +1888,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -1906,7 +1906,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         fun `ToggleFavorite should update favorite`() = runTest {
             val action = VaultAddEditAction.Common.ToggleFavorite(true)
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -1928,7 +1928,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isMasterPasswordReprompt = true,
                 )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -1948,7 +1948,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val action =
                 VaultAddEditAction.Common.NotesTextChange(notes = "newNotes")
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -1973,7 +1973,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -2134,7 +2134,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
                     CustomFieldAction.REMOVE,
                     customFieldData,
@@ -2200,7 +2200,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
                     CustomFieldAction.MOVE_UP,
                     customFieldData,
@@ -2266,7 +2266,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     ),
                 )
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAddEditAction.Common.CustomFieldActionSelect(
                     CustomFieldAction.MOVE_DOWN,
                     customFieldData,
@@ -2301,10 +2301,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Test
         fun `CollectionSelect should update availableOwners collections`() = runTest {
-            viewModel.actionChannel.trySend(ownershipChangeAction())
+            viewModel.trySendAction(ownershipChangeAction())
 
             val action = collectionSelectAction()
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = vaultAddItemInitialState.copy(
                 viewState = VaultAddEditState.ViewState.Content(
@@ -2573,7 +2573,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         assertEquals(expectedState, viewModel.stateFlow.value.viewState)
     }
@@ -2645,7 +2645,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
         assertEquals(expectedState, viewModel.stateFlow.value.viewState)
     }
 

@@ -257,7 +257,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         mutableAuthRequestsWithUpdatesFlow.tryEmit(
             AuthRequestsUpdatesResult.Update(authRequests = listOf(authRequest1, authRequest2)),
         )
-        viewModel.actionChannel.trySend(PendingRequestsAction.DeclineAllRequestsConfirm)
+        viewModel.trySendAction(PendingRequestsAction.DeclineAllRequestsConfirm)
 
         coVerify {
             authRepository.updateAuthRequest(

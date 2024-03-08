@@ -159,7 +159,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(LandingAction.EmailInputChanged(validEmail))
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
+            viewModel.trySendAction(LandingAction.ContinueButtonClick)
             assertEquals(
                 LandingEvent.NavigateToLogin(validEmail),
                 awaitItem(),
@@ -179,7 +179,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.stateFlow.test {
             assertEquals(initialState, awaitItem())
 
-            viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
+            viewModel.trySendAction(LandingAction.ContinueButtonClick)
             assertEquals(
                 initialState.copy(
                     dialog = LandingState.DialogState.Error(
@@ -282,7 +282,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             )
 
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(LandingAction.ContinueButtonClick)
+                viewModel.trySendAction(LandingAction.ContinueButtonClick)
                 assertEquals(
                     LandingEvent.NavigateToLogin(rememberedEmail),
                     awaitItem(),
@@ -298,7 +298,7 @@ class LandingViewModelTest : BaseViewModelTest() {
     fun `CreateAccountClick should emit NavigateToCreateAccount`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LandingAction.CreateAccountClick)
+            viewModel.trySendAction(LandingAction.CreateAccountClick)
             assertEquals(
                 LandingEvent.NavigateToCreateAccount,
                 awaitItem(),
@@ -331,7 +331,7 @@ class LandingViewModelTest : BaseViewModelTest() {
     fun `RememberMeToggle should update value of isRememberMeToggled`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LandingAction.RememberMeToggle(true))
+            viewModel.trySendAction(LandingAction.RememberMeToggle(true))
             assertEquals(
                 viewModel.stateFlow.value,
                 DEFAULT_STATE.copy(isRememberMeEnabled = true),

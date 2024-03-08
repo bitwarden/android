@@ -66,7 +66,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     fun `CloseButtonClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(ExportVaultAction.CloseButtonClick)
+            viewModel.trySendAction(ExportVaultAction.CloseButtonClick)
             assertEquals(
                 ExportVaultEvent.NavigateBack,
                 awaitItem(),

@@ -1167,7 +1167,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val notes = "notes"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
                 ),
@@ -1182,7 +1182,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val number = "12345-4321-9876-6789"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
                 ),
@@ -1198,7 +1198,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val password = "passTheWord"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
                 ),
@@ -1259,7 +1259,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val securityCode = "234"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
@@ -1277,7 +1277,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         runTest {
             val username = "bitwarden"
             val viewModel = createViewModel()
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(
                         username = username,
@@ -1294,7 +1294,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val cipherId = "cipherId-1234"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
                 ),
@@ -1308,7 +1308,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val url = "www.test.com"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.LaunchClick(url = url),
                 ),
@@ -1322,7 +1322,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         val cipherId = "cipherId-9876"
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
                 ),

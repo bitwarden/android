@@ -66,7 +66,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     fun `CloseButtonClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginWithDeviceAction.CloseButtonClick)
+            viewModel.trySendAction(LoginWithDeviceAction.CloseButtonClick)
             assertEquals(
                 LoginWithDeviceEvent.NavigateBack,
                 awaitItem(),
@@ -83,14 +83,14 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel(initialState)
-        viewModel.actionChannel.trySend(LoginWithDeviceAction.DismissDialog)
+        viewModel.trySendAction(LoginWithDeviceAction.DismissDialog)
         assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
     }
 
     @Test
     fun `ResendNotificationClick should create new auth request and update state`() {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(LoginWithDeviceAction.ResendNotificationClick)
+        viewModel.trySendAction(LoginWithDeviceAction.ResendNotificationClick)
         assertEquals(
             DEFAULT_STATE.copy(
                 viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
@@ -108,7 +108,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     fun `ViewAllLogInOptionsClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginWithDeviceAction.ViewAllLogInOptionsClick)
+            viewModel.trySendAction(LoginWithDeviceAction.ViewAllLogInOptionsClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
                 LoginWithDeviceEvent.NavigateBack,

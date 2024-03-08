@@ -81,7 +81,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             savedStateHandle = initialSavedStateHandle,
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.BackClick)
+            viewModel.trySendAction(VaultMoveToOrganizationAction.BackClick)
             assertEquals(VaultMoveToOrganizationEvent.NavigateBack, awaitItem())
         }
     }
@@ -106,7 +106,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         assertEquals(
             expectedState,
@@ -144,7 +144,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.actionChannel.trySend(unselectCollection1Action)
+        viewModel.trySendAction(unselectCollection1Action)
 
         assertEquals(
             expectedState,
@@ -255,7 +255,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
-            viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.MoveClick)
+            viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick)
             assertEquals(
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Loading(
@@ -313,7 +313,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 ),
                 awaitItem(),
             )
-            viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.MoveClick)
+            viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick)
             assertEquals(
                 initialState.copy(
                     dialogState = VaultMoveToOrganizationState.DialogState.Loading(
@@ -363,7 +363,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
             )
         } returns ShareCipherResult.Success
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.MoveClick)
+            viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick)
             assertEquals(
                 VaultMoveToOrganizationEvent.NavigateBack,
                 awaitItem(),
@@ -407,7 +407,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
                 )
             } returns ShareCipherResult.Success
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(VaultMoveToOrganizationAction.MoveClick)
+                viewModel.trySendAction(VaultMoveToOrganizationAction.MoveClick)
                 assertEquals(
                     VaultMoveToOrganizationEvent.NavigateBack,
                     awaitItem(),

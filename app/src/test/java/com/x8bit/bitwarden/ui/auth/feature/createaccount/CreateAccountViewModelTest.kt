@@ -105,7 +105,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+        viewModel.trySendAction(CreateAccountAction.SubmitClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -129,7 +129,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+        viewModel.trySendAction(CreateAccountAction.SubmitClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -157,7 +157,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+        viewModel.trySendAction(CreateAccountAction.SubmitClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -185,7 +185,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+        viewModel.trySendAction(CreateAccountAction.SubmitClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -215,7 +215,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+        viewModel.trySendAction(CreateAccountAction.SubmitClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -243,7 +243,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
             val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
-            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
             assertEquals(
                 VALID_INPUT_STATE.copy(dialog = CreateAccountDialog.Loading),
                 stateFlow.awaitItem(),
@@ -280,7 +280,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
         )
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
-            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
             assertEquals(
                 VALID_INPUT_STATE.copy(dialog = CreateAccountDialog.Loading),
                 awaitItem(),
@@ -322,7 +322,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             authRepository = repo,
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
             assertEquals(
                 CreateAccountEvent.NavigateToCaptcha(uri = mockkUri),
                 awaitItem(),
@@ -353,7 +353,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             authRepository = repo,
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
             assertEquals(
                 CreateAccountEvent.NavigateToLogin(
                     email = EMAIL,
@@ -413,8 +413,8 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 savedStateHandle = validInputHandle,
                 authRepository = repo,
             )
-            viewModel.actionChannel.trySend(CreateAccountAction.CheckDataBreachesToggle(true))
-            viewModel.actionChannel.trySend(CreateAccountAction.SubmitClick)
+            viewModel.trySendAction(CreateAccountAction.CheckDataBreachesToggle(true))
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
             viewModel.stateFlow.test {
                 assertEquals(
                     VALID_INPUT_STATE.copy(
@@ -433,7 +433,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(CloseClick)
+            viewModel.trySendAction(CloseClick)
             assertEquals(CreateAccountEvent.NavigateBack, awaitItem())
         }
     }
@@ -445,7 +445,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(CreateAccountAction.PrivacyPolicyClick)
+            viewModel.trySendAction(CreateAccountAction.PrivacyPolicyClick)
             assertEquals(CreateAccountEvent.NavigateToPrivacyPolicy, awaitItem())
         }
     }
@@ -457,7 +457,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             authRepository = mockAuthRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(CreateAccountAction.TermsClick)
+            viewModel.trySendAction(CreateAccountAction.TermsClick)
             assertEquals(CreateAccountEvent.NavigateToTerms, awaitItem())
         }
     }
@@ -468,7 +468,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        viewModel.actionChannel.trySend(ConfirmPasswordInputChange("input"))
+        viewModel.trySendAction(ConfirmPasswordInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(confirmPasswordInput = "input"), awaitItem())
         }
@@ -480,7 +480,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        viewModel.actionChannel.trySend(EmailInputChange("input"))
+        viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(emailInput = "input"), awaitItem())
         }
@@ -492,7 +492,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        viewModel.actionChannel.trySend(PasswordHintChange("input"))
+        viewModel.trySendAction(PasswordHintChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(passwordHintInput = "input"), awaitItem())
         }
@@ -507,7 +507,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
         )
-        viewModel.actionChannel.trySend(PasswordInputChange("input"))
+        viewModel.trySendAction(PasswordInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(passwordInput = "input"), awaitItem())
         }

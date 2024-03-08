@@ -234,7 +234,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `CloseButtonClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.CloseButtonClick)
+            viewModel.trySendAction(LoginAction.CloseButtonClick)
             assertEquals(
                 LoginEvent.NavigateBack,
                 awaitItem(),
@@ -325,7 +325,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             } returns LoginResult.CaptchaRequired(captchaId = "mock_captcha_id")
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(LoginAction.LoginButtonClick)
+                viewModel.trySendAction(LoginAction.LoginButtonClick)
                 assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
                 assertEquals(LoginEvent.NavigateToCaptcha(uri = mockkUri), awaitItem())
             }
@@ -338,7 +338,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `MasterPasswordHintClick should emit NavigateToMasterPasswordHint`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.MasterPasswordHintClick)
+            viewModel.trySendAction(LoginAction.MasterPasswordHintClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
                 LoginEvent.NavigateToMasterPasswordHint(EMAIL),
@@ -351,7 +351,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `LoginWithDeviceButtonClick should emit NavigateToLoginWithDevice`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.LoginWithDeviceButtonClick)
+            viewModel.trySendAction(LoginAction.LoginWithDeviceButtonClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
                 LoginEvent.NavigateToLoginWithDevice(EMAIL),
@@ -364,7 +364,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `SingleSignOnClick should emit NavigateToEnterpriseSignOn`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.SingleSignOnClick)
+            viewModel.trySendAction(LoginAction.SingleSignOnClick)
             assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
             assertEquals(
                 LoginEvent.NavigateToEnterpriseSignOn("test@gmail.com"),
@@ -377,7 +377,7 @@ class LoginViewModelTest : BaseViewModelTest() {
     fun `NotYouButtonClick should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.actionChannel.trySend(LoginAction.NotYouButtonClick)
+            viewModel.trySendAction(LoginAction.NotYouButtonClick)
             assertEquals(
                 LoginEvent.NavigateBack,
                 awaitItem(),
@@ -391,7 +391,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             val input = "input"
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
-                viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(input))
+                viewModel.trySendAction(LoginAction.PasswordInputChanged(input))
                 assertEquals(
                     DEFAULT_STATE.copy(
                         passwordInput = input,
@@ -409,7 +409,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 // set isLoginButtonEnabled to true
-                viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(input))
+                viewModel.trySendAction(LoginAction.PasswordInputChanged(input))
                 assertEquals(
                     DEFAULT_STATE.copy(
                         passwordInput = input,
@@ -419,7 +419,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                 )
 
                 // set isLoginButtonEnabled to false
-                viewModel.actionChannel.trySend(LoginAction.PasswordInputChanged(""))
+                viewModel.trySendAction(LoginAction.PasswordInputChanged(""))
                 assertEquals(
                     DEFAULT_STATE.copy(
                         passwordInput = "",

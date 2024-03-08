@@ -213,7 +213,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     @Test
     fun `CloseClick should emit NavigateBack event`() = runTest {
         val viewModel = createViewModel()
-        viewModel.actionChannel.trySend(GeneratorAction.CloseClick)
+        viewModel.trySendAction(GeneratorAction.CloseClick)
 
         viewModel.eventFlow.test {
             val event = awaitItem()
@@ -232,7 +232,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 .generatorResultFlow
                 .testIn(backgroundScope)
 
-            viewModel.actionChannel.trySend(GeneratorAction.SelectClick)
+            viewModel.trySendAction(GeneratorAction.SelectClick)
 
             assertEquals(GeneratorEvent.NavigateBack, eventTurbine.awaitItem())
             assertEquals(
@@ -272,7 +272,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedPasswordResult.Success(updatedGeneratedPassword),
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             val expectedState = initialState.copy(generatedText = updatedGeneratedPassword)
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -293,7 +293,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedPasswordResult.InvalidRequest,
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             viewModel.eventFlow.test {
                 assertEquals(
@@ -335,7 +335,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             val expectedState = initialState.copy(generatedText = updatedGeneratedPassphrase)
             assertEquals(expectedState, viewModel.stateFlow.value)
@@ -358,7 +358,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedPassphraseResult.InvalidRequest,
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             viewModel.eventFlow.test {
                 assertEquals(
@@ -378,7 +378,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedPasswordResult.Success("DifferentUsername"),
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             val expectedState =
                 initialPasscodeState.copy(
@@ -402,7 +402,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedCatchAllUsernameResult.Success("DifferentUsername"),
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             val expectedState =
                 initialCatchAllEmailState.copy(
@@ -427,7 +427,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 GeneratedRandomWordUsernameResult.Success("DifferentUsername"),
             )
 
-            viewModel.actionChannel.trySend(GeneratorAction.RegenerateClick)
+            viewModel.trySendAction(GeneratorAction.RegenerateClick)
 
             val expectedState =
                 initialCatchAllEmailState.copy(
@@ -445,7 +445,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         every { clipboardManager.setText(viewModel.stateFlow.value.generatedText) } just runs
 
-        viewModel.actionChannel.trySend(GeneratorAction.CopyClick)
+        viewModel.trySendAction(GeneratorAction.CopyClick)
 
         verify(exactly = 1) {
             clipboardManager.setText(text = viewModel.stateFlow.value.generatedText)
@@ -536,7 +536,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         assertEquals(
             initialPasscodeState.copy(
@@ -566,7 +566,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.PASSWORD)
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState =
             initialPasscodeState.copy(
@@ -586,7 +586,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
         val action = GeneratorAction.MainTypeOptionSelect(GeneratorState.MainTypeOption.USERNAME)
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState =
             initialPasscodeState.copy(
@@ -612,7 +612,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSWORD,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState = initialPasscodeState.copy(
             selectedType = GeneratorState.MainType.Passcode(
@@ -637,7 +637,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             passcodeTypeOption = GeneratorState.MainType.Passcode.PasscodeTypeOption.PASSPHRASE,
         )
 
-        viewModel.actionChannel.trySend(action)
+        viewModel.trySendAction(action)
 
         val expectedState = initialPasscodeState.copy(
             generatedText = updatedText,
@@ -654,7 +654,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel(initialUsernameState)
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
                     usernameTypeOption = GeneratorState
                         .MainType
@@ -684,7 +684,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `UsernameTypeOptionSelect CATCH_ALL_EMAIL should switch to CatchAllEmail type`() = runTest {
         val viewModel = createViewModel(initialUsernameState)
 
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
                 usernameTypeOption = GeneratorState
                     .MainType
@@ -710,7 +710,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel(initialUsernameState)
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
                     usernameTypeOption = GeneratorState
                         .MainType
@@ -738,7 +738,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `UsernameTypeOptionSelect RANDOM_WORD should switch to RandomWord type`() = runTest {
         val viewModel = createViewModel(initialUsernameState)
 
-        viewModel.actionChannel.trySend(
+        viewModel.trySendAction(
             GeneratorAction.MainType.Username.UsernameTypeOptionSelect(
                 usernameTypeOption = GeneratorState
                     .MainType
@@ -762,7 +762,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `TooltipClick should emit NavigateToTooltip event`() = runTest {
         val viewModel = createViewModel(initialUsernameState)
 
-        viewModel.actionChannel.trySend(GeneratorAction.MainType.Username.UsernameType.TooltipClick)
+        viewModel.trySendAction(GeneratorAction.MainType.Username.UsernameType.TooltipClick)
 
         viewModel.eventFlow.test {
             val event = awaitItem()
@@ -794,7 +794,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val newLength = 16
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction.MainType.Passcode.PasscodeType.Password.SliderLengthChange(
                         length = newLength,
                         isUserInteracting = false,
@@ -824,7 +824,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val useCapitals = true
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -858,7 +858,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val useLowercase = true
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -890,7 +890,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             val useNumbers = true
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
                     useNumbers = useNumbers,
                 ),
@@ -919,7 +919,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val useSpecialChars = true
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -953,7 +953,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val minNumbers = 4
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange(
                         minNumbers = minNumbers,
                     ),
@@ -982,7 +982,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val minSpecial = 2
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -1016,7 +1016,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val avoidAmbiguousChars = true
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -1047,12 +1047,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             )
 
             // Initially turn on all toggles
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
                     useCapitals = true,
                 ),
             )
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction
                     .MainType
                     .Passcode
@@ -1062,12 +1062,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         useLowercase = true,
                     ),
             )
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
                     useNumbers = true,
                 ),
             )
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction
                     .MainType
                     .Passcode
@@ -1079,12 +1079,12 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             )
 
             // Attempt to turn off all toggles
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleCapitalLettersChange(
                     useCapitals = false,
                 ),
             )
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction
                     .MainType
                     .Passcode
@@ -1094,7 +1094,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                         useLowercase = false,
                     ),
             )
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange(
                     useNumbers = false,
                 ),
@@ -1117,7 +1117,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             assertEquals(intermediateState, viewModel.stateFlow.value)
 
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction
                     .MainType
                     .Passcode
@@ -1166,7 +1166,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 )
 
                 val newNumWords = 4
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -1199,7 +1199,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
                 val newWordSeparatorChar = '_'
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -1229,7 +1229,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
                 )
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -1260,7 +1260,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     GeneratedPassphraseResult.Success(updatedGeneratedPassphrase),
                 )
 
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Passcode
@@ -1317,7 +1317,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultForwardedEmailAliasState.copy(
                 generatedText = "-",
@@ -1371,7 +1371,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultAddyIoState.copy(
                 generatedText = "-",
@@ -1411,7 +1411,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultAddyIoState.copy(
                 generatedText = "-",
@@ -1462,7 +1462,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultDuckDuckGoState.copy(
                 generatedText = "-",
@@ -1513,7 +1513,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultFastMailState.copy(
                 generatedText = "-",
@@ -1565,7 +1565,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultFirefoxRelayState.copy(
                 generatedText = "-",
@@ -1617,7 +1617,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultForwardEmailState.copy(
                 generatedText = "-",
@@ -1658,7 +1658,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultForwardEmailState.copy(
                 generatedText = "-",
@@ -1710,7 +1710,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            viewModel.actionChannel.trySend(action)
+            viewModel.trySendAction(action)
 
             val expectedState = defaultSimpleLoginState.copy(
                 generatedText = "-",
@@ -1746,7 +1746,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Test
         fun `EmailTextChange should update email correctly`() = runTest {
             val newEmail = "test@example.com"
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction
                     .MainType
                     .Username
@@ -1789,7 +1789,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         fun `DomainTextChange should update domain correctly`() =
             runTest {
                 val newDomain = "test.com"
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Username
@@ -1830,7 +1830,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `ToggleCapitalizeChange should update the capitalize property correctly`() = runTest {
-            viewModel.actionChannel.trySend(
+            viewModel.trySendAction(
                 GeneratorAction
                     .MainType
                     .Username
@@ -1856,7 +1856,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
         @Test
         fun `ToggleIncludeNumberChange should update the includeNumber property correctly`() =
             runTest {
-                viewModel.actionChannel.trySend(
+                viewModel.trySendAction(
                     GeneratorAction
                         .MainType
                         .Username
