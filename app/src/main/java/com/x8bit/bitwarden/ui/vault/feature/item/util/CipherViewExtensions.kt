@@ -13,19 +13,16 @@ import com.x8bit.bitwarden.ui.platform.base.util.capitalize
 import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.base.util.orZeroWidthSpace
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
-import java.time.format.DateTimeFormatter
 import java.util.TimeZone
 
-private val dateTimeFormatter
-    get() = DateTimeFormatter
-        .ofPattern("M/d/yy hh:mm a")
-        .withZone(TimeZone.getDefault().toZoneId())
+private const val DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
 
 /**
  * Transforms [VaultData] into [VaultState.ViewState].
@@ -41,7 +38,10 @@ fun CipherView.toViewState(
             name = name,
             requiresReprompt = reprompt == CipherRepromptType.PASSWORD,
             customFields = fields.orEmpty().map { it.toCustomField() },
-            lastUpdated = dateTimeFormatter.format(revisionDate),
+            lastUpdated = revisionDate.toFormattedPattern(
+                pattern = DATE_TIME_PATTERN,
+                zone = TimeZone.getDefault().toZoneId(),
+            ),
             notes = notes,
             attachments = attachments
                 ?.mapNotNull {
@@ -83,9 +83,12 @@ fun CipherView.toViewState(
                         )
                     },
                     uris = loginValues.uris.orEmpty().map { it.toUriData() },
-                    passwordRevisionDate = loginValues.passwordRevisionDate?.let {
-                        dateTimeFormatter.format(it)
-                    },
+                    passwordRevisionDate = loginValues
+                        .passwordRevisionDate
+                        ?.toFormattedPattern(
+                            pattern = DATE_TIME_PATTERN,
+                            zone = TimeZone.getDefault().toZoneId(),
+                        ),
                     passwordHistoryCount = passwordHistory?.count(),
                     isPremiumUser = isPremiumUser,
                     totpCodeItemData = totpCodeItemData,

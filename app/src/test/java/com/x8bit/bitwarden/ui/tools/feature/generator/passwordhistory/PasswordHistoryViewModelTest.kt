@@ -22,33 +22,26 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
-import java.util.TimeZone
+import java.time.ZoneOffset
 
 class PasswordHistoryViewModelTest : BaseViewModelTest() {
 
     private val initialState = createPasswordHistoryState()
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val clipboardManager: BitwardenClipboardManager = mockk()
     private val fakeGeneratorRepository = FakeGeneratorRepository()
     private val mutableVaultItemFlow = MutableStateFlow<DataState<CipherView?>>(DataState.Loading)
     private val fakeVaultRepository: VaultRepository = mockk {
         every { getVaultItemStateFlow("mockId-1") } returns mutableVaultItemFlow
-    }
-
-    @BeforeEach
-    fun setUp() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    }
-
-    @AfterEach
-    fun tearDown() {
-        TimeZone.setDefault(null)
     }
 
     @Test
@@ -200,6 +193,7 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
                         password = "password",
                         date = passwordHistoryView.lastUsedDate.toFormattedPattern(
                             pattern = "MM/dd/yy h:mm a",
+                            clock = fixedClock,
                         ),
                     ),
                 ),
@@ -260,10 +254,11 @@ class PasswordHistoryViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         initialState: PasswordHistoryState = createPasswordHistoryState(),
     ): PasswordHistoryViewModel = PasswordHistoryViewModel(
-        savedStateHandle = createSavedStateHandleWithState(state = initialState),
+        clock = fixedClock,
         clipboardManager = clipboardManager,
         generatorRepository = fakeGeneratorRepository,
         vaultRepository = fakeVaultRepository,
+        savedStateHandle = createSavedStateHandleWithState(state = initialState),
     )
 
     private fun createPasswordHistoryState(

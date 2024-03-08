@@ -42,7 +42,7 @@ class OtherViewModel @Inject constructor(
             clearClipboardFrequency = settingsRepo.clearClipboardFrequency,
             lastSyncTime = settingsRepo
                 .vaultLastSync
-                ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock.zone)
+                ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock)
                 .orEmpty(),
             dialogState = null,
         ),
@@ -105,7 +105,7 @@ class OtherViewModel @Inject constructor(
             it.copy(
                 lastSyncTime = action
                     .vaultLastSyncTime
-                    ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock.zone)
+                    ?.toFormattedPattern(VAULT_LAST_SYNC_TIME_PATTERN, clock)
                     .orEmpty(),
                 dialogState = null,
             )

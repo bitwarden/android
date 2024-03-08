@@ -217,6 +217,7 @@ class ExportVaultViewModel @Inject constructor(
             is ExportVaultDataResult.Success -> {
                 val date = clock.instant().toFormattedPattern(
                     pattern = "yyyyMMddHHmmss",
+                    clock = clock,
                 )
                 val extension = state.exportFormat.fileExtension
                 val fileName = "bitwarden_export_$date.$extension"

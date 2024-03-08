@@ -20,14 +20,11 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
-import java.util.TimeZone
 
 class ExportVaultViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk()
@@ -47,16 +44,6 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         coEvery { exportVaultDataToString(any()) } returns mockk()
     }
     private val fileManager: FileManager = mockk()
-
-    @BeforeEach
-    fun setup() {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    }
-
-    @AfterEach
-    fun teardown() {
-        TimeZone.setDefault(null)
-    }
 
     @Test
     fun `initial state should be correct`() = runTest {

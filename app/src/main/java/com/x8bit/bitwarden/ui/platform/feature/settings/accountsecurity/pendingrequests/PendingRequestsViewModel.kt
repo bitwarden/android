@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.isOverFiveMinutesOld
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -19,7 +20,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -41,11 +41,6 @@ class PendingRequestsViewModel @Inject constructor(
     ),
 ) {
     private var authJob: Job = Job().apply { complete() }
-
-    private val dateTimeFormatter
-        get() = DateTimeFormatter
-            .ofPattern("M/d/yy hh:mm a")
-            .withZone(clock.zone)
 
     init {
         updateAuthRequestList()
@@ -140,8 +135,9 @@ class PendingRequestsViewModel @Inject constructor(
                         PendingRequestsState.ViewState.Content.PendingLoginRequest(
                             fingerprintPhrase = request.fingerprint,
                             platform = request.platform,
-                            timestamp = dateTimeFormatter.format(
-                                request.creationDate,
+                            timestamp = request.creationDate.toFormattedPattern(
+                                pattern = "M/d/yy hh:mm a",
+                                clock = clock,
                             ),
                         )
                     }
