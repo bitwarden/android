@@ -1,10 +1,11 @@
 package com.x8bit.bitwarden.data.auth.repository.model
 
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
- * The policy information decoded from the [data] parameter of the [SyncResponseJson.Policy] object.
+ * The policy information decoded from the `data` parameter of the [SyncResponseJson.Policy] object.
  */
 @Serializable
 sealed class PolicyInformation {

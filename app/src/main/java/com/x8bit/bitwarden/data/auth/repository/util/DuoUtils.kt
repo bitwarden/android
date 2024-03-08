@@ -7,7 +7,7 @@ private const val DUO_HOST: String = "duo-callback"
 /**
  * Retrieves a [DuoCallbackTokenResult] from an Intent. There are three possible cases.
  *
- * - [null]: Intent is not a Duo callback, or data is null.
+ * - `null`: Intent is not a Duo callback, or data is null.
  *
  * - [DuoCallbackTokenResult.MissingToken]: Intent is the Duo callback, but it's missing the code or
  * state value.

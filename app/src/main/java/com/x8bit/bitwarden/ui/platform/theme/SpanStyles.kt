@@ -4,6 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 
 /**
  * Defines a span style for clickable span texts. Useful because spans require a
