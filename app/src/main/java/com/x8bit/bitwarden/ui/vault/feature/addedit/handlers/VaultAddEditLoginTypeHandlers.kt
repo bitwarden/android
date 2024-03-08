@@ -21,7 +21,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * @property onSetupTotpClick Handles the action when the setup TOTP button is clicked.
  * @property onCopyTotpKeyClick Handles the action when the copy TOTP text button is clicked.
  * @property onClearTotpKeyClick Handles the action when the clear TOTP text button is clicked.
- * @property onUriSettingsClick Handles the action when the URI settings button is clicked.
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
  */
 @Suppress("LongParameterList")

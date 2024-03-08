@@ -37,7 +37,7 @@ fun generateUriForCaptcha(captchaId: String): Uri {
 /**
  * Retrieves a [CaptchaCallbackTokenResult] from an Intent. There are three possible cases.
  *
- * - [null]: Intent is not a captcha callback, or data is null.
+ * - `null`: Intent is not a captcha callback, or data is null.
  *
  * - [CaptchaCallbackTokenResult.MissingToken]:
  * Intent is the captcha callback, but its missing a token value.
