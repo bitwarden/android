@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -34,10 +35,11 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 @Suppress("TooManyFunctions")
 class PasswordHistoryViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
     private val vaultRepository: VaultRepository,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -138,6 +140,7 @@ class PasswordHistoryViewModel @Inject constructor(
                 password = passwordHistoryView.password,
                 date = passwordHistoryView.lastUsedDate.toFormattedPattern(
                     pattern = "MM/dd/yy h:mm a",
+                    clock = clock,
                 ),
             )
         }

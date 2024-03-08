@@ -1,17 +1,22 @@
 package com.x8bit.bitwarden.ui.platform.util
 
+import java.time.Clock
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.temporal.TemporalAccessor
-import java.util.TimeZone
 
 /**
  * Converts the [TemporalAccessor] to a formatted string based on the provided pattern and timezone.
  */
 fun TemporalAccessor.toFormattedPattern(
     pattern: String,
-    zone: ZoneId = TimeZone.getDefault().toZoneId(),
-): String {
-    val formatter = DateTimeFormatter.ofPattern(pattern).withZone(zone)
-    return formatter.format(this)
-}
+    zone: ZoneId,
+): String = DateTimeFormatter.ofPattern(pattern).withZone(zone).format(this)
+
+/**
+ * Converts the [TemporalAccessor] to a formatted string based on the provided pattern and timezone.
+ */
+fun TemporalAccessor.toFormattedPattern(
+    pattern: String,
+    clock: Clock = Clock.systemDefaultZone(),
+): String = toFormattedPattern(pattern = pattern, zone = clock.zone)

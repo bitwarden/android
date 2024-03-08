@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -20,7 +21,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import java.time.Clock
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -52,11 +52,6 @@ class LoginApprovalViewModel @Inject constructor(
             )
         },
 ) {
-    private val dateTimeFormatter
-        get() = DateTimeFormatter
-            .ofPattern("M/d/yy hh:mm a")
-            .withZone(clock.zone)
-
     init {
         state
             .specialCircumstance
@@ -171,7 +166,10 @@ class LoginApprovalViewModel @Inject constructor(
                         email = email,
                         fingerprint = result.authRequest.fingerprint,
                         ipAddress = result.authRequest.ipAddress,
-                        time = dateTimeFormatter.format(result.authRequest.creationDate),
+                        time = result.authRequest.creationDate.toFormattedPattern(
+                            pattern = "M/d/yy hh:mm a",
+                            clock = clock,
+                        ),
                     ),
                 )
             }

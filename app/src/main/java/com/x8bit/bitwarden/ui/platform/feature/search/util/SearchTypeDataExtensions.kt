@@ -322,7 +322,7 @@ private fun SendView.toDisplayItem(
     SearchState.DisplayItem(
         id = id.orEmpty(),
         title = name,
-        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock.zone),
+        subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
         iconData = IconData.Local(
             iconRes = when (type) {
                 SendType.TEXT -> R.drawable.ic_send_text
