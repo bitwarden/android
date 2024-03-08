@@ -19,4 +19,4 @@ enum class KdfTypeJson {
 
 @Keep
 private class KdfTypeSerializer :
-    BaseEnumeratedIntSerializer<KdfTypeJson>(KdfTypeJson.values())
+    BaseEnumeratedIntSerializer<KdfTypeJson>(KdfTypeJson.entries.toTypedArray())

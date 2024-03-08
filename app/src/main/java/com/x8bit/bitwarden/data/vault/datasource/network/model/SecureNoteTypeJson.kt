@@ -19,4 +19,4 @@ enum class SecureNoteTypeJson {
 
 @Keep
 private class SecureNoteTypeSerializer :
-    BaseEnumeratedIntSerializer<SecureNoteTypeJson>(SecureNoteTypeJson.values())
+    BaseEnumeratedIntSerializer<SecureNoteTypeJson>(SecureNoteTypeJson.entries.toTypedArray())

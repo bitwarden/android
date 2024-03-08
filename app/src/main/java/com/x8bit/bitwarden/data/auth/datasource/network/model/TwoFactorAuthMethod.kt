@@ -40,4 +40,4 @@ enum class TwoFactorAuthMethod(val value: UInt) {
 
 @Keep
 private class TwoFactorAuthMethodSerializer :
-    BaseEnumeratedIntSerializer<TwoFactorAuthMethod>(TwoFactorAuthMethod.values())
+    BaseEnumeratedIntSerializer<TwoFactorAuthMethod>(TwoFactorAuthMethod.entries.toTypedArray())
