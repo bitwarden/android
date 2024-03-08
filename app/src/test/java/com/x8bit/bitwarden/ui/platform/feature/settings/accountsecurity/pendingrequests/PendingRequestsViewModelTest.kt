@@ -16,16 +16,20 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.util.TimeZone
 
 class PendingRequestsViewModelTest : BaseViewModelTest() {
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val mutableAuthRequestsWithUpdatesFlow =
         bufferedMutableSharedFlow<AuthRequestsUpdatesResult>()
     private val authRepository = mockk<AuthRepository> {
@@ -35,18 +39,6 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     private val mutablePullToRefreshStateFlow = MutableStateFlow(false)
     private val settingsRepository = mockk<SettingsRepository> {
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshStateFlow
-    }
-
-    @BeforeEach
-    fun setup() {
-        // Setting the timezone so the tests pass consistently no matter the environment.
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    }
-
-    @AfterEach
-    fun tearDown() {
-        // Clearing the timezone after the test.
-        TimeZone.setDefault(null)
     }
 
     @Test
@@ -65,7 +57,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     fun `getPendingResults success with content should update state with some requests filtered`() {
         val dateTimeFormatter = DateTimeFormatter
             .ofPattern("M/d/yy hh:mm a")
-            .withZone(TimeZone.getDefault().toZoneId())
+            .withZone(fixedClock.zone)
         val nowZonedDateTime = ZonedDateTime.now()
         val requestList = listOf(
             AuthRequest(
@@ -288,7 +280,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     fun `on LifecycleResume should update state`() = runTest {
         val dateTimeFormatter = DateTimeFormatter
             .ofPattern("M/d/yy hh:mm a")
-            .withZone(TimeZone.getDefault().toZoneId())
+            .withZone(fixedClock.zone)
         val nowZonedDateTime = ZonedDateTime.now()
         val fiveMinZonedDateTime = ZonedDateTime.now().minusMinutes(5)
         val sixMinZonedDateTime = ZonedDateTime.now().minusMinutes(6)
@@ -373,6 +365,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
     private fun createViewModel(
         state: PendingRequestsState? = DEFAULT_STATE,
     ): PendingRequestsViewModel = PendingRequestsViewModel(
+        clock = fixedClock,
         authRepository = authRepository,
         settingsRepository = settingsRepository,
         savedStateHandle = SavedStateHandle().apply { set("state", state) },
