@@ -397,6 +397,7 @@ class VaultItemListingDataExtensionsTest {
 
         assertEquals(
             VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
@@ -469,6 +470,7 @@ class VaultItemListingDataExtensionsTest {
 
         assertEquals(
             VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
                 displayItemList = listOf(
                     createMockDisplayItemForCipher(
                         number = 1,
@@ -582,6 +584,7 @@ class VaultItemListingDataExtensionsTest {
 
         assertEquals(
             VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
                 displayItemList = listOf(
                     createMockDisplayItemForSend(number = 1, sendType = SendType.FILE),
                     createMockDisplayItemForSend(number = 2, sendType = SendType.TEXT),
@@ -683,7 +686,7 @@ class VaultItemListingDataExtensionsTest {
     @Test
     fun `toViewState should properly filter and return the correct folders`() {
         val vaultData = VaultData(
-            listOf(createMockCipherView(number = 1)),
+            cipherViewList = listOf(createMockCipherView(number = 1)),
             collectionViewList = emptyList(),
             folderViewList = listOf(
                 FolderView("1", "test", clock.instant()),
@@ -705,6 +708,7 @@ class VaultItemListingDataExtensionsTest {
 
         assertEquals(
             VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
                 displayItemList = listOf(),
                 displayFolderList = listOf(
                     VaultItemListingState.FolderDisplayItem(
@@ -713,6 +717,50 @@ class VaultItemListingDataExtensionsTest {
                         count = 0,
                     ),
                 ),
+            ),
+            actual,
+        )
+    }
+
+    @Test
+    fun `toViewState should properly filter and return the correct collections`() {
+        val vaultData = VaultData(
+            cipherViewList = emptyList(),
+            collectionViewList = listOf(
+                createMockCollectionView(1, "test"),
+                createMockCollectionView(2, "test/test"),
+                createMockCollectionView(3, "Collection/test"),
+                createMockCollectionView(4, "test/Collection"),
+                createMockCollectionView(5, "Collection"),
+            ),
+            folderViewList = emptyList(),
+            sendViewList = emptyList(),
+        )
+
+        val actual = vaultData.toViewState(
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            autofillSelectionData = null,
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
+            vaultFilterType = VaultFilterType.AllVaults,
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayCollectionList = listOf(
+                    VaultItemListingState.CollectionDisplayItem(
+                        id = "mockId-2",
+                        name = "test",
+                        count = 0,
+                    ),
+                    VaultItemListingState.CollectionDisplayItem(
+                        id = "mockId-4",
+                        name = "Collection",
+                        count = 0,
+                    ),
+                ),
+                displayItemList = emptyList(),
+                displayFolderList = emptyList(),
             ),
             actual,
         )

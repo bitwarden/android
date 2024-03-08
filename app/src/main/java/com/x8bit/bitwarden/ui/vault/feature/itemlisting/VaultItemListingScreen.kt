@@ -56,7 +56,7 @@ import kotlinx.collections.immutable.toImmutableList
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Suppress("LongMethod")
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun VaultItemListingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItem: (id: String) -> Unit,
@@ -123,6 +123,10 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.NavigateToFolderItem -> {
                 onNavigateToVaultItemListing(VaultItemListingType.Folder(event.folderId))
+            }
+
+            is VaultItemListingEvent.NavigateToCollectionItem -> {
+                onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
         }
     }
@@ -244,6 +248,7 @@ private fun VaultItemListingScaffold(
                     policyDisablesSend = state.policyDisablesSend &&
                         state.itemListingType is VaultItemListingState.ItemListingType.Send,
                     vaultItemClick = vaultItemListingHandlers.itemClick,
+                    collectionClick = vaultItemListingHandlers.collectionClick,
                     folderClick = vaultItemListingHandlers.folderClick,
                     masterPasswordRepromptSubmit =
                     vaultItemListingHandlers.masterPasswordRepromptSubmit,

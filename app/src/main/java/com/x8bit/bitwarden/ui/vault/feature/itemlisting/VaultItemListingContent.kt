@@ -39,6 +39,7 @@ import kotlinx.collections.immutable.toPersistentList
 fun VaultItemListingContent(
     state: VaultItemListingState.ViewState.Content,
     policyDisablesSend: Boolean,
+    collectionClick: (id: String) -> Unit,
     folderClick: (id: String) -> Unit,
     vaultItemClick: (id: String) -> Unit,
     masterPasswordRepromptSubmit: (password: String, data: MasterPasswordRepromptData) -> Unit,
@@ -111,6 +112,35 @@ fun VaultItemListingContent(
             }
         }
 
+        if (state.displayCollectionList.isNotEmpty()) {
+            item {
+                BitwardenListHeaderTextWithSupportLabel(
+                    label = stringResource(id = R.string.collections),
+                    supportingLabel = state.displayCollectionList.count().toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+
+            item {
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+
+            items(state.displayCollectionList) { collection ->
+                BitwardenGroupItem(
+                    startIcon = painterResource(id = R.drawable.ic_collection),
+                    label = collection.name,
+                    supportingLabel = collection.count.toString(),
+                    onClick = { collectionClick(collection.id) },
+                    showDivider = false,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+        }
+
         if (state.displayFolderList.isNotEmpty()) {
             item {
                 BitwardenListHeaderTextWithSupportLabel(
@@ -140,7 +170,7 @@ fun VaultItemListingContent(
             }
         }
 
-        if (state.displayItemList.isNotEmpty() && state.displayFolderList.isNotEmpty()) {
+        if (state.shouldShowDivider) {
             item {
                 HorizontalDivider(
                     thickness = 1.dp,

@@ -19,7 +19,9 @@ import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import com.x8bit.bitwarden.ui.vault.feature.util.getCollections
 import com.x8bit.bitwarden.ui.vault.feature.util.getFolders
+import com.x8bit.bitwarden.ui.vault.feature.util.toCollectionDisplayName
 import com.x8bit.bitwarden.ui.vault.feature.util.toFolderDisplayName
 import com.x8bit.bitwarden.ui.vault.feature.util.toLabelIcons
 import com.x8bit.bitwarden.ui.vault.feature.util.toOverflowActions
@@ -101,15 +103,20 @@ fun VaultData.toViewState(
         }
         .toFilteredList(vaultFilterType)
 
-    val folderList = if (itemListingType is VaultItemListingState.ItemListingType.Vault.Folder &&
-        !itemListingType.folderId.isNullOrBlank()
-    ) {
-        folderViewList.getFolders(itemListingType.folderId)
-    } else {
-        emptyList()
-    }
+    val folderList =
+        (itemListingType as? VaultItemListingState.ItemListingType.Vault.Folder)
+            ?.folderId
+            ?.let { folderViewList.getFolders(it) }
+            .orEmpty()
 
-    return if (folderList.isNotEmpty() || filteredCipherViewList.isNotEmpty()) {
+    val collectionList =
+        (itemListingType as? VaultItemListingState.ItemListingType.Vault.Collection)
+            ?.let { collectionViewList.getCollections(it.collectionId) }
+            .orEmpty()
+
+    return if (folderList.isNotEmpty() || filteredCipherViewList.isNotEmpty() ||
+        collectionList.isNotEmpty()
+    ) {
         VaultItemListingState.ViewState.Content(
             displayItemList = filteredCipherViewList.toDisplayItemList(
                 baseIconUrl = baseIconUrl,
@@ -128,6 +135,18 @@ fun VaultData.toViewState(
                         },
                 )
             },
+            displayCollectionList = collectionList.map { collectionView ->
+                VaultItemListingState.CollectionDisplayItem(
+                    id = requireNotNull(collectionView.id),
+                    name = collectionView.name,
+                    count = this.cipherViewList
+                        .count {
+                            !it.id.isNullOrBlank() &&
+                                it.deletedDate == null &&
+                                collectionView.id in it.collectionIds
+                        },
+                )
+            },
         )
     } else {
         // Use the autofill empty message if necessary, otherwise use normal type-specific message
@@ -139,6 +158,10 @@ fun VaultData.toViewState(
                 when (itemListingType) {
                     is VaultItemListingState.ItemListingType.Vault.Folder -> {
                         R.string.no_items_folder
+                    }
+
+                    is VaultItemListingState.ItemListingType.Vault.Collection -> {
+                        R.string.no_items_collection
                     }
 
                     VaultItemListingState.ItemListingType.Vault.Trash -> {
@@ -177,6 +200,7 @@ fun List<SendView>.toViewState(
                 clock = clock,
             ),
             displayFolderList = emptyList(),
+            displayCollectionList = emptyList(),
         )
     } else {
         VaultItemListingState.ViewState.NoItems(
@@ -196,6 +220,7 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
             collectionName = collectionList
                 .find { it.id == collectionId }
                 ?.name
+                ?.toCollectionDisplayName(collectionList)
                 .orEmpty(),
         )
 

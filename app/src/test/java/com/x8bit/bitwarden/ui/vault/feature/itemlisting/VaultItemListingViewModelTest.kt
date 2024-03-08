@@ -305,6 +305,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             } returns ValidatePasswordResult.Error
             val initialState = createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
@@ -354,6 +355,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
             val initialState = createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
@@ -482,6 +484,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.actionChannel.trySend(VaultItemListingsAction.FolderClick(testId))
             assertEquals(VaultItemListingEvent.NavigateToFolderItem(testId), awaitItem())
+        }
+    }
+
+    @Test
+    fun `CollectionClick for vault item should emit NavigateToCollectionItem`() = runTest {
+        val viewModel = createVaultItemListingViewModel()
+        val testId = "1"
+
+        viewModel.eventFlow.test {
+            viewModel.actionChannel.trySend(VaultItemListingsAction.CollectionClick(testId))
+            assertEquals(VaultItemListingEvent.NavigateToCollectionItem(testId), awaitItem())
         }
     }
 
@@ -842,6 +855,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1),
                         ),
@@ -889,6 +903,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             assertEquals(
                 createVaultItemListingState(
                     viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1).copy(isAutofill = true),
                         ),
@@ -990,6 +1005,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
@@ -1097,6 +1113,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),
@@ -1211,6 +1228,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             createVaultItemListingState(
                 viewState = VaultItemListingState.ViewState.Content(
+                    displayCollectionList = emptyList(),
                     displayItemList = listOf(
                         createMockDisplayItemForCipher(number = 1),
                     ),

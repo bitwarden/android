@@ -139,6 +139,7 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.DismissDialogClick -> handleDismissDialogClick()
             is VaultItemListingsAction.BackClick -> handleBackClick()
             is VaultItemListingsAction.FolderClick -> handleFolderClick(action)
+            is VaultItemListingsAction.CollectionClick -> handleCollectionClick(action)
             is VaultItemListingsAction.LockClick -> handleLockClick()
             is VaultItemListingsAction.SyncClick -> handleSyncClick()
             is VaultItemListingsAction.SearchIconClick -> handleSearchIconClick()
@@ -166,6 +167,10 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleSwitchAccountClick(action: VaultItemListingsAction.SwitchAccountClick) {
         authRepository.switchAccount(userId = action.accountSummary.userId)
+    }
+
+    private fun handleCollectionClick(action: VaultItemListingsAction.CollectionClick) {
+        sendEvent(VaultItemListingEvent.NavigateToCollectionItem(action.id))
     }
 
     private fun handleFolderClick(action: VaultItemListingsAction.FolderClick) {
@@ -839,12 +844,18 @@ data class VaultItemListingState(
          * Content state for the [VaultItemListingScreen] showing the actual content or items.
          *
          * @property displayItemList List of items to display.
+         * @property displayFolderList list of folders to display.
+         * @property displayCollectionList list of collections to display.
          */
         data class Content(
             val displayItemList: List<DisplayItem>,
             val displayFolderList: List<FolderDisplayItem>,
+            val displayCollectionList: List<CollectionDisplayItem>,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
+            val shouldShowDivider: Boolean
+                get() = displayItemList.isNotEmpty() &&
+                    (displayFolderList.isNotEmpty() || displayCollectionList.isNotEmpty())
         }
 
         /**
@@ -890,6 +901,19 @@ data class VaultItemListingState(
      * @property count the amount of ciphers in the folder.
      */
     data class FolderDisplayItem(
+        val id: String,
+        val name: String,
+        val count: Int,
+    )
+
+    /**
+     * The collection that is displayed to the user on the ItemListingScreen.
+     *
+     * @property id the id of the collection.
+     * @property name the name of the collection.
+     * @property count the amount of ciphers in the collection.
+     */
+    data class CollectionDisplayItem(
         val id: String,
         val name: String,
         val count: Int,
@@ -1032,6 +1056,11 @@ sealed class VaultItemListingEvent {
     data object NavigateToAddVaultItem : VaultItemListingEvent()
 
     /**
+     * Navigates to the collection.
+     */
+    data class NavigateToCollectionItem(val collectionId: String) : VaultItemListingEvent()
+
+    /**
      * Navigates to the folder.
      */
     data class NavigateToFolderItem(val folderId: String) : VaultItemListingEvent()
@@ -1164,6 +1193,13 @@ sealed class VaultItemListingsAction {
      * @property id the id of the item that has been clicked.
      */
     data class ItemClick(val id: String) : VaultItemListingsAction()
+
+    /**
+     * Click on the collection.
+     *
+     * @property id the id of the collection that has been clicked
+     */
+    data class CollectionClick(val id: String) : VaultItemListingsAction()
 
     /**
      * Click on the folder.
