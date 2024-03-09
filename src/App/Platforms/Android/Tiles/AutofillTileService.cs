@@ -1,6 +1,7 @@
 ﻿using Android;
 using Android.App;
 using Android.Content;
+using Android.OS;
 using Android.Runtime;
 using Android.Service.QuickSettings;
 using Bit.Core.Resources.Localization;
@@ -76,7 +77,24 @@ namespace Bit.Droid.Tile
             var intent = new Intent(this, typeof(AccessibilityActivity));
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             intent.PutExtra("autofillTileClicked", true);
-            StartActivityAndCollapse(intent);
+
+            //For Android 14+ We need to use PendingIntent instead of Intent directly. Older versions still need to use Intent.
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.UpsideDownCake)
+            {
+                var pendingIntent = PendingIntent.GetActivity(
+                    ApplicationContext,
+                    0,
+                    intent,
+                    PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent
+                );
+                if (pendingIntent == null) { return; }
+
+                StartActivityAndCollapse(pendingIntent);
+            }
+            else
+            {
+                StartActivityAndCollapse(intent);
+            }
         }
 
         private void ShowConfigErrorDialog()
