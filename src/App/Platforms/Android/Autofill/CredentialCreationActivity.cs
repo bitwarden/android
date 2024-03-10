@@ -121,7 +121,7 @@ namespace Bit.Droid.Autofill
             (
                 clientCreateCredentialResult.CredentialId,
                 response,
-                "cross-platform"
+                "platform"
             );
 
             var result = new Intent();

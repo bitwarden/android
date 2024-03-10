@@ -138,7 +138,7 @@ namespace Bit.Droid.Autofill
             (
                 assertResult.RawId, 
                 response, 
-                "cross-platform" //TODO: use "platform" vs "cross-platform"?
+                "platform"
             );
             
             var clientJson = credential.Response.ClientJson;
@@ -171,7 +171,7 @@ namespace Bit.Droid.Autofill
             var rootAndroidJson = new JSONObject();
             rootAndroidJson.Put("id", b64Encode(assertResult.RawId));
             rootAndroidJson.Put("rawId", b64Encode(assertResult.RawId));
-            rootAndroidJson.Put("authenticatorAttachment", "cross-platform");
+            rootAndroidJson.Put("authenticatorAttachment", "platform");
             rootAndroidJson.Put("type", "public-key");
             rootAndroidJson.Put("clientExtensionResults", new JSONObject());
             rootAndroidJson.Put("response", responseInnerAndroidJson);
