@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
@@ -315,7 +316,7 @@ namespace Bit.iOS.Core.Services
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
-        public Task ReturnToPasskeyAfterUnlockAsync()
+        public Task ReturnToPasskeyAfterUnlockAsync(AppOptions appOptions)
         {
             // only used by Android
             throw new NotImplementedException();

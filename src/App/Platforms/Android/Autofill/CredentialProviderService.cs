@@ -22,10 +22,10 @@ namespace Bit.Droid.Autofill
     [Register("com.x8bit.bitwarden.Autofill.CredentialProviderService")]
     public class CredentialProviderService : AndroidX.Credentials.Provider.CredentialProviderService
     {
-        private const string GetPasskeyIntentAction = "PACKAGE_NAME.GET_PASSKEY";
-        private const string CreatePasskeyIntentAction = "PACKAGE_NAME.CREATE_PASSKEY";
-        private const int UniqueGetRequestCode = 94556023;
-        private const int UniqueCreateRequestCode = 94556024;
+        public const string GetPasskeyIntentAction = "PACKAGE_NAME.GET_PASSKEY";
+        public const string CreatePasskeyIntentAction = "PACKAGE_NAME.CREATE_PASSKEY";
+        public const int UniqueGetRequestCode = 94556023;
+        public const int UniqueCreateRequestCode = 94556024;
 
         private ICipherService _cipherService;
         private IUserVerificationService _userVerificationService;
@@ -63,7 +63,7 @@ namespace Bit.Droid.Autofill
                 }
 
                 var intent = new Intent(ApplicationContext, typeof(MainActivity));
-                intent.PutExtra(CredentialProviderConstants.PasskeyFramework, true);
+                intent.PutExtra(CredentialProviderConstants.PasskeyCredentialAction, CredentialProviderConstants.PasskeyCredentialGet);
                 var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueGetRequestCode, intent,
                     AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
@@ -91,8 +91,6 @@ namespace Bit.Droid.Autofill
         {
             if (request == null) { return null; }
 
-            //TODO: Need to confirm if we check for Unlock here and use a similar flow to the one used for OnBeginGetCredentialRequest()
-
             if (request is BeginCreatePasswordCredentialRequest beginCreatePasswordCredentialRequest)
             {
                 //TODO: Is the Create Password needed?
@@ -110,13 +108,27 @@ namespace Bit.Droid.Autofill
         private async Task<BeginCreateCredentialResponse> HandleCreatePasskeyQuery(BeginCreatePublicKeyCredentialRequest optionRequest)
         {
             var origin = optionRequest.CallingAppInfo?.Origin;
+            PendingIntent pendingIntent = null;
 
-            var intent = new Intent(ApplicationContext, typeof(CredentialCreationActivity))
-                .SetAction(CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
-                .PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, optionRequest.RequestJson)
-                .PutExtra(CredentialProviderConstants.Origin, origin);
-            var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
-                PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
+            _vaultTimeoutService ??= ServiceContainer.Resolve<IVaultTimeoutService>();
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            var locked = await _vaultTimeoutService.IsLockedAsync();
+            if (locked)
+            {
+                var intent = new Intent(ApplicationContext, typeof(MainActivity));
+                intent.PutExtra(CredentialProviderConstants.PasskeyCredentialAction, CredentialProviderConstants.PasskeyCredentialCreate);
+                pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
+            }
+            else
+            {
+                var intent = new Intent(ApplicationContext, typeof(CredentialCreationActivity))
+                    .SetAction(CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
+                    .PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, optionRequest.RequestJson)
+                    .PutExtra(CredentialProviderConstants.Origin, origin);
+                pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
+            }
 
             //TODO: i81n needs to be done
             var createEntryBuilder = new CreateEntry.Builder("Bitwarden Vault", pendingIntent)

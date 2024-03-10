@@ -325,13 +325,15 @@ namespace Bit.Droid
 
         private AppOptions GetOptions()
         {
+            var passkeyCredentialAction = Intent.GetStringExtra(CredentialProviderConstants.PasskeyCredentialAction);
             var options = new AppOptions
             {
                 Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra(AutofillConstants.AutofillFrameworkUri),
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra(AutofillConstants.AutofillFramework, false),
-                FromPasskeyFramework = Intent.GetBooleanExtra(CredentialProviderConstants.PasskeyFramework, false),
+                PasskeyCredentialAction = passkeyCredentialAction,
+                FromPasskeyFramework = !string.IsNullOrWhiteSpace(passkeyCredentialAction),
                 CreateSend = GetCreateSendRequest(Intent)
             };
             var fillType = Intent.GetIntExtra(AutofillConstants.AutofillFrameworkFillType, 0);

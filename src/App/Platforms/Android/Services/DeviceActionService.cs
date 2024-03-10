@@ -19,6 +19,8 @@ using Bit.App.Utilities.Prompts;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.App.Droid.Utilities;
+using Bit.App.Models;
+using Bit.Droid.Autofill;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
@@ -35,10 +37,6 @@ namespace Bit.Droid.Services
 
         private Toast _toast;
         private string _userAgent;
-
-        //TODO: These consts need to be moved somewhere else where they can be shared with the code in CredentialProviderService.cs
-        private const string GetPasskeyIntentAction = "PACKAGE_NAME.GET_PASSKEY";
-        private const int UniqueRequestCode = 94556023;
 
         public DeviceActionService(
             IStateService stateService,
@@ -559,13 +557,30 @@ namespace Bit.Droid.Services
             return SystemClock.ElapsedRealtime();
         }
 
-        public async Task ReturnToPasskeyAfterUnlockAsync()
+        public async Task ReturnToPasskeyAfterUnlockAsync(AppOptions appOptions)
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
-            if (activity == null)
+            if (activity == null || string.IsNullOrWhiteSpace(appOptions.PasskeyCredentialAction))
             {
                 return;
             }
+
+            if (appOptions.PasskeyCredentialAction == CredentialProviderConstants.PasskeyCredentialGet)
+            {
+                await ReturnToPasskeyGetAfterUnlockAsync();
+            }
+            else if (appOptions.PasskeyCredentialAction == CredentialProviderConstants.PasskeyCredentialCreate)
+            {
+                await ReturnToPasskeyCreateAfterUnlockAsync();
+            }
+
+            appOptions.PasskeyCredentialAction = null; //Clear CredentialAction Value
+        }
+
+        public async Task ReturnToPasskeyGetAfterUnlockAsync()
+        {
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
+            if (activity == null) { return; }
 
             try
             {
@@ -594,6 +609,38 @@ namespace Bit.Droid.Services
 
                 activity.SetResult(Result.Ok, result);
                 activity.Finish();
+            }
+            catch (Exception ex)
+            {
+                Bit.Core.Services.LoggerHelper.LogEvenIfCantBeResolved(ex);
+
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
+            }
+        }
+
+        public async Task ReturnToPasskeyCreateAfterUnlockAsync()
+        {
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
+            if (activity == null) { return; }
+
+            try
+            {
+                var getRequest = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveProviderCreateCredentialRequest(activity.Intent);
+                var callingRequest = getRequest?.CallingRequest as CreatePublicKeyCredentialRequest;
+
+                //TODO: WIP. Need to either pass the PendingIntentHandler data into CredentialCreationActivity or we need to do the CredentialCreation here directly. (we would need to share code with one in CredentialCreationActivity in this last scenario)
+
+                var intent = new Intent(activity.ApplicationContext, typeof(CredentialCreationActivity))
+                    .SetAction(CredentialProviderService.CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
+                    .PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, "data") //TODO
+                    .PutExtra(CredentialProviderConstants.Origin, "origin"); //TODO
+                var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, CredentialProviderService.UniqueCreateRequestCode, intent,
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
+                
+                //activity.SetResult(Result.Ok, intent);
+                activity.StartActivity(intent, activity.Intent.Extras);
+                //activity.StartActivity(pendingIntent);
             }
             catch (Exception ex)
             {
@@ -643,10 +690,10 @@ namespace Bit.Droid.Services
                 cipher.Login.MainFido2Credential.CredentialId);
 
             var intent = new Intent(activity.ApplicationContext, typeof(Bit.Droid.Autofill.CredentialProviderSelectionActivity))
-                .SetAction(GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
+                .SetAction(CredentialProviderService.GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
             intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
             intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
-            var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, UniqueRequestCode, intent,
+            var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, CredentialProviderService.UniqueGetRequestCode, intent,
                 PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
             return new AndroidX.Credentials.Provider.PublicKeyCredentialEntry.Builder(

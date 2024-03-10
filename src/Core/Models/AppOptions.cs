@@ -10,6 +10,7 @@ namespace Bit.App.Models
         public bool GeneratorTile { get; set; }
         public bool FromAutofillFramework { get; set; }
         public bool FromPasskeyFramework { get; set; }
+        public string PasskeyCredentialAction { get; set; }
         public CipherType? FillType { get; set; }
         public string Uri { get; set; }
         public CipherType? SaveType { get; set; }

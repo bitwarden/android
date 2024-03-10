@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Bit.App.Models;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
 using Bit.Core.Models;
@@ -40,7 +41,7 @@ namespace Bit.App.Abstractions
         void OpenCredentialProviderSettings();
         void OpenAutofillSettings();
         long GetActiveTime();
-        Task ReturnToPasskeyAfterUnlockAsync();
+        Task ReturnToPasskeyAfterUnlockAsync(AppOptions appOptions);
         void CloseMainApp();
         float GetSystemFontSizeScale();
         Task OnAccountSwitchCompleteAsync();

@@ -434,11 +434,11 @@ namespace Bit.App.Utilities
                     App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
-                if (appOptions.FromPasskeyFramework)
+                if (appOptions.FromPasskeyFramework && !string.IsNullOrWhiteSpace(appOptions.PasskeyCredentialAction))
                 {
                     appOptions.FromPasskeyFramework = false;
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
-                    deviceActionService.ReturnToPasskeyAfterUnlockAsync().FireAndForget();
+                    deviceActionService.ReturnToPasskeyAfterUnlockAsync(appOptions).FireAndForget();
                     return true;
                 }
                 if (appOptions.Uri != null

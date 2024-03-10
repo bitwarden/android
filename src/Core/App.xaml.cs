@@ -104,6 +104,7 @@ namespace Bit.App
                 Options.GeneratorTile = appOptions.GeneratorTile;
                 Options.FromAutofillFramework = appOptions.FromAutofillFramework;
                 Options.FromPasskeyFramework = appOptions.FromPasskeyFramework;
+                Options.PasskeyCredentialAction = appOptions.PasskeyCredentialAction;
                 Options.CreateSend = appOptions.CreateSend;
             }
         }
