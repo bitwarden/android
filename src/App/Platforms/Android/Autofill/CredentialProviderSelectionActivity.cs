@@ -1,4 +1,6 @@
-﻿using Android.App;
+﻿using System.Security.Cryptography;
+using System.Text;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
@@ -12,6 +14,7 @@ using Bit.App.Droid.Utilities;
 using Bit.Core.Utilities.Fido2;
 using Java.Security;
 using Java.Security.Spec;
+using Org.Json;
 
 namespace Bit.Droid.Autofill
 {
@@ -108,7 +111,7 @@ namespace Bit.Droid.Autofill
                 packageName,
                 assertResult.ClientDataJSON //clientDataHash
             );
-            
+
             System.Diagnostics.Debug.WriteLine($"Base64Id: {assertResult.Id}");
 
             response.SetAuthenticatorData(assertResult.AuthenticatorData);
@@ -116,15 +119,18 @@ namespace Bit.Droid.Autofill
             System.Diagnostics.Debug.WriteLine($"RequestJson: {credentialPublic.RequestJson}");
             System.Diagnostics.Debug.WriteLine($"UserHandle: {assertResult.UserHandle}");
 
-            //TODO: WIP lines below to delete if not needed in the end. They are based on Android Sample
             /*
-            var privateKeyBytes = Convert.FromBase64String(passkey.KeyValue);
-            var privateKey = ConvertPrivateKey(privateKeyBytes);
-            var sig = Java.Security.Signature.GetInstance("SHA256withECDSA");
-            sig.InitSign(privateKey);
-            sig.Update(response.DataToSign());
-            response.SetSignature(sig.Sign());
+            var signature = GenerateSignature(response.DataToSign(), passkey.KeyBytes);
+            response.SetSignature(signature);
             */
+
+            //TODO: WIP lines below to delete if not needed in the end. They are based on Android Sample
+            //var privateKeyBytes = Convert.FromBase64String(passkey.KeyValue);
+            //var privateKey = ConvertPrivateKey(passkey.KeyBytes);
+            //var sig = Java.Security.Signature.GetInstance("SHA256withECDSA");
+            //sig.InitSign(privateKey);
+            //sig.Update(response.DataToSign());
+            //response.SetSignature(sig.Sign());
 
             response.SetSignature(assertResult.Signature);
 
@@ -132,9 +138,15 @@ namespace Bit.Droid.Autofill
             (
                 assertResult.RawId, 
                 response, 
-                "platform" //TODO: use "platform" vs "cross-platform"?
+                "cross-platform" //TODO: use "platform" vs "cross-platform"?
             );
+            
+            var clientJson = credential.Response.ClientJson;
+            System.Diagnostics.Debug.WriteLine($"ClientJson: {clientJson}");
 
+            
+            //TODO: Original Android sample return code
+            /*
             var result = new Intent();
             var credentialJson = credential.Json();
             var cred = new PublicKeyCredential(credentialJson);
@@ -144,10 +156,49 @@ namespace Bit.Droid.Autofill
             PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
             SetResult(Result.Ok, result);
             Finish();
+            */
 
-            // Copy TOTP if needed
-            //var autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
-            //autofillHandler.Autofill(decCipher);
+            //TODO: Code below until end of method is using alternative method of building Json ourselves
+
+            var result = new Intent();
+
+            var responseInnerAndroidJson = new JSONObject();
+            responseInnerAndroidJson.Put("clientDataJSON", b64Encode(assertResult.ClientDataJSON));
+            responseInnerAndroidJson.Put("authenticatorData", b64Encode(assertResult.AuthenticatorData));
+            responseInnerAndroidJson.Put("signature", b64Encode(assertResult.Signature));
+            responseInnerAndroidJson.Put("userHandle", b64Encode(assertResult.UserHandle));
+
+            var rootAndroidJson = new JSONObject();
+            rootAndroidJson.Put("id", b64Encode(assertResult.RawId));
+            rootAndroidJson.Put("rawId", b64Encode(assertResult.RawId));
+            rootAndroidJson.Put("authenticatorAttachment", "cross-platform");
+            rootAndroidJson.Put("type", "public-key");
+            rootAndroidJson.Put("clientExtensionResults", new JSONObject());
+            rootAndroidJson.Put("response", responseInnerAndroidJson);
+
+            var responseAndroidJson = rootAndroidJson.ToString();
+            var cred = new PublicKeyCredential(responseAndroidJson);
+            var responseJson = cred.AuthenticationResponseJson;
+            System.Diagnostics.Debug.WriteLine($"ResponseJson: {responseJson}");
+            var credResponse = new GetCredentialResponse(cred);
+            PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
+            SetResult(Result.Ok, result);
+            Finish();
+        }
+
+        //TODO: Delete if not used
+        private byte[] GenerateSignature(byte[] dataToSign, byte[] privateKey)
+        {
+            var sigBase = dataToSign.ToArray();
+            var dsa = ECDsa.Create();
+            dsa.ImportPkcs8PrivateKey(privateKey, out var bytesRead);
+
+            if (bytesRead == 0)
+            {
+                throw new Exception("Failed to import private key");
+            }
+
+            return dsa.SignData(sigBase, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
         }
 
         //TODO: WIP Region below to delete if not needed in the end. They are based on Android Sample
@@ -181,6 +232,54 @@ namespace Bit.Droid.Autofill
             var certHash = md.Digest(cert);
             return $"android:apk-key-hash:${b64Encode(certHash)}";
         }
+
+        private JSONObject ToJson(byte[] clientDataHash, byte[] authenticatorData, byte[] signature, byte[] userHandle, string packageName, PublicKeyCredentialRequestOptions requestOptions, string origin)
+        {
+            var clientJson = new JSONObject();
+            clientJson.Put("type", "webauthn.get");
+            clientJson.Put("challenge", b64Encode(requestOptions.GetChallenge()));
+            clientJson.Put("origin", origin);
+            if (packageName != null)
+            {
+                clientJson.Put("androidPackageName", packageName);
+            }
+
+            var clientData = Encoding.UTF8.GetBytes(clientJson.ToString());
+            var response = new JSONObject();
+            if (clientDataHash == null)
+            {
+                response.Put("clientDataJSON", b64Encode(clientData));
+            }
+            response.Put("authenticatorData", b64Encode(authenticatorData));
+            response.Put("signature", b64Encode(signature));
+            response.Put("userHandle", b64Encode(userHandle));
+            return response;
+        }
         #endregion
     }
+
+    #region TMP_OBJECTS_FOR_JSON_RESPONSE_TO_DELETE_AFTERWARDS
+    public class AuthenticationResponseJSON 
+    {
+        public string id { get; set; }
+        public string rawId { get; set; }
+        public AuthenticatorAssertionResponseJSON response { get; set; }
+        public string authenticatorAttachment { get; set; }
+        public AuthenticationExtensionsClientOutputsJSON clientExtensionResults { get; set; }
+        public string type { get; set; }
+    }
+
+    public class AuthenticationExtensionsClientOutputsJSON 
+    {
+    }
+
+    public class AuthenticatorAssertionResponseJSON 
+    {
+        public string clientDataJSON { get; set; }
+        public string authenticatorData { get; set; }
+        public string signature { get; set; }
+        public string userHandle { get; set; }
+        //public string attestationObject { get; set; }
+    }
+    #endregion
 }

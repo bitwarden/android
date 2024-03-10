@@ -23,7 +23,9 @@ namespace Bit.Droid.Autofill
     public class CredentialProviderService : AndroidX.Credentials.Provider.CredentialProviderService
     {
         private const string GetPasskeyIntentAction = "PACKAGE_NAME.GET_PASSKEY";
-        private const int UniqueRequestCode = 94556023;
+        private const string CreatePasskeyIntentAction = "PACKAGE_NAME.CREATE_PASSKEY";
+        private const int UniqueGetRequestCode = 94556023;
+        private const int UniqueCreateRequestCode = 94556024;
 
         private ICipherService _cipherService;
         private IUserVerificationService _userVerificationService;
@@ -31,7 +33,18 @@ namespace Bit.Droid.Autofill
         private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public override async void OnBeginCreateCredentialRequest(BeginCreateCredentialRequest request,
-            CancellationSignal cancellationSignal, IOutcomeReceiver callback) => throw new NotImplementedException();
+            CancellationSignal cancellationSignal, IOutcomeReceiver callback)
+        {
+            var response = await ProcessCreateCredentialsRequestAsync(request);
+            if (response != null)
+            {
+                callback.OnResult(response);
+            } 
+            else
+            {
+                callback.OnError(null); //TODO: Reply with an exception based from Java.Lang.Object
+            }
+        }
 
         public override async void OnBeginGetCredentialRequest(BeginGetCredentialRequest request,
             CancellationSignal cancellationSignal, IOutcomeReceiver callback)
@@ -51,7 +64,7 @@ namespace Bit.Droid.Autofill
 
                 var intent = new Intent(ApplicationContext, typeof(MainActivity));
                 intent.PutExtra(CredentialProviderConstants.PasskeyFramework, true);
-                var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueRequestCode, intent,
+                var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueGetRequestCode, intent,
                     AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
                 var unlockAction = new AuthenticationAction(AppResources.Unlock, pendingIntent);
@@ -71,6 +84,49 @@ namespace Bit.Droid.Autofill
                 _logger.Value.Exception(e);
                 throw;
             }
+        }
+
+        private async Task<BeginCreateCredentialResponse> ProcessCreateCredentialsRequestAsync(
+            BeginCreateCredentialRequest request)
+        {
+            if (request == null) { return null; }
+
+            //TODO: Need to confirm if we check for Unlock here and use a similar flow to the one used for OnBeginGetCredentialRequest()
+
+            if (request is BeginCreatePasswordCredentialRequest beginCreatePasswordCredentialRequest)
+            {
+                //TODO: Is the Create Password needed?
+                throw new NotImplementedException();
+                //return await HandleCreatePasswordQuery(beginCreatePasswordCredentialRequest);
+            }
+            else if (request is BeginCreatePublicKeyCredentialRequest beginCreatePublicKeyCredentialRequest)
+            {
+                return await HandleCreatePasskeyQuery(beginCreatePublicKeyCredentialRequest);
+            }
+
+            return null;
+        }
+
+        private async Task<BeginCreateCredentialResponse> HandleCreatePasskeyQuery(BeginCreatePublicKeyCredentialRequest optionRequest)
+        {
+            var origin = optionRequest.CallingAppInfo?.Origin;
+
+            var intent = new Intent(ApplicationContext, typeof(CredentialCreationActivity))
+                .SetAction(CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
+                .PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, optionRequest.RequestJson)
+                .PutExtra(CredentialProviderConstants.Origin, origin);
+            var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
+                PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
+
+            //TODO: i81n needs to be done
+            var createEntryBuilder = new CreateEntry.Builder("Bitwarden Vault", pendingIntent)
+                .SetDescription("Your passkey will be saved securely to the Bitwarden Vault. You can use it from any other device for sign-in in the future.")
+                .Build();
+
+            var createCredentialResponse = new BeginCreateCredentialResponse.Builder()
+                .AddCreateEntry(createEntryBuilder);
+
+            return createCredentialResponse.Build();
         }
 
         private async Task<BeginGetCredentialResponse> ProcessGetCredentialsRequestAsync(
@@ -141,7 +197,7 @@ namespace Bit.Droid.Autofill
                 .SetAction(GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
             intent.PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
             intent.PutExtra(CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
-            var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueRequestCode, intent,
+            var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueGetRequestCode, intent,
                 PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
             return new PublicKeyCredentialEntry.Builder(
@@ -155,6 +211,9 @@ namespace Bit.Droid.Autofill
         }
 
         public override void OnClearCredentialStateRequest(ProviderClearCredentialStateRequest request,
-            CancellationSignal cancellationSignal, IOutcomeReceiver callback) => throw new NotImplementedException();
+            CancellationSignal cancellationSignal, IOutcomeReceiver callback)
+        {
+            callback.OnResult(null);
+        }
     }
 }
