@@ -23,8 +23,6 @@ namespace Bit.Droid.Autofill
         public const int UniqueGetRequestCode = 94556023;
         public const int UniqueCreateRequestCode = 94556024;
 
-        private ICipherService _cipherService;
-        private IUserVerificationService _userVerificationService;
         private IVaultTimeoutService _vaultTimeoutService;
         private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 

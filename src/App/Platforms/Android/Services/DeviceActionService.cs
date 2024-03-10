@@ -623,20 +623,7 @@ namespace Bit.Droid.Services
             try
             {
                 var getRequest = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveProviderCreateCredentialRequest(activity.Intent);
-                var callingRequest = getRequest?.CallingRequest as CreatePublicKeyCredentialRequest;
-
-                //TODO: WIP. Need to either pass the PendingIntentHandler data into CredentialCreationActivity or we need to do the CredentialCreation here directly. (we would need to share code with one in CredentialCreationActivity in this last scenario)
-
-                var intent = new Intent(activity.ApplicationContext, typeof(CredentialCreationActivity))
-                    .SetAction(CredentialProviderService.CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
-                    .PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, "data") //TODO
-                    .PutExtra(CredentialProviderConstants.Origin, "origin"); //TODO
-                var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, CredentialProviderService.UniqueCreateRequestCode, intent,
-                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
-                
-                //activity.SetResult(Result.Ok, intent);
-                activity.StartActivity(intent, activity.Intent.Extras);
-                //activity.StartActivity(pendingIntent);
+                await Bit.App.Platforms.Android.Autofill.CredentialHelpers.CreateCipherPasskeyAsync(getRequest, activity);
             }
             catch (Exception ex)
             {
