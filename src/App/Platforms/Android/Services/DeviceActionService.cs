@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Nfc;
@@ -17,14 +15,12 @@ using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.App.Droid.Utilities;
 using Bit.App.Models;
 using Bit.Droid.Autofill;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
-using static Android.Content.Res.Resources;
 
 namespace Bit.Droid.Services
 {
@@ -593,7 +589,7 @@ namespace Bit.Droid.Services
                     if (credentialOption != null)
                     {
                         credentialEntries ??= new List<AndroidX.Credentials.Provider.CredentialEntry>();
-                        credentialEntries.AddRange(await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                        credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption, activity));
                     }
                 }
 
@@ -650,62 +646,6 @@ namespace Bit.Droid.Services
                 activity.Finish();
             }
         }
-
-        #region CODE_THAT_NEEDS_TO_BE_MOVED_ELSEWHERE
-        //TODO: This region needs to be moved somewhere else where it can be shared with the code in CredentialProviderService.cs
-        private async Task<List<AndroidX.Credentials.Provider.CredentialEntry>> PopulatePasskeyDataAsync(AndroidX.Credentials.Provider.CallingAppInfo callingAppInfo,
-            AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption option)
-        {
-            var origin = callingAppInfo.Origin;
-            var passkeyEntries = new List<AndroidX.Credentials.Provider.CredentialEntry>();
-
-            var cipherService = Bit.Core.Utilities.ServiceContainer.Resolve<ICipherService>();
-            var ciphers = await cipherService.GetAllDecryptedForUrlAsync(origin);
-            if (ciphers == null)
-            {
-                return passkeyEntries;
-            }
-
-            var passkeyCiphers = ciphers.Where(cipher => cipher.HasFido2Credential).ToList();
-            if (!passkeyCiphers.Any())
-            {
-                return passkeyEntries;
-            }
-
-            foreach (var cipher in passkeyCiphers)
-            {
-                var passkeyEntry = GetPasskey(cipher, option);
-                passkeyEntries.Add(passkeyEntry);
-            }
-
-            return passkeyEntries;
-        }
-
-        private AndroidX.Credentials.Provider.PublicKeyCredentialEntry GetPasskey(Bit.Core.Models.View.CipherView cipher, AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption option)
-        {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
-
-            var credDataBundle = new Bundle();
-            credDataBundle.PutString(Bit.Droid.Autofill.CredentialProviderConstants.CredentialIdIntentExtra,
-                cipher.Login.MainFido2Credential.CredentialId);
-
-            var intent = new Intent(activity.ApplicationContext, typeof(Bit.Droid.Autofill.CredentialProviderSelectionActivity))
-                .SetAction(CredentialProviderService.GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
-            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
-            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
-            var pendingIntent = PendingIntent.GetActivity(activity.ApplicationContext, CredentialProviderService.UniqueGetRequestCode, intent,
-                PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
-
-            return new AndroidX.Credentials.Provider.PublicKeyCredentialEntry.Builder(
-                    activity.ApplicationContext,
-                    cipher.Login.Username ?? "No username",
-                    pendingIntent,
-                    option)
-                .SetDisplayName(cipher.Name)
-                .SetIcon(Android.Graphics.Drawables.Icon.CreateWithResource(activity.ApplicationContext, Microsoft.Maui.Resource.Drawable.icon))
-                .Build();
-        }
-        #endregion
         
         public void CloseMainApp()
         {

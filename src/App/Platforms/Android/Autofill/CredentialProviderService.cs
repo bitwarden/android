@@ -1,17 +1,13 @@
 ﻿using Android;
 using Android.App;
 using Android.Content;
-using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Runtime;
 using AndroidX.Credentials.Provider;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using AndroidX.Credentials.Exceptions;
-using AndroidX.Credentials.WebAuthn;
 using Bit.App.Droid.Utilities;
-using Bit.Core.Models.View;
-using Resource = Microsoft.Maui.Resource;
 using Bit.Core.Resources.Localization;
 
 namespace Bit.Droid.Autofill
@@ -152,7 +148,7 @@ namespace Bit.Droid.Autofill
                 if (credentialOption != null)
                 {
                     credentialEntries ??= new List<CredentialEntry>();
-                    credentialEntries.AddRange(await PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption));
+                    credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption, ApplicationContext));
                 }
             }
 
@@ -163,62 +159,6 @@ namespace Bit.Droid.Autofill
 
             return new BeginGetCredentialResponse.Builder()
                 .SetCredentialEntries(credentialEntries)
-                .Build();
-        }
-
-        private async Task<List<CredentialEntry>> PopulatePasskeyDataAsync(CallingAppInfo callingAppInfo,
-            BeginGetPublicKeyCredentialOption option)
-        {
-            var packageName = callingAppInfo.PackageName;
-            var origin = callingAppInfo.Origin;
-            var signingInfo = callingAppInfo.SigningInfo;
-
-            var request = new PublicKeyCredentialRequestOptions(option.RequestJson);
-
-            var passkeyEntries = new List<CredentialEntry>();
-
-            _cipherService ??= ServiceContainer.Resolve<ICipherService>();
-            var ciphers = await _cipherService.GetAllDecryptedForUrlAsync(origin);
-            if (ciphers == null)
-            {
-                return passkeyEntries;
-            }
-
-            var passkeyCiphers = ciphers.Where(cipher => cipher.HasFido2Credential).ToList();
-            if (!passkeyCiphers.Any())
-            {
-                return passkeyEntries;
-            }
-
-            foreach (var cipher in passkeyCiphers)
-            {
-                var passkeyEntry = GetPasskey(cipher, option);
-                passkeyEntries.Add(passkeyEntry);
-            }
-
-            return passkeyEntries;
-        }
-
-        private PublicKeyCredentialEntry GetPasskey(CipherView cipher, BeginGetPublicKeyCredentialOption option)
-        {
-            var credDataBundle = new Bundle();
-            credDataBundle.PutString(CredentialProviderConstants.CredentialIdIntentExtra,
-                cipher.Login.MainFido2Credential.CredentialId);
-
-            var intent = new Intent(ApplicationContext, typeof(CredentialProviderSelectionActivity))
-                .SetAction(GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
-            intent.PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
-            intent.PutExtra(CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
-            var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueGetRequestCode, intent,
-                PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
-
-            return new PublicKeyCredentialEntry.Builder(
-                    ApplicationContext,
-                    cipher.Login.Username ?? "No username",
-                    pendingIntent,
-                    option)
-                .SetDisplayName(cipher.Name)
-                .SetIcon(Icon.CreateWithResource(ApplicationContext, Resource.Drawable.icon))
                 .Build();
         }
 
