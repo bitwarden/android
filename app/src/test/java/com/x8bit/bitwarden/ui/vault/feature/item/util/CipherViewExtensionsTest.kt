@@ -3,25 +3,18 @@ package com.x8bit.bitwarden.ui.vault.feature.item.util
 import com.bitwarden.core.CipherType
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.TimeZone
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class CipherViewExtensionsTest {
 
-    @BeforeEach
-    fun setup() {
-        // Setting the timezone so the tests pass consistently no matter the environment.
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
-    }
-
-    @AfterEach
-    fun tearDown() {
-        // Clearing the timezone after the test.
-        TimeZone.setDefault(null)
-    }
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
 
     @Test
     fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
@@ -34,6 +27,7 @@ class CipherViewExtensionsTest {
                 verificationCode = "123456",
                 totpCode = "testCode",
             ),
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -59,6 +53,7 @@ class CipherViewExtensionsTest {
                 verificationCode = "123456",
                 totpCode = "testCode",
             ),
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -77,6 +72,7 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -96,6 +92,7 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -114,6 +111,7 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -142,6 +140,7 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -175,6 +174,7 @@ class CipherViewExtensionsTest {
         val result = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -210,6 +210,7 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         assertEquals(
@@ -229,6 +230,7 @@ class CipherViewExtensionsTest {
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
             totpCodeItemData = null,
+            clock = fixedClock,
         )
 
         val expectedState = VaultItemState.ViewState.Content(

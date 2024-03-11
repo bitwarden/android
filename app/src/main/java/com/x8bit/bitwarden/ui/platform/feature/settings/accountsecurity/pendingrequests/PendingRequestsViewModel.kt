@@ -129,7 +129,7 @@ class PendingRequestsViewModel @Inject constructor(
             is AuthRequestsUpdatesResult.Update -> {
                 val requests = result
                     .authRequests
-                    .filterRespondedAndExpired()
+                    .filterRespondedAndExpired(clock = clock)
                     .sortedByDescending { request -> request.creationDate }
                     .map { request ->
                         PendingRequestsState.ViewState.Content.PendingLoginRequest(
@@ -342,9 +342,9 @@ sealed class PendingRequestsAction {
  * * The request has been declined (indicated by it not being approved & having a responseDate).
  * * The request has expired (it is at least 5 minutes old).
  */
-private fun List<AuthRequest>.filterRespondedAndExpired() =
+private fun List<AuthRequest>.filterRespondedAndExpired(clock: Clock) =
     filterNot { request ->
         request.requestApproved ||
             request.responseDate != null ||
-            request.creationDate.isOverFiveMinutesOld()
+            request.creationDate.isOverFiveMinutesOld(clock)
     }

@@ -20,7 +20,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VaultState
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
-import java.util.TimeZone
+import java.time.Clock
 
 private const val DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
 
@@ -31,6 +31,7 @@ private const val DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
 fun CipherView.toViewState(
     isPremiumUser: Boolean,
     totpCodeItemData: TotpCodeItemData?,
+    clock: Clock = Clock.systemDefaultZone(),
 ): VaultItemState.ViewState =
     VaultItemState.ViewState.Content(
         common = VaultItemState.ViewState.Content.Common(
@@ -40,7 +41,7 @@ fun CipherView.toViewState(
             customFields = fields.orEmpty().map { it.toCustomField() },
             lastUpdated = revisionDate.toFormattedPattern(
                 pattern = DATE_TIME_PATTERN,
-                zone = TimeZone.getDefault().toZoneId(),
+                clock = clock,
             ),
             notes = notes,
             attachments = attachments
@@ -87,7 +88,7 @@ fun CipherView.toViewState(
                         .passwordRevisionDate
                         ?.toFormattedPattern(
                             pattern = DATE_TIME_PATTERN,
-                            zone = TimeZone.getDefault().toZoneId(),
+                            clock = clock,
                         ),
                     passwordHistoryCount = passwordHistory?.count(),
                     isPremiumUser = isPremiumUser,

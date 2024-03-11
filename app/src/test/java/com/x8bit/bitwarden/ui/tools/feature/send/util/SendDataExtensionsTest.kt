@@ -14,14 +14,19 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.TimeZone
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 class SendDataExtensionsTest {
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
+
     @BeforeEach
     fun setup() {
-        // Setting the timezone so the tests pass consistently no matter the environment.
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
         mockkStatic(
             SendView::toLabelIcons,
             SendView::toSendUrl,
@@ -30,8 +35,6 @@ class SendDataExtensionsTest {
 
     @AfterEach
     fun tearDown() {
-        // Clearing the timezone after the test.
-        TimeZone.setDefault(null)
         unmockkStatic(
             SendView::toLabelIcons,
             SendView::toSendUrl,
@@ -42,7 +45,7 @@ class SendDataExtensionsTest {
     fun `toViewState should return Empty when SendData is empty`() {
         val sendData = SendData(emptyList())
 
-        val result = sendData.toViewState(DEFAULT_BASE_URL)
+        val result = sendData.toViewState(DEFAULT_BASE_URL, fixedClock)
 
         assertEquals(SendState.ViewState.Empty, result)
     }
@@ -63,7 +66,7 @@ class SendDataExtensionsTest {
         every { textSendView.toLabelIcons(any()) } returns DEFAULT_SEND_STATUS_ICONS
         every { fileSendView.toLabelIcons(any()) } returns DEFAULT_SEND_STATUS_ICONS
 
-        val result = sendData.toViewState(DEFAULT_BASE_URL)
+        val result = sendData.toViewState(DEFAULT_BASE_URL, fixedClock)
 
         assertEquals(
             SendState.ViewState.Content(
