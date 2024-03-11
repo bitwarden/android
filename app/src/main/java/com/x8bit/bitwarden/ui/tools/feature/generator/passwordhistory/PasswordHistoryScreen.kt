@@ -161,16 +161,17 @@ private fun PasswordHistoryLoading(modifier: Modifier = Modifier) {
 @Composable
 private fun PasswordHistoryContent(
     state: PasswordHistoryState.ViewState.Content,
-    modifier: Modifier = Modifier,
     onPasswordCopyClick: (PasswordHistoryState.GeneratedPassword) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier.semantics { testTag = "GeneratedPasswordRow" }) {
+    LazyColumn(modifier = modifier) {
         items(state.passwords) { password ->
             PasswordHistoryListItem(
                 label = password.password,
                 supportingLabel = password.date,
                 onCopyClick = { onPasswordCopyClick(password) },
                 modifier = Modifier
+                    .semantics { testTag = "GeneratedPasswordRow" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )

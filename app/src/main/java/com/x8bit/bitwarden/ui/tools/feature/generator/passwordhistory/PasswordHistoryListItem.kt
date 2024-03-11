@@ -19,6 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -49,7 +51,6 @@ fun PasswordHistoryListItem(
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-
         Column(modifier = Modifier.weight(1f)) {
             var widthPx by remember(label) { mutableIntStateOf(0) }
             val textStyle = LocalNonMaterialTypography.current.sensitiveInfoMedium
@@ -64,6 +65,7 @@ fun PasswordHistoryListItem(
                 style = textStyle,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
+                    .semantics { testTag = "GeneratedPasswordValue" }
                     .fillMaxWidth()
                     .onGloballyPositioned { widthPx = it.size.width },
             )
@@ -72,6 +74,7 @@ fun PasswordHistoryListItem(
                 text = supportingLabel,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.semantics { testTag = "GeneratedPasswordDateLabel" },
             )
         }
 
@@ -80,6 +83,7 @@ fun PasswordHistoryListItem(
             colors = IconButtonDefaults.iconButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary,
             ),
+            modifier = Modifier.semantics { testTag = "CopyPasswordValueButton" },
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_copy),
