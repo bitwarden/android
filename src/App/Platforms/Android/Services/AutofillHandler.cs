@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.App.Assist;
 using Android.Content;
+using Android.Credentials;
 using Android.OS;
 using Android.Provider;
 using Android.Views.Autofill;
+using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -43,9 +43,28 @@ namespace Bit.Droid.Services
             {
                 return false;
             }
+
             try
             {
-                // TODO - find a way to programmatically check if the credential provider service is enabled
+                var activity = (MainActivity)Platform.CurrentActivity;
+                if (activity == null)
+                {
+                    return false;
+                }
+
+                var credManager = activity.GetSystemService(Java.Lang.Class.FromType(typeof(CredentialManager))) as CredentialManager;
+                if (credManager == null)
+                {
+                    return false;
+                }
+
+                var credentialProviderServiceComponentName = new ComponentName(activity, Java.Lang.Class.FromType(typeof(CredentialProviderService)));
+                return credManager.IsEnabledCredentialProviderService(credentialProviderServiceComponentName);
+            }
+            catch (Java.Lang.NullPointerException) 
+            {
+                //TODO: CredentialManager API is not working fully and may return a NullPointerException even if the CredentialProviderService is working and enabled
+                // Info Here: https://developer.android.com/reference/android/credentials/CredentialManager#isEnabledCredentialProviderService(android.content.ComponentName)
                 return false;
             }
             catch
@@ -185,6 +204,9 @@ namespace Bit.Droid.Services
             try
             {
                 // TODO - find a way to programmatically disable the provider service, or take the user to the settings page where they can do it
+                // For now we'll take the user to Credential Settings so they can manually change
+                var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
+                deviceActionService.OpenCredentialProviderSettings();
             }
             catch { }
         }

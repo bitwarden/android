@@ -132,9 +132,8 @@ namespace Bit.App.Pages
 
         private async Task UpdateAndroidAutofillSettingsAsync()
         {
-            // TODO - uncomment once _autofillHandler.CredentialProviderServiceEnabled() returns a real value
-            // _useCredentialProviderService = 
-            //     SupportsCredentialProviderService && _autofillHandler.CredentialProviderServiceEnabled();
+            _useCredentialProviderService = 
+                SupportsCredentialProviderService && _autofillHandler.CredentialProviderServiceEnabled();
             _useAutofillServices =
                 _autofillHandler.SupportsAutofillService() && _autofillHandler.AutofillServiceEnabled();
             _useAccessibility = _autofillHandler.AutofillAccessibilityServiceRunning();
