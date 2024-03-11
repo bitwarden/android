@@ -26,9 +26,12 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * layout individual icons or buttons.
  */
 @Composable
-fun BitwardenRowOfActions(actions: @Composable RowScope.() -> Unit) {
+fun BitwardenRowOfActions(
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit,
+) {
     Row(
-        modifier = Modifier.padding(start = 8.dp),
+        modifier = modifier.padding(start = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
         content = actions,
