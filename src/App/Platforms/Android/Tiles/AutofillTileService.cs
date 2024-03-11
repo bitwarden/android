@@ -8,6 +8,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Bit.Droid.Accessibility;
 using Java.Lang;
+using Bit.App.Droid.Utilities;
 
 namespace Bit.Droid.Tile
 {
@@ -76,7 +77,7 @@ namespace Bit.Droid.Tile
             var intent = new Intent(this, typeof(AccessibilityActivity));
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             intent.PutExtra("autofillTileClicked", true);
-            StartActivityAndCollapse(intent);
+            this.StartActivityAndCollapseWithIntent(intent, isMutable: true);
         }
 
         private void ShowConfigErrorDialog()
