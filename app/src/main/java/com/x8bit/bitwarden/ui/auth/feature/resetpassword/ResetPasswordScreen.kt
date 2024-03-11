@@ -122,7 +122,7 @@ fun ResetPasswordScreen(
             )
         },
     ) { innerPadding ->
-        ResetPasswordScreeContent(
+        ResetPasswordScreenContent(
             state = state,
             onCurrentPasswordInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged(it)) }
@@ -145,7 +145,7 @@ fun ResetPasswordScreen(
 
 @Composable
 @Suppress("LongMethod")
-private fun ResetPasswordScreeContent(
+private fun ResetPasswordScreenContent(
     state: ResetPasswordState,
     onCurrentPasswordInputChanged: (String) -> Unit,
     onPasswordInputChanged: (String) -> Unit,
