@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -2454,6 +2456,187 @@ class AuthRepositoryTest {
                 newPassword = newPassword,
             )
         }
+    }
+
+    @Test
+    fun `setPassword without active account should return Error`() = runTest {
+        fakeAuthDiskSource.userState = null
+
+        val result = repository.setPassword(
+            organizationId = "organizationId",
+            password = "password",
+            passwordHint = "passwordHint",
+        )
+
+        assertEquals(SetPasswordResult.Error, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+    }
+
+    @Test
+    fun `setPassword with authSdkSource hashPassword failure should return Error`() = runTest {
+        val password = "password"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.setPassword(
+            organizationId = "organizationId",
+            password = password,
+            passwordHint = "passwordHint",
+        )
+
+        assertEquals(SetPasswordResult.Error, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+    }
+
+    @Test
+    fun `setPassword with authSdkSource makeRegisterKeys failure should return Error`() = runTest {
+        val password = "password"
+        val passwordHash = "passwordHash"
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns passwordHash.asSuccess()
+        coEvery {
+            authSdkSource.makeRegisterKeys(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+            )
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.setPassword(
+            organizationId = "organizationId",
+            password = password,
+            passwordHint = "passwordHint",
+        )
+
+        assertEquals(SetPasswordResult.Error, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+    }
+
+    @Test
+    fun `setPassword with accountsService setPassword failure should return Error`() = runTest {
+        val password = "password"
+        val passwordHash = "passwordHash"
+        val passwordHint = "passwordHint"
+        val organizationId = "organizationIdentifier"
+        val encryptedUserKey = "encryptedUserKey"
+        val privateRsaKey = "privateRsaKey"
+        val publicRsaKey = "publicRsaKey"
+        val profile = SINGLE_USER_STATE_1.activeAccount.profile
+        val kdf = profile.toSdkParams()
+        val registerKeyResponse = RegisterKeyResponse(
+            masterPasswordHash = passwordHash,
+            encryptedUserKey = encryptedUserKey,
+            keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
+        )
+        val setPasswordRequestJson = SetPasswordRequestJson(
+            passwordHash = passwordHash,
+            passwordHint = passwordHint,
+            organizationIdentifier = organizationId,
+            kdfIterations = profile.kdfIterations,
+            kdfMemory = profile.kdfMemory,
+            kdfParallelism = profile.kdfParallelism,
+            kdfType = profile.kdfType,
+            key = encryptedUserKey,
+            keys = RegisterRequestJson.Keys(
+                publicKey = publicRsaKey,
+                encryptedPrivateKey = privateRsaKey,
+            ),
+        )
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns passwordHash.asSuccess()
+        coEvery {
+            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+        } returns registerKeyResponse.asSuccess()
+        coEvery {
+            accountsService.setPassword(body = setPasswordRequestJson)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.setPassword(
+            organizationId = organizationId,
+            password = password,
+            passwordHint = passwordHint,
+        )
+
+        assertEquals(SetPasswordResult.Error, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+    }
+
+    @Test
+    fun `setPassword with accountsService setPassword success should return Success`() = runTest {
+        val password = "password"
+        val passwordHash = "passwordHash"
+        val passwordHint = "passwordHint"
+        val organizationId = "organizationIdentifier"
+        val encryptedUserKey = "encryptedUserKey"
+        val privateRsaKey = "privateRsaKey"
+        val publicRsaKey = "publicRsaKey"
+        val profile = SINGLE_USER_STATE_1.activeAccount.profile
+        val kdf = profile.toSdkParams()
+        val registerKeyResponse = RegisterKeyResponse(
+            masterPasswordHash = passwordHash,
+            encryptedUserKey = encryptedUserKey,
+            keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
+        )
+        val setPasswordRequestJson = SetPasswordRequestJson(
+            passwordHash = passwordHash,
+            passwordHint = passwordHint,
+            organizationIdentifier = organizationId,
+            kdfIterations = profile.kdfIterations,
+            kdfMemory = profile.kdfMemory,
+            kdfParallelism = profile.kdfParallelism,
+            kdfType = profile.kdfType,
+            key = encryptedUserKey,
+            keys = RegisterRequestJson.Keys(
+                publicKey = publicRsaKey,
+                encryptedPrivateKey = privateRsaKey,
+            ),
+        )
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns passwordHash.asSuccess()
+        coEvery {
+            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+        } returns registerKeyResponse.asSuccess()
+        coEvery {
+            accountsService.setPassword(body = setPasswordRequestJson)
+        } returns Unit.asSuccess()
+
+        val result = repository.setPassword(
+            organizationId = organizationId,
+            password = password,
+            passwordHint = passwordHint,
+        )
+
+        assertEquals(SetPasswordResult.Success, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = passwordHash)
     }
 
     @Test

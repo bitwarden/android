@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -207,6 +208,16 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         newPassword: String,
         passwordHint: String?,
     ): ResetPasswordResult
+
+    /**
+     * Sets the user's password to [password] for the user within the given [organizationId] with
+     * an optional [passwordHint].
+     */
+    suspend fun setPassword(
+        organizationId: String,
+        password: String,
+        passwordHint: String?,
+    ): SetPasswordResult
 
     /**
      * Set the value of [captchaTokenResultFlow].
