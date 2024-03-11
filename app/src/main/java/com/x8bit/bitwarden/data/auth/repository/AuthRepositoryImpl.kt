@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
@@ -45,6 +46,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -800,6 +802,62 @@ class AuthRepositoryImpl(
                     ResetPasswordResult.Success
                 },
                 onFailure = { ResetPasswordResult.Error },
+            )
+    }
+
+    override suspend fun setPassword(
+        organizationId: String,
+        password: String,
+        passwordHint: String?,
+    ): SetPasswordResult {
+        val activeAccount = authDiskSource
+            .userState
+            ?.activeAccount
+            ?: return SetPasswordResult.Error
+
+        // Update the saved master password hash.
+        val passwordHash = authSdkSource
+            .hashPassword(
+                email = activeAccount.profile.email,
+                password = password,
+                kdf = activeAccount.profile.toSdkParams(),
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            .getOrElse { return@setPassword SetPasswordResult.Error }
+
+        return authSdkSource
+            .makeRegisterKeys(
+                email = activeAccount.profile.email,
+                password = password,
+                kdf = activeAccount.profile.toSdkParams(),
+            )
+            .flatMap { keyResponse ->
+                accountsService.setPassword(
+                    body = SetPasswordRequestJson(
+                        passwordHash = passwordHash,
+                        passwordHint = passwordHint,
+                        organizationIdentifier = organizationId,
+                        kdfIterations = activeAccount.profile.kdfIterations,
+                        kdfMemory = activeAccount.profile.kdfMemory,
+                        kdfParallelism = activeAccount.profile.kdfParallelism,
+                        kdfType = activeAccount.profile.kdfType,
+                        key = keyResponse.encryptedUserKey,
+                        keys = RegisterRequestJson.Keys(
+                            publicKey = keyResponse.keys.public,
+                            encryptedPrivateKey = keyResponse.keys.private,
+                        ),
+                    ),
+                )
+            }
+            .onSuccess {
+                authDiskSource.storeMasterPasswordHash(
+                    userId = activeAccount.profile.userId,
+                    passwordHash = passwordHash,
+                )
+            }
+            .fold(
+                onFailure = { SetPasswordResult.Error },
+                onSuccess = { SetPasswordResult.Success },
             )
     }
 
