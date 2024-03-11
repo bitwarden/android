@@ -39,6 +39,7 @@ fun BitwardenStepper(
     isIncrementEnabled: Boolean = true,
     isDecrementEnabled: Boolean = true,
     textFieldReadOnly: Boolean = true,
+    stepperActionsTestTag: String? = null,
     increaseButtonTestTag: String? = null,
     decreaseButtonTestTag: String? = null,
 ) {
@@ -53,6 +54,7 @@ fun BitwardenStepper(
         value = clampedValue
             ?.toString()
             ?: ZERO_WIDTH_CHARACTER,
+        actionsTestTag = stepperActionsTestTag,
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(

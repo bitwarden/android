@@ -64,7 +64,7 @@ fun BitwardenSwitchWithActions(
             onCheckedChange = null,
         )
 
-        BitwardenRowOfActions(actions)
+        BitwardenRowOfActions(actions = actions)
     }
 }
 

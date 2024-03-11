@@ -50,6 +50,7 @@ fun BitwardenTextFieldWithActions(
     keyboardType: KeyboardType = KeyboardType.Text,
     trailingIconContent: (@Composable () -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {},
+    actionsTestTag: String? = null,
     textFieldTestTag: String? = null,
 ) {
     Row(
@@ -73,7 +74,10 @@ fun BitwardenTextFieldWithActions(
             shouldAddCustomLineBreaks = shouldAddCustomLineBreaks,
             visualTransformation = visualTransformation,
         )
-        BitwardenRowOfActions(actions)
+        BitwardenRowOfActions(
+            modifier = Modifier.run { actionsTestTag?.let { semantics { testTag = it } } ?: this },
+            actions = actions,
+        )
     }
 }
 

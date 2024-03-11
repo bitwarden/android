@@ -830,6 +830,7 @@ private fun PassphraseNumWordsCounterItem(
         value = coercedNumWords,
         range = minValue..maxValue,
         onValueChange = onPassphraseNumWordsCounterChange,
+        stepperActionsTestTag = "NumberOfWordsStepper",
         increaseButtonTestTag = "NumberOfWordsIncreaseButton",
         decreaseButtonTestTag = "NumberOfWordsDecreaseButton",
         modifier = Modifier
