@@ -347,7 +347,7 @@ namespace Bit.Droid.Autofill
                 // InlinePresentation requires nonNull pending intent (even though we only utilize one for the
                 // "my vault" presentation) so we're including an empty one here
                 pendingIntent = PendingIntent.GetService(context, 0, new Intent(),
-                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent, true));
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent, false));
             }
             var slice = CreateInlinePresentationSlice(
                 inlinePresentationSpec,
