@@ -66,25 +66,25 @@ namespace Bit.App.Droid.Utilities
             return pendingIntentFlags;
         }
 
-        public static void StartActivityAndCollapseFromTileService(this Intent intent, TileService service, bool isMutable = false)
+        public static void StartActivityAndCollapseFromTileService(this TileService service, Intent intent, bool isMutable)
         {
             //For Android 14+ We need to use PendingIntent instead of Intent directly. Older versions still need to use Intent.
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.UpsideDownCake)
-            {
-                var pendingIntent = PendingIntent.GetActivity(
-                    service.ApplicationContext,
-                    0,
-                    intent,
-                    AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, isMutable)
-                );
-                if (pendingIntent == null) { return; }
-
-                service.StartActivityAndCollapse(pendingIntent);
-            }
-            else
+            if (Build.VERSION.SdkInt < BuildVersionCodes.UpsideDownCake)
             {
                 service.StartActivityAndCollapse(intent);
+                return;
             }
+            var pendingIntent = PendingIntent.GetActivity(
+                service.ApplicationContext,
+                0,
+                intent,
+                AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, isMutable)
+            );
+            if (pendingIntent == null) 
+            { 
+                return; 
+            }
+            service.StartActivityAndCollapse(pendingIntent);
         }
     }
 }
