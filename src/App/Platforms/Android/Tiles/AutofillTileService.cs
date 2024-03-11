@@ -77,7 +77,7 @@ namespace Bit.Droid.Tile
             var intent = new Intent(this, typeof(AccessibilityActivity));
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             intent.PutExtra("autofillTileClicked", true);
-            intent.StartActivityAndCollapseFromTileService(this, isMutable: true);
+            this.StartActivityAndCollapseWithIntent(intent, isMutable: true);
         }
 
         private void ShowConfigErrorDialog()

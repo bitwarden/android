@@ -55,7 +55,7 @@ namespace Bit.Droid.Tile
             var intent = new Intent(this, typeof(MainActivity));
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             intent.PutExtra("generatorTile", true);
-            intent.StartActivityAndCollapseFromTileService(this, isMutable: false);
+            this.StartActivityAndCollapseWithIntent(intent, isMutable: false);
         }
     }
 }
