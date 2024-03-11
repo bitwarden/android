@@ -58,7 +58,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
         val dateTimeFormatter = DateTimeFormatter
             .ofPattern("M/d/yy hh:mm a")
             .withZone(fixedClock.zone)
-        val nowZonedDateTime = ZonedDateTime.now()
+        val nowZonedDateTime = ZonedDateTime.now(fixedClock)
         val requestList = listOf(
             AuthRequest(
                 id = "1",
@@ -93,7 +93,7 @@ class PendingRequestsViewModelTest : BaseViewModelTest() {
                 ipAddress = "192.168.0.2",
                 key = "publicKey",
                 masterPasswordHash = "verySecureHash",
-                creationDate = ZonedDateTime.now().minusMinutes(10),
+                creationDate = nowZonedDateTime.minusMinutes(10),
                 responseDate = null,
                 requestApproved = false,
                 originUrl = "www.bitwarden.com",
