@@ -79,16 +79,18 @@ namespace Bit.iOS.Autofill.Utilities
                 }
             }
 
-            if (fido2CiphersToInsert.Any())
+            if (!fido2CiphersToInsert.Any())
             {
-                fido2CiphersToInsert.Reverse();
+                return;
+            }
 
-                foreach (var item in fido2CiphersToInsert)
-                {
-                    ct.ThrowIfCancellationRequested();
+            fido2CiphersToInsert.Reverse();
 
-                    Items.Insert(0, item);
-                }
+            foreach (var item in fido2CiphersToInsert)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                Items.Insert(0, item);
             }
         }
 

@@ -42,14 +42,14 @@ namespace Bit.iOS.Autofill.Utilities
 
         public async Task<(string CipherId, bool UserVerified)> PickCredentialAsync(Fido2GetAssertionUserInterfaceCredential[] credentials)
         {
-            if (credentials.Length == 0)
+            if (credentials is null || credentials.Length == 0)
             {
                 throw new NotAllowedError();
             }
 
             HasVaultBeenUnlockedInThisTransaction = _hasVaultBeenUnlockedInThisTransaction();
 
-            _onAllowedFido2Credentials?.Invoke(credentials?.Select(c => c.CipherId).ToList() ?? new List<string>());
+            _onAllowedFido2Credentials?.Invoke(credentials.Select(c => c.CipherId).ToList() ?? new List<string>());
 
             _context.PickCredentialForFido2GetAssertionFromListTcs?.SetCanceled();
             _context.PickCredentialForFido2GetAssertionFromListTcs = new TaskCompletionSource<string>();

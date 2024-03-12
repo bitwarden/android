@@ -406,8 +406,7 @@ namespace Bit.iOS.Autofill
                     {
                         try
                         {
-                            await LoadSourceAsync();
-                            TableView.ReloadData();
+                            await ReloadItemsAsync();
                         }
                         catch (Exception ex)
                         {
@@ -445,8 +444,7 @@ namespace Bit.iOS.Autofill
             {
                 try
                 {
-                    await LoadSourceAsync();
-                    TableView.ReloadData();
+                    await ReloadItemsAsync();
                 }
                 catch (Exception ex)
                 {
@@ -500,11 +498,19 @@ namespace Bit.iOS.Autofill
 
         public async Task ReloadItemsAsync()
         {
-            await LoadSourceAsync();
+            try
+            {
+                await LoadSourceAsync();
 
-            _alreadyLoadItemsOnce = true;
+                _alreadyLoadItemsOnce = true;
 
-            await MainThread.InvokeOnMainThreadAsync(TableView.ReloadData);
+                await MainThread.InvokeOnMainThreadAsync(TableView.ReloadData);
+            }
+            catch
+            {
+                _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred).FireAndForget();
+                throw;
+            }
         }
 
         public void ReloadTableViewData() => TableView.ReloadData();
