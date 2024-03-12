@@ -31,7 +31,7 @@ class FilledDataBuilderImpl(
                 // Use getOrLastOrNull so if the list has run dry take the last spec.
                 autofillRequest
                     .inlinePresentationSpecs
-                    .getOrLastOrNull(inlineSuggestionsAdded)
+                    ?.getOrLastOrNull(inlineSuggestionsAdded)
             } else {
                 null
             }
@@ -73,7 +73,7 @@ class FilledDataBuilderImpl(
         // Use getOrLastOrNull so if the list has run dry take the last spec.
         val vaultItemInlinePresentationSpec = autofillRequest
             .inlinePresentationSpecs
-            .getOrLastOrNull(inlineSuggestionsAdded)
+            ?.getOrLastOrNull(inlineSuggestionsAdded)
 
         return FilledData(
             filledPartitions = filledPartitions,
