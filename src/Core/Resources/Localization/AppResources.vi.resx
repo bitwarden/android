@@ -2878,12 +2878,12 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
     <value>Thiết lập khóa khi hết thời gian chờ kho.</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
-    <value>Duo two-step login is required for your account. </value>
+    <value>Tài khoản của bạn bắt buộc đăng nhập 2 bước Dou. </value>
   </data>
   <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
-    <value>Follow the steps from Duo to finish logging in.</value>
+    <value>Làm theo các bước từ Dou để hoàn tất đăng nhập.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
-    <value>Launch Duo</value>
+    <value>Khởi động Dou</value>
   </data>
 </root>
