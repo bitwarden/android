@@ -132,6 +132,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="830"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <searchBar hidden="YES" contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="FnG-4H-B7H">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2304" id="9s5-am-0Sm"/>
+                                </connections>
+                            </searchBar>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wNm-Sy-bJv" userLabel="EmptyView">
                                 <rect key="frame" x="0.0" y="200" width="414" height="228"/>
                                 <subviews>
@@ -172,7 +179,10 @@
                                     <constraint firstItem="FDN-Dp-jl3" firstAttribute="top" secondItem="wNm-Sy-bJv" secondAttribute="top" id="kKX-UE-JzG"/>
                                 </constraints>
                             </view>
-                            <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2305">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="1MY-io-Uh6">
+                                <rect key="frame" x="188.5" y="70" width="37" height="37"/>
+                            </activityIndicatorView>
+                            <tableView hidden="YES" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2305">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="781"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
@@ -219,14 +229,25 @@
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="Tq0-Ep-tHr" secondAttribute="trailing" id="5BV-0y-vU1"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="bottom" secondItem="2305" secondAttribute="bottom" id="6EB-rh-lLS"/>
                             <constraint firstItem="wNm-Sy-bJv" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" constant="200" id="CWX-uT-sfH"/>
+                            <constraint firstItem="FnG-4H-B7H" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" id="DyG-zK-MDg"/>
+                            <constraint firstItem="1MY-io-Uh6" firstAttribute="centerX" secondItem="BQW-dG-XMM" secondAttribute="centerX" id="E6j-d5-Slg"/>
                             <constraint firstItem="wNm-Sy-bJv" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="Ytw-kT-KUB"/>
                             <constraint firstItem="Tq0-Ep-tHr" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" id="eT6-Bv-JaR"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="2305" secondAttribute="trailing" id="ofJ-fL-adF"/>
+                            <constraint firstItem="FnG-4H-B7H" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="oz8-5S-g3r"/>
+                            <constraint firstItem="1MY-io-Uh6" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" constant="70" id="p2k-Pz-j9M"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="bottom" secondItem="Tq0-Ep-tHr" secondAttribute="bottom" id="pBa-o1-Mtx"/>
-                            <constraint firstItem="2305" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" id="pGe-1e-B4s"/>
+                            <constraint firstItem="2305" firstAttribute="top" secondItem="FnG-4H-B7H" secondAttribute="bottom" priority="701" id="pGe-1e-B4s"/>
+                            <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="FnG-4H-B7H" secondAttribute="trailing" id="qJE-bG-L66"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="wNm-Sy-bJv" secondAttribute="trailing" id="v0x-aS-ymc"/>
+                            <constraint firstItem="2305" firstAttribute="top" secondItem="BQW-dG-XMM" secondAttribute="top" priority="700" id="wML-RE-8T6"/>
                             <constraint firstItem="2305" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="xfQ-VQ-yWe"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="pGe-1e-B4s"/>
+                            </mask>
+                        </variation>
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Logins" id="3734">
@@ -256,6 +277,9 @@
                         <outlet property="_emptyViewButton" destination="Gv5-Xt-G9l" id="JHd-sV-VJC"/>
                         <outlet property="_emptyViewImage" destination="FDN-Dp-jl3" id="Dzb-p3-tv0"/>
                         <outlet property="_emptyViewLabel" destination="tEp-qe-xvE" id="CPZ-it-kVY"/>
+                        <outlet property="_loadingView" destination="1MY-io-Uh6" id="hAN-TF-dIn"/>
+                        <outlet property="_searchBar" destination="FnG-4H-B7H" id="UJI-d9-IUd"/>
+                        <outlet property="_tableViewTopToSearchBarConstraint" destination="pGe-1e-B4s" id="P32-0j-8YX"/>
                         <segue destination="1845" kind="presentation" identifier="loginAddSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="3731"/>
                         <segue destination="11552" kind="show" identifier="loginSearchFromListSegue" id="12574"/>
                     </connections>
@@ -619,7 +643,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="12959"/>
+        <segue reference="12574"/>
         <segue reference="3731"/>
     </inferredMetricsTieBreakers>
     <resources>
