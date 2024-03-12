@@ -60,7 +60,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
             return new PublicKeyCredentialEntry.Builder(
                     context,
-                    cipher.Login.Username ?? "No username",
+                    cipher.Login.Username ?? "No username", //TODO: i18n
                     pendingIntent,
                     option)
                 .SetDisplayName(cipher.Name)
