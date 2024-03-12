@@ -154,6 +154,7 @@ private fun FoldersContent(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.semantics { testTag = "NoFoldersLabel" },
             )
         }
     } else {
@@ -163,6 +164,7 @@ private fun FoldersContent(
             items(foldersList) {
                 Row(
                     modifier = Modifier
+                        .semantics { testTag = "FolderCell" }
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
@@ -176,6 +178,7 @@ private fun FoldersContent(
                 ) {
                     Text(
                         modifier = Modifier
+                            .semantics { testTag = "FolderName" }
                             .padding(start = 16.dp)
                             .weight(1f),
                         text = it.name,
