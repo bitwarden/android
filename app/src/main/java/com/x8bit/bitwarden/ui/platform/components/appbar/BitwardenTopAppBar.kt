@@ -105,6 +105,7 @@ fun BitwardenTopAppBar(
                 maxLines = 1,
                 softWrap = false,
                 overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.semantics { testTag = "PageTitleLabel" },
             )
         },
         modifier = modifier.semantics { testTag = "HeaderBarComponent" },

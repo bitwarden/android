@@ -23,6 +23,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -159,6 +161,7 @@ fun SendScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(SendAction.AddSendClick) }
                     },
+                    modifier = Modifier.semantics { testTag = "AddItemButton" },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_plus),
