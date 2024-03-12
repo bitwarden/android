@@ -13,12 +13,13 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 fun FillRequest?.getInlinePresentationSpecs(
     autofillAppInfo: AutofillAppInfo,
     isInlineAutofillEnabled: Boolean,
-): List<InlinePresentationSpec> =
-    if (this != null &&
-        isInlineAutofillEnabled &&
-        autofillAppInfo.sdkInt >= Build.VERSION_CODES.R
-    ) {
-        inlineSuggestionsRequest?.inlinePresentationSpecs ?: emptyList()
+): List<InlinePresentationSpec>? =
+    if (autofillAppInfo.sdkInt < Build.VERSION_CODES.R) {
+        // When SDK version is bellow 30, InlinePresentationSpec is not available and null
+        // must be returned.
+        null
+    } else if (isInlineAutofillEnabled) {
+        this?.inlineSuggestionsRequest?.inlinePresentationSpecs.orEmpty()
     } else {
         emptyList()
     }

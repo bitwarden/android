@@ -13,7 +13,7 @@ sealed class AutofillRequest {
      */
     data class Fillable(
         val ignoreAutofillIds: List<AutofillId>,
-        val inlinePresentationSpecs: List<InlinePresentationSpec>,
+        val inlinePresentationSpecs: List<InlinePresentationSpec>?,
         val maxInlineSuggestionsCount: Int,
         val packageName: String?,
         val partition: AutofillPartition,

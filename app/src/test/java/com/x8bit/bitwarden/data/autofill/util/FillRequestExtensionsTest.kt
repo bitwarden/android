@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 class FillRequestExtensionsTest {
@@ -22,7 +23,9 @@ class FillRequestExtensionsTest {
     @Test
     fun `getInlinePresentationSpecs should return empty list when request is null`() {
         // Setup
-        val autofillAppInfo: AutofillAppInfo = mockk()
+        val autofillAppInfo: AutofillAppInfo = mockk {
+            every { sdkInt } returns 30
+        }
         val expected: List<InlinePresentationSpec> = emptyList()
 
         // Test
@@ -38,7 +41,9 @@ class FillRequestExtensionsTest {
     @Test
     fun `getInlinePresentationSpecs should return empty list when disabled`() {
         // Setup
-        val autofillAppInfo: AutofillAppInfo = mockk()
+        val autofillAppInfo: AutofillAppInfo = mockk {
+            every { sdkInt } returns 30
+        }
         val expected: List<InlinePresentationSpec> = emptyList()
 
         // Test
@@ -52,14 +57,13 @@ class FillRequestExtensionsTest {
     }
 
     @Test
-    fun `getInlinePresentationSpecs should return empty list when enabled pre-R`() {
+    fun `getInlinePresentationSpecs should return null when enabled pre-R`() {
         // Setup
         val autofillAppInfo = AutofillAppInfo(
             context = mockk(),
             packageName = "com.x8bit.bitwarden",
             sdkInt = 17,
         )
-        val expected: List<InlinePresentationSpec> = emptyList()
 
         // Test
         val actual = fillRequest.getInlinePresentationSpecs(
@@ -68,7 +72,7 @@ class FillRequestExtensionsTest {
         )
 
         // Verify
-        assertEquals(expected, actual)
+        assertNull(actual)
     }
 
     @Test
