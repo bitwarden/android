@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialo
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.supportingTextResOrNull
 import kotlinx.collections.immutable.ImmutableList
@@ -216,7 +217,6 @@ private fun AnimatedAccountSwitcher(
                     onSwitchAccountLongClick = onSwitchAccountLongClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { testTag = "AccountIconButton" }
                         .padding(horizontal = 16.dp),
                 )
                 HorizontalDivider(
@@ -239,6 +239,7 @@ private fun AnimatedAccountSwitcher(
     }
 }
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AccountSummaryItem(
@@ -251,6 +252,7 @@ private fun AccountSummaryItem(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
+            .semantics { testTag = "AccountCell" }
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
@@ -288,6 +290,7 @@ private fun AccountSummaryItem(
             Text(
                 text = accountSummary.email,
                 style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.semantics { testTag = "AccountEmailLabel" },
             )
 
             accountSummary.supportingTextResOrNull?.let { supportingTextResId ->
@@ -295,6 +298,7 @@ private fun AccountSummaryItem(
                     text = stringResource(id = supportingTextResId).lowercaseWithCurrentLocal(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.semantics { testTag = "AccountStatusLabel" },
                 )
             }
         }
@@ -306,6 +310,7 @@ private fun AccountSummaryItem(
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
+                .semantics { testTag = accountSummary.iconTestTag }
                 .size(24.dp),
         )
 
