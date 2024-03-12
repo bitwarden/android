@@ -111,12 +111,14 @@ fun ResetPasswordScreen(
                     BitwardenTextButton(
                         label = stringResource(id = R.string.log_out),
                         onClick = { shouldShowLogoutConfirmationDialog = true },
+                        modifier = Modifier.semantics { testTag = "LogoutButton" },
                     )
                     BitwardenTextButton(
                         label = stringResource(id = R.string.submit),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(ResetPasswordAction.SubmitClick) }
                         },
+                        modifier = Modifier.semantics { testTag = "SubmitButton" },
                     )
                 },
             )

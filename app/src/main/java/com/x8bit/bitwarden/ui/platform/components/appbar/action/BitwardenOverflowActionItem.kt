@@ -49,7 +49,10 @@ fun BitwardenOverflowActionItem(
         contentAlignment = Alignment.Center,
         modifier = modifier,
     ) {
-        IconButton(onClick = { isOverflowMenuVisible = !isOverflowMenuVisible }) {
+        IconButton(
+            onClick = { isOverflowMenuVisible = !isOverflowMenuVisible },
+            modifier = Modifier.semantics { testTag = "HeaderBarOptionsButton" },
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_more),
                 contentDescription = stringResource(id = R.string.more),

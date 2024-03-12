@@ -142,7 +142,6 @@ fun VaultUnlockScreen(
                         initials = state.initials,
                         color = state.avatarColor,
                         onClick = { accountMenuVisible = !accountMenuVisible },
-                        actionTestTag = "AccountIconButton",
                     )
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOf(

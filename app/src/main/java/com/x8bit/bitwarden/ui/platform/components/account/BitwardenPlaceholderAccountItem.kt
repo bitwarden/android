@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
@@ -25,7 +26,7 @@ fun BitwardenPlaceholderAccountActionItem(
     IconButton(
         onClick = onClick,
         modifier = Modifier
-            .semantics(mergeDescendants = true) {},
+            .semantics(mergeDescendants = true) { testTag = "CurrentActiveAccount" },
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_account_initials_container),
