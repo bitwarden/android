@@ -34,18 +34,13 @@ fun BitwardenAccountActionItem(
     initials: String,
     color: Color,
     onClick: () -> Unit,
-    actionTestTag: String? = null,
 ) {
     val iconPainter = painterResource(id = R.drawable.ic_account_initials_container)
     val contentDescription = stringResource(id = R.string.account)
 
     IconButton(
         onClick = onClick,
-        modifier = Modifier.semantics {
-            if (actionTestTag != null) {
-                testTag = actionTestTag
-            }
-        },
+        modifier = Modifier.semantics { testTag = "CurrentActiveAccount" },
     ) {
         Icon(
             painter = iconPainter,

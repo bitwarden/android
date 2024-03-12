@@ -21,6 +21,8 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
@@ -44,7 +46,7 @@ fun BitwardenSearchTopAppBar(
 ) {
     val focusRequester = remember { FocusRequester() }
     TopAppBar(
-        modifier = modifier,
+        modifier = modifier.semantics { testTag = "HeaderBarComponent" },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface,
             scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
@@ -57,6 +59,7 @@ fun BitwardenSearchTopAppBar(
             navigationIcon?.let {
                 IconButton(
                     onClick = it.onNavigationIconClick,
+                    modifier = Modifier.semantics { testTag = "CloseButton" },
                 ) {
                     Icon(
                         modifier = Modifier.mirrorIfRtl(),

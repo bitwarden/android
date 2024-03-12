@@ -279,6 +279,7 @@ private fun ModalAppBar(
             BitwardenTextButton(
                 label = stringResource(id = R.string.select),
                 onClick = onSelectClick,
+                modifier = Modifier.semantics { testTag = "SelectButton" },
             )
         },
     )

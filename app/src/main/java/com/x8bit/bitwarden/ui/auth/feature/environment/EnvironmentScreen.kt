@@ -94,6 +94,7 @@ fun EnvironmentScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EnvironmentAction.SaveClick) }
                         },
+                        modifier = Modifier.semantics { testTag = "SaveButton" },
                     )
                 },
             )

@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
@@ -39,6 +41,7 @@ fun BitwardenTopAppBar(
     navigationIcon: Painter,
     navigationIconContentDescription: String,
     onNavigationIconClick: () -> Unit,
+    modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = { },
 ) {
     BitwardenTopAppBar(
@@ -49,6 +52,7 @@ fun BitwardenTopAppBar(
             navigationIconContentDescription = navigationIconContentDescription,
             onNavigationIconClick = onNavigationIconClick,
         ),
+        modifier = modifier,
         actions = actions,
     )
 }
@@ -68,6 +72,7 @@ fun BitwardenTopAppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     navigationIcon: NavigationIcon?,
+    modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
@@ -83,6 +88,7 @@ fun BitwardenTopAppBar(
             navigationIcon?.let {
                 IconButton(
                     onClick = it.onNavigationIconClick,
+                    modifier = Modifier.semantics { testTag = "CloseButton" },
                 ) {
                     Icon(
                         modifier = Modifier.mirrorIfRtl(),
@@ -101,6 +107,7 @@ fun BitwardenTopAppBar(
                 overflow = TextOverflow.Ellipsis,
             )
         },
+        modifier = modifier.semantics { testTag = "HeaderBarComponent" },
         actions = actions,
     )
 }

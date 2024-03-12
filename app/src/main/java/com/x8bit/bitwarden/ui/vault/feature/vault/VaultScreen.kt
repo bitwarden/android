@@ -219,7 +219,6 @@ private fun VaultScreenScaffold(
                         onClick = {
                             updateAccountMenuVisibility(!accountMenuVisible)
                         },
-                        actionTestTag = "AccountIconButton",
                     )
                     BitwardenSearchActionItem(
                         contentDescription = stringResource(id = R.string.search_vault),

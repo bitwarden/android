@@ -184,6 +184,7 @@ fun CreateAccountScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(SubmitClick) }
                         },
+                        modifier = Modifier.semantics { testTag = "SubmitButton" },
                     )
                 },
             )
