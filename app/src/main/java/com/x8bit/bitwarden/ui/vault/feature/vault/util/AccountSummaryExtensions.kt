@@ -42,6 +42,18 @@ val AccountSummary.iconRes: Int
     }
 
 /**
+ * Test tag to be used for the for the given [AccountSummary.iconRes].
+ */
+val AccountSummary.iconTestTag: String
+    get() = when (this.status) {
+        AccountSummary.Status.ACTIVE -> "ActiveVaultIcon"
+        AccountSummary.Status.LOCKED,
+        AccountSummary.Status.LOGGED_OUT,
+        AccountSummary.Status.UNLOCKED,
+        -> "InactiveVaultIcon"
+    }
+
+/**
  * String resource of a supporting text to display (or `null`) for the given [AccountSummary].
  */
 @get:StringRes

@@ -91,6 +91,38 @@ class AccountSummaryExtensionsTest {
     }
 
     @Test
+    fun `iconTestTag returns ActiveVaultIcon for active account`() {
+        val accountSummary = mockk<AccountSummary> {
+            every { status } returns AccountSummary.Status.ACTIVE
+        }
+        assertEquals("ActiveVaultIcon", accountSummary.iconTestTag)
+    }
+
+    @Test
+    fun `iconTestTag returns InactiveVaultIcon for locked account`() {
+        val accountSummary = mockk<AccountSummary> {
+            every { status } returns AccountSummary.Status.LOCKED
+        }
+        assertEquals("InactiveVaultIcon", accountSummary.iconTestTag)
+    }
+
+    @Test
+    fun `iconTestTag returns InactiveVaultIcon for logged out account`() {
+        val accountSummary = mockk<AccountSummary> {
+            every { status } returns AccountSummary.Status.LOGGED_OUT
+        }
+        assertEquals("InactiveVaultIcon", accountSummary.iconTestTag)
+    }
+
+    @Test
+    fun `iconTestTag returns InactiveVaultIcon for unlocked account`() {
+        val accountSummary = mockk<AccountSummary> {
+            every { status } returns AccountSummary.Status.UNLOCKED
+        }
+        assertEquals("InactiveVaultIcon", accountSummary.iconTestTag)
+    }
+
+    @Test
     fun `supportingTextResOrNull returns a null for active accounts`() {
         assertNull(
             mockk<AccountSummary> {
