@@ -24,6 +24,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
@@ -227,6 +229,7 @@ private fun VaultItemListingScaffold(
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     onClick = vaultItemListingHandlers.addVaultItemClick,
+                    modifier = Modifier.semantics { testTag = "AddItemButton" },
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_plus),

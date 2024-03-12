@@ -254,7 +254,9 @@ fun VaultItemScreen(
                     onClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultItemAction.Common.EditClick) }
                     },
-                    modifier = Modifier.padding(bottom = 16.dp),
+                    modifier = Modifier
+                        .semantics { testTag = "EditItemButton" }
+                        .padding(bottom = 16.dp),
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_edit),
