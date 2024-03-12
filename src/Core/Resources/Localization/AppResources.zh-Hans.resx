@@ -2876,4 +2876,13 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>设置解锁选项以更改您的密码库超时操作。</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>您的账户要求使用 Duo 两步登录。 </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>按照 Duo 的步骤完成登录。</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>启动 Duo</value>
+  </data>
 </root>

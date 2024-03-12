@@ -599,8 +599,9 @@ namespace Bit.iOS.Extension
 
         private void LaunchLoginSsoFlow()
         {
-            var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var loginPage = new LoginSsoPage(appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)

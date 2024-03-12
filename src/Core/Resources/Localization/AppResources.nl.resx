@@ -946,7 +946,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Je kunt deze functie pas gebruiken als je je encryptiesleutel bijwerkt.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Migratie van de encryptiesleutel vereist. Login via de website om je encryptiesleutel bij te werken.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Meer informatie</value>
@@ -2623,22 +2623,22 @@ Wilt u naar dit account wisselen?</value>
     <value>Huidig hoofdwachtwoord</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Ingelogd!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
-    <value>Approve with my other device</value>
+    <value>Goedkeuren met mijn andere apparaat</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Goedkeuring van beheerder vragen</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Goedkeuren met hoofdwachtwoord</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
-    <value>Turn off using a public device</value>
+    <value>Uitschakelen met een openbaar apparaat</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Dit apparaat onthouden</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2668,7 +2668,7 @@ Wilt u naar dit account wisselen?</value>
     <value>Hulptekst hoofdwachtwoord opnieuw vragen</value>
   </data>
   <data name="UnlockingMayFailDueToInsufficientMemoryDecreaseYourKDFMemorySettingsToResolve" xml:space="preserve">
-    <value>Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</value>
+    <value>Ontgrendelen kan mislukken als er onvoldoende geheugen is. Verminder je KDF-geheugeninstellingen of stel biometrische ontgrendeling in om dit op te lossen.</value>
   </data>
   <data name="InvalidAPIKey" xml:space="preserve">
     <value>Ongeldige API-sleutel</value>
@@ -2677,22 +2677,22 @@ Wilt u naar dit account wisselen?</value>
     <value>Ongeldige API-token</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Goedkeuring van beheerder aangevraagd</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Je verzoek is naar je beheerder verstuurd.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Je krijgt een melding zodra je bent goedgekeurd.</value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Problemen met inloggen?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Inloggen als {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
-    <value>Vault timeout action changed to log out</value>
+    <value>Kluis time-out actie gewijzigd naar uitloggen</value>
   </data>
   <data name="BlockAutoFill" xml:space="preserve">
     <value>Automatisch aanvullen blokkeren</value>
@@ -2738,16 +2738,16 @@ Wilt u naar dit account wisselen?</value>
     <value>Meerdere URIs in één keer bewerken kan niet</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Inloggen goedgekeurd</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
-    <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
+    <value>Je moet Inloggen met apparaat instellen in de instellingen van de Bitwarden-app. Behoefte aan een andere mogelijkheid?</value>
   </data>
   <data name="LogInWithDevice" xml:space="preserve">
-    <value>Log in with device</value>
+    <value>Inloggen met apparaat</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Inloggen op</value>
   </data>
   <data name="Vault" xml:space="preserve">
     <value>Kluis</value>
@@ -2862,18 +2862,27 @@ Wilt u naar dit account wisselen?</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
-    <value>Too many attempts</value>
+    <value>Te veel pogingen</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
-    <value>Account logged out.</value>
+    <value>Account uitgelogd.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>De organisatierechten zijn bijgewerkt, je moet een hoofdwachtwoord instellen.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Je organisatie vereist dat je een hoofdwachtwoord instelt.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Stel een ontgrendelingsmethode in om je kluis time-out actie te wijzigen.</value>
+  </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Jouw account vereist Duo-tweestapsaanmelding. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Volg de stappen van Duo om in te loggen.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Duo starten</value>
   </data>
 </root>

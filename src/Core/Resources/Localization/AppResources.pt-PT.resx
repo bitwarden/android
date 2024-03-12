@@ -1570,7 +1570,7 @@ A leitura será efetuada automaticamente.</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="SolarizedDark" xml:space="preserve">
-    <value>Solarized Dark</value>
+    <value>Solarized (escuro)</value>
     <comment>'Solarized Dark' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
@@ -2826,7 +2826,7 @@ Deseja mudar para esta conta?</value>
     <value>Continuar para a loja de aplicações?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
-    <value>Torne a sua conta mais segura configurando a verificação em dois passos na aplicação Web Bitwarden.</value>
+    <value>Torne a sua conta mais segura configurando a verificação de dois passos na aplicação Web Bitwarden.</value>
   </data>
   <data name="ChangeMasterPasswordDescriptionLong" xml:space="preserve">
     <value>Pode alterar a sua palavra-passe mestra na aplicação Web Bitwarden.</value>
@@ -2874,5 +2874,14 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</value>
+  </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>A verificação de dois passos Duo é necessária para a sua conta. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Siga os passos do Duo para concluir o início de sessão.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Iniciar o Duo</value>
   </data>
 </root>

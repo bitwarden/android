@@ -381,7 +381,7 @@ namespace Bit.iOS.ShareExtension
 
         private void LaunchLoginSsoFlow()
         {
-            var loginPage = new LoginSsoPage();
+            var loginPage = new LoginSsoPage(_appOptions.Value);
             SetupAppAndApplyResources(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {

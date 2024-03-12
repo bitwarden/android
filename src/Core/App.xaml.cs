@@ -46,7 +46,6 @@ namespace Bit.App
         // This queue keeps those actions so that when the app has resumed they can still be executed.
         // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
         private readonly Queue<Action> _onResumeActions = new Queue<Action>();
-        private bool _hasNavigatedToAutofillWindow;
 
 #if ANDROID
 
@@ -120,41 +119,8 @@ namespace Bit.App
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
 
-            //"Internal" Autofill and Uri/Otp/CreateSend. This is where we create the autofill specific Window
-            if (Options != null && (Options.FromAutofillFramework || Options.Uri != null || Options.OtpData != null || Options.CreateSend != null))
-            {
-                _isResumed = true; //Specifically for the Autofill scenario we need to manually set the _isResumed here
-                _hasNavigatedToAutofillWindow = true;
-                return new AutoFillWindow(new NavigationPage(new AndroidNavigationRedirectPage()));
-            }
-
-            var homePage = new HomePage(Options);
-            // WORKAROUND: If the user autofills with Accessibility Services enabled and goes back to the application then there is currently an issue
-            // where this method is called again
-            // thus it goes through here and the user goes to HomePage as we see here.
-            // So to solve this, the next flag check has been added which then turns on a flag on the home page
-            // that will trigger a navigation on the accounts manager when it loads; workarounding this behavior and navigating the user
-            // to the proper page depending on its state.
-            // WARNING: this doens't navigate the user to where they were but it acts as if the user had changed their account.
-            if(_hasNavigatedToAutofillWindow)
-            {
-                homePage.PerformNavigationOnAccountChangedOnLoad = true;
-                // this is needed because when coming back from AutofillWindow OnResume won't be called and we need this flag
-                // so that void Navigate(NavigationTarget navTarget, INavigationParams navParams) doesn't enqueue the navigation
-                // and it performs it directly.
-                _isResumed = true; 
-                _hasNavigatedToAutofillWindow = false;
-            }
-
-            //If we have an existing MainAppWindow we can use that one
-            var mainAppWindow = Windows.OfType<MainAppWindow>().FirstOrDefault();
-            if (mainAppWindow != null)
-            {
-                mainAppWindow.PendingPage = new NavigationPage(homePage);
-            }
-
-            //Create new main window
-            return new MainAppWindow(new NavigationPage(homePage));
+            _isResumed = true;
+            return new ResumeWindow(new NavigationPage(new AndroidNavigationRedirectPage(Options)));
         }
 #else
         //iOS doesn't use the CreateWindow override used in Android so we just set the Application.Current.MainPage directly
@@ -171,7 +137,7 @@ namespace Bit.App
                     Application.Current.MainPage = value;
                 }
             }
-        }   
+        }
 #endif
 
         public App() : this(null)
