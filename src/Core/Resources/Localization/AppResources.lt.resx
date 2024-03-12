@@ -946,7 +946,7 @@ Nuskaitymas vyks automatiškai.</value>
     <value>Negalite naudoti šios funkcijos, kol neatnaujinsite šifravimo raktą.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>Privaloma migruoti šifravimo raktą. Prašome prisijungti per internetinę saugyklą norint jį atnaujinti.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Sužinoti daugiau</value>
@@ -1741,7 +1741,7 @@ Nuskaitymas vyks automatiškai.</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="AccountBiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock for this account is disabled pending verification of master password.</value>
+    <value>Biometrinis atrakinimas išjungtas, kol neįvesite pagrindinio slaptažodžio.</value>
   </data>
   <data name="AccountBiometricInvalidatedExtension" xml:space="preserve">
     <value>Autofill biometric unlock for this account is disabled pending verification of master password.</value>
@@ -2739,7 +2739,7 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Cannot edit multiple URIs at once</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Prisijungimas patvirtintas</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
     <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
@@ -2863,13 +2863,13 @@ Ar norite pereiti prie šios paskyros?</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
-    <value>Too many attempts</value>
+    <value>Viršytas bandymų skaičius</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
-    <value>Account logged out.</value>
+    <value>Atsijungta nuo paskyros.</value>
   </data>
   <data name="YourOrganizationPermissionsWereUpdatedRequeringYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization permissions were updated, requiring you to set a master password.</value>
+    <value>Dėl pasikeitusių Jūsų organizacijos nuostatų, Jums reikia nustatyti pagrindinį slaptažodį.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
     <value>Your organization requires you to set a master password.</value> 
@@ -2884,6 +2884,6 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Follow the steps from Duo to finish logging in.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
-    <value>Launch Duo</value>
+    <value>Paleisti „Duo“</value>
   </data>
 </root>
