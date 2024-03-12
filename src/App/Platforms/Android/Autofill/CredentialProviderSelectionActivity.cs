@@ -159,9 +159,6 @@ namespace Bit.Droid.Autofill
             */
 
             //TODO: Code below until end of method is using alternative method of building Json ourselves
-
-            var result = new Intent();
-
             var responseInnerAndroidJson = new JSONObject();
             responseInnerAndroidJson.Put("clientDataJSON", b64Encode(assertResult.ClientDataJSON));
             responseInnerAndroidJson.Put("authenticatorData", b64Encode(assertResult.AuthenticatorData));
@@ -177,9 +174,10 @@ namespace Bit.Droid.Autofill
             rootAndroidJson.Put("response", responseInnerAndroidJson);
 
             var responseAndroidJson = rootAndroidJson.ToString();
+            System.Diagnostics.Debug.WriteLine($"ResponseJson: {responseAndroidJson}");
+
+            var result = new Intent();
             var cred = new PublicKeyCredential(responseAndroidJson);
-            var responseJson = cred.AuthenticationResponseJson;
-            System.Diagnostics.Debug.WriteLine($"ResponseJson: {responseJson}");
             var credResponse = new GetCredentialResponse(cred);
             PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
             SetResult(Result.Ok, result);
