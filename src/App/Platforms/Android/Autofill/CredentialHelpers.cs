@@ -10,6 +10,7 @@ using AndroidX.Credentials.WebAuthn;
 using AndroidX.Credentials;
 using Bit.Core.Utilities;
 using Java.Security;
+using Org.Json;
 using Activity = Android.App.Activity;
 
 namespace Bit.App.Platforms.Android.Autofill
@@ -135,33 +136,37 @@ namespace Bit.App.Platforms.Android.Autofill
                 //TODO: Cancel process?
             }
 
-            var response = new AuthenticatorAttestationResponse
-            (
-                credentialCreationOptions,
-                clientCreateCredentialResult.CredentialId,
-                clientCreateCredentialResult.PublicKey,
-                androidOrigin,
-                true,
-                true,
-                true,
-                true,
-                packageName = packageName,
-                clientCreateCredentialResult.ClientDataJSON
-            );
-            response.SetAttestationObject(clientCreateCredentialResult.AttestationObject);
+            var transportsArray = new JSONArray();
+            if (clientCreateCredentialResult.Transports != null)
+            {
+                foreach (var transport in clientCreateCredentialResult.Transports)
+                {
+                    transportsArray.Put(transport);
+                }
+            }
             
-            var credential = new FidoPublicKeyCredential
-            (
-                clientCreateCredentialResult.CredentialId,
-                response,
-                "platform"
-            );
+            var responseInnerAndroidJson = new JSONObject();
+            responseInnerAndroidJson.Put("clientDataJSON", b64Encode(clientCreateCredentialResult.ClientDataJSON));
+            responseInnerAndroidJson.Put("authenticatorData", b64Encode(clientCreateCredentialResult.AuthData));
+            responseInnerAndroidJson.Put("attestationObject", b64Encode(clientCreateCredentialResult.AttestationObject));
+            responseInnerAndroidJson.Put("transports", transportsArray);
+            responseInnerAndroidJson.Put("publicKeyAlgorithm", clientCreateCredentialResult.PublicKeyAlgorithm);
+            responseInnerAndroidJson.Put("publicKey", b64Encode(clientCreateCredentialResult.PublicKey));
+
+            var rootAndroidJson = new JSONObject();
+            rootAndroidJson.Put("id", b64Encode(clientCreateCredentialResult.CredentialId));
+            rootAndroidJson.Put("rawId", b64Encode(clientCreateCredentialResult.CredentialId));
+            rootAndroidJson.Put("authenticatorAttachment", "platform");
+            rootAndroidJson.Put("type", "public-key");
+            rootAndroidJson.Put("clientExtensionResults", new JSONObject());
+            rootAndroidJson.Put("response", responseInnerAndroidJson);
+
+            var responseAndroidJson = rootAndroidJson.ToString();
+
+            System.Diagnostics.Debug.WriteLine(responseAndroidJson);
 
             var result = new Intent();
-            var credentialJson = credential.Json();
-            System.Diagnostics.Debug.WriteLine(credentialJson);
-
-            var publicKeyResponse = new CreatePublicKeyCredentialResponse(credentialJson);
+            var publicKeyResponse = new CreatePublicKeyCredentialResponse(responseAndroidJson);
             PendingIntentHandler.SetCreateCredentialResponse(result, publicKeyResponse);
 
             activity.SetResult(Result.Ok, result);
