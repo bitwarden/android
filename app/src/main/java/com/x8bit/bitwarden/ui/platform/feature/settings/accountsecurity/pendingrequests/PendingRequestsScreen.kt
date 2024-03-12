@@ -208,7 +208,9 @@ private fun PendingRequestsContent(
                     platform = request.platform,
                     timestamp = request.timestamp,
                     onNavigateToLoginApproval = onNavigateToLoginApproval,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .semantics { testTag = "LoginRequestCell" }
+                        .fillMaxWidth(),
                 )
                 HorizontalDivider(
                     thickness = 1.dp,
