@@ -99,12 +99,34 @@ sealed class SettingsAction {
  * Enum representing the settings rows, such as "account security" or "vault".
  *
  * @property text The [Text] of the string that represents the label of each setting.
+ * @property testTag The value that should be set for the test tag. This is used in Appium testing.
  */
-enum class Settings(val text: Text) {
-    ACCOUNT_SECURITY(R.string.account_security.asText()),
-    AUTO_FILL(R.string.autofill.asText()),
-    VAULT(R.string.vault.asText()),
-    APPEARANCE(R.string.appearance.asText()),
-    OTHER(R.string.other.asText()),
-    ABOUT(R.string.about.asText()),
+enum class Settings(
+    val text: Text,
+    val testTag: String,
+) {
+    ACCOUNT_SECURITY(
+        text = R.string.account_security.asText(),
+        testTag = "AccountSecuritySettingsButton",
+    ),
+    AUTO_FILL(
+        text = R.string.autofill.asText(),
+        testTag = "AutofillSettingsButton",
+    ),
+    VAULT(
+        text = R.string.vault.asText(),
+        testTag = "VaultSettingsButton",
+    ),
+    APPEARANCE(
+        text = R.string.appearance.asText(),
+        testTag = "AppearanceSettingsButton",
+    ),
+    OTHER(
+        text = R.string.other.asText(),
+        testTag = "OtherSettingsButton",
+    ),
+    ABOUT(
+        text = R.string.about.asText(),
+        testTag = "AboutSettingsButton",
+    ),
 }
