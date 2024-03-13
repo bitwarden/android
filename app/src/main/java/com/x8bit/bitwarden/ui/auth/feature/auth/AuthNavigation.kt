@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.loginWithDeviceDestin
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHintDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
+import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.trustedDeviceDestination
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
 
@@ -104,6 +105,9 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             onNavigateBack = { navController.popBackStack() },
         )
         masterPasswordHintDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        trustedDeviceDestination(
             onNavigateBack = { navController.popBackStack() },
         )
         twoFactorLoginDestination(
