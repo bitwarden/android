@@ -1,9 +1,12 @@
 package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.performClick
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.Before
 import org.junit.Test
@@ -34,6 +37,14 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(TrustedDeviceEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    fun `on back click should send BackClick`() {
+        composeTestRule.onNodeWithContentDescription("Close").performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(TrustedDeviceAction.BackClick)
+        }
     }
 }
 
