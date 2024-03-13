@@ -317,6 +317,7 @@ private fun ScrollContent(
             BitwardenPolicyWarningText(
                 text = stringResource(id = R.string.password_generator_policy_in_effect),
                 modifier = Modifier
+                    .semantics { testTag = "PasswordGeneratorPolicyInEffectLabel" }
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
