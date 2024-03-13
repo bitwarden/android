@@ -26,7 +26,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "1.0.0"
+        versionName = "2024.03.0"
 
         ksp {
             // The location in which the generated Room Database Schemas will be stored in the repo.
