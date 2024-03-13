@@ -22,6 +22,7 @@ import java.time.ZonedDateTime
  * @property fields A list of fields associated with the cipher (nullable).
  * @property isFavorite If the cipher is a favorite.
  * @property card The card of the cipher.
+ * @property key The key of the cipher (nullable).
  */
 @Serializable
 data class CipherJsonRequest(
@@ -67,4 +68,7 @@ data class CipherJsonRequest(
 
     @SerialName("card")
     val card: SyncResponseJson.Cipher.Card?,
+
+    @SerialName("key")
+    val key: String?,
 )

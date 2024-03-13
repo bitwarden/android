@@ -21,4 +21,5 @@ fun createMockCipherJsonRequest(number: Int, hasNullUri: Boolean = false): Ciphe
         reprompt = CipherRepromptTypeJson.NONE,
         secureNote = createMockSecureNote(),
         lastKnownRevisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
+        key = "mockKey-$number",
     )
