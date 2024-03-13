@@ -91,6 +91,15 @@ class RootNavScreenTest : BaseComposeTest() {
             )
         }
 
+        // Make sure navigating to set password works as expected:
+        rootNavStateFlow.value = RootNavState.SetPassword
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "set_password",
+                navOptions = expectedNavOptions,
+            )
+        }
+
         // Make sure navigating to vault unlocked works as expected:
         rootNavStateFlow.value = RootNavState.VaultUnlocked(activeUserId = "userId")
         composeTestRule.runOnIdle {

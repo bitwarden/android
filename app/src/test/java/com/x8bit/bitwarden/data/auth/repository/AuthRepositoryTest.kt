@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordReque
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AccountsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.HaveIBeenPwnedService
@@ -396,8 +397,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
+                    userKey = successResponse.key!!,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
@@ -462,8 +463,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
+                    userKey = successResponse.key!!,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
@@ -811,8 +812,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
+                    userKey = successResponse.key!!,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
@@ -854,8 +855,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
+                    userKey = successResponse.key!!,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
@@ -866,6 +867,82 @@ class AuthRepositoryTest {
                 fakeAuthDiskSource.userState,
             )
             verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `login get token succeeds with null keys and hasMasterPassword false should not call unlockVault`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+                key = null,
+                privateKey = null,
+                userDecryptionOptions = UserDecryptionOptionsJson(
+                    hasMasterPassword = false,
+                    keyConnectorUserDecryptionOptions = null,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+            )
+            coEvery {
+                accountsService.preLogin(email = EMAIL)
+            } returns PRE_LOGIN_SUCCESS.asSuccess()
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                successResponse.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            val result = repository.login(
+                email = EMAIL,
+                password = PASSWORD,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            coVerify { accountsService.preLogin(email = EMAIL) }
+            fakeAuthDiskSource.assertMasterPasswordHash(
+                userId = USER_ID_1,
+                passwordHash = PASSWORD_HASH,
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.MasterPassword(
+                        username = EMAIL,
+                        password = PASSWORD_HASH,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.syncIfNecessary()
+            }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+            coVerify(exactly = 0) {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    userKey = any(),
+                    privateKey = any(),
+                    organizationKeys = null,
+                    masterPassword = PASSWORD,
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -897,8 +974,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
+                    userKey = successResponse.key!!,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
@@ -938,8 +1015,8 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key,
-                    privateKey = successResponse.privateKey,
+                    userKey = successResponse.key!!,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     masterPassword = PASSWORD,
                 )
@@ -1083,8 +1160,8 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key,
-                privateKey = successResponse.privateKey,
+                userKey = successResponse.key!!,
+                privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
                 masterPassword = PASSWORD,
             )
@@ -1139,8 +1216,8 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key,
-                privateKey = successResponse.privateKey,
+                userKey = successResponse.key!!,
+                privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
                 masterPassword = PASSWORD,
             )
@@ -1179,8 +1256,8 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key,
-                privateKey = successResponse.privateKey,
+                userKey = successResponse.key!!,
+                privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
                 masterPassword = PASSWORD,
             )
@@ -1319,12 +1396,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
-                            authRequestKey = successResponse.key,
+                            authRequestKey = successResponse.key!!,
                             protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
@@ -1365,12 +1442,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    privateKey = successResponse.privateKey,
+                    privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
                     initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                         requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                         method = AuthRequestMethod.MasterKey(
-                            authRequestKey = successResponse.key,
+                            authRequestKey = successResponse.key!!,
                             protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
                         ),
                     ),
@@ -1539,12 +1616,12 @@ class AuthRepositoryTest {
                 userId = SINGLE_USER_STATE_1.activeUserId,
                 email = SINGLE_USER_STATE_1.activeAccount.profile.email,
                 kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams(),
-                privateKey = successResponse.privateKey,
+                privateKey = successResponse.privateKey!!,
                 initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
                     requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
                     method = AuthRequestMethod.MasterKey(
                         protectedMasterKey = DEVICE_ASYMMETRICAL_KEY,
-                        authRequestKey = successResponse.key,
+                        authRequestKey = successResponse.key!!,
                     ),
                 ),
                 organizationKeys = null,
@@ -1584,6 +1661,7 @@ class AuthRepositoryTest {
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
             captchaToken = null,
+            organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.Error(errorMessage = null), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -1628,6 +1706,7 @@ class AuthRepositoryTest {
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
             captchaToken = null,
+            organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.Error(errorMessage = "mock_error_message"), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -1675,6 +1754,7 @@ class AuthRepositoryTest {
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
                 captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.Success, result)
             assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -1742,6 +1822,7 @@ class AuthRepositoryTest {
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
                 captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
 
             assertEquals(LoginResult.Success, result)
@@ -1795,6 +1876,7 @@ class AuthRepositoryTest {
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
             captchaToken = null,
+            organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.CaptchaRequired(CAPTCHA_KEY), result)
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
@@ -1839,6 +1921,7 @@ class AuthRepositoryTest {
                 ssoCodeVerifier = SSO_CODE_VERIFIER,
                 ssoRedirectUri = SSO_REDIRECT_URI,
                 captchaToken = null,
+                organizationIdentifier = ORGANIZATION_IDENTIFIER,
             )
             assertEquals(LoginResult.TwoFactorRequired, result)
             assertEquals(
@@ -1889,6 +1972,7 @@ class AuthRepositoryTest {
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
             captchaToken = null,
+            organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.TwoFactorRequired, firstResult)
         coVerify {
@@ -1977,6 +2061,7 @@ class AuthRepositoryTest {
             ssoCodeVerifier = SSO_CODE_VERIFIER,
             ssoRedirectUri = SSO_REDIRECT_URI,
             captchaToken = null,
+            organizationIdentifier = ORGANIZATION_IDENTIFIER,
         )
         assertEquals(LoginResult.Success, result)
         assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
@@ -2463,13 +2548,15 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.userState = null
 
         val result = repository.setPassword(
-            organizationId = "organizationId",
+            organizationIdentifier = "organizationId",
             password = "password",
             passwordHint = "passwordHint",
         )
 
         assertEquals(SetPasswordResult.Error, result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
@@ -2486,13 +2573,15 @@ class AuthRepositoryTest {
         } returns Throwable("Fail").asFailure()
 
         val result = repository.setPassword(
-            organizationId = "organizationId",
+            organizationIdentifier = "organizationId",
             password = password,
             passwordHint = "passwordHint",
         )
 
         assertEquals(SetPasswordResult.Error, result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
@@ -2518,13 +2607,15 @@ class AuthRepositoryTest {
         } returns Throwable("Fail").asFailure()
 
         val result = repository.setPassword(
-            organizationId = "organizationId",
+            organizationIdentifier = "organizationId",
             password = password,
             passwordHint = "passwordHint",
         )
 
         assertEquals(SetPasswordResult.Error, result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
@@ -2532,7 +2623,7 @@ class AuthRepositoryTest {
         val password = "password"
         val passwordHash = "passwordHash"
         val passwordHint = "passwordHint"
-        val organizationId = "organizationIdentifier"
+        val organizationId = ORGANIZATION_IDENTIFIER
         val encryptedUserKey = "encryptedUserKey"
         val privateRsaKey = "privateRsaKey"
         val publicRsaKey = "publicRsaKey"
@@ -2574,13 +2665,15 @@ class AuthRepositoryTest {
         } returns Throwable("Fail").asFailure()
 
         val result = repository.setPassword(
-            organizationId = organizationId,
+            organizationIdentifier = organizationId,
             password = password,
             passwordHint = passwordHint,
         )
 
         assertEquals(SetPasswordResult.Error, result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
     }
 
     @Test
@@ -2588,7 +2681,7 @@ class AuthRepositoryTest {
         val password = "password"
         val passwordHash = "passwordHash"
         val passwordHint = "passwordHint"
-        val organizationId = "organizationIdentifier"
+        val organizationId = ORGANIZATION_IDENTIFIER
         val encryptedUserKey = "encryptedUserKey"
         val privateRsaKey = "privateRsaKey"
         val publicRsaKey = "publicRsaKey"
@@ -2630,13 +2723,16 @@ class AuthRepositoryTest {
         } returns Unit.asSuccess()
 
         val result = repository.setPassword(
-            organizationId = organizationId,
+            organizationIdentifier = organizationId,
             password = password,
             passwordHint = passwordHint,
         )
 
         assertEquals(SetPasswordResult.Success, result)
         fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = passwordHash)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
+        fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
     }
 
     @Test
@@ -3373,6 +3469,7 @@ class AuthRepositoryTest {
         private const val PRIVATE_KEY = "privateKey"
         private const val USER_ID_1 = "2a135b23-e1fb-42c9-bec3-573857bc8181"
         private const val USER_ID_2 = "b9d32ec0-6497-4582-9798-b350f53bfa02"
+        private const val ORGANIZATION_IDENTIFIER = "organizationIdentifier"
         private val ORGANIZATIONS = listOf(createMockOrganization(number = 0))
         private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
             TwoFactorAuthMethod.EMAIL to JsonObject(
@@ -3458,6 +3555,20 @@ class AuthRepositoryTest {
             activeUserId = USER_ID_1,
             accounts = mapOf(
                 USER_ID_1 to ACCOUNT_1,
+            ),
+        )
+        private val SINGLE_USER_STATE_1_WITH_PASS = UserStateJson(
+            activeUserId = USER_ID_1,
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = ACCOUNT_1.profile.copy(
+                        userDecryptionOptions = UserDecryptionOptionsJson(
+                            hasMasterPassword = true,
+                            keyConnectorUserDecryptionOptions = null,
+                            trustedDeviceUserDecryptionOptions = null,
+                        ),
+                    ),
+                ),
             ),
         )
         private val SINGLE_USER_STATE_2 = UserStateJson(

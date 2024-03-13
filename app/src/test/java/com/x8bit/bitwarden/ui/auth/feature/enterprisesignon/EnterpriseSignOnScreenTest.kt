@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 class EnterpriseSignOnScreenTest : BaseComposeTest() {
     private var onNavigateBackCalled = false
+    private var onNavigateToSetPasswordCalled = false
     private var twoFactorLoginEmail: String? = null
     private val mutableEventFlow = bufferedMutableSharedFlow<EnterpriseSignOnEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -47,6 +48,7 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             EnterpriseSignOnScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToSetPassword = { onNavigateToSetPasswordCalled = true },
                 onNavigateToTwoFactorLogin = { twoFactorLoginEmail = it },
                 viewModel = viewModel,
                 intentManager = intentManager,
@@ -112,6 +114,12 @@ class EnterpriseSignOnScreenTest : BaseComposeTest() {
         verify(exactly = 1) {
             intentManager.startCustomTabsActivity(captchaUri)
         }
+    }
+
+    @Test
+    fun `NavigateToSetPassword should call onNavigateToSetPassword`() {
+        mutableEventFlow.tryEmit(EnterpriseSignOnEvent.NavigateToSetPassword)
+        assertTrue(onNavigateToSetPasswordCalled)
     }
 
     @Test

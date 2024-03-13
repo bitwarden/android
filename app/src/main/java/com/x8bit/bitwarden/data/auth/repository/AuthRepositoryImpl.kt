@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
+import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
@@ -156,6 +157,8 @@ class AuthRepositoryImpl(
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     private val ioScope = CoroutineScope(dispatcherManager.io)
+
+    override var organizationIdentifier: String? = null
 
     override var twoFactorResponse: TwoFactorRequired? = null
 
@@ -400,6 +403,7 @@ class AuthRepositoryImpl(
         ssoCodeVerifier: String,
         ssoRedirectUri: String,
         captchaToken: String?,
+        organizationIdentifier: String,
     ): LoginResult = loginCommon(
         email = email,
         authModel = IdentityTokenAuthModel.SingleSignOn(
@@ -408,19 +412,21 @@ class AuthRepositoryImpl(
             ssoRedirectUri = ssoRedirectUri,
         ),
         captchaToken = captchaToken,
+        orgIdentifier = organizationIdentifier,
     )
 
     /**
      * A helper function to extract the common logic of logging in through
      * any of the available methods.
      */
-    @Suppress("LongMethod")
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
     private suspend fun loginCommon(
         email: String,
         password: String? = null,
         authModel: IdentityTokenAuthModel,
         twoFactorData: TwoFactorDataModel? = null,
         deviceData: DeviceDataModel? = null,
+        orgIdentifier: String? = null,
         captchaToken: String?,
     ): LoginResult = identityService
         .getToken(
@@ -474,6 +480,11 @@ class AuthRepositoryImpl(
                             )
                         }
 
+                        // Set the current organization identifier for use in JIT provisioning.
+                        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
+                            organizationIdentifier = orgIdentifier
+                        }
+
                         // Remove any cached data after successfully logging in.
                         identityTokenAuthModel = null
                         twoFactorResponse = null
@@ -482,17 +493,19 @@ class AuthRepositoryImpl(
 
                         // Attempt to unlock the vault with password if possible.
                         password?.let {
-                            vaultRepository.unlockVault(
-                                userId = userStateJson.activeUserId,
-                                email = userStateJson.activeAccount.profile.email,
-                                kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                                userKey = loginResponse.key,
-                                privateKey = loginResponse.privateKey,
-                                masterPassword = it,
-                                // We can separately unlock the vault for organization data after
-                                // receiving the sync response if this data is currently absent.
-                                organizationKeys = null,
-                            )
+                            if (loginResponse.privateKey != null && loginResponse.key != null) {
+                                vaultRepository.unlockVault(
+                                    userId = userStateJson.activeUserId,
+                                    email = userStateJson.activeAccount.profile.email,
+                                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                                    userKey = loginResponse.key,
+                                    privateKey = loginResponse.privateKey,
+                                    masterPassword = it,
+                                    // We can separately unlock vault for organization data after
+                                    // receiving the sync response if this data is currently absent.
+                                    organizationKeys = null,
+                                )
+                            }
 
                             // Save the master password hash.
                             authSdkSource
@@ -515,34 +528,37 @@ class AuthRepositoryImpl(
                         }
 
                         // Attempt to unlock the vault with auth request if possible.
-                        deviceData?.let { model ->
-                            vaultRepository.unlockVault(
-                                userId = userStateJson.activeUserId,
-                                email = userStateJson.activeAccount.profile.email,
-                                kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                                privateKey = loginResponse.privateKey,
-                                initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                                    requestPrivateKey = model.privateKey,
-                                    method = model
-                                        .masterPasswordHash
-                                        ?.let {
-                                            AuthRequestMethod.MasterKey(
-                                                protectedMasterKey = model.asymmetricalKey,
-                                                authRequestKey = loginResponse.key,
-                                            )
-                                        }
-                                        ?: AuthRequestMethod.UserKey(
-                                            protectedUserKey = model.asymmetricalKey,
-                                        ),
-                                ),
-                                // We can separately unlock the vault for organization data after
-                                // receiving the sync response if this data is currently absent.
-                                organizationKeys = null,
-                            )
-                            // We are purposely not storing the master password hash here since it
-                            // is not formatted in in a manner that we can use. We will store it
-                            // properly the next time the user enters their master password and
-                            // it is validated.
+                        // These values will only be null during the Just-in-Time provisioning flow.
+                        if (loginResponse.privateKey != null && loginResponse.key != null) {
+                            deviceData?.let { model ->
+                                vaultRepository.unlockVault(
+                                    userId = userStateJson.activeUserId,
+                                    email = userStateJson.activeAccount.profile.email,
+                                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                                    privateKey = loginResponse.privateKey,
+                                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                                        requestPrivateKey = model.privateKey,
+                                        method = model
+                                            .masterPasswordHash
+                                            ?.let {
+                                                AuthRequestMethod.MasterKey(
+                                                    protectedMasterKey = model.asymmetricalKey,
+                                                    authRequestKey = loginResponse.key,
+                                                )
+                                            }
+                                            ?: AuthRequestMethod.UserKey(
+                                                protectedUserKey = model.asymmetricalKey,
+                                            ),
+                                    ),
+                                    // We can separately unlock  vault for organization data after
+                                    // receiving the sync response if this data is currently absent.
+                                    organizationKeys = null,
+                                )
+                                // We are purposely not storing the master password hash here since
+                                // it is not formatted in in a manner that we can use. We will store
+                                // it properly the next time the user enters their master password
+                                // and it is validated.
+                            }
                         }
 
                         authDiskSource.storeAccountTokens(
@@ -805,8 +821,9 @@ class AuthRepositoryImpl(
             )
     }
 
+    @Suppress("LongMethod")
     override suspend fun setPassword(
-        organizationId: String,
+        organizationIdentifier: String,
         password: String,
         passwordHint: String?,
     ): SetPasswordResult {
@@ -832,28 +849,40 @@ class AuthRepositoryImpl(
                 kdf = activeAccount.profile.toSdkParams(),
             )
             .flatMap { keyResponse ->
-                accountsService.setPassword(
-                    body = SetPasswordRequestJson(
-                        passwordHash = passwordHash,
-                        passwordHint = passwordHint,
-                        organizationIdentifier = organizationId,
-                        kdfIterations = activeAccount.profile.kdfIterations,
-                        kdfMemory = activeAccount.profile.kdfMemory,
-                        kdfParallelism = activeAccount.profile.kdfParallelism,
-                        kdfType = activeAccount.profile.kdfType,
-                        key = keyResponse.encryptedUserKey,
-                        keys = RegisterRequestJson.Keys(
-                            publicKey = keyResponse.keys.public,
-                            encryptedPrivateKey = keyResponse.keys.private,
+                accountsService
+                    .setPassword(
+                        body = SetPasswordRequestJson(
+                            passwordHash = passwordHash,
+                            passwordHint = passwordHint,
+                            organizationIdentifier = organizationIdentifier,
+                            kdfIterations = activeAccount.profile.kdfIterations,
+                            kdfMemory = activeAccount.profile.kdfMemory,
+                            kdfParallelism = activeAccount.profile.kdfParallelism,
+                            kdfType = activeAccount.profile.kdfType,
+                            key = keyResponse.encryptedUserKey,
+                            keys = RegisterRequestJson.Keys(
+                                publicKey = keyResponse.keys.public,
+                                encryptedPrivateKey = keyResponse.keys.private,
+                            ),
                         ),
-                    ),
-                )
+                    )
+                    .onSuccess {
+                        authDiskSource.storePrivateKey(
+                            userId = activeAccount.profile.userId,
+                            privateKey = keyResponse.keys.private,
+                        )
+                        authDiskSource.storeUserKey(
+                            userId = activeAccount.profile.userId,
+                            userKey = keyResponse.encryptedUserKey,
+                        )
+                    }
             }
             .onSuccess {
                 authDiskSource.storeMasterPasswordHash(
                     userId = activeAccount.profile.userId,
                     passwordHash = passwordHash,
                 )
+                authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword()
             }
             .fold(
                 onFailure = { SetPasswordResult.Error },

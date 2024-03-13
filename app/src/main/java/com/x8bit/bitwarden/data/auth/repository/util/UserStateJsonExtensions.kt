@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -36,6 +37,35 @@ fun UserStateJson.toUpdatedUserStateJson(
                 .toMutableMap()
                 .apply {
                     replace(userId, updatedAccount)
+                },
+        )
+}
+
+/**
+ * Updates the [UserStateJson] to set the `hasMasterPassword` value to `true` after a user sets
+ * their password.
+ */
+fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
+    val account = this.accounts[activeUserId] ?: return this
+    val profile = account.profile
+    val updatedProfile = profile
+        .copy(
+            userDecryptionOptions = profile
+                .userDecryptionOptions
+                ?.copy(hasMasterPassword = true)
+                ?: UserDecryptionOptionsJson(
+                    hasMasterPassword = true,
+                    keyConnectorUserDecryptionOptions = null,
+                    trustedDeviceUserDecryptionOptions = null,
+                ),
+        )
+    val updatedAccount = account.copy(profile = updatedProfile)
+    return this
+        .copy(
+            accounts = accounts
+                .toMutableMap()
+                .apply {
+                    replace(activeUserId, updatedAccount)
                 },
         )
 }

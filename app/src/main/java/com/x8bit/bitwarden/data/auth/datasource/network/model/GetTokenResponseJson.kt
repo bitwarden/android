@@ -44,10 +44,10 @@ sealed class GetTokenResponseJson {
         val expiresInSeconds: Int,
 
         @SerialName("Key")
-        val key: String,
+        val key: String?,
 
         @SerialName("PrivateKey")
-        val privateKey: String,
+        val privateKey: String?,
 
         @SerialName("Kdf")
         val kdfType: KdfTypeJson,

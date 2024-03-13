@@ -69,6 +69,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     val yubiKeyResultFlow: Flow<YubiKeyResult>
 
     /**
+     * The organization identifier currently associated with this user.
+     */
+    var organizationIdentifier: String?
+
+    /**
      * The two-factor response data necessary for login and also to populate the
      * Two-Factor Login screen.
      */
@@ -153,12 +158,14 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Attempt to login using a SSO flow. Updated access token will be reflected in [authStateFlow].
      */
+    @Suppress("LongParameterList")
     suspend fun login(
         email: String,
         ssoCode: String,
         ssoCodeVerifier: String,
         ssoRedirectUri: String,
         captchaToken: String?,
+        organizationIdentifier: String,
     ): LoginResult
 
     /**
@@ -210,11 +217,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     ): ResetPasswordResult
 
     /**
-     * Sets the user's password to [password] for the user within the given [organizationId] with
-     * an optional [passwordHint].
+     * Sets the user's password to [password] for the user within the given [organizationIdentifier]
+     * with an optional [passwordHint].
      */
     suspend fun setPassword(
-        organizationId: String,
+        organizationIdentifier: String,
         password: String,
         passwordHint: String?,
     ): SetPasswordResult

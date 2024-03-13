@@ -123,7 +123,7 @@ class AccountsServiceTest : BaseServiceTest() {
     fun `register success json should be Success`() = runTest {
         val json = """
             {
-              "captchaBypassToken": "mock_token"            
+              "captchaBypassToken": "mock_token"
             }
             """
         val expectedResponse = RegisterResponseJson.Success(

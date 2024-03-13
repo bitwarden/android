@@ -5,6 +5,8 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -91,6 +93,114 @@ class UserStateJsonExtensionsTest {
                         }
                     },
                 ),
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonWithPassword should update correct account to set needsMasterPassword`() {
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = mockk(),
+            settings = mockk(),
+        )
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                keyConnectorUserDecryptionOptions = null,
+                                trustedDeviceUserDecryptionOptions = null,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount,
+                ),
+            )
+                .toUserStateJsonWithPassword(),
+        )
+    }
+
+    @Test
+    fun `toUserStateJsonWithPassword should preserve values of userDecryptionOptions`() {
+        val keyConnectorOptionsJson = KeyConnectorUserDecryptionOptionsJson("key")
+        val trustedDeviceOptionsJson = TrustedDeviceUserDecryptionOptionsJson(
+            encryptedPrivateKey = "encryptedPrivateKey",
+            encryptedUserKey = "encryptedUserKey",
+            hasAdminApproval = true,
+            hasLoginApprovingDevice = true,
+            hasManageResetPasswordPermission = true,
+        )
+        val originalProfile = AccountJson.Profile(
+            userId = "activeUserId",
+            email = "email",
+            isEmailVerified = true,
+            name = "name",
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            hasPremium = true,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = UserDecryptionOptionsJson(
+                hasMasterPassword = true,
+                keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
+                trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
+            ),
+        )
+        val originalAccount = AccountJson(
+            profile = originalProfile,
+            tokens = mockk(),
+            settings = mockk(),
+        )
+        assertEquals(
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount.copy(
+                        profile = originalProfile.copy(
+                            userDecryptionOptions = UserDecryptionOptionsJson(
+                                hasMasterPassword = true,
+                                keyConnectorUserDecryptionOptions = keyConnectorOptionsJson,
+                                trustedDeviceUserDecryptionOptions = trustedDeviceOptionsJson,
+                            ),
+                        ),
+                    ),
+                ),
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to originalAccount,
+                ),
+            )
+                .toUserStateJsonWithPassword(),
         )
     }
 
