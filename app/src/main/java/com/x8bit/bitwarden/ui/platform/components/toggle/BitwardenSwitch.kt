@@ -3,7 +3,10 @@ package com.x8bit.bitwarden.ui.platform.components.toggle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -28,6 +31,7 @@ import androidx.compose.ui.unit.dp
  * @param isChecked Whether or not the switch is currently checked.
  * @param onCheckedChange A callback for when the checked state changes.
  * @param modifier The [Modifier] to be applied to the button.
+ * @param description The description of the switch to be displayed below the [label].
  */
 @Composable
 fun BitwardenSwitch(
@@ -35,6 +39,7 @@ fun BitwardenSwitch(
     isChecked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
+    description: String? = null,
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,
@@ -65,31 +70,49 @@ fun BitwardenSwitch(
             onCheckedChange = null,
         )
 
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp),
-        )
+        Spacer(modifier = Modifier.width(16.dp))
+
+        Column {
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            description?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(4.dp))
+        }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun BitwardenSwitch_preview_isChecked() {
     BitwardenSwitch(
         label = "Label",
+        description = "Description",
         isChecked = true,
         onCheckedChange = {},
+        modifier = Modifier.fillMaxWidth(),
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun BitwardenSwitch_preview_isNotChecked() {
     BitwardenSwitch(
         label = "Label",
         isChecked = false,
         onCheckedChange = {},
+        modifier = Modifier.fillMaxWidth(),
     )
 }
