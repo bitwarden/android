@@ -153,7 +153,7 @@ private val fixedClock = Clock.fixed(
     ZoneId.systemDefault(),
 )
 private val DEFAULT_ABOUT_STATE: AboutState = AboutState(
-    version = "Version: 1.0.0 (1)".asText(),
+    version = "Version: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText(),
     isSubmitCrashLogsEnabled = false,
     copyrightInfo = "© Bitwarden Inc. 2015-"
         .asText()
