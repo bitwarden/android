@@ -870,4 +870,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Oprávnění Vaší organizace byla aktualizována. To vyžaduje nastavení hlavního hesla.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Vaše organizace vyžaduje nastavení hlavního hesla.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Nastavte volbu odemknutí, abyste změnili časový limit Vašeho trezoru.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Pro Váš účet je vyžadováno dvoufázové přihlášení DUO.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Postupujte podle kroků od DUO pro dokončení přihlášení.</string>
+  <string name="launch_duo">Spustit DUO</string>
 </resources>

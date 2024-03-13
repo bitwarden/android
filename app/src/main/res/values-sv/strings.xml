@@ -872,4 +872,7 @@ Vill du byta till detta konto?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Din organisations behörigheter uppdaterades, vilket kräver att du anger ett huvudlösenord.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Din organisation kräver att du anger ett huvudlösenord.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ställ in ett upplåsningsalternativ för att ändra vad som händer när tidsgränsen uppnås.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
+  <string name="launch_duo">Launch Duo</string>
 </resources>
