@@ -2936,4 +2936,7 @@ Do you want to switch to this account?</value>
     <value>There was a problem reading your passkey for {0}. Try again later.</value>
     <comment>The parameter is the RpId</comment>
   </data>
+  <data name="Passwords" xml:space="preserve">
+    <value>Passwords</value>
+  </data>
 </root>

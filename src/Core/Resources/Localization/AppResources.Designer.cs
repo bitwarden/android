@@ -5408,6 +5408,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passwords.
+        /// </summary>
+        public static string Passwords {
+            get {
+                return ResourceManager.GetString("Passwords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This password was not found in any known data breaches. It should be safe to use..
         /// </summary>
         public static string PasswordSafe {
