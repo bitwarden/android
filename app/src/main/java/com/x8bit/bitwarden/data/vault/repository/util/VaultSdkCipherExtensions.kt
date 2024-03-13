@@ -49,6 +49,7 @@ fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
         fields = fields?.toEncryptedNetworkFieldList(),
         isFavorite = favorite,
         card = card?.toEncryptedNetworkCard(),
+        key = key,
     )
 
 /**
