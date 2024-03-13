@@ -252,7 +252,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="feature_unavailable">Funkcija nepasiekiama</string>
   <string name="max_file_size">Maximum file size is 100 MB.</string>
   <string name="update_key">Negalite naudoti šios funkcijos, kol neatnaujinsite šifravimo raktą.</string>
-  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
+  <string name="encryption_key_migration_required_description_long">Privaloma migruoti šifravimo raktą. Prašome prisijungti per internetinę saugyklą norint jį atnaujinti.</string>
   <string name="learn_more">Sužinoti daugiau</string>
   <string name="api_url">API serverio nuoroda</string>
   <string name="custom_environment">Individualizuota aplinka</string>
@@ -503,7 +503,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="do_you_really_want_to_permanently_delete_cipher">Ar tikrai norite panaikinti? Atkurti nebebus galima.</string>
   <string name="do_you_really_want_to_restore_cipher">Ar tikrai norite atkurti šį elementą?</string>
   <string name="do_you_really_want_to_soft_delete_cipher">Ar tikrai norite perkelti į šiukšlinę?</string>
-  <string name="account_biometric_invalidated">Biometric unlock for this account is disabled pending verification of master password.</string>
+  <string name="account_biometric_invalidated">Biometrinis atrakinimas išjungtas, kol neįvesite pagrindinio slaptažodžio.</string>
   <string name="account_biometric_invalidated_extension">Autofill biometric unlock for this account is disabled pending verification of master password.</string>
   <string name="enable_sync_on_refresh">Leisti sinchronizuoti atnaujinant</string>
   <string name="enable_sync_on_refresh_description">Sinchronizuojama saugykla su perbraukimu iš viršaus į apačią gestu.</string>
@@ -826,7 +826,7 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="there_are_no_blocked_ur_is">There are no blocked URIs</string>
   <string name="the_urix_is_already_blocked">The URI %1$s is already blocked</string>
   <string name="cannot_edit_multiple_ur_is_at_once">Cannot edit multiple URIs at once</string>
-  <string name="login_approved">Login approved</string>
+  <string name="login_approved">Prisijungimas patvirtintas</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
   <string name="log_in_with_device">Log in with device</string>
   <string name="logging_in_on">Logging in on</string>
@@ -866,9 +866,12 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
   <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
   <string name="created_xy">Created %1$s, %2$s</string>
-  <string name="too_many_attempts">Too many attempts</string>
-  <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
-  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Your organization permissions were updated, requiring you to set a master password.</string>
+  <string name="too_many_attempts">Viršytas bandymų skaičius</string>
+  <string name="account_logged_out_biometric_exceeded">Atsijungta nuo paskyros.</string>
+  <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Dėl pasikeitusių Jūsų organizacijos nuostatų, Jums reikia nustatyti pagrindinį slaptažodį.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Your organization requires you to set a master password.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Set up an unlock option to change your vault timeout action.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
+  <string name="launch_duo">Paleisti „Duo“</string>
 </resources>

@@ -239,7 +239,7 @@ Skanning vil ske automatisk.</string>
   <string name="camera">Kamera</string>
   <string name="photos">Billeder</string>
   <string name="copy_totp">Kopiér TOTP</string>
-  <string name="copy_totp_automatically_description">Har et login en godkendelsesnøgle, så kopiér TOTP-bekræftelseskoden til udklipsholderen, når login auto-udfyldes.</string>
+  <string name="copy_totp_automatically_description">Har et login en godkendelsesnøgle, kopiér da TOTP-bekræftelseskoden til udklipsholderen, når login autoudfyldes.</string>
   <string name="copy_totp_automatically">Kopiér TOTP automatisk</string>
   <string name="premium_required">Premium-medlemskab kræves for at anvende denne funktion.</string>
   <string name="attachement_added">Vedhæftning tilføjet</string>
@@ -623,7 +623,7 @@ Skanning vil ske automatisk.</string>
   <string name="fido2_return_to_app">Vend tilbage til app</string>
   <string name="fido2_check_browser">Sørg for, at standardbrowseren understøtter WebAuthn og forsøg igen.</string>
   <string name="reset_password_auto_enroll_invite_warning">Denne organisation har en virksomhedspolitik, der automatisk tilmelder dig til nulstilling af adgangskode. Tilmelding giver organisationsadministratorer mulighed for at skifte din hovedadgangskode.</string>
-  <string name="vault_timeout_policy_in_effect">Dine organisationspolitikker påvirker din boks-timeout. Maksimum tilladte boks-timeout er %1$s time(r) og %2$s minut(ter)</string>
+  <string name="vault_timeout_policy_in_effect">Organisationspolitikkerne har sat den maksimalt tilladte bokstimeout til %1$s tim(er) og %2$s minut(ter).</string>
   <string name="vault_timeout_policy_with_action_in_effect">Organisationspolitikkerne påvirker boks-timeout. Maks. tilladt boks-timeout er %1$s time(r) og %2$s minut(ter). Boks-timeout er pt. sat til %3$s.</string>
   <string name="vault_timeout_action_policy_in_effect">Organisationspolitikker har sat boks-timeouthandlingen til %1$s.</string>
   <string name="vault_timeout_to_large">Timeout for din boks overskrider de begrænsninger, der er angivet af din organisation.</string>
@@ -699,7 +699,7 @@ vælg Tilføj TOTP for at gemme nøglen sikkert</string>
   <string name="log_in_accepted">Login bekræftet</string>
   <string name="log_in_denied">Login afvist</string>
   <string name="approve_login_requests">Godkend loginanmodninger</string>
-  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Brug denne enhed til at godkende loginanmodninger fra andre enheder.</string>
+  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Brug denne enhed til at godkende loginanmodninger fra andre enheder</string>
   <string name="allow_notifications">Tillad notifikationer</string>
   <string name="receive_push_notifications_for_new_login_requests">Modtag push-notifikationer om nye login-anmodninger</string>
   <string name="no_thanks">Nej tak</string>
@@ -803,7 +803,7 @@ Vil du skifte til denne konto?</string>
   <string name="copy_application">Kopiér applikation</string>
   <string name="available_for_two_step_login">Tilgængelig for totrins-login</string>
   <string name="master_password_re_prompt_help">Hjælp til genanmodning om hovedadgangskode</string>
-  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Unlocking may fail due to insufficient memory. Decrease your KDF memory settings or set up biometric unlock to resolve.</string>
+  <string name="unlocking_may_fail_due_to_insufficient_memory_decrease_your_kdf_memory_settings_to_resolve">Oplåsning kan fejle grundet utilstrækkelig hukommelse. Reducér KDF-hukommelsesindstillinger eller opsæt biometrisk oplåsning for at afhjælpe.</string>
   <string name="invalid_api_key">Ugyldig API-nøgle</string>
   <string name="invalid_api_token">Ugyldigt API-token</string>
   <string name="admin_approval_requested">Admin-godkendelse udbedt</string>
@@ -871,4 +871,7 @@ Vil du skifte til denne konto?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Organisationstilladelserne er blevet opdateret, og der kræves nu oprettelse af en hovedadgangskode.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Organisationen kræver, at der oprettes en hovedadgangskode.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Opsæt en oplåsningsmetode for at ændre Bokstimeouthandlingen.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Duo-totrinsindlogning kræves for kontoen.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Følg trinnene fra Duo for at færdiggøre indlogningen.</string>
+  <string name="launch_duo">Start Duo</string>
 </resources>

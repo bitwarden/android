@@ -44,7 +44,7 @@
   <string name="log_in_noun">تسجيل الدخول</string>
   <string name="log_out">تسجيل الخروج</string>
   <string name="logout_confirmation">هل أنت متأكد من أنك تريد تسجيل الخروج؟</string>
-  <string name="remove_account">إزالة الحساب</string>
+  <string name="remove_account">أزِل الحساب</string>
   <string name="remove_account_confirmation">هل أنت متأكد من أنك تريد إزالة هذا الحساب؟</string>
   <string name="account_already_added">تمت إضافة الحساب بالفعل</string>
   <string name="switch_to_already_added_account_confirmation">هل ترغب في التبديل إليه الآن؟</string>
@@ -853,14 +853,14 @@
   <string name="continue_to_x">الإستمرار إلى %1$s؟</string>
   <string name="continue_to_help_center">هل تريد المتابعة إلى مركز المساعدة؟</string>
   <string name="continue_to_contact_support">مواصلة الاتصال بالدعم؟</string>
-  <string name="continue_to_privacy_policy">Continue to privacy policy?</string>
+  <string name="continue_to_privacy_policy">هل تريد المتابعة إلى سياسة الخصوصية؟</string>
   <string name="continue_to_app_store">هل تريد المتابعة إلى متجر التطبيقات؟</string>
   <string name="two_step_login_description_long">اجعل حسابك أكثر أمنا من خلال إعداد تسجيل الدخول بخطوتين في تطبيق Bitwarden على شبكة الإنترنت.</string>
   <string name="change_master_password_description_long">يمكنك تغيير كلمة المرور الرئيسية الخاصة بك على تطبيق ويب Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">يمكنك استيراد البيانات إلى خزانتك على %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">تعرف على المزيد حول كيفية استخدام Bitwarden في مركز المساعدة.</string>
   <string name="contact_support_description_long">لا يمكن العثور على ما تبحث عنه؟ قم بالتواصل مع دعم Bitwarden على bitwarden.com.</string>
-  <string name="privacy_policy_description_long">Check out our privacy policy on bitwarden.com.</string>
+  <string name="privacy_policy_description_long">اطلع على سياستنا للخصوصية على bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">استكشف المزيد من الميزات لحساب Bitwarden الخاص بك على تطبيق الويب.</string>
   <string name="learn_about_organizations_description_long">يتيح لك Bitwarden مشاركة عناصر خزنتك مع الآخرين باستخدام حساب المؤسسة. تعرف على المزيد على موقع bitwarden.com على شبكة الإنترنت.</string>
   <string name="rate_app_description_long">ساعد الآخرين في معرفة ما إذا كان Bitwarden مناسبا لهم. قم بزيارة متجر التطبيقات وترك التقييم الآن.</string>
@@ -871,4 +871,7 @@
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">تم تحديث أذونات مؤسستك ، مما يتطلب عليك تعيين كلمة مرور رئيسية.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">تتطلب مؤسستك تعيين كلمة مرور رئيسية.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">أعدنّ ميزة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
+  <string name="launch_duo">Launch Duo</string>
 </resources>

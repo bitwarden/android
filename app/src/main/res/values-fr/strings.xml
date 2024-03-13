@@ -871,4 +871,7 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Les autorisations de votre organisation ont été mises à jour, vous obligeant à définir un mot de passe principal.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Votre organisation vous demande de définir un mot de passe principal.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configurez une méthode de déverrouillage pour modifier l\'action après délai d\'expiration de votre coffre.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
+  <string name="launch_duo">Launch Duo</string>
 </resources>

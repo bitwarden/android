@@ -854,14 +854,14 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="continue_to_x">¿Continuar a %1$s?</string>
   <string name="continue_to_help_center">¿Continuar al centro de ayuda?</string>
   <string name="continue_to_contact_support">¿Continuar con el servicio de asistencia?</string>
-  <string name="continue_to_privacy_policy">Continue to privacy policy?</string>
+  <string name="continue_to_privacy_policy">¿Continuar a la política de privacidad?</string>
   <string name="continue_to_app_store">¿Continuar a la App Store?</string>
   <string name="two_step_login_description_long">Haz tu cuenta más segura al configurar el inicio de sesión en dos pasos en la aplicación web de Bitwarden.</string>
   <string name="change_master_password_description_long">Puedes cambiar tu contraseña maestra en la aplicación web de Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Puedes importar datos a tu caja fuerte en %1$s.</string>
   <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Más información sobre cómo usar Bitwarden en el centro de Ayuda.</string>
   <string name="contact_support_description_long">¿No encuentras lo que estás buscando? Contacta con el soporte de Bitwarden en bitwarden.com.</string>
-  <string name="privacy_policy_description_long">Check out our privacy policy on bitwarden.com.</string>
+  <string name="privacy_policy_description_long">Revise nuestra política de privacidad en bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Explora más características de tu cuenta de Bitwarden en la aplicación web.</string>
   <string name="learn_about_organizations_description_long">Bitwarden te permite compartir tus elementos de la caja fuerte con otros utilizando una organización. Más información en el sitio web de bitwarden.com.</string>
   <string name="rate_app_description_long">Ayuda a otros a averiguar si Bitwarden es correcto para ellos. Visita la tienda de aplicaciones y deja una calificación ahora.</string>
@@ -872,4 +872,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Los permisos de su organización han sido actualizados, requiriendo que establezca una contraseña maestra.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Tu organización requiere que establezcas una contraseña maestra.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configura una opción de desbloqueo para cambiar tu acción de tiempo de espera de tu caja fuerte.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Se requiere el inicio de sesión en dos pasos Duo para su cuenta.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Siga los pasos de Duo para terminar de iniciar sesión.</string>
+  <string name="launch_duo">Iniciar Duo</string>
 </resources>

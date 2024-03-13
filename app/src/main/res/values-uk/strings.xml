@@ -728,7 +728,7 @@
   <string name="email_type">Тип е-пошти</string>
   <string name="website_required">Вебсайт (обов\'язково)</string>
   <string name="unknown_x_error_message">Сталася невідома помилка %1$s.</string>
-  <string name="plus_addressed_email_description">Використовуйте розширені можливості адрес вашого постачальника електронної пошти</string>
+  <string name="plus_addressed_email_description">Використовуйте розширені можливості адрес вашого провайдера електронної пошти</string>
   <string name="catch_all_email_description">Використовуйте свою скриньку вхідних Catch-All власного домену.</string>
   <string name="forwarded_email_description">Згенеруйте псевдонім е-пошти зі стороннім сервісом пересилання.</string>
   <string name="random">Випадково</string>
@@ -871,4 +871,7 @@
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Оновлено дозволи вашої організації – вимагається встановлення головного пароля.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Ваша організація вимагає, щоб ви встановили головний пароль.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Налаштуйте спосіб розблокування, щоб змінити час очікування сховища.</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Для вашого облікового запису необхідна двоетапна перевірка з Duo.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Виконайте дії з Duo для завершення входу.</string>
+  <string name="launch_duo">Запустити Duo</string>
 </resources>
