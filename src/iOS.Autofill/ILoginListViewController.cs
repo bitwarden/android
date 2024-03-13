@@ -1,4 +1,5 @@
-﻿using Bit.iOS.Autofill.Models;
+﻿using System.Threading.Tasks;
+using Bit.iOS.Autofill.Models;
 
 namespace Bit.iOS.Autofill
 {
@@ -6,5 +7,8 @@ namespace Bit.iOS.Autofill
     {
         Context Context { get; }
         CredentialProviderViewController CPViewController { get; }
+        void OnItemsLoaded(string searchFilter);
+        Task ReloadItemsAsync();
+        void ReloadTableViewData();
     }
 }

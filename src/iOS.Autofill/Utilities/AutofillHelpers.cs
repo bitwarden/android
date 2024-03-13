@@ -4,6 +4,7 @@ using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
+using Bit.iOS.Core.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
@@ -13,26 +14,11 @@ namespace Bit.iOS.Autofill.Utilities
 {
     public static class AutofillHelpers
     {
-        public async static Task TableRowSelectedAsync(UITableView tableView, NSIndexPath indexPath,
-            ExtensionTableSource tableSource, CredentialProviderViewController cpViewController,
-            UIViewController controller, IPasswordRepromptService passwordRepromptService,
-            string loginAddSegue)
+        public async static Task TableRowSelectedAsync(CipherViewModel item, ExtensionTableSource tableSource,
+            CredentialProviderViewController cpViewController,
+            UIViewController controller,
+            IPasswordRepromptService passwordRepromptService)
         {
-            tableView.DeselectRow(indexPath, true);
-            tableView.EndEditing(true);
-
-            if (tableSource.Items == null || tableSource.Items.Count() == 0)
-            {
-                controller.PerformSegue(loginAddSegue, tableSource);
-                return;
-            }
-            var item = tableSource.Items.ElementAt(indexPath.Row);
-            if (item == null)
-            {
-                cpViewController.CompleteRequest();
-                return;
-            }
-
             if (!await passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
             {
                 return;

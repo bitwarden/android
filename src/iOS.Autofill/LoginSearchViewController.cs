@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.iOS.Autofill.Models;
+using Bit.iOS.Autofill.Utilities;
+using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Bit.iOS.Core.Controllers;
-using Bit.Core.Resources.Localization;
-using Bit.iOS.Core.Views;
-using Bit.iOS.Autofill.Utilities;
-using Bit.iOS.Core.Utilities;
-using Bit.App.Abstractions;
-using Bit.Core.Utilities;
 
 namespace Bit.iOS.Autofill
 {
@@ -26,22 +26,35 @@ namespace Bit.iOS.Autofill
 
         public async override void ViewDidLoad()
         {
-            base.ViewDidLoad();
-            NavItem.Title = AppResources.SearchVault;
-            CancelBarButton.Title = AppResources.Cancel;
-            SearchBar.Placeholder = AppResources.Search;
-            SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
-            SearchBar.UpdateThemeIfNeeded();
+            try
+            {
+                base.ViewDidLoad();
 
-            TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 44;
-                
-            var tableSource = new TableSource(this);
-            TableView.Source = tableSource;
-            tableSource.RegisterTableViewCells(TableView);
-            
-            SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
-            await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
+                NavItem.Title = AppResources.SearchVault;
+                CancelBarButton.Title = AppResources.Cancel;
+                SearchBar.Placeholder = AppResources.Search;
+                SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                SearchBar.UpdateThemeIfNeeded();
+
+                TableView.RowHeight = UITableView.AutomaticDimension;
+                TableView.EstimatedRowHeight = 55;
+
+                var tableSource = new TableSource(this);
+                TableView.Source = tableSource;
+                tableSource.RegisterTableViewCells(TableView);
+
+                if (UIDevice.CurrentDevice.CheckSystemVersion(15, 0))
+                {
+                    TableView.SectionHeaderTopPadding = 0;
+                }
+
+                SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
+                await ReloadItemsAsync();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         public override void ViewDidAppear(bool animated)
@@ -90,10 +103,19 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
-                TableView.ReloadData();
+                await ReloadItemsAsync();
             });
         }
+
+        public void OnItemsLoaded(string searchFilter) { }
+
+        public async Task ReloadItemsAsync()
+        {
+            await((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
+            TableView.ReloadData();
+        }
+
+        public void ReloadTableViewData() => TableView.ReloadData();
 
         public class TableSource : BaseLoginListTableSource<LoginSearchViewController>
         {

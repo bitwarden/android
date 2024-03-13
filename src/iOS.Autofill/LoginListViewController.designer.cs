@@ -25,6 +25,15 @@ namespace Bit.iOS.Autofill
 		UIKit.UILabel _emptyViewLabel { get; set; }
 
 		[Outlet]
+		UIKit.UIActivityIndicatorView _loadingView { get; set; }
+
+		[Outlet]
+		UIKit.UISearchBar _searchBar { get; set; }
+
+		[Outlet]
+		UIKit.NSLayoutConstraint _tableViewTopToSearchBarConstraint { get; set; }
+
+		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIKit.UIBarButtonItem AddBarButton { get; set; }
 
@@ -72,6 +81,16 @@ namespace Bit.iOS.Autofill
 				_emptyViewLabel = null;
 			}
 
+			if (_searchBar != null) {
+				_searchBar.Dispose ();
+				_searchBar = null;
+			}
+
+			if (_tableViewTopToSearchBarConstraint != null) {
+				_tableViewTopToSearchBarConstraint.Dispose ();
+				_tableViewTopToSearchBarConstraint = null;
+			}
+
 			if (AddBarButton != null) {
 				AddBarButton.Dispose ();
 				AddBarButton = null;
@@ -95,6 +114,11 @@ namespace Bit.iOS.Autofill
 			if (TableView != null) {
 				TableView.Dispose ();
 				TableView = null;
+			}
+
+			if (_loadingView != null) {
+				_loadingView.Dispose ();
+				_loadingView = null;
 			}
 		}
 	}

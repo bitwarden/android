@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AuthenticationServices;
 using Bit.App.Controls;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
@@ -15,8 +16,8 @@ using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using CoreFoundation;
-using CoreGraphics;
 using Foundation;
+using Microsoft.Maui.ApplicationModel;
 using UIKit;
 
 namespace Bit.iOS.Autofill
@@ -45,8 +46,30 @@ namespace Bit.iOS.Autofill
         LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
         LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
         LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
+        LazyResolve<IFido2AuthenticatorService> _fido2AuthenticatorService = new LazyResolve<IFido2AuthenticatorService>();
 
         bool _alreadyLoadItemsOnce = false;
+        bool _isLoading;
+
+        private string NavTitle
+        {
+            get
+            {
+                if (Context.IsCreatingPasskey)
+                {
+                    return AppResources.SavePasskey;
+                }
+
+                if (Context.IsCreatingOrPreparingListForPasskey)
+                {
+                    return AppResources.Autofill;
+                }
+
+                return AppResources.Items;
+            }
+        }
+
+        private TableSource Source => (TableSource)TableView.Source;
 
         public async override void ViewDidLoad()
         {
@@ -58,8 +81,14 @@ namespace Bit.iOS.Autofill
 
                 SubscribeSyncCompleted();
 
-                NavItem.Title = Context.IsCreatingPasskey ? AppResources.SavePasskey : AppResources.Items;
+                NavItem.Title = NavTitle;
+
                 _cancelButton.Title = AppResources.Cancel;
+
+                _searchBar.Placeholder = AppResources.Search;
+                _searchBar.BackgroundColor = _searchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                _searchBar.UpdateThemeIfNeeded();
+                _searchBar.Delegate = new ExtensionSearchDelegate(TableView);
 
                 TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
                 
@@ -67,7 +96,7 @@ namespace Bit.iOS.Autofill
                 TableView.Source = tableSource;
                 tableSource.RegisterTableViewCells(TableView);
 
-                if (Context.IsCreatingPasskey)
+                if (Context.IsCreatingOrPreparingListForPasskey)
                 {
                     TableView.SectionHeaderHeight = 55;
                     TableView.RegisterClassForHeaderFooterViewReuse(typeof(HeaderItemView), HEADER_SECTION_IDENTIFIER);
@@ -77,8 +106,6 @@ namespace Bit.iOS.Autofill
                 {
                     TableView.SectionHeaderTopPadding = 0;
                 }
-
-                await ((TableSource)TableView.Source).LoadAsync();
 
                 if (Context.IsCreatingPasskey)
                 {
@@ -90,8 +117,6 @@ namespace Bit.iOS.Autofill
                     _emptyViewButton.Layer.CornerRadius = 10;
                     _emptyViewButton.ClipsToBounds = true;
                 }
-
-                _alreadyLoadItemsOnce = true;
 
                 var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
                 var needsAutofillReplacement = await storageService.GetAsync<bool?>(
@@ -113,10 +138,94 @@ namespace Bit.iOS.Autofill
                 }, false);
 
                 _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
+
+                if (Context.IsPreparingListForPasskey)
+                {
+                    var fido2UserInterface = new Fido2GetAssertionFromListUserInterface(Context,
+                        () => Task.CompletedTask,
+                        () => Context?.VaultUnlockedDuringThisSession ?? false,
+                        CPViewController.VerifyUserAsync,
+                        Source.ReloadWithAllowedFido2Credentials);
+
+                    DoFido2GetAssertionAsync(fido2UserInterface).FireAndForget();
+                }
+                else
+                {
+                    await ReloadItemsAsync();
+                    _alreadyLoadItemsOnce = true;
+                }
             }
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
+        }
+
+        public async Task DoFido2GetAssertionAsync(IFido2GetAssertionUserInterface fido2GetAssertionUserInterface)
+        {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+            {
+                CPViewController.OnProvidingCredentialException(new InvalidOperationException("Trying to get assertion request before iOS 17"));
+                return;
+            }
+
+            if (Context.PasskeyCredentialRequestParameters is null)
+            {
+                CPViewController.OnProvidingCredentialException(new InvalidOperationException("Trying to get assertion request without a PasskeyCredentialRequestParameters"));
+                return;
+            }
+
+            try
+            {
+                var fido2AssertionResult = await _fido2AuthenticatorService.Value.GetAssertionAsync(new Fido2AuthenticatorGetAssertionParams
+                {
+                    RpId = Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier,
+                    Hash = Context.PasskeyCredentialRequestParameters.ClientDataHash.ToArray(),
+                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(Context.PasskeyCredentialRequestParameters.UserVerificationPreference),
+                    AllowCredentialDescriptorList = Context.PasskeyCredentialRequestParameters.AllowedCredentials?
+                        .Select(c => new PublicKeyCredentialDescriptor { Id = c.ToArray() })
+                        .ToArray()
+                }, fido2GetAssertionUserInterface);
+
+                if (fido2AssertionResult.SelectedCredential is null)
+                {
+                    throw new NullReferenceException("SelectedCredential must have a value");
+                }
+
+                await CPViewController.CompleteAssertionRequest(new ASPasskeyAssertionCredential(
+                    NSData.FromArray(fido2AssertionResult.SelectedCredential.UserHandle),
+                    Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier,
+                    NSData.FromArray(fido2AssertionResult.Signature),
+                    Context.PasskeyCredentialRequestParameters.ClientDataHash,
+                    NSData.FromArray(fido2AssertionResult.AuthenticatorData),
+                    NSData.FromArray(fido2AssertionResult.SelectedCredential.Id)
+                ));
+            }
+            catch (InvalidOperationNeedsUIException)
+            {
+                return;
+            }
+            catch (TaskCanceledException)
+            {
+                return;
+            }
+            catch
+            {
+                try
+                {
+                    if (Context?.IsExecutingWithoutUserInteraction == false)
+                    {
+                        await _platformUtilsService.Value.ShowDialogAsync(
+                            string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier),
+                            AppResources.ErrorReadingPasskey);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
+
+                throw;
             }
         }
 
@@ -142,7 +251,54 @@ namespace Bit.iOS.Autofill
 
         partial void SearchBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue(SegueConstants.LOGIN_SEARCH_FROM_LIST, this);
+            try
+            {
+                if (!Context.IsCreatingOrPreparingListForPasskey)
+                {
+                    PerformSegue(SegueConstants.LOGIN_SEARCH_FROM_LIST, this);
+                    return;
+                }
+
+                if (_isLoading)
+                {
+                    // if it's loading we simplify this logic to just avoid toggling the search bar visibility
+                    // and reloading items while this is taking place.
+                    return;
+                }
+
+                UIView.Animate(0.3f,
+                    () =>
+                    {
+                        _tableViewTopToSearchBarConstraint.Active = !_tableViewTopToSearchBarConstraint.Active;
+                        _searchBar.Hidden = !_searchBar.Hidden;
+                    },
+                    () =>
+                    {
+                        if (_tableViewTopToSearchBarConstraint.Active)
+                        {
+                            _searchBar?.BecomeFirstResponder();
+
+                            if (Context.IsCreatingPasskey)
+                            {
+                                _emptyView.Hidden = true;
+                                TableView.Hidden = false;
+                            }
+                        }
+                        else
+                        {
+                            _searchBar.Text = string.Empty;
+                            _searchBar.Text = null;
+
+                            _searchBar.ResignFirstResponder();
+
+                            ReloadItemsAsync().FireAndForget();
+                        }
+                    });
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         partial void EmptyButton_Activated(UIButton sender)
@@ -250,8 +406,7 @@ namespace Bit.iOS.Autofill
                     {
                         try
                         {
-                            await ((TableSource)TableView.Source).LoadAsync();
-                            TableView.ReloadData();
+                            await ReloadItemsAsync();
                         }
                         catch (Exception ex)
                         {
@@ -262,10 +417,18 @@ namespace Bit.iOS.Autofill
             });
         }
 
-        public void OnEmptyList()
+        public void OnItemsLoaded(string searchFilter)
         {
-            _emptyView.Hidden = false;
-            TableView.Hidden = true;
+            if (Context.IsCreatingPasskey)
+            {
+                _emptyView.Hidden = !Source.IsEmpty;
+                TableView.Hidden = Source.IsEmpty;
+
+                if (Source.IsEmpty)
+                {
+                    _emptyViewLabel.Text = string.Format(AppResources.NoItemsForUri, string.IsNullOrEmpty(searchFilter) ? Context.UrlString : searchFilter);
+                }
+            }
         }
 
         public override void ViewDidUnload()
@@ -281,8 +444,7 @@ namespace Bit.iOS.Autofill
             {
                 try
                 {
-                    await ((TableSource)TableView.Source).LoadAsync();
-                    TableView.ReloadData();
+                    await ReloadItemsAsync();
                 }
                 catch (Exception ex)
                 {
@@ -306,6 +468,53 @@ namespace Bit.iOS.Autofill
             base.Dispose(disposing);
         }
 
+        private async Task LoadSourceAsync()
+        {
+            _isLoading = true;
+
+            try
+            {
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    TableView.Hidden = true;
+                    _searchBar.Hidden = true;
+                    _loadingView.Hidden = false;
+                });
+
+                await Source.LoadAsync(string.IsNullOrEmpty(_searchBar?.Text), _searchBar?.Text);
+
+                await MainThread.InvokeOnMainThreadAsync(() =>
+                {
+                    _loadingView.Hidden = true;
+                    TableView.Hidden = Context.IsCreatingPasskey && Source.IsEmpty;
+                    _searchBar.Hidden = string.IsNullOrEmpty(_searchBar?.Text);
+                });
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+        }
+
+        public async Task ReloadItemsAsync()
+        {
+            try
+            {
+                await LoadSourceAsync();
+
+                _alreadyLoadItemsOnce = true;
+
+                await MainThread.InvokeOnMainThreadAsync(TableView.ReloadData);
+            }
+            catch
+            {
+                _platformUtilsService.Value.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred).FireAndForget();
+                throw;
+            }
+        }
+
+        public void ReloadTableViewData() => TableView.ReloadData();
+
         public class TableSource : BaseLoginListTableSource<LoginListViewController>
         {
             public TableSource(LoginListViewController controller)
@@ -314,54 +523,6 @@ namespace Bit.iOS.Autofill
             }
 
             protected override string LoginAddSegue => SegueConstants.ADD_LOGIN;
-
-            public override async Task LoadAsync(bool urlFilter = true, string searchFilter = null)
-            {
-                try
-                {
-                    await base.LoadAsync(urlFilter, searchFilter);
-
-                    if (Context.IsCreatingPasskey && !Items.Any())
-                    {
-                        Controller?.OnEmptyList();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                }
-            }
-
-            public override UIView GetViewForHeader(UITableView tableView, nint section)
-            {
-                try
-                {
-                    if (Context.IsCreatingPasskey
-                        &&
-                        tableView.DequeueReusableHeaderFooterView(LoginListViewController.HEADER_SECTION_IDENTIFIER) is HeaderItemView headerItemView)
-                    {
-                        headerItemView.SetHeaderText(AppResources.ChooseALoginToSaveThisPasskeyTo);
-                        return headerItemView;
-                    }
-
-                    return new UIView(CGRect.Empty);
-                }
-                catch (Exception ex)
-                {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                    return new UIView();
-                }
-            }
-
-            public override nint RowsInSection(UITableView tableview, nint section)
-            {
-                if (Context.IsCreatingPasskey)
-                {
-                    return Items?.Count() ?? 0;
-                }
-
-                return base.RowsInSection(tableview, section);
-            }
         }
     }
 }

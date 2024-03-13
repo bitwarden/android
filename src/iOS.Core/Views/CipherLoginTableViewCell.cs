@@ -47,6 +47,7 @@ namespace Bit.iOS.Core.Views
 
                 _mainIcon.Font = UIFont.FromName("bwi-font", 24);
                 _mainIcon.AdjustsFontSizeToFitWidth = true;
+                _mainIcon.Text = BitwardenIcons.Globe;
                 _mainIcon.TextColor = ThemeHelpers.PrimaryColor;
 
                 _orgIcon.Font = UIFont.FromName("bwi-font", 15);
@@ -103,7 +104,7 @@ namespace Bit.iOS.Core.Views
 
         public void SetSubtitle(string subtitle) => _subtitle.Text = subtitle;
 
-        public void SetHasFido2Credential(bool has) => _mainIcon.Text = has ? BitwardenIcons.Passkey : BitwardenIcons.Globe;
+        public void UpdateMainIcon(bool usePasskeyIcon) => _mainIcon.Text = usePasskeyIcon ? BitwardenIcons.Passkey : BitwardenIcons.Globe;
         
         public void ShowOrganizationIcon() => _orgIcon.Hidden = false;
     }
