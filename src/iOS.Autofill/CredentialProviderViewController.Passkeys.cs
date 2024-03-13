@@ -24,7 +24,25 @@ namespace Bit.iOS.Autofill
         private readonly LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
         private readonly LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
         private readonly LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
-        
+
+        [Export("prepareCredentialListForServiceIdentifiers:requestParameters:")]
+        public override void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers, ASPasskeyCredentialRequestParameters requestParameters)
+        {
+            try
+            {
+                if (UIDevice.CurrentDevice.CheckSystemVersion(17, 0) && !string.IsNullOrEmpty(requestParameters?.RelyingPartyIdentifier))
+                {
+                    _context.PasskeyCredentialRequestParameters = requestParameters;
+                }
+
+                PrepareCredentialList(serviceIdentifiers);
+            }
+            catch (Exception ex)
+            {
+                OnProvidingCredentialException(ex);
+            }
+        }
+
         public override async void PrepareInterfaceForPasskeyRegistration(IASCredentialRequest registrationRequest)
         {
             if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
@@ -239,7 +257,7 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference)
+        internal async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference)
         {
             try
             {

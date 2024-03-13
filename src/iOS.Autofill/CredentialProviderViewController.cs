@@ -98,56 +98,13 @@ namespace Bit.iOS.Autofill
                 }
                 else
                 {
-                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
-                    {
-                        PerformSegue(SegueConstants.LOGIN_SEARCH, this);
-                    }
-                    else
+                    if (_context.IsCreatingOrPreparingListForPasskey || _context.ServiceIdentifiers?.Length > 0)
                     {
                         PerformSegue(SegueConstants.LOGIN_LIST, this);
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                OnProvidingCredentialException(ex);
-            }
-        }
-
-        [Export("prepareCredentialListForServiceIdentifiers:requestParameters:")]
-        public override async void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers, ASPasskeyCredentialRequestParameters requestParameters)
-        {
-            try
-            {
-                InitAppIfNeeded();
-                _context.VaultUnlockedDuringThisSession = false;
-                _context.ServiceIdentifiers = serviceIdentifiers;
-                if (serviceIdentifiers.Length > 0)
-                {
-                    var uri = serviceIdentifiers[0].Identifier;
-                    if (serviceIdentifiers[0].Type == ASCredentialServiceIdentifierType.Domain)
-                    {
-                        uri = string.Concat("https://", uri);
-                    }
-                    _context.UrlString = uri;
-                }
-                if (!await IsAuthed())
-                {
-                    await _accountsManager.NavigateOnAccountChangeAsync(false);
-                }
-                else if (await IsLocked())
-                {
-                    PerformSegue(SegueConstants.LOCK, this);
-                }
-                else
-                {
-                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
-                    {
-                        PerformSegue(SegueConstants.LOGIN_SEARCH, this);
-                    }
                     else
                     {
-                        PerformSegue(SegueConstants.LOGIN_LIST, this);
+                        PerformSegue(SegueConstants.LOGIN_SEARCH, this);
                     }
                 }
             }
@@ -316,6 +273,8 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
+            _context.PickCredentialForFido2GetAssertionFromListTcs?.TrySetCanceled();
+
             if (!string.IsNullOrWhiteSpace(totp))
             {
                 UIPasteboard.General.String = totp;
@@ -334,7 +293,7 @@ namespace Bit.iOS.Autofill
             });
         }
 
-        private void OnProvidingCredentialException(Exception ex)
+        internal void OnProvidingCredentialException(Exception ex)
         {
             LoggerHelper.LogEvenIfCantBeResolved(ex);
             CancelRequest(ASExtensionErrorCode.Failed);

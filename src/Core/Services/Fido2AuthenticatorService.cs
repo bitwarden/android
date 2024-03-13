@@ -109,8 +109,9 @@ namespace Bit.Core.Services
             {
                 throw;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
                 throw new UnknownError();
             }
         }
@@ -203,8 +204,9 @@ namespace Bit.Core.Services
                     Signature = signature
                 };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
                 throw new UnknownError();
             }
         }

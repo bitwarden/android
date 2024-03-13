@@ -2939,4 +2939,7 @@ Do you want to switch to this account?</value>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
     <value>Verifying identity...</value>
   </data>
+  <data name="Passwords" xml:space="preserve">
+    <value>Passwords</value>
+  </data>
 </root>
