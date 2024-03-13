@@ -42,7 +42,7 @@ namespace Bit.App.Platforms.Android.Autofill
             var intent = new Intent(context, typeof(Bit.Droid.Autofill.CredentialProviderSelectionActivity))
                 .SetAction(Bit.Droid.Autofill.CredentialProviderService.GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
             intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
-            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, "unknown");
+            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, credential.CipherId);
             var pendingIntent = PendingIntent.GetActivity(context, Bit.Droid.Autofill.CredentialProviderService.UniqueGetRequestCode, intent,
                 PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
