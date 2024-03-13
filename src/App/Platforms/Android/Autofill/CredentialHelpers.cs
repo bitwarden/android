@@ -12,6 +12,8 @@ using Bit.Core.Utilities;
 using Java.Security;
 using Org.Json;
 using Activity = Android.App.Activity;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace Bit.App.Platforms.Android.Autofill
 {
@@ -20,52 +22,38 @@ namespace Bit.App.Platforms.Android.Autofill
         public static async Task<List<CredentialEntry>> PopulatePasskeyDataAsync(CallingAppInfo callingAppInfo,
             BeginGetPublicKeyCredentialOption option, Context context)
         {
-            var origin = callingAppInfo.Origin;
             var passkeyEntries = new List<CredentialEntry>();
 
-            var cipherService = Bit.Core.Utilities.ServiceContainer.Resolve<ICipherService>();
-            var ciphers = await cipherService.GetAllDecryptedForUrlAsync(origin);
-            if (ciphers == null)
-            {
-                return passkeyEntries;
-            }
+            var requestOptions = new PublicKeyCredentialRequestOptions(option.RequestJson);
 
-            var passkeyCiphers = ciphers.Where(cipher => cipher.HasFido2Credential).ToList();
-            if (!passkeyCiphers.Any())
-            {
-                return passkeyEntries;
-            }
+            var authenticator = Bit.Core.Utilities.ServiceContainer.Resolve<IFido2AuthenticatorService>();
+            var credentials = await authenticator.SilentCredentialDiscoveryAsync(requestOptions.RpId);
 
-            foreach (var cipher in passkeyCiphers)
-            {
-                var passkeyEntry = GetPasskey(cipher, option, context);
-                passkeyEntries.Add(passkeyEntry);
-            }
+            passkeyEntries = credentials.Select(credential => MapCredential(credential, option, context) as CredentialEntry).ToList();
 
             return passkeyEntries;
         }
 
-        private static PublicKeyCredentialEntry GetPasskey(Bit.Core.Models.View.CipherView cipher, BeginGetPublicKeyCredentialOption option, Context context)
+        private static PublicKeyCredentialEntry MapCredential(Fido2AuthenticatorDiscoverableCredentialMetadata credential, BeginGetPublicKeyCredentialOption option, Context context)
         {
             var credDataBundle = new Bundle();
-            credDataBundle.PutString(Bit.Droid.Autofill.CredentialProviderConstants.CredentialIdIntentExtra,
-                cipher.Login.MainFido2Credential.CredentialId);
+            credDataBundle.PutByteArray(Bit.Droid.Autofill.CredentialProviderConstants.CredentialIdIntentExtra, credential.Id);
 
             var intent = new Intent(context, typeof(Bit.Droid.Autofill.CredentialProviderSelectionActivity))
                 .SetAction(Bit.Droid.Autofill.CredentialProviderService.GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
             intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
-            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, cipher.Id);
+            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, "unknown");
             var pendingIntent = PendingIntent.GetActivity(context, Bit.Droid.Autofill.CredentialProviderService.UniqueGetRequestCode, intent,
                 PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
             return new PublicKeyCredentialEntry.Builder(
-                    context,
-                    cipher.Login.Username ?? "No username",
-                    pendingIntent,
-                    option)
-                .SetDisplayName(cipher.Name)
-                .SetIcon(Drawables.Icon.CreateWithResource(context, Microsoft.Maui.Resource.Drawable.icon))
-                .Build();
+                        context,
+                        credential.UserName ?? "No username",
+                        pendingIntent,
+                        option)
+                    .SetDisplayName(credential.UserName ?? "No username")
+                    .SetIcon(Drawables.Icon.CreateWithResource(context, Microsoft.Maui.Resource.Drawable.icon))
+                    .Build();
         }
 
         public static async Task CreateCipherPasskeyAsync(ProviderCreateCredentialRequest getRequest, Activity activity)
