@@ -194,6 +194,7 @@ fun VaultUnlockScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
+                        .semantics { testTag = "UserAndEnvironmentDataLabel" }
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
