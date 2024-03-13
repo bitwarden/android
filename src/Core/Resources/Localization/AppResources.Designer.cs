@@ -7677,6 +7677,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verifying identity....
+        /// </summary>
+        public static string VerifyingIdentityEllipsis {
+            get {
+                return ResourceManager.GetString("VerifyingIdentityEllipsis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verify master password.
         /// </summary>
         public static string VerifyMasterPassword {
