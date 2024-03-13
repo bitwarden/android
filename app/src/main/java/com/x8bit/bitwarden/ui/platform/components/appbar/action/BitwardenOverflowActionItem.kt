@@ -15,11 +15,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
@@ -38,6 +40,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param menuItemDataList The list of [OverflowMenuItemData] that will populate the overflow
  * dropdown menu.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenOverflowActionItem(
     modifier: Modifier = Modifier,
@@ -63,6 +66,7 @@ fun BitwardenOverflowActionItem(
             onDismissRequest = { isOverflowMenuVisible = false },
             offset = DpOffset(x = (-12).dp, y = 0.dp),
             modifier = Modifier
+                .semantics { testTagsAsResourceId = true }
                 .widthIn(
                     min = 112.dp,
                     max = 280.dp,
