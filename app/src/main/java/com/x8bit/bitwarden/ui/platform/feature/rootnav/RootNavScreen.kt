@@ -19,6 +19,8 @@ import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.RESET_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
+import com.x8bit.bitwarden.ui.auth.feature.setpassword.SET_PASSWORD_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
@@ -87,6 +89,7 @@ fun RootNavScreen(
     val targetRoute = when (state) {
         RootNavState.Auth -> AUTH_GRAPH_ROUTE
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
+        is RootNavState.SetPassword -> SET_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         is RootNavState.VaultUnlocked,
@@ -126,6 +129,7 @@ fun RootNavScreen(
         when (val currentState = state) {
             RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
             RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
+            is RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
             RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
             is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(

@@ -20,6 +20,8 @@ import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.loginWithDeviceDestin
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHintDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
+import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
+import com.x8bit.bitwarden.ui.auth.feature.setpassword.setPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.trustedDeviceDestination
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
@@ -49,6 +51,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         )
         enterpriseSignOnDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToSetPassword = { navController.navigateToSetPassword() },
             onNavigateToTwoFactorLogin = { emailAddress ->
                 navController.navigateToTwoFactorLogin(
                     emailAddress = emailAddress,
@@ -56,6 +59,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 )
             },
         )
+        setPasswordDestination()
         landingDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
             onNavigateToLogin = { emailAddress ->

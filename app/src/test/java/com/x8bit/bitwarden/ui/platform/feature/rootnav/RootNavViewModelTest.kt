@@ -86,6 +86,36 @@ class RootNavViewModelTest : BaseViewModelTest() {
         assertEquals(RootNavState.ResetPassword, viewModel.stateFlow.value)
     }
 
+    @Test
+    fun `when the active user needs a master password the nav state should be SetPassword`() {
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = true,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = true,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.SetPassword,
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `when the active user but there are pending account additions the nav state should be Auth`() {

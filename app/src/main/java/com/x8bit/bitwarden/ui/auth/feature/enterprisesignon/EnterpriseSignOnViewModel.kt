@@ -343,7 +343,8 @@ class EnterpriseSignOnViewModel @Inject constructor(
                                 ssoCode = ssoCallbackResult.code,
                                 ssoCodeVerifier = ssoData.codeVerifier,
                                 ssoRedirectUri = SSO_URI,
-                                captchaToken = mutableStateFlow.value.captchaToken,
+                                captchaToken = state.captchaToken,
+                                organizationIdentifier = state.orgIdentifierInput,
                             )
                         sendAction(EnterpriseSignOnAction.Internal.OnLoginResult(result))
                     }
@@ -471,6 +472,11 @@ sealed class EnterpriseSignOnEvent {
      * Navigates to the captcha verification screen.
      */
     data class NavigateToCaptcha(val uri: Uri) : EnterpriseSignOnEvent()
+
+    /**
+     * Navigates to the set master password screen.
+     */
+    data object NavigateToSetPassword : EnterpriseSignOnEvent()
 
     /**
      * Navigates to the two-factor login screen.

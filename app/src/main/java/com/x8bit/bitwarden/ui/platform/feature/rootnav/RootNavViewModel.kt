@@ -60,6 +60,8 @@ class RootNavViewModel @Inject constructor(
         val userState = action.userState
         val specialCircumstance = action.specialCircumstance
         val updatedRootNavState = when {
+            userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
+
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
             userState == null ||
@@ -116,6 +118,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object ResetPassword : RootNavState()
+
+    /**
+     * App should show set password graph.
+     */
+    @Parcelize
+    data object SetPassword : RootNavState()
 
     /**
      * App should show splash nav graph.

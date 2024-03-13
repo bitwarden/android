@@ -38,6 +38,7 @@ fun NavController.navigateToEnterpriseSignOn(
  */
 fun NavGraphBuilder.enterpriseSignOnDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToSetPassword: () -> Unit,
     onNavigateToTwoFactorLogin: (emailAddress: String) -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -48,6 +49,7 @@ fun NavGraphBuilder.enterpriseSignOnDestination(
     ) {
         EnterpriseSignOnScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToSetPassword = onNavigateToSetPassword,
             onNavigateToTwoFactorLogin = onNavigateToTwoFactorLogin,
         )
     }

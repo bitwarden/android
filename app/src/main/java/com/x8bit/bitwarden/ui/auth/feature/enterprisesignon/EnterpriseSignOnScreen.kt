@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 @Composable
 fun EnterpriseSignOnScreen(
     onNavigateBack: () -> Unit,
+    onNavigateToSetPassword: () -> Unit,
     onNavigateToTwoFactorLogin: (String) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: EnterpriseSignOnViewModel = hiltViewModel(),
@@ -65,6 +66,10 @@ fun EnterpriseSignOnScreen(
 
             is EnterpriseSignOnEvent.NavigateToCaptcha -> {
                 intentManager.startCustomTabsActivity(event.uri)
+            }
+
+            is EnterpriseSignOnEvent.NavigateToSetPassword -> {
+                onNavigateToSetPassword()
             }
 
             is EnterpriseSignOnEvent.NavigateToTwoFactorLogin -> {

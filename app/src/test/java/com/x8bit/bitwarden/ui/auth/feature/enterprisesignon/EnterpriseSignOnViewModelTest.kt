@@ -306,8 +306,9 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `ssoCallbackResultFlow Success with same state with login Error should show loading dialog then show an error`() =
         runTest {
+            val orgIdentifier = "Bitwarden"
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.Error(null)
 
             val viewModel = createViewModel(
@@ -321,6 +322,17 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     awaitItem(),
                 )
 
+                viewModel.trySendAction(
+                    EnterpriseSignOnAction.OrgIdentifierInputChange(orgIdentifier),
+                )
+
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        orgIdentifierInput = orgIdentifier,
+                    ),
+                    awaitItem(),
+                )
+
                 mutableSsoCallbackResultFlow.tryEmit(ssoCallbackResult)
 
                 assertEquals(
@@ -328,6 +340,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         dialogState = EnterpriseSignOnState.DialogState.Loading(
                             R.string.logging_in.asText(),
                         ),
+                        orgIdentifierInput = orgIdentifier,
                     ),
                     awaitItem(),
                 )
@@ -337,6 +350,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                         dialogState = EnterpriseSignOnState.DialogState.Error(
                             message = R.string.login_sso_error.asText(),
                         ),
+                        orgIdentifierInput = orgIdentifier,
                     ),
                     awaitItem(),
                 )
@@ -349,6 +363,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
                     captchaToken = null,
+                    organizationIdentifier = orgIdentifier,
                 )
             }
         }
@@ -358,7 +373,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `ssoCallbackResultFlow Success with same state with login Success should show loading dialog, hide it, and save org identifier`() =
         runTest {
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.Success
 
             coEvery {
@@ -402,6 +417,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
                     captchaToken = null,
+                    organizationIdentifier = "Bitwarden",
                 )
             }
             coVerify(exactly = 1) {
@@ -414,7 +430,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `ssoCallbackResultFlow Success with same state with login CaptchaRequired should show loading dialog, hide it, and send NavigateToCaptcha event`() =
         runTest {
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.CaptchaRequired("captcha")
 
             val uri: Uri = mockk()
@@ -464,6 +480,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
                     captchaToken = null,
+                    organizationIdentifier = "Bitwarden",
                 )
             }
         }
@@ -473,7 +490,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     fun `ssoCallbackResultFlow Success with same state with login TwoFactorRequired should show loading dialog, hide it, and send NavigateToTwoFactorLogin event`() =
         runTest {
             coEvery {
-                authRepository.login(any(), any(), any(), any(), any())
+                authRepository.login(any(), any(), any(), any(), any(), any())
             } returns LoginResult.TwoFactorRequired
 
             val initialState = DEFAULT_STATE.copy(orgIdentifierInput = "Bitwarden")
@@ -518,6 +535,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
                     ssoCodeVerifier = "def",
                     ssoRedirectUri = "bitwarden://sso-callback",
                     captchaToken = null,
+                    organizationIdentifier = "Bitwarden",
                 )
             }
         }
@@ -545,7 +563,7 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
     @Test
     fun `captchaTokenResultFlow Success should update the state and attempt to login`() = runTest {
         coEvery {
-            authRepository.login(any(), any(), any(), any(), any())
+            authRepository.login(any(), any(), any(), any(), any(), any())
         } returns LoginResult.Success
 
         coEvery {
@@ -748,5 +766,6 @@ class EnterpriseSignOnViewModelTest : BaseViewModelTest() {
             codeVerifier = "def",
         )
         private const val DEFAULT_EMAIL = "test@gmail.com"
+        private const val DEFAULT_ORG_ID = "orgId"
     }
 }
