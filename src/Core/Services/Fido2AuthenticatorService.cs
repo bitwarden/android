@@ -154,7 +154,7 @@ namespace Bit.Core.Services
             {
                 throw new NotAllowedError();
             }
-
+             
             if (!userVerified
                 &&
                 await ShouldEnforceRequiredUserVerificationAsync(new Fido2UserVerificationOptions(
@@ -217,7 +217,8 @@ namespace Bit.Core.Services
                 Id = cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                 RpId = cipher.Login.MainFido2Credential.RpId,
                 UserHandle = cipher.Login.MainFido2Credential.UserHandleValue,
-                UserName = cipher.Login.MainFido2Credential.UserName
+                UserName = cipher.Login.MainFido2Credential.UserName,
+                CipherId = cipher.Id,
             }).ToArray();
 
             return credentials;

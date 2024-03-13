@@ -24,7 +24,7 @@ namespace Bit.Droid.Autofill
     public class CredentialProviderSelectionActivity : MauiAppCompatActivity
     {
 
-        private IFido2ClientService _fido2ClientService;
+        private IFido2AuthenticatorService _fido2AuthenticatorService;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -39,7 +39,7 @@ namespace Bit.Droid.Autofill
                 return;
             }
 
-            _fido2ClientService = ServiceContainer.Resolve<IFido2ClientService>();
+            _fido2AuthenticatorService = ServiceContainer.Resolve<IFido2AuthenticatorService>();
 
             GetCipherAndPerformPasskeyAuthAsync(cipherId).FireAndForget();
         }
@@ -57,19 +57,7 @@ namespace Bit.Droid.Autofill
             var requestOptions = new PublicKeyCredentialRequestOptions(credentialPublic.RequestJson);
 
             var requestInfo = Intent.GetBundleExtra(CredentialProviderConstants.CredentialDataIntentExtra);
-            var credIdEnc = requestInfo?.GetString(CredentialProviderConstants.CredentialIdIntentExtra);
-
-            var cipherService = ServiceContainer.Resolve<ICipherService>();
-            var cipher = await cipherService.GetAsync(cipherId);
-            var decCipher = await cipher.DecryptAsync();
-
-            //TODO: Can be deleted if not needed
-            var passkey = decCipher.Login.Fido2Credentials.Find(f => f.CredentialId == credIdEnc);
-
-            //TODO: WIP line below to delete if not needed in the end. They are based on Android Sample
-            //var credId = Convert.FromBase64String(credIdEnc);
-            //var privateKey = Convert.FromBase64String(passkey.KeyValue);
-            //var uid = Convert.FromBase64String(passkey.UserHandle);
+            var credentialId = requestInfo?.GetByteArray(CredentialProviderConstants.CredentialIdIntentExtra);
 
             var origin = getRequest?.CallingAppInfo.Origin;
             var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
@@ -77,107 +65,49 @@ namespace Bit.Droid.Autofill
 
             System.Diagnostics.Debug.WriteLine($"RequestOptions JSON: {requestOptions.Json}");
 
-            var assertParams = new Fido2ClientAssertCredentialParams()
+            // TODO: Properly implement this interface 
+            var userInterface = new Fido2GetAssertionUserInterface(
+                cipherId: cipherId,
+                userVerified: true,
+                ensureUnlockedVaultCallback: () => Task.FromResult(true),
+                hasVaultBeenUnlockedInThisTransaction: () => true,
+                verifyUserCallback: (cipherId, verificationPreference) => Task.FromResult(true));
+
+            var assertParams = new Fido2AuthenticatorGetAssertionParams
             {
                 Challenge = requestOptions.GetChallenge(),
-                Origin = origin,
                 RpId = requestOptions.RpId,
-                //AllowCredentials = new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor[]  //TODO: Confirm if this is needed and where to get it.
-                //{
-                //    new Bit.Core.Utilities.Fido2.PublicKeyCredentialDescriptor
-                //    {
-                //        Id = credId
-                //    }
-                //},
-                //SameOriginWithAncestors = false, //TODO: Confirm if this is needed and where to get it.
-                Timeout = Convert.ToInt32(requestOptions.Timeout),
-                UserVerification = requestOptions.UserVerification
+                UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(requestOptions.UserVerification),
+                Hash = credentialPublic.GetClientDataHash(),
+                AllowCredentialDescriptorList = new Core.Utilities.Fido2.PublicKeyCredentialDescriptor[]
+                {
+                    new Core.Utilities.Fido2.PublicKeyCredentialDescriptor
+                    {
+                        Id = credentialId
+                    }
+                },
+                Extensions = new object()
             };
-            var assertResult = await _fido2ClientService.AssertCredentialAsync(assertParams);
-
-            //TODO: WIP line below to delete if not needed in the end. They are based on Android Sample
-            //var clientDataHash = credentialPublic.GetClientDataHash();
-            //System.Diagnostics.Debug.WriteLine($"ClientDataHash: {clientDataHash}");
+            var assertResult = await _fido2AuthenticatorService.GetAssertionAsync(assertParams, userInterface);
 
             var response = new AuthenticatorAssertionResponse(
                 requestOptions,
-                assertResult.RawId,
+                assertResult.SelectedCredential.Id,
                 androidOrigin,
-                true,
-                true,
-                true,
-                true,
-                assertResult.UserHandle,
+                false, // These flags have no effect, we set our own within `SetAuthenticatorData`
+                false,
+                false,
+                false,
+                assertResult.SelectedCredential.UserHandle,
                 packageName,
-                assertResult.ClientDataJSON //clientDataHash
+                credentialPublic.GetClientDataHash() //clientDataHash
             );
-
-            System.Diagnostics.Debug.WriteLine($"Base64Id: {assertResult.Id}");
-
             response.SetAuthenticatorData(assertResult.AuthenticatorData);
-
-            System.Diagnostics.Debug.WriteLine($"RequestJson: {credentialPublic.RequestJson}");
-            System.Diagnostics.Debug.WriteLine($"UserHandle: {assertResult.UserHandle}");
-
-            /*
-            var signature = GenerateSignature(response.DataToSign(), passkey.KeyBytes);
-            response.SetSignature(signature);
-            */
-
-            //TODO: WIP lines below to delete if not needed in the end. They are based on Android Sample
-            //var privateKeyBytes = Convert.FromBase64String(passkey.KeyValue);
-            //var privateKey = ConvertPrivateKey(passkey.KeyBytes);
-            //var sig = Java.Security.Signature.GetInstance("SHA256withECDSA");
-            //sig.InitSign(privateKey);
-            //sig.Update(response.DataToSign());
-            //response.SetSignature(sig.Sign());
-
             response.SetSignature(assertResult.Signature);
 
-            var credential = new FidoPublicKeyCredential
-            (
-                assertResult.RawId, 
-                response, 
-                "platform"
-            );
-            
-            var clientJson = credential.Response.ClientJson;
-            System.Diagnostics.Debug.WriteLine($"ClientJson: {clientJson}");
-
-            
-            //TODO: Original Android sample return code
-            /*
             var result = new Intent();
-            var credentialJson = credential.Json();
-            var cred = new PublicKeyCredential(credentialJson);
-            var responseJson = cred.AuthenticationResponseJson;
-            System.Diagnostics.Debug.WriteLine($"ResponseJson: {responseJson}");
-            var credResponse = new GetCredentialResponse(cred);
-            PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
-            SetResult(Result.Ok, result);
-            Finish();
-            */
-
-            //TODO: Code below until end of method is using alternative method of building Json ourselves
-            var responseInnerAndroidJson = new JSONObject();
-            responseInnerAndroidJson.Put("clientDataJSON", b64Encode(assertResult.ClientDataJSON));
-            responseInnerAndroidJson.Put("authenticatorData", b64Encode(assertResult.AuthenticatorData));
-            responseInnerAndroidJson.Put("signature", b64Encode(assertResult.Signature));
-            responseInnerAndroidJson.Put("userHandle", b64Encode(assertResult.UserHandle));
-
-            var rootAndroidJson = new JSONObject();
-            rootAndroidJson.Put("id", b64Encode(assertResult.RawId));
-            rootAndroidJson.Put("rawId", b64Encode(assertResult.RawId));
-            rootAndroidJson.Put("authenticatorAttachment", "platform");
-            rootAndroidJson.Put("type", "public-key");
-            rootAndroidJson.Put("clientExtensionResults", new JSONObject());
-            rootAndroidJson.Put("response", responseInnerAndroidJson);
-
-            var responseAndroidJson = rootAndroidJson.ToString();
-            System.Diagnostics.Debug.WriteLine($"ResponseJson: {responseAndroidJson}");
-
-            var result = new Intent();
-            var cred = new PublicKeyCredential(responseAndroidJson);
+            var fidoCredential = new FidoPublicKeyCredential(assertResult.SelectedCredential.Id, response, "platform");
+            var cred = new PublicKeyCredential(fidoCredential.Json());
             var credResponse = new GetCredentialResponse(cred);
             PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
             SetResult(Result.Ok, result);

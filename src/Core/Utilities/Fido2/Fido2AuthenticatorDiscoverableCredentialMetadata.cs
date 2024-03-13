@@ -13,4 +13,6 @@ public class Fido2AuthenticatorDiscoverableCredentialMetadata
     public byte[] UserHandle { get; set; }
 
     public string UserName { get; set; }
+
+    public string CipherId { get; set; }
 }
