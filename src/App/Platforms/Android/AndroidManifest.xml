@@ -44,6 +44,9 @@
 	<!-- Related docs: https://learn.microsoft.com/en-us/xamarin/essentials/open-browser?tabs=android -->
 	<queries>
 		<intent>
+			<action android:name="android.support.customtabs.action.CustomTabsService" />
+		</intent>
+		<intent>
 			<action android:name="android.intent.action.VIEW" />
 			<data android:scheme="http" />
 		</intent>

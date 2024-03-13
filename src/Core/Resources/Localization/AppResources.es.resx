@@ -2823,7 +2823,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>¿Continuar con el servicio de asistencia?</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>Continue to privacy policy?</value>
+    <value>¿Continuar a la política de privacidad?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>¿Continuar a la App Store?</value>
@@ -2845,7 +2845,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>¿No encuentras lo que estás buscando? Contacta con el soporte de Bitwarden en bitwarden.com.</value>
   </data>
   <data name="PrivacyPolicyDescriptionLong" xml:space="preserve">
-    <value>Check out our privacy policy on bitwarden.com.</value>
+    <value>Revise nuestra política de privacidad en bitwarden.com.</value>
   </data>
   <data name="ExploreMoreFeaturesOfYourBitwardenAccountOnTheWebApp" xml:space="preserve">
     <value>Explora más características de tu cuenta de Bitwarden en la aplicación web.</value>
@@ -2879,12 +2879,12 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Configura una opción de desbloqueo para cambiar tu acción de tiempo de espera de tu caja fuerte.</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
-    <value>Duo two-step login is required for your account. </value>
+    <value>Se requiere el inicio de sesión en dos pasos Duo para su cuenta. </value>
   </data>
   <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
-    <value>Follow the steps from Duo to finish logging in.</value>
+    <value>Siga los pasos de Duo para terminar de iniciar sesión.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
-    <value>Launch Duo</value>
+    <value>Iniciar Duo</value>
   </data>
 </root>
