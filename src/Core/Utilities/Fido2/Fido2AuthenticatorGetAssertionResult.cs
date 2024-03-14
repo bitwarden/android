@@ -1,4 +1,6 @@
-﻿namespace Bit.Core.Utilities.Fido2
+﻿using Bit.Core.Models.View;
+
+namespace Bit.Core.Utilities.Fido2
 {
     public class Fido2AuthenticatorGetAssertionResult
     {
@@ -14,6 +16,8 @@
 
         #nullable enable
         public byte[]? UserHandle { get; set; }
+
+        public CipherView? Cipher { get; set; }
     }
 }
 
