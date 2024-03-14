@@ -146,10 +146,7 @@ jobs:
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
-
-          echo "########################################"
-          echo "##### Setting Version Code $BUILD_NUMBER"
-          echo "########################################"
+          echo "##### Setting Android Version Code to $BUILD_NUMBER" | tee -a $GITHUB_STEP_SUMMARY
 
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./${{ env.android_folder_path_bash }}/AndroidManifest.xml
@@ -358,7 +355,7 @@ jobs:
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
-          echo "##### Setting Version Code $BUILD_NUMBER"
+          echo "##### Setting F-Droid Version Code to $BUILD_NUMBER" | tee -a $GITHUB_STEP_SUMMARY
 
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./${{ env.android_manifest_path }}
@@ -521,9 +518,7 @@ jobs:
       - name: Increment version
         run: |
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
-
-          echo "##### Setting CFBundleVersion $BUILD_NUMBER"
-          echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "##### Setting iOS CFBundleVersion to $BUILD_NUMBER" | tee -a $GITHUB_STEP_SUMMARY
 
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
