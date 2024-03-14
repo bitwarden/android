@@ -272,13 +272,16 @@ private fun CipherView.toDisplayItem(
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
+        titleTestTag = "CipherNameLabel",
         subtitle = subtitle,
+        subtitleTestTag = "CipherSubTitleLabel",
         iconData = this.toIconData(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
         extraIconList = toLabelIcons(),
         overflowOptions = toOverflowActions(),
+        optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
@@ -308,7 +311,9 @@ private fun SendView.toDisplayItem(
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
+        titleTestTag = "SendNameLabel",
         subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
+        subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(
             iconRes = when (type) {
                 SendType.TEXT -> R.drawable.ic_send_text
@@ -317,6 +322,7 @@ private fun SendView.toDisplayItem(
         ),
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
+        optionsTestTag = "SendOptionsButton",
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
     )

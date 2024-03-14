@@ -22,7 +22,9 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
                 subtitle = subtitle,
+                subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Network(
                     "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                     fallbackIconRes = R.drawable.ic_login_item,
@@ -31,10 +33,12 @@ fun createMockDisplayItemForCipher(
                     IconRes(
                         iconRes = R.drawable.ic_collection,
                         contentDescription = R.string.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
                         iconRes = R.drawable.ic_attachment,
                         contentDescription = R.string.attachments.asText(),
+                        testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
@@ -53,6 +57,7 @@ fun createMockDisplayItemForCipher(
                         url = "www.mockuri$number.com",
                     ),
                 ),
+                optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
             )
@@ -62,16 +67,20 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
                 subtitle = subtitle,
+                subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_secure_note_item),
                 extraIconList = listOf(
                     IconRes(
                         iconRes = R.drawable.ic_collection,
                         contentDescription = R.string.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
                         iconRes = R.drawable.ic_attachment,
                         contentDescription = R.string.attachments.asText(),
+                        testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
@@ -81,6 +90,7 @@ fun createMockDisplayItemForCipher(
                         notes = "mockNotes-$number",
                     ),
                 ),
+                optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
             )
@@ -90,16 +100,20 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
                 subtitle = subtitle,
+                subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_card_item),
                 extraIconList = listOf(
                     IconRes(
                         iconRes = R.drawable.ic_collection,
                         contentDescription = R.string.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
                         iconRes = R.drawable.ic_attachment,
                         contentDescription = R.string.attachments.asText(),
+                        testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
@@ -112,6 +126,7 @@ fun createMockDisplayItemForCipher(
                         securityCode = "mockCode-$number",
                     ),
                 ),
+                optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
             )
@@ -121,22 +136,27 @@ fun createMockDisplayItemForCipher(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
+                titleTestTag = "CipherNameLabel",
                 subtitle = subtitle,
+                subtitleTestTag = "CipherSubTitleLabel",
                 iconData = IconData.Local(R.drawable.ic_identity_item),
                 extraIconList = listOf(
                     IconRes(
                         iconRes = R.drawable.ic_collection,
                         contentDescription = R.string.collections.asText(),
+                        testTag = "CipherInCollectionIcon",
                     ),
                     IconRes(
                         iconRes = R.drawable.ic_attachment,
                         contentDescription = R.string.attachments.asText(),
+                        testTag = "CipherWithAttachmentsIcon",
                     ),
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
                     ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
                 ),
+                optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
             )
@@ -156,16 +176,20 @@ fun createMockDisplayItemForSend(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
+                titleTestTag = "SendNameLabel",
                 subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(R.drawable.ic_send_file),
                 extraIconList = listOf(
                     IconRes(
                         iconRes = R.drawable.ic_send_password,
                         contentDescription = R.string.password.asText(),
+                        testTag = "PasswordProtectedSendIcon",
                     ),
                     IconRes(
                         iconRes = R.drawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
+                        testTag = "MaxAccessSendIcon",
                     ),
                 ),
                 overflowOptions = listOf(
@@ -179,6 +203,7 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
+                optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
             )
@@ -188,16 +213,20 @@ fun createMockDisplayItemForSend(
             VaultItemListingState.DisplayItem(
                 id = "mockId-$number",
                 title = "mockName-$number",
+                titleTestTag = "SendNameLabel",
                 subtitle = "Oct 27, 2023, 12:00 PM",
+                subtitleTestTag = "SendDateLabel",
                 iconData = IconData.Local(R.drawable.ic_send_text),
                 extraIconList = listOf(
                     IconRes(
                         iconRes = R.drawable.ic_send_password,
                         contentDescription = R.string.password.asText(),
+                        testTag = "PasswordProtectedSendIcon",
                     ),
                     IconRes(
                         iconRes = R.drawable.ic_send_max_access_count_reached,
                         contentDescription = R.string.maximum_access_count_reached.asText(),
+                        testTag = "MaxAccessSendIcon",
                     ),
                 ),
                 overflowOptions = listOf(
@@ -211,6 +240,7 @@ fun createMockDisplayItemForSend(
                     ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
                     ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
                 ),
+                optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
             )

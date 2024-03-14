@@ -875,9 +875,12 @@ data class VaultItemListingState(
      *
      * @property id the id of the item.
      * @property title title of the item.
+     * @property titleTestTag The test tag associated with the [title].
      * @property subtitle subtitle of the item (nullable).
+     * @property subtitleTestTag The test tag associated with the [subtitle].
      * @property iconData data for the icon to be displayed (nullable).
      * @property overflowOptions list of options for the item's overflow menu.
+     * @property optionsTestTag The test tag associated with the [overflowOptions].
      * @property isAutofill whether or not this screen is part of an autofill flow.
      * @property shouldShowMasterPasswordReprompt whether or not a master password reprompt is
      * required for various secure actions.
@@ -885,10 +888,13 @@ data class VaultItemListingState(
     data class DisplayItem(
         val id: String,
         val title: String,
+        val titleTestTag: String,
         val subtitle: String?,
+        val subtitleTestTag: String,
         val iconData: IconData,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
+        val optionsTestTag: String,
         val isAutofill: Boolean,
         val shouldShowMasterPasswordReprompt: Boolean,
     )

@@ -11,13 +11,16 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 enum class VaultTrailingIcon(
     @DrawableRes val iconRes: Int,
     val contentDescription: Text,
+    val testTag: String,
 ) {
     COLLECTION(
         iconRes = R.drawable.ic_collection,
         contentDescription = R.string.collections.asText(),
+        testTag = "CipherInCollectionIcon",
     ),
     ATTACHMENT(
         iconRes = R.drawable.ic_attachment,
         contentDescription = R.string.attachments.asText(),
+        testTag = "CipherWithAttachmentsIcon",
     ),
 }

@@ -118,22 +118,27 @@ private val ALL_SEND_STATUS_ICONS: List<IconRes> = listOf(
     IconRes(
         iconRes = SendStatusIcon.DISABLED.iconRes,
         contentDescription = SendStatusIcon.DISABLED.contentDescription,
+        testTag = SendStatusIcon.DISABLED.testTag,
     ),
     IconRes(
         iconRes = SendStatusIcon.PASSWORD.iconRes,
         contentDescription = SendStatusIcon.PASSWORD.contentDescription,
+        testTag = SendStatusIcon.PASSWORD.testTag,
     ),
     IconRes(
         iconRes = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.iconRes,
         contentDescription = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.contentDescription,
+        testTag = SendStatusIcon.MAX_ACCESS_COUNT_REACHED.testTag,
     ),
     IconRes(
         iconRes = SendStatusIcon.EXPIRED.iconRes,
         contentDescription = SendStatusIcon.EXPIRED.contentDescription,
+        testTag = SendStatusIcon.EXPIRED.testTag,
     ),
     IconRes(
         iconRes = SendStatusIcon.PENDING_DELETE.iconRes,
         contentDescription = SendStatusIcon.PENDING_DELETE.contentDescription,
+        testTag = SendStatusIcon.PENDING_DELETE.testTag,
     ),
 )
 

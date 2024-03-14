@@ -19,7 +19,13 @@ fun SendView.toLabelIcons(clock: Clock = Clock.systemDefaultZone()): List<IconRe
         SendStatusIcon.EXPIRED.takeIf { expirationDate?.isBefore(clock.instant()) == true },
         SendStatusIcon.PENDING_DELETE.takeIf { deletionDate.isBefore(clock.instant()) },
     )
-        .map { IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription) }
+        .map {
+            IconRes(
+                iconRes = it.iconRes,
+                contentDescription = it.contentDescription,
+                testTag = it.testTag,
+            )
+        }
 
 /**
  * Creates the list of overflow actions to be displayed for a [SendView].

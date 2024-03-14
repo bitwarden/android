@@ -53,6 +53,10 @@ fun CipherView.toLabelIcons(): List<IconRes> {
         VaultTrailingIcon.ATTACHMENT.takeIf { this.attachments?.isNotEmpty() == true },
     )
         .map {
-            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+            IconRes(
+                iconRes = it.iconRes,
+                contentDescription = it.contentDescription,
+                testTag = it.testTag,
+            )
         }
 }

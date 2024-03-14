@@ -13,10 +13,12 @@ import kotlinx.parcelize.Parcelize
  *
  * @property iconPainter Painter for the icon.
  * @property contentDescription String for the icon's content description.
+ * @property testTag The optional test tag to associate with this icon.
  */
 data class IconResource(
     val iconPainter: Painter,
     val contentDescription: String,
+    val testTag: String? = null,
 )
 
 /**
@@ -24,12 +26,14 @@ data class IconResource(
  *
  * @property iconRes Resource for the icon.
  * @property contentDescription The icon's content description.
+ * @property testTag The optional test tag to associate with this icon.
  */
 @Parcelize
 data class IconRes(
     @DrawableRes
     val iconRes: Int,
     val contentDescription: Text,
+    val testTag: String? = null,
 ) : Parcelable
 
 /**
@@ -46,4 +50,5 @@ fun IconRes.toIconResource(): IconResource =
     IconResource(
         iconPainter = painterResource(id = iconRes),
         contentDescription = contentDescription(),
+        testTag = testTag,
     )
