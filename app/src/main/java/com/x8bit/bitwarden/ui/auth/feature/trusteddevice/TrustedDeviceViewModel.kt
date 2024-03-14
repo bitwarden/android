@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -18,11 +19,12 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class TrustedDeviceViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<TrustedDeviceState, TrustedDeviceEvent, TrustedDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: TrustedDeviceState(
-            emailAddress = "",
-            environmentLabel = "",
+            emailAddress = TrustedDeviceArgs(savedStateHandle).emailAddress,
+            environmentLabel = environmentRepository.environment.label,
             isRemembered = false,
         ),
 ) {
