@@ -46,7 +46,7 @@ namespace Bit.iOS.Autofill
         LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
         LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
         LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
-        LazyResolve<IFido2AuthenticatorService> _fido2AuthenticatorService = new LazyResolve<IFido2AuthenticatorService>();
+        LazyResolve<IFido2MediatorService> _fido2MediatorService = new LazyResolve<IFido2MediatorService>();
 
         bool _alreadyLoadItemsOnce = false;
         bool _isLoading;
@@ -177,7 +177,7 @@ namespace Bit.iOS.Autofill
 
             try
             {
-                var fido2AssertionResult = await _fido2AuthenticatorService.Value.GetAssertionAsync(new Fido2AuthenticatorGetAssertionParams
+                var fido2AssertionResult = await _fido2MediatorService.Value.GetAssertionAsync(new Fido2AuthenticatorGetAssertionParams
                 {
                     RpId = Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier,
                     Hash = Context.PasskeyCredentialRequestParameters.ClientDataHash.ToArray(),

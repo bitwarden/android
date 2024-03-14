@@ -1,3 +1,5 @@
+using Bit.Core.Models.View;
+
 namespace Bit.Core.Utilities.Fido2
 {
     /// <summary>
@@ -38,5 +40,10 @@ namespace Bit.Core.Utilities.Fido2
         /// return a user handle.
         /// </summary>
         public byte[]? UserHandle { get; set; }
+
+        /// <summary>
+        /// The selected cipher login item that has the credential
+        /// </summary>
+        public CipherView? Cipher { get; set; }
     }
 }
