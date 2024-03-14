@@ -32,6 +32,7 @@ namespace Bit.iOS.Autofill
         private IAccountsManager _accountsManager;
 
         private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private readonly LazyResolve<IConditionedAwaiterManager> _conditionedAwaiterManager = new LazyResolve<IConditionedAwaiterManager>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -56,11 +57,20 @@ namespace Bit.iOS.Autofill
                 {
                     ExtContext = ExtensionContext
                 };
+
+                _conditionedAwaiterManager.Value.Recreate(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
             }
             catch (Exception ex)
             {
                 OnProvidingCredentialException(ex);
             }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            _conditionedAwaiterManager.Value.SetAsCompleted(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
         }
 
         public override async void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)

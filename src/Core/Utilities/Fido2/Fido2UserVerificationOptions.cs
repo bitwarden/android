@@ -6,19 +6,19 @@
             Fido2UserVerificationPreference userVerificationPreference,
             bool hasVaultBeenUnlockedInTransaction,
             string rpId = null,
-            Action onNeedUI = null)
+            Func<Task> onNeedUITask = null)
         {
             ShouldCheckMasterPasswordReprompt = shouldCheckMasterPasswordReprompt;
             UserVerificationPreference = userVerificationPreference;
             HasVaultBeenUnlockedInTransaction = hasVaultBeenUnlockedInTransaction;
             RpId = rpId;
-            OnNeedUI = onNeedUI;
+            OnNeedUITask = onNeedUITask;
         }
 
         public bool ShouldCheckMasterPasswordReprompt { get; }
         public Fido2UserVerificationPreference UserVerificationPreference { get; }
         public bool HasVaultBeenUnlockedInTransaction { get; }
         public string RpId { get; }
-        public Action OnNeedUI { get; }
+        public Func<Task> OnNeedUITask { get; }
     }
 }

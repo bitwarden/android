@@ -270,13 +270,21 @@ namespace Bit.iOS.Autofill
                         userVerificationPreference,
                         _context.VaultUnlockedDuringThisSession,
                         _context.PasskeyCredentialIdentity?.RelyingPartyIdentifier,
-                        () =>
+                        async () =>
                         {
                             if (_context.IsExecutingWithoutUserInteraction)
                             {
                                 CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
                                 throw new InvalidOperationNeedsUIException();
                             }
+
+                            // HACK: [PM-6685] There are some devices that end up with a race condition when doing biometrics authentication
+                            // that the check is trying to be done before the iOS extension UI is shown, which cause the bio check to fail.
+                            // So a workaround is to show a toast which force the iOS extension UI to be shown and then awaiting for the
+                            // precondition that the view did appear before continuing with the verification.
+                            _platformUtilsService.Value.ShowToast(null, null, AppResources.VerifyingIdentityEllipsis);
+
+                            await _conditionedAwaiterManager.Value.GetAwaiterForPrecondition(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
                         })
                     );
             }

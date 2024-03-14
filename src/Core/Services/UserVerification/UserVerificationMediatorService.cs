@@ -41,7 +41,10 @@ namespace Bit.Core.Services.UserVerification
         {
             if (await ShouldPerformMasterPasswordRepromptAsync(options))
             {
-                options.OnNeedUI?.Invoke();
+                if (options.OnNeedUITask != null)
+                {
+                    await options.OnNeedUITask();
+                }
 
                 var (canPerformMP, mpVerified) = await VerifyMasterPasswordAsync(true);
                 return canPerformMP && mpVerified;
