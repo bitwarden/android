@@ -247,7 +247,11 @@ class CipherViewExtensionsTest {
         )
 
         val expected = listOf(VaultTrailingIcon.COLLECTION).map {
-            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+            IconRes(
+                iconRes = it.iconRes,
+                contentDescription = it.contentDescription,
+                testTag = it.testTag,
+            )
         }
 
         val result = cipher.toLabelIcons()
@@ -263,7 +267,11 @@ class CipherViewExtensionsTest {
         )
 
         val expected = listOf(VaultTrailingIcon.COLLECTION).map {
-            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+            IconRes(
+                iconRes = it.iconRes,
+                contentDescription = it.contentDescription,
+                testTag = it.testTag,
+            )
         }
 
         val result = cipher.toLabelIcons()
@@ -279,7 +287,11 @@ class CipherViewExtensionsTest {
         )
 
         val expected = listOf(VaultTrailingIcon.ATTACHMENT).map {
-            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+            IconRes(
+                iconRes = it.iconRes,
+                contentDescription = it.contentDescription,
+                testTag = it.testTag,
+            )
         }
 
         val result = cipher.toLabelIcons()
@@ -295,7 +307,11 @@ class CipherViewExtensionsTest {
             VaultTrailingIcon.COLLECTION,
             VaultTrailingIcon.ATTACHMENT,
         ).map {
-            IconRes(iconRes = it.iconRes, contentDescription = it.contentDescription)
+            IconRes(
+                iconRes = it.iconRes,
+                contentDescription = it.contentDescription,
+                testTag = it.testTag,
+            )
         }
 
         val result = cipher.toLabelIcons()

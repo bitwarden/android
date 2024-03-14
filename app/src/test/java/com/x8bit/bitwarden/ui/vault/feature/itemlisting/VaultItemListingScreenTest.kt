@@ -1469,7 +1469,9 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
         title = "mockTitle-$number",
+        titleTestTag = "SendNameLabel",
         subtitle = "mockSubtitle-$number",
+        subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(R.drawable.ic_card_item),
         extraIconList = listOf(
             IconRes(
@@ -1500,6 +1502,7 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
             ListingItemOverflowAction.SendAction.RemovePasswordClick(sendId = "mockId-$number"),
             ListingItemOverflowAction.SendAction.DeleteClick(sendId = "mockId-$number"),
         ),
+        optionsTestTag = "SendOptionsButton",
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
     )
@@ -1508,12 +1511,15 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
     VaultItemListingState.DisplayItem(
         id = "mockId-$number",
         title = "mockTitle-$number",
+        titleTestTag = "CipherNameLabel",
         subtitle = "mockSubtitle-$number",
+        subtitleTestTag = "CipherSubTitleLabel",
         iconData = IconData.Local(R.drawable.ic_vault),
         extraIconList = emptyList(),
         overflowOptions = listOf(
             ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
         ),
+        optionsTestTag = "CipherOptionsButton",
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
     )

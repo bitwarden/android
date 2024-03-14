@@ -770,11 +770,14 @@ data class SearchState(
     data class DisplayItem(
         val id: String,
         val title: String,
+        val titleTestTag: String,
         val subtitle: String?,
+        val subtitleTestTag: String,
         val totpCode: String?,
         val iconData: IconData,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
+        val overflowTestTag: String?,
         val autofillSelectionOptions: List<AutofillSelectionOption>,
         val shouldDisplayMasterPasswordReprompt: Boolean,
     ) : Parcelable

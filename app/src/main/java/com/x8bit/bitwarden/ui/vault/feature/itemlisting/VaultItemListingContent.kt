@@ -196,7 +196,10 @@ fun VaultItemListingContent(
                 BitwardenListItem(
                     startIcon = it.iconData,
                     label = it.title,
+                    labelTestTag = it.titleTestTag,
                     supportingLabel = it.subtitle,
+                    supportingLabelTestTag = it.subtitleTestTag,
+                    optionsTestTag = it.optionsTestTag,
                     onClick = {
                         if (it.isAutofill && it.shouldShowMasterPasswordReprompt) {
                             masterPasswordRepromptData =

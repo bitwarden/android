@@ -112,7 +112,10 @@ fun SearchContent(
             BitwardenListItem(
                 startIcon = it.iconData,
                 label = it.title,
+                labelTestTag = it.titleTestTag,
                 supportingLabel = it.subtitle,
+                supportingLabelTestTag = it.subtitleTestTag,
+                optionsTestTag = it.overflowTestTag,
                 onClick = {
                     if (it.autofillSelectionOptions.isNotEmpty()) {
                         autofillSelectionOptionsItem = it

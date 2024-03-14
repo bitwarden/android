@@ -51,8 +51,10 @@ import kotlinx.collections.immutable.persistentListOf
  * dialog.
  * @param modifier An optional [Modifier] for this Composable, defaulting to an empty Modifier.
  * This allows the caller to specify things like padding, size, etc.
+ * @param labelTestTag The optional test tag for the [label].
  * @param optionsTestTag The optional test tag for the options button.
  * @param supportingLabel An optional secondary text label to display beneath the label.
+ * @param supportingLabelTestTag The optional test tag for the [supportingLabel].
  * @param trailingLabelIcons An optional list of small icons to be displayed after the [label].
  */
 @Suppress("LongMethod")
@@ -63,8 +65,10 @@ fun BitwardenListItem(
     onClick: () -> Unit,
     selectionDataList: ImmutableList<SelectionItemData>,
     modifier: Modifier = Modifier,
+    labelTestTag: String? = null,
     optionsTestTag: String? = null,
     supportingLabel: String? = null,
+    supportingLabelTestTag: String? = null,
     trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -98,25 +102,30 @@ fun BitwardenListItem(
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(weight = 1f, fill = false),
+                    modifier = Modifier
+                        .semantics { labelTestTag?.let { testTag = it } }
+                        .weight(weight = 1f, fill = false),
                 )
 
-                trailingLabelIcons.forEach {
+                trailingLabelIcons.forEach { iconResource ->
                     Spacer(modifier = Modifier.width(8.dp))
                     Icon(
-                        painter = it.iconPainter,
-                        contentDescription = it.contentDescription,
+                        painter = iconResource.iconPainter,
+                        contentDescription = iconResource.contentDescription,
                         tint = MaterialTheme.colorScheme.secondary,
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier
+                            .semantics { iconResource.testTag?.let { testTag = it } }
+                            .size(16.dp),
                     )
                 }
             }
 
-            supportingLabel?.let {
+            supportingLabel?.let { supportLabel ->
                 Text(
-                    text = it,
+                    text = supportLabel,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.semantics { supportingLabelTestTag?.let { testTag = it } },
                 )
             }
         }
