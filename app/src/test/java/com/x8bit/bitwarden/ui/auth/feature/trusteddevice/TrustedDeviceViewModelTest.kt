@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import kotlinx.coroutines.test.runTest
@@ -9,6 +11,8 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class TrustedDeviceViewModelTest : BaseViewModelTest() {
+
+    private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
     fun `on BackClick emits NavigateBack`() = runTest {
@@ -75,14 +79,19 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         state: TrustedDeviceState? = null,
+        environmentRepository: EnvironmentRepository = environmentRepo,
     ): TrustedDeviceViewModel =
         TrustedDeviceViewModel(
-            savedStateHandle = SavedStateHandle().apply { set("state", state) },
+            savedStateHandle = SavedStateHandle().apply {
+                set("state", state)
+                set("email_address", "email@bitwarden.com")
+            },
+            environmentRepository = environmentRepository,
         )
 }
 
 private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
-    emailAddress = "",
-    environmentLabel = "",
+    emailAddress = "email@bitwarden.com",
+    environmentLabel = "bitwarden.com",
     isRemembered = false,
 )
