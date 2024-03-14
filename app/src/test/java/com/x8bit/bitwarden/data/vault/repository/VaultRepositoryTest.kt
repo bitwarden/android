@@ -159,9 +159,8 @@ class VaultRepositoryTest {
     private val fileManager: FileManager = mockk()
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val settingsDiskSource = mockk<SettingsDiskSource> {
-        every {
-            getLastSyncTime(userId = any())
-        } returns clock.instant()
+        every { getLastSyncTime(userId = any()) } returns clock.instant()
+        every { storeLastSyncTime(userId = any(), lastSyncTime = any()) } just runs
     }
     private val syncService: SyncService = mockk {
         coEvery {
@@ -965,13 +964,15 @@ class VaultRepositoryTest {
     fun `sync when the last sync time is more recent than the revision date should not sync `() {
         val userId = "mockId-1"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
-        coEvery { syncService.sync() } just awaits
         every {
             settingsDiskSource.getLastSyncTime(userId = userId)
         } returns clock.instant().plus(2, ChronoUnit.MINUTES)
 
         vaultRepository.sync()
 
+        verify(exactly = 1) {
+            settingsDiskSource.storeLastSyncTime(userId = userId, lastSyncTime = clock.instant())
+        }
         coVerify(exactly = 0) { syncService.sync() }
     }
 

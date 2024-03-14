@@ -331,6 +331,10 @@ class VaultRepositoryImpl(
                         if (serverRevisionDate < lastSyncInstant) {
                             // We can skip the actual sync call if there is no new data
                             vaultDiskSource.resyncVaultData(userId)
+                            settingsDiskSource.storeLastSyncTime(
+                                userId = userId,
+                                lastSyncTime = clock.instant(),
+                            )
                             return@launch
                         }
                     },
@@ -369,7 +373,10 @@ class VaultRepositoryImpl(
                             userId = userId,
                             policies = syncResponse.policies,
                         )
-                        settingsDiskSource.storeLastSyncTime(userId = userId, clock.instant())
+                        settingsDiskSource.storeLastSyncTime(
+                            userId = userId,
+                            lastSyncTime = clock.instant(),
+                        )
                         vaultDiskSource.replaceVaultData(userId = userId, vault = syncResponse)
                     },
                     onFailure = { throwable ->
