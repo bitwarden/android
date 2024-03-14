@@ -35,5 +35,6 @@ namespace Bit.Core.Abstractions
         Task SoftDeleteWithServerAsync(string id);
         Task RestoreWithServerAsync(string id);
         Task<string> CreateNewLoginForPasskeyAsync(Fido2ConfirmNewCredentialParams newPasskeyParams);
+        Task CopyTotpCodeIfNeededAsync(CipherView cipher);
     }
 }

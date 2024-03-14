@@ -27,6 +27,7 @@ namespace Bit.Core.Utilities
             var messagingService = Resolve<IMessagingService>("messagingService");
             var cryptoFunctionService = Resolve<ICryptoFunctionService>("cryptoFunctionService");
             var cryptoService = Resolve<ICryptoService>("cryptoService");
+            var clipboardService = Resolve<IClipboardService>();
             var logger = Resolve<ILogger>();
 
             SearchService searchService = null;
@@ -43,8 +44,9 @@ namespace Bit.Core.Utilities
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
             var configService = new ConfigService(apiService, stateService, logger);
+            var totpService = new TotpService(cryptoFunctionService);
             var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,
-                fileUploadService, storageService, i18nService, () => searchService, configService, clearCipherCacheKey,
+                fileUploadService, storageService, i18nService, () => searchService, configService, totpService, clipboardService, clearCipherCacheKey,
                 allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, stateService, apiService, i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, stateService, i18nService);
@@ -76,7 +78,6 @@ namespace Bit.Core.Utilities
                     return Task.CompletedTask;
                 });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService, cryptoFunctionService, policyService);
-            var totpService = new TotpService(cryptoFunctionService);
             var deviceTrustCryptoService = new DeviceTrustCryptoService(apiService, appIdService, cryptoFunctionService, cryptoService, stateService);
             var passwordResetEnrollmentService = new PasswordResetEnrollmentService(apiService, cryptoService, organizationService, stateService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
@@ -115,7 +116,6 @@ namespace Bit.Core.Utilities
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
             Register<IPasswordResetEnrollmentService>(passwordResetEnrollmentService);
-            Register<IFido2AuthenticationService>(new Fido2AuthenticationService());
         }
 
         public static void Register<T>(string serviceName, T obj)

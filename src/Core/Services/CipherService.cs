@@ -34,6 +34,8 @@ namespace Bit.Core.Services
         private readonly II18nService _i18nService;
         private readonly Func<ISearchService> _searchService;
         private readonly IConfigService _configService;
+        private readonly ITotpService _totpService;
+        private readonly IClipboardService _clipboardService;
         private readonly string _clearCipherCacheKey;
         private readonly string[] _allClearCipherCacheKeys;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
@@ -53,6 +55,8 @@ namespace Bit.Core.Services
             II18nService i18nService,
             Func<ISearchService> searchService,
             IConfigService configService,
+            ITotpService totpService,
+            IClipboardService clipboardService,
             string clearCipherCacheKey,
             string[] allClearCipherCacheKeys)
         {
@@ -65,6 +69,8 @@ namespace Bit.Core.Services
             _i18nService = i18nService;
             _searchService = searchService;
             _configService = configService;
+            _totpService = totpService;
+            _clipboardService = clipboardService;
             _clearCipherCacheKey = clearCipherCacheKey;
             _allClearCipherCacheKeys = allClearCipherCacheKeys;
         }
@@ -1313,6 +1319,22 @@ namespace Bit.Core.Services
             await SaveWithServerAsync(encryptedCipher);
 
             return encryptedCipher.Id;
+        }
+
+        public async Task CopyTotpCodeIfNeededAsync(CipherView cipher)
+        {
+            if (string.IsNullOrWhiteSpace(cipher?.Login?.Totp)
+                ||
+                await _stateService.GetDisableAutoTotpCopyAsync() == true)
+            {
+                return;
+            }
+
+            if (cipher.OrganizationUseTotp || await _stateService.CanAccessPremiumAsync())
+            {
+                var totpCode = await _totpService.GetCodeAsync(cipher.Login.Totp);
+                await _clipboardService.CopyTextAsync(totpCode);
+            }
         }
 
         private class CipherLocaleComparer : IComparer<CipherView>
