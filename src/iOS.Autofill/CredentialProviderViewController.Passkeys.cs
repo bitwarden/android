@@ -20,7 +20,7 @@ namespace Bit.iOS.Autofill
 {
     public partial class CredentialProviderViewController : ASCredentialProviderViewController, IAccountsManagerHost
     {
-        private readonly LazyResolve<IFido2AuthenticatorService> _fido2AuthService = new LazyResolve<IFido2AuthenticatorService>();
+        private readonly LazyResolve<IFido2MediatorService> _fido2MediatorService = new LazyResolve<IFido2MediatorService>();
         private readonly LazyResolve<IPlatformUtilsService> _platformUtilsService = new LazyResolve<IPlatformUtilsService>();
         private readonly LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
         private readonly LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
@@ -96,7 +96,7 @@ namespace Bit.iOS.Autofill
             
             try
             {
-                var result = await _fido2AuthService.Value.MakeCredentialAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorMakeCredentialParams
+                var result = await _fido2MediatorService.Value.MakeCredentialAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorMakeCredentialParams
                 {
                     Hash = passkeyRegistrationRequest.ClientDataHash.ToArray(),
                     CredTypesAndPubKeyAlgs = GetCredTypesAndPubKeyAlgs(passkeyRegistrationRequest.SupportedAlgorithms),
@@ -202,7 +202,7 @@ namespace Bit.iOS.Autofill
 
             try
             {
-                var fido2AssertionResult = await _fido2AuthService.Value.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
+                var fido2AssertionResult = await _fido2MediatorService.Value.GetAssertionAsync(new Bit.Core.Utilities.Fido2.Fido2AuthenticatorGetAssertionParams
                 {
                     RpId = rpId,
                     Hash = _context.PasskeyCredentialRequest.ClientDataHash.ToArray(),
@@ -270,13 +270,21 @@ namespace Bit.iOS.Autofill
                         userVerificationPreference,
                         _context.VaultUnlockedDuringThisSession,
                         _context.PasskeyCredentialIdentity?.RelyingPartyIdentifier,
-                        () =>
+                        async () =>
                         {
                             if (_context.IsExecutingWithoutUserInteraction)
                             {
                                 CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
                                 throw new InvalidOperationNeedsUIException();
                             }
+
+                            // HACK: [PM-6685] There are some devices that end up with a race condition when doing biometrics authentication
+                            // that the check is trying to be done before the iOS extension UI is shown, which cause the bio check to fail.
+                            // So a workaround is to show a toast which force the iOS extension UI to be shown and then awaiting for the
+                            // precondition that the view did appear before continuing with the verification.
+                            _platformUtilsService.Value.ShowToast(null, null, AppResources.VerifyingIdentityEllipsis);
+
+                            await _conditionedAwaiterManager.Value.GetAwaiterForPrecondition(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
                         })
                     );
             }

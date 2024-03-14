@@ -198,7 +198,8 @@ namespace Bit.Core.Services
                     SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
                     {
                         Id = selectedCredentialId.GuidToRawFormat(),
-                        UserHandle = selectedFido2Credential.UserHandleValue
+                        UserHandle = selectedFido2Credential.UserHandleValue,
+                        Cipher = selectedCipher
                     },
                     AuthenticatorData = authenticatorData,
                     Signature = signature

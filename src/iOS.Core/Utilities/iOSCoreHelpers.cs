@@ -203,11 +203,17 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IUserVerificationService>());
             ServiceContainer.Register<IUserVerificationMediatorService>(userVerificationMediatorService);
 
-            ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
+            var fido2AuthenticatorService = new Fido2AuthenticatorService(
                 ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<ISyncService>(),
                 ServiceContainer.Resolve<ICryptoFunctionService>(),
-                userVerificationMediatorService));
+                userVerificationMediatorService);
+            ServiceContainer.Register<IFido2AuthenticatorService>(fido2AuthenticatorService);
+
+            ServiceContainer.Register<IFido2MediatorService>(new Fido2MediatorService(
+                fido2AuthenticatorService,
+                null, // iOS doesn't use IFido2ClientService so no need to have it in memory
+                ServiceContainer.Resolve<ICipherService>()));
 
             ServiceContainer.Register<IWatchDeviceService>(new WatchDeviceService(ServiceContainer.Resolve<ICipherService>(),
                 ServiceContainer.Resolve<IEnvironmentService>(),

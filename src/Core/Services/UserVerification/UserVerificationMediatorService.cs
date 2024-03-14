@@ -10,6 +10,8 @@ namespace Bit.Core.Services.UserVerification
 {
     public class UserVerificationMediatorService : IUserVerificationMediatorService
     {
+        private const byte MAX_ATTEMPTS = 5;
+
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IUserPinService _userPinService;
@@ -39,8 +41,13 @@ namespace Bit.Core.Services.UserVerification
         {
             if (await ShouldPerformMasterPasswordRepromptAsync(options))
             {
-                options.OnNeedUI?.Invoke();
-                return await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(Enums.CipherRepromptType.Password);
+                if (options.OnNeedUITask != null)
+                {
+                    await options.OnNeedUITask();
+                }
+
+                var (canPerformMP, mpVerified) = await VerifyMasterPasswordAsync(true);
+                return canPerformMP && mpVerified;
             }
 
             if (!_fido2UserVerificationStrategies.TryGetValue(options.UserVerificationPreference, out var userVerificationServiceStrategy))
@@ -91,43 +98,71 @@ namespace Bit.Core.Services.UserVerification
 
         public async Task<(bool canPerformUnlockWithPin, bool pinVerified)> VerifyPinCodeAsync()
         {
-            if (!await _userPinService.IsPinLockEnabledAsync())
+            return await VerifyWithAttemptsAsync(async () =>
             {
-                return (false, false);
-            }
+                if (!await _userPinService.IsPinLockEnabledAsync())
+                {
+                    return (false, false);
+                }
 
-            var pin = await _deviceActionService.DisplayPromptAync(AppResources.EnterPIN,
-                AppResources.VerifyPIN, null, AppResources.Ok, AppResources.Cancel, password: true);
-            if (pin is null)
-            {
-                // cancelled by the user
-                return (true, false); 
-            }
+                var pin = await _deviceActionService.DisplayPromptAync(AppResources.EnterPIN,
+                    AppResources.VerifyPIN, null, AppResources.Ok, AppResources.Cancel, password: true);
+                if (pin is null)
+                {
+                    // cancelled by the user
+                    return (true, false);
+                }
 
-            try
-            {
-                var isVerified = await _userPinService.VerifyPinAsync(pin);
-                return (true, isVerified);
-            }
-            catch (SymmetricCryptoKey.ArgumentKeyNullException)
-            {
-                return (true, false);
-            }
-            catch (SymmetricCryptoKey.InvalidKeyOperationException)
-            {
-                return (true, false);
-            }
+                try
+                {
+                    var isVerified = await _userPinService.VerifyPinAsync(pin);
+                    return (true, isVerified);
+                }
+                catch (SymmetricCryptoKey.ArgumentKeyNullException)
+                {
+                    return (true, false);
+                }
+                catch (SymmetricCryptoKey.InvalidKeyOperationException)
+                {
+                    return (true, false);
+                }
+            });
         }
 
-        public async Task<(bool canPerformUnlockWithMasterPassword, bool mpVerified)> VerifyMasterPasswordAsync()
+        public async Task<(bool canPerformUnlockWithMasterPassword, bool mpVerified)> VerifyMasterPasswordAsync(bool isMasterPasswordReprompt)
         {
-            if (!await _userVerificationService.HasMasterPasswordAsync(true))
+            return await VerifyWithAttemptsAsync(async () =>
             {
-                return (false, false);
-            }
+                if (!await _userVerificationService.HasMasterPasswordAsync(true))
+                {
+                    return (false, false);
+                }
 
-            var (_, isValid) = await _platformUtilsService.ShowPasswordDialogAndGetItAsync(AppResources.MasterPassword, string.Empty, _userVerificationService.VerifyMasterPasswordAsync);
-            return (true, isValid);
+                var title = isMasterPasswordReprompt ? AppResources.PasswordConfirmation : AppResources.MasterPassword;
+                var body = isMasterPasswordReprompt ? AppResources.PasswordConfirmationDesc : string.Empty;
+
+                var (_, isValid) = await _platformUtilsService.ShowPasswordDialogAndGetItAsync(title, body, _userVerificationService.VerifyMasterPasswordAsync);
+                return (true, isValid);
+            });
+        }
+
+        private async Task<(bool canPerform, bool isVerified)> VerifyWithAttemptsAsync(Func<Task<(bool canPerform, bool isVerified)>> verifyAsync)
+        {
+            byte attempts = 0;
+            do
+            {
+                var (canPerform, verified) = await verifyAsync();
+                if (!canPerform)
+                {
+                    return (false, false);
+                }
+                if (verified)
+                {
+                    return (true, true);
+                }
+            } while (attempts++ < MAX_ATTEMPTS);
+
+            return (true, false);
         }
     }
 }

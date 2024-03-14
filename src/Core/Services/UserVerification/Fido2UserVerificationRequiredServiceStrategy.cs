@@ -23,7 +23,10 @@ namespace Bit.Core.Services.UserVerification
                 return true;
             }
 
-            options.OnNeedUI?.Invoke();
+            if (options.OnNeedUITask != null)
+            {
+                await options.OnNeedUITask();
+            }
 
             var (canPerformOSUnlock, isOSUnlocked) = await _userVerificationMediatorService.PerformOSUnlockAsync();
             if (canPerformOSUnlock)
@@ -37,7 +40,7 @@ namespace Bit.Core.Services.UserVerification
                 return pinVerified;
             }
 
-            var (canPerformUnlockWithMasterPassword, mpVerified) = await _userVerificationMediatorService.VerifyMasterPasswordAsync();
+            var (canPerformUnlockWithMasterPassword, mpVerified) = await _userVerificationMediatorService.VerifyMasterPasswordAsync(false);
             if (canPerformUnlockWithMasterPassword)
             {
                 return mpVerified;
