@@ -8,6 +8,7 @@ import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Fido2Credential
 import com.bitwarden.core.Field
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.Identity
@@ -232,7 +233,27 @@ private fun Login.toEncryptedNetworkLogin(): SyncResponseJson.Cipher.Login =
         // uri needs to be null to avoid duplicating the first url entry for a login item.
         uri = null,
         username = username,
+        fido2Credentials = fido2Credentials?.toNetworkFido2Credentials(),
     )
+
+private fun List<Fido2Credential>.toNetworkFido2Credentials() =
+    this.map { it.toNetworkFido2Credential() }
+
+private fun Fido2Credential.toNetworkFido2Credential() = SyncResponseJson.Cipher.Fido2Credential(
+    credentialId = credentialId,
+    keyType = keyType,
+    keyAlgorithm = keyAlgorithm,
+    keyCurve = keyCurve,
+    keyValue = keyValue,
+    rpId = rpId,
+    rpName = rpName,
+    userHandle = userHandle,
+    userName = userName,
+    userDisplayName = userDisplayName,
+    counter = counter,
+    discoverable = discoverable,
+    creationDate = ZonedDateTime.ofInstant(creationDate, ZoneOffset.UTC),
+)
 
 /**
  * Converts a list of Bitwarden SDK [PasswordHistory] objects to a corresponding
@@ -325,7 +346,27 @@ fun SyncResponseJson.Cipher.Login.toSdkLogin(): Login =
         uris = uris?.toSdkLoginUriList(),
         totp = totp,
         autofillOnPageLoad = shouldAutofillOnPageLoad,
+        fido2Credentials = fido2Credentials?.toSdkFido2Credentials(),
     )
+
+private fun List<SyncResponseJson.Cipher.Fido2Credential>.toSdkFido2Credentials() =
+    this.map { it.toSdkFido2Credential() }
+
+private fun SyncResponseJson.Cipher.Fido2Credential.toSdkFido2Credential() = Fido2Credential(
+    credentialId = credentialId,
+    keyType = keyType,
+    keyAlgorithm = keyAlgorithm,
+    keyCurve = keyCurve,
+    keyValue = keyValue,
+    rpId = rpId,
+    rpName = rpName,
+    userHandle = userHandle,
+    userName = userName,
+    userDisplayName = userDisplayName,
+    counter = counter,
+    discoverable = discoverable,
+    creationDate = creationDate.toInstant(),
+)
 
 /**
  * Transforms a [SyncResponseJson.Cipher.Identity] into the corresponding Bitwarden SDK [Identity].

@@ -120,10 +120,27 @@ fun createMockLogin(number: Int, hasNullUri: Boolean = false): SyncResponseJson.
         password = "mockPassword-$number",
         passwordRevisionDate = ZonedDateTime.parse("2023-10-27T12:00:00Z"),
         shouldAutofillOnPageLoad = false,
-        uri = if (hasNullUri) { null } else "mockUri-$number",
+        uri = if (hasNullUri) null else "mockUri-$number",
         uris = listOf(createMockUri(number = number)),
         totp = "mockTotp-$number",
+        fido2Credentials = listOf(createMockFido2Credential(number)),
     )
+
+fun createMockFido2Credential(number: Int) = SyncResponseJson.Cipher.Fido2Credential(
+    credentialId = "mockCredentialId-$number",
+    keyType = "mockKeyType-$number",
+    keyAlgorithm = "mockKeyAlgorithm-$number",
+    keyCurve = "mockKeyCurve-$number",
+    keyValue = "mockKeyValue-$number",
+    rpId = "mockRpId-$number",
+    rpName = "mockRpName-$number",
+    userHandle = "mockUserHandle-$number",
+    userName = "mockUserName-$number",
+    userDisplayName = "mockUserDisplayName-$number",
+    counter = "mockCounter-$number",
+    discoverable = "mockDiscoverable-$number",
+    creationDate = ZonedDateTime.parse("2024-03-12T20:20:16.456Z"),
+)
 
 /**
  * Create a mock [SyncResponseJson.Cipher.Login.Uri] with a given [number].

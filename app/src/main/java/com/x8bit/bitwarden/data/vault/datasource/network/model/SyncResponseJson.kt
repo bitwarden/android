@@ -6,6 +6,10 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 import java.time.ZonedDateTime
 
+private const val DEFAULT_FIDO_2_KEY_TYPE = "public-key"
+private const val DEFAULT_FIDO_2_KEY_ALGORITHM = "ECDSA"
+private const val DEFAULT_FIDO_2_KEY_CURVE = "P-256"
+
 /**
  * Represents the response model for vault data fetched from the server.
  *
@@ -731,6 +735,9 @@ data class SyncResponseJson(
 
             @SerialName("username")
             val username: String?,
+
+            @SerialName("fido2Credentials")
+            val fido2Credentials: List<Fido2Credential>?,
         ) {
             /**
              * Represents a URI in the vault response.
@@ -773,6 +780,66 @@ data class SyncResponseJson(
         data class SecureNote(
             @SerialName("type")
             val type: SecureNoteTypeJson,
+        )
+
+        /**
+         * Represents a FIDO2 credential object in the vault response.
+         *
+         * @property credentialId The unique identifier of the FIDO2 credential.
+         * @property keyType The type of public key of the FIDO2 credential.
+         * @property keyAlgorithm The public Key algorithm of the credential.
+         * @property keyValue The public key of the credential.
+         * @property rpId The relying party (RP) identity.
+         * @property rpName The optional name of the relying party (RP).
+         * @property userHandle The optional unique identifier used to identify an account.
+         * @property userName The conditional, formal name of the user associated to the credential.
+         * @property userDisplayName The optional display name of the user associated to the
+         * credential.
+         * @property counter The signature counter for the credential.
+         * @property discoverable Whether the FIDO2 credential is discoverable or non-discoverable.
+         * @property creationDate The creation date and time of the credential.
+         */
+        @Serializable
+        data class Fido2Credential(
+            @SerialName("credentialId")
+            val credentialId: String,
+
+            @SerialName("keyType")
+            val keyType: String = DEFAULT_FIDO_2_KEY_TYPE,
+
+            @SerialName("keyAlgorithm")
+            val keyAlgorithm: String = DEFAULT_FIDO_2_KEY_ALGORITHM,
+
+            @SerialName("keyCurve")
+            val keyCurve: String = DEFAULT_FIDO_2_KEY_CURVE,
+
+            @SerialName("keyValue")
+            val keyValue: String,
+
+            @SerialName("rpId")
+            val rpId: String,
+
+            @SerialName("rpName")
+            val rpName: String?,
+
+            @SerialName("userHandle")
+            val userHandle: String?,
+
+            @SerialName("userName")
+            val userName: String?,
+
+            @SerialName("userDisplayName")
+            val userDisplayName: String?,
+
+            @SerialName("counter")
+            val counter: String,
+
+            @SerialName("discoverable")
+            val discoverable: String,
+
+            @SerialName("creationDate")
+            @Contextual
+            val creationDate: ZonedDateTime,
         )
     }
 
