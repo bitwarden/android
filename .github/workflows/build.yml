@@ -363,15 +363,14 @@ jobs:
 
       - name: Clean for F-Droid
         run: |
-          $appPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
-          $corePath = $($env:GITHUB_WORKSPACE + "/src/Core/Core.csproj");
+          $directoryBuildProps = $($env:GITHUB_WORKSPACE + "/Directory.Build.props");
 
           $androidManifest = $($env:GITHUB_WORKSPACE + "/${{ env.android_manifest_path }}");
 
           Write-Output "##### Back up project files"
 
           Copy-Item $androidManifest $($androidManifest + ".original");
-          Copy-Item $appPath $($appPath + ".original");
+          Copy-Item $directoryBuildProps $($directoryBuildProps + ".original");
 
           Write-Output "##### Cleanup Android Manifest"
 
@@ -382,6 +381,10 @@ jobs:
           $nsAndroid.AddNamespace("android", "http://schemas.android.com/apk/res/android");
 
           $xml.Save($androidManifest);
+
+          Write-Output "##### Enabling FDROID constant"
+
+          (Get-Content $directoryBuildProps).Replace('<!-- <CustomConstants>FDROID</CustomConstants> -->', '<CustomConstants>FDROID</CustomConstants>') | Set-Content $directoryBuildProps
 
       - name: Restore packages
         run: dotnet restore
@@ -401,8 +404,7 @@ jobs:
             /p:AndroidSigningKeyStore=$signingFdroidKeyStore `
             /p:AndroidSigningKeyAlias=bitwarden `
             /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" `
-            /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" `
-            /p:CustomConstants="FDROID" --no-restore
+            /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" ` --no-restore
 
           Write-Output "##### Copy FDroid apk to project root"
 
