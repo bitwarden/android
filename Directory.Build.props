@@ -9,5 +9,8 @@
    
    <!-- Uncomment this when Unit Testing-->
    <!-- <CustomConstants>UT</CustomConstants> -->
+
+   <!-- Uncomment this when building FDROID-->
+   <!-- <CustomConstants>FDROID</CustomConstants> -->
  </PropertyGroup>
 </Project>
