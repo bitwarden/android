@@ -5,6 +5,7 @@ import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Fido2Credential
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.bitwarden.core.IdentityView
@@ -89,6 +90,29 @@ fun createMockLoginView(
         autofillOnPageLoad = false,
         uris = listOf(createMockUriView(number = number)),
         totp = totp,
+        fido2Credentials = createMockSdkFido2CredentialList(number),
+    )
+
+fun createMockSdkFido2CredentialList(number: Int) =
+    listOf(createMockSdkFido2CredentialView(number))
+
+fun createMockSdkFido2CredentialView(number: Int) =
+    Fido2Credential(
+        credentialId = "mockCredentialId-$number",
+        keyType = "mockKeyType-$number",
+        keyAlgorithm = "mockKeyAlgorithm-$number",
+        keyCurve = "mockKeyCurve-$number",
+        keyValue = "mockKeyValue-$number",
+        rpId = "mockRpId-$number",
+        userHandle = "mockUserHandle-$number",
+        userName = "mockUserName-$number",
+        counter = "mockCounter-$number",
+        rpName = "mockRpName-$number",
+        userDisplayName = "mockUserDisplayName-$number",
+        discoverable = "mockDiscoverable-$number",
+        creationDate = ZonedDateTime
+            .parse("2024-03-12T20:20:16.456Z")
+            .toInstant(),
     )
 
 /**

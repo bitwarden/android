@@ -147,6 +147,7 @@ fun createMockSdkLogin(number: Int): Login =
         autofillOnPageLoad = false,
         uris = listOf(createMockSdkUri(number = number)),
         totp = "mockTotp-$number",
+        fido2Credentials = createMockSdkFido2CredentialList(number),
     )
 
 /**

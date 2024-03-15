@@ -10,6 +10,7 @@ import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
@@ -42,6 +43,7 @@ fun createLoginView(isEmpty: Boolean): LoginView =
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example"
             .takeUnless { isEmpty },
         autofillOnPageLoad = false,
+        fido2Credentials = createMockSdkFido2CredentialList(number = 1),
     )
 
 @Suppress("CyclomaticComplexMethod")

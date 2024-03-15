@@ -337,7 +337,24 @@ private const val CIPHER_JSON = """
     "passwordRevisionDate": "2023-10-27T12:00:00.000Z",
     "autofillOnPageLoad": false,
     "uri": "mockUri-1",
-    "username": "mockUsername-1"
+    "username": "mockUsername-1",
+    "fido2Credentials": [
+      {
+        "credentialId": "mockCredentialId-1",
+        "keyType": "mockKeyType-1",
+        "keyAlgorithm": "mockKeyAlgorithm-1",
+        "keyCurve": "mockKeyCurve-1",
+        "keyValue": "mockKeyValue-1",
+        "rpId": "mockRpId-1",
+        "rpName": "mockRpName-1",
+        "userHandle": "mockUserHandle-1",
+        "userName": "mockUserName-1",
+        "userDisplayName": "mockUserDisplayName-1",
+        "counter": "mockCounter-1",
+        "discoverable": "mockDiscoverable-1",
+        "creationDate": "2024-03-12T20:20:16.456Z"
+      }
+    ]
   },
   "creationDate": "2023-10-27T12:00:00.000Z",
   "secureNote": {

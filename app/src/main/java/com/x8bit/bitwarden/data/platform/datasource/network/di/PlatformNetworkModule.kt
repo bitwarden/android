@@ -91,5 +91,8 @@ object PlatformNetworkModule {
         serializersModule = SerializersModule {
             contextual(ZonedDateTimeSerializer())
         }
+
+        // Respect model default property values.
+        coerceInputValues = true
     }
 }

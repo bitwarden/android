@@ -84,6 +84,7 @@ class VaultAddItemStateExtensionsTest {
                     ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     autofillOnPageLoad = null,
+                    fido2Credentials = null,
                 ),
                 identity = null,
                 card = null,
@@ -162,6 +163,7 @@ class VaultAddItemStateExtensionsTest {
                     ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     autofillOnPageLoad = false,
+                    fido2Credentials = null,
                 ),
                 favorite = true,
                 reprompt = CipherRepromptType.NONE,
@@ -741,6 +743,7 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
         ),
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
         autofillOnPageLoad = false,
+        fido2Credentials = null,
     ),
 )
 
