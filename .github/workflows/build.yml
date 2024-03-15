@@ -396,12 +396,12 @@ jobs:
           Write-Output "##### Sign FDroid"
 
           $signingFdroidKeyStore = "$($env:GITHUB_WORKSPACE)\${{ env.android_folder_path }}\app_fdroid-keystore.jks"
-          dotnet build $projToBuild -c Release -f ${{ env.target-net-version }}-android `
-            /p:AndroidKeyStore=true `
-            /p:AndroidSigningKeyStore=$signingFdroidKeyStore `
-            /p:AndroidSigningKeyAlias=bitwarden `
-            /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" `
-            /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" `
+          dotnet build $projToBuild -c Release -f ${{ env.target-net-version }}-android \
+            /p:AndroidKeyStore=true \
+            /p:AndroidSigningKeyStore=$signingFdroidKeyStore \
+            /p:AndroidSigningKeyAlias=bitwarden \
+            /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" \
+            /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" \
             /p:CustomConstants="FDROID" --no-restore
 
           Write-Output "##### Copy FDroid apk to project root"
