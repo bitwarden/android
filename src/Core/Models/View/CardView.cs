@@ -21,6 +21,19 @@ namespace Bit.Core.Models.View
         public string Code { get; set; }
         public string MaskedCode => Code != null ? new string('•', Code.Length) : null;
         public string MaskedNumber => Number != null ? new string('•', Number.Length) : null;
+        public string SpacedNumber {
+            get {
+                if (Number == null) return null;
+                var sb = new StringBuilder();
+                for (int i = 0; i < Number.Length; i++) {
+                    sb.Append(Number[i]);
+                    if ((i + 1) % 4 == 0 && i + 1 < Number.Length) {
+                        sb.Append(" ");
+                    }
+                }
+                return sb.ToString();
+            }
+        }
 
         public string Brand
         {

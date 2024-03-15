@@ -313,7 +313,7 @@
                                     IsVisible="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
                                     AutomationId="ItemValue" />
                                 <controls:MonoLabel
-                                    Text="{Binding Cipher.Card.Number, Mode=OneWay}"
+                                    Text="{Binding Cipher.Card.SpacedNumber, Mode=OneWay}"
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0"
