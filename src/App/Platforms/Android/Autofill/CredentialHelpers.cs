@@ -12,8 +12,6 @@ using Bit.Core.Utilities;
 using Java.Security;
 using Org.Json;
 using Activity = Android.App.Activity;
-using System.Text.Json;
-using System.Text.Json.Nodes;
 
 namespace Bit.App.Platforms.Android.Autofill
 {
@@ -123,7 +121,7 @@ namespace Bit.App.Platforms.Android.Autofill
             {
                 //TODO: Cancel process?
             }
-
+            
             var transportsArray = new JSONArray();
             if (clientCreateCredentialResult.Transports != null)
             {

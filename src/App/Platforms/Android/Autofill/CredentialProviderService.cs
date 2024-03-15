@@ -26,10 +26,10 @@ namespace Bit.Droid.Autofill
         private IVaultTimeoutService _vaultTimeoutService;
         private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
-        public override async void OnBeginCreateCredentialRequest(BeginCreateCredentialRequest request,
+        public override void OnBeginCreateCredentialRequest(BeginCreateCredentialRequest request,
             CancellationSignal cancellationSignal, IOutcomeReceiver callback)
         {
-            var response = await ProcessCreateCredentialsRequestAsync(request);
+            var response = ProcessCreateCredentialsRequestAsync(request);
             if (response != null)
             {
                 callback.OnResult(response);
@@ -80,7 +80,7 @@ namespace Bit.Droid.Autofill
             }
         }
 
-        private async Task<BeginCreateCredentialResponse> ProcessCreateCredentialsRequestAsync(
+        private BeginCreateCredentialResponse ProcessCreateCredentialsRequestAsync(
             BeginCreateCredentialRequest request)
         {
             if (request == null) { return null; }
@@ -89,32 +89,27 @@ namespace Bit.Droid.Autofill
             {
                 //TODO: Is the Create Password needed?
                 throw new NotImplementedException();
-                //return await HandleCreatePasswordQuery(beginCreatePasswordCredentialRequest);
+                //return HandleCreatePasswordQuery(beginCreatePasswordCredentialRequest);
             }
             else if (request is BeginCreatePublicKeyCredentialRequest beginCreatePublicKeyCredentialRequest)
             {
-                return await HandleCreatePasskeyQuery(beginCreatePublicKeyCredentialRequest);
+                return HandleCreatePasskeyQuery(beginCreatePublicKeyCredentialRequest);
             }
 
             return null;
         }
 
-        private async Task<BeginCreateCredentialResponse> HandleCreatePasskeyQuery(BeginCreatePublicKeyCredentialRequest optionRequest)
+        private BeginCreateCredentialResponse HandleCreatePasskeyQuery(BeginCreatePublicKeyCredentialRequest optionRequest)
         {
-            var origin = optionRequest.CallingAppInfo?.Origin;
-            PendingIntent pendingIntent = null;
+            //TODO: For POC if the Vault was unlocked we would navigate directly to 'CredentialCreationActivity'.
+            //TODO: This flow is no longer needed and can be deleted. It's kept here temporarily for reference in case it's useful.
+            /*
+            //var origin = optionRequest.CallingAppInfo?.Origin;
 
             _vaultTimeoutService ??= ServiceContainer.Resolve<IVaultTimeoutService>();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             var locked = await _vaultTimeoutService.IsLockedAsync();
-            if (locked)
-            {
-                var intent = new Intent(ApplicationContext, typeof(MainActivity));
-                intent.PutExtra(CredentialProviderConstants.PasskeyCredentialAction, CredentialProviderConstants.PasskeyCredentialCreate);
-                pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
-                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
-            }
-            else
+            if (!locked )
             {
                 var intent = new Intent(ApplicationContext, typeof(CredentialCreationActivity))
                     .SetAction(CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
@@ -122,7 +117,23 @@ namespace Bit.Droid.Autofill
                     .PutExtra(CredentialProviderConstants.Origin, origin);
                 pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
                     AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
+
+                //TODO: i81n needs to be done
+                var createEntryBuilder = new CreateEntry.Builder("Bitwarden Vault", pendingIntent)
+                    .SetDescription("Your passkey will be saved securely to the Bitwarden Vault. You can use it from any other device for sign-in in the future.")
+                    .Build();
+
+                var createCredentialResponse = new BeginCreateCredentialResponse.Builder()
+                    .AddCreateEntry(createEntryBuilder);
+
+                return createCredentialResponse.Build();
             }
+            */
+
+            var intent = new Intent(ApplicationContext, typeof(MainActivity));
+            intent.PutExtra(CredentialProviderConstants.PasskeyCredentialAction, CredentialProviderConstants.PasskeyCredentialCreate);
+            var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
+                AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
             //TODO: i81n needs to be done
             var createEntryBuilder = new CreateEntry.Builder("Bitwarden Vault", pendingIntent)

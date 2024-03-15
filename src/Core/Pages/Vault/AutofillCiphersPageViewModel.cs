@@ -12,6 +12,8 @@ namespace Bit.App.Pages
     public class AutofillCiphersPageViewModel : CipherSelectionPageViewModel
     {
         private CipherType? _fillType;
+        private bool _isAndroidPasskeyCreation;
+        private AppOptions _appOptions;
 
         public string Uri { get; set; }
 
@@ -19,6 +21,8 @@ namespace Bit.App.Pages
         {
             Uri = appOptions?.Uri;
             _fillType = appOptions.FillType;
+            _isAndroidPasskeyCreation = appOptions.FromPasskeyFramework;
+            _appOptions = appOptions;
 
             string name = null;
             if (Uri?.StartsWith(Constants.AndroidAppProtocol) ?? false)
@@ -132,6 +136,14 @@ namespace Bit.App.Pages
 
         protected override async Task AddCipherAsync()
         {
+            //Scenario for creating a new Passkey on Android
+            if (_isAndroidPasskeyCreation)
+            {
+                var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
+                await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                return;
+            }
+
             if (_fillType.HasValue && _fillType != CipherType.Login)
             {
                 var pageForOther = new CipherAddEditPage(type: _fillType, fromAutofill: true);

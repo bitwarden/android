@@ -292,7 +292,9 @@ namespace Bit.App.Pages
                 });
         }
         public bool ShowCollections => (!EditMode || CloneMode) && Cipher?.OrganizationId != null;
+        public bool IsFromPasskeyFramework { get; set; }
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
+        public bool TypeEditMode => !string.IsNullOrWhiteSpace(CipherId) || IsFromPasskeyFramework;
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
         public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
         public bool CloneMode { get; set; }
@@ -324,6 +326,7 @@ namespace Bit.App.Pages
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
             _fromOtp = appOptions?.OtpData != null;
+            IsFromPasskeyFramework = appOptions?.FromPasskeyFramework ?? false;
 
             var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));

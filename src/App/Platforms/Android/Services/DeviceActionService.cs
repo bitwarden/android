@@ -553,7 +553,7 @@ namespace Bit.Droid.Services
             return SystemClock.ElapsedRealtime();
         }
 
-        public async Task ReturnToPasskeyAfterUnlockAsync(AppOptions appOptions)
+        public async Task ExecutePasskeyActionAsync(AppOptions appOptions)
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
             if (activity == null || string.IsNullOrWhiteSpace(appOptions.PasskeyCredentialAction))
@@ -563,17 +563,19 @@ namespace Bit.Droid.Services
 
             if (appOptions.PasskeyCredentialAction == CredentialProviderConstants.PasskeyCredentialGet)
             {
-                await ReturnToPasskeyGetAfterUnlockAsync();
+                //TODO: Old POC code used for auth of a passkey after unlock. Maybe it can be reused
+                await ExecutePasskeyGetAsync();
             }
             else if (appOptions.PasskeyCredentialAction == CredentialProviderConstants.PasskeyCredentialCreate)
             {
-                await ReturnToPasskeyCreateAfterUnlockAsync();
+                //TODO: Old POC code used for creating a passkey after unlock. Maybe it can be reused
+                await ExecutePasskeyCreateAsync();
             }
 
             appOptions.PasskeyCredentialAction = null; //Clear CredentialAction Value
         }
 
-        public async Task ReturnToPasskeyGetAfterUnlockAsync()
+        public async Task ExecutePasskeyGetAsync()
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
             if (activity == null) { return; }
@@ -615,7 +617,7 @@ namespace Bit.Droid.Services
             }
         }
 
-        public async Task ReturnToPasskeyCreateAfterUnlockAsync()
+        public async Task ExecutePasskeyCreateAsync()
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
             if (activity == null) { return; }

@@ -436,9 +436,8 @@ namespace Bit.App.Utilities
                 }
                 if (appOptions.FromPasskeyFramework && !string.IsNullOrWhiteSpace(appOptions.PasskeyCredentialAction))
                 {
-                    appOptions.FromPasskeyFramework = false;
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
-                    deviceActionService.ReturnToPasskeyAfterUnlockAsync(appOptions).FireAndForget();
+                    deviceActionService.ExecutePasskeyActionAsync(appOptions).FireAndForget();
                     return true;
                 }
                 if (appOptions.Uri != null

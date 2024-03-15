@@ -45,6 +45,7 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
             _fromAutofill = fromAutofill;
             FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
+            FromAndroidPasskeyFramework = _appOptions?.FromPasskeyFramework ?? false;
             InitializeComponent();
             _vm = BindingContext as CipherAddEditPageViewModel;
             _vm.Page = this;
@@ -144,6 +145,7 @@ namespace Bit.App.Pages
         }
 
         public bool FromAutofillFramework { get; set; }
+        public bool FromAndroidPasskeyFramework { get; set; }
         public CipherAddEditPageViewModel ViewModel => _vm;
 
         protected override async void OnAppearing()

@@ -100,6 +100,11 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AddEditCipher);
                 }
+                else if (Options.FromPasskeyFramework)
+                {
+                    var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
+                    deviceActionService.ExecutePasskeyActionAsync(Options).FireAndForget();
+                }
                 else if (Options.Uri != null)
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AutofillCiphers);
