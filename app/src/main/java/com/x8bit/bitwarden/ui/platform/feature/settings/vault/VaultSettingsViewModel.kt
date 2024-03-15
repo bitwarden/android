@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.vault
 
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.repository.util.toBaseWebVaultImportUrl
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,10 +15,6 @@ class VaultSettingsViewModel @Inject constructor(
 ) : BaseViewModel<VaultSettingsState, VaultSettingsEvent, VaultSettingsAction>(
     initialState = run {
         VaultSettingsState(
-            baseUrl = environmentRepository
-                .environment
-                .environmentUrlData
-                .baseWebVaultUrlOrDefault,
             importUrl = environmentRepository
                 .environment
                 .environmentUrlData
@@ -58,7 +53,6 @@ class VaultSettingsViewModel @Inject constructor(
  * Models the state for the VaultSettingScreen.
  */
 data class VaultSettingsState(
-    val baseUrl: String,
     val importUrl: String,
 )
 
