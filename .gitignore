@@ -11,3 +11,6 @@ Thumbs.db
 /local.properties
 local.properties
 user.properties
+
+# Gradle build cache
+/build-cache/
