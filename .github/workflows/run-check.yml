@@ -31,7 +31,8 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-gradle-v2-
 
@@ -52,7 +53,7 @@ jobs:
         # with the Compose testing library. Also exclude most FDroid-related tasks, as there is no
         # significant code difference between builds.
         run: |
-          ./gradlew check \
+          ./gradlew check --no-daemon \
             -x testStandardRelease \
             -x testFdroidDebug \
             -x testFdroidRelease \
