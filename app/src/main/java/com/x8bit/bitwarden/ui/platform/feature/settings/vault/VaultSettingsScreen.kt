@@ -117,7 +117,7 @@ fun VaultSettingsScreen(
                 dialogMessage =
                 stringResource(
                     id = R.string.you_can_import_data_to_your_vault_on_x,
-                    state.value.baseUrl,
+                    state.value.importUrl,
                 ),
                 modifier = Modifier
                     .semantics { testTag = "ImportItemsLinkItemView" }

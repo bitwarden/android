@@ -29,7 +29,7 @@ class VaultSettingsScreenTest : BaseComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultSettingsEvent>()
     private val mutableStateFlow = MutableStateFlow(
         VaultSettingsState(
-            baseUrl = "testUrl", importUrl = "testUrl/#/tools/import",
+            importUrl = "testUrl/#/tools/import",
         ),
     )
     private val intentManager: IntentManager = mockk(relaxed = true) {
@@ -95,6 +95,14 @@ class VaultSettingsScreenTest : BaseComposeTest() {
         verify(exactly = 0) {
             viewModel.trySendAction(VaultSettingsAction.ImportItemsClick)
         }
+    }
+
+    @Test
+    fun `import items click should display dialog with importUrl`() {
+        composeTestRule.onNodeWithText("Import items").performClick()
+        composeTestRule
+            .onNodeWithText(mutableStateFlow.value.importUrl, substring = true)
+            .assertIsDisplayed()
     }
 
     @Test
