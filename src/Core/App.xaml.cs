@@ -9,6 +9,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Pages;
 using Bit.Core.Services;
@@ -167,132 +168,143 @@ namespace Bit.App
 
             _accountsManager.Init(() => Options, this);
 
-            Bootstrap();
-            _broadcasterService.Subscribe(nameof(App), async (message) =>
-            {
-                try
-                {
-                    if (message.Command == "showDialog")
-                    {
-                        var details = message.Data as DialogDetails;
-                        var confirmed = true;
-                        var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
-                            AppResources.Ok : details.ConfirmText;
-                        await MainThread.InvokeOnMainThreadAsync(async () =>
-                        {
-                            if (!string.IsNullOrWhiteSpace(details.CancelText))
-                            {
-                                confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
-                                    details.CancelText);
-                            }
-                            else
-                            {
-                                await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
-                            }
-                            _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
-                        });
-                    }
-#if IOS
-                    else if (message.Command == AppHelpers.RESUMED_MESSAGE_COMMAND)
-                    {
-                        ResumedAsync().FireAndForget();
-                    }
-                    else if (message.Command == "slept")
-                    {
-                        await SleptAsync();
-                    }
-#endif
-                    else if (message.Command == "migrated")
-                    {
-                        await Task.Delay(1000);
-                        await _accountsManager.NavigateOnAccountChangeAsync();
-                    }
-                    else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE ||
-                        message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE ||
-                        message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE ||
-                        message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE ||
-                        message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
-                    {
-                        if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
-                        {
-                            Options.OtpData = new OtpData((string)message.Data);
-                        }
+            _broadcasterService.Subscribe(nameof(App), BroadcastServiceMessageCallbackAsync);
 
-                        await MainThread.InvokeOnMainThreadAsync(async () =>
+            Bootstrap();
+        }
+
+        private async void BroadcastServiceMessageCallbackAsync(Message message)
+        {
+           try
+           {
+                if (message.Command == "showDialog")
+                {
+                    var details = message.Data as DialogDetails;
+                    var confirmed = true;
+                    var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
+                        AppResources.Ok : details.ConfirmText;
+                    await MainThread.InvokeOnMainThreadAsync(ShowDialogAction);
+                    async Task ShowDialogAction()
+                    {
+                        if (!string.IsNullOrWhiteSpace(details.CancelText))
                         {
-                            if (MainPage is TabsPage tabsPage)
+                            confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
+                                details.CancelText);
+                        }
+                        else
+                        {
+                            await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
+                        }
+                        _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                    }
+                }
+#if IOS
+                else if (message.Command == AppHelpers.RESUMED_MESSAGE_COMMAND)
+                {
+                    ResumedAsync().FireAndForget();
+                }
+                else if (message.Command == "slept")
+                {
+                    await SleptAsync();
+                }
+#endif
+                else if (message.Command == "migrated")
+                {
+                    await Task.Delay(1000);
+                    await _accountsManager.NavigateOnAccountChangeAsync();
+                }
+                else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE ||
+                    message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE ||
+                    message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE ||
+                    message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE ||
+                    message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                {
+                    if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                    {
+                        Options.OtpData = new OtpData((string)message.Data);
+                    }
+
+                    await MainThread.InvokeOnMainThreadAsync(ExecuteNavigationAction); 
+                    async Task ExecuteNavigationAction()
+                    {
+                        if (MainPage is TabsPage tabsPage)
+                        {
+                            while (tabsPage.Navigation.ModalStack.Count > 0)
                             {
-                                while (tabsPage.Navigation.ModalStack.Count > 0)
-                                {
-                                    await tabsPage.Navigation.PopModalAsync(false);
-                                }
-                                if (message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE)
-                                {
-                                    MainPage = new NavigationPage(new CipherSelectionPage(Options));
-                                }
-                                else if (message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE)
-                                {
-                                    Options.MyVaultTile = false;
-                                    tabsPage.ResetToVaultPage();
-                                }
-                                else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE)
-                                {
-                                    Options.GeneratorTile = false;
-                                    tabsPage.ResetToGeneratorPage();
-                                }
-                                else if (message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE)
-                                {
-                                    tabsPage.ResetToSendPage();
-                                }
-                                else if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
-                                {
-                                    tabsPage.ResetToVaultPage();
-                                    await tabsPage.Navigation.PushModalAsync(new NavigationPage(new CipherSelectionPage(Options)));
-                                }
+                                await tabsPage.Navigation.PopModalAsync(false);
                             }
-                        });
-                    }
-                    else if (message.Command == "convertAccountToKeyConnector")
-                    {
-                        await MainThread.InvokeOnMainThreadAsync(async () =>
-                        {
-                            await MainPage.Navigation.PushModalAsync(
-                                new NavigationPage(new RemoveMasterPasswordPage()));
-                        });
-                    }
-                    else if (message.Command == Constants.ForceUpdatePassword)
-                    {
-                        await MainThread.InvokeOnMainThreadAsync(async () =>
-                        {
-                            await MainPage.Navigation.PushModalAsync(
-                                new NavigationPage(new UpdateTempPasswordPage()));
-                        });
-                    }
-                    else if (message.Command == Constants.ForceSetPassword)
-                    {
-                        await MainThread.InvokeOnMainThreadAsync(() => MainPage.Navigation.PushModalAsync(
-                                new NavigationPage(new SetPasswordPage(orgIdentifier: (string)message.Data))));
-                    }
-                    else if (message.Command == "syncCompleted")
-                    {
-                        await _configService.GetAsync(true);
-                    }
-                    else if (message.Command == Constants.PasswordlessLoginRequestKey
-                        || message.Command == "unlocked"
-                        || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
-                    {
-                        lock (_processingLoginRequestLock)
-                        {
-                            // lock doesn't allow for async execution
-                            CheckPasswordlessLoginRequestsAsync().Wait();
+                            if (message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE)
+                            {
+                                MainPage = new NavigationPage(new CipherSelectionPage(Options));
+                            }
+                            else if (message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE)
+                            {
+                                Options.MyVaultTile = false;
+                                tabsPage.ResetToVaultPage();
+                            }
+                            else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE)
+                            {
+                                Options.GeneratorTile = false;
+                                tabsPage.ResetToGeneratorPage();
+                            }
+                            else if (message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE)
+                            {
+                                tabsPage.ResetToSendPage();
+                            }
+                            else if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                            {
+                                tabsPage.ResetToVaultPage();
+                                await tabsPage.Navigation.PushModalAsync(new NavigationPage(new CipherSelectionPage(Options)));
+                            }
                         }
                     }
                 }
-                catch (Exception ex)
+                else if (message.Command == "convertAccountToKeyConnector")
                 {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    await MainThread.InvokeOnMainThreadAsync(NavigateToRemoveMasterPasswordPageAction);
+                    async Task NavigateToRemoveMasterPasswordPageAction()
+                    {
+                        await MainPage.Navigation.PushModalAsync(
+                            new NavigationPage(new RemoveMasterPasswordPage()));
+                    }
                 }
-            });
+                else if (message.Command == Constants.ForceUpdatePassword)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(NavigateToUpdateTempPasswordPageAction);
+                    async Task NavigateToUpdateTempPasswordPageAction()
+                    {
+                        await MainPage.Navigation.PushModalAsync(
+                            new NavigationPage(new UpdateTempPasswordPage()));
+                    }
+                }
+                else if (message.Command == Constants.ForceSetPassword)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(NavigateToSetPasswordPageAction);
+                    void NavigateToSetPasswordPageAction()
+                    {
+                        MainPage.Navigation.PushModalAsync(
+                            new NavigationPage(new SetPasswordPage(orgIdentifier: (string)message.Data)));
+                    }
+                }
+                else if (message.Command == "syncCompleted")
+                {
+                    await _configService.GetAsync(true);
+                }
+                else if (message.Command == Constants.PasswordlessLoginRequestKey
+                    || message.Command == "unlocked"
+                    || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                {
+                    lock (_processingLoginRequestLock)
+                    {
+                        // lock doesn't allow for async execution
+                        CheckPasswordlessLoginRequestsAsync().Wait();
+                    }
+                }
+           }
+           catch (Exception ex)
+           {
+               LoggerHelper.LogEvenIfCantBeResolved(ex);
+           }
         }
 
         private async Task CheckPasswordlessLoginRequestsAsync()
@@ -307,7 +319,6 @@ namespace Bit.App
             {
                 return;
             }
-
             var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
             if (notification == null)
             {
