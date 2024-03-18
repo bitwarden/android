@@ -39,7 +39,7 @@ interface IdentityApi {
         @Field(value = "authRequest") authRequestId: String?,
     ): Result<GetTokenResponseJson.Success>
 
-    @GET("/account/prevalidate")
+    @GET("/sso/prevalidate")
     suspend fun prevalidateSso(
         @Query("domainHint") organizationIdentifier: String,
     ): Result<PrevalidateSsoResponseJson>
