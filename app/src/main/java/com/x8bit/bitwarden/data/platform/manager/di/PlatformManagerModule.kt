@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -97,7 +98,11 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun provideSdkClientManager(): SdkClientManager = SdkClientManagerImpl()
+    fun provideSdkClientManager(
+        featureFlagManager: BitwardenFeatureFlagManager,
+    ): SdkClientManager = SdkClientManagerImpl(
+        featureFlagManager = featureFlagManager,
+    )
 
     @Provides
     @Singleton

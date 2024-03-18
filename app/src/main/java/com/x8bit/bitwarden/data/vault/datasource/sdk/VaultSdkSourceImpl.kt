@@ -388,7 +388,7 @@ class VaultSdkSourceImpl(
             )
     }
 
-    private fun getClient(
+    private suspend fun getClient(
         userId: String,
     ): Client = sdkClientManager.getOrCreateClient(userId = userId)
 }
