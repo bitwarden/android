@@ -275,6 +275,7 @@ namespace Bit.App
                 }
                 else if (message.Command == Constants.ForceUpdatePassword)
                 {
+                    ArgumentNullException.ThrowIfNull(MainPage);
                     await MainThread.InvokeOnMainThreadAsync(NavigateToUpdateTempPasswordPageAction);
                     async Task NavigateToUpdateTempPasswordPageAction()
                     {
