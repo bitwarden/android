@@ -177,6 +177,7 @@ namespace Bit.App
         {
            try
            {
+                ArgumentNullException.ThrowIfNull(message);
                 if (message.Command == "showDialog")
                 {
                     var details = message.Data as DialogDetails;
