@@ -1,9 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
-    base64 (0.1.1)
+    base64 (0.2.0)
     claide (1.1.0)
     claide-plugins (0.9.2)
       cork
@@ -12,7 +12,7 @@ GEM
     colored2 (3.1.2)
     cork (0.3.0)
       colored2 (~> 3.1)
-    danger (9.3.2)
+    danger (9.4.3)
       claide (~> 1.0)
       claide-plugins (>= 0.9.2)
       colored2 (~> 3.1)
@@ -23,48 +23,50 @@ GEM
       kramdown (~> 2.3)
       kramdown-parser-gfm (~> 1.0)
       no_proxy_fix
-      octokit (~> 6.0)
+      octokit (>= 4.0)
       terminal-table (>= 1, < 4)
     danger-plugin-api (1.0.0)
       danger (> 2.0)
-    danger-shroud (0.0.6)
+    danger-shroud (0.0.7)
       danger-plugin-api (~> 1.0)
       nokogiri
-    faraday (2.7.11)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-http-cache (2.5.0)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-http-cache (2.5.1)
       faraday (>= 0.8)
-    faraday-net_http (3.0.2)
-    git (1.18.0)
+    faraday-net_http (3.1.0)
+      net-http
+    git (1.19.1)
       addressable (~> 2.8)
       rchardet (~> 1.8)
     kramdown (2.4.0)
       rexml
     kramdown-parser-gfm (1.1.0)
       kramdown (~> 2.0)
-    mini_portile2 (2.8.4)
+    mini_portile2 (2.8.5)
     nap (1.1.0)
+    net-http (0.4.1)
+      uri
     no_proxy_fix (0.1.2)
-    nokogiri (1.15.4)
+    nokogiri (1.16.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    octokit (6.1.1)
+    octokit (8.1.0)
+      base64
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
     open4 (1.3.4)
-    public_suffix (5.0.3)
-    racc (1.7.1)
+    public_suffix (5.0.4)
+    racc (1.7.3)
     rchardet (1.8.0)
     rexml (3.2.6)
-    ruby2_keywords (0.0.5)
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
 
 PLATFORMS
   ruby
@@ -77,4 +79,4 @@ RUBY VERSION
    ruby 3.2.2p53
 
 BUNDLED WITH
-   2.1.4
+   2.4.10
