@@ -284,6 +284,7 @@ namespace Bit.App
                 }
                 else if (message.Command == Constants.ForceSetPassword)
                 {
+                    ArgumentNullException.ThrowIfNull(MainPage);
                     await MainThread.InvokeOnMainThreadAsync(NavigateToSetPasswordPageAction);
                     void NavigateToSetPasswordPageAction()
                     {
