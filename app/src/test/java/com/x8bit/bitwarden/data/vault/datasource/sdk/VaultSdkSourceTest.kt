@@ -67,7 +67,7 @@ class VaultSdkSourceTest {
         every { exporters() } returns clientExporters
     }
     private val sdkClientManager = mockk<SdkClientManager> {
-        every { getOrCreateClient(any()) } returns client
+        coEvery { getOrCreateClient(any()) } returns client
         every { destroyClient(any()) } just runs
     }
     private val vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
@@ -102,7 +102,7 @@ class VaultSdkSourceTest {
         coVerify {
             clientCrypto.derivePinKey(pin)
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -125,7 +125,7 @@ class VaultSdkSourceTest {
             coVerify {
                 clientCrypto.derivePinUserKey(encryptedPin = encryptedPin)
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -144,7 +144,7 @@ class VaultSdkSourceTest {
             coVerify {
                 clientCrypto.getUserEncryptionKey()
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -192,7 +192,7 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -218,7 +218,7 @@ class VaultSdkSourceTest {
                 req = mockInitCryptoRequest,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -245,7 +245,7 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -271,7 +271,7 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -297,7 +297,7 @@ class VaultSdkSourceTest {
                 req = mockInitCryptoRequest,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -324,7 +324,7 @@ class VaultSdkSourceTest {
                     req = mockInitCryptoRequest,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -350,7 +350,7 @@ class VaultSdkSourceTest {
                 cipherView = mockCipher,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -376,7 +376,7 @@ class VaultSdkSourceTest {
                 cipher = mockCipher,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -403,7 +403,7 @@ class VaultSdkSourceTest {
                     ciphers = mockCiphers,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -429,7 +429,7 @@ class VaultSdkSourceTest {
                 cipher = mockCiphers,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -455,7 +455,7 @@ class VaultSdkSourceTest {
                     collection = mockCollection,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -482,7 +482,7 @@ class VaultSdkSourceTest {
                     collections = mockCollectionsList,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -509,7 +509,7 @@ class VaultSdkSourceTest {
                     send = mockSend,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -586,7 +586,7 @@ class VaultSdkSourceTest {
                     send = mockSend,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -614,7 +614,7 @@ class VaultSdkSourceTest {
                 folder = mockFolder,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -640,7 +640,7 @@ class VaultSdkSourceTest {
                 folder = mockFolder,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -666,7 +666,7 @@ class VaultSdkSourceTest {
                 folders = mockFolders,
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -702,7 +702,7 @@ class VaultSdkSourceTest {
                 decryptedFilePath = "decrypted_path",
             )
         }
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test
@@ -728,7 +728,7 @@ class VaultSdkSourceTest {
                     passwordHistory = mockPasswordHistoryView,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -754,7 +754,7 @@ class VaultSdkSourceTest {
                     list = mockPasswordHistoryList,
                 )
             }
-            verify { sdkClientManager.getOrCreateClient(userId = userId) }
+            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -781,7 +781,7 @@ class VaultSdkSourceTest {
             )
         }
 
-        verify { sdkClientManager.getOrCreateClient(userId = userId) }
+        coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
     }
 
     @Test

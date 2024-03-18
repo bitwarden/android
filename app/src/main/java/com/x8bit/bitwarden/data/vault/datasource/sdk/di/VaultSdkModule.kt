@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.di
 
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSourceImpl
 import dagger.Module
@@ -24,4 +26,9 @@ object VaultSdkModule {
         VaultSdkSourceImpl(
             sdkClientManager = sdkClientManager,
         )
+
+    @Provides
+    @Singleton
+    fun providesBitwardenFeatureFlagManager(): BitwardenFeatureFlagManager =
+        BitwardenFeatureFlagManagerImpl()
 }

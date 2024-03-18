@@ -11,7 +11,7 @@ interface SdkClientManager {
      * Returns the cached [Client] instance for the given [userId], otherwise creates and caches
      * a new one and returns it.
      */
-    fun getOrCreateClient(userId: String): Client
+    suspend fun getOrCreateClient(userId: String): Client
 
     /**
      * Clears any resources from the [Client] associated with the given [userId] and removes it

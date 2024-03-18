@@ -12,6 +12,10 @@ import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toUByte
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 /**
  * Primary implementation of [AuthSdkSource] that serves as a convenience wrapper around a
@@ -20,7 +24,17 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toUByte
 class AuthSdkSourceImpl(
     private val clientAuth: ClientAuth,
     private val clientPlatform: ClientPlatform,
+    dispatcherManager: DispatcherManager,
+    featureFlagManager: BitwardenFeatureFlagManager,
 ) : AuthSdkSource {
+
+    private val ioScope = CoroutineScope(dispatcherManager.io)
+
+    init {
+        ioScope.launch {
+            clientPlatform.loadFlags(featureFlagManager.featureFlags)
+        }
+    }
 
     override suspend fun getTrustDevice(): Result<TrustDeviceResponse> = runCatching {
         clientAuth.trustDevice()
