@@ -38,6 +38,16 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on ContinueClick emits ShowToast`() = runTest {
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(TrustedDeviceAction.ContinueClick)
+            assertEquals(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        }
+    }
+
+    @Test
     fun `on ApproveWithAdminClick emits ShowToast`() = runTest {
         val viewModel = createViewModel()
 
@@ -94,4 +104,8 @@ private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
     emailAddress = "email@bitwarden.com",
     environmentLabel = "bitwarden.com",
     isRemembered = false,
+    showContinueButton = false,
+    showOtherDeviceButton = false,
+    showRequestAdminButton = false,
+    showMasterPasswordButton = false,
 )
