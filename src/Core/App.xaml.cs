@@ -181,6 +181,9 @@ namespace Bit.App
                 if (message.Command == "showDialog")
                 {
                     var details = message.Data as DialogDetails;
+                    ArgumentNullException.ThrowIfNull(details);
+                    ArgumentNullException.ThrowIfNull(MainPage);
+                    
                     var confirmed = true;
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                         AppResources.Ok : details.ConfirmText;
