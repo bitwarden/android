@@ -258,6 +258,7 @@ namespace Bit.App
                             else if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
                             {
                                 tabsPage.ResetToVaultPage();
+                                ArgumentNullException.ThrowIfNull(tabsPage.Navigation);
                                 await tabsPage.Navigation.PushModalAsync(new NavigationPage(new CipherSelectionPage(Options)));
                             }
                         }
