@@ -233,6 +233,8 @@ namespace Bit.App
                     {
                         if (MainPage is TabsPage tabsPage)
                         {
+                            ArgumentNullException.ThrowIfNull(tabsPage.Navigation);
+                            ArgumentNullException.ThrowIfNull(tabsPage.Navigation.ModalStack);
                             while (tabsPage.Navigation.ModalStack.Count > 0)
                             {
                                 await tabsPage.Navigation.PopModalAsync(false);
