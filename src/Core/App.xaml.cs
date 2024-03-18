@@ -266,6 +266,7 @@ namespace Bit.App
                 }
                 else if (message.Command == "convertAccountToKeyConnector")
                 {
+                    ArgumentNullException.ThrowIfNull(MainPage);
                     await MainThread.InvokeOnMainThreadAsync(NavigateToRemoveMasterPasswordPageAction);
                     async Task NavigateToRemoveMasterPasswordPageAction()
                     {
