@@ -65,6 +65,45 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `continue button should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(showContinueButton = false) }
+
+        composeTestRule
+            .onNodeWithText("Continue")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `on continue clicked should send ContinueClick`() {
+        composeTestRule
+            .onNodeWithText("Continue")
+            .performScrollTo()
+            .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(TrustedDeviceAction.ContinueClick)
+        }
+    }
+
+    @Test
+    fun `other device button should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText("Approve with my other device")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(showOtherDeviceButton = false) }
+
+        composeTestRule
+            .onNodeWithText("Approve with my other device")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on approve with device clicked should send ApproveWithDeviceClick`() {
         composeTestRule
             .onNodeWithText("Approve with my other device")
@@ -76,6 +115,20 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `admin approval button should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText("Request admin approval")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(showRequestAdminButton = false) }
+
+        composeTestRule
+            .onNodeWithText("Request admin approval")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `on approve with admin clicked should send ApproveWithAdminClick`() {
         composeTestRule
             .onNodeWithText("Request admin approval")
@@ -84,6 +137,20 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
         verify(exactly = 1) {
             viewModel.trySendAction(TrustedDeviceAction.ApproveWithAdminClick)
         }
+    }
+
+    @Test
+    fun `master password button should be displayed according to state`() {
+        composeTestRule
+            .onNodeWithText("Approve with master password")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(showMasterPasswordButton = false) }
+
+        composeTestRule
+            .onNodeWithText("Approve with master password")
+            .assertDoesNotExist()
     }
 
     @Test
@@ -158,4 +225,8 @@ private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
     emailAddress = "email@bitwarden.com",
     environmentLabel = "vault.bitwarden.pw",
     isRemembered = false,
+    showContinueButton = true,
+    showOtherDeviceButton = true,
+    showRequestAdminButton = true,
+    showMasterPasswordButton = true,
 )

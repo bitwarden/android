@@ -110,35 +110,53 @@ private fun TrustedDeviceScaffold(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
-
             Spacer(modifier = Modifier.height(24.dp))
-            BitwardenFilledButton(
-                label = stringResource(id = R.string.approve_with_my_other_device),
-                onClick = handlers.onApproveWithDeviceClick,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
+
+            if (state.showContinueButton) {
+                BitwardenFilledButton(
+                    label = stringResource(id = R.string.continue_text),
+                    onClick = handlers.onContinueClick,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            if (state.showOtherDeviceButton) {
+                BitwardenFilledButton(
+                    label = stringResource(id = R.string.approve_with_my_other_device),
+                    onClick = handlers.onApproveWithDeviceClick,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            if (state.showRequestAdminButton) {
+                BitwardenOutlinedButton(
+                    label = stringResource(id = R.string.request_admin_approval),
+                    onClick = handlers.onApproveWithAdminClick,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+
+            if (state.showMasterPasswordButton) {
+                BitwardenOutlinedButton(
+                    label = stringResource(id = R.string.approve_with_master_password),
+                    onClick = handlers.onApproveWithPasswordClick,
+                    modifier = Modifier
+                        .padding(horizontal = 16.dp)
+                        .fillMaxWidth(),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
             Spacer(modifier = Modifier.height(12.dp))
-            BitwardenOutlinedButton(
-                label = stringResource(id = R.string.request_admin_approval),
-                onClick = handlers.onApproveWithAdminClick,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-            BitwardenOutlinedButton(
-                label = stringResource(id = R.string.approve_with_master_password),
-                onClick = handlers.onApproveWithPasswordClick,
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(
                     id = R.string.logging_in_as_x_on_y,
@@ -174,10 +192,15 @@ private fun TrustedDeviceScaffold_preview() {
             isRemembered = false,
             emailAddress = "email@bitwarden.com",
             environmentLabel = "vault.bitwarden.pw",
+            showContinueButton = false,
+            showOtherDeviceButton = true,
+            showRequestAdminButton = true,
+            showMasterPasswordButton = true,
         ),
         handlers = TrustedDeviceHandlers(
             onBackClick = {},
             onRememberToggle = {},
+            onContinueClick = {},
             onApproveWithAdminClick = {},
             onApproveWithDeviceClick = {},
             onApproveWithPasswordClick = {},

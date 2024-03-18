@@ -22,16 +22,23 @@ class TrustedDeviceViewModel @Inject constructor(
     environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<TrustedDeviceState, TrustedDeviceEvent, TrustedDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: TrustedDeviceState(
-            emailAddress = TrustedDeviceArgs(savedStateHandle).emailAddress,
-            environmentLabel = environmentRepository.environment.label,
-            isRemembered = false,
-        ),
+        ?: run {
+            TrustedDeviceState(
+                emailAddress = TrustedDeviceArgs(savedStateHandle).emailAddress,
+                environmentLabel = environmentRepository.environment.label,
+                isRemembered = false,
+                showContinueButton = false,
+                showOtherDeviceButton = false,
+                showRequestAdminButton = false,
+                showMasterPasswordButton = false,
+            )
+        },
 ) {
     override fun handleAction(action: TrustedDeviceAction) {
         when (action) {
             TrustedDeviceAction.BackClick -> handleBackClick()
             is TrustedDeviceAction.RememberToggle -> handleRememberToggle(action)
+            TrustedDeviceAction.ContinueClick -> handleContinueClick()
             TrustedDeviceAction.ApproveWithAdminClick -> handleApproveWithAdminClick()
             TrustedDeviceAction.ApproveWithDeviceClick -> handleApproveWithDeviceClick()
             TrustedDeviceAction.ApproveWithPasswordClick -> handleApproveWithPasswordClick()
@@ -45,6 +52,10 @@ class TrustedDeviceViewModel @Inject constructor(
 
     private fun handleRememberToggle(action: TrustedDeviceAction.RememberToggle) {
         mutableStateFlow.update { it.copy(isRemembered = action.isRemembered) }
+    }
+
+    private fun handleContinueClick() {
+        sendEvent(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()))
     }
 
     private fun handleApproveWithAdminClick() {
@@ -72,6 +83,10 @@ data class TrustedDeviceState(
     val emailAddress: String,
     val environmentLabel: String,
     val isRemembered: Boolean,
+    val showContinueButton: Boolean,
+    val showOtherDeviceButton: Boolean,
+    val showRequestAdminButton: Boolean,
+    val showMasterPasswordButton: Boolean,
 ) : Parcelable
 
 /**
@@ -104,6 +119,11 @@ sealed class TrustedDeviceAction {
     data class RememberToggle(
         val isRemembered: Boolean,
     ) : TrustedDeviceAction()
+
+    /**
+     * User clicked the "Continue" button.
+     */
+    data object ContinueClick : TrustedDeviceAction()
 
     /**
      * User clicked the "Approve with my other device" button.

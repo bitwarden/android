@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.TrustedDeviceViewModel
 data class TrustedDeviceHandlers(
     val onBackClick: () -> Unit,
     val onRememberToggle: (Boolean) -> Unit,
+    val onContinueClick: () -> Unit,
     val onApproveWithDeviceClick: () -> Unit,
     val onApproveWithAdminClick: () -> Unit,
     val onApproveWithPasswordClick: () -> Unit,
@@ -26,6 +27,7 @@ data class TrustedDeviceHandlers(
                 onRememberToggle = {
                     viewModel.trySendAction(TrustedDeviceAction.RememberToggle(it))
                 },
+                onContinueClick = { viewModel.trySendAction(TrustedDeviceAction.ContinueClick) },
                 onApproveWithDeviceClick = {
                     viewModel.trySendAction(TrustedDeviceAction.ApproveWithDeviceClick)
                 },
