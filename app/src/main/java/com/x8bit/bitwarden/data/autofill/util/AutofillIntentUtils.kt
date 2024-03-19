@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.IntentSender
 import android.service.autofill.Dataset
 import android.view.autofill.AutofillManager
+import androidx.core.os.bundleOf
 import com.x8bit.bitwarden.AutofillTotpCopyActivity
 import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
 private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"
 private const val AUTOFILL_SELECTION_DATA_KEY = "autofill-selection-data"
 private const val AUTOFILL_TOTP_COPY_DATA_KEY = "autofill-totp-copy-data"
+private const val AUTOFILL_BUNDLE_KEY = "autofill-bundle-key"
 
 /**
  * Creates an [Intent] in order to send the user to a manual selection process for autofill.
@@ -36,10 +38,9 @@ fun createAutofillSelectionIntent(
     )
         .apply {
             putExtra(
-                AUTOFILL_SELECTION_DATA_KEY,
-                AutofillSelectionData(
-                    type = type,
-                    uri = uri,
+                AUTOFILL_BUNDLE_KEY,
+                bundleOf(
+                    AUTOFILL_SELECTION_DATA_KEY to AutofillSelectionData(type = type, uri = uri),
                 ),
             )
         }
@@ -132,7 +133,8 @@ fun Intent.getAutofillSaveItemOrNull(): AutofillSaveItem? =
  * The [AutofillSelectionData] will be returned when present.
  */
 fun Intent.getAutofillSelectionDataOrNull(): AutofillSelectionData? =
-    this.getSafeParcelableExtra(AUTOFILL_SELECTION_DATA_KEY)
+    getBundleExtra(AUTOFILL_BUNDLE_KEY)
+        ?.getSafeParcelableExtra(AUTOFILL_SELECTION_DATA_KEY)
 
 /**
  * Checks if the given [Intent] contains data for TOTP copying. The [AutofillTotpCopyData] will be
