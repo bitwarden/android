@@ -6,8 +6,6 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.util.toDisplayLabels
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -28,11 +26,10 @@ private const val MIN_PASSWORD_LENGTH = 12
 @Suppress("TooManyFunctions")
 class SetPasswordViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SetPasswordState, SetPasswordEvent, SetPasswordAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
-        val organizationIdentifier = authRepository.organizationIdentifier
+        val organizationIdentifier = authRepository.ssoOrganizationIdentifier
         if (organizationIdentifier.isNullOrBlank()) authRepository.logout()
         SetPasswordState(
             dialogState = null,
@@ -58,10 +55,6 @@ class SetPasswordViewModel @Inject constructor(
 
             is SetPasswordAction.PasswordHintInputChanged -> {
                 handlePasswordHintInputChanged(action)
-            }
-
-            is SetPasswordAction.Internal.ReceiveUnlockVaultResult -> {
-                handleReceiveUnlockVaultResult(action)
             }
 
             is SetPasswordAction.Internal.ReceiveSetPasswordResult -> {
@@ -180,30 +173,6 @@ class SetPasswordViewModel @Inject constructor(
         }
     }
 
-    private fun handleReceiveUnlockVaultResult(
-        action: SetPasswordAction.Internal.ReceiveUnlockVaultResult,
-    ) {
-        when (action.result) {
-            is VaultUnlockResult.Success -> {
-                mutableStateFlow.update { it.copy(dialogState = null) }
-            }
-
-            is VaultUnlockResult.AuthenticationError,
-            is VaultUnlockResult.InvalidStateError,
-            is VaultUnlockResult.GenericError,
-            -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialogState = SetPasswordState.DialogState.Error(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
-            }
-        }
-    }
-
     /**
      * Show an alert if the set password attempt failed, otherwise attempt to unlock the vault.
      */
@@ -223,15 +192,7 @@ class SetPasswordViewModel @Inject constructor(
             }
 
             SetPasswordResult.Success -> {
-                viewModelScope.launch {
-                    sendAction(
-                        SetPasswordAction.Internal.ReceiveUnlockVaultResult(
-                            result = vaultRepository.unlockVaultWithMasterPassword(
-                                masterPassword = state.passwordInput,
-                            ),
-                        ),
-                    )
-                }
+                mutableStateFlow.update { it.copy(dialogState = null) }
             }
         }
     }
@@ -361,13 +322,6 @@ sealed class SetPasswordAction {
      * Models actions that the [SetPasswordViewModel] might send itself.
      */
     sealed class Internal : SetPasswordAction() {
-        /**
-         * Indicates that a login result has been received.
-         */
-        data class ReceiveUnlockVaultResult(
-            val result: VaultUnlockResult,
-        ) : Internal()
-
         /**
          * Indicates that a set password result has been received.
          */

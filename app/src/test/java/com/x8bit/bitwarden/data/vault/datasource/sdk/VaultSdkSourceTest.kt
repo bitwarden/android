@@ -129,6 +129,52 @@ class VaultSdkSourceTest {
         }
 
     @Test
+    fun `getAuthRequestKey should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val publicKey = "key"
+            val userId = "userId"
+            val expectedResult = "authRequestKey"
+            coEvery {
+                clientAuth.approveAuthRequest(publicKey)
+            } returns expectedResult
+            val result = vaultSdkSource.getAuthRequestKey(
+                publicKey = publicKey,
+                userId = userId,
+            )
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientAuth.approveAuthRequest(publicKey)
+                sdkClientManager.getOrCreateClient(userId = userId)
+            }
+        }
+
+    @Test
+    fun `getResetPasswordKey should call SDK and return a Result with correct data`() =
+        runBlocking {
+            val orgPublicKey = "key"
+            val userId = "userId"
+            val expectedResult = "resetPasswordKey"
+            coEvery {
+                clientCrypto.enrollAdminPasswordReset(orgPublicKey)
+            } returns expectedResult
+            val result = vaultSdkSource.getResetPasswordKey(
+                orgPublicKey = orgPublicKey,
+                userId = userId,
+            )
+            assertEquals(
+                expectedResult.asSuccess(),
+                result,
+            )
+            coVerify {
+                clientCrypto.enrollAdminPasswordReset(orgPublicKey)
+                sdkClientManager.getOrCreateClient(userId = userId)
+            }
+        }
+
+    @Test
     fun `getUserEncryptionKey should call SDK and return a Result with correct data`() =
         runBlocking {
             val userId = "userId"
@@ -143,8 +189,8 @@ class VaultSdkSourceTest {
             )
             coVerify {
                 clientCrypto.getUserEncryptionKey()
+                sdkClientManager.getOrCreateClient(userId = userId)
             }
-            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test

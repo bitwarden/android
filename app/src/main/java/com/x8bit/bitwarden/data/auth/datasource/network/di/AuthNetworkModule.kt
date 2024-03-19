@@ -92,6 +92,7 @@ object AuthNetworkModule {
     fun providesOrganizationService(
         retrofits: Retrofits,
     ): OrganizationService = OrganizationServiceImpl(
+        authenticatedOrganizationApi = retrofits.authenticatedApiRetrofit.create(),
         organizationApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 }

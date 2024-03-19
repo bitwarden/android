@@ -71,6 +71,17 @@ interface VaultSdkSource {
     ): Result<String>
 
     /**
+     * Get the reset password key for this [orgPublicKey] and [userId].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun getResetPasswordKey(
+        orgPublicKey: String,
+        userId: String,
+    ): Result<String>
+
+    /**
      * Gets the user's encryption key, which can be used to later unlock their vault via a call to
      * [initializeCrypto] with [InitUserCryptoMethod.DecryptedKey].
      *
