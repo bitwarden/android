@@ -2,16 +2,25 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
+import io.mockk.verify
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class TrustedDeviceViewModelTest : BaseViewModelTest() {
 
+    private val authRepository: AuthRepository = mockk {
+        every { logout() } just runs
+    }
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
@@ -78,18 +87,20 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on NotYouClick emits ShowToast`() = runTest {
+    fun `on NotYouClick emits ShowToast`() {
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(TrustedDeviceAction.NotYouClick)
-            assertEquals(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+        viewModel.trySendAction(TrustedDeviceAction.NotYouClick)
+
+        verify(exactly = 1) {
+            authRepository.logout()
         }
     }
 
     private fun createViewModel(
         state: TrustedDeviceState? = null,
         environmentRepository: EnvironmentRepository = environmentRepo,
+        authorizationRepository: AuthRepository = authRepository,
     ): TrustedDeviceViewModel =
         TrustedDeviceViewModel(
             savedStateHandle = SavedStateHandle().apply {
@@ -97,6 +108,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
                 set("email_address", "email@bitwarden.com")
             },
             environmentRepository = environmentRepository,
+            authRepository = authorizationRepository,
         )
 }
 

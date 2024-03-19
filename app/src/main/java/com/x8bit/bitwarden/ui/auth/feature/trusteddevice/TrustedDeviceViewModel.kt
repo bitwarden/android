@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -20,6 +21,7 @@ private const val KEY_STATE = "state"
 class TrustedDeviceViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     environmentRepository: EnvironmentRepository,
+    private val authRepository: AuthRepository,
 ) : BaseViewModel<TrustedDeviceState, TrustedDeviceEvent, TrustedDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -71,7 +73,7 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleNotYouClick() {
-        sendEvent(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()))
+        authRepository.logout()
     }
 }
 
