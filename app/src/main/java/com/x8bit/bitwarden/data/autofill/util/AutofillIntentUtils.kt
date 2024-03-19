@@ -59,9 +59,9 @@ fun createTotpCopyIntentSender(
     )
         .apply {
             putExtra(
-                AUTOFILL_TOTP_COPY_DATA_KEY,
-                AutofillTotpCopyData(
-                    cipherId = cipherId,
+                AUTOFILL_BUNDLE_KEY,
+                bundleOf(
+                    AUTOFILL_TOTP_COPY_DATA_KEY to AutofillTotpCopyData(cipherId = cipherId),
                 ),
             )
         }
@@ -141,4 +141,5 @@ fun Intent.getAutofillSelectionDataOrNull(): AutofillSelectionData? =
  * returned when present.
  */
 fun Intent.getTotpCopyIntentOrNull(): AutofillTotpCopyData? =
-    this.getSafeParcelableExtra(AUTOFILL_TOTP_COPY_DATA_KEY)
+    getBundleExtra(AUTOFILL_BUNDLE_KEY)
+        ?.getSafeParcelableExtra(AUTOFILL_TOTP_COPY_DATA_KEY)
