@@ -69,9 +69,9 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     val yubiKeyResultFlow: Flow<YubiKeyResult>
 
     /**
-     * The organization identifier currently associated with this user.
+     * The organization identifier currently associated with this user's SSO flow.
      */
-    var organizationIdentifier: String?
+    val ssoOrganizationIdentifier: String?
 
     /**
      * The two-factor response data necessary for login and also to populate the

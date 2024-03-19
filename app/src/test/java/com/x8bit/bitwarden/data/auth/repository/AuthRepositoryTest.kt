@@ -18,7 +18,9 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationKeysResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
@@ -2681,10 +2683,13 @@ class AuthRepositoryTest {
         val password = "password"
         val passwordHash = "passwordHash"
         val passwordHint = "passwordHint"
-        val organizationId = ORGANIZATION_IDENTIFIER
+        val organizationIdentifier = ORGANIZATION_IDENTIFIER
+        val organizationId = "orgId"
         val encryptedUserKey = "encryptedUserKey"
         val privateRsaKey = "privateRsaKey"
         val publicRsaKey = "publicRsaKey"
+        val publicOrgKey = "publicOrgKey"
+        val resetPasswordKey = "resetPasswordKey"
         val profile = SINGLE_USER_STATE_1.activeAccount.profile
         val kdf = profile.toSdkParams()
         val registerKeyResponse = RegisterKeyResponse(
@@ -2695,7 +2700,7 @@ class AuthRepositoryTest {
         val setPasswordRequestJson = SetPasswordRequestJson(
             passwordHash = passwordHash,
             passwordHint = passwordHint,
-            organizationIdentifier = organizationId,
+            organizationIdentifier = organizationIdentifier,
             kdfIterations = profile.kdfIterations,
             kdfMemory = profile.kdfMemory,
             kdfParallelism = profile.kdfParallelism,
@@ -2721,9 +2726,40 @@ class AuthRepositoryTest {
         coEvery {
             accountsService.setPassword(body = setPasswordRequestJson)
         } returns Unit.asSuccess()
+        coEvery {
+            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+        } returns OrganizationAutoEnrollStatusResponseJson(
+            organizationId = organizationId,
+            isResetPasswordEnabled = true,
+        )
+            .asSuccess()
+        coEvery {
+            organizationService.getOrganizationKeys(organizationId)
+        } returns OrganizationKeysResponseJson(
+            privateKey = "",
+            publicKey = publicOrgKey,
+        )
+            .asSuccess()
+        coEvery {
+            organizationService.organizationResetPasswordEnroll(
+                organizationId = organizationId,
+                userId = profile.userId,
+                passwordHash = passwordHash,
+                resetPasswordKey = resetPasswordKey,
+            )
+        } returns Unit.asSuccess()
+        coEvery {
+            vaultSdkSource.getResetPasswordKey(
+                orgPublicKey = publicOrgKey,
+                userId = profile.userId,
+            )
+        } returns resetPasswordKey.asSuccess()
+        coEvery {
+            vaultRepository.unlockVaultWithMasterPassword(password)
+        } returns VaultUnlockResult.Success
 
         val result = repository.setPassword(
-            organizationIdentifier = organizationId,
+            organizationIdentifier = organizationIdentifier,
             password = password,
             passwordHint = passwordHint,
         )
@@ -2733,6 +2769,119 @@ class AuthRepositoryTest {
         fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
         fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
+        coVerify {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+            accountsService.setPassword(body = setPasswordRequestJson)
+            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            organizationService.getOrganizationKeys(organizationId)
+            organizationService.organizationResetPasswordEnroll(
+                organizationId = organizationId,
+                userId = profile.userId,
+                passwordHash = passwordHash,
+                resetPasswordKey = resetPasswordKey,
+            )
+            vaultRepository.unlockVaultWithMasterPassword(password)
+            vaultSdkSource.getResetPasswordKey(
+                orgPublicKey = publicOrgKey,
+                userId = profile.userId,
+            )
+        }
+    }
+
+    @Test
+    fun `setPassword with unlockVaultWithMasterPassword error should return Failure`() = runTest {
+        val password = "password"
+        val passwordHash = "passwordHash"
+        val passwordHint = "passwordHint"
+        val organizationIdentifier = ORGANIZATION_IDENTIFIER
+        val organizationId = "orgId"
+        val encryptedUserKey = "encryptedUserKey"
+        val privateRsaKey = "privateRsaKey"
+        val publicRsaKey = "publicRsaKey"
+        val publicOrgKey = "publicOrgKey"
+        val resetPasswordKey = "resetPasswordKey"
+        val profile = SINGLE_USER_STATE_1.activeAccount.profile
+        val kdf = profile.toSdkParams()
+        val registerKeyResponse = RegisterKeyResponse(
+            masterPasswordHash = passwordHash,
+            encryptedUserKey = encryptedUserKey,
+            keys = RsaKeyPair(public = publicRsaKey, private = privateRsaKey),
+        )
+        val setPasswordRequestJson = SetPasswordRequestJson(
+            passwordHash = passwordHash,
+            passwordHint = passwordHint,
+            organizationIdentifier = organizationIdentifier,
+            kdfIterations = profile.kdfIterations,
+            kdfMemory = profile.kdfMemory,
+            kdfParallelism = profile.kdfParallelism,
+            kdfType = profile.kdfType,
+            key = encryptedUserKey,
+            keys = RegisterRequestJson.Keys(
+                publicKey = publicRsaKey,
+                encryptedPrivateKey = privateRsaKey,
+            ),
+        )
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns passwordHash.asSuccess()
+        coEvery {
+            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+        } returns registerKeyResponse.asSuccess()
+        coEvery {
+            accountsService.setPassword(body = setPasswordRequestJson)
+        } returns Unit.asSuccess()
+        coEvery {
+            vaultRepository.unlockVaultWithMasterPassword(password)
+        } returns VaultUnlockResult.GenericError
+
+        val result = repository.setPassword(
+            organizationIdentifier = organizationIdentifier,
+            password = password,
+            passwordHint = passwordHint,
+        )
+
+        assertEquals(SetPasswordResult.Error, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = privateRsaKey)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
+        fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1)
+        coVerify {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+            accountsService.setPassword(body = setPasswordRequestJson)
+            vaultRepository.unlockVaultWithMasterPassword(password)
+        }
+        coVerify(exactly = 0) {
+            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            organizationService.getOrganizationKeys(organizationId)
+            organizationService.organizationResetPasswordEnroll(
+                organizationId = organizationId,
+                userId = profile.userId,
+                passwordHash = passwordHash,
+                resetPasswordKey = resetPasswordKey,
+            )
+            vaultSdkSource.getResetPasswordKey(
+                orgPublicKey = publicOrgKey,
+                userId = profile.userId,
+            )
+        }
     }
 
     @Test

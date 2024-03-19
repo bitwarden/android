@@ -5,8 +5,6 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
-import com.x8bit.bitwarden.data.vault.repository.VaultRepository
-import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
@@ -23,16 +21,18 @@ import org.junit.jupiter.api.Test
 class SetPasswordViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { passwordPolicies } returns emptyList()
-        every { organizationIdentifier } returns ORGANIZATION_IDENTIFIER
+        every { ssoOrganizationIdentifier } returns ORGANIZATION_IDENTIFIER
     }
-    private val vaultRepository: VaultRepository = mockk()
 
     @Test
-    fun `null organizationIdentifier logs user out`() = runTest {
+    fun `null ssoOrganizationIdentifier logs user out`() = runTest {
         every { authRepository.logout() } just runs
-        every { authRepository.organizationIdentifier } returns null
+        every { authRepository.ssoOrganizationIdentifier } returns null
         createViewModel()
-        verify { authRepository.logout() }
+        verify {
+            authRepository.logout()
+            authRepository.ssoOrganizationIdentifier
+        }
     }
 
     @Test
@@ -159,7 +159,7 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SubmitClicked with all valid inputs and unlock vault success sets password`() = runTest {
+    fun `SubmitClicked with all valid inputs sets password`() = runTest {
         val password = "TestPassword123"
         coEvery {
             authRepository.setPassword(
@@ -168,9 +168,6 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
                 passwordHint = "",
             )
         } returns SetPasswordResult.Success
-        coEvery {
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.Success
 
         val viewModel = createViewModel()
         viewModel.trySendAction(SetPasswordAction.PasswordInputChanged(password))
@@ -215,71 +212,6 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
                 password = password,
                 passwordHint = "",
             )
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        }
-    }
-
-    @Test
-    fun `SubmitClicked with all valid inputs and unlock vault failure shows error`() = runTest {
-        val password = "TestPassword123"
-        coEvery {
-            authRepository.setPassword(
-                organizationIdentifier = ORGANIZATION_IDENTIFIER,
-                password = password,
-                passwordHint = "",
-            )
-        } returns SetPasswordResult.Success
-        coEvery {
-            vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.InvalidStateError
-
-        val viewModel = createViewModel()
-        viewModel.trySendAction(SetPasswordAction.PasswordInputChanged(password))
-        viewModel.trySendAction(SetPasswordAction.RetypePasswordInputChanged(password))
-
-        viewModel.stateFlow.test {
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = null,
-                    passwordInput = password,
-                    retypePasswordInput = password,
-                ),
-                awaitItem(),
-            )
-
-            viewModel.trySendAction(SetPasswordAction.SubmitClick)
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = SetPasswordState.DialogState.Loading(
-                        message = R.string.updating_password.asText(),
-                    ),
-                    passwordInput = password,
-                    retypePasswordInput = password,
-                ),
-                awaitItem(),
-            )
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = SetPasswordState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
-                    ),
-                    passwordInput = password,
-                    retypePasswordInput = password,
-                ),
-                awaitItem(),
-            )
-        }
-
-        coVerify {
-            authRepository.setPassword(
-                organizationIdentifier = ORGANIZATION_IDENTIFIER,
-                password = password,
-                passwordHint = "",
-            )
-            vaultRepository.unlockVaultWithMasterPassword(password)
         }
     }
 
@@ -328,7 +260,6 @@ class SetPasswordViewModelTest : BaseViewModelTest() {
     ): SetPasswordViewModel =
         SetPasswordViewModel(
             authRepository = authRepository,
-            vaultRepository = vaultRepository,
             savedStateHandle = SavedStateHandle(mapOf("state" to state)),
         )
 }

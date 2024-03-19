@@ -73,11 +73,13 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -143,6 +145,8 @@ class AuthRepositoryImpl(
      */
     private var resendEmailRequestJson: ResendEmailRequestJson? = null
 
+    private var organizationIdentifier: String? = null
+
     /**
      * The password that needs to be checked against any organization policies before
      * the user can complete the login flow.
@@ -158,10 +162,9 @@ class AuthRepositoryImpl(
 
     private val ioScope = CoroutineScope(dispatcherManager.io)
 
-    override var organizationIdentifier: String? = null
-
     override var twoFactorResponse: TwoFactorRequired? = null
 
+    override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -877,12 +880,32 @@ class AuthRepositoryImpl(
                         )
                     }
             }
+            .flatMap {
+                when (vaultRepository.unlockVaultWithMasterPassword(password)) {
+                    is VaultUnlockResult.Success -> {
+                        enrollUserInPasswordReset(
+                            organizationIdentifier = organizationIdentifier,
+                            passwordHash = passwordHash,
+                        )
+                    }
+
+                    VaultUnlockResult.AuthenticationError,
+                    VaultUnlockResult.GenericError,
+                    VaultUnlockResult.InvalidStateError,
+                    -> {
+                        IllegalStateException("Failed to unlock vault").asFailure()
+                    }
+                }
+            }
             .onSuccess {
                 authDiskSource.storeMasterPasswordHash(
                     userId = activeAccount.profile.userId,
                     passwordHash = passwordHash,
                 )
+
                 authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword()
+
+                this.organizationIdentifier = null
             }
             .fold(
                 onFailure = { SetPasswordResult.Error },
@@ -1079,6 +1102,42 @@ class AuthRepositoryImpl(
         return passwordPolicies.all { policy ->
             validatePasswordAgainstPolicy(password, policy)
         }
+    }
+
+    /**
+     * Enrolls the active user in password reset if their organization requires it.
+     */
+    private suspend fun enrollUserInPasswordReset(
+        organizationIdentifier: String,
+        passwordHash: String,
+    ): Result<Unit> {
+        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
+        return organizationService
+            .getOrganizationAutoEnrollStatus(
+                organizationIdentifier = organizationIdentifier,
+            )
+            .flatMap { statusResponse ->
+                if (statusResponse.isResetPasswordEnabled) {
+                    organizationService
+                        .getOrganizationKeys(statusResponse.organizationId)
+                        .flatMap { keys ->
+                            vaultSdkSource.getResetPasswordKey(
+                                orgPublicKey = keys.publicKey,
+                                userId = userId,
+                            )
+                        }
+                        .flatMap { key ->
+                            organizationService.organizationResetPasswordEnroll(
+                                organizationId = statusResponse.organizationId,
+                                passwordHash = passwordHash,
+                                resetPasswordKey = key,
+                                userId = userId,
+                            )
+                        }
+                } else {
+                    Unit.asSuccess()
+                }
+            }
     }
 
     /**

@@ -69,6 +69,15 @@ class VaultSdkSourceImpl(
                 .approveAuthRequest(publicKey)
         }
 
+    override suspend fun getResetPasswordKey(
+        orgPublicKey: String,
+        userId: String,
+    ): Result<String> = runCatching {
+        getClient(userId = userId)
+            .crypto()
+            .enrollAdminPasswordReset(publicKey = orgPublicKey)
+    }
+
     override suspend fun getUserEncryptionKey(
         userId: String,
     ): Result<String> =
