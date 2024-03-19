@@ -316,7 +316,7 @@ namespace Bit.iOS.Core.Services
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
-        public Task ExecutePasskeyActionAsync(AppOptions appOptions)
+        public Task ExecuteFido2CredentialActionAsync(AppOptions appOptions)
         {
             // only used by Android
             throw new NotImplementedException();

@@ -429,15 +429,18 @@ namespace Bit.App.Utilities
         {
             if (appOptions != null)
             {
+                // this is called after login in or unlocking so we can assume the vault has been unlocked in this transaction here.
+                appOptions.HasUnlockedInThisTransaction = true;
+
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
                     App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
-                if (appOptions.FromPasskeyFramework && !string.IsNullOrWhiteSpace(appOptions.PasskeyCredentialAction))
+                if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
                 {
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
-                    deviceActionService.ExecutePasskeyActionAsync(appOptions).FireAndForget();
+                    deviceActionService.ExecuteFido2CredentialActionAsync(appOptions).FireAndForget();
                     return true;
                 }
                 if (appOptions.Uri != null

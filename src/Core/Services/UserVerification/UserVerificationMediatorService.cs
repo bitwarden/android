@@ -77,6 +77,19 @@ namespace Bit.Core.Services.UserVerification
             return options.ShouldCheckMasterPasswordReprompt && !await _passwordRepromptService.ShouldByPassMasterPasswordRepromptAsync();
         }
 
+        public async Task<bool> ShouldEnforceFido2RequiredUserVerificationAsync(Fido2UserVerificationOptions options)
+        {
+            switch (options.UserVerificationPreference)
+            {
+                case Fido2UserVerificationPreference.Required:
+                    return true;
+                case Fido2UserVerificationPreference.Discouraged:
+                    return await ShouldPerformMasterPasswordRepromptAsync(options);
+                default:
+                    return await CanPerformUserVerificationPreferredAsync(options);
+            }
+        }
+
         public async Task<(bool CanPerfom, bool IsUnlocked)> PerformOSUnlockAsync()
         {
             var availability = await CrossFingerprint.Current.GetAvailabilityAsync();

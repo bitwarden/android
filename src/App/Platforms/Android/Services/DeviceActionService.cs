@@ -21,6 +21,8 @@ using Bit.Droid.Autofill;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
+using Bit.Core.Services;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Droid.Services
 {
@@ -553,49 +555,47 @@ namespace Bit.Droid.Services
             return SystemClock.ElapsedRealtime();
         }
 
-        public async Task ExecutePasskeyActionAsync(AppOptions appOptions)
+        public async Task ExecuteFido2CredentialActionAsync(AppOptions appOptions)
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
-            if (activity == null || string.IsNullOrWhiteSpace(appOptions.PasskeyCredentialAction))
+            if (activity == null || string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
             {
                 return;
             }
 
-            if (appOptions.PasskeyCredentialAction == CredentialProviderConstants.PasskeyCredentialGet)
+            if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialGet)
             {
                 //TODO: Old POC code used for auth of a passkey after unlock. Maybe it can be reused
-                await ExecutePasskeyGetAsync();
+                await ExecuteFido2GetCredentialAsync(appOptions);
             }
-            else if (appOptions.PasskeyCredentialAction == CredentialProviderConstants.PasskeyCredentialCreate)
+            else if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
             {
                 //TODO: Old POC code used for creating a passkey after unlock. Maybe it can be reused
-                await ExecutePasskeyCreateAsync();
+                await ExecuteFido2CreateCredentialAsync();
             }
 
-            appOptions.PasskeyCredentialAction = null; //Clear CredentialAction Value
+            appOptions.Fido2CredentialAction = null; //Clear CredentialAction Value
         }
 
-        public async Task ExecutePasskeyGetAsync()
+        public async Task ExecuteFido2GetCredentialAsync(AppOptions appOptions)
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
-            if (activity == null) { return; }
+            if (activity == null) 
+            {
+                return; 
+            }
 
             try
             {
                 var request = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveBeginGetCredentialRequest(activity.Intent);
                 var response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse();;
-                List<AndroidX.Credentials.Provider.CredentialEntry> credentialEntries = null;
-                foreach (var option in request.BeginGetCredentialOptions)
+                var credentialEntries = new List<AndroidX.Credentials.Provider.CredentialEntry>();
+                foreach (var option in request.BeginGetCredentialOptions.OfType<AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption>())
                 {
-                    var credentialOption = option as AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption;
-                    if (credentialOption != null)
-                    {
-                        credentialEntries ??= new List<AndroidX.Credentials.Provider.CredentialEntry>();
-                        credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption, activity));
-                    }
+                    credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, option, activity, appOptions.HasUnlockedInThisTransaction));
                 }
 
-                if (credentialEntries != null)
+                if (credentialEntries.Any())
                 {
                     response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse.Builder()
                         .SetCredentialEntries(credentialEntries)
@@ -604,7 +604,6 @@ namespace Bit.Droid.Services
 
                 var result = new Android.Content.Intent();
                 AndroidX.Credentials.Provider.PendingIntentHandler.SetBeginGetCredentialResponse(result, response);
-
                 activity.SetResult(Result.Ok, result);
                 activity.Finish();
             }
@@ -617,7 +616,7 @@ namespace Bit.Droid.Services
             }
         }
 
-        public async Task ExecutePasskeyCreateAsync()
+        public async Task ExecuteFido2CreateCredentialAsync()
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
             if (activity == null) { return; }

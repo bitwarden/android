@@ -1,19 +1,23 @@
 ﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.App.Pages
 {
     public class AutofillCiphersPageViewModel : CipherSelectionPageViewModel
     {
         private CipherType? _fillType;
-        private bool _isAndroidPasskeyCreation;
+        private bool _isAndroidFido2CredentialCreation;
         private AppOptions _appOptions;
+
+        private readonly LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
 
         public string Uri { get; set; }
 
@@ -21,7 +25,7 @@ namespace Bit.App.Pages
         {
             Uri = appOptions?.Uri;
             _fillType = appOptions.FillType;
-            _isAndroidPasskeyCreation = appOptions.FromPasskeyFramework;
+            _isAndroidFido2CredentialCreation = appOptions.FromFido2Framework;
             _appOptions = appOptions;
 
             string name = null;
@@ -82,6 +86,15 @@ namespace Bit.App.Pages
                 return;
             }
 
+            if (_appOptions.FromFido2Framework)
+            {
+                if (_appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
+                {
+                    await CreateFido2CredentialIntoAsync(cipher);
+                }
+                return;
+            }
+
             if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(cipher.Reprompt))
             {
                 return;
@@ -134,13 +147,30 @@ namespace Bit.App.Pages
             }
         }
 
+        private async Task CreateFido2CredentialIntoAsync(CipherView cipher)
+        {
+            if (cipher.Login.HasFido2Credentials
+                &&
+                !await _platformUtilsService.ShowDialogAsync(
+                    AppResources.ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey,
+                    AppResources.OverwritePasskey,
+                    AppResources.Yes,
+                    AppResources.No))
+            {
+                return;
+            }
+
+            _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(cipher.Id, null);
+        }
+
         protected override async Task AddCipherAsync()
         {
-            //Scenario for creating a new Passkey on Android
-            if (_isAndroidPasskeyCreation)
+            //Scenario for creating a new Fido2 credential on Android
+            if (_isAndroidFido2CredentialCreation)
             {
-                var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
-                await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(null, null);
+                //var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
+                //await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
                 return;
             }
 
@@ -154,6 +184,16 @@ namespace Bit.App.Pages
             var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: Uri, name: Name,
                 fromAutofill: true);
             await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
+        }
+
+        public void Cancel()
+        {
+            if (_appOptions?.FromFido2Framework == true
+                &&
+                _appOptions?.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
+            {
+                _fido2MakeCredentialConfirmationUserInterface.Value.Cancel();
+            }
         }
     }
 }

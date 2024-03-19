@@ -15,6 +15,7 @@ using Bit.Core.Utilities.Fido2;
 using Java.Security;
 using Java.Security.Spec;
 using Org.Json;
+using Bit.Core.Services;
 
 namespace Bit.Droid.Autofill
 {
@@ -23,8 +24,11 @@ namespace Bit.Droid.Autofill
         LaunchMode = LaunchMode.SingleTop)]
     public class CredentialProviderSelectionActivity : MauiAppCompatActivity
     {
-
-        private IFido2AuthenticatorService _fido2AuthenticatorService;
+        private LazyResolve<IFido2MediatorService> _fido2MediatorService = new LazyResolve<IFido2MediatorService>();
+        private LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
+        private LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
+        private LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -39,12 +43,10 @@ namespace Bit.Droid.Autofill
                 return;
             }
 
-            _fido2AuthenticatorService = ServiceContainer.Resolve<IFido2AuthenticatorService>();
-
-            GetCipherAndPerformPasskeyAuthAsync(cipherId).FireAndForget();
+            GetCipherAndPerformFido2AuthAsync(cipherId).FireAndForget();
         }
 
-        private async Task GetCipherAndPerformPasskeyAuthAsync(string cipherId)
+        private async Task GetCipherAndPerformFido2AuthAsync(string cipherId)
         {
             // TODO this is a work in progress
             // https://developer.android.com/training/sign-in/credential-provider#passkeys-implement
@@ -53,11 +55,12 @@ namespace Bit.Droid.Autofill
 
             var credentialOption = getRequest?.CredentialOptions.FirstOrDefault();
             var credentialPublic = credentialOption as GetPublicKeyCredentialOption;
-            
+
             var requestOptions = new PublicKeyCredentialRequestOptions(credentialPublic.RequestJson);
 
             var requestInfo = Intent.GetBundleExtra(CredentialProviderConstants.CredentialDataIntentExtra);
             var credentialId = requestInfo?.GetByteArray(CredentialProviderConstants.CredentialIdIntentExtra);
+            var hasVaultBeenUnlockedInThisTransaction = Intent.GetBooleanExtra(CredentialProviderConstants.CredentialHasVaultBeenUnlockedInThisTransactionExtra, false);
 
             var origin = getRequest?.CallingAppInfo.Origin;
             var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
@@ -65,13 +68,12 @@ namespace Bit.Droid.Autofill
 
             System.Diagnostics.Debug.WriteLine($"RequestOptions JSON: {requestOptions.Json}");
 
-            // TODO: Properly implement this interface 
             var userInterface = new Fido2GetAssertionUserInterface(
                 cipherId: cipherId,
-                userVerified: true,
-                ensureUnlockedVaultCallback: () => Task.FromResult(true),
-                hasVaultBeenUnlockedInThisTransaction: () => true,
-                verifyUserCallback: (cipherId, verificationPreference) => Task.FromResult(true));
+                userVerified: false,
+                ensureUnlockedVaultCallback: EnsureUnlockedVaultAsync,
+                hasVaultBeenUnlockedInThisTransaction: () => hasVaultBeenUnlockedInThisTransaction,
+                verifyUserCallback: (cipherId, uvPreference) => VerifyUserAsync(cipherId, uvPreference, requestOptions.RpId, hasVaultBeenUnlockedInThisTransaction));
 
             var assertParams = new Fido2AuthenticatorGetAssertionParams
             {
@@ -88,7 +90,8 @@ namespace Bit.Droid.Autofill
                 },
                 Extensions = new object()
             };
-            var assertResult = await _fido2AuthenticatorService.GetAssertionAsync(assertParams, userInterface);
+
+            var assertResult = await _fido2MediatorService.Value.GetAssertionAsync(assertParams, userInterface);
 
             var response = new AuthenticatorAssertionResponse(
                 requestOptions,
@@ -110,8 +113,43 @@ namespace Bit.Droid.Autofill
             var cred = new PublicKeyCredential(fidoCredential.Json());
             var credResponse = new GetCredentialResponse(cred);
             PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
-            SetResult(Result.Ok, result);
-            Finish();
+
+            await MainThread.InvokeOnMainThreadAsync(() => 
+            {
+                SetResult(Result.Ok, result);
+                Finish();
+            });
+        }
+
+        private async Task EnsureUnlockedVaultAsync()
+        {
+            if (!await _stateService.Value.IsAuthenticatedAsync() || !await _vaultTimeoutService.Value.IsLockedAsync())
+            {
+                // this should never happen but just in case.
+                throw new InvalidOperationException("Not authed or vault locked");
+            }
+        }
+
+        internal async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference, string rpId, bool vaultUnlockedDuringThisTransaction)
+        {
+            try
+            {
+                var encrypted = await _cipherService.Value.GetAsync(selectedCipherId);
+                var cipher = await encrypted.DecryptAsync();
+
+                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
+                    new Fido2UserVerificationOptions(
+                        cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
+                        userVerificationPreference,
+                        vaultUnlockedDuringThisTransaction,
+                        rpId)
+                    );
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                return false;
+            }
         }
 
         //TODO: Delete if not used
@@ -152,7 +190,7 @@ namespace Bit.Droid.Autofill
         {
             return Base64.EncodeToString(data, Base64Flags.NoPadding | Base64Flags.NoWrap | Base64Flags.UrlSafe);
         }
-        
+
         private string AppInfoToOrigin(CallingAppInfo info)
         {
             var cert = info.SigningInfo.GetApkContentsSigners()[0].ToByteArray();
@@ -187,7 +225,7 @@ namespace Bit.Droid.Autofill
     }
 
     #region TMP_OBJECTS_FOR_JSON_RESPONSE_TO_DELETE_AFTERWARDS
-    public class AuthenticationResponseJSON 
+    public class AuthenticationResponseJSON
     {
         public string id { get; set; }
         public string rawId { get; set; }
@@ -197,11 +235,11 @@ namespace Bit.Droid.Autofill
         public string type { get; set; }
     }
 
-    public class AuthenticationExtensionsClientOutputsJSON 
+    public class AuthenticationExtensionsClientOutputsJSON
     {
     }
 
-    public class AuthenticatorAssertionResponseJSON 
+    public class AuthenticatorAssertionResponseJSON
     {
         public string clientDataJSON { get; set; }
         public string authenticatorData { get; set; }

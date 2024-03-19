@@ -9,6 +9,8 @@ using Bit.Core.Utilities;
 using AndroidX.Credentials.Exceptions;
 using Bit.App.Droid.Utilities;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Droid.Autofill
 {
@@ -18,13 +20,13 @@ namespace Bit.Droid.Autofill
     [Register("com.x8bit.bitwarden.Autofill.CredentialProviderService")]
     public class CredentialProviderService : AndroidX.Credentials.Provider.CredentialProviderService
     {
-        public const string GetPasskeyIntentAction = "PACKAGE_NAME.GET_PASSKEY";
-        public const string CreatePasskeyIntentAction = "PACKAGE_NAME.CREATE_PASSKEY";
+        public const string GetFido2IntentAction = "PACKAGE_NAME.GET_PASSKEY";
+        public const string CreateFido2IntentAction = "PACKAGE_NAME.CREATE_PASSKEY";
         public const int UniqueGetRequestCode = 94556023;
         public const int UniqueCreateRequestCode = 94556024;
 
-        private IVaultTimeoutService _vaultTimeoutService;
-        private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        private readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
         public override void OnBeginCreateCredentialRequest(BeginCreateCredentialRequest request,
             CancellationSignal cancellationSignal, IOutcomeReceiver callback)
@@ -45,10 +47,8 @@ namespace Bit.Droid.Autofill
         {
             try
             {
-                _vaultTimeoutService ??= ServiceContainer.Resolve<IVaultTimeoutService>();
-
-                await _vaultTimeoutService.CheckVaultTimeoutAsync();
-                var locked = await _vaultTimeoutService.IsLockedAsync();
+                await _vaultTimeoutService.Value.CheckVaultTimeoutAsync();
+                var locked = await _vaultTimeoutService.Value.IsLockedAsync();
                 if (!locked)
                 {
                     var response = await ProcessGetCredentialsRequestAsync(request);
@@ -57,7 +57,7 @@ namespace Bit.Droid.Autofill
                 }
 
                 var intent = new Intent(ApplicationContext, typeof(MainActivity));
-                intent.PutExtra(CredentialProviderConstants.PasskeyCredentialAction, CredentialProviderConstants.PasskeyCredentialGet);
+                intent.PutExtra(CredentialProviderConstants.Fido2CredentialAction, CredentialProviderConstants.Fido2CredentialGet);
                 var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueGetRequestCode, intent,
                     AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
@@ -131,7 +131,7 @@ namespace Bit.Droid.Autofill
             */
 
             var intent = new Intent(ApplicationContext, typeof(MainActivity));
-            intent.PutExtra(CredentialProviderConstants.PasskeyCredentialAction, CredentialProviderConstants.PasskeyCredentialCreate);
+            intent.PutExtra(CredentialProviderConstants.Fido2CredentialAction, CredentialProviderConstants.Fido2CredentialCreate);
             var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
                 AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
@@ -149,19 +149,14 @@ namespace Bit.Droid.Autofill
         private async Task<BeginGetCredentialResponse> ProcessGetCredentialsRequestAsync(
             BeginGetCredentialRequest request)
         {
-            List<CredentialEntry> credentialEntries = null;
+            var credentialEntries = new List<CredentialEntry>();
 
-            foreach (var option in request.BeginGetCredentialOptions)
+            foreach (var option in request.BeginGetCredentialOptions.OfType<BeginGetPublicKeyCredentialOption>())
             {
-                var credentialOption = option as BeginGetPublicKeyCredentialOption;
-                if (credentialOption != null)
-                {
-                    credentialEntries ??= new List<CredentialEntry>();
-                    credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, credentialOption, ApplicationContext));
-                }
+                credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, option, ApplicationContext, false));
             }
 
-            if (credentialEntries == null)
+            if (!credentialEntries.Any())
             {
                 return new BeginGetCredentialResponse();
             }

@@ -24,6 +24,7 @@ using Bit.App.Droid.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using FileProvider = AndroidX.Core.Content.FileProvider;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Droid
 {
@@ -325,15 +326,15 @@ namespace Bit.Droid
 
         private AppOptions GetOptions()
         {
-            var passkeyCredentialAction = Intent.GetStringExtra(CredentialProviderConstants.PasskeyCredentialAction);
+            var fido2CredentialAction = Intent.GetStringExtra(CredentialProviderConstants.Fido2CredentialAction);
             var options = new AppOptions
             {
                 Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra(AutofillConstants.AutofillFrameworkUri),
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra(AutofillConstants.AutofillFramework, false),
-                PasskeyCredentialAction = passkeyCredentialAction,
-                FromPasskeyFramework = !string.IsNullOrWhiteSpace(passkeyCredentialAction),
+                Fido2CredentialAction = fido2CredentialAction,
+                FromFido2Framework = !string.IsNullOrWhiteSpace(fido2CredentialAction),
                 CreateSend = GetCreateSendRequest(Intent)
             };
             var fillType = Intent.GetIntExtra(AutofillConstants.AutofillFrameworkFillType, 0);

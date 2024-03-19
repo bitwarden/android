@@ -110,14 +110,22 @@ namespace Bit.Droid
                     userVerificationMediatorService
                     ));
 
-                //TODO: WIP: Need to replace 'Fido2GetAssertionUserInterface' and 'Fido2MakeCredentialUserInterface'
+                var fido2MakeCredentialUserInterface = new Fido2MakeCredentialUserInterface(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<IVaultTimeoutService>(),
+                    ServiceContainer.Resolve<ICipherService>(),
+                    ServiceContainer.Resolve<IUserVerificationMediatorService>(),
+                    ServiceContainer.Resolve<IDeviceActionService>());
+                ServiceContainer.Register<IFido2MakeCredentialConfirmationUserInterface>(fido2MakeCredentialUserInterface);
+
+                //TODO: WIP: Need to replace 'Fido2GetAssertionUserInterface' if needed
                 ServiceContainer.Register<IFido2ClientService>(new Fido2ClientService(
                     ServiceContainer.Resolve<IStateService>(),
                     ServiceContainer.Resolve<IEnvironmentService>(),
                     ServiceContainer.Resolve<ICryptoFunctionService>(),
                     ServiceContainer.Resolve<IFido2AuthenticatorService>(),
                     new Fido2GetAssertionUserInterface(),
-                    new Fido2MakeCredentialUserInterface()));
+                    fido2MakeCredentialUserInterface));
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)

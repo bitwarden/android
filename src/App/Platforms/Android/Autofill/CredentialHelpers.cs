@@ -2,23 +2,23 @@
 using Android.Content;
 using Android.OS;
 using Android.Util;
-using Bit.Core.Abstractions;
-using Bit.Droid;
-using Drawables = Android.Graphics.Drawables;
+using AndroidX.Credentials;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
-using AndroidX.Credentials;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Bit.Droid;
 using Java.Security;
 using Org.Json;
 using Activity = Android.App.Activity;
+using Drawables = Android.Graphics.Drawables;
 
 namespace Bit.App.Platforms.Android.Autofill
 {
     public static class CredentialHelpers
     {
         public static async Task<List<CredentialEntry>> PopulatePasskeyDataAsync(CallingAppInfo callingAppInfo,
-            BeginGetPublicKeyCredentialOption option, Context context)
+            BeginGetPublicKeyCredentialOption option, Context context, bool hasVaultBeenUnlockedInThisTransaction)
         {
             var passkeyEntries = new List<CredentialEntry>();
 
@@ -27,20 +27,21 @@ namespace Bit.App.Platforms.Android.Autofill
             var authenticator = Bit.Core.Utilities.ServiceContainer.Resolve<IFido2AuthenticatorService>();
             var credentials = await authenticator.SilentCredentialDiscoveryAsync(requestOptions.RpId);
 
-            passkeyEntries = credentials.Select(credential => MapCredential(credential, option, context) as CredentialEntry).ToList();
+            passkeyEntries = credentials.Select(credential => MapCredential(credential, option, context, hasVaultBeenUnlockedInThisTransaction) as CredentialEntry).ToList();
 
             return passkeyEntries;
         }
 
-        private static PublicKeyCredentialEntry MapCredential(Fido2AuthenticatorDiscoverableCredentialMetadata credential, BeginGetPublicKeyCredentialOption option, Context context)
+        private static PublicKeyCredentialEntry MapCredential(Fido2AuthenticatorDiscoverableCredentialMetadata credential, BeginGetPublicKeyCredentialOption option, Context context, bool hasVaultBeenUnlockedInThisTransaction)
         {
             var credDataBundle = new Bundle();
-            credDataBundle.PutByteArray(Bit.Droid.Autofill.CredentialProviderConstants.CredentialIdIntentExtra, credential.Id);
+            credDataBundle.PutByteArray(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialIdIntentExtra, credential.Id);
 
             var intent = new Intent(context, typeof(Bit.Droid.Autofill.CredentialProviderSelectionActivity))
-                .SetAction(Bit.Droid.Autofill.CredentialProviderService.GetPasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME);
-            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
-            intent.PutExtra(Bit.Droid.Autofill.CredentialProviderConstants.CredentialProviderCipherId, credential.CipherId);
+                .SetAction(Bit.Droid.Autofill.CredentialProviderService.GetFido2IntentAction).SetPackage(Constants.PACKAGE_NAME);
+            intent.PutExtra(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
+            intent.PutExtra(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialProviderCipherId, credential.CipherId);
+            intent.PutExtra(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialHasVaultBeenUnlockedInThisTransactionExtra, hasVaultBeenUnlockedInThisTransaction);
             var pendingIntent = PendingIntent.GetActivity(context, Bit.Droid.Autofill.CredentialProviderService.UniqueGetRequestCode, intent,
                 PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
@@ -115,8 +116,8 @@ namespace Bit.App.Platforms.Android.Autofill
                 SameOriginWithAncestors = true //TODO: Where to get value? Or logic to set?
             };
 
-            var fido2ClientService = ServiceContainer.Resolve<IFido2ClientService>();
-            var clientCreateCredentialResult = await fido2ClientService.CreateCredentialAsync(credentialCreateParams);
+            var fido2MediatorService = ServiceContainer.Resolve<IFido2MediatorService>();
+            var clientCreateCredentialResult = await fido2MediatorService.CreateCredentialAsync(credentialCreateParams);
             if (clientCreateCredentialResult == null)
             {
                 //TODO: Cancel process?

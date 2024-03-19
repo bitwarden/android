@@ -103,8 +103,8 @@ namespace Bit.App
                 Options.MyVaultTile = appOptions.MyVaultTile;
                 Options.GeneratorTile = appOptions.GeneratorTile;
                 Options.FromAutofillFramework = appOptions.FromAutofillFramework;
-                Options.FromPasskeyFramework = appOptions.FromPasskeyFramework;
-                Options.PasskeyCredentialAction = appOptions.PasskeyCredentialAction;
+                Options.FromFido2Framework = appOptions.FromFido2Framework;
+                Options.Fido2CredentialAction = appOptions.Fido2CredentialAction;
                 Options.CreateSend = appOptions.CreateSend;
             }
         }

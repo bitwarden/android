@@ -100,10 +100,10 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AddEditCipher);
                 }
-                else if (Options.FromPasskeyFramework)
+                else if (Options.FromFido2Framework)
                 {
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
-                    deviceActionService.ExecutePasskeyActionAsync(Options).FireAndForget();
+                    deviceActionService.ExecuteFido2CredentialActionAsync(Options).FireAndForget();
                 }
                 else if (Options.Uri != null)
                 {

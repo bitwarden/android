@@ -649,11 +649,11 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     SemanticProperties.Description="{u:I18n URI}"
-                                    IsEnabled="{Binding BindingContext.IsFromPasskeyFramework, Source={x:Reference _page}, Converter={StaticResource inverseBool}}"
+                                    IsEnabled="{Binding BindingContext.IsFromFido2Framework, Source={x:Reference _page}, Converter={StaticResource inverseBool}}"
                                     AutomationId="LoginUriEntry" />
                                 <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    IsVisible="{Binding BindingContext.IsFromPasskeyFramework, Source={x:Reference _page}, Converter={StaticResource inverseBool}}"
+                                    IsVisible="{Binding BindingContext.IsFromFido2Framework, Source={x:Reference _page}, Converter={StaticResource inverseBool}}"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
                                     Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
                                     CommandParameter="{Binding .}"
@@ -667,7 +667,7 @@
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
                 <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
-                        IsVisible="{Binding IsFromPasskeyFramework, Converter={StaticResource inverseBool}}"
+                        IsVisible="{Binding IsFromFido2Framework, Converter={StaticResource inverseBool}}"
                         Clicked="NewUri_Clicked"
                         AutomationId="LoginAddNewUriButton"></Button>
             </StackLayout>

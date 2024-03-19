@@ -127,6 +127,11 @@ namespace Bit.App.Pages
 
 #if ANDROID
             _appOptions.Uri = null;
+
+            if (BindingContext is AutofillCiphersPageViewModel autofillVM)
+            {
+                autofillVM.Cancel();
+            }
 #endif
             return base.OnBackButtonPressed();
         }
@@ -175,6 +180,11 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 _accountsManager.StartDefaultNavigationFlowAsync(op => op.OtpData = null).FireAndForget();
+
+                if (BindingContext is AutofillCiphersPageViewModel autofillVM)
+                {
+                    autofillVM.Cancel();
+                }
             }
         }
     }

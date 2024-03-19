@@ -41,7 +41,7 @@ namespace Bit.App.Abstractions
         void OpenCredentialProviderSettings();
         void OpenAutofillSettings();
         long GetActiveTime();
-        Task ExecutePasskeyActionAsync(AppOptions appOptions);
+        Task ExecuteFido2CredentialActionAsync(AppOptions appOptions);
         void CloseMainApp();
         float GetSystemFontSizeScale();
         Task OnAccountSwitchCompleteAsync();
