@@ -104,7 +104,7 @@ fun VaultItemLoginContent(
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 Fido2CredentialField(
-                    creationDate = creationDate.toString(),
+                    creationDate = creationDate.invoke(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),

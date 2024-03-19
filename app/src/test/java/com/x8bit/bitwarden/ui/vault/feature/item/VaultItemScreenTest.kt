@@ -1346,7 +1346,7 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onNodeWithText(text = DEFAULT_PASSKEY.toString(), substring = true)
+            .onNodeWithText(text = "Created 3/13/24, 3:56 PM")
             .assertIsDisplayed()
     }
 
