@@ -23,6 +23,8 @@ import kotlin.time.Duration.Companion.minutes
 /**
  * Displays a UI for selecting a customizable date and time.
  *
+ * @param dateLabel The display label for the date selection field.
+ * @param timeLabel The display label for the time selection field.
  * @param currentZonedDateTime The currently selected time, `null` when no time is selected yet.
  * @param dateFormatPattern The pattern to use when displaying the date.
  * @param timeFormatPattern The pattern for displaying the time.
@@ -33,6 +35,8 @@ import kotlin.time.Duration.Companion.minutes
  */
 @Composable
 fun AddSendCustomDateChooser(
+    dateLabel: String,
+    timeLabel: String,
     currentZonedDateTime: ZonedDateTime?,
     dateFormatPattern: String,
     timeFormatPattern: String,
@@ -61,6 +65,7 @@ fun AddSendCustomDateChooser(
     ) {
         BitwardenDateSelectButton(
             modifier = Modifier.weight(1f),
+            label = dateLabel,
             formatPattern = dateFormatPattern,
             currentZonedDateTime = currentZonedDateTime,
             isEnabled = isEnabled,
@@ -72,6 +77,7 @@ fun AddSendCustomDateChooser(
         Spacer(modifier = Modifier.width(16.dp))
         BitwardenTimeSelectButton(
             modifier = Modifier.weight(1f),
+            label = timeLabel,
             formatPattern = timeFormatPattern,
             currentZonedDateTime = currentZonedDateTime,
             isEnabled = isEnabled,

@@ -67,6 +67,8 @@ fun SendExpirationDateChooser(
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 AddSendCustomDateChooser(
+                    dateLabel = stringResource(id = R.string.expiration_date),
+                    timeLabel = stringResource(id = R.string.expiration_time),
                     currentZonedDateTime = currentZonedDateTime,
                     dateFormatPattern = dateFormatPattern,
                     timeFormatPattern = timeFormatPattern,

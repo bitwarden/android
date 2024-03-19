@@ -65,6 +65,8 @@ fun SendDeletionDateChooser(
             Column {
                 Spacer(modifier = Modifier.height(8.dp))
                 AddSendCustomDateChooser(
+                    dateLabel = stringResource(id = R.string.deletion_date),
+                    timeLabel = stringResource(id = R.string.deletion_time),
                     currentZonedDateTime = currentZonedDateTime,
                     dateFormatPattern = dateFormatPattern,
                     timeFormatPattern = timeFormatPattern,

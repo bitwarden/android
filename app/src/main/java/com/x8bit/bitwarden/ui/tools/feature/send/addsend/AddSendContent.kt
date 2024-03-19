@@ -367,6 +367,8 @@ private fun AddSendOptions(
                         .semantics { testTag = "SendCustomDeletionDatePicker" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    dateLabel = stringResource(id = R.string.deletion_date),
+                    timeLabel = stringResource(id = R.string.deletion_time),
                     dateFormatPattern = state.common.dateFormatPattern,
                     timeFormatPattern = state.common.timeFormatPattern,
                     currentZonedDateTime = state.common.deletionDate,
@@ -396,6 +398,8 @@ private fun AddSendOptions(
                         .semantics { testTag = "SendCustomExpirationDatePicker" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    dateLabel = stringResource(id = R.string.expiration_date),
+                    timeLabel = stringResource(id = R.string.expiration_time),
                     dateFormatPattern = state.common.dateFormatPattern,
                     timeFormatPattern = state.common.timeFormatPattern,
                     currentZonedDateTime = state.common.expirationDate,

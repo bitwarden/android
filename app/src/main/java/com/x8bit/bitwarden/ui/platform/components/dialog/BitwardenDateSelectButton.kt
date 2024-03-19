@@ -38,6 +38,7 @@ import java.time.ZonedDateTime
  * This composable displays an [OutlinedTextField] with a dropdown icon as a trailing icon.
  * When the field is clicked, a date picker dialog appears.
  *
+ * @param label The displayed label.
  * @param currentZonedDateTime The currently displayed time.
  * @param formatPattern The pattern to format the displayed time.
  * @param onDateSelect The callback to be invoked when a new date is selected.
@@ -48,6 +49,7 @@ import java.time.ZonedDateTime
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BitwardenDateSelectButton(
+    label: String,
     currentZonedDateTime: ZonedDateTime?,
     formatPattern: String,
     onDateSelect: (ZonedDateTime) -> Unit,
@@ -62,8 +64,6 @@ fun BitwardenDateSelectButton(
                 ?: "mm/dd/yyyy",
         )
     }
-    // TODO: This should be "Date" but we don't have that string (BIT-1405)
-    val label = stringResource(id = R.string.deletion_date)
 
     OutlinedTextField(
         modifier = modifier

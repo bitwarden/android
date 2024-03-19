@@ -15,7 +15,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -31,6 +30,7 @@ import java.time.ZonedDateTime
  * This composable displays an [OutlinedTextField] with a dropdown icon as a trailing icon.
  * When the field is clicked, a time picker dialog appears.
  *
+ * @param label The displayed label.
  * @param currentZonedDateTime The currently displayed time.
  * @param formatPattern The pattern to format the displayed time.
  * @param onTimeSelect The callback to be invoked when a new time is selected.
@@ -41,6 +41,7 @@ import java.time.ZonedDateTime
  */
 @Composable
 fun BitwardenTimeSelectButton(
+    label: String,
     currentZonedDateTime: ZonedDateTime?,
     formatPattern: String,
     onTimeSelect: (hour: Int, minute: Int) -> Unit,
@@ -56,7 +57,6 @@ fun BitwardenTimeSelectButton(
                 ?: "--:-- --",
         )
     }
-    val label = stringResource(id = R.string.time)
     OutlinedTextField(
         modifier = modifier
             .clearAndSetSemantics {
