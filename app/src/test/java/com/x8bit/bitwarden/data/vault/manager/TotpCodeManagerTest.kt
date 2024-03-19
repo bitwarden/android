@@ -62,7 +62,7 @@ class TotpCodeManagerTest {
             )
 
             val cipherView = createMockCipherView(1).copy(
-                login = createMockLoginView(1).copy(
+                login = createMockLoginView(number = 1, clock = clock).copy(
                     totp = null,
                 ),
             )
@@ -82,7 +82,7 @@ class TotpCodeManagerTest {
                 )
 
             val cipherView = createMockCipherView(1).copy(
-                login = createMockLoginView(1).copy(
+                login = createMockLoginView(number = 1, clock = clock).copy(
                     totp = null,
                 ),
             )

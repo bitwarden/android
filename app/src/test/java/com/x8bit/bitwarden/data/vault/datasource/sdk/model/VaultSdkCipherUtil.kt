@@ -14,12 +14,24 @@ import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.SecureNote
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.UriMatchType
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
+
+/**
+ * Default date time used for [ZonedDateTime] properties of mock objects.
+ */
+private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse(DEFAULT_TIMESTAMP),
+    ZoneOffset.UTC,
+)
 
 /**
  * Create a mock [Cipher] with a given [number].
  */
-fun createMockSdkCipher(number: Int): Cipher =
+fun createMockSdkCipher(number: Int, clock: Clock = FIXED_CLOCK): Cipher =
     Cipher(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
@@ -29,22 +41,16 @@ fun createMockSdkCipher(number: Int): Cipher =
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = CipherType.LOGIN,
-        login = createMockSdkLogin(number = number),
-        creationDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
-        deletedDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
-        revisionDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        login = createMockSdkLogin(number = number, clock = clock),
+        creationDate = clock.instant(),
+        deletedDate = clock.instant(),
+        revisionDate = clock.instant(),
         attachments = listOf(createMockSdkAttachment(number = number)),
         card = createMockSdkCard(number = number),
         fields = listOf(createMockSdkField(number = number)),
         identity = createMockSdkIdentity(number = number),
         favorite = false,
-        passwordHistory = listOf(createMockSdkPasswordHistory(number = number)),
+        passwordHistory = listOf(createMockSdkPasswordHistory(number = number, clock = clock)),
         reprompt = CipherRepromptType.NONE,
         secureNote = createMockSdkSecureNote(),
         edit = false,
@@ -64,12 +70,10 @@ fun createMockSdkSecureNote(): SecureNote =
 /**
  * Create a mock [PasswordHistory] with a given [number].
  */
-fun createMockSdkPasswordHistory(number: Int): PasswordHistory =
+fun createMockSdkPasswordHistory(number: Int, clock: Clock): PasswordHistory =
     PasswordHistory(
         password = "mockPassword-$number",
-        lastUsedDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        lastUsedDate = clock.instant(),
     )
 
 /**
@@ -137,17 +141,15 @@ fun createMockSdkAttachment(number: Int): Attachment =
 /**
  * Create a mock [Login] with a given [number].
  */
-fun createMockSdkLogin(number: Int): Login =
+fun createMockSdkLogin(number: Int, clock: Clock): Login =
     Login(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
-        passwordRevisionDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
         uris = listOf(createMockSdkUri(number = number)),
         totp = "mockTotp-$number",
-        fido2Credentials = createMockSdkFido2CredentialList(number),
+        fido2Credentials = createMockSdkFido2CredentialList(number, clock),
     )
 
 /**

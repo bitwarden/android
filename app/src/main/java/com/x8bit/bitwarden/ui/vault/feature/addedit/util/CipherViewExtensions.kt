@@ -6,6 +6,7 @@ import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.CollectionView
+import com.bitwarden.core.Fido2Credential
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.bitwarden.core.FolderView
@@ -14,6 +15,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
+import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -23,7 +25,11 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType.Companion.fromId
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
+import java.time.Clock
 import java.util.UUID
+
+private const val PASSKEY_CREATION_DATE_PATTERN: String = "M/d/yy"
+private const val PASSKEY_CREATION_TIME_PATTERN: String = "hh:mm a"
 
 /**
  * Transforms [CipherView] into [VaultAddEditState.ViewState].
@@ -32,6 +38,7 @@ fun CipherView.toViewState(
     isClone: Boolean,
     isIndividualVaultDisabled: Boolean,
     resourceManager: ResourceManager,
+    clock: Clock,
 ): VaultAddEditState.ViewState =
     VaultAddEditState.ViewState.Content(
         type = when (type) {
@@ -39,9 +46,13 @@ fun CipherView.toViewState(
                 VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = login?.username.orEmpty(),
                     password = login?.password.orEmpty(),
-                    uriList = login?.uris.toUriItems(),
                     totp = login?.totp,
                     canViewPassword = this.viewPassword,
+                    uriList = login?.uris.toUriItems(),
+                    fido2CredentialCreationDateTime = login
+                        ?.fido2Credentials
+                        .getPrimaryFido2CredentialOrNull(isClone)
+                        ?.getCreationDateTime(clock),
                 )
             }
 
@@ -272,3 +283,24 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
             )
         }
     }
+
+/**
+ * Retrieves the cipher's primary (first) FIDO2 credential, or null if there is no FIDO2 credential
+ * assigned.
+ */
+private fun List<Fido2Credential>?.getPrimaryFido2CredentialOrNull(
+    isClone: Boolean,
+): Fido2Credential? {
+    if (isNullOrEmpty() || isClone) return null
+
+    return first()
+}
+
+/**
+ * Return the creation date and time of the primary FIDO2 credential, formatted as
+ * "M/d/yy, hh:mm a".
+ */
+private fun Fido2Credential.getCreationDateTime(clock: Clock) = R.string.created_xy.asText(
+    creationDate.toFormattedPattern(pattern = PASSKEY_CREATION_DATE_PATTERN, clock = clock),
+    creationDate.toFormattedPattern(pattern = PASSKEY_CREATION_TIME_PATTERN, clock = clock),
+)

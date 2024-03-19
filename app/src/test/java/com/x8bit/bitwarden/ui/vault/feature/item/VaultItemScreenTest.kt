@@ -22,6 +22,7 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onSiblings
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
@@ -1214,6 +1215,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                         passwordRevisionDate = null,
                         isPremiumUser = true,
                         totpCodeItemData = null,
+                        fido2CredentialCreationDateText = null,
                     ),
                 ),
             )
@@ -1302,6 +1304,53 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in login state, the Passkey field should exist based on the state`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        fido2CredentialCreationDateText = DEFAULT_PASSKEY,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNode(isProgressBar)
+            .assertDoesNotExist()
+
+        composeTestRule
+            .onNodeWithText("Passkey")
+            .assertIsDisplayed()
+    }
+
+    @Test
+    fun `in login state, the Passkey field should not exist based on state`() {
+        mutableStateFlow.update { it }
+
+        composeTestRule
+            .onNodeWithText("Passkey")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun `in login state, the Passkey field text should display creation date`() {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = EMPTY_LOGIN_VIEW_STATE.copy(
+                    type = EMPTY_LOGIN_TYPE.copy(
+                        fido2CredentialCreationDateText = DEFAULT_PASSKEY,
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(text = DEFAULT_PASSKEY.toString(), substring = true)
+            .assertIsDisplayed()
+    }
+
+    @Test
     fun `in login state, the TOTP field should exist based on the state`() {
         mutableStateFlow.update { currentState ->
             currentState.copy(
@@ -1338,6 +1387,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNode(isProgressBar)
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -1355,6 +1405,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule
             .onNode(isProgressBar)
+            .performScrollTo()
             .assertIsDisplayed()
 
         composeTestRule
@@ -2034,8 +2085,8 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
     VaultItemState.ViewState.Content.Common(
-        lastUpdated = "12/31/69 06:16 PM",
         name = "cipher",
+        lastUpdated = "12/31/69 06:16 PM",
         notes = "Lots of notes",
         customFields = listOf(
             VaultItemState.ViewState.Content.Common.Custom.TextField(
@@ -2055,6 +2106,7 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             ),
         ),
         requiresReprompt = true,
+        requiresCloneConfirmation = false,
         attachments = listOf(
             VaultItemState.ViewState.Content.Common.AttachmentItem(
                 id = "attachment-id",
@@ -2066,6 +2118,11 @@ private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
             ),
         ),
     )
+
+private val DEFAULT_PASSKEY = R.string.created_xy.asText(
+    "3/13/24",
+    "3:56 PM",
+)
 
 private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
     VaultItemState.ViewState.Content.ItemType.Login(
@@ -2091,6 +2148,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
             verificationCode = "123456",
             totpCode = "testCode",
         ),
+        fido2CredentialCreationDateText = null,
     )
 
 private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity =
@@ -2122,6 +2180,7 @@ private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
         notes = null,
         customFields = emptyList(),
         requiresReprompt = true,
+        requiresCloneConfirmation = false,
         attachments = emptyList(),
     )
 
@@ -2134,6 +2193,7 @@ private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
         passwordRevisionDate = null,
         totpCodeItemData = null,
         isPremiumUser = true,
+        fido2CredentialCreationDateText = null,
     )
 
 private val EMPTY_IDENTITY_TYPE: VaultItemState.ViewState.Content.ItemType.Identity =

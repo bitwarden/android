@@ -932,6 +932,103 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
             }
 
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CloneClick should show confirmation when cipher contains a passkey`() = runTest {
+            val loginViewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON.copy(
+                    requiresReprompt = false,
+                    requiresCloneConfirmation = true,
+                ),
+            )
+            val loginState = DEFAULT_STATE.copy(viewState = loginViewState)
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        isPremiumUser = true,
+                        totpCodeItemData = null,
+                    )
+                } returns loginViewState
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            assertEquals(loginState, viewModel.stateFlow.value)
+
+            viewModel.trySendAction(VaultItemAction.Common.CloneClick)
+
+            assertEquals(
+                loginState.copy(
+                    dialog = VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt(
+                        R.string.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            verify(exactly = 1) {
+                mockCipherView.toViewState(
+                    isPremiumUser = true,
+                    totpCodeItemData = null,
+                )
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CloneClick should show confirmation before re-prompt when both are required`() {
+            val loginViewState = DEFAULT_VIEW_STATE.copy(
+                common = DEFAULT_COMMON.copy(
+                    requiresReprompt = true,
+                    requiresCloneConfirmation = true,
+                ),
+            )
+            val loginState = DEFAULT_STATE.copy(
+                viewState = loginViewState,
+            )
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        isPremiumUser = true,
+                        totpCodeItemData = null,
+                    )
+                } returns loginViewState
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            assertEquals(loginState, viewModel.stateFlow.value)
+            viewModel.trySendAction(VaultItemAction.Common.CloneClick)
+
+            // Assert clone confirmation dialog is triggered
+            assertEquals(
+                loginState.copy(
+                    dialog = VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt(
+                        R.string.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            // Simulate confirmation click.
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick)
+
+            // Assert MP dialog is triggered.
+            assertEquals(
+                loginState.copy(
+                    dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CloneClick,
+                    ),
+                    viewState = loginViewState.copy(
+                        common = loginViewState.common.copy(
+                            requiresCloneConfirmation = false,
+                        ),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
         @Test
         fun `on CloneClick should show password dialog when re-prompt is required`() = runTest {
             val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
@@ -1946,6 +2043,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     timeLeftSeconds = 15,
                     periodSeconds = 30,
                 ),
+                fido2CredentialCreationDateText = null,
             )
 
         private val DEFAULT_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
@@ -1988,6 +2086,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                 ),
                 requiresReprompt = true,
+                requiresCloneConfirmation = false,
                 currentCipher = createMockCipherView(number = 1),
                 attachments = listOf(
                     VaultItemState.ViewState.Content.Common.AttachmentItem(

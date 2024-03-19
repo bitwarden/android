@@ -280,7 +280,7 @@ class VaultRepositoryTest {
         coEvery {
             vaultSdkSource.decryptCipherList(
                 userId = userId,
-                cipherList = listOf(createMockSdkCipher(1)),
+                cipherList = listOf(createMockSdkCipher(1, clock)),
             )
         } returns listOf(createMockCipherView(number = 1)).asSuccess()
         coEvery {
@@ -1834,7 +1834,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.createCipher(
                     body = createMockCipherJsonRequest(number = 1, hasNullUri = true),
@@ -1861,7 +1861,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.createCipher(
@@ -1931,7 +1931,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.createCipherInOrganization(
                     body = CreateCipherInOrganizationJsonRequest(
@@ -1964,7 +1964,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.createCipherInOrganization(
@@ -2043,7 +2043,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
@@ -2072,7 +2072,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.updateCipher(
                     cipherId = cipherId,
@@ -2111,7 +2111,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = mockCipherView,
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             val mockCipher = createMockCipher(number = 1)
             coEvery {
                 ciphersService.updateCipher(
@@ -2221,7 +2221,7 @@ class VaultRepositoryTest {
         runTest {
             mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
             every {
-                createMockSdkCipher(number = 1).toEncryptedNetworkCipherResponse()
+                createMockSdkCipher(number = 1, clock = clock).toEncryptedNetworkCipherResponse()
             } returns createMockCipher(number = 1)
             val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
             val userId = "mockId-1"
@@ -2234,7 +2234,7 @@ class VaultRepositoryTest {
                             deletedDate = fixedInstant,
                         ),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.softDeleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
             coEvery {
@@ -2303,7 +2303,7 @@ class VaultRepositoryTest {
         runTest {
             mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
             every {
-                createMockSdkCipher(number = 1).toEncryptedNetworkCipherResponse()
+                createMockSdkCipher(number = 1, clock = clock).toEncryptedNetworkCipherResponse()
             } returns createMockCipher(number = 1)
             val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
             val userId = "mockId-1"
@@ -2316,7 +2316,7 @@ class VaultRepositoryTest {
                         attachments = emptyList(),
                     ),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
                 ciphersService.deleteCipherAttachment(
@@ -2385,7 +2385,7 @@ class VaultRepositoryTest {
         runTest {
             mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
             every {
-                createMockSdkCipher(number = 1).toEncryptedNetworkCipherResponse()
+                createMockSdkCipher(number = 1, clock = clock).toEncryptedNetworkCipherResponse()
             } returns createMockCipher(number = 1)
             val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
             val userId = "mockId-1"
@@ -2398,7 +2398,7 @@ class VaultRepositoryTest {
                             deletedDate = null,
                         ),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.restoreCipher(cipherId = cipherId) } returns Unit.asSuccess()
             coEvery {
@@ -2957,7 +2957,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -2998,7 +2998,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.shareCipher(
                     cipherId = "mockId-1",
@@ -3085,7 +3085,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -3120,7 +3120,7 @@ class VaultRepositoryTest {
                     userId = userId,
                     cipherView = createMockCipherView(number = 1),
                 )
-            } returns createMockSdkCipher(number = 1).asSuccess()
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.updateCipherCollections(
                     cipherId = "mockId-1",
@@ -3233,7 +3233,7 @@ class VaultRepositoryTest {
             val cipherId = "cipherId-1"
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockCipher = createMockSdkCipher(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -3278,7 +3278,7 @@ class VaultRepositoryTest {
             val cipherId = "cipherId-1"
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockCipher = createMockSdkCipher(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             coEvery {
@@ -3308,7 +3308,7 @@ class VaultRepositoryTest {
             val cipherId = "cipherId-1"
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockCipher = createMockSdkCipher(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -3364,7 +3364,7 @@ class VaultRepositoryTest {
             val cipherId = "cipherId-1"
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockCipher = createMockSdkCipher(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -3427,7 +3427,7 @@ class VaultRepositoryTest {
             val cipherId = "cipherId-1"
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockCipher = createMockSdkCipher(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -3503,7 +3503,7 @@ class VaultRepositoryTest {
             val cipherId = "cipherId-1"
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
-            val mockCipher = createMockSdkCipher(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -4456,7 +4456,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptCipherList(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipherList = listOf(createMockSdkCipher(number = number)),
+                    cipherList = listOf(createMockSdkCipher(number = number, clock = clock)),
                 )
             } returns listOf(cipherView).asSuccess()
 
@@ -4499,7 +4499,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptCipherList(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipherList = listOf(createMockSdkCipher(number = number)),
+                    cipherList = listOf(createMockSdkCipher(number = number, clock = clock)),
                 )
             } returns listOf(cipherView).asSuccess()
             val collectionView = createMockCollectionView(number = number)
@@ -4678,7 +4678,7 @@ class VaultRepositoryTest {
         coEvery {
             vaultSdkSource.decryptCipherList(
                 userId = MOCK_USER_STATE.activeUserId,
-                cipherList = listOf(createMockSdkCipher(number = number)),
+                cipherList = listOf(createMockSdkCipher(number = number, clock = clock)),
             )
         } returns listOf(cipherView).asSuccess()
 
@@ -4734,7 +4734,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptCipherList(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipherList = listOf(createMockSdkCipher(number = number)),
+                    cipherList = listOf(createMockSdkCipher(number = number, clock = clock)),
                 )
             } returns listOf(cipherView).asSuccess()
 
@@ -4888,7 +4888,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptCipherList(
                     userId = MOCK_USER_STATE.activeUserId,
-                    cipherList = listOf(createMockSdkCipher(number = number)),
+                    cipherList = listOf(createMockSdkCipher(number = number, clock = clock)),
                 )
             } returns listOf(cipherView).asSuccess()
 
@@ -5734,7 +5734,7 @@ class VaultRepositoryTest {
         coEvery {
             vaultSdkSource.decryptCipherList(
                 userId = userId,
-                cipherList = listOf(createMockSdkCipher(1)),
+                cipherList = listOf(createMockSdkCipher(1, clock)),
             )
         } returns listOf(createMockCipherView(1)).asSuccess()
         coEvery {

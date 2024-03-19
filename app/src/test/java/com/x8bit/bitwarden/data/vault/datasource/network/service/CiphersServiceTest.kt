@@ -329,7 +329,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
           "userDisplayName": "mockUserDisplayName-1",
           "counter": "mockCounter-1",
           "discoverable": "mockDiscoverable-1",
-          "creationDate": "2024-03-12T20:20:16.456Z"
+          "creationDate": "2023-10-27T12:00:00.00Z"
         }
       ]
     },
@@ -439,7 +439,7 @@ private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
         "userDisplayName": "mockUserDisplayName-1",
         "counter": "mockCounter-1",
         "discoverable": "mockDiscoverable-1",
-        "creationDate": "2024-03-12T20:20:16.456Z"
+        "creationDate": "2023-10-27T12:00:00.00Z"
       }
     ]
   },
