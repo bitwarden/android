@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
@@ -70,11 +71,18 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.util.UUID
 
 @Suppress("LargeClass")
 class VaultAddEditViewModelTest : BaseViewModelTest() {
 
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
     private val settingsRepository: SettingsRepository = mockk {
         every { initialAutofillDialogShown = any() } just runs
         every { initialAutofillDialogShown } returns true
@@ -476,6 +484,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         uri = listOf(UriItem("testId", "www.mockuri1.com", UriMatchType.HOST)),
                         totpCode = "mockTotp-1",
                         canViewPassword = true,
+                        fido2CredentialCreationDateTime = R.string.created_xy.asText(
+                            "10/27/23",
+                            "12:00 PM",
+                        ),
                     )
                         .copy(totp = "mockTotp-1"),
                 ),
@@ -752,6 +764,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isClone = false,
                     isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
+                    clock = fixedClock,
                 )
             } returns stateWithName.viewState
             mutableVaultDataFlow.value = DataState.Loaded(
@@ -781,6 +794,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isClone = false,
                     isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
+                    clock = fixedClock,
                 )
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             }
@@ -813,6 +827,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isClone = false,
                     isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
+                    clock = fixedClock,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -873,6 +888,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     isClone = false,
                     isIndividualVaultDisabled = false,
                     resourceManager = resourceManager,
+                    clock = fixedClock,
                 )
             } returns stateWithName.viewState
             coEvery {
@@ -1857,6 +1873,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 resourceManager = resourceManager,
                 authRepository = authRepository,
                 settingsRepository = settingsRepository,
+                clock = fixedClock,
             )
         }
 
@@ -2369,12 +2386,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             availableOwners = availableOwners,
         )
 
+    @Suppress("LongParameterList")
     private fun createLoginTypeContentViewState(
         username: String = "",
         password: String = "",
         uri: List<UriItem> = listOf(UriItem("testId", "", null)),
         totpCode: String? = null,
         canViewPassword: Boolean = true,
+        fido2CredentialCreationDateTime: Text? = null,
     ): VaultAddEditState.ViewState.Content.ItemType.Login =
         VaultAddEditState.ViewState.Content.ItemType.Login(
             username = username,
@@ -2382,6 +2401,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             uriList = uri,
             totp = totpCode,
             canViewPassword = canViewPassword,
+            fido2CredentialCreationDateTime = fido2CredentialCreationDateTime,
         )
 
     private fun createSavedStateHandleWithState(
@@ -2400,12 +2420,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         set("vault_edit_id", (vaultAddEditType as? VaultAddEditType.EditItem)?.vaultItemId)
     }
 
+    @Suppress("LongParameterList")
     private fun createAddVaultItemViewModel(
         savedStateHandle: SavedStateHandle = loginInitialSavedStateHandle,
         bitwardenClipboardManager: BitwardenClipboardManager = clipboardManager,
         vaultRepo: VaultRepository = vaultRepository,
         generatorRepo: GeneratorRepository = generatorRepository,
         bitwardenResourceManager: ResourceManager = resourceManager,
+        clock: Clock = fixedClock,
     ): VaultAddEditViewModel =
         VaultAddEditViewModel(
             savedStateHandle = savedStateHandle,
@@ -2417,6 +2439,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             resourceManager = bitwardenResourceManager,
             authRepository = authRepository,
             settingsRepository = settingsRepository,
+            clock = clock,
         )
 
     private fun createVaultData(

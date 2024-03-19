@@ -15,7 +15,19 @@ import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.SecureNoteView
 import com.bitwarden.core.UriMatchType
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 import java.time.ZonedDateTime
+
+/**
+ * Default date time used for [ZonedDateTime] properties of mock objects.
+ */
+private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse(DEFAULT_TIMESTAMP),
+    ZoneOffset.UTC,
+)
 
 /**
  * Create a mock [CipherView].
@@ -24,12 +36,14 @@ import java.time.ZonedDateTime
  * @param isDeleted whether or not the cipher has been deleted.
  * @param cipherType the type of cipher to create.
  */
+@Suppress("LongParameterList")
 fun createMockCipherView(
     number: Int,
     isDeleted: Boolean = false,
     cipherType: CipherType = CipherType.LOGIN,
     totp: String? = "mockTotp-$number",
     folderId: String? = "mockId-$number",
+    clock: Clock = FIXED_CLOCK,
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -43,21 +57,16 @@ fun createMockCipherView(
         login = createMockLoginView(
             number = number,
             totp = totp,
+            clock = clock,
         )
             .takeIf { cipherType == CipherType.LOGIN },
-        creationDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        creationDate = clock.instant(),
         deletedDate = if (isDeleted) {
-            ZonedDateTime
-                .parse("2023-10-27T12:00:00Z")
-                .toInstant()
+            clock.instant()
         } else {
             null
         },
-        revisionDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        revisionDate = clock.instant(),
         attachments = listOf(createMockAttachmentView(number = number)),
         card = createMockCardView(number = number).takeIf { cipherType == CipherType.CARD },
         fields = listOf(createMockFieldView(number = number)),
@@ -65,7 +74,7 @@ fun createMockCipherView(
             cipherType == CipherType.IDENTITY
         },
         favorite = false,
-        passwordHistory = listOf(createMockPasswordHistoryView(number = number)),
+        passwordHistory = listOf(createMockPasswordHistoryView(number = number, clock)),
         reprompt = CipherRepromptType.NONE,
         secureNote = createMockSecureNoteView().takeIf { cipherType == CipherType.SECURE_NOTE },
         edit = false,
@@ -80,40 +89,39 @@ fun createMockCipherView(
 fun createMockLoginView(
     number: Int,
     totp: String? = "mockTotp-$number",
+    clock: Clock = FIXED_CLOCK,
 ): LoginView =
     LoginView(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
-        passwordRevisionDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        passwordRevisionDate = clock.instant(),
         autofillOnPageLoad = false,
         uris = listOf(createMockUriView(number = number)),
         totp = totp,
-        fido2Credentials = createMockSdkFido2CredentialList(number),
+        fido2Credentials = createMockSdkFido2CredentialList(number, clock),
     )
 
-fun createMockSdkFido2CredentialList(number: Int) =
-    listOf(createMockSdkFido2CredentialView(number))
+fun createMockSdkFido2CredentialList(number: Int, clock: Clock = FIXED_CLOCK) =
+    listOf(createMockSdkFido2CredentialView(number, clock))
 
-fun createMockSdkFido2CredentialView(number: Int) =
-    Fido2Credential(
-        credentialId = "mockCredentialId-$number",
-        keyType = "mockKeyType-$number",
-        keyAlgorithm = "mockKeyAlgorithm-$number",
-        keyCurve = "mockKeyCurve-$number",
-        keyValue = "mockKeyValue-$number",
-        rpId = "mockRpId-$number",
-        userHandle = "mockUserHandle-$number",
-        userName = "mockUserName-$number",
-        counter = "mockCounter-$number",
-        rpName = "mockRpName-$number",
-        userDisplayName = "mockUserDisplayName-$number",
-        discoverable = "mockDiscoverable-$number",
-        creationDate = ZonedDateTime
-            .parse("2024-03-12T20:20:16.456Z")
-            .toInstant(),
-    )
+fun createMockSdkFido2CredentialView(
+    number: Int,
+    clock: Clock = FIXED_CLOCK,
+) = Fido2Credential(
+    credentialId = "mockCredentialId-$number",
+    keyType = "mockKeyType-$number",
+    keyAlgorithm = "mockKeyAlgorithm-$number",
+    keyCurve = "mockKeyCurve-$number",
+    keyValue = "mockKeyValue-$number",
+    rpId = "mockRpId-$number",
+    userHandle = "mockUserHandle-$number",
+    userName = "mockUserName-$number",
+    counter = "mockCounter-$number",
+    rpName = "mockRpName-$number",
+    userDisplayName = "mockUserDisplayName-$number",
+    discoverable = "mockDiscoverable-$number",
+    creationDate = clock.instant(),
+)
 
 /**
  * Create a mock [LoginUriView] with a given [number].
@@ -189,12 +197,10 @@ fun createMockIdentityView(number: Int): IdentityView =
 /**
  * Create a mock [PasswordHistoryView] with a given [number].
  */
-fun createMockPasswordHistoryView(number: Int): PasswordHistoryView =
+fun createMockPasswordHistoryView(number: Int, clock: Clock = FIXED_CLOCK): PasswordHistoryView =
     PasswordHistoryView(
         password = "mockPassword-$number",
-        lastUsedDate = ZonedDateTime
-            .parse("2023-10-27T12:00:00Z")
-            .toInstant(),
+        lastUsedDate = clock.instant(),
     )
 
 /**

@@ -137,10 +137,17 @@ fun VaultItemScreen(
                 )
             }
         },
-        onConfirmDeleteClick = remember {
+        onConfirmDeleteClick = remember(viewModel) {
             {
                 viewModel.trySendAction(
                     VaultItemAction.Common.ConfirmDeleteClick,
+                )
+            }
+        },
+        onConfirmCloneWithoutFido2Credential = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick,
                 )
             }
         },
@@ -291,6 +298,7 @@ private fun VaultItemDialogs(
     onDismissRequest: () -> Unit,
     onConfirmDeleteClick: () -> Unit,
     onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
+    onConfirmCloneWithoutFido2Credential: () -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
@@ -319,6 +327,18 @@ private fun VaultItemDialogs(
                 confirmButtonText = stringResource(id = R.string.ok),
                 dismissButtonText = stringResource(id = R.string.cancel),
                 onConfirmClick = onConfirmDeleteClick,
+                onDismissClick = onDismissRequest,
+                onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt -> {
+            BitwardenTwoButtonDialog(
+                title = stringResource(id = R.string.passkey_will_not_be_copied),
+                message = dialog.message.invoke(),
+                confirmButtonText = stringResource(id = R.string.yes),
+                dismissButtonText = stringResource(id = R.string.no),
+                onConfirmClick = onConfirmCloneWithoutFido2Credential,
                 onDismissClick = onDismissRequest,
                 onDismissRequest = onDismissRequest,
             )

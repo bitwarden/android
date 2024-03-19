@@ -4,11 +4,15 @@ import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Fido2Credential
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.bitwarden.core.IdentityView
 import com.bitwarden.core.LoginUriView
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
+import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.capitalize
 import com.x8bit.bitwarden.ui.platform.base.util.nullIfAllEqual
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
@@ -22,7 +26,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import com.x8bit.bitwarden.ui.vault.model.findVaultCardBrandWithNameOrNull
 import java.time.Clock
 
-private const val DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
+private const val LAST_UPDATED_DATE_TIME_PATTERN: String = "M/d/yy hh:mm a"
+private const val FIDO2_CREDENTIAL_CREATION_DATE_PATTERN: String = "M/d/yy"
+private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
 
 /**
  * Transforms [VaultData] into [VaultState.ViewState].
@@ -40,10 +46,11 @@ fun CipherView.toViewState(
             requiresReprompt = reprompt == CipherRepromptType.PASSWORD,
             customFields = fields.orEmpty().map { it.toCustomField() },
             lastUpdated = revisionDate.toFormattedPattern(
-                pattern = DATE_TIME_PATTERN,
+                pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                 clock = clock,
             ),
             notes = notes,
+            requiresCloneConfirmation = login?.fido2Credentials?.any() ?: false,
             attachments = attachments
                 ?.mapNotNull {
                     @Suppress("ComplexCondition")
@@ -87,12 +94,16 @@ fun CipherView.toViewState(
                     passwordRevisionDate = loginValues
                         .passwordRevisionDate
                         ?.toFormattedPattern(
-                            pattern = DATE_TIME_PATTERN,
+                            pattern = LAST_UPDATED_DATE_TIME_PATTERN,
                             clock = clock,
                         ),
                     passwordHistoryCount = passwordHistory?.count(),
                     isPremiumUser = isPremiumUser,
                     totpCodeItemData = totpCodeItemData,
+                    fido2CredentialCreationDateText = loginValues
+                        .fido2Credentials
+                        ?.firstOrNull()
+                        ?.getCreationDateText(clock),
                 )
             }
 
@@ -158,6 +169,20 @@ private fun LoginUriView.toUriData() =
         isCopyable = !uri.isNullOrBlank(),
         isLaunchable = !uri.isNullOrBlank(),
     )
+
+private fun Fido2Credential?.getCreationDateText(clock: Clock): Text? =
+    this?.let {
+        R.string.created_xy.asText(
+            creationDate.toFormattedPattern(
+                pattern = FIDO2_CREDENTIAL_CREATION_DATE_PATTERN,
+                clock = clock,
+            ),
+            creationDate.toFormattedPattern(
+                pattern = FIDO2_CREDENTIAL_CREATION_TIME_PATTERN,
+                clock = clock,
+            ),
+        )
+    }
 
 private val IdentityView.identityAddress: String?
     get() = listOfNotNull(

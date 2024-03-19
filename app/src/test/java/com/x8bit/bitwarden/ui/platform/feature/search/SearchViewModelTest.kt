@@ -210,7 +210,7 @@ class SearchViewModelTest : BaseViewModelTest() {
         val cipherId = CIPHER_ID
         val errorMessage = "Server error"
         val updatedCipherView = cipherView.copy(
-            login = createMockLoginView(1).copy(
+            login = createMockLoginView(number = 1, clock = clock).copy(
                 uris = listOf(createMockUriView(number = 1)) +
                     LoginUriView(
                         uri = AUTOFILL_URI,
@@ -261,7 +261,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             val cipherView = setupForAutofill()
             val cipherId = CIPHER_ID
             val updatedCipherView = cipherView.copy(
-                login = createMockLoginView(1).copy(
+                login = createMockLoginView(number = 1, clock = clock).copy(
                     uris = listOf(createMockUriView(number = 1)) +
                         LoginUriView(
                             uri = AUTOFILL_URI,
@@ -420,7 +420,7 @@ class SearchViewModelTest : BaseViewModelTest() {
             val cipherId = CIPHER_ID
             val password = "password"
             val updatedCipherView = cipherView.copy(
-                login = createMockLoginView(1).copy(
+                login = createMockLoginView(number = 1, clock = clock).copy(
                     uris = listOf(createMockUriView(number = 1)) +
                         LoginUriView(
                             uri = AUTOFILL_URI,

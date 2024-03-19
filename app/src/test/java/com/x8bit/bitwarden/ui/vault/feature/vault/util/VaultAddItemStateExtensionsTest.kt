@@ -57,6 +57,7 @@ class VaultAddItemStateExtensionsTest {
                 password = "mockPassword-1",
                 uriList = listOf(UriItem("testId", "mockUri-1", UriMatchType.DOMAIN)),
                 totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
+                fido2CredentialCreationDateTime = null,
             ),
         )
 

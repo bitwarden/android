@@ -21,6 +21,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
@@ -79,6 +80,18 @@ fun LazyListScope.vaultAddEditLoginItems(
             loginState = loginState,
             loginItemTypeHandlers = loginItemTypeHandlers,
         )
+    }
+
+    loginState.fido2CredentialCreationDateTime?.let { creationDateTime ->
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            PasskeyField(
+                creationDateTime = creationDateTime,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+        }
     }
 
     item {
@@ -475,4 +488,19 @@ private fun PasswordRow(
                 .padding(horizontal = 16.dp),
         )
     }
+}
+
+@Composable
+private fun PasskeyField(
+    creationDateTime: Text,
+    modifier: Modifier = Modifier,
+) {
+    BitwardenTextField(
+        label = stringResource(id = R.string.passkey),
+        value = creationDateTime.invoke(),
+        onValueChange = { },
+        readOnly = true,
+        singleLine = true,
+        modifier = modifier,
+    )
 }

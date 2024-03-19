@@ -55,6 +55,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import java.util.Collections
 import java.util.UUID
 import javax.inject.Inject
@@ -82,6 +83,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val resourceManager: ResourceManager,
+    private val clock: Clock,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -1164,6 +1166,7 @@ class VaultAddEditViewModel @Inject constructor(
                         isClone = isCloneMode,
                         isIndividualVaultDisabled = isIndividualVaultDisabled,
                         resourceManager = resourceManager,
+                        clock = clock,
                     ) ?: viewState)
                         .appendFolderAndOwnerData(
                             folderViewList = vaultData.folderViewList,
@@ -1557,6 +1560,8 @@ data class VaultAddEditState(
                  * @property totp The current TOTP (if applicable).
                  * @property canViewPassword Indicates whether the current user can view and copy
                  * passwords associated with the login item.
+                 * @property fido2CredentialCreationDateTime Date and time the FIDO 2 credential was
+                 * created.
                  */
                 @Parcelize
                 data class Login(
@@ -1567,6 +1572,7 @@ data class VaultAddEditState(
                     val uriList: List<UriItem> = listOf(
                         UriItem(id = UUID.randomUUID().toString(), uri = "", match = null),
                     ),
+                    val fido2CredentialCreationDateTime: Text? = null,
                 ) : ItemType() {
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.LOGIN
                 }

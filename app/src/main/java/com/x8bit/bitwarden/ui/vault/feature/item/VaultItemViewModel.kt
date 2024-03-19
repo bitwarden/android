@@ -151,6 +151,9 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.ConfirmDeleteClick -> handleConfirmDeleteClick()
             is VaultItemAction.Common.ConfirmRestoreClick -> handleConfirmRestoreClick()
             is VaultItemAction.Common.DeleteClick -> handleDeleteClick()
+            is VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick -> {
+                handleConfirmCloneClick()
+            }
         }
     }
 
@@ -373,9 +376,19 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    @Suppress("MaxLineLength")
     private fun handleCloneClick() {
         onContent { content ->
-            if (content.common.requiresReprompt) {
+            if (content.common.requiresCloneConfirmation) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt(
+                            message = R.string.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
+                        ),
+                    )
+                }
+                return@onContent
+            } else if (content.common.requiresReprompt) {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultItemState.DialogState.MasterPasswordDialog(
@@ -386,6 +399,23 @@ class VaultItemViewModel @Inject constructor(
                 return@onContent
             }
             sendEvent(VaultItemEvent.NavigateToAddEdit(itemId = state.vaultItemId, isClone = true))
+        }
+    }
+
+    private fun handleConfirmCloneClick() {
+        onContent { content ->
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = null,
+                    viewState = content.copy(
+                        common = content.common.copy(
+                            requiresCloneConfirmation = false,
+                        ),
+                    ),
+                )
+            }
+
+            trySendAction(VaultItemAction.Common.CloneClick)
         }
     }
 
@@ -1030,6 +1060,8 @@ data class VaultItemState(
              * @property customFields A list of custom fields that user has added.
              * @property requiresReprompt Indicates if a master password prompt is required to view
              * secure fields.
+             * @property requiresCloneConfirmation Indicates user confirmation is required when
+             * cloning a cipher.
              * @property currentCipher The cipher that is currently being viewed (nullable).
              */
             @Parcelize
@@ -1039,6 +1071,7 @@ data class VaultItemState(
                 val notes: String?,
                 val customFields: List<Custom>,
                 val requiresReprompt: Boolean,
+                val requiresCloneConfirmation: Boolean,
                 @IgnoredOnParcel
                 val currentCipher: CipherView? = null,
                 val attachments: List<AttachmentItem>?,
@@ -1121,6 +1154,8 @@ data class VaultItemState(
                  * @property totpCodeItemData The optional data related the TOTP code.
                  * @property isPremiumUser Indicates if the user has subscribed to a premium
                  * account.
+                 * @property fido2CredentialCreationDateText Optional creation date and time of the
+                 * FIDO2 credential associated with the login item.
                  */
                 @Parcelize
                 data class Login(
@@ -1131,6 +1166,7 @@ data class VaultItemState(
                     val passwordRevisionDate: String?,
                     val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
+                    val fido2CredentialCreationDateText: Text?,
                 ) : ItemType() {
 
                     /**
@@ -1244,6 +1280,14 @@ data class VaultItemState(
          */
         @Parcelize
         data class DeleteConfirmationPrompt(
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Displays the dialog for cloning without copying FIDO2 credentials to the user.
+         */
+        @Parcelize
+        data class Fido2CredentialCannotBeCopiedConfirmationPrompt(
             val message: Text,
         ) : DialogState()
     }
@@ -1430,6 +1474,11 @@ sealed class VaultItemAction {
          * The user skipped selecting a location for the attachment file.
          */
         data object NoAttachmentFileLocationReceive : Common()
+
+        /**
+         * The user confirmed cloning a cipher without its FIDO 2 credentials.
+         */
+        data object ConfirmCloneWithoutFido2CredentialClick : Common()
     }
 
     /**

@@ -4,6 +4,7 @@ import com.bitwarden.core.CardView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
+import com.bitwarden.core.Fido2Credential
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.bitwarden.core.IdentityView
@@ -20,7 +21,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -37,7 +37,9 @@ import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 import java.util.UUID
 
 class CipherViewExtensionsTest {
@@ -66,6 +68,7 @@ class CipherViewExtensionsTest {
             isClone = false,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
         )
 
         assertEquals(
@@ -110,6 +113,7 @@ class CipherViewExtensionsTest {
             isClone = false,
             isIndividualVaultDisabled = true,
             resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
         )
 
         assertEquals(
@@ -159,6 +163,7 @@ class CipherViewExtensionsTest {
             isClone = false,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
         )
 
         assertEquals(
@@ -189,6 +194,10 @@ class CipherViewExtensionsTest {
                     uriList = listOf(UriItem(TEST_ID, "www.example.com", null)),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
+                    fido2CredentialCreationDateTime = R.string.created_xy.asText(
+                        "10/27/23",
+                        "12:00 PM",
+                    ),
                 ),
             ),
             result,
@@ -203,6 +212,7 @@ class CipherViewExtensionsTest {
             isClone = false,
             isIndividualVaultDisabled = true,
             resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
         )
 
         assertEquals(
@@ -236,6 +246,7 @@ class CipherViewExtensionsTest {
             isClone = true,
             isIndividualVaultDisabled = false,
             resourceManager = resourceManager,
+            clock = FIXED_CLOCK,
         )
 
         assertEquals(
@@ -423,6 +434,11 @@ class CipherViewExtensionsTest {
         )
 }
 
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)
+
 private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     id = "id1234",
     organizationId = null,
@@ -472,12 +488,12 @@ private val DEFAULT_BASE_CIPHER_VIEW: CipherView = CipherView(
     passwordHistory = listOf(
         PasswordHistoryView(
             password = "old_password",
-            lastUsedDate = Instant.ofEpochSecond(1_000L),
+            lastUsedDate = FIXED_CLOCK.instant(),
         ),
     ),
-    creationDate = Instant.ofEpochSecond(1_000L),
+    creationDate = FIXED_CLOCK.instant(),
     deletedDate = null,
-    revisionDate = Instant.ofEpochSecond(1_000L),
+    revisionDate = FIXED_CLOCK.instant(),
 )
 
 private val DEFAULT_CARD_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
@@ -521,7 +537,7 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
     login = LoginView(
         username = "username",
         password = "password",
-        passwordRevisionDate = Instant.ofEpochSecond(1_000L),
+        passwordRevisionDate = FIXED_CLOCK.instant(),
         uris = listOf(
             LoginUriView(
                 uri = "www.example.com",
@@ -530,7 +546,23 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
         ),
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
         autofillOnPageLoad = false,
-        fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+        fido2Credentials = listOf(
+            Fido2Credential(
+                credentialId = "mockCredentialId",
+                keyType = "mockKeyType",
+                keyAlgorithm = "mockKeyAlgorithm",
+                keyCurve = "mockKeyCurve",
+                keyValue = "mockKeyValue",
+                rpId = "mockRpId",
+                userHandle = "mockUserHandle",
+                userName = "mockUserName",
+                counter = "mockCounter",
+                rpName = "mockRpName",
+                userDisplayName = "mockUserDisplayName",
+                discoverable = "mockDiscoverable",
+                creationDate = FIXED_CLOCK.instant(),
+            ),
+        ),
     ),
 )
 

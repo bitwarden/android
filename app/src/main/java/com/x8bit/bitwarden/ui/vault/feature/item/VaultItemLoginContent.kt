@@ -100,6 +100,18 @@ fun VaultItemLoginContent(
             }
         }
 
+        loginItemState.fido2CredentialCreationDateText?.let { creationDate ->
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                Fido2CredentialField(
+                    creationDate = creationDate.toString(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
+        }
+
         loginItemState.totpCodeItemData?.let { totpCodeItemData ->
             item {
                 Spacer(modifier = Modifier.height(8.dp))
@@ -245,6 +257,21 @@ fun VaultItemLoginContent(
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
+}
+
+@Composable
+private fun Fido2CredentialField(
+    creationDate: String,
+    modifier: Modifier = Modifier,
+) {
+    BitwardenTextField(
+        label = stringResource(id = R.string.passkey),
+        value = creationDate,
+        onValueChange = { },
+        readOnly = true,
+        singleLine = true,
+        modifier = modifier,
+    )
 }
 
 @Composable

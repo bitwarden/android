@@ -30,12 +30,25 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSecureNo
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkUri
 import org.junit.Assert.assertEquals
 import org.junit.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
+
+/**
+ * Default date time used for [ZonedDateTime] properties of mock objects.
+ */
+private const val DEFAULT_TIMESTAMP = "2023-10-27T12:00:00Z"
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse(DEFAULT_TIMESTAMP),
+    ZoneOffset.UTC,
+)
 
 class VaultSdkCipherExtensionsTest {
 
     @Test
     fun `toEncryptedNetworkCipherResponse should convert an Sdk Cipher to a cipher`() {
-        val sdkCipher = createMockSdkCipher(number = 1)
+        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
 
         val result = sdkCipher.toEncryptedNetworkCipherResponse()
 
@@ -50,7 +63,7 @@ class VaultSdkCipherExtensionsTest {
 
     @Test
     fun `toEncryptedNetworkCipher should convert an Sdk Cipher to a Network Cipher`() {
-        val sdkCipher = createMockSdkCipher(number = 1)
+        val sdkCipher = createMockSdkCipher(number = 1, clock = FIXED_CLOCK)
         val syncCipher = sdkCipher.toEncryptedNetworkCipher()
         assertEquals(
             createMockCipherJsonRequest(
@@ -70,8 +83,8 @@ class VaultSdkCipherExtensionsTest {
         val sdkCiphers = syncCiphers.toEncryptedSdkCipherList()
         assertEquals(
             listOf(
-                createMockSdkCipher(number = 1),
-                createMockSdkCipher(number = 2),
+                createMockSdkCipher(number = 1, clock = FIXED_CLOCK),
+                createMockSdkCipher(number = 2, clock = FIXED_CLOCK),
             ),
             sdkCiphers,
         )
@@ -82,7 +95,7 @@ class VaultSdkCipherExtensionsTest {
         val syncCipher = createMockCipher(number = 1)
         val sdkCipher = syncCipher.toEncryptedSdkCipher()
         assertEquals(
-            createMockSdkCipher(number = 1),
+            createMockSdkCipher(number = 1, clock = FIXED_CLOCK),
             sdkCipher,
         )
     }
@@ -92,7 +105,7 @@ class VaultSdkCipherExtensionsTest {
         val syncLogin = createMockLogin(number = 1)
         val sdkLogin = syncLogin.toSdkLogin()
         assertEquals(
-            createMockSdkLogin(number = 1),
+            createMockSdkLogin(number = 1, clock = FIXED_CLOCK),
             sdkLogin,
         )
     }
@@ -215,8 +228,8 @@ class VaultSdkCipherExtensionsTest {
         val sdkPasswordHistories = syncPasswordHistories.toSdkPasswordHistoryList()
         assertEquals(
             listOf(
-                createMockSdkPasswordHistory(number = 1),
-                createMockSdkPasswordHistory(number = 2),
+                createMockSdkPasswordHistory(number = 1, FIXED_CLOCK),
+                createMockSdkPasswordHistory(number = 2, FIXED_CLOCK),
             ),
             sdkPasswordHistories,
         )
@@ -227,7 +240,7 @@ class VaultSdkCipherExtensionsTest {
         val syncPasswordHistory = createMockPasswordHistory(number = 1)
         val sdkPasswordHistory = syncPasswordHistory.toSdkPasswordHistory()
         assertEquals(
-            createMockSdkPasswordHistory(number = 1),
+            createMockSdkPasswordHistory(number = 1, clock = FIXED_CLOCK),
             sdkPasswordHistory,
         )
     }

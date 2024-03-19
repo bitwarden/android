@@ -711,6 +711,7 @@ data class SyncResponseJson(
          * @property shouldAutofillOnPageLoad If autofill is used on page load (nullable).
          * @property uri The URI (nullable).
          * @property username The username (nullable).
+         * @property fido2Credentials A list of FIDO 2 credentials (nullable).
          */
         @Serializable
         data class Login(
