@@ -332,7 +332,18 @@ namespace Bit.iOS.Autofill
             bool? isUserVerified = null;
             if (Context?.PasskeyCreationParams?.UserVerificationPreference != Fido2UserVerificationPreference.Discouraged)
             {
-                isUserVerified = await VerifyUserAsync();
+                var verification = await VerifyUserAsync();
+                if (verification.IsCancelled)
+                {
+                    return;
+                }
+                isUserVerified = verification.Result;
+
+                if (!isUserVerified.Value && await _userVerificationMediatorService.Value.ShouldEnforceFido2RequiredUserVerificationAsync(Fido2UserVerificationOptions))
+                {
+                    await _platformUtilsService.Value.ShowDialogAsync(AppResources.ErrorCreatingPasskey, AppResources.SavePasskey);
+                    return;
+                }
             }
 
             var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
@@ -350,29 +361,30 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private async Task<bool> VerifyUserAsync()
+        private async Task<CancellableResult<bool>> VerifyUserAsync()
         {
             try
             {
                 if (Context?.PasskeyCreationParams is null)
                 {
-                    return false;
+                    return new CancellableResult<bool>(false);
                 }
 
-                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
-                    new Fido2UserVerificationOptions(
-                        false,
-                        Context.PasskeyCreationParams.Value.UserVerificationPreference,
-                        Context.VaultUnlockedDuringThisSession,
-                        Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier)
-                    );
+                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(Fido2UserVerificationOptions);
             }
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
-                return false;
+                return new CancellableResult<bool>(false);
             }
         }
+
+        private Fido2UserVerificationOptions Fido2UserVerificationOptions => new Fido2UserVerificationOptions(
+            false,
+            Context.PasskeyCreationParams.Value.UserVerificationPreference,
+            Context.VaultUnlockedDuringThisSession,
+            Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier
+        );
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
