@@ -75,6 +75,12 @@ enum class PolicyTypeJson {
      */
     @SerialName("10")
     DISABLE_PERSONAL_VAULT_EXPORT,
+
+    /**
+     * Activate the auto-fill in the browser extension. Currently unused in mobile.
+     */
+    @SerialName("11")
+    ACTIVATE_AUTOFILL,
 }
 
 @Keep
