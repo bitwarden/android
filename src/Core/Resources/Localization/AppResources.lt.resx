@@ -2748,13 +2748,13 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Log in with device</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Prisijungiama prie</value>
   </data>
   <data name="Vault" xml:space="preserve">
     <value>Vault</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Išvaizda</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
     <value>Account security</value>
@@ -2769,7 +2769,7 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Copy app information</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>Sinchronizuoti dabar</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
     <value>Unlock options</value>
@@ -2859,7 +2859,7 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Choose the dark theme to use when your device’s dark mode is in use</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
-    <value>Created {0}, {1}</value>
+    <value>Sukurta {0}, {1}</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
@@ -2872,10 +2872,10 @@ Ar norite pereiti prie šios paskyros?</value>
     <value>Dėl pasikeitusių Jūsų organizacijos nuostatų, Jums reikia nustatyti pagrindinį slaptažodį.</value>
   </data>
   <data name="YourOrganizationRequiresYouToSetAMasterPassword" xml:space="preserve">
-    <value>Your organization requires you to set a master password.</value> 
+    <value>Jūsų organizacijos nuostatos reikalauja Jus nustatyti pagrindinį slaptažodį.</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>Set up an unlock option to change your vault timeout action.</value>
+    <value>Nustatykite atrakinimo būdą, kad pakeistumėte Jūsų saugyklos laiko limito veiksmą.</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Duo two-step login is required for your account. </value>
