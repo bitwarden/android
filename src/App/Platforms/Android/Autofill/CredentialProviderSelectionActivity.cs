@@ -123,7 +123,7 @@ namespace Bit.Droid.Autofill
 
         private async Task EnsureUnlockedVaultAsync()
         {
-            if (!await _stateService.Value.IsAuthenticatedAsync() || !await _vaultTimeoutService.Value.IsLockedAsync())
+            if (!await _stateService.Value.IsAuthenticatedAsync() || await _vaultTimeoutService.Value.IsLockedAsync())
             {
                 // this should never happen but just in case.
                 throw new InvalidOperationException("Not authed or vault locked");

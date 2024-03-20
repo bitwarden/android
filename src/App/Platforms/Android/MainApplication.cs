@@ -103,12 +103,12 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IUserVerificationService>());
                 ServiceContainer.Register<IUserVerificationMediatorService>(userVerificationMediatorService);
 
-                ServiceContainer.Register<IFido2AuthenticatorService>(new Fido2AuthenticatorService(
+                var fido2AuthenticatorService = new Fido2AuthenticatorService(
                     ServiceContainer.Resolve<ICipherService>(),
                     ServiceContainer.Resolve<ISyncService>(),
                     ServiceContainer.Resolve<ICryptoFunctionService>(),
-                    userVerificationMediatorService
-                    ));
+                    userVerificationMediatorService);
+                ServiceContainer.Register<IFido2AuthenticatorService>(fido2AuthenticatorService);
 
                 var fido2MakeCredentialUserInterface = new Fido2MakeCredentialUserInterface(
                     ServiceContainer.Resolve<IStateService>(),
@@ -119,13 +119,19 @@ namespace Bit.Droid
                 ServiceContainer.Register<IFido2MakeCredentialConfirmationUserInterface>(fido2MakeCredentialUserInterface);
 
                 //TODO: WIP: Need to replace 'Fido2GetAssertionUserInterface' if needed
-                ServiceContainer.Register<IFido2ClientService>(new Fido2ClientService(
+                var fido2ClientService = new Fido2ClientService(
                     ServiceContainer.Resolve<IStateService>(),
                     ServiceContainer.Resolve<IEnvironmentService>(),
                     ServiceContainer.Resolve<ICryptoFunctionService>(),
                     ServiceContainer.Resolve<IFido2AuthenticatorService>(),
                     new Fido2GetAssertionUserInterface(),
-                    fido2MakeCredentialUserInterface));
+                    fido2MakeCredentialUserInterface);
+                ServiceContainer.Register<IFido2ClientService>(fido2ClientService);
+
+                ServiceContainer.Register<IFido2MediatorService>(new Fido2MediatorService(
+                    fido2AuthenticatorService,
+                    fido2ClientService,
+                    ServiceContainer.Resolve<ICipherService>()));
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)

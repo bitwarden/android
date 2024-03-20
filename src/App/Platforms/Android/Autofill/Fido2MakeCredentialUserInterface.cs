@@ -84,7 +84,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public async Task EnsureUnlockedVaultAsync()
         {
-            if (!await _stateService.IsAuthenticatedAsync() || !await _vaultTimeoutService.IsLockedAsync())
+            if (!await _stateService.IsAuthenticatedAsync() || await _vaultTimeoutService.IsLockedAsync())
             {
                 // this should never happen but just in case.
                 throw new InvalidOperationException("Not authed or vault locked");
