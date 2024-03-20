@@ -26,18 +26,14 @@ data class TrustedDeviceArgs(val emailAddress: String) {
 /**
  * Add the Trusted Device Screen to the nav graph.
  */
-fun NavGraphBuilder.trustedDeviceDestination(
-    onNavigateBack: () -> Unit,
-) {
+fun NavGraphBuilder.trustedDeviceDestination() {
     composableWithSlideTransitions(
         route = TRUSTED_DEVICE_ROUTE,
         arguments = listOf(
             navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
         ),
     ) {
-        TrustedDeviceScreen(
-            onNavigateBack = onNavigateBack,
-        )
+        TrustedDeviceScreen()
     }
 }
 

@@ -49,7 +49,7 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleBackClick() {
-        sendEvent(TrustedDeviceEvent.NavigateBack)
+        authRepository.logout()
     }
 
     private fun handleRememberToggle(action: TrustedDeviceAction.RememberToggle) {
@@ -95,11 +95,6 @@ data class TrustedDeviceState(
  * Models events for the Trusted Device screen.
  */
 sealed class TrustedDeviceEvent {
-    /**
-     * Navigates back.
-     */
-    data object NavigateBack : TrustedDeviceEvent()
-
     /**
      * Displays the [message] as a toast.
      */
