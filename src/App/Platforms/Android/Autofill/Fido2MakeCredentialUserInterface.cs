@@ -2,6 +2,7 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
+using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
 
 namespace Bit.App.Platforms.Android.Autofill
@@ -40,6 +41,8 @@ namespace Bit.App.Platforms.Android.Autofill
 
             _currentDefaultUserVerificationOptions = new Fido2UserVerificationOptions(false, confirmNewCredentialParams.UserVerificationPreference, true, confirmNewCredentialParams.RpId);
 
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            messagingService?.Send("fidoNavigateToAutofillCipher", confirmNewCredentialParams);
             var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
             var verified = isUserVerified ?? await VerifyUserAsync(cipherId, confirmNewCredentialParams.UserVerificationPreference, confirmNewCredentialParams.RpId);

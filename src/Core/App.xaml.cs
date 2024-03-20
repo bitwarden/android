@@ -13,6 +13,7 @@ using Bit.Core.Models.Response;
 using Bit.Core.Pages;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Bit.App
@@ -297,6 +298,16 @@ namespace Bit.App
                             // lock doesn't allow for async execution
                             CheckPasswordlessLoginRequestsAsync().Wait();
                         }
+                    }
+                    else if (message.Command == "fidoNavigateToAutofillCipher" && message.Data is Fido2ConfirmNewCredentialParams createParams)
+                    {
+                        await MainThread.InvokeOnMainThreadAsync(async () =>
+                        {
+                            Options.Uri = createParams.RpId;
+                            Options.SaveUsername = createParams.UserName;
+                            Options.SaveName = createParams.CredentialName;
+                            App.MainPage = new NavigationPage(new CipherSelectionPage(Options));
+                        });
                     }
                 }
                 catch (Exception ex)
