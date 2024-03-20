@@ -16,11 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
-import org.junit.jupiter.api.Assertions.assertTrue
 
 class TrustedDeviceScreenTest : BaseComposeTest() {
-
-    private var onNavigateBackCalled: Boolean = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<TrustedDeviceEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -34,15 +31,8 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             TrustedDeviceScreen(
                 viewModel = viewModel,
-                onNavigateBack = { onNavigateBackCalled = true },
             )
         }
-    }
-
-    @Test
-    fun `on NavigateBack should call onNavigateBack`() {
-        mutableEventFlow.tryEmit(TrustedDeviceEvent.NavigateBack)
-        assertTrue(onNavigateBackCalled)
     }
 
     @Test

@@ -111,9 +111,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         masterPasswordHintDestination(
             onNavigateBack = { navController.popBackStack() },
         )
-        trustedDeviceDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
+        trustedDeviceDestination()
         twoFactorLoginDestination(
             onNavigateBack = { navController.popBackStack() },
         )

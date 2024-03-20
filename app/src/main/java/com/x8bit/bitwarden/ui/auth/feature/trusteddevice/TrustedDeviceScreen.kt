@@ -47,7 +47,6 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 @Composable
 fun TrustedDeviceScreen(
     viewModel: TrustedDeviceViewModel = hiltViewModel(),
-    onNavigateBack: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val handlers = remember(viewModel) { TrustedDeviceHandlers.create(viewModel = viewModel) }
@@ -55,7 +54,6 @@ fun TrustedDeviceScreen(
     val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            TrustedDeviceEvent.NavigateBack -> onNavigateBack()
             is TrustedDeviceEvent.ShowToast -> {
                 Toast
                     .makeText(context, event.message(context.resources), Toast.LENGTH_SHORT)

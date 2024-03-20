@@ -24,12 +24,13 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
 
     @Test
-    fun `on BackClick emits NavigateBack`() = runTest {
+    fun `on BackClick should logout`() {
         val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(TrustedDeviceAction.BackClick)
-            assertEquals(TrustedDeviceEvent.NavigateBack, awaitItem())
+        viewModel.trySendAction(TrustedDeviceAction.BackClick)
+
+        verify(exactly = 1) {
+            authRepository.logout()
         }
     }
 
@@ -87,7 +88,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on NotYouClick emits ShowToast`() {
+    fun `on NotYouClick should logout`() {
         val viewModel = createViewModel()
 
         viewModel.trySendAction(TrustedDeviceAction.NotYouClick)
