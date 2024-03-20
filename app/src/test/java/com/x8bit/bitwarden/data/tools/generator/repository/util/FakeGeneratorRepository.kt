@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import org.junit.jupiter.api.Assertions.assertEquals
 
 /**
  * A fake implementation of [GeneratorRepository] for testing purposes.
@@ -37,6 +38,8 @@ class FakeGeneratorRepository : GeneratorRepository {
     private var passcodeGenerationOptions: PasscodeGenerationOptions? = null
 
     private var usernameGenerationOptions: UsernameGenerationOptions? = null
+
+    private var passwordGeneratorRequest: PasswordGeneratorRequest? = null
 
     private val mutablePasswordHistoryStateFlow =
         MutableStateFlow<LocalDataState<List<PasswordHistoryView>>>(LocalDataState.Loading)
@@ -79,6 +82,7 @@ class FakeGeneratorRepository : GeneratorRepository {
         passwordGeneratorRequest: PasswordGeneratorRequest,
         shouldSave: Boolean,
     ): GeneratedPasswordResult {
+        this.passwordGeneratorRequest = passwordGeneratorRequest
         return generatePasswordResult
     }
 
@@ -194,5 +198,12 @@ class FakeGeneratorRepository : GeneratorRepository {
 
     fun setMockPasswordGeneratorPolicy(policy: PolicyInformation.PasswordGenerator?) {
         this.passwordGeneratorPolicy = policy
+    }
+
+    /**
+     * Asserts that the passed in request matches the stored request.
+     */
+    fun assertEqualsStoredRequest(request: PasswordGeneratorRequest) {
+        assertEquals(request, passwordGeneratorRequest)
     }
 }

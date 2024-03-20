@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.tools.feature.generator
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
+import com.bitwarden.generators.PasswordGeneratorRequest
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
@@ -280,6 +281,21 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             assertEquals(
                 updatedPasswordOptions,
                 fakeGeneratorRepository.getPasscodeGenerationOptions(),
+            )
+
+            fakeGeneratorRepository.assertEqualsStoredRequest(
+                PasswordGeneratorRequest(
+                    lowercase = true,
+                    uppercase = true,
+                    numbers = true,
+                    special = false,
+                    length = 14.toUByte(),
+                    avoidAmbiguous = false,
+                    minLowercase = null,
+                    minUppercase = null,
+                    minNumber = 1.toUByte(),
+                    minSpecial = 1.toUByte(),
+                ),
             )
         }
 
