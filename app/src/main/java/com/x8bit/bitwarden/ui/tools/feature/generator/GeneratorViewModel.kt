@@ -522,8 +522,8 @@ class GeneratorViewModel @Inject constructor(
             avoidAmbiguous = password.avoidAmbiguousChars,
             minLowercase = null,
             minUppercase = null,
-            minNumber = null,
-            minSpecial = null,
+            minNumber = password.minNumbers.toUByte(),
+            minSpecial = password.minSpecial.toUByte(),
         )
         val shouldSave = !password.isUserInteracting
 
