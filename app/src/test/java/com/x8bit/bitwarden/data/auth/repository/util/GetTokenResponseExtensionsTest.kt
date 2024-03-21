@@ -2,9 +2,12 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import io.mockk.every
 import io.mockk.mockkStatic
@@ -51,6 +54,33 @@ class GetTokenResponseExtensionsTest {
             ),
         )
     }
+
+    @Test
+    fun `toUserState with userDecryptionOptions creates a new single user state`() {
+        val tokenResponse = GET_TOKEN_RESPONSE_SUCCESS.copy(
+            userDecryptionOptions = USER_DECRYPTION_OPTIONS,
+        )
+        val expectedState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
+                        userDecryptionOptions = USER_DECRYPTION_OPTIONS,
+                    ),
+                ),
+            ),
+        )
+        every { parseJwtTokenDataOrNull(ACCESS_TOKEN_1) } returns JWT_TOKEN_DATA
+
+        assertEquals(
+            expectedState,
+            tokenResponse.toUserState(
+                previousUserState = null,
+                environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+            ),
+        )
+    }
 }
 
 private const val ACCESS_TOKEN_1 = "accessToken1"
@@ -84,23 +114,35 @@ private val GET_TOKEN_RESPONSE_SUCCESS = GetTokenResponseJson.Success(
     masterPasswordPolicyOptions = null,
     userDecryptionOptions = null,
 )
-private val ACCOUNT_1 = AccountJson(
-    profile = AccountJson.Profile(
-        userId = USER_ID_1,
-        email = "test@bitwarden.com",
-        isEmailVerified = true,
-        name = "Bitwarden Tester",
-        hasPremium = false,
-        stamp = null,
-        organizationId = null,
-        avatarColorHex = null,
-        forcePasswordResetReason = null,
-        kdfType = KdfTypeJson.ARGON2_ID,
-        kdfIterations = 600000,
-        kdfMemory = 16,
-        kdfParallelism = 4,
-        userDecryptionOptions = null,
+private val USER_DECRYPTION_OPTIONS = UserDecryptionOptionsJson(
+    hasMasterPassword = false,
+    trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
+        encryptedUserKey = "encryptedUserKey",
+        encryptedPrivateKey = "encryptedPrivateKey",
+        hasAdminApproval = true,
+        hasLoginApprovingDevice = true,
+        hasManageResetPasswordPermission = true,
     ),
+    keyConnectorUserDecryptionOptions = null,
+)
+private val PROFILE_1 = AccountJson.Profile(
+    userId = USER_ID_1,
+    email = "test@bitwarden.com",
+    isEmailVerified = true,
+    name = "Bitwarden Tester",
+    hasPremium = false,
+    stamp = null,
+    organizationId = null,
+    avatarColorHex = null,
+    forcePasswordResetReason = null,
+    kdfType = KdfTypeJson.ARGON2_ID,
+    kdfIterations = 600000,
+    kdfMemory = 16,
+    kdfParallelism = 4,
+    userDecryptionOptions = null,
+)
+private val ACCOUNT_1 = AccountJson(
+    profile = PROFILE_1,
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
     ),
