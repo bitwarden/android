@@ -17,8 +17,7 @@ fun GetTokenResponseJson.Success.toUserState(
     previousUserState: UserStateJson?,
     environmentUrlData: EnvironmentUrlDataJson,
 ): UserStateJson {
-    val accessToken = this.accessToken
-    val jwtTokenData = requireNotNull(parseJwtTokenDataOrNull(jwtToken = accessToken))
+    val jwtTokenData = requireNotNull(parseJwtTokenDataOrNull(jwtToken = this.accessToken))
     val userId = jwtTokenData.userId
 
     val account = AccountJson(
@@ -31,11 +30,7 @@ fun GetTokenResponseJson.Success.toUserState(
             organizationId = null,
             avatarColorHex = null,
             hasPremium = jwtTokenData.hasPremium,
-            forcePasswordResetReason = if (this.shouldForcePasswordReset) {
-                ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
-            } else {
-                null
-            },
+            forcePasswordResetReason = this.toForcePasswordResetReason(),
             kdfType = this.kdfType,
             kdfIterations = this.kdfIterations,
             kdfMemory = this.kdfMemory,
@@ -63,3 +58,20 @@ fun GetTokenResponseJson.Success.toUserState(
             accounts = mapOf(userId to account),
         )
 }
+
+/**
+ * Determines the [ForcePasswordResetReason] from the [GetTokenResponseJson.Success].
+ */
+private fun GetTokenResponseJson.Success.toForcePasswordResetReason(): ForcePasswordResetReason? =
+    this
+        .userDecryptionOptions
+        ?.trustedDeviceUserDecryptionOptions
+        ?.let { options ->
+            ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION
+                .takeIf {
+                    !this.userDecryptionOptions.hasMasterPassword &&
+                        options.hasManageResetPasswordPermission
+                }
+        }
+        ?: ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET
+            .takeIf { this.shouldForcePasswordReset }
