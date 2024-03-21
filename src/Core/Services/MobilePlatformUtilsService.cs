@@ -238,7 +238,7 @@ namespace Bit.App.Services
             return await stateService.IsAccountBiometricIntegrityValidAsync(bioIntegritySrcKey);
         }
 
-        public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
+        public async Task<bool?> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
             Action fallback = null, bool logOutOnTooManyAttempts = false, bool allowAlternativeAuthentication = false)
         {
             try
@@ -261,6 +261,10 @@ namespace Bit.App.Services
                 if (result.Authenticated)
                 {
                     return true;
+                }
+                if (result.Status == FingerprintAuthenticationResultStatus.Canceled)
+                {
+                    return null;
                 }
                 if (result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
                 {

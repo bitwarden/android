@@ -2,8 +2,10 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
 using Plugin.Fingerprint;
+using static Bit.Core.Abstractions.IUserVerificationMediatorService;
 using FingerprintAvailability = Plugin.Fingerprint.Abstractions.FingerprintAvailability;
 
 namespace Bit.Core.Services.UserVerification
@@ -37,7 +39,7 @@ namespace Bit.Core.Services.UserVerification
             _fido2UserVerificationStrategies.Add(Fido2UserVerificationPreference.Preferred, new Fido2UserVerificationPreferredServiceStrategy(this));
         }
 
-        public async Task<bool> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
+        public async Task<CancellableResult<bool>> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
         {
             if (await ShouldPerformMasterPasswordRepromptAsync(options))
             {
@@ -46,13 +48,16 @@ namespace Bit.Core.Services.UserVerification
                     await options.OnNeedUITask();
                 }
 
-                var (canPerformMP, mpVerified) = await VerifyMasterPasswordAsync(true);
-                return canPerformMP && mpVerified;
+                var mpVerification = await VerifyMasterPasswordAsync(true);
+                return new CancellableResult<bool>(
+                    !mpVerification.IsCancelled && mpVerification.Result.CanPerform && mpVerification.Result.IsVerified, 
+                    mpVerification.IsCancelled
+                );
             }
 
             if (!_fido2UserVerificationStrategies.TryGetValue(options.UserVerificationPreference, out var userVerificationServiceStrategy))
             {
-                return false;
+                return new CancellableResult<bool>(false, false);
             }
 
             return await userVerificationServiceStrategy.VerifyUserForFido2Async(options);
@@ -77,32 +82,53 @@ namespace Bit.Core.Services.UserVerification
             return options.ShouldCheckMasterPasswordReprompt && !await _passwordRepromptService.ShouldByPassMasterPasswordRepromptAsync();
         }
 
-        public async Task<(bool CanPerfom, bool IsUnlocked)> PerformOSUnlockAsync()
+        public async Task<bool> ShouldEnforceFido2RequiredUserVerificationAsync(Fido2UserVerificationOptions options)
+        {
+            switch (options.UserVerificationPreference)
+            {
+                case Fido2UserVerificationPreference.Required:
+                    return true;
+                case Fido2UserVerificationPreference.Discouraged:
+                    return await ShouldPerformMasterPasswordRepromptAsync(options);
+                default:
+                    return await CanPerformUserVerificationPreferredAsync(options);
+            }
+        }
+
+        public async Task<CancellableResult<UVResult>> PerformOSUnlockAsync()
         {
             var availability = await CrossFingerprint.Current.GetAvailabilityAsync();
             if (availability == FingerprintAvailability.Available)
             {
                 var isValid = await _platformUtilsService.AuthenticateBiometricAsync(null, DeviceInfo.Platform == DevicePlatform.Android ? "." : null);
-                return (true, isValid);
+                if (!isValid.HasValue)
+                {
+                    return new UVResult(false, false).AsCancellable(true);
+                }
+                return new UVResult(true, isValid.Value).AsCancellable();
             }
 
             var alternativeAuthAvailability = await CrossFingerprint.Current.GetAvailabilityAsync(true);
             if (alternativeAuthAvailability == FingerprintAvailability.Available)
             {
                 var isNonBioValid = await _platformUtilsService.AuthenticateBiometricAsync(null, DeviceInfo.Platform == DevicePlatform.Android ? "." : null, allowAlternativeAuthentication: true);
-                return (true, isNonBioValid);
+                if (!isNonBioValid.HasValue)
+                {
+                    return new UVResult(false, false).AsCancellable(true);
+                }
+                return new UVResult(true, isNonBioValid.Value).AsCancellable();
             }
 
-            return (false, false);
+            return new UVResult(false, false).AsCancellable();
         }
 
-        public async Task<(bool canPerformUnlockWithPin, bool pinVerified)> VerifyPinCodeAsync()
+        public async Task<CancellableResult<UVResult>> VerifyPinCodeAsync()
         {
             return await VerifyWithAttemptsAsync(async () =>
             {
                 if (!await _userPinService.IsPinLockEnabledAsync())
                 {
-                    return (false, false);
+                    return new UVResult(false, false).AsCancellable();
                 }
 
                 var pin = await _deviceActionService.DisplayPromptAync(AppResources.EnterPIN,
@@ -110,59 +136,76 @@ namespace Bit.Core.Services.UserVerification
                 if (pin is null)
                 {
                     // cancelled by the user
-                    return (true, false);
+                    return new UVResult(true, false).AsCancellable(true);
                 }
 
                 try
                 {
                     var isVerified = await _userPinService.VerifyPinAsync(pin);
-                    return (true, isVerified);
+                    return new UVResult(true, isVerified).AsCancellable();
                 }
                 catch (SymmetricCryptoKey.ArgumentKeyNullException)
                 {
-                    return (true, false);
+                    return new UVResult(true, false).AsCancellable();
                 }
                 catch (SymmetricCryptoKey.InvalidKeyOperationException)
                 {
-                    return (true, false);
+                    return new UVResult(true, false).AsCancellable();
                 }
             });
         }
 
-        public async Task<(bool canPerformUnlockWithMasterPassword, bool mpVerified)> VerifyMasterPasswordAsync(bool isMasterPasswordReprompt)
+        public async Task<CancellableResult<UVResult>> VerifyMasterPasswordAsync(bool isMasterPasswordReprompt)
         {
             return await VerifyWithAttemptsAsync(async () =>
             {
                 if (!await _userVerificationService.HasMasterPasswordAsync(true))
                 {
-                    return (false, false);
+                    return new UVResult(false, false).AsCancellable();
                 }
 
                 var title = isMasterPasswordReprompt ? AppResources.PasswordConfirmation : AppResources.MasterPassword;
                 var body = isMasterPasswordReprompt ? AppResources.PasswordConfirmationDesc : string.Empty;
 
-                var (_, isValid) = await _platformUtilsService.ShowPasswordDialogAndGetItAsync(title, body, _userVerificationService.VerifyMasterPasswordAsync);
-                return (true, isValid);
+                var (password, isValid) = await _platformUtilsService.ShowPasswordDialogAndGetItAsync(title, body, _userVerificationService.VerifyMasterPasswordAsync);
+                if (password is null)
+                {
+                    return new UVResult(true, false).AsCancellable(true);
+                }
+
+                return new UVResult(true, isValid).AsCancellable();
             });
         }
 
-        private async Task<(bool canPerform, bool isVerified)> VerifyWithAttemptsAsync(Func<Task<(bool canPerform, bool isVerified)>> verifyAsync)
+        private async Task<CancellableResult<UVResult>> VerifyWithAttemptsAsync(Func<Task<CancellableResult<UVResult>>> verifyAsync)
         {
             byte attempts = 0;
             do
             {
-                var (canPerform, verified) = await verifyAsync();
-                if (!canPerform)
+                var verification = await verifyAsync();
+                if (verification.IsCancelled)
                 {
-                    return (false, false);
+                    return new UVResult(false, false).AsCancellable(true);
                 }
-                if (verified)
+                if (!verification.Result.CanPerform)
                 {
-                    return (true, true);
+                    return new UVResult(false, false).AsCancellable();
+                }
+                if (verification.Result.IsVerified)
+                {
+                    return new UVResult(true, true).AsCancellable();
                 }
             } while (attempts++ < MAX_ATTEMPTS);
 
-            return (true, false);
+            return new UVResult(true, false).AsCancellable();
+        }
+    }
+
+    public static class UVResultExtensions
+    {
+        public static CancellableResult<UVResult> AsCancellable(this UVResult result, bool isCancelled = false)
+        {
+            return new CancellableResult<UVResult>(result, isCancelled);
         }
     }
 }

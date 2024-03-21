@@ -74,7 +74,7 @@ namespace Bit.Core.Services
 
                 if (!userVerified
                 &&
-                await ShouldEnforceRequiredUserVerificationAsync(new Fido2UserVerificationOptions(
+                await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(new Fido2UserVerificationOptions(
                     cipher.Reprompt != CipherRepromptType.None,
                     makeCredentialParams.UserVerificationPreference,
                     userInterface.HasVaultBeenUnlockedInThisTransaction)))
@@ -158,7 +158,7 @@ namespace Bit.Core.Services
 
             if (!userVerified
                 &&
-                await ShouldEnforceRequiredUserVerificationAsync(new Fido2UserVerificationOptions(
+                await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(new Fido2UserVerificationOptions(
                     selectedCipher.Reprompt != CipherRepromptType.None,
                     assertionParams.UserVerificationPreference,
                     userInterface.HasVaultBeenUnlockedInThisTransaction)))
@@ -456,19 +456,6 @@ namespace Bit.Core.Services
             }
 
             return dsa.SignData(sigBase, HashAlgorithmName.SHA256, DSASignatureFormat.Rfc3279DerSequence);
-        }
-
-        private async Task<bool> ShouldEnforceRequiredUserVerificationAsync(Fido2UserVerificationOptions options)
-        {
-            switch (options.UserVerificationPreference)
-            {
-                case Fido2UserVerificationPreference.Required:
-                    return true;
-                case Fido2UserVerificationPreference.Discouraged:
-                    return await _userVerificationMediatorService.ShouldPerformMasterPasswordRepromptAsync(options);
-                default:
-                    return await _userVerificationMediatorService.CanPerformUserVerificationPreferredAsync(options);
-            }
         }
 
         private class PublicKey
