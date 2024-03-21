@@ -160,7 +160,7 @@ namespace Bit.Core.Services.UserVerification
                 {
                     return (true, true);
                 }
-            } while (attempts++ < MAX_ATTEMPTS);
+            } while (++attempts < MAX_ATTEMPTS);
 
             return (true, false);
         }
