@@ -42,6 +42,9 @@ namespace Bit.App.Pages
             SelectCipherCommand = CreateDefaultAsyncRelayCommand<IGroupingsPageListItem>(SelectCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+            AddFabCipherCommand = CreateDefaultAsyncRelayCommand(AddFabCipherAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
             AddCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -60,6 +63,7 @@ namespace Bit.App.Pages
         public ICommand CipherOptionsCommand { get; set; }
         public ICommand SelectCipherCommand { get; set; }
         public ICommand AddCipherCommand { get; set; }
+        public ICommand AddFabCipherCommand { get; set; }
 
         public bool ShowNoData
         {
@@ -153,5 +157,6 @@ namespace Bit.App.Pages
         protected abstract Task SelectCipherAsync(IGroupingsPageListItem item);
 
         protected abstract Task AddCipherAsync();
+        protected abstract Task AddFabCipherAsync();
     }
 }

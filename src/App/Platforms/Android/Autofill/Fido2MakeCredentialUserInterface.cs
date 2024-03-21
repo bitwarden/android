@@ -35,7 +35,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public async Task<(string CipherId, bool UserVerified)> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {
-            _confirmCredentialTcs?.SetCanceled();
+            _confirmCredentialTcs?.TrySetCanceled();
             _confirmCredentialTcs = null;
             _confirmCredentialTcs = new TaskCompletionSource<(string cipherId, bool? userVerified)>();
 

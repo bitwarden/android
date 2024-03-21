@@ -163,14 +163,27 @@ namespace Bit.App.Pages
             _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(cipher.Id, null);
         }
 
+        protected override async Task AddFabCipherAsync()
+        {
+            //Scenario for creating a new Fido2 credential on Android but showing the Cipher Page
+            if (_isAndroidFido2CredentialCreation)
+            {
+                var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
+                await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                return;
+            }
+            else
+            {
+                await AddCipherAsync();
+            }
+        }
+
         protected override async Task AddCipherAsync()
         {
             //Scenario for creating a new Fido2 credential on Android
             if (_isAndroidFido2CredentialCreation)
             {
                 _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(null, null);
-                //var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
-                //await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
                 return;
             }
 

@@ -133,7 +133,7 @@
         <Button
             x:Name="_fab"
             ImageSource="plus.png"
-            Command="{Binding AddCipherCommand}"
+            Command="{Binding AddFabCipherCommand}"
             Style="{StaticResource btn-fab}"
             IsVisible="{OnPlatform iOS=false, Android=true}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
