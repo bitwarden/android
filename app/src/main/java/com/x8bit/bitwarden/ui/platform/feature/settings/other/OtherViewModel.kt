@@ -60,6 +60,7 @@ class OtherViewModel @Inject constructor(
         is OtherAction.AllowSyncToggle -> handleAllowSyncToggled(action)
         OtherAction.BackClick -> handleBackClicked()
         is OtherAction.ClearClipboardFrequencyChange -> handleClearClipboardFrequencyChanged(action)
+        OtherAction.GiveFeedbackClick -> handleGiveFeedbackClicked()
         OtherAction.SyncNowButtonClick -> handleSyncNowButtonClicked()
         is OtherAction.Internal -> handleInternalAction(action)
     }
@@ -85,6 +86,10 @@ class OtherViewModel @Inject constructor(
             it.copy(clearClipboardFrequency = action.clearClipboardFrequency)
         }
         settingsRepo.clearClipboardFrequency = action.clearClipboardFrequency
+    }
+
+    private fun handleGiveFeedbackClicked() {
+        sendEvent(OtherEvent.NavigateToFeedbackForm)
     }
 
     private fun handleSyncNowButtonClicked() {
@@ -146,6 +151,11 @@ sealed class OtherEvent {
      * Navigate back.
      */
     data object NavigateBack : OtherEvent()
+
+    /**
+     * Navigate to the feedback form.
+     */
+    data object NavigateToFeedbackForm : OtherEvent()
 }
 
 /**
@@ -177,6 +187,11 @@ sealed class OtherAction {
     data class ClearClipboardFrequencyChange(
         val clearClipboardFrequency: ClearClipboardFrequency,
     ) : OtherAction()
+
+    /**
+     * Indicates that the user clicked the Give feedback button.
+     */
+    data object GiveFeedbackClick : OtherAction()
 
     /**
      * Indicates that the user clicked the Sync Now button.
