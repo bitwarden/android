@@ -2942,6 +2942,9 @@ Do you want to switch to this account?</value>
   <data name="Passwords" xml:space="preserve">
     <value>Passwords</value>
   </data>
+  <data name="UnknownAccount" xml:space="preserve">
+    <value>Unknown account</value>
+  </data>
   <data name="SetUpAutofill" xml:space="preserve">
     <value>Set up auto-fill</value>
   </data>

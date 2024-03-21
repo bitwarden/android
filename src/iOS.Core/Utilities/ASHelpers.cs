@@ -2,6 +2,7 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Foundation;
@@ -148,19 +149,8 @@ namespace Bit.iOS.Core.Utilities
                     return null;
                 }
 
-                var userName = cipher.Login.MainFido2Credential.UserName;
-                if (string.IsNullOrWhiteSpace(userName))
-                {
-                    userName = cipher.Login.MainFido2Credential.UserDisplayName;
-
-                    if (string.IsNullOrWhiteSpace(userName))
-                    {
-                        userName = cipher.Login.Username;
-                    }
-                }
-
                 return new ASPasskeyCredentialIdentity(cipher.Login.MainFido2Credential.RpId,
-                    userName,
+                    cipher.Login.GetMainFido2CredentialUsername(),
                     NSData.FromArray(cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat()),
                     cipher.Login.MainFido2Credential.UserHandle,
                     cipher.Id);

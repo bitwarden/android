@@ -7209,6 +7209,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unknown account.
+        /// </summary>
+        public static string UnknownAccount {
+            get {
+                return ResourceManager.GetString("UnknownAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown {0} error occurred..
         /// </summary>
         public static string UnknownXErrorMessage {
