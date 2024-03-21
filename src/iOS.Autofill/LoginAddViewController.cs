@@ -87,7 +87,12 @@ namespace Bit.iOS.Autofill
 
             if (Context?.PasskeyCreationParams?.UserVerificationPreference != Fido2UserVerificationPreference.Discouraged)
             {
-                _isUserVerified = await VerifyUserAsync();
+                var verification = await VerifyUserAsync();
+                if (verification.IsCancelled)
+                {
+                    return;
+                }
+                _isUserVerified = verification.Result;
             }
 
             var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
@@ -109,13 +114,13 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private async Task<bool> VerifyUserAsync()
+        private async Task<CancellableResult<bool>> VerifyUserAsync()
         {
             try
             {
                 if (Context?.PasskeyCreationParams is null)
                 {
-                    return false;
+                    return new CancellableResult<bool>(false);
                 }
 
                 return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
@@ -123,13 +128,14 @@ namespace Bit.iOS.Autofill
                         false,
                         Context.PasskeyCreationParams.Value.UserVerificationPreference,
                         Context.VaultUnlockedDuringThisSession,
-                        Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier)
-                    );
+                        Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier
+                    )
+                );
             }
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
-                return false;
+                return new CancellableResult<bool>(false);
             }
         }
 

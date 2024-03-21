@@ -264,7 +264,7 @@ namespace Bit.iOS.Autofill
                 var encrypted = await _cipherService.Value.GetAsync(selectedCipherId);
                 var cipher = await encrypted.DecryptAsync();
 
-                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
+                var cResult = await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
                     new Fido2UserVerificationOptions(
                         cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
                         userVerificationPreference,
@@ -285,8 +285,10 @@ namespace Bit.iOS.Autofill
                             _platformUtilsService.Value.ShowToast(null, null, AppResources.VerifyingIdentityEllipsis);
 
                             await _conditionedAwaiterManager.Value.GetAwaiterForPrecondition(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
-                        })
-                    );
+                        }
+                    )
+                );
+                return !cResult.IsCancelled && cResult.Result;
             }
             catch (InvalidOperationNeedsUIException)
             {
