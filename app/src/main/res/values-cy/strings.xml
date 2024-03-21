@@ -55,7 +55,7 @@
   <string name="name">Enw</string>
   <string name="no">Na</string>
   <string name="notes">Nodiadau</string>
-  <string name="ok">Ok</string>
+  <string name="ok">Iawn</string>
   <string name="password">Cyfrinair</string>
   <string name="save">Cadw</string>
   <string name="move">Symud</string>
@@ -63,17 +63,17 @@
   <string name="settings">Gosodiadau</string>
   <string name="show">Dangos</string>
   <string name="item_deleted">Eitem wedi\'i dileu</string>
-  <string name="submit">Submit</string>
+  <string name="submit">Cyflwyno</string>
   <string name="sync">Cysoni</string>
   <string name="thank_you">Diolch</string>
   <string name="tools">Offer</string>
   <string name="uri">URI</string>
   <string name="use_fingerprint_to_unlock">Use fingerprint to unlock</string>
   <string name="username">Enw defnyddiwr</string>
-  <string name="validation_field_required">The %1$s field is required.</string>
+  <string name="validation_field_required">Mae\'r maes %1$s yn ofynnol.</string>
   <string name="value_has_been_copied">%1$s wedi\'i gopïo</string>
   <string name="verify_fingerprint">Verify fingerprint</string>
-  <string name="verify_master_password">Verify master password</string>
+  <string name="verify_master_password">Gwirio\'r prif gyfrinair</string>
   <string name="verify_pin">Verify PIN</string>
   <string name="version">Fersiwn</string>
   <string name="view">Gweld</string>
@@ -81,7 +81,7 @@
   <string name="website">Gwefan</string>
   <string name="yes">Ydw</string>
   <string name="account">Cyfrif</string>
-  <string name="account_created">Your new account has been created! You may now log in.</string>
+  <string name="account_created">Mae eich cyfrif newydd wedi cael ei greu! Gallwch bellach fewngofnodi.</string>
   <string name="add_an_item">Ychwanegu eitem</string>
   <string name="app_extension">App extension</string>
   <string name="autofill_accessibility_description">Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</string>
@@ -202,16 +202,16 @@
   <string name="bitwarden_autofill_service_alert2">The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the \"Settings\" screen.</string>
   <string name="autofill">Llenwi\'n awtomatig</string>
   <string name="autofill_or_view">Do you want to auto-fill or view this item?</string>
-  <string name="bitwarden_autofill_service_match_confirm">Are you sure you want to auto-fill this item? It is not a complete match for \"%1$s\".</string>
-  <string name="matching_items">Matching items</string>
+  <string name="bitwarden_autofill_service_match_confirm">Ydych chi\'n siŵr eich bod am lenwi\'r eitem hon? Dyw hi ddim yn cyfateb yn llwyr i \"%1$s\".</string>
+  <string name="matching_items">Eitemau sy\'n cyfateb</string>
   <string name="possible_matching_items">Possible matching items</string>
   <string name="search">Chwilio</string>
   <string name="bitwarden_autofill_service_search">You are searching for an auto-fill item for \"%1$s\".</string>
-  <string name="learn_org">Learn about organizations</string>
-  <string name="cannot_open_app">Cannot open the app \"%1$s\".</string>
-  <string name="authenticator_app_title">Authenticator app</string>
-  <string name="enter_verification_code_app">Enter the 6 digit verification code from your authenticator app.</string>
-  <string name="enter_verification_code_email">Enter the 6 digit verification code that was emailed to %1$s.</string>
+  <string name="learn_org">Dysgu am sefydliadau</string>
+  <string name="cannot_open_app">Methu agor yr ap \"%1$s\".</string>
+  <string name="authenticator_app_title">Ap dilysu</string>
+  <string name="enter_verification_code_app">Rhowch y cod dilysu 6 nod o\'ch ap dilysu.</string>
+  <string name="enter_verification_code_email">Rhowch y cod dilysu 6 nod anfonwyd i %1$s.</string>
   <string name="login_unavailable">Login unavailable</string>
   <string name="no_two_step_available">This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</string>
   <string name="recovery_code_title">Cod adfer</string>
@@ -235,7 +235,7 @@
   <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
   <string name="point_your_camera_at_the_qr_code">Point your camera at the QR Code.
 Scanning will happen automatically.</string>
-  <string name="scan_qr_title">Scan QR Code</string>
+  <string name="scan_qr_title">Sganio cod QR</string>
   <string name="camera">Camera</string>
   <string name="photos">Lluniau</string>
   <string name="copy_totp">Copy TOTP</string>
@@ -317,7 +317,7 @@ Scanning will happen automatically.</string>
   <string name="show_website_icons">Dangos eiconau gwefannau</string>
   <string name="show_website_icons_description">Dangos delwedd adnabyddadwy wrth ymyl pob eitem.</string>
   <string name="icons_url">Icons server URL</string>
-  <string name="autofill_with_bitwarden">Auto-fill with Bitwarden</string>
+  <string name="autofill_with_bitwarden">Llenwi\'n awtomatig â Bitwarden</string>
   <string name="vault_is_locked">Vault is locked</string>
   <string name="go_to_my_vault">Go to my vault</string>
   <string name="collections">Casgliadau</string>
@@ -327,7 +327,7 @@ Scanning will happen automatically.</string>
   <string name="autofill_accessibility_service">Auto-fill Accessibility Service</string>
   <string name="autofill_service_description">The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</string>
   <string name="bitwarden_autofill_service_description">Use the Bitwarden auto-fill service to fill login information into other apps.</string>
-  <string name="bitwarden_autofill_service_open_autofill_settings">Open Autofill Settings</string>
+  <string name="bitwarden_autofill_service_open_autofill_settings">Agor gosodiadau llenwi awtomatig</string>
   <string name="face_id">Face ID</string>
   <string name="face_id_direction">Use Face ID to verify.</string>
   <string name="use_face_id_to_unlock">Use Face ID To Unlock</string>
@@ -353,7 +353,7 @@ Scanning will happen automatically.</string>
   <string name="uri_match_detection">Modd cymharu URIs</string>
   <string name="match_detection">Cymharu URIs</string>
   <string name="yes_and_save">Yes, and save</string>
-  <string name="autofill_and_save">Auto-fill and save</string>
+  <string name="autofill_and_save">Llenwi\'n awtomatig a chadw</string>
   <string name="organization">Sefydliad</string>
   <string name="hold_yubikey_near_top">Hold your Yubikey near the top of the device.</string>
   <string name="try_again">Ceisio eto</string>
@@ -426,7 +426,7 @@ Scanning will happen automatically.</string>
   <string name="unlock_vault">Datgloi\'ch cell</string>
   <string name="thirty_minutes">ar ôl hanner awr</string>
   <string name="set_pin_description">Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</string>
-  <string name="logged_in_as_on">Logged in as %1$s on %2$s.</string>
+  <string name="logged_in_as_on">Rydych wedi mewngofnodi fel %1$s ar %2$s.</string>
   <string name="vault_locked_master_password">Mae eich cell dan glo. Gwiriwch eich prif gyfrinair i barhau.</string>
   <string name="vault_locked_pin">Mae eich cell dan glo. Gwiriwch eich cod PIN i barhau.</string>
   <string name="vault_locked_identity">Mae eich cell dan glo. Gwiriwch eich hunaniaeth i barhau.</string>
@@ -442,7 +442,7 @@ Scanning will happen automatically.</string>
   <string name="default_uri_match_detection">Default URI match detection</string>
   <string name="default_uri_match_detection_description">Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</string>
   <string name="theme">Thema</string>
-  <string name="theme_description">Newid thema liwiau\'r ap.</string>
+  <string name="theme_description">Newid thema liwiau\'r ap</string>
   <string name="theme_default">Rhagosodiad (system)</string>
   <string name="default_dark_theme">Default dark theme</string>
   <string name="copy_notes">Copïo\'r nodyn</string>
@@ -453,7 +453,7 @@ Scanning will happen automatically.</string>
   <string name="nord">Nord</string>
   <string name="solarized_dark">Solarized Dark</string>
   <string name="autofill_blocked_uris">Auto-fill blocked URIs</string>
-  <string name="ask_to_add_login">Ask to add login</string>
+  <string name="ask_to_add_login">Gofyn i ychwanegu manylion mewngofnodi</string>
   <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
   <string name="on_restart">On app restart</string>
   <string name="autofill_service_not_enabled">Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not set up an auto-fill service for Bitwarden. Set up auto-fill for Bitwarden from the \"Settings\" screen.</string>
@@ -483,7 +483,7 @@ Scanning will happen automatically.</string>
   <string name="enc_export_key_warning">This export encrypts your data using your account\'s encryption key. If you ever rotate your account\'s encryption key you should export again since you will not be able to decrypt this export file.</string>
   <string name="enc_export_account_warning">Account encryption keys are unique to each Bitwarden user account, so you can\'t import an encrypted export into a different account.</string>
   <string name="export_vault_confirmation_title">Cadarnhau allforio\'r gell</string>
-  <string name="warning">Warning</string>
+  <string name="warning">Rhybudd</string>
   <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\'ll need to export from the web vault.</string>
   <string name="export_vault_success">Vault exported successfully</string>
   <string name="clone">Clone</string>
@@ -568,7 +568,7 @@ Scanning will happen automatically.</string>
   <string name="maximum_access_count_info">If set, users will no longer be able to access this Send once the maximum access count is reached.</string>
   <string name="maximum_access_count_reached">Max access count reached</string>
   <string name="current_access_count">Current access count</string>
-  <string name="new_password">New password</string>
+  <string name="new_password">Cyfrinair newydd</string>
   <string name="password_info">Optionally require a password for users to access this Send.</string>
   <string name="remove_password">Remove password</string>
   <string name="are_you_sure_remove_send_password">Are you sure you want to remove the password?</string>
@@ -684,7 +684,7 @@ select Add TOTP to store the key safely</string>
   <string name="environment_page_urls_error">One or more of the URLs entered are invalid. Please revise it and try to save again.</string>
   <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
   <string name="allow_screen_capture">Caniatáu sgrinluniau</string>
-  <string name="are_you_sure_you_want_to_enable_screen_capture">Are you sure you want to turn on screen capture?</string>
+  <string name="are_you_sure_you_want_to_enable_screen_capture">Ydych chi\'n siŵr eich bod am ganiatáu sgrinluniau?</string>
   <string name="log_in_requested">Login requested</string>
   <string name="are_you_trying_to_log_in">Ydych chi\'n ceisio mewngofnodi?</string>
   <string name="log_in_attempt_by_x_on_y">Cais mewngofnodi gan %1$s ar %2$s</string>
@@ -712,10 +712,10 @@ select Add TOTP to store the key safely</string>
   <string name="catch_all_email">Catch-all email</string>
   <string name="forwarded_email_alias">Forwarded email alias</string>
   <string name="random_word">Gair ar hap</string>
-  <string name="email_required_parenthesis">Email (required)</string>
+  <string name="email_required_parenthesis">Ebost (gofynnol)</string>
   <string name="domain_name_required_parenthesis">Enw parth (gofynnol)</string>
-  <string name="api_key_required_parenthesis">API key (required)</string>
-  <string name="service">Service</string>
+  <string name="api_key_required_parenthesis">Allwedd API (gofynnol)</string>
+  <string name="service">Gwasanaeth</string>
   <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
   <string name="simple_login">SimpleLogin</string>
@@ -763,7 +763,7 @@ Do you want to switch to this account?</string>
   <string name="language">Iaith</string>
   <string name="language_change_x_description">Cafodd yr iaith ei newid i %1$s. Ailgychwynnwch yr ap i weld newidiadau</string>
   <string name="language_change_requires_app_restart">Bydd angen ailgychwyn yr ap</string>
-  <string name="default_system">Default (System)</string>
+  <string name="default_system">Rhagosodiad (system)</string>
   <string name="important">Pwysig</string>
   <string name="your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum">Your master password cannot be recovered if you forget it! %1$s characters minimum.</string>
   <string name="weak_master_password">Prif gyfrinair gwan</string>
@@ -788,7 +788,7 @@ Do you want to switch to this account?</string>
   <string name="region">Rhanbarth</string>
   <string name="update_weak_master_password_warning">Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</string>
   <string name="current_master_password">Prif gyfrinair presennol</string>
-  <string name="logged_in">Logged in!</string>
+  <string name="logged_in">Wedi mewngofnodi!</string>
   <string name="approve_with_my_other_device">Approve with my other device</string>
   <string name="request_admin_approval">Request admin approval</string>
   <string name="approve_with_master_password">Approve with master password</string>
@@ -850,10 +850,10 @@ Do you want to switch to this account?</string>
   <string name="use_inline_autofill_explanation_long">Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</string>
   <string name="additional_options">Dewisiadau ychwanegol</string>
   <string name="continue_to_web_app">Parhau i\'r ap gwe?</string>
-  <string name="continue_to_x">Continue to %1$s?</string>
-  <string name="continue_to_help_center">Continue to Help center?</string>
+  <string name="continue_to_x">Parhau i %1$s?</string>
+  <string name="continue_to_help_center">Parhau i\'r ganolfan gymorth?</string>
   <string name="continue_to_contact_support">Continue to contact support?</string>
-  <string name="continue_to_privacy_policy">Continue to privacy policy?</string>
+  <string name="continue_to_privacy_policy">Parhau i\'r polisi preifatrwydd?</string>
   <string name="continue_to_app_store">Continue to app store?</string>
   <string name="two_step_login_description_long">Gallwch wneud eich cyfrif yn fwy diogel drwy alluogi mewngofnodi dau gam yn ap gwe Bitwarden.</string>
   <string name="change_master_password_description_long">You can change your master password on the Bitwarden web app.</string>
@@ -865,13 +865,13 @@ Do you want to switch to this account?</string>
   <string name="learn_about_organizations_description_long">Bitwarden allows you to share your vault items with others by using an organization. Learn more on the bitwarden.com website.</string>
   <string name="rate_app_description_long">Help others find out if Bitwarden is right for them. Visit the app store and leave a rating now.</string>
   <string name="default_dark_theme_description_long">Choose the dark theme to use when your device’s dark mode is in use</string>
-  <string name="created_xy">Created %1$s, %2$s</string>
-  <string name="too_many_attempts">Too many attempts</string>
+  <string name="created_xy">Crëwyd ar %1$s am %2$s</string>
+  <string name="too_many_attempts">Gormod o geisiadau</string>
   <string name="account_logged_out_biometric_exceeded">Account logged out.</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Your organization permissions were updated, requiring you to set a master password.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Your organization requires you to set a master password.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Set up an unlock option to change your vault timeout action.</string>
   <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
-  <string name="launch_duo">Launch Duo</string>
+  <string name="launch_duo">Lansio Duo</string>
 </resources>
