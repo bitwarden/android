@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.View
 {
@@ -38,6 +37,17 @@ namespace Bit.Core.Models.View
                 new KeyValuePair<string, LinkedIdType>("Username", LinkedIdType.Login_Username),
                 new KeyValuePair<string, LinkedIdType>("Password", LinkedIdType.Login_Password),
             };
+        }
+    }
+
+    public static class LoginViewExtensions
+    {
+        public static string GetMainFido2CredentialUsername(this LoginView loginView)
+        {
+            return loginView.MainFido2Credential.UserName
+                    .FallbackOnNullOrWhiteSpace(loginView.MainFido2Credential.UserDisplayName)
+                    .FallbackOnNullOrWhiteSpace(loginView.Username)
+                    .FallbackOnNullOrWhiteSpace(AppResources.UnknownAccount);
         }
     }
 }
