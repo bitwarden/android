@@ -30,14 +30,6 @@ namespace Bit.Core.Utilities
                 .Normalize(NormalizationForm.FormC);
         }
 
-        public static string FallbackOnNullOrWhiteSpace(this string s, string fallback)
-        {
-            if (string.IsNullOrWhiteSpace(s))
-            {
-                return fallback;
-            }
-
-            return s;
-        }
+        public static string FallbackOnNullOrWhiteSpace(this string s, string fallback) => string.IsNullOrWhiteSpace(s) ? fallback : s;
     }
 }
