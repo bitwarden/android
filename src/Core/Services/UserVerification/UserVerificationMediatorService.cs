@@ -195,7 +195,7 @@ namespace Bit.Core.Services.UserVerification
                 {
                     return new UVResult(true, true).AsCancellable();
                 }
-            } while (attempts++ < MAX_ATTEMPTS);
+            } while (++attempts < MAX_ATTEMPTS);
 
             return new UVResult(true, false).AsCancellable();
         }
