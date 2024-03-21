@@ -379,12 +379,22 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private Fido2UserVerificationOptions Fido2UserVerificationOptions => new Fido2UserVerificationOptions(
-            false,
-            Context.PasskeyCreationParams.Value.UserVerificationPreference,
-            Context.VaultUnlockedDuringThisSession,
-            Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier
-        );
+        private Fido2UserVerificationOptions Fido2UserVerificationOptions
+        {
+            get
+            {
+                ArgumentNullException.ThrowIfNull(Context);
+                ArgumentNullException.ThrowIfNull(Context.PasskeyCreationParams);
+
+                return new Fido2UserVerificationOptions
+                (
+                    false,
+                    Context.PasskeyCreationParams.Value.UserVerificationPreference,
+                    Context.VaultUnlockedDuringThisSession,
+                    Context.PasskeyCredentialIdentity?.RelyingPartyIdentifier
+                );
+            }
+        }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
