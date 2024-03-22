@@ -1,14 +1,12 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Util;
 using AndroidX.Credentials;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Bit.Droid;
-using Java.Security;
 using Org.Json;
 using Activity = Android.App.Activity;
 using Drawables = Android.Graphics.Drawables;
@@ -58,11 +56,7 @@ namespace Bit.App.Platforms.Android.Autofill
         public static async Task CreateCipherPasskeyAsync(ProviderCreateCredentialRequest getRequest, Activity activity)
         {
             var callingRequest = getRequest?.CallingRequest as CreatePublicKeyCredentialRequest;
-
             var origin = callingRequest.Origin;
-            var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
-            var packageName = getRequest?.CallingAppInfo.PackageName;
-
             var credentialCreationOptions = new PublicKeyCredentialCreationOptions(callingRequest.RequestJson);
 
             var rp = new Core.Utilities.Fido2.PublicKeyCredentialRpEntity()
@@ -133,16 +127,16 @@ namespace Bit.App.Platforms.Android.Autofill
             }
             
             var responseInnerAndroidJson = new JSONObject();
-            responseInnerAndroidJson.Put("clientDataJSON", b64Encode(clientCreateCredentialResult.ClientDataJSON));
-            responseInnerAndroidJson.Put("authenticatorData", b64Encode(clientCreateCredentialResult.AuthData));
-            responseInnerAndroidJson.Put("attestationObject", b64Encode(clientCreateCredentialResult.AttestationObject));
+            responseInnerAndroidJson.Put("clientDataJSON", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.ClientDataJSON));
+            responseInnerAndroidJson.Put("authenticatorData", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.AuthData));
+            responseInnerAndroidJson.Put("attestationObject", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.AttestationObject));
             responseInnerAndroidJson.Put("transports", transportsArray);
             responseInnerAndroidJson.Put("publicKeyAlgorithm", clientCreateCredentialResult.PublicKeyAlgorithm);
-            responseInnerAndroidJson.Put("publicKey", b64Encode(clientCreateCredentialResult.PublicKey));
+            responseInnerAndroidJson.Put("publicKey", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.PublicKey));
 
             var rootAndroidJson = new JSONObject();
-            rootAndroidJson.Put("id", b64Encode(clientCreateCredentialResult.CredentialId));
-            rootAndroidJson.Put("rawId", b64Encode(clientCreateCredentialResult.CredentialId));
+            rootAndroidJson.Put("id", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.CredentialId));
+            rootAndroidJson.Put("rawId", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.CredentialId));
             rootAndroidJson.Put("authenticatorAttachment", "platform");
             rootAndroidJson.Put("type", "public-key");
             rootAndroidJson.Put("clientExtensionResults", new JSONObject());
@@ -158,21 +152,6 @@ namespace Bit.App.Platforms.Android.Autofill
 
             activity.SetResult(Result.Ok, result);
             activity.Finish();
-        }
-
-        //TODO: To Delete if not needed
-        private static string AppInfoToOrigin(CallingAppInfo info)
-        {
-            var cert = info.SigningInfo.GetApkContentsSigners()[0].ToByteArray();
-            var md = MessageDigest.GetInstance("SHA-256");
-            var certHash = md.Digest(cert);
-            return $"android:apk-key-hash:${b64Encode(certHash)}";
-        }
-
-        //TODO: To Delete if not needed
-        private static string b64Encode(byte[] data)
-        {
-            return Base64.EncodeToString(data, Base64Flags.NoPadding | Base64Flags.NoWrap | Base64Flags.UrlSafe);
         }
     }
 }

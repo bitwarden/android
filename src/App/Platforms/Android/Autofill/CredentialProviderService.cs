@@ -9,7 +9,6 @@ using Bit.Core.Utilities;
 using AndroidX.Credentials.Exceptions;
 using Bit.App.Droid.Utilities;
 using Bit.Core.Resources.Localization;
-using Bit.Core.Services;
 using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Droid.Autofill
@@ -101,35 +100,6 @@ namespace Bit.Droid.Autofill
 
         private BeginCreateCredentialResponse HandleCreatePasskeyQuery(BeginCreatePublicKeyCredentialRequest optionRequest)
         {
-            //TODO: For POC if the Vault was unlocked we would navigate directly to 'CredentialCreationActivity'.
-            //TODO: This flow is no longer needed and can be deleted. It's kept here temporarily for reference in case it's useful.
-            /*
-            //var origin = optionRequest.CallingAppInfo?.Origin;
-
-            _vaultTimeoutService ??= ServiceContainer.Resolve<IVaultTimeoutService>();
-            await _vaultTimeoutService.CheckVaultTimeoutAsync();
-            var locked = await _vaultTimeoutService.IsLockedAsync();
-            if (!locked )
-            {
-                var intent = new Intent(ApplicationContext, typeof(CredentialCreationActivity))
-                    .SetAction(CreatePasskeyIntentAction).SetPackage(Constants.PACKAGE_NAME)
-                    .PutExtra(CredentialProviderConstants.CredentialDataIntentExtra, optionRequest.RequestJson)
-                    .PutExtra(CredentialProviderConstants.Origin, origin);
-                pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
-                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
-
-                //TODO: i81n needs to be done
-                var createEntryBuilder = new CreateEntry.Builder("Bitwarden Vault", pendingIntent)
-                    .SetDescription("Your passkey will be saved securely to the Bitwarden Vault. You can use it from any other device for sign-in in the future.")
-                    .Build();
-
-                var createCredentialResponse = new BeginCreateCredentialResponse.Builder()
-                    .AddCreateEntry(createEntryBuilder);
-
-                return createCredentialResponse.Build();
-            }
-            */
-
             var intent = new Intent(ApplicationContext, typeof(MainActivity));
             intent.PutExtra(CredentialProviderConstants.Fido2CredentialAction, CredentialProviderConstants.Fido2CredentialCreate);
             var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,

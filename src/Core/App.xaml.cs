@@ -122,11 +122,11 @@ namespace Bit.App
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
 
-            //When executing from CredentialProviderSelectionActivity or CredentialCreationActivity we don't have "Options" so we need to filter "manually"
-            //In the CredentialProviderSelectionActivity or CredentialCreationActivity we don't need to show any Page, so we just create a "dummy" Window with a NavigationPage to avoid crashing.
+            //When executing from CredentialProviderSelectionActivity we don't have "Options" so we need to filter "manually"
+            //In the CredentialProviderSelectionActivity we don't need to show any Page, so we just create a "dummy" Window with a NavigationPage to avoid crashing.
             if (activationState != null 
                 && activationState.State.ContainsKey("CREDENTIAL_DATA") 
-                && (activationState.State.ContainsKey("credentialProviderCipherId") || activationState.State.ContainsKey("PasskeyOrigin")))
+                && activationState.State.ContainsKey("credentialProviderCipherId"))
             {
                 return new Window(new NavigationPage()); //No actual page needed. Only used for auto-filling the fields directly (externally)
             }
