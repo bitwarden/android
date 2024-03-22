@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
@@ -46,7 +47,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeededAsync();
+                InitAppIfNeededAsync().FireAndForget(ex => OnProvidingCredentialException(ex));
 
                 base.ViewDidLoad();
 
@@ -77,7 +78,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeededAsync();
+                await InitAppIfNeededAsync();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
                 {
@@ -209,7 +210,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeededAsync();
+                await InitAppIfNeededAsync();
                 _context.Configuring = true;
                 _context.VaultUnlockedDuringThisSession = false;
 
@@ -228,7 +229,7 @@ namespace Bit.iOS.Autofill
         
         private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
         {
-            InitAppIfNeededAsync();
+            await InitAppIfNeededAsync();
             await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
             await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
             if (!await IsAuthed() || await IsLocked())
@@ -244,7 +245,7 @@ namespace Bit.iOS.Autofill
 
         private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
         {
-            InitAppIfNeededAsync();
+            await InitAppIfNeededAsync();
             if (!await IsAuthed())
             {
                 await _accountsManager.NavigateOnAccountChangeAsync(false);
@@ -476,13 +477,17 @@ namespace Bit.iOS.Autofill
                 {
                     if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp)
                         &&
-                        (cipher.OrganizationUseTotp || await _stateService.Value.CanAccessPremiumAsync()))
+                        (cipher.OrganizationUseTotp || await _stateService.Value.CanAccessPremiumAsync()))
                     {
                         totpCode = await ServiceContainer.Resolve<ITotpService>().GetCodeAsync(decCipher.Login.Totp);
                     }
                 }
 
                 CompleteRequest(decCipher.Id, decCipher.Login.Username, decCipher.Login.Password, totpCode);
+            }
+            catch (Fido2AuthenticatorException)
+            {
+                CancelRequest(ASExtensionErrorCode.Failed);
             }
             catch (Exception ex)
             {
