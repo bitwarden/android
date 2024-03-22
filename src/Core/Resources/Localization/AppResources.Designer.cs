@@ -3185,6 +3185,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1. Go to your device&apos;s Settings &gt; Passwords &gt; Password Options.
+        /// </summary>
+        public static string FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions {
+            get {
+                return ResourceManager.GetString("FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First name.
         /// </summary>
         public static string FirstName {
@@ -3370,6 +3379,15 @@ namespace Bit.Core.Resources.Localization {
         public static string GenericErrorMessage {
             get {
                 return ResourceManager.GetString("GenericErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get instant access to your passwords and passkeys!.
+        /// </summary>
+        public static string GetInstantAccessToYourPasswordsAndPasskeys {
+            get {
+                return ResourceManager.GetString("GetInstantAccessToYourPasswordsAndPasskeys", resourceCulture);
             }
         }
         
@@ -6078,6 +6096,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2. Turn on AutoFill.
+        /// </summary>
+        public static string SecondDotTurnOnAutoFill {
+            get {
+                return ResourceManager.GetString("SecondDotTurnOnAutoFill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Secure notes.
         /// </summary>
         public static string SecureNotes {
@@ -6407,6 +6434,24 @@ namespace Bit.Core.Resources.Localization {
         public static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
             get {
                 return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up auto-fill.
+        /// </summary>
+        public static string SetUpAutofill {
+            get {
+                return ResourceManager.GetString("SetUpAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings..
+        /// </summary>
+        public static string SetUpAutoFillDescriptionLong {
+            get {
+                return ResourceManager.GetString("SetUpAutoFillDescriptionLong", resourceCulture);
             }
         }
         
@@ -6843,6 +6888,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 3. Select &quot;Bitwarden&quot; to use for passwords and passkeys.
+        /// </summary>
+        public static string ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys {
+            get {
+                return ResourceManager.GetString("ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 30 days.
         /// </summary>
         public static string ThirtyDays {
@@ -7172,6 +7226,15 @@ namespace Bit.Core.Resources.Localization {
         public static string UnableToSaveAttachment {
             get {
                 return ResourceManager.GetString("UnableToSaveAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown account.
+        /// </summary>
+        public static string UnknownAccount {
+            get {
+                return ResourceManager.GetString("UnknownAccount", resourceCulture);
             }
         }
         

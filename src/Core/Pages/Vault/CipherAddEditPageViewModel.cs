@@ -549,7 +549,12 @@ namespace Bit.App.Pages
                 if (IsFromFido2Framework)
                 {
                     // Verify the user and prevent saving cipher if enforcing is needed and it's not verified.
-                    isFido2UserVerified = await VerifyUserAsync();
+                    var userVerification = await VerifyUserAsync();
+                    if (userVerification.IsCancelled)
+                    {
+                        return false;
+                    }
+                    isFido2UserVerified = userVerification.Result;
 
                     var options = _fido2MakeCredentialConfirmationUserInterface.GetCurrentUserVerificationOptions();
 
@@ -618,7 +623,7 @@ namespace Bit.App.Pages
             return false;
         }
 
-        private async Task<bool> VerifyUserAsync()
+        private async Task<CancellableResult<bool>> VerifyUserAsync()
         {
             try
             {
@@ -627,7 +632,7 @@ namespace Bit.App.Pages
 
                 if (options.Value.UserVerificationPreference == Fido2UserVerificationPreference.Discouraged)
                 {
-                    return false;
+                    return new CancellableResult<bool>(false);
                 }
 
                 return await _userVerificationMediatorService.VerifyUserForFido2Async(options.Value);
@@ -635,7 +640,7 @@ namespace Bit.App.Pages
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
-                return false;
+                return new CancellableResult<bool>(false);
             }
         }
 

@@ -5,7 +5,7 @@
     x:Class="Bit.App.Pages.AutofillPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    Title="{u:I18n PasswordAutofill}">
+    Title="{u:I18n SetUpAutofill}">
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
@@ -15,26 +15,22 @@
         <StackLayout Spacing="5"
                  Padding="20, 20, 20, 30"
                  VerticalOptions="FillAndExpand">
-            <Label Text="{u:I18n ExtensionInstantAccess}"
+            <Label Text="{u:I18n GetInstantAccessToYourPasswordsAndPasskeys}"
                    HorizontalOptions="Center"
                    HorizontalTextAlignment="Center"
                    LineBreakMode="WordWrap"
                    StyleClass="text-lg"
                    Margin="0, 0, 0, 15" />
-            <Label Text="{u:I18n AutofillTurnOn}"
+            <Label Text="{u:I18n SetUpAutoFillDescriptionLong}"
                    HorizontalOptions="Center"
                    HorizontalTextAlignment="Center"
                    LineBreakMode="WordWrap"
                    Margin="0, 0, 0, 15" />
-            <Label Text="{u:I18n AutofillTurnOn1}"
+            <Label Text="{u:I18n FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions}"
                    LineBreakMode="WordWrap" />
-            <Label Text="{u:I18n AutofillTurnOn2}"
+            <Label Text="{u:I18n SecondDotTurnOnAutoFill}"
                    LineBreakMode="WordWrap" />
-            <Label Text="{u:I18n AutofillTurnOn3}"
-                   LineBreakMode="WordWrap" />
-            <Label Text="{u:I18n AutofillTurnOn4}"
-                   LineBreakMode="WordWrap" />
-            <Label Text="{u:I18n AutofillTurnOn5}"
+            <Label Text="{u:I18n ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys}"
                    LineBreakMode="WordWrap" />
             <Image Source="autofill-kb.png"
                    VerticalOptions="CenterAndExpand"
