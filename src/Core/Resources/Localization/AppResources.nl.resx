@@ -371,7 +371,7 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>Het {0}-veld is vereist.</value>
+    <value>Vul het veld {0} in.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -996,7 +996,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Beveiligingscode kopiëren</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Kaartummer</value>
+    <value>Kaartnummer</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Beveiligingscode</value>
