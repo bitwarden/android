@@ -79,7 +79,7 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            InitAppIfNeeded();
+            InitAppIfNeededAsync();
 
             if (!await IsAuthed())
             {
@@ -174,7 +174,7 @@ namespace Bit.iOS.Autofill
 
         private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasskeyCredentialRequest passkeyCredentialRequest)
         {
-            InitAppIfNeeded();
+            InitAppIfNeededAsync();
             await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
             await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
             if (!await IsAuthed() || await IsLocked())

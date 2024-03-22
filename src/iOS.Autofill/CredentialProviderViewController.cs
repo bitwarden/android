@@ -46,7 +46,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
+                InitAppIfNeededAsync();
 
                 base.ViewDidLoad();
 
@@ -77,7 +77,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
+                InitAppIfNeededAsync();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
                 {
@@ -209,7 +209,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
+                InitAppIfNeededAsync();
                 _context.Configuring = true;
                 _context.VaultUnlockedDuringThisSession = false;
 
@@ -228,7 +228,7 @@ namespace Bit.iOS.Autofill
         
         private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
         {
-            InitAppIfNeeded();
+            InitAppIfNeededAsync();
             await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
             await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
             if (!await IsAuthed() || await IsLocked())
@@ -244,7 +244,7 @@ namespace Bit.iOS.Autofill
 
         private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
         {
-            InitAppIfNeeded();
+            InitAppIfNeededAsync();
             if (!await IsAuthed())
             {
                 await _accountsManager.NavigateOnAccountChangeAsync(false);
@@ -541,12 +541,14 @@ namespace Bit.iOS.Autofill
                 _nfcSession, out _nfcDelegate, out _accountsManager);
         }
 
-        private void InitAppIfNeeded()
+        private async Task InitAppIfNeededAsync()
         {
             if (ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
             {
-                InitApp();
+                await MainThread.InvokeOnMainThreadAsync(InitApp);
             }
+
+            await _stateService.Value.ReloadStateAsync();
         }
 
         private void LaunchHomePage()
