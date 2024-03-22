@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Core.Services.UserVerification
@@ -12,11 +13,11 @@ namespace Bit.Core.Services.UserVerification
             _userVerificationMediatorService = userVerificationMediatorService;
         }
 
-        public async Task<bool> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
+        public async Task<CancellableResult<bool>> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
         {
             if (options.HasVaultBeenUnlockedInTransaction)
             {
-                return true;
+                return new CancellableResult<bool>(true);
             }
 
             if (options.OnNeedUITask != null)
@@ -24,13 +25,17 @@ namespace Bit.Core.Services.UserVerification
                 await options.OnNeedUITask();
             }
 
-            var (canPerformOSUnlock, isOSUnlocked) = await _userVerificationMediatorService.PerformOSUnlockAsync();
-            if (canPerformOSUnlock)
+            var osUnlockVerification = await _userVerificationMediatorService.PerformOSUnlockAsync();
+            if (osUnlockVerification.IsCancelled)
             {
-                return isOSUnlocked;
+                return new CancellableResult<bool>(false, true);
+            }
+            if (osUnlockVerification.Result.CanPerform)
+            {
+                return new CancellableResult<bool>(osUnlockVerification.Result.IsVerified);
             }
 
-            return false;
+            return new CancellableResult<bool>(false);
         }
     }
 }

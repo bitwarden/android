@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Core.Services.UserVerification
@@ -16,11 +17,11 @@ namespace Bit.Core.Services.UserVerification
             _platformUtilsService = platformUtilsService;
         }
 
-        public async Task<bool> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
+        public async Task<CancellableResult<bool>> VerifyUserForFido2Async(Fido2UserVerificationOptions options)
         {
             if (options.HasVaultBeenUnlockedInTransaction)
             {
-                return true;
+                return new CancellableResult<bool>(true);
             }
 
             if (options.OnNeedUITask != null)
@@ -28,22 +29,34 @@ namespace Bit.Core.Services.UserVerification
                 await options.OnNeedUITask();
             }
 
-            var (canPerformOSUnlock, isOSUnlocked) = await _userVerificationMediatorService.PerformOSUnlockAsync();
-            if (canPerformOSUnlock)
+            var osUnlockVerification = await _userVerificationMediatorService.PerformOSUnlockAsync();
+            if (osUnlockVerification.IsCancelled)
             {
-                return isOSUnlocked;
+                return new CancellableResult<bool>(false, true);
+            }
+            if (osUnlockVerification.Result.CanPerform)
+            {
+                return new CancellableResult<bool>(osUnlockVerification.Result.IsVerified);
             }
 
-            var (canPerformUnlockWithPin, pinVerified) = await _userVerificationMediatorService.VerifyPinCodeAsync();
-            if (canPerformUnlockWithPin)
+            var pinVerification = await _userVerificationMediatorService.VerifyPinCodeAsync();
+            if (pinVerification.IsCancelled)
             {
-                return pinVerified;
+                return new CancellableResult<bool>(false, true);
+            }
+            if (pinVerification.Result.CanPerform)
+            {
+                return new CancellableResult<bool>(pinVerification.Result.IsVerified);
             }
 
-            var (canPerformUnlockWithMasterPassword, mpVerified) = await _userVerificationMediatorService.VerifyMasterPasswordAsync(false);
-            if (canPerformUnlockWithMasterPassword)
+            var mpVerification = await _userVerificationMediatorService.VerifyMasterPasswordAsync(false);
+            if (mpVerification.IsCancelled)
             {
-                return mpVerified;
+                return new CancellableResult<bool>(false, true);
+            }
+            if (mpVerification.Result.CanPerform)
+            {
+                return new CancellableResult<bool>(mpVerification.Result.IsVerified);
             }
 
             // TODO: Setup PIN code. For the sake of simplicity, we're not implementing this step now and just telling the user to do it in the main app.
@@ -52,7 +65,7 @@ namespace Bit.Core.Services.UserVerification
                 string.Format(AppResources.VerificationRequiredByX, options.RpId),
                 AppResources.Ok);
 
-            return false;
+            return new CancellableResult<bool>(false);
         }
     }
 }

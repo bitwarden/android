@@ -45,14 +45,22 @@ namespace Bit.App.Platforms.Android.Autofill
             messagingService?.Send("fidoNavigateToAutofillCipher", confirmNewCredentialParams);
             var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
-            var verified = isUserVerified ?? await VerifyUserAsync(cipherId, confirmNewCredentialParams.UserVerificationPreference, confirmNewCredentialParams.RpId);
+
+            var verified = isUserVerified;
+            if (verified is null)
+            {
+                var userVerification = await VerifyUserAsync(cipherId, confirmNewCredentialParams.UserVerificationPreference, confirmNewCredentialParams.RpId);
+                // TODO: If cancelled then let the user choose another cipher.
+                // I think this can be done by showing a message to the uesr and recursive calling of this method ConfirmNewCredentialAsync
+                verified = !userVerification.IsCancelled && userVerification.Result;
+            }
 
             if (cipherId is null)
             {
-                return await CreateNewLoginForFido2CredentialAsync(confirmNewCredentialParams, verified);
+                return await CreateNewLoginForFido2CredentialAsync(confirmNewCredentialParams, verified.Value);
             }
 
-            return (cipherId, verified);
+            return (cipherId, verified.Value);
         }
 
         private async Task<(string CipherId, bool UserVerified)> CreateNewLoginForFido2CredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams, bool userVerified)
@@ -106,13 +114,13 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public void OnConfirmationException(Exception ex) => _confirmCredentialTcs?.TrySetException(ex);
 
-        private async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference, string rpId)
+        private async Task<CancellableResult<bool>> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference, string rpId)
         {
             try
             {
                 if (selectedCipherId is null && userVerificationPreference == Fido2UserVerificationPreference.Discouraged)
                 {
-                    return false;
+                    return new CancellableResult<bool>(false);
                 }
 
                 var shouldCheckMasterPasswordReprompt = false;
@@ -134,7 +142,7 @@ namespace Bit.App.Platforms.Android.Autofill
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
-                return false;
+                return new CancellableResult<bool>(false);
             }
         }
 

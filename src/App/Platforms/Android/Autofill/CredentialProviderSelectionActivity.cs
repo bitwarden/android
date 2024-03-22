@@ -137,13 +137,14 @@ namespace Bit.Droid.Autofill
                 var encrypted = await _cipherService.Value.GetAsync(selectedCipherId);
                 var cipher = await encrypted.DecryptAsync();
 
-                return await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
+                var userVerification = await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
                     new Fido2UserVerificationOptions(
                         cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
                         userVerificationPreference,
                         vaultUnlockedDuringThisTransaction,
                         rpId)
                     );
+                return !userVerification.IsCancelled && userVerification.Result;
             }
             catch (Exception ex)
             {
