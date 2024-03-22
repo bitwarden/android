@@ -136,7 +136,7 @@ namespace Bit.App.Pages
 
         private async Task GoToCredentialProviderSettings()
         {
-            var confirmed = await _platformUtilsService.ShowDialogAsync("Set Bitwarden as your passkey provider in device settings.", "Continue to device Settings?", //TODO: i18n
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.SetBitwardenAsPasskeyManagerDescription, AppResources.ContinueToDeviceSettings,
                 AppResources.Continue,
                 AppResources.Cancel);
             if (confirmed)
