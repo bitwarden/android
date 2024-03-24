@@ -11,7 +11,7 @@ import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
-import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.currentCoroutineContext
@@ -208,21 +208,20 @@ class AuthRequestManagerImpl(
     ): Flow<AuthRequestUpdatesResult> = getAuthRequest {
         authRequestsService
             .getAuthRequest(requestId)
-            .map { request ->
-                when (val result = getFingerprintPhrase(request.publicKey)) {
-                    is UserFingerprintResult.Error -> null
-                    is UserFingerprintResult.Success -> AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = result.fingerprint,
+            .map { response ->
+                getFingerprintPhrase(response.publicKey).getOrNull()?.let { fingerprint ->
+                    AuthRequest(
+                        id = response.id,
+                        publicKey = response.publicKey,
+                        platform = response.platform,
+                        ipAddress = response.ipAddress,
+                        key = response.key,
+                        masterPasswordHash = response.masterPasswordHash,
+                        creationDate = response.creationDate,
+                        responseDate = response.responseDate,
+                        requestApproved = response.requestApproved ?: false,
+                        originUrl = response.originUrl,
+                        fingerprint = fingerprint,
                     )
                 }
             }
@@ -239,30 +238,28 @@ class AuthRequestManagerImpl(
     override suspend fun getAuthRequests(): AuthRequestsResult =
         authRequestsService
             .getAuthRequests()
+            .map { response ->
+                response.authRequests.mapNotNull { request ->
+                    getFingerprintPhrase(request.publicKey).getOrNull()?.let { fingerprint ->
+                        AuthRequest(
+                            id = request.id,
+                            publicKey = request.publicKey,
+                            platform = request.platform,
+                            ipAddress = request.ipAddress,
+                            key = request.key,
+                            masterPasswordHash = request.masterPasswordHash,
+                            creationDate = request.creationDate,
+                            responseDate = request.responseDate,
+                            requestApproved = request.requestApproved ?: false,
+                            originUrl = request.originUrl,
+                            fingerprint = fingerprint,
+                        )
+                    }
+                }
+            }
             .fold(
                 onFailure = { AuthRequestsResult.Error },
-                onSuccess = { response ->
-                    AuthRequestsResult.Success(
-                        authRequests = response.authRequests.mapNotNull { request ->
-                            when (val result = getFingerprintPhrase(request.publicKey)) {
-                                is UserFingerprintResult.Error -> null
-                                is UserFingerprintResult.Success -> AuthRequest(
-                                    id = request.id,
-                                    publicKey = request.publicKey,
-                                    platform = request.platform,
-                                    ipAddress = request.ipAddress,
-                                    key = request.key,
-                                    masterPasswordHash = request.masterPasswordHash,
-                                    creationDate = request.creationDate,
-                                    responseDate = request.responseDate,
-                                    requestApproved = request.requestApproved ?: false,
-                                    originUrl = request.originUrl,
-                                    fingerprint = result.fingerprint,
-                                )
-                            }
-                        },
-                    )
-                },
+                onSuccess = { AuthRequestsResult.Success(authRequests = it) },
             )
 
     override suspend fun updateAuthRequest(
@@ -287,25 +284,23 @@ class AuthRequestManagerImpl(
                 )
             }
             .map { request ->
-                AuthRequestResult.Success(
-                    authRequest = AuthRequest(
-                        id = request.id,
-                        publicKey = request.publicKey,
-                        platform = request.platform,
-                        ipAddress = request.ipAddress,
-                        key = request.key,
-                        masterPasswordHash = request.masterPasswordHash,
-                        creationDate = request.creationDate,
-                        responseDate = request.responseDate,
-                        requestApproved = request.requestApproved ?: false,
-                        originUrl = request.originUrl,
-                        fingerprint = "",
-                    ),
+                AuthRequest(
+                    id = request.id,
+                    publicKey = request.publicKey,
+                    platform = request.platform,
+                    ipAddress = request.ipAddress,
+                    key = request.key,
+                    masterPasswordHash = request.masterPasswordHash,
+                    creationDate = request.creationDate,
+                    responseDate = request.responseDate,
+                    requestApproved = request.requestApproved ?: false,
+                    originUrl = request.originUrl,
+                    fingerprint = "",
                 )
             }
             .fold(
                 onFailure = { AuthRequestResult.Error },
-                onSuccess = { it },
+                onSuccess = { AuthRequestResult.Success(authRequest = it) },
             )
     }
 
@@ -347,19 +342,13 @@ class AuthRequestManagerImpl(
 
     private suspend fun getFingerprintPhrase(
         publicKey: String,
-    ): UserFingerprintResult {
+    ): Result<String> {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return UserFingerprintResult.Error
-
-        return authSdkSource
-            .getUserFingerprint(
-                email = profile.email,
-                publicKey = publicKey,
-            )
-            .fold(
-                onFailure = { UserFingerprintResult.Error },
-                onSuccess = { UserFingerprintResult.Success(it) },
-            )
+            ?: return IllegalStateException("No active account").asFailure()
+        return authSdkSource.getUserFingerprint(
+            email = profile.email,
+            publicKey = publicKey,
+        )
     }
 }
 

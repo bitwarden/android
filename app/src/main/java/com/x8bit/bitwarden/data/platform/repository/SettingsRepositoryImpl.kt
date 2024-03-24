@@ -309,10 +309,8 @@ class SettingsRepositoryImpl(
         autofillEnabledManager.isAutofillEnabled = false
     }
 
-    @Suppress("ReturnCount")
     override suspend fun getUserFingerprint(): UserFingerprintResult {
-        val userId = activeUserId
-            ?: return UserFingerprintResult.Error
+        val userId = activeUserId ?: return UserFingerprintResult.Error
 
         return vaultSdkSource
             .getUserFingerprint(userId)
