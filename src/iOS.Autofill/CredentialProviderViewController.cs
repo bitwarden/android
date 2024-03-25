@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
@@ -46,7 +47,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
+                InitAppIfNeededAsync().FireAndForget(ex => OnProvidingCredentialException(ex));
 
                 base.ViewDidLoad();
 
@@ -77,7 +78,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
+                await InitAppIfNeededAsync();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
                 {
@@ -209,7 +210,7 @@ namespace Bit.iOS.Autofill
         {
             try
             {
-                InitAppIfNeeded();
+                await InitAppIfNeededAsync();
                 _context.Configuring = true;
                 _context.VaultUnlockedDuringThisSession = false;
 
@@ -228,7 +229,7 @@ namespace Bit.iOS.Autofill
         
         private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
         {
-            InitAppIfNeeded();
+            await InitAppIfNeededAsync();
             await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
             await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
             if (!await IsAuthed() || await IsLocked())
@@ -244,7 +245,7 @@ namespace Bit.iOS.Autofill
 
         private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
         {
-            InitAppIfNeeded();
+            await InitAppIfNeededAsync();
             if (!await IsAuthed())
             {
                 await _accountsManager.NavigateOnAccountChangeAsync(false);
@@ -476,13 +477,17 @@ namespace Bit.iOS.Autofill
                 {
                     if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp)
                         &&
-                        (cipher.OrganizationUseTotp || await _stateService.Value.CanAccessPremiumAsync()))
+                        (cipher.OrganizationUseTotp || await _stateService.Value.CanAccessPremiumAsync()))
                     {
                         totpCode = await ServiceContainer.Resolve<ITotpService>().GetCodeAsync(decCipher.Login.Totp);
                     }
                 }
 
                 CompleteRequest(decCipher.Id, decCipher.Login.Username, decCipher.Login.Password, totpCode);
+            }
+            catch (Fido2AuthenticatorException)
+            {
+                CancelRequest(ASExtensionErrorCode.Failed);
             }
             catch (Exception ex)
             {
@@ -541,12 +546,14 @@ namespace Bit.iOS.Autofill
                 _nfcSession, out _nfcDelegate, out _accountsManager);
         }
 
-        private void InitAppIfNeeded()
+        private async Task InitAppIfNeededAsync()
         {
             if (ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
             {
-                InitApp();
+                await MainThread.InvokeOnMainThreadAsync(InitApp);
             }
+
+            await _stateService.Value.ReloadStateAsync();
         }
 
         private void LaunchHomePage()
