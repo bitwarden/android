@@ -95,7 +95,7 @@
 		</PackageReference>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="zxcvbn-core" Version="7.0.92" />
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
 		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
