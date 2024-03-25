@@ -230,17 +230,17 @@ namespace Bit.App
                     await _accountsManager.NavigateOnAccountChangeAsync();
                 }
                 else if (message.Command == POP_ALL_AND_GO_TO_TAB_GENERATOR_MESSAGE ||
-                    message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE ||
-                    message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE ||
-                    message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE ||
-                    message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
+                         message.Command == POP_ALL_AND_GO_TO_TAB_MYVAULT_MESSAGE ||
+                         message.Command == POP_ALL_AND_GO_TO_TAB_SEND_MESSAGE ||
+                         message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE ||
+                         message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
                 {
                     if (message.Command == DeepLinkContext.NEW_OTP_MESSAGE)
                     {
                         Options.OtpData = new OtpData((string)message.Data);
                     }
 
-                    await MainThread.InvokeOnMainThreadAsync(ExecuteNavigationAction); 
+                    await MainThread.InvokeOnMainThreadAsync(ExecuteNavigationAction);
                     async Task ExecuteNavigationAction()
                     {
                         if (MainPage is TabsPage tabsPage)
@@ -251,6 +251,7 @@ namespace Bit.App
                             {
                                 await tabsPage.Navigation.PopModalAsync(false);
                             }
+
                             if (message.Command == POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE)
                             {
                                 MainPage = new NavigationPage(new CipherSelectionPage(Options));
@@ -277,15 +278,18 @@ namespace Bit.App
                             }
                         }
                     }
-                    else if (message.Command == "fidoNavigateToAutofillCipher" && message.Data is Fido2ConfirmNewCredentialParams createParams)
+                }
+                else if (message.Command == "fidoNavigateToAutofillCipher" && message.Data is Fido2ConfirmNewCredentialParams createParams)
+                {
+                    ArgumentNullException.ThrowIfNull(MainPage);
+                    ArgumentNullException.ThrowIfNull(Options);
+                    await MainThread.InvokeOnMainThreadAsync(NavigateToCipherSelectionPageAction);
+                    void NavigateToCipherSelectionPageAction()
                     {
-                        await MainThread.InvokeOnMainThreadAsync(async () =>
-                        {
-                            Options.Uri = createParams.RpId;
-                            Options.SaveUsername = createParams.UserName;
-                            Options.SaveName = createParams.CredentialName;
-                            App.MainPage = new NavigationPage(new CipherSelectionPage(Options));
-                        });
+                        Options.Uri = createParams.RpId;
+                        Options.SaveUsername = createParams.UserName;
+                        Options.SaveName = createParams.CredentialName;
+                        MainPage = new NavigationPage(new CipherSelectionPage(Options));
                     }
                 }
                 else if (message.Command == "convertAccountToKeyConnector")
