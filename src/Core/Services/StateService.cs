@@ -1688,6 +1688,11 @@ namespace Bit.Core.Services
             await _storageService.SaveAsync(Constants.iOSExtensionActiveUserIdKey, userId);
         }
 
+        public async Task ReloadStateAsync()
+        {
+            _state = await GetStateFromStorageAsync() ?? new State();
+        }
+
         private async Task CheckStateAsync()
         {
             if (!_migrationChecked)
@@ -1699,7 +1704,7 @@ namespace Bit.Core.Services
 
             if (_state == null)
             {
-                _state = await GetStateFromStorageAsync() ?? new State();
+                await ReloadStateAsync();
             }
         }
 

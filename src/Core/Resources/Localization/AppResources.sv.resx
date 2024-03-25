@@ -2879,12 +2879,12 @@ Vill du byta till detta konto?</value>
     <value>Ställ in ett upplåsningsalternativ för att ändra vad som händer när tidsgränsen uppnås.</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
-    <value>Duo two-step login is required for your account. </value>
+    <value>Duo tvåstegsverifiering krävs för ditt konto. </value>
   </data>
   <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
-    <value>Follow the steps from Duo to finish logging in.</value>
+    <value>Följ stegen från Duo för att slutföra inloggningen.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
-    <value>Launch Duo</value>
+    <value>Starta Duo</value>
   </data>
 </root>
