@@ -18,12 +18,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="1713">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="splash_logo" translatesAutoresizingMaskIntoConstraints="NO" id="1713">
                                 <rect key="frame" x="66" y="396" width="282" height="44"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="YG6-2d-qpF"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY" constant="-30" id="1763"/>
                             <constraint firstItem="1713" firstAttribute="centerX" secondItem="YG6-2d-qpF" secondAttribute="centerX" id="1764"/>
@@ -166,7 +166,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="Gv5-Xt-G9l" secondAttribute="trailing" constant="19" id="CAs-sg-RdA"/>
                                     <constraint firstAttribute="trailing" secondItem="tEp-qe-xvE" secondAttribute="trailing" constant="19" id="FcV-36-N23"/>
@@ -496,14 +496,14 @@
                                 <rect key="frame" x="15" y="30" width="384" height="20.5"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" systemColor="darkTextColor"/>
+                                <color key="textColor" name="text_color"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="11093">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="11093">
                                 <rect key="frame" x="15" y="134.5" width="570" height="41"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" systemColor="darkTextColor"/>
+                                <color key="textColor" name="text_color"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="check.png" translatesAutoresizingMaskIntoConstraints="NO" id="11094">
@@ -511,7 +511,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hcg-mr-Ilx"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="11092" firstAttribute="leading" secondItem="hcg-mr-Ilx" secondAttribute="leading" constant="15" id="11114"/>
                             <constraint firstItem="hcg-mr-Ilx" firstAttribute="trailing" secondItem="11092" secondAttribute="trailing" constant="15" id="11115"/>
@@ -649,9 +649,12 @@
     <resources>
         <image name="check.png" width="90" height="90"/>
         <image name="empty_items_state" width="157" height="111"/>
-        <image name="logo.png" width="282" height="44"/>
+        <image name="splash_logo" width="282" height="44"/>
         <namedColor name="LightTextMuted">
             <color red="0.42699998617172241" green="0.45899999141693115" blue="0.49399998784065247" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="text_color">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
