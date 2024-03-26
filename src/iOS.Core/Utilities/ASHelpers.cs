@@ -144,6 +144,11 @@ namespace Bit.iOS.Core.Utilities
                     return ToPasswordCredentialIdentity(cipher);
                 }
 
+                if (!cipher.Login.MainFido2Credential.DiscoverableValue)
+                {
+                    return null;
+                }
+
                 return new ASPasskeyCredentialIdentity(cipher.Login.MainFido2Credential.RpId,
                     cipher.GetMainFido2CredentialUsername(),
                     NSData.FromArray(cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat()),
