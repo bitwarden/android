@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -18,6 +19,7 @@ interface UnauthenticatedAuthRequestsApi {
      */
     @POST("/auth-requests")
     suspend fun createAuthRequest(
+        @Header("Device-Identifier") deviceIdentifier: String,
         @Body body: AuthRequestRequestJson,
     ): Result<AuthRequestsResponseJson.AuthRequest>
 
