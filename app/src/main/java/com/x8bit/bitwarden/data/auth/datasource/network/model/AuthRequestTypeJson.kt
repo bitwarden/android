@@ -12,6 +12,12 @@ import kotlinx.serialization.Serializable
 enum class AuthRequestTypeJson {
     @SerialName("0")
     LOGIN_WITH_DEVICE,
+
+    @SerialName("1")
+    UNLOCK,
+
+    @SerialName("2")
+    ADMIN_APPROVAL,
 }
 
 @Keep
