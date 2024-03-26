@@ -111,6 +111,21 @@ namespace Bit.iOS.Autofill.Utilities
             return IsPasskeySection(indexPath.Section) || !item.ForceSectionIcon;
         }
 
+        protected override string GetCipherCellSubtitle(CipherViewModel item, NSIndexPath indexPath)
+        {
+            if (!item.HasFido2Credential)
+            {
+                return base.GetCipherCellSubtitle(item, indexPath);
+            }
+
+            if (Context.IsPreparingListForPasskey && !IsPasskeySection(indexPath.Section))
+            {
+                return item.Username;
+            }
+
+            return item.CipherView?.GetMainFido2CredentialUsername() ?? item.Username;
+        }
+
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             try
