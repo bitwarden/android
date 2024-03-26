@@ -19,7 +19,8 @@ class NewAuthRequestServiceImpl(
         fingerprint: String,
     ): Result<AuthRequestsResponseJson.AuthRequest> =
         unauthenticatedAuthRequestsApi.createAuthRequest(
-            AuthRequestRequestJson(
+            deviceIdentifier = deviceId,
+            body = AuthRequestRequestJson(
                 email = email,
                 publicKey = publicKey,
                 deviceId = deviceId,

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -22,13 +23,15 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
     fun `createAuthRequest when request response is Failure should return Failure`() = runTest {
         val response = MockResponse().setResponseCode(400)
         server.enqueue(response)
+        val deviceIdentifier = "4321"
         val actual = service.createAuthRequest(
             email = "test@gmail.com",
             publicKey = "1234",
-            deviceId = "4321",
+            deviceId = deviceIdentifier,
             accessCode = "accessCode",
             fingerprint = "fingerprint",
         )
+        assertEquals(deviceIdentifier, server.takeRequest().getHeader("Device-Identifier"))
         assertTrue(actual.isFailure)
     }
 
@@ -36,14 +39,16 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
     fun `createAuthRequest when request response is Success should return Success`() = runTest {
         val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
         server.enqueue(response)
+        val deviceIdentifier = "4321"
         val actual = service.createAuthRequest(
             email = "test@gmail.com",
             publicKey = "1234",
-            deviceId = "4321",
+            deviceId = deviceIdentifier,
             accessCode = "accessCode",
             fingerprint = "fingerprint",
         )
-        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
+        assertEquals(deviceIdentifier, server.takeRequest().getHeader("Device-Identifier"))
+        assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
     }
 
     @Test
@@ -65,7 +70,7 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
             requestId = "1",
             accessCode = "accessCode",
         )
-        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
+        assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
     }
 }
 
