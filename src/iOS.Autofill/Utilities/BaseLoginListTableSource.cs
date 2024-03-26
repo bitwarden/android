@@ -302,11 +302,6 @@ namespace Bit.iOS.Autofill.Utilities
                 return;
             }
 
-            if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
-            {
-                return;
-            }
-
             Context.PickCredentialForFido2CreationTcs.SetResult((item.Id, null));
         }
 
