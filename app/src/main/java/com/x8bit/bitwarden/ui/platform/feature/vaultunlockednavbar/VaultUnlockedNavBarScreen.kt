@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.sendGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
@@ -75,7 +76,7 @@ import kotlinx.parcelize.Parcelize
 fun VaultUnlockedNavBarScreen(
     viewModel: VaultUnlockedNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
-    onNavigateToVaultAddItem: () -> Unit,
+    onNavigateToVaultAddItem: (VaultItemCipherType) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
@@ -160,7 +161,7 @@ private fun VaultUnlockedNavBarScaffold(
     sendTabClickedAction: () -> Unit,
     generatorTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
-    navigateToVaultAddItem: () -> Unit,
+    navigateToVaultAddItem: (VaultItemCipherType) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,

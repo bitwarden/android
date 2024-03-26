@@ -38,12 +38,14 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflo
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.determineListingPredicate
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toItemListingType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toSearchType
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toVaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.updateWithAdditionalDataIfNecessary
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -228,9 +230,11 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleAddVaultItemClick() {
-        val event = when (state.itemListingType) {
+        val event = when (val itemListingType = state.itemListingType) {
             is VaultItemListingState.ItemListingType.Vault -> {
-                VaultItemListingEvent.NavigateToAddVaultItem
+                VaultItemListingEvent.NavigateToAddVaultItem(
+                    vaultItemCipherType = itemListingType.toVaultItemCipherType(),
+                )
             }
 
             is VaultItemListingState.ItemListingType.Send -> {
@@ -1057,7 +1061,9 @@ sealed class VaultItemListingEvent {
     /**
      * Navigates to the VaultAddItemScreen.
      */
-    data object NavigateToAddVaultItem : VaultItemListingEvent()
+    data class NavigateToAddVaultItem(
+        val vaultItemCipherType: VaultItemCipherType,
+    ) : VaultItemListingEvent()
 
     /**
      * Navigates to the collection.

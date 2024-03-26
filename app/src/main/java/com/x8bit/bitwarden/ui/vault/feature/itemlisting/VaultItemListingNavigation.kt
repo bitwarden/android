@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithPushTransitions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 
 private const val CARD: String = "card"
@@ -62,7 +63,7 @@ fun NavGraphBuilder.vaultItemListingDestination(
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     internalVaultItemListingDestination(
@@ -85,7 +86,7 @@ fun NavGraphBuilder.vaultItemListingDestinationAsRoot(
     onNavigateBack: () -> Unit,
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
-    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultAddItemScreen: (VaultItemCipherType) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
 ) {
     composableWithStayTransitions(
@@ -144,7 +145,7 @@ private fun NavGraphBuilder.internalVaultItemListingDestination(
     onNavigateToVaultItemScreen: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherId: String) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,

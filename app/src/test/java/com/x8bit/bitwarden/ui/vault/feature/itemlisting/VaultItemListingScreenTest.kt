@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
 import io.mockk.just
@@ -366,7 +367,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToAdd VaultItem event should call NavigateToVaultAddItemScreen`() {
-        mutableEventFlow.tryEmit(VaultItemListingEvent.NavigateToAddVaultItem)
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.NavigateToAddVaultItem(VaultItemCipherType.LOGIN),
+        )
         assertTrue(onNavigateToVaultAddItemScreenCalled)
     }
 

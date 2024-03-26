@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayIt
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toActiveAccountSummary
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.coEvery
 import io.mockk.every
@@ -461,7 +462,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(VaultItemListingsAction.AddVaultItemClick)
-            assertEquals(VaultItemListingEvent.NavigateToAddVaultItem, awaitItem())
+            assertEquals(
+                VaultItemListingEvent.NavigateToAddVaultItem(VaultItemCipherType.LOGIN),
+                awaitItem(),
+            )
         }
     }
 
