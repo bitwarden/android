@@ -672,9 +672,7 @@ class VaultItemListingViewModel @Inject constructor(
                 itemListingType = currentState
                     .itemListingType
                     .updateWithAdditionalDataIfNecessary(
-                        folderList = vaultData
-                            .folderViewList
-                            .toFilteredList(state.vaultFilterType),
+                        folderList = vaultData.folderViewList,
                         collectionList = vaultData
                             .collectionViewList
                             .toFilteredList(state.vaultFilterType),

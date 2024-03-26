@@ -152,7 +152,10 @@ class VaultDataExtensionsTest {
                 createMockCollectionView(number = 1),
                 createMockCollectionView(number = 2),
             ),
-            folderViewList = listOf(createMockFolderView(number = 1)),
+            folderViewList = listOf(
+                createMockFolderView(number = 1),
+                createMockFolderView(number = 3),
+            ),
             sendViewList = listOf(createMockSendView(number = 1)),
         )
 
@@ -173,7 +176,13 @@ class VaultDataExtensionsTest {
                 identityItemsCount = 0,
                 secureNoteItemsCount = 0,
                 favoriteItems = listOf(),
-                folderItems = listOf(),
+                folderItems = listOf(
+                    VaultState.ViewState.FolderItem(
+                        id = "mockId-1",
+                        name = "mockName-1".asText(),
+                        itemCount = 1,
+                    ),
+                ),
                 collectionItems = listOf(
                     VaultState.ViewState.CollectionItem(
                         id = "mockId-1",

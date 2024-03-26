@@ -46,7 +46,12 @@ fun VaultData.toViewState(
     val filteredCipherViewList = filteredCipherViewListWithDeletedItems
         .filter { it.deletedDate == null }
 
-    val filteredFolderViewList = folderViewList.toFilteredList(vaultFilterType).getFilteredFolders()
+    val filteredFolderViewList = folderViewList
+        .toFilteredList(
+            cipherList = filteredCipherViewList,
+            vaultFilterType = vaultFilterType,
+        )
+        .getFilteredFolders()
 
     val filteredCollectionViewList = collectionViewList
         .toFilteredList(vaultFilterType)
@@ -257,17 +262,20 @@ fun List<CipherView>.toFilteredList(
  */
 @JvmName("toFilteredFolderList")
 fun List<FolderView>.toFilteredList(
+    cipherList: List<CipherView>,
     vaultFilterType: VaultFilterType,
 ): List<FolderView> =
     this
-        .filter {
+        .filter { folder ->
             when (vaultFilterType) {
-                // Folders are only included when including the user's personal data.
                 VaultFilterType.AllVaults,
                 VaultFilterType.MyVault,
                 -> true
 
-                is VaultFilterType.OrganizationVault -> false
+                // Only include folders containing an item associated with this organization.
+                is VaultFilterType.OrganizationVault -> {
+                    cipherList.any { it.folderId == folder.id }
+                }
             }
         }
 

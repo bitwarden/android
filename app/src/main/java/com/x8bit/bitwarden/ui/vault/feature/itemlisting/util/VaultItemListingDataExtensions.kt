@@ -209,7 +209,9 @@ fun List<SendView>.toViewState(
         )
     }
 
-/** * Updates a [VaultItemListingState.ItemListingType] with the given data if necessary. */
+/**
+ * Updates a [VaultItemListingState.ItemListingType] with the given data if necessary.
+ */
 fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
     folderList: List<FolderView>,
     collectionList: List<CollectionView>,
