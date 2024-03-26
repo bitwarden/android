@@ -17,6 +17,10 @@ private const val EDIT_TYPE: String = "edit"
 private const val CLONE_TYPE: String = "clone"
 private const val EDIT_ITEM_ID: String = "vault_edit_id"
 
+private const val LOGIN: String = "login"
+private const val CARD: String = "card"
+private const val IDENTITY: String = "identity"
+private const val SECURE_NOTE: String = "secure_note"
 private const val ADD_ITEM_TYPE: String = "vault_add_item_type"
 
 private const val ADD_EDIT_ITEM_PREFIX: String = "vault_add_edit_item"
@@ -39,8 +43,9 @@ data class VaultAddEditArgs(
         vaultAddEditType = when (requireNotNull(savedStateHandle[ADD_EDIT_ITEM_TYPE])) {
             ADD_TYPE -> VaultAddEditType.AddItem(
                 vaultItemCipherType = requireNotNull(
-                    savedStateHandle.get<VaultItemCipherType>(ADD_ITEM_TYPE),
-                ),
+                    value = savedStateHandle.get<String>(ADD_ITEM_TYPE),
+                )
+                    .toVaultItemCipherType(),
             )
 
             EDIT_TYPE -> VaultAddEditType.EditItem(requireNotNull(savedStateHandle[EDIT_ITEM_ID]))
@@ -66,7 +71,6 @@ fun NavGraphBuilder.vaultAddEditDestination(
         route = ADD_EDIT_ITEM_ROUTE,
         arguments = listOf(
             navArgument(ADD_EDIT_ITEM_TYPE) { type = NavType.StringType },
-            navArgument(ADD_ITEM_TYPE) { type = NavType.EnumType(VaultItemCipherType::class.java) },
         ),
     ) {
         VaultAddEditScreen(
@@ -109,10 +113,29 @@ private fun VaultAddEditType.toIdOrNull(): String? =
         is VaultAddEditType.EditItem -> vaultItemId
     }
 
-private fun VaultAddEditType.toVaultItemCipherTypeOrNull(): VaultItemCipherType? =
+private fun VaultAddEditType.toVaultItemCipherTypeOrNull(): String? =
     when (this) {
-        is VaultAddEditType.AddItem -> vaultItemCipherType
+        is VaultAddEditType.AddItem -> vaultItemCipherType.toTypeString()
         is VaultAddEditType.CloneItem,
         is VaultAddEditType.EditItem,
         -> null
+    }
+
+private fun VaultItemCipherType.toTypeString(): String =
+    when (this) {
+        VaultItemCipherType.LOGIN -> LOGIN
+        VaultItemCipherType.CARD -> CARD
+        VaultItemCipherType.IDENTITY -> IDENTITY
+        VaultItemCipherType.SECURE_NOTE -> SECURE_NOTE
+    }
+
+private fun String.toVaultItemCipherType(): VaultItemCipherType =
+    when (this) {
+        LOGIN -> VaultItemCipherType.LOGIN
+        CARD -> VaultItemCipherType.CARD
+        IDENTITY -> VaultItemCipherType.IDENTITY
+        SECURE_NOTE -> VaultItemCipherType.SECURE_NOTE
+        else -> throw IllegalStateException(
+            "Edit Item string arguments for VaultAddEditNavigation must match!",
+        )
     }

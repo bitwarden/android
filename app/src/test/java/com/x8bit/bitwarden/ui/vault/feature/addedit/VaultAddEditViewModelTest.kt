@@ -2421,8 +2421,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         set("vault_edit_id", (vaultAddEditType as? VaultAddEditType.EditItem)?.vaultItemId)
         set(
             "vault_add_item_type",
-            (vaultAddEditType as? VaultAddEditType.AddItem)
-                ?.vaultItemCipherType,
+            when ((vaultAddEditType as? VaultAddEditType.AddItem)
+                ?.vaultItemCipherType) {
+                VaultItemCipherType.LOGIN -> "login"
+                VaultItemCipherType.CARD -> "card"
+                VaultItemCipherType.IDENTITY -> "identity"
+                VaultItemCipherType.SECURE_NOTE -> "secure_note"
+                null -> null
+            },
         )
     }
 
