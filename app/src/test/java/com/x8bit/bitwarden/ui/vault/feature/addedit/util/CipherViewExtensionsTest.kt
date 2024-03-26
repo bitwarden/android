@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import io.mockk.every
 import io.mockk.mockk
@@ -279,7 +280,7 @@ class CipherViewExtensionsTest {
         val result = createMockCipherView(number = 1)
             .validateCipherOrReturnErrorState(
                 currentAccount = createAccount(),
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
             ) { _, _ -> providedState }
 
         assertEquals(providedState, result)
@@ -308,7 +309,7 @@ class CipherViewExtensionsTest {
         val result = createMockCipherView(number = 1)
             .validateCipherOrReturnErrorState(
                 currentAccount = null,
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
             ) { _, _ -> providedState }
 
         assertEquals(

@@ -15,9 +15,13 @@ sealed class VaultAddEditType : Parcelable {
 
     /**
      * Indicates that we want to create a completely new vault item.
+     *
+     * @property vaultItemCipherType The specified [VaultItemCipherType].
      */
     @Parcelize
-    data object AddItem : VaultAddEditType() {
+    data class AddItem(
+        val vaultItemCipherType: VaultItemCipherType,
+    ) : VaultAddEditType() {
         override val vaultItemId: String?
             get() = null
     }

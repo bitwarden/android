@@ -68,7 +68,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToVaultItemScreen = { navController.navigateToVaultItem(vaultItemId = it) },
             onNavigateToVaultAddItemScreen = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem)
+                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem(it))
             },
             onNavigateToSearchVault = { navController.navigateToSearch(searchType = it) },
             onNavigateToVaultEditItemScreen = {
@@ -79,7 +79,7 @@ fun NavGraphBuilder.vaultUnlockedGraph(
             onNavigateToExportVault = { navController.navigateToExportVault() },
             onNavigateToFolders = { navController.navigateToFolders() },
             onNavigateToVaultAddItem = {
-                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem)
+                navController.navigateToVaultAddEdit(VaultAddEditType.AddItem(it))
             },
             onNavigateToVaultItem = { navController.navigateToVaultItem(it) },
             onNavigateToVaultEditItem = {

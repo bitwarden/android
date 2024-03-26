@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
 import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
 import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -2602,7 +2603,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `should display policy warning when personal vault is disabled for add item type`() {
         mutableStateFlow.update {
             it.copy(
-                vaultAddEditType = VaultAddEditType.AddItem,
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 viewState = VaultAddEditState.ViewState.Content(
                     common = VaultAddEditState.ViewState.Content.Common(
                         originalCipher = createMockCipherView(1),
@@ -2853,11 +2854,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = VaultAddEditState.DialogState.Generic(message = "test".asText()),
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
         )
 
         private val DEFAULT_STATE_LOGIN = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(),
@@ -2867,7 +2868,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         private val DEFAULT_STATE_IDENTITY = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.IDENTITY),
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Identity(),
@@ -2877,7 +2878,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         )
 
         private val DEFAULT_STATE_CARD = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.CARD),
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.Card(),
@@ -2904,11 +2905,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 isIndividualVaultDisabled = false,
             ),
             dialog = null,
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
         )
 
         private val DEFAULT_STATE_SECURE_NOTES = VaultAddEditState(
-            vaultAddEditType = VaultAddEditType.AddItem,
+            vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.SECURE_NOTE),
             viewState = VaultAddEditState.ViewState.Content(
                 common = VaultAddEditState.ViewState.Content.Common(),
                 type = VaultAddEditState.ViewState.Content.ItemType.SecureNotes,

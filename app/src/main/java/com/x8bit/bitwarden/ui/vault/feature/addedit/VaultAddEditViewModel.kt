@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.appendFolderAndOwnerData
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
@@ -111,20 +112,20 @@ class VaultAddEditViewModel @Inject constructor(
                     null
                 }
 
-            val defaultAddTypeContent = autofillSelectionData
-                ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
-                ?: autofillSaveItem
-                    ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
-                ?: VaultAddEditState.ViewState.Content(
-                    common = VaultAddEditState.ViewState.Content.Common(),
-                    isIndividualVaultDisabled = isIndividualVaultDisabled,
-                    type = VaultAddEditState.ViewState.Content.ItemType.Login(),
-                )
-
             VaultAddEditState(
                 vaultAddEditType = vaultAddEditType,
                 viewState = when (vaultAddEditType) {
-                    VaultAddEditType.AddItem -> defaultAddTypeContent
+                    is VaultAddEditType.AddItem -> {
+                        autofillSelectionData
+                            ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
+                            ?: autofillSaveItem
+                                ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
+                            ?: VaultAddEditState.ViewState.Content(
+                                common = VaultAddEditState.ViewState.Content.Common(),
+                                isIndividualVaultDisabled = isIndividualVaultDisabled,
+                                type = vaultAddEditType.vaultItemCipherType.toItemType(),
+                            )
+                    }
                     is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
@@ -318,7 +319,7 @@ class VaultAddEditViewModel @Inject constructor(
 
         viewModelScope.launch {
             when (val vaultAddEditType = state.vaultAddEditType) {
-                VaultAddEditType.AddItem -> {
+                is VaultAddEditType.AddItem -> {
                     val result = content.createCipherForAddAndCloneItemStates()
                     sendAction(VaultAddEditAction.Internal.CreateCipherResultReceive(result))
                 }
@@ -1425,7 +1426,7 @@ data class VaultAddEditState(
      */
     val screenDisplayName: Text
         get() = when (vaultAddEditType) {
-            VaultAddEditType.AddItem -> R.string.add_item.asText()
+            is VaultAddEditType.AddItem -> R.string.add_item.asText()
             is VaultAddEditType.EditItem -> R.string.edit_item.asText()
             is VaultAddEditType.CloneItem -> R.string.add_item.asText()
         }
@@ -1444,7 +1445,7 @@ data class VaultAddEditState(
     /**
      * Helper to determine if the UI should display the content in add item mode.
      */
-    val isAddItemMode: Boolean get() = vaultAddEditType == VaultAddEditType.AddItem
+    val isAddItemMode: Boolean get() = vaultAddEditType is VaultAddEditType.AddItem
 
     /**
      * Helper to determine if the UI should display the content in clone mode.

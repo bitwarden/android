@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListi
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.vaultItemListingDestination
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.navigateToVerificationCodeScreen
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.vaultVerificationCodeDestination
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 
@@ -18,7 +19,7 @@ const val VAULT_GRAPH_ROUTE: String = "vault_graph"
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultGraph(
     navController: NavController,
-    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
     onNavigateToVaultItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItemScreen: (vaultItemId: String) -> Unit,
     onNavigateToSearchVault: (searchType: SearchType.Vault) -> Unit,
@@ -29,7 +30,9 @@ fun NavGraphBuilder.vaultGraph(
         startDestination = VAULT_ROUTE,
     ) {
         vaultDestination(
-            onNavigateToVaultAddItemScreen = onNavigateToVaultAddItemScreen,
+            onNavigateToVaultAddItemScreen = {
+                onNavigateToVaultAddItemScreen(VaultItemCipherType.LOGIN)
+            },
             onNavigateToVaultItemScreen = onNavigateToVaultItemScreen,
             onNavigateToVaultEditItemScreen = onNavigateToVaultEditItemScreen,
             onNavigateToVaultItemListingScreen = { navController.navigateToVaultItemListing(it) },

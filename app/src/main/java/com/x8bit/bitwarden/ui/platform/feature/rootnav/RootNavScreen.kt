@@ -40,6 +40,7 @@ import com.x8bit.bitwarden.ui.tools.feature.send.addsend.navigateToAddSend
 import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -147,7 +148,9 @@ fun RootNavScreen(
             is RootNavState.VaultUnlockedForAutofillSave -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultAddEdit(
-                    vaultAddEditType = VaultAddEditType.AddItem,
+                    vaultAddEditType = VaultAddEditType.AddItem(
+                        vaultItemCipherType = VaultItemCipherType.LOGIN,
+                    ),
                     navOptions = rootNavOptions,
                 )
             }

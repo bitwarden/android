@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class VaultItemListingStateExtensionsTest {
 
@@ -107,5 +109,44 @@ class VaultItemListingStateExtensionsTest {
         val result = itemType.toSearchType()
 
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun `toVaultItemCipherType should return the correct response`() {
+        val itemListingTypes = listOf(
+            VaultItemListingState.ItemListingType.Vault.Card,
+            VaultItemListingState.ItemListingType.Vault.Identity,
+            VaultItemListingState.ItemListingType.Vault.SecureNote,
+            VaultItemListingState.ItemListingType.Vault.Login,
+        )
+
+        val result = itemListingTypes.map { it.toVaultItemCipherType() }
+
+        assertEquals(
+            listOf(
+                VaultItemCipherType.CARD,
+                VaultItemCipherType.IDENTITY,
+                VaultItemCipherType.SECURE_NOTE,
+                VaultItemCipherType.LOGIN,
+            ),
+            result,
+        )
+    }
+
+    @Test
+    fun `toVaultItemCipherType should throw an exception for unsupported ItemListingTypes`() {
+        val itemListingTypes = listOf(
+            VaultItemListingState.ItemListingType.Vault.Trash,
+            VaultItemListingState.ItemListingType.Vault.Collection(
+                collectionId = "mockId",
+            ),
+            VaultItemListingState.ItemListingType.Vault.Folder(
+                folderId = "mockId",
+            ),
+        )
+
+        itemListingTypes.forEach {
+            assertThrows<IllegalStateException> { it.toVaultItemCipherType() }
+        }
     }
 }

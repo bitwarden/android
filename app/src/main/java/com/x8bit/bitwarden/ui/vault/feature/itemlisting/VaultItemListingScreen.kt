@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -64,7 +65,7 @@ fun VaultItemListingScreen(
     onNavigateToVaultItem: (id: String) -> Unit,
     onNavigateToVaultEditItemScreen: (cipherVaultId: String) -> Unit,
     onNavigateToVaultItemListing: (vaultItemListingType: VaultItemListingType) -> Unit,
-    onNavigateToVaultAddItemScreen: () -> Unit,
+    onNavigateToVaultAddItemScreen: (vaultItemCipherType: VaultItemCipherType) -> Unit,
     onNavigateToAddSendItem: () -> Unit,
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
@@ -100,7 +101,7 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.NavigateToAddVaultItem -> {
-                onNavigateToVaultAddItemScreen()
+                onNavigateToVaultAddItemScreen(event.vaultItemCipherType)
             }
 
             is VaultItemListingEvent.NavigateToEditCipher -> {

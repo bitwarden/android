@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 
 /**
  * The functions below pertain to entry into the [VaultUnlockedNavBarScreen].
@@ -23,7 +24,7 @@ fun NavController.navigateToVaultUnlockedNavBar(navOptions: NavOptions? = null) 
  */
 @Suppress("LongParameterList")
 fun NavGraphBuilder.vaultUnlockedNavBarDestination(
-    onNavigateToVaultAddItem: () -> Unit,
+    onNavigateToVaultAddItem: (VaultItemCipherType) -> Unit,
     onNavigateToVaultItem: (vaultItemId: String) -> Unit,
     onNavigateToVaultEditItem: (vaultItemId: String) -> Unit,
     onNavigateToSearchSend: (searchType: SearchType.Sends) -> Unit,
