@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Controls
@@ -46,14 +47,26 @@ namespace Bit.App.Controls
             if (Handler?.MauiContext == null) { return; }
             if (_iconImage?.Source == null) { return; }
 
-            var result = await _iconImage.Source.GetPlatformImageAsync(Handler.MauiContext);
-            if (result == null)
+            try
+            {
+                var result = await _iconImage.Source.GetPlatformImageAsync(Handler.MauiContext);
+                if (result == null)
+                {
+                    Icon_Error(sender, e);
+                }
+                else
+                {
+                    Icon_Success(sender, e);
+                }
+            }
+            catch (InvalidOperationException) //Can occur with incorrect/malformed uris
             {
                 Icon_Error(sender, e);
             }
-            else
+            catch(Exception ex)
             {
-                Icon_Success(sender, e);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                Icon_Error(sender, e);
             }
         }
     }
