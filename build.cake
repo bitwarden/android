@@ -221,6 +221,13 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
         plist["NSExtension"]["NSExtensionAttributes"]["NSExtensionActivationRule"] = keyText.Replace("com.8bit.bitwarden", buildVariant.iOSBundleId);
     }
 
+    //TODO DEVOPS-1822 testing
+    if(buildVariant is Beta)
+    {
+        plist.Remove("ITSAppUsesNonExemptEncryption");
+        plist.Remove("ITSEncryptionExportComplianceCode");
+    }
+
     SerializePlist(plistFile, plist);
 
     Information($"Changed app name from {prevBundleName} to {newBundleName}");
