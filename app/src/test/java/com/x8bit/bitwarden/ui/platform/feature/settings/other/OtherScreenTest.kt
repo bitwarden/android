@@ -154,7 +154,7 @@ class OtherScreenTest : BaseComposeTest() {
     @Test
     fun `on give feedback click should display confirmation dialog and confirm click should emit GiveFeedbackClick`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Give feedback").performClick()
+        composeTestRule.onNodeWithText("Give Feedback").performClick()
         composeTestRule.onNode(isDialog()).assertExists()
         composeTestRule
             .onAllNodesWithText("Continue")
