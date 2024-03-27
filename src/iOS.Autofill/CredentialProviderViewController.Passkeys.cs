@@ -339,7 +339,7 @@ namespace Bit.iOS.Autofill
             {
                 try
                 {
-                    PerformSegue(SegueConstants.LOGIN_LIST, this);
+                    DismissViewController(false, () => PerformSegue(SegueConstants.LOGIN_LIST, this));
                 }
                 catch (Exception ex)
                 {
@@ -352,26 +352,22 @@ namespace Bit.iOS.Autofill
         {
             if (_context.IsCreatingPasskey)
             {
+                if (!await IsAuthed()
+                    ||
+                    await _vaultTimeoutService.Value.IsLoggedOutByTimeoutAsync()
+                    ||
+                    await _vaultTimeoutService.Value.ShouldLogOutByTimeoutAsync())
+                {
+                    await NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget.HomeLogin);
+                    return;
+                }
+
                 if (!await IsLocked())
                 {
                     return;
                 }
 
-                _context.UnlockVaultTcs?.SetCanceled();
-                _context.UnlockVaultTcs = new TaskCompletionSource<bool>();
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    try
-                    {
-                        PerformSegue(SegueConstants.LOCK, this);
-                    }
-                    catch (Exception ex)
-                    {
-                        LoggerHelper.LogEvenIfCantBeResolved(ex);
-                    }
-                });
-
-                await _context.UnlockVaultTcs.Task;
+                await NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget.Lock);
                 return;
             }
 
@@ -380,6 +376,18 @@ namespace Bit.iOS.Autofill
                 CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
                 throw new InvalidOperationNeedsUIException("Not authed or locked");
             }
+        }
+
+        private async Task NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget navTarget)
+        {
+            _context.UnlockVaultTcs?.TrySetCanceled();
+            _context.UnlockVaultTcs = new TaskCompletionSource<bool>();
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                DoNavigate(navTarget);
+            });
+
+            await _context.UnlockVaultTcs.Task;
         }
     }
 }

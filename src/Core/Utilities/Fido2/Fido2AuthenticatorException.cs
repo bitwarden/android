@@ -34,4 +34,11 @@ namespace Bit.Core.Utilities.Fido2
         {
         }
     }
+
+    public class AccountSwitchedException : Fido2AuthenticatorException
+    {
+        public AccountSwitchedException() : base(nameof(AccountSwitchedException))
+        {
+        }
+    }
 }

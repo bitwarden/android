@@ -36,28 +36,42 @@ namespace Bit.Core.Services
                 throw new NotSupportedError();
             }
 
-            await userInterface.EnsureUnlockedVaultAsync();
-            await _syncService.FullSyncAsync(false);
+            string cipherId = null;
+            var userVerified = false;
+            var accountSwitched = false;
 
-            var existingCipherIds = await FindExcludedCredentialsAsync(
-                makeCredentialParams.ExcludeCredentialDescriptorList
-            );
-            if (existingCipherIds.Length > 0)
+            do
             {
-                await userInterface.InformExcludedCredentialAsync(existingCipherIds);
-                throw new NotAllowedError();
-            }
+                try
+                {
+                    accountSwitched = false;
 
-            var response = await userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams
-            {
-                CredentialName = makeCredentialParams.RpEntity.Name,
-                UserName = makeCredentialParams.UserEntity.Name,
-                UserVerificationPreference = makeCredentialParams.UserVerificationPreference,
-                RpId = makeCredentialParams.RpEntity.Id
-            });
+                    await userInterface.EnsureUnlockedVaultAsync();
+                    await _syncService.FullSyncAsync(false);
 
-            var cipherId = response.CipherId;
-            var userVerified = response.UserVerified;
+                    var existingCipherIds = await FindExcludedCredentialsAsync(
+                        makeCredentialParams.ExcludeCredentialDescriptorList
+                    );
+                    if (existingCipherIds.Length > 0)
+                    {
+                        await userInterface.InformExcludedCredentialAsync(existingCipherIds);
+                        throw new NotAllowedError();
+                    }
+
+                    (cipherId, userVerified) = await userInterface.ConfirmNewCredentialAsync(new Fido2ConfirmNewCredentialParams
+                    {
+                        CredentialName = makeCredentialParams.RpEntity.Name,
+                        UserName = makeCredentialParams.UserEntity.Name,
+                        UserVerificationPreference = makeCredentialParams.UserVerificationPreference,
+                        RpId = makeCredentialParams.RpEntity.Id
+                    });
+                }
+                catch (AccountSwitchedException)
+                {
+                    accountSwitched = true;
+                }
+            } while (accountSwitched);
+
             string credentialId;
             if (cipherId == null)
             {
@@ -118,37 +132,52 @@ namespace Bit.Core.Services
 
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams, IFido2GetAssertionUserInterface userInterface)
         {
-            List<CipherView> cipherOptions;
+            List<CipherView> cipherOptions = new List<CipherView>();
 
-            await userInterface.EnsureUnlockedVaultAsync();
-            await _syncService.FullSyncAsync(false);
+            string selectedCipherId = null;
+            var userVerified = false;
+            var accountSwitched = false;
 
-            if (assertionParams.AllowCredentialDescriptorList?.Length > 0)
+            do
             {
-                cipherOptions = await FindCredentialsByIdAsync(
-                    assertionParams.AllowCredentialDescriptorList,
-                    assertionParams.RpId
-                );
-            }
-            else
-            {
-                cipherOptions = await FindCredentialsByRpAsync(assertionParams.RpId);
-            }
-
-            if (cipherOptions.Count == 0)
-            {
-                throw new NotAllowedError();
-            }
-
-            var response = await userInterface.PickCredentialAsync(
-                cipherOptions.Select((cipher) => new Fido2GetAssertionUserInterfaceCredential
+                try
                 {
-                    CipherId = cipher.Id,
-                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.GetUserVerificationPreferenceFrom(assertionParams.UserVerificationPreference, cipher.Reprompt)
-                }).ToArray()
-            );
-            var selectedCipherId = response.CipherId;
-            var userVerified = response.UserVerified;
+                    accountSwitched = false;
+
+                    await userInterface.EnsureUnlockedVaultAsync();
+                    await _syncService.FullSyncAsync(false);
+
+                    if (assertionParams.AllowCredentialDescriptorList?.Length > 0)
+                    {
+                        cipherOptions = await FindCredentialsByIdAsync(
+                            assertionParams.AllowCredentialDescriptorList,
+                            assertionParams.RpId
+                        );
+                    }
+                    else
+                    {
+                        cipherOptions = await FindCredentialsByRpAsync(assertionParams.RpId);
+                    }
+
+                    if (cipherOptions.Count == 0)
+                    {
+                        throw new NotAllowedError();
+                    }
+
+                    (selectedCipherId, userVerified) = await userInterface.PickCredentialAsync(
+                        cipherOptions.Select((cipher) => new Fido2GetAssertionUserInterfaceCredential
+                        {
+                            CipherId = cipher.Id,
+                            UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.GetUserVerificationPreferenceFrom(assertionParams.UserVerificationPreference, cipher.Reprompt)
+                        }).ToArray()
+                    );
+
+                }
+                catch (AccountSwitchedException)
+                {
+                    accountSwitched = true;
+                }
+            } while (accountSwitched);
 
             var selectedCipher = cipherOptions.FirstOrDefault((c) => c.Id == selectedCipherId);
             if (selectedCipher == null)

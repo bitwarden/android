@@ -8,6 +8,7 @@ using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
@@ -34,6 +35,8 @@ namespace Bit.iOS.Autofill
 
         private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
         private readonly LazyResolve<IConditionedAwaiterManager> _conditionedAwaiterManager = new LazyResolve<IConditionedAwaiterManager>();
+        private readonly LazyResolve<IBroadcasterService> _broadcasterService = new LazyResolve<IBroadcasterService>();
+        private readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -377,7 +380,7 @@ namespace Bit.iOS.Autofill
 
                 if (_context.IsCreatingPasskey)
                 {
-                    _context.UnlockVaultTcs.SetResult(true);
+                    _context.UnlockVaultTcs.TrySetResult(true);
                     return;
                 }
 
@@ -509,8 +512,7 @@ namespace Bit.iOS.Autofill
 
         private Task<bool> IsLocked()
         {
-            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            return vaultTimeoutService.IsLockedAsync();
+            return _vaultTimeoutService.Value.IsLockedAsync();
         }
 
         private Task<bool> IsAuthed()
@@ -544,6 +546,8 @@ namespace Bit.iOS.Autofill
         {
             iOSCoreHelpers.InitApp(this, Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey,
                 _nfcSession, out _nfcDelegate, out _accountsManager);
+
+            _broadcasterService.Value.Subscribe(nameof(CredentialProviderViewController), OnMessageReceived);
         }
 
         private async Task InitAppIfNeededAsync()
@@ -554,6 +558,18 @@ namespace Bit.iOS.Autofill
             }
 
             await _stateService.Value.ReloadStateAsync();
+        }
+
+        private void OnMessageReceived(Message message)
+        {
+            if (message?.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED
+                &&
+                _context != null)
+            {
+                _context.VaultUnlockedDuringThisSession = false;
+                _context.PickCredentialForFido2CreationTcs?.TrySetException(new AccountSwitchedException());
+                _context.PickCredentialForFido2GetAssertionFromListTcs?.TrySetException(new AccountSwitchedException());
+            }
         }
 
         private void LaunchHomePage()
@@ -751,6 +767,24 @@ namespace Bit.iOS.Autofill
         public Task UpdateThemeAsync() => Task.CompletedTask;
 
         public void Navigate(NavigationTarget navTarget, INavigationParams navParams = null)
+        {
+            if (_context?.IsCreatingPasskey == true
+                &&
+                _context.PickCredentialForFido2CreationTcs != null
+                &&
+                !_context.PickCredentialForFido2CreationTcs.Task.IsCompleted)
+            {
+                // if it's creating passkey
+                // and we have an active pending TaskCompletionSource
+                // then we let the Fido2 Authenticator flow manage the navigation to avoid issues
+                // like duplicated navigation.
+                return;
+            }
+
+            DoNavigate(navTarget, navParams);
+        }
+
+        internal void DoNavigate(NavigationTarget navTarget, INavigationParams navParams = null)
         {
             switch (navTarget)
             {
