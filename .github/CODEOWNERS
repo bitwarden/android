@@ -5,7 +5,7 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
 
 # Default file owners
-* @bitwarden/tech-leads
+* @bitwarden/dept-development-mobile
 
 # DevOps for Actions and other workflow changes
 .github/workflows @bitwarden/dept-devops
