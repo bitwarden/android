@@ -285,7 +285,7 @@ namespace Bit.iOS.Autofill.Utilities
 
                 if (Context.IsPreparingListForPasskey && item.IsFido2ListItem)
                 {
-                    Context.PickCredentialForFido2GetAssertionFromListTcs.SetResult(item.Id);
+                    Context.PickCredentialForFido2GetAssertionFromListTcs.TrySetResult(item.Id);
                     return;
                 }
 
@@ -317,7 +317,12 @@ namespace Bit.iOS.Autofill.Utilities
                 return;
             }
 
-            Context.PickCredentialForFido2CreationTcs.SetResult((item.Id, null));
+            if (!await _passwordRepromptService.PromptAndCheckPasswordIfNeededAsync(item.Reprompt))
+            {
+                return;
+            }
+
+            Context.PickCredentialForFido2CreationTcs.TrySetResult((item.Id, null));
         }
 
         private async Task<CipherViewModel> DeselectRowAndGetItemAsync(UITableView tableView, NSIndexPath indexPath)

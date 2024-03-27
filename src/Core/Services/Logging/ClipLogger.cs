@@ -38,7 +38,7 @@
 //        {
 //            _currentBreadcrumbs.AppendLine($"{DateTime.Now.ToShortTimeString()}: {breadcrumb}");
 //#if IOS
-//            UIPasteboard.General.String = _currentBreadcrumbs.ToString();
+//            MainThread.BeginInvokeOnMainThread(() => UIPasteboard.General.String = _currentBreadcrumbs.ToString());
 //#endif
 //        }
 
