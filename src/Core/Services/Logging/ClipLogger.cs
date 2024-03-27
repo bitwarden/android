@@ -42,11 +42,12 @@
 //            _currentBreadcrumbs.AppendLine(formattedText);
 
 //#if IOS
-//           UIPasteboard.General.String = _currentBreadcrumbs.ToString();
+//            MainThread.BeginInvokeOnMainThread(() => UIPasteboard.General.String = _currentBreadcrumbs.ToString());
 //#elif ANDROID
 //            var clipboardManager = Android.App.Application.Context.GetSystemService(Context.ClipboardService) as ClipboardManager;
 //            var clipData = ClipData.NewPlainText("bitwarden", _currentBreadcrumbs.ToString());
 //            clipboardManager.PrimaryClip = clipData;
+//            MainThread.BeginInvokeOnMainThread(() => UIPasteboard.General.String = _currentBreadcrumbs.ToString());
 //#endif
 //        }
 

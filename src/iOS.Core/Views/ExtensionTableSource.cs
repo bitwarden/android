@@ -144,7 +144,7 @@ namespace Bit.iOS.Core.Views
                 }
 
                 cipherCell.SetTitle(item.Name);
-                cipherCell.SetSubtitle(item.Username);
+                cipherCell.SetSubtitle(GetCipherCellSubtitle(item, indexPath));
                 cipherCell.UpdateMainIcon(ShouldUseMainIconAsPasskey(item, indexPath));
                 if (item.IsShared)
                 {
@@ -160,6 +160,8 @@ namespace Bit.iOS.Core.Views
         protected virtual int GetIndexForItemAt(UITableView tableView, NSIndexPath indexPath) => indexPath.Row;
 
         protected virtual bool ShouldUseMainIconAsPasskey(CipherViewModel item, NSIndexPath indexPath) => item.HasFido2Credential;
+
+        protected virtual string GetCipherCellSubtitle(CipherViewModel item, NSIndexPath indexPath) => item.Username;
 
         public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {

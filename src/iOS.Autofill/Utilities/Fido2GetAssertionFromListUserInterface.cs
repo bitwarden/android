@@ -51,7 +51,7 @@ namespace Bit.iOS.Autofill.Utilities
 
             _onAllowedFido2Credentials?.Invoke(credentials.Select(c => c.CipherId).ToList() ?? new List<string>());
 
-            _context.PickCredentialForFido2GetAssertionFromListTcs?.SetCanceled();
+            _context.PickCredentialForFido2GetAssertionFromListTcs?.TrySetCanceled();
             _context.PickCredentialForFido2GetAssertionFromListTcs = new TaskCompletionSource<string>();
 
             var cipherId = await _context.PickCredentialForFido2GetAssertionFromListTcs.Task;

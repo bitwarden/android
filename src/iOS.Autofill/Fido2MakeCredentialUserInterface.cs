@@ -31,7 +31,7 @@ namespace Bit.iOS.Autofill
 
         public async Task<(string CipherId, bool UserVerified)> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {
-            _context.PickCredentialForFido2CreationTcs?.SetCanceled();
+            _context.PickCredentialForFido2CreationTcs?.TrySetCanceled();
             _context.PickCredentialForFido2CreationTcs = new TaskCompletionSource<(string, bool?)>();
             _context.PasskeyCreationParams = confirmNewCredentialParams;
 

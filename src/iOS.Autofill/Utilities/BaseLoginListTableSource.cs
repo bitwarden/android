@@ -111,6 +111,21 @@ namespace Bit.iOS.Autofill.Utilities
             return IsPasskeySection(indexPath.Section) || !item.ForceSectionIcon;
         }
 
+        protected override string GetCipherCellSubtitle(CipherViewModel item, NSIndexPath indexPath)
+        {
+            if (!item.HasFido2Credential)
+            {
+                return base.GetCipherCellSubtitle(item, indexPath);
+            }
+
+            if (Context.IsPreparingListForPasskey && !IsPasskeySection(indexPath.Section))
+            {
+                return item.Username;
+            }
+
+            return item.CipherView?.GetMainFido2CredentialUsername() ?? item.Username;
+        }
+
         public override UIView GetViewForHeader(UITableView tableView, nint section)
         {
             try
@@ -270,7 +285,7 @@ namespace Bit.iOS.Autofill.Utilities
 
                 if (Context.IsPreparingListForPasskey && item.IsFido2ListItem)
                 {
-                    Context.PickCredentialForFido2GetAssertionFromListTcs.SetResult(item.Id);
+                    Context.PickCredentialForFido2GetAssertionFromListTcs.TrySetResult(item.Id);
                     return;
                 }
 
@@ -307,7 +322,7 @@ namespace Bit.iOS.Autofill.Utilities
                 return;
             }
 
-            Context.PickCredentialForFido2CreationTcs.SetResult((item.Id, null));
+            Context.PickCredentialForFido2CreationTcs.TrySetResult((item.Id, null));
         }
 
         private async Task<CipherViewModel> DeselectRowAndGetItemAsync(UITableView tableView, NSIndexPath indexPath)
