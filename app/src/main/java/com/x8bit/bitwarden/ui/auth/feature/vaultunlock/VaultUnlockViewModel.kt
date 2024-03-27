@@ -259,6 +259,7 @@ class VaultUnlockViewModel @Inject constructor(
                 email = activeAccountSummary.email,
                 isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
                 vaultUnlockType = userState.activeAccount.vaultUnlockType,
+                input = "",
             )
         }
     }

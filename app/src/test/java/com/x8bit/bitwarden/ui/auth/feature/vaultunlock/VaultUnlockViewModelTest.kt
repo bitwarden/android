@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummary
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -31,6 +32,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
@@ -177,6 +179,35 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 ),
                 isBiometricEnabled = true,
             ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `UserState updates with a non-null locked account should clear view state input`() {
+        val password = "abc1234"
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            accountSummaries = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false)
+                    .toAccountSummary(true),
+            ),
+        )
+        val viewModel = createViewModel(state = initialState)
+
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(isVaultUnlocked = false),
+            ),
+        )
+
+        assertEquals(
+            initialState.copy(input = ""),
             viewModel.stateFlow.value,
         )
     }
