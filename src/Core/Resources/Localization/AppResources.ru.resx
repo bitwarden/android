@@ -2878,4 +2878,13 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Настройте опцию разблокировки для изменения действия по тайм-ауту хранилища.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Для вашего аккаунта требуется двухэтапная аутентификация Duo. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Следуйте указаниям Duo, чтобы завершить авторизацию.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Запустить Duo</value>
+  </data>
 </root>

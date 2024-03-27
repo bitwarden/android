@@ -2877,4 +2877,13 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Thiết lập khóa khi hết thời gian chờ kho.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Tài khoản của bạn bắt buộc đăng nhập 2 bước Dou. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Làm theo các bước từ Dou để hoàn tất đăng nhập.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Khởi động Dou</value>
+  </data>
 </root>

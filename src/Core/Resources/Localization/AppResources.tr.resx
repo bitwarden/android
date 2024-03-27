@@ -2875,4 +2875,13 @@ Bu hesaba geçmek ister misiniz?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Hesabınız için Duo'ya iki adımlı giriş yapmanız gerekiyor. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Oturum açmayı tamamlamak için Duo'daki adımları izleyin.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Duo'yu başlat</value>
+  </data>
 </root>

@@ -1,8 +1,8 @@
 using System;
 using Bit.App.Controls;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
-using MapKit;
 using UIKit;
 
 namespace Bit.iOS.Autofill
@@ -33,22 +33,29 @@ namespace Bit.iOS.Autofill
 
         public override async void ViewDidLoad()
         {
-            _cancelButton = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, CancelButton_TouchUpInside);
-
-            base.ViewDidLoad();
-
-            _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
-
-            _accountSwitchButton = await _accountSwitchingOverlayHelper.CreateAccountSwitchToolbarButtonItemCustomViewAsync();
-            _accountSwitchButton.TouchUpInside += AccountSwitchedButton_TouchUpInside;
-
-            NavItem.SetLeftBarButtonItems(new UIBarButtonItem[]
+            try
             {
-                _cancelButton,
-                new UIBarButtonItem(_accountSwitchButton)
-            }, false);
+                _cancelButton = new UIBarButtonItem(UIBarButtonSystemItem.Cancel, CancelButton_TouchUpInside);
 
-            _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
+                base.ViewDidLoad();
+
+                _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
+
+                _accountSwitchButton = await _accountSwitchingOverlayHelper.CreateAccountSwitchToolbarButtonItemCustomViewAsync();
+                _accountSwitchButton.TouchUpInside += AccountSwitchedButton_TouchUpInside;
+
+                NavItem.SetLeftBarButtonItems(new UIBarButtonItem[]
+                {
+                    _cancelButton,
+                    new UIBarButtonItem(_accountSwitchButton)
+                }, false);
+
+                _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         private void CancelButton_TouchUpInside(object sender, EventArgs e)

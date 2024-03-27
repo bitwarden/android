@@ -2876,4 +2876,13 @@ Voleu canviar a aquest compte?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Configura una opció de desbloqueig per canviar l'acció de temps d'espera de la caixa forta.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Es requereix l'inici de sessió en dos passos de DUO al vostre compte. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Seguiu els passos de Duo per acabar d'iniciar la sessió.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Inicia DUO</value>
+  </data>
 </root>

@@ -315,7 +315,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>Iawn</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -346,7 +346,7 @@
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>Cyflwyno</value>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Cysoni</value>
@@ -371,7 +371,7 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>Mae'r maes {0} yn ofynnol.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -382,7 +382,7 @@
     <value>Verify fingerprint</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verify master password</value>
+    <value>Gwirio'r prif gyfrinair</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Verify PIN</value>
@@ -407,7 +407,7 @@
     <value>Cyfrif</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Your new account has been created! You may now log in.</value>
+    <value>Mae eich cyfrif newydd wedi cael ei greu! Gallwch bellach fewngofnodi.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Ychwanegu eitem</value>
@@ -784,10 +784,10 @@
     <value>Do you want to auto-fill or view this item?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>Ydych chi'n siŵr eich bod am lenwi'r eitem hon? Dyw hi ddim yn cyfateb yn llwyr i "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching items</value>
+    <value>Eitemau sy'n cyfateb</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
     <value>Possible matching items</value>
@@ -799,22 +799,22 @@
     <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn about organizations</value>
+    <value>Dysgu am sefydliadau</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Methu agor yr ap "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator app</value>
+    <value>Ap dilysu</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Rhowch y cod dilysu 6 nod o'ch ap dilysu.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Rhowch y cod dilysu 6 nod anfonwyd i {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -895,7 +895,7 @@
 Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Sganio cod QR</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>Camera</value>
@@ -1143,7 +1143,7 @@ Scanning will happen automatically.</value>
     <value>Icons server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>Llenwi'n awtomatig â Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Vault is locked</value>
@@ -1173,7 +1173,7 @@ Scanning will happen automatically.</value>
     <value>Use the Bitwarden auto-fill service to fill login information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Agor gosodiadau llenwi awtomatig</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
@@ -1256,7 +1256,7 @@ Scanning will happen automatically.</value>
     <value>Yes, and save</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Llenwi'n awtomatig a chadw</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Sefydliad</value>
@@ -1486,7 +1486,7 @@ Scanning will happen automatically.</value>
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Rydych wedi mewngofnodi fel {0} ar {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1541,7 +1541,7 @@ Scanning will happen automatically.</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Newid thema liwiau'r ap.</value>
+    <value>Newid thema liwiau'r ap</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
     <value>Rhagosodiad (system)</value>
@@ -1577,7 +1577,7 @@ Scanning will happen automatically.</value>
     <value>Auto-fill blocked URIs</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>Gofyn i ychwanegu manylion mewngofnodi</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>Ask to add an item if one isn't found in your vault.</value>
@@ -1669,7 +1669,7 @@ Scanning will happen automatically.</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Rhybudd</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
     <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
@@ -1945,7 +1945,7 @@ Scanning will happen automatically.</value>
     <value>Current access count</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New password</value>
+    <value>Cyfrinair newydd</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
     <value>Optionally require a password for users to access this Send.</value>
@@ -2310,7 +2310,7 @@ select Add TOTP to store the key safely</value>
     <value>Caniatáu sgrinluniau</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to turn on screen capture?</value>
+    <value>Ydych chi'n siŵr eich bod am ganiatáu sgrinluniau?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
     <value>Login requested</value>
@@ -2394,16 +2394,16 @@ select Add TOTP to store the key safely</value>
     <value>Gair ar hap</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>Ebost (gofynnol)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
     <value>Enw parth (gofynnol)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API key (required)</value>
+    <value>Allwedd API (gofynnol)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>Gwasanaeth</value>
   </data>
   <data name="AddyIo" xml:space="preserve">
     <value>addy.io</value>
@@ -2549,7 +2549,7 @@ Do you want to switch to this account?</value>
     <value>Bydd angen ailgychwyn yr ap</value>
   </data>
   <data name="DefaultSystem" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Rhagosodiad (system)</value>
   </data>
   <data name="Important" xml:space="preserve">
     <value>Pwysig</value>
@@ -2624,7 +2624,7 @@ Do you want to switch to this account?</value>
     <value>Prif gyfrinair presennol</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Wedi mewngofnodi!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
     <value>Approve with my other device</value>
@@ -2812,17 +2812,17 @@ Do you want to switch to this account?</value>
     <value>Parhau i'r ap gwe?</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
-    <value>Continue to {0}?</value>
+    <value>Parhau i {0}?</value>
     <comment>The parameter is an URL, like bitwarden.com.</comment>
   </data>
   <data name="ContinueToHelpCenter" xml:space="preserve">
-    <value>Continue to Help center?</value>
+    <value>Parhau i'r ganolfan gymorth?</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
     <value>Continue to contact support?</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>Continue to privacy policy?</value>
+    <value>Parhau i'r polisi preifatrwydd?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continue to app store?</value>
@@ -2859,11 +2859,11 @@ Do you want to switch to this account?</value>
     <value>Choose the dark theme to use when your device’s dark mode is in use</value>
   </data>
   <data name="CreatedXY" xml:space="preserve">
-    <value>Created {0}, {1}</value>
+    <value>Crëwyd ar {0} am {1}</value>
     <comment>To state the date/time in which the cipher was created: Created 03/21/2023, 09:25 AM. First parameter is the date and the second parameter is the time.</comment>
   </data>
   <data name="TooManyAttempts" xml:space="preserve">
-    <value>Too many attempts</value>
+    <value>Gormod o geisiadau</value>
   </data>
   <data name="AccountLoggedOutBiometricExceeded" xml:space="preserve">
     <value>Account logged out.</value>
@@ -2876,5 +2876,14 @@ Do you want to switch to this account?</value>
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Set up an unlock option to change your vault timeout action.</value>
+  </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Lansio Duo</value>
   </data>
 </root>

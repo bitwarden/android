@@ -2878,4 +2878,13 @@ Vill du byta till detta konto?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Ställ in ett upplåsningsalternativ för att ändra vad som händer när tidsgränsen uppnås.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo tvåstegsverifiering krävs för ditt konto. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Följ stegen från Duo för att slutföra inloggningen.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Starta Duo</value>
+  </data>
 </root>

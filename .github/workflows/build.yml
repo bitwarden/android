@@ -85,7 +85,7 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
 
-      # This step might be obsolete at some point as .NET MAUI workloads 
+      # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -146,11 +146,8 @@ jobs:
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
+          echo "##### Setting Android Version Code to $BUILD_NUMBER" | tee -a $GITHUB_STEP_SUMMARY
 
-          echo "########################################"
-          echo "##### Setting Version Code $BUILD_NUMBER"
-          echo "########################################"
-          
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./${{ env.android_folder_path_bash }}/AndroidManifest.xml
         shell: bash
@@ -298,7 +295,8 @@ jobs:
     name: F-Droid Build
     runs-on: windows-2022
     env:
-      android_folder_path: src/App/Platforms/Android
+      android_folder_path: src\App\Platforms\Android
+      android_folder_path_bash: src/App/Platforms/Android
       android_manifest_path: src/App/Platforms/Android/AndroidManifest.xml
     steps:
       - name: Setup NuGet
@@ -314,7 +312,7 @@ jobs:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
 
-      # This step might be obsolete at some point as .NET MAUI workloads 
+      # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -350,15 +348,14 @@ jobs:
           CONTAINER_NAME: mobile
           FILE: app_fdroid-keystore.jks
         run: |
-          mkdir -p $HOME/secrets
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
-            --file $HOME/secrets/$FILE --output none
+            --file ${{ env.android_folder_path_bash }}/$FILE --output none
         shell: bash
 
       - name: Increment version
         run: |
           BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
-          echo "##### Setting Version Code $BUILD_NUMBER"
+          echo "##### Setting F-Droid Version Code to $BUILD_NUMBER" | tee -a $GITHUB_STEP_SUMMARY
 
           sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./${{ env.android_manifest_path }}
@@ -366,15 +363,14 @@ jobs:
 
       - name: Clean for F-Droid
         run: |
-          $appPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
-          $corePath = $($env:GITHUB_WORKSPACE + "/src/Core/Core.csproj");
+          $directoryBuildProps = $($env:GITHUB_WORKSPACE + "/Directory.Build.props");
 
           $androidManifest = $($env:GITHUB_WORKSPACE + "/${{ env.android_manifest_path }}");
 
           Write-Output "##### Back up project files"
 
           Copy-Item $androidManifest $($androidManifest + ".original");
-          Copy-Item $appPath $($appPath + ".original");
+          Copy-Item $directoryBuildProps $($directoryBuildProps + ".original");
 
           Write-Output "##### Cleanup Android Manifest"
 
@@ -386,33 +382,34 @@ jobs:
 
           $xml.Save($androidManifest);
 
+          Write-Output "##### Enabling FDROID constant"
+
+          (Get-Content $directoryBuildProps).Replace('<!-- <CustomConstants>FDROID</CustomConstants> -->', '<CustomConstants>FDROID</CustomConstants>') | Set-Content $directoryBuildProps
+
       - name: Restore packages
         run: dotnet restore
 
-      - name: Build for F-Droid
-        run: |
-          $configuration = "Release";
-          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
-
-          Write-Output "##### Build $configuration FDROID"
-          
-          dotnet build $projToBuild -c $configuration -f ${{ env.target-net-version }}-android /p:CustomConstants="FDROID"
-
-      - name: Sign for F-Droid
+      - name: Build & Sign F-Droid
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
         run: |
-          $projToBuild = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_project_path }}");
+          $projToBuild = "$($env:GITHUB_WORKSPACE)\${{ env.main_app_project_path }}";
           $packageName = "com.x8bit.bitwarden";
 
           Write-Output "##### Sign FDroid"
 
-          dotnet publish $projToBuild -c Release -f ${{ env.target-net-version }}-android /p:AndroidKeyStore=true /p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks") /p:AndroidSigningKeyAlias=bitwarden /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" /p:CustomConstants="FDROID" --no-restore
+          $signingFdroidKeyStore = "$($env:GITHUB_WORKSPACE)\${{ env.android_folder_path }}\app_fdroid-keystore.jks"
+          dotnet build $projToBuild -c Release -f ${{ env.target-net-version }}-android `
+            /p:AndroidKeyStore=true `
+            /p:AndroidSigningKeyStore=$signingFdroidKeyStore `
+            /p:AndroidSigningKeyAlias=bitwarden `
+            /p:AndroidSigningKeyPass="$($env:FDROID_KEYSTORE_PASSWORD)" `
+            /p:AndroidSigningStorePass="$($env:FDROID_KEYSTORE_PASSWORD)" ` --no-restore
 
           Write-Output "##### Copy FDroid apk to project root"
 
-          $signedApkPath = $($env:GITHUB_WORKSPACE + "/${{ env.main_app_folder_path }}/bin/Release/${{ env.target-net-version }}-android/publish/$($packageName)-Signed.apk");
-          $signedApkDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden-fdroid.apk");
+          $signedApkPath = "$($env:GITHUB_WORKSPACE)\${{ env.main_app_folder_path }}\bin\Release\${{ env.target-net-version }}-android\$($packageName)-Signed.apk";
+          $signedApkDestPath = "$($env:GITHUB_WORKSPACE)\com.x8bit.bitwarden-fdroid.apk";
 
           Copy-Item $signedApkPath $signedApkDestPath
 
@@ -454,13 +451,13 @@ jobs:
         uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
         with:
           nuget-version: 6.4.0
-      
+
       - name: Set up .NET
         uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
         with:
           dotnet-version: '8.0.x'
-  
-      # This step might be obsolete at some point as .NET MAUI workloads 
+
+      # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
       - name: Install MAUI Workload
         run: dotnet workload install maui --ignore-failed-sources
@@ -518,14 +515,12 @@ jobs:
         run: |
           mkdir -p $HOME/secrets
           az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
-            --file $HOME/secrets/$FILE --output none
+            --file src/watchOS/bitwarden/$FILE --output none
 
       - name: Increment version
         run: |
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
-
-          echo "##### Setting CFBundleVersion $BUILD_NUMBER"
-          echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
+          echo "##### Setting iOS CFBundleVersion to $BUILD_NUMBER" | tee -a $GITHUB_STEP_SUMMARY
 
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
@@ -544,7 +539,7 @@ jobs:
           mkdir -p $HOME/certificates
           az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution |
             jq -r .value | base64 -d > $HOME/certificates/ios-distribution.p12
-        
+
       - name: Set up Keychain
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
@@ -744,7 +739,7 @@ jobs:
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
         with:
           config: crowdin.yml
-          crowdin_branch_name: main 
+          crowdin_branch_name: main
           upload_sources: true
           upload_translations: false
 
@@ -762,27 +757,11 @@ jobs:
     steps:
       - name: Check if any job failed
         if: |
-          (github.ref == 'refs/heads/main')
-          || (github.ref == 'refs/heads/rc')
-          || (github.ref == 'refs/heads/hotfix-rc')
-        env:
-          CLOC_STATUS: ${{ needs.cloc.result }}
-          ANDROID_STATUS: ${{ needs.android.result }}
-          F_DROID_STATUS: ${{ needs.f-droid.result }}
-          IOS_STATUS: ${{ needs.ios.result }}
-          CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
-        run: |
-          if [ "$CLOC_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$ANDROID_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$F_DROID_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$IOS_STATUS" = "failure" ]; then
-              exit 1
-          elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
-              exit 1
-          fi
+          (github.ref == 'refs/heads/main'
+          || github.ref == 'refs/heads/rc'
+          || github.ref == 'refs/heads/hotfix-rc')
+          && contains(needs.*.result, 'failure')
+        run: exit 1
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0

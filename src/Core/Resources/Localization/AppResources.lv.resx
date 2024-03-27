@@ -2877,4 +2877,13 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Jāuzstāda atslēgšanas iespēja, lai mainītu glabātavas noildzes darbību.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Kontam ir nepieciešama Duo divpakāpju pieteikšanās. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Jāseko Duo norādēm, lai pabeigtu pieteikšanos.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Palaist Duo</value>
+  </data>
 </root>

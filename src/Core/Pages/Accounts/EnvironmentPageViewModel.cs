@@ -44,7 +44,7 @@ namespace Bit.App.Pages
         public string WebVaultUrl { get; set; }
         public string IconsUrl { get; set; }
         public string NotificationsUrls { get; set; }
-        public Action SubmitSuccessAction { get; set; }
+        public Func<Task> SubmitSuccessTask { get; set; }
         public Action CloseAction { get; set; }
 
         public async Task SubmitAsync()
@@ -73,7 +73,10 @@ namespace Bit.App.Pages
             IconsUrl = resUrls.Icons;
             NotificationsUrls = resUrls.Notifications;
 
-            SubmitSuccessAction?.Invoke();
+            if (SubmitSuccessTask != null)
+            {
+                await SubmitSuccessTask();
+            }
         }
 
         public bool ValidateUrls()

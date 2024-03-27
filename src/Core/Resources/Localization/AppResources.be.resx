@@ -2623,22 +2623,22 @@
     <value>Бягучы асноўны пароль</value>
   </data>
   <data name="LoggedIn" xml:space="preserve">
-    <value>Logged in!</value>
+    <value>Вы ўвайшлі!</value>
   </data>
   <data name="ApproveWithMyOtherDevice" xml:space="preserve">
     <value>Approve with my other device</value>
   </data>
   <data name="RequestAdminApproval" xml:space="preserve">
-    <value>Request admin approval</value>
+    <value>Запытаць ухваленне адміністратара</value>
   </data>
   <data name="ApproveWithMasterPassword" xml:space="preserve">
-    <value>Approve with master password</value>
+    <value>Ухваліць з дапамогай асноўнага пароля</value>
   </data>
   <data name="TurnOffUsingPublicDevice" xml:space="preserve">
     <value>Turn off using a public device</value>
   </data>
   <data name="RememberThisDevice" xml:space="preserve">
-    <value>Remember this device</value>
+    <value>Запомніць гэту прыладу</value>
   </data>
   <data name="Passkey" xml:space="preserve">
     <value>Passkey</value>
@@ -2677,19 +2677,19 @@
     <value>Памылковы токен API</value>
   </data>
   <data name="AdminApprovalRequested" xml:space="preserve">
-    <value>Admin approval requested</value>
+    <value>Патрабуецца ўхваленне адміністратара</value>
   </data>
   <data name="YourRequestHasBeenSentToYourAdmin" xml:space="preserve">
-    <value>Your request has been sent to your admin.</value>
+    <value>Ваш запыт адпраўлены адміністратару.</value>
   </data>
   <data name="YouWillBeNotifiedOnceApproved" xml:space="preserve">
-    <value>You will be notified once approved. </value>
+    <value>Вы атрымаеце апавяшчэння пасля яго ўхвалення. </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>Trouble logging in?</value>
+    <value>Праблемы з уваходам?</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
-    <value>Logging in as {0}</value>
+    <value>Увайсці як {0}</value>
   </data>
   <data name="VaultTimeoutActionChangedToLogOut" xml:space="preserve">
     <value>Vault timeout action changed to log out</value>
@@ -2738,7 +2738,7 @@
     <value>Немагчыма рэдагаваць некалькі URI адначасова</value>
   </data>
   <data name="LoginApproved" xml:space="preserve">
-    <value>Login approved</value>
+    <value>Уваход ухвалены</value>
   </data>
   <data name="LogInWithDeviceMustBeSetUpInTheSettingsOfTheBitwardenAppNeedAnotherOption" xml:space="preserve">
     <value>Log in with device must be set up in the settings of the Bitwarden app. Need another option?</value>
@@ -2747,28 +2747,28 @@
     <value>Log in with device</value>
   </data>
   <data name="LoggingInOn" xml:space="preserve">
-    <value>Logging in on</value>
+    <value>Увайсці на</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>Сховішча</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Знешні выгляд</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>Бяспеке акаўнта</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Даведачны цэнтр Bitwarden</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>Звярніцеся ў службу падтрымкі Bitwarden</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
     <value>Copy app information</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>Сінхранізаваць зараз</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
     <value>Unlock options</value>
@@ -2805,7 +2805,7 @@
     <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
-    <value>Additional options</value>
+    <value>Дадатковы параметры</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
     <value>Continue to web app?</value>
@@ -2875,5 +2875,14 @@
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Set up an unlock option to change your vault timeout action.</value>
+  </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo two-step login is required for your account. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Follow the steps from Duo to finish logging in.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Launch Duo</value>
   </data>
 </root>

@@ -2876,4 +2876,13 @@ Vil du skifte til denne konto?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Opsæt en oplåsningsmetode for at ændre Bokstimeouthandlingen.</value>
   </data>
+  <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
+    <value>Duo-totrinsindlogning kræves for kontoen. </value>
+  </data>
+  <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
+    <value>Følg trinnene fra Duo for at færdiggøre indlogningen.</value>
+  </data>
+  <data name="LaunchDuo" xml:space="preserve">
+    <value>Start Duo</value>
+  </data>
 </root>

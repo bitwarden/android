@@ -18,6 +18,7 @@ using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Platform;
 using MobileCoreServices;
@@ -528,7 +529,11 @@ namespace Bit.iOS.Extension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.SubmitSuccessTask = async () =>
+                {
+                    await DismissViewControllerAsync(false);
+                    await MainThread.InvokeOnMainThreadAsync(() => LaunchHomePage());
+                };
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
@@ -594,8 +599,9 @@ namespace Bit.iOS.Extension
 
         private void LaunchLoginSsoFlow()
         {
-            var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var loginPage = new LoginSsoPage(appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)

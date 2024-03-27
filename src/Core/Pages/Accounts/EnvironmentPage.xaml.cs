@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
+using Microsoft.Maui.Platform;
 
 namespace Bit.App.Pages
 {
@@ -26,7 +27,7 @@ namespace Bit.App.Pages
             _apiEntry.ReturnCommand = new Command(() => _identityEntry.Focus());
             _identityEntry.ReturnType = ReturnType.Next;
             _identityEntry.ReturnCommand = new Command(() => _iconsEntry.Focus());
-            _vm.SubmitSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await SubmitSuccessAsync());
+            _vm.SubmitSuccessTask = () => MainThread.InvokeOnMainThreadAsync(SubmitSuccessAsync);
             _vm.CloseAction = async () =>
             {
                 await Navigation.PopModalAsync();
@@ -37,6 +38,12 @@ namespace Bit.App.Pages
         {
             _platformUtilsService.ShowToast("success", null, AppResources.EnvironmentSaved);
             await Navigation.PopModalAsync();
+#if ANDROID
+            if (Platform.CurrentActivity.CurrentFocus != null)
+            {
+                Platform.CurrentActivity.HideKeyboard(Platform.CurrentActivity.CurrentFocus);
+            }
+#endif
         }
 
         private void Close_Clicked(object sender, EventArgs e)
