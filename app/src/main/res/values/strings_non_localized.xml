@@ -4,7 +4,7 @@
     <string name="duo_title" translatable="false">Duo</string>
     <string name="duo_org_title" translatable="false">Duo (%1$s)</string>
     <!-- TODO BIT-2140: Update typeform strings -->
-    <string name="give_feedback" translatable="false">Give feedback</string>
-    <string name="continue_to_give_feedback" translatable="false">Continue to Give feedback?</string>
+    <string name="give_feedback" translatable="false">Give Feedback</string>
+    <string name="continue_to_give_feedback" translatable="false">Continue to Give Feedback?</string>
     <string name="continue_to_provide_feedback" translatable="false">Select continue to provide feedback on your experience in a web form.</string>
 </resources>
