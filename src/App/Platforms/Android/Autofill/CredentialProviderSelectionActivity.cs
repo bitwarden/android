@@ -51,6 +51,7 @@ namespace Bit.Droid.Autofill
 
         private async Task GetCipherAndPerformFido2AuthAsync(string cipherId)
         {
+            string RpId = string.Empty;
             try
             {
                 var getRequest = PendingIntentHandler.RetrieveProviderGetCredentialRequest(Intent);
@@ -59,6 +60,7 @@ namespace Bit.Droid.Autofill
                 var credentialPublic = credentialOption as GetPublicKeyCredentialOption;
 
                 var requestOptions = new PublicKeyCredentialRequestOptions(credentialPublic.RequestJson);
+                RpId = requestOptions.RpId;
 
                 var requestInfo = Intent.GetBundleExtra(CredentialProviderConstants.CredentialDataIntentExtra);
                 var credentialId = requestInfo?.GetByteArray(CredentialProviderConstants.CredentialIdIntentExtra);
@@ -72,12 +74,12 @@ namespace Bit.Droid.Autofill
                     userVerified: false,
                     ensureUnlockedVaultCallback: EnsureUnlockedVaultAsync,
                     hasVaultBeenUnlockedInThisTransaction: () => hasVaultBeenUnlockedInThisTransaction,
-                    verifyUserCallback: (cipherId, uvPreference) => VerifyUserAsync(cipherId, uvPreference, requestOptions.RpId, hasVaultBeenUnlockedInThisTransaction));
+                    verifyUserCallback: (cipherId, uvPreference) => VerifyUserAsync(cipherId, uvPreference, RpId, hasVaultBeenUnlockedInThisTransaction));
 
                 var assertParams = new Fido2AuthenticatorGetAssertionParams
                 {
                     Challenge = requestOptions.GetChallenge(),
-                    RpId = requestOptions.RpId,
+                    RpId = RpId,
                     UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(requestOptions.UserVerification),
                     Hash = credentialPublic.GetClientDataHash(),
                     AllowCredentialDescriptorList = new Core.Utilities.Fido2.PublicKeyCredentialDescriptor[] { new Core.Utilities.Fido2.PublicKeyCredentialDescriptor { Id = credentialId } },
@@ -117,7 +119,7 @@ namespace Bit.Droid.Autofill
             {
                 await MainThread.InvokeOnMainThreadAsync(async() =>
                 {
-                    await _deviceActionService.Value.DisplayAlertAsync("Not Allowed", "NotAllowedError", AppResources.Ok); //TODO: i18n
+                    await _deviceActionService.Value.DisplayAlertAsync("Error reading passkey", $"There was a problem reading your passkey for {RpId}. Try again later.", AppResources.Ok); //TODO: i18n
                     Finish();
                 });
             }
@@ -126,7 +128,7 @@ namespace Bit.Droid.Autofill
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
                 await MainThread.InvokeOnMainThreadAsync(async() =>
                 {
-                    await _deviceActionService.Value.DisplayAlertAsync("Error", ex.Message, AppResources.Ok); //TODO: i18n
+                    await _deviceActionService.Value.DisplayAlertAsync("Error reading passkey", $"There was a problem reading your passkey for {RpId}. Try again later.", AppResources.Ok); //TODO: i18n
                     Finish();
                 });
             }

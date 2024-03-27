@@ -37,7 +37,7 @@ namespace Bit.Droid.Autofill
             } 
             else
             {
-                callback.OnError(null); //TODO: Reply with an exception based from Java.Lang.Object
+                callback.OnError("Error creating credential"); //TODO: Improve message
             }
         }
 
@@ -70,11 +70,11 @@ namespace Bit.Droid.Autofill
             catch (GetCredentialException e)
             {
                 _logger.Value.Exception(e);
-                callback.OnError(e.ErrorMessage ?? "Error getting credentials");
+                callback.OnError(e.ErrorMessage ?? "Error getting credentials"); //TODO: Improve message
             }
             catch (Exception e)
             {
-                _logger.Value.Exception(e);
+                _logger.Value.Exception(e); 
                 throw;
             }
         }
