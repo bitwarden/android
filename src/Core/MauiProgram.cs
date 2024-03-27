@@ -1,12 +1,8 @@
-﻿using Bit.App.Controls;
+﻿
 using Camera.MAUI;
 using CommunityToolkit.Maui;
-#if !UT
-using FFImageLoading.Maui;
-#endif
 using Microsoft.Extensions.Logging;
 using Microsoft.Maui.Controls.Compatibility.Hosting;
-using Microsoft.Maui.Handlers;
 using SkiaSharp.Views.Maui.Controls.Hosting;
 using AppEffects = Bit.App.Effects;
 
@@ -26,9 +22,6 @@ public static class MauiProgram
             .UseMauiCompatibility()
             .UseMauiCameraView()
             .UseSkiaSharp()
-#if !UT
-            .UseFFImageLoading()
-#endif
             .ConfigureEffects(effects =>
             {
 #if ANDROID
@@ -63,13 +56,6 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        ExplicitlyPreventThingsGetRemovedBecauseOfLinker();
-
         return builder;
-    }
-
-    private static void ExplicitlyPreventThingsGetRemovedBecauseOfLinker()
-    {
-        StubBaseCipherViewCellSoLinkerDoesntRemoveMethods.CallThisSoLinkerDoesntRemoveMethods();
     }
 }

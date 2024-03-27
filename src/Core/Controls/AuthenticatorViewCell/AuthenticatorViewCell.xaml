@@ -18,17 +18,16 @@
         <u:InverseBoolConverter x:Key="inverseBool" />
     </controls:BaseCipherViewCell.Resources>
 
-    <controls:CachedImage
+    <Image
         x:Name="_iconImage"
         Grid.Column="0"
         Grid.RowSpan="2"
-        BitmapOptimizations="True"
+        IsOpaque="True"
         HorizontalOptions="Center"
         VerticalOptions="Center"
         WidthRequest="22"
         HeightRequest="22"
-        Success="Icon_Success"
-        Error="Icon_Error"
+        Loaded="Image_OnLoaded"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <controls:IconLabel

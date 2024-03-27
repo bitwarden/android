@@ -29,18 +29,17 @@
         <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
 
-    <controls:CachedImage
+    <Image
         x:Name="_iconImage"
         Grid.Column="0"
-        BitmapOptimizations="True"
+        IsOpaque="True"
         HorizontalOptions="CenterAndExpand"
         VerticalOptions="CenterAndExpand"
         Margin="9"
         WidthRequest="22"
         HeightRequest="22"
         Aspect="AspectFit"
-        Success="Icon_Success"
-        Error="Icon_Error"
+        Loaded="Image_OnLoaded"
         AutomationProperties.IsInAccessibleTree="False"
         AutomationId="CipherWebsiteIcon" />
 

@@ -7,7 +7,7 @@ namespace Bit.App.Pages
     public class CipherItemViewModel : ExtendedViewModel, IGroupingsPageListItem
     {
         private readonly bool _websiteIconsEnabled;
-        private string _iconImageSource = string.Empty;
+        private UriImageSource _iconImageSource = null;
 
         public CipherItemViewModel(CipherView cipherView, bool websiteIconsEnabled, bool fuzzyAutofill = false)
         {
@@ -27,14 +27,22 @@ namespace Bit.App.Pages
                 && IconImageSource != null;
         }
 
-        public string IconImageSource
+        public UriImageSource IconImageSource
         {
             get
             {
-                if (_iconImageSource == string.Empty) // default value since icon source can return null
+                if (_iconImageSource == null) // default value since icon source can return null
                 {
-                    _iconImageSource = IconImageHelper.GetIconImage(Cipher);
+                    var iconImageStr = IconImageHelper.GetIconImage(Cipher);
+                    if (string.IsNullOrWhiteSpace(iconImageStr)) { return null; }
+
+                    _iconImageSource = new UriImageSource
+                    {
+                        Uri = new Uri(iconImageStr),
+                        CacheValidity = TimeSpan.FromDays(90)
+                    };
                 }
+
                 return _iconImageSource;
             }
         }

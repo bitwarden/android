@@ -23,7 +23,7 @@ namespace Bit.App.Controls
             _iconImage.HeightRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
         }
 
-        protected override CachedImage Icon => _iconImage;
+        protected override Image Icon => _iconImage;
 
         protected override IconLabel IconPlaceholder => _iconPlaceholderImage;
 
@@ -38,6 +38,22 @@ namespace Bit.App.Controls
             if (BindingContext is CipherItemViewModel cipherItem)
             {
                 ButtonCommand?.Execute(cipherItem.Cipher);
+            }
+        }
+
+        private async void Image_OnLoaded(object sender, EventArgs e)
+        {
+            if (Handler?.MauiContext == null) { return; }
+            if (_iconImage?.Source == null) { return; }
+
+            var result = await _iconImage.Source.GetPlatformImageAsync(Handler.MauiContext);
+            if (result == null)
+            {
+                Icon_Error(sender, e);
+            }
+            else
+            {
+                Icon_Success(sender, e);
             }
         }
     }

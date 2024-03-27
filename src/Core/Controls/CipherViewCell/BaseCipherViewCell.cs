@@ -4,7 +4,7 @@ namespace Bit.App.Controls
 {
     public abstract class BaseCipherViewCell : ExtendedGrid
     {
-        protected virtual CachedImage Icon { get; }
+        protected virtual Image Icon { get; }
 
         protected virtual IconLabel IconPlaceholder { get; }
 
@@ -15,7 +15,7 @@ namespace Bit.App.Controls
         // the app would crash because there can't be any lock files by the app when it gets suspended.
         // So, the approach has changed to reuse the IconLabel default icon to use it for these placeholders
         // as well. In order to do that both icon controls change their visibility dynamically here reacting to 
-        // CachedImage events and binding context changes.
+        // Image OnLoaded event and binding context changes.
 
         protected override void OnBindingContextChanged()
         {
@@ -47,8 +47,7 @@ namespace Bit.App.Controls
             });
         }
 
-#if !UT
-        public void Icon_Success(object sender, FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs e)
+        public void Icon_Success(object sender, EventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
@@ -62,7 +61,7 @@ namespace Bit.App.Controls
             }
         }
 
-        public void Icon_Error(object sender, FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs e)
+        public void Icon_Error(object sender, EventArgs e)
         {
             if (BindingContext is CipherItemViewModel cipherItemVM)
             {
@@ -73,39 +72,6 @@ namespace Bit.App.Controls
                 Icon.IsVisible = false;
                 IconPlaceholder.IsVisible = true;
             });
-        }
-#else
-        private void Icon_Success(object sender, EventArgs e)  {}
-        private void Icon_Error(object sender, EventArgs e) {}
-#endif
-    }
-
-    public class StubBaseCipherViewCellSoLinkerDoesntRemoveMethods : BaseCipherViewCell
-    {
-        protected override CachedImage Icon => new CachedImage();
-        protected override IconLabel IconPlaceholder => new IconLabel();
-
-        public static void CallThisSoLinkerDoesntRemoveMethods()
-        {
-#if !UT
-            var stub = new StubBaseCipherViewCellSoLinkerDoesntRemoveMethods();
-
-            try
-            {
-                stub.Icon_Success(stub, new FFImageLoading.Maui.CachedImageEvents.SuccessEventArgs(new FFImageLoading.Work.ImageInformation(), FFImageLoading.Work.LoadingResult.Disk));
-            }
-            catch (Exception)
-            {
-            }
-
-            try
-            {
-                stub.Icon_Error(stub, new FFImageLoading.Maui.CachedImageEvents.ErrorEventArgs(new InvalidOperationException("stub")));
-            }
-            catch (Exception)
-            {
-            }
-#endif
         }
     }
 }
