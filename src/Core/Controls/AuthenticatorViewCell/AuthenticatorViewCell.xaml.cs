@@ -34,7 +34,7 @@ namespace Bit.App.Controls
             {
                 Icon_Error(sender, e);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
                 Icon_Error(sender, e);

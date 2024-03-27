@@ -39,7 +39,8 @@ namespace Bit.App.Pages
                     _iconImageSource = new UriImageSource
                     {
                         Uri = new Uri(iconImageStr),
-                        CacheValidity = TimeSpan.FromDays(90)
+                        CacheValidity = TimeSpan.FromDays(90),
+                        CachingEnabled = true
                     };
                 }
 
