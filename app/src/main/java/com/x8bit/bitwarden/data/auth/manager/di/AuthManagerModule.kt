@@ -3,12 +3,15 @@ package com.x8bit.bitwarden.data.auth.manager.di
 import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
+import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManagerImpl
+import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
+import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManagerImpl
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManagerImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
@@ -66,6 +69,19 @@ object AuthManagerModule {
             authSdkSource = authSdkSource,
             vaultSdkSource = vaultSdkSource,
             authDiskSource = authDiskSource,
+        )
+
+    @Provides
+    @Singleton
+    fun provideTrustedDeviceManager(
+        authDiskSource: AuthDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        devicesService: DevicesService,
+    ): TrustedDeviceManager =
+        TrustedDeviceManagerImpl(
+            authDiskSource = authDiskSource,
+            vaultSdkSource = vaultSdkSource,
+            devicesService = devicesService,
         )
 
     @Provides

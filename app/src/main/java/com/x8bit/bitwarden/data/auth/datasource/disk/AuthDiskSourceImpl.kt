@@ -20,6 +20,8 @@ import java.util.UUID
 private const val ACCOUNT_TOKENS_KEY = "$ENCRYPTED_BASE_KEY:accountTokens"
 private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
+private const val DEVICE_KEY_KEY = "$ENCRYPTED_BASE_KEY:deviceKey"
+
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
 private const val REMEMBERED_ORG_IDENTIFIER_KEY = "$BASE_KEY:rememberedOrgIdentifier"
@@ -35,6 +37,7 @@ private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
 private const val TWO_FACTOR_TOKEN_KEY = "$BASE_KEY:twoFactorToken"
 private const val MASTER_PASSWORD_HASH_KEY = "$BASE_KEY:keyHash"
 private const val POLICIES_KEY = "$BASE_KEY:policies"
+private const val SHOULD_TRUST_DEVICE_KEY = "$BASE_KEY:shouldTrustDevice"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -101,6 +104,12 @@ class AuthDiskSourceImpl(
             )
         }
 
+    override var shouldTrustDevice: Boolean
+        get() = requireNotNull(getBoolean(key = SHOULD_TRUST_DEVICE_KEY, default = false))
+        set(value) {
+            putBoolean(key = SHOULD_TRUST_DEVICE_KEY, value = value)
+        }
+
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
@@ -115,6 +124,7 @@ class AuthDiskSourceImpl(
         storePrivateKey(userId = userId, privateKey = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
+        storeDeviceKey(userId = userId, deviceKey = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
@@ -181,6 +191,14 @@ class AuthDiskSourceImpl(
             key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
             value = userAutoUnlockKey,
         )
+    }
+
+    override fun getDeviceKey(
+        userId: String,
+    ): String? = getEncryptedString(key = "${DEVICE_KEY_KEY}_$userId")
+
+    override fun storeDeviceKey(userId: String, deviceKey: String?) {
+        putEncryptedString(key = "${DEVICE_KEY_KEY}_$userId", value = deviceKey)
     }
 
     override fun getUserBiometricUnlockKey(userId: String): String? =
