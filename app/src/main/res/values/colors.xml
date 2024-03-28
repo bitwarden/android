@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--region Light System -->
+    <color name="primary">@color/blue_175DDC</color>
+    <color name="on_primary">@color/white_FFFFFF</color>
+    <color name="primary_container">@color/blue_DAE2FF</color>
+    <color name="on_primary_container">@color/blue_001848</color>
+    <color name="secondary">@color/grey_585E71</color>
+    <color name="on_secondary">@color/white_FFFFFF</color>
+    <color name="secondary_container">@color/grey_DDE2F9</color>
+    <color name="on_secondary_container">@color/blue_151B2C</color>
+    <color name="tertiary">@color/blue_3B5BA9</color>
+    <color name="on_tertiary">@color/white_FFFFFF</color>
+    <color name="tertiary_container">@color/blue_DAE2FF</color>
+    <color name="on_tertiary_container">@color/blue_001848</color>
+    <color name="error">@color/red_BA1A1A</color>
+    <color name="on_error">@color/white_FFFFFF</color>
+    <color name="error_container">@color/red_FFDAD6</color>
+    <color name="on_error_container">@color/red_410002</color>
+    <color name="surface_dim">@color/grey_DBD9DD</color>
+    <color name="surface">@color/grey_FBF8FD</color>
+    <color name="surface_variant">@color/grey_DDE3EA</color>
+    <color name="surface_bright">@color/grey_FBF8FD</color>
+    <color name="surface_container_lowest">@color/white_FFFFFF</color>
+    <color name="surface_container_low">@color/white_F5F3F7</color>
+    <color name="surface_container">@color/white_EFEDF1</color>
+    <color name="surface_container_high">@color/white_E9E7EC</color>
+    <color name="surface_container_highest">@color/white_E4E2E6</color>
+    <color name="on_surface">@color/grey_1B1B1F</color>
+    <color name="on_surface_variant">@color/grey_45464F</color>
+    <color name="outline">@color/grey_757780</color>
+    <color name="outline_variant">@color/white_C5C6D0</color>
+    <color name="inverse_surface">@color/grey_303034</color>
+    <color name="inverse_on_surface">@color/grey_F2F0F4</color>
+    <color name="inverse_primary">@color/blue_B2C5FF</color>
+    <color name="scrim">@color/black_000000</color>
+    <!--endregion Light System-->
+
+    <!--region Dark System -->
+    <color name="dark_primary">@color/blue_B2C5FF</color>
+    <color name="dark_on_primary">@color/blue_002B74</color>
+    <color name="dark_primary_container">@color/blue_003FA3</color>
+    <color name="dark_on_primary_container">@color/blue_DAE2FF</color>
+    <color name="dark_secondary">@color/grey_C0C6DD</color>
+    <color name="dark_on_secondary">@color/grey_2A3042</color>
+    <color name="dark_secondary_container">@color/grey_404659</color>
+    <color name="dark_on_secondary_container">@color/grey_DDE2F9</color>
+    <color name="dark_tertiary">@color/blue_B2C5FF</color>
+    <color name="dark_on_tertiary">@color/blue_002B73</color>
+    <color name="dark_tertiary_container">@color/blue_1F438F</color>
+    <color name="dark_on_tertiary_container">@color/blue_DAE2FF</color>
+    <color name="dark_error">@color/red_FFB4AB</color>
+    <color name="dark_on_error">@color/red_690005</color>
+    <color name="dark_error_container">@color/red_93000A</color>
+    <color name="dark_on_error_container">@color/red_FFDAD6</color>
+    <color name="dark_surface_dim">@color/grey_131316</color>
+    <color name="dark_surface">@color/grey_131316</color>
+    <color name="dark_surface_variant">@color/grey_45464F</color>
+    <color name="dark_surface_bright">@color/grey_39393C</color>
+    <color name="dark_surface_container_lowest">@color/grey_0D0E11</color>
+    <color name="dark_surface_container_low">@color/grey_1B1B1F</color>
+    <color name="dark_surface_container">@color/grey_1F1F23</color>
+    <color name="dark_surface_container_high">@color/grey_292A2D</color>
+    <color name="dark_surface_container_highest">@color/grey_343438</color>
+    <color name="dark_on_surface">@color/grey_C7C6CA</color>
+    <color name="dark_on_surface_variant">@color/white_C5C6D0</color>
+    <color name="dark_outline">@color/grey_8F909A</color>
+    <color name="dark_outline_variant">@color/grey_45464F</color>
+    <color name="dark_inverse_surface">@color/white_E4E2E6</color>
+    <color name="dark_inverse_on_surface">@color/grey_1B1B1F</color>
+    <color name="dark_inverse_primary">@color/blue_0055D4</color>
+    <color name="dark_scrim">@color/black_000000</color>
+    <!--endregion Dark System -->
+
+    <!--region Other -->
+    <color name="dark_gray">@color/grey_333333</color>
+    <color name="light_fingerprint">@color/magenta_C01176</color>
+    <color name="dark_fingerprint">@color/magenta_F08DC7</color>
+    <color name="qr_code_clickable_text">@color/blue_B2C5FF</color>
+    <!--endregion Other -->
+</resources>

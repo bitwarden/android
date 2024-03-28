@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Blues -->
+    <color name="blue_DAE2FF">#DAE2FF</color>
+    <color name="blue_B2C5FF">#B2C5FF</color>
+    <color name="blue_175DDC">#175DDC</color>
+    <color name="blue_0055D4">#0055D4</color>
+    <color name="blue_3B5BA9">#3B5BA9</color>
+    <color name="blue_1F438F">#1F438F</color>
+    <color name="blue_003FA3">#003FA3</color>
+    <color name="blue_002B74">#002B74</color>
+    <color name="blue_002B73">#002B73</color>
+    <color name="blue_001848">#001848</color>
+    <color name="blue_151B2C">#151B2C</color>
+
+    <!-- Greys -->
+    <color name="grey_FBF8FD">#FBF8FD</color>
+    <color name="grey_DDE3EA">#DDE3EA</color>
+    <color name="grey_DDE2F9">#DDE2F9</color>
+    <color name="grey_F2F0F4">#F2F0F4</color>
+    <color name="grey_DBD9DD">#DBD9DD</color>
+    <color name="grey_C7C6CA">#C7C6CA</color>
+    <color name="grey_8F909A">#8F909A</color>
+    <color name="grey_C0C6DD">#C0C6DD</color>
+    <color name="grey_757780">#757780</color>
+    <color name="grey_585E71">#585E71</color>
+    <color name="grey_45464F">#45464F</color>
+    <color name="grey_404659">#404659</color>
+    <color name="grey_333333">#333333</color>
+    <color name="grey_303034">#303034</color>
+    <color name="grey_2A3042">#2A3042</color>
+    <color name="grey_39393C">#39393C</color>
+    <color name="grey_292A2D">#292A2D</color>
+    <color name="grey_343438">#343438</color>
+    <color name="grey_1F1F23">#1F1F23</color>
+    <color name="grey_1B1B1F">#1B1B1F</color>
+    <color name="grey_131316">#131316</color>
+    <color name="grey_0D0E11">#0D0E11</color>
+
+    <!-- Reds and Oranges -->
+    <color name="red_FFDAD6">#FFDAD6</color>
+    <color name="red_FFB4AB">#FFB4AB</color>
+    <color name="red_BA1A1A">#BA1A1A</color>
+    <color name="red_93000A">#93000A</color>
+    <color name="red_690005">#690005</color>
+    <color name="red_410002">#410002</color>
+
+    <!-- Whites and Off-Whites -->
+    <color name="white_FFFFFF">#FFFFFF</color>
+    <color name="white_F5F3F7">#F5F3F7</color>
+    <color name="white_EFEDF1">#EFEDF1</color>
+    <color name="white_E9E7EC">#E9E7EC</color>
+    <color name="white_C5C6D0">#C5C6D0</color>
+    <color name="white_E4E2E6">#E4E2E6</color>
+
+    <!-- Misc Colors -->
+    <color name="black_000000">#000000</color>
+    <color name="magenta_F08DC7">#FFF08DC7</color>
+    <color name="magenta_C01176">#FFC01176</color>
+
+</resources>

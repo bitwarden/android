@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name"> Bitwarden Authenticator</string>
+    <string name="biometrics_direction">Biometric verification</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_item">Add item</string>
+    <string name="an_error_has_occurred">An error has occurred.</string>
+    <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
+    <string name="syncing_complete">SyncingComplete</string>
+    <string name="internet_connection_required_title">Internet connection required</string>
+    <string name="internet_connection_required_message">Please connect to the internet before continuing.</string>
+    <string name="ok">OK</string>
+    <string name="syncing">Syncing</string>
+    <string name="verification_code_totp">Verification Code (TOTP)</string>
+    <string name="copy">Copy</string>
+    <string name="edit_item">Edit</string>
+    <string name="copy_totp">Copy TOTP</string>
+    <string name="close">Close</string>
+    <string name="view_item">View Item</string>
+    <string name="bitwarden_authenticator">Bitwarden Authenticator</string>
+</resources>
