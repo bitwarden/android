@@ -21,6 +21,7 @@ import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
@@ -81,6 +82,35 @@ class VaultSdkSourceTest {
         vaultSdkSource.clearCrypto(userId = userId)
 
         verify { sdkClientManager.destroyClient(userId = userId) }
+    }
+
+    @Test
+    fun `getTrustDevice with trustDevice success should return success with correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val expectedResult = mockk<TrustDeviceResponse>()
+            coEvery { clientAuth.trustDevice() } returns expectedResult
+
+            val result = vaultSdkSource.getTrustDevice(userId = userId)
+
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                clientAuth.trustDevice()
+            }
+        }
+
+    @Test
+    fun `getTrustDevice with trustDevice exception should return a failure`() = runBlocking {
+        val userId = "userId"
+        val error = Throwable("Fail")
+        coEvery { clientAuth.trustDevice() } throws error
+
+        val result = vaultSdkSource.getTrustDevice(userId = userId)
+
+        assertEquals(error.asFailure(), result)
+        coVerify(exactly = 1) {
+            clientAuth.trustDevice()
+        }
     }
 
     @Test

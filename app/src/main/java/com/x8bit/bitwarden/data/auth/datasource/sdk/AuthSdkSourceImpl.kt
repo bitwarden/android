@@ -6,7 +6,6 @@ import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
@@ -34,10 +33,6 @@ class AuthSdkSourceImpl(
         ioScope.launch {
             clientPlatform.loadFlags(featureFlagManager.featureFlags)
         }
-    }
-
-    override suspend fun getTrustDevice(): Result<TrustDeviceResponse> = runCatching {
-        clientAuth.trustDevice()
     }
 
     override suspend fun getNewAuthRequest(
