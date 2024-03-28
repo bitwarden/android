@@ -293,6 +293,13 @@ private fun AccountSummaryItem(
                 modifier = Modifier.semantics { testTag = "AccountEmailLabel" },
             )
 
+            Text(
+                text = accountSummary.environmentLabel,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.semantics { testTag = "AccountEnvironmentLabel" },
+            )
+
             accountSummary.supportingTextResOrNull?.let { supportingTextResId ->
                 Text(
                     text = stringResource(id = supportingTextResId).lowercaseWithCurrentLocal(),

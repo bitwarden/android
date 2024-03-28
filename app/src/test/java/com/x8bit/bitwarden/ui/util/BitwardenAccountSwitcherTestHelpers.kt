@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.util
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.junit4.ComposeContentTestRule
 import androidx.compose.ui.test.longClick
@@ -26,7 +27,17 @@ fun ComposeContentTestRule.assertSwitcherIsDisplayed(
     isAddAccountButtonVisible: Boolean = true,
 ) {
     accountSummaries.forEach { accountSummary ->
-        this.onNodeWithText(accountSummary.email).assertIsDisplayed()
+        this.onNode(
+            hasTextExactly(
+                *listOfNotNull(
+                    accountSummary.email,
+                    accountSummary.environmentLabel,
+                    "locked".takeUnless { accountSummary.isVaultUnlocked },
+                )
+                    .toTypedArray(),
+            ),
+        )
+            .assertIsDisplayed()
     }
 
     if (isAddAccountButtonVisible) {

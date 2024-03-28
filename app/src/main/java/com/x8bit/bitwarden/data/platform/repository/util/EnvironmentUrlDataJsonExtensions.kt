@@ -73,6 +73,8 @@ val EnvironmentUrlDataJson.baseIconUrl: String
 /**
  * Returns the appropriate pre-defined labels for environments matching the known US/EU values.
  * Otherwise returns the host of the custom base URL.
+ *
+ * @see getSelfHostedUrlOrNull
  */
 val EnvironmentUrlDataJson.labelOrBaseUrlHost: String
     get() = when (this) {
@@ -83,11 +85,26 @@ val EnvironmentUrlDataJson.labelOrBaseUrlHost: String
             // Ex:
             // - "https://www.abc.com/path-1/path-1" -> "www.abc.com"
             URI
-                .create(this.base)
+                .create(getSelfHostedUrlOrNull().orEmpty())
                 .host
                 .orEmpty()
         }
     }
+
+/**
+ * Returns the first self-hosted environment URL from
+ * [EnvironmentUrlDataJson.webVault], [EnvironmentUrlDataJson.base],
+ * [EnvironmentUrlDataJson.api], and finally [EnvironmentUrlDataJson.identity]. Returns `null` if
+ * all self-host environment URLs are null.
+ */
+private fun EnvironmentUrlDataJson.getSelfHostedUrlOrNull(): String? =
+    webVault.takeIf { !it.isNullOrBlank() }
+        ?: base
+            .takeIf { it.isNotBlank() }
+        ?: api
+            .takeIf { !it.isNullOrBlank() }
+        ?: identity
+            .takeIf { !it.isNullOrBlank() }
 
 /**
  * Converts a raw [EnvironmentUrlDataJson] to an externally-consumable [Environment].
