@@ -54,7 +54,8 @@ object AuthNetworkModule {
     fun providesDevicesService(
         retrofits: Retrofits,
     ): DevicesService = DevicesServiceImpl(
-        devicesApi = retrofits.unauthenticatedApiRetrofit.create(),
+        authenticatedDevicesApi = retrofits.authenticatedApiRetrofit.create(),
+        unauthenticatedDevicesApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 
     @Provides
