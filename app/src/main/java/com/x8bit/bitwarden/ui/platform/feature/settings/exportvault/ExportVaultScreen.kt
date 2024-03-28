@@ -206,14 +206,15 @@ private fun ExportVaultScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.file_format),
-            options = ExportVaultFormat.entries.map { it.displayLabel }.toImmutableList(),
-            selectedOption = state.exportFormat.displayLabel,
+            options = ExportVaultFormat.entries.map { it.displayLabel() }.toImmutableList(),
+            selectedOption = state.exportFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
                 val selectedOption = ExportVaultFormat
                     .entries
-                    .first { it.displayLabel == selectedOptionLabel }
+                    .first { it.displayLabel(resources) == selectedOptionLabel }
                 onExportFormatOptionSelected(selectedOption)
             },
             isEnabled = !state.policyPreventsExport,
