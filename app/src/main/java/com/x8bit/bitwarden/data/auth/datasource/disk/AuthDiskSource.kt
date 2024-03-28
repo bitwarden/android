@@ -28,6 +28,11 @@ interface AuthDiskSource {
     var rememberedOrgIdentifier: String?
 
     /**
+     * The currently persisted state indicating that the user has trusted this device.
+     */
+    var shouldTrustDevice: Boolean
+
+    /**
      * The currently persisted user state information (or `null` if not set).
      */
     var userState: UserStateJson?
@@ -105,6 +110,16 @@ interface AuthDiskSource {
      * Stores a user auto-unlock key for the given [userId].
      */
     fun storeUserAutoUnlockKey(userId: String, userAutoUnlockKey: String?)
+
+    /**
+     * Gets the device key for the given [userId].
+     */
+    fun getDeviceKey(userId: String): String?
+
+    /**
+     * Stores the device key for the given [userId].
+     */
+    fun storeDeviceKey(userId: String, deviceKey: String?)
 
     /**
      * Gets the biometrics key for the given [userId].

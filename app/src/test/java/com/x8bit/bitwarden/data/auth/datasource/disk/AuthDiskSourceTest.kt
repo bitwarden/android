@@ -121,6 +121,23 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `shouldTrustDevice should pull from and update SharedPreferences`() {
+        val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice"
+
+        // Shared preferences and the disk source start with the same value.
+        assertFalse(authDiskSource.shouldTrustDevice)
+        assertFalse(fakeSharedPreferences.getBoolean(shouldTrustDeviceKey, false))
+
+        // Updating the disk source updates shared preferences
+        authDiskSource.shouldTrustDevice = true
+        assertTrue(fakeSharedPreferences.getBoolean(shouldTrustDeviceKey, false))
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit { putBoolean(shouldTrustDeviceKey, false) }
+        assertFalse(authDiskSource.shouldTrustDevice)
+    }
+
+    @Test
     fun `userState should pull from and update SharedPreferences`() {
         val userStateKey = "bwPreferencesStorage:state"
 
@@ -164,6 +181,10 @@ class AuthDiskSourceTest {
     fun `clearData should clear all necessary data for the given user`() {
         val userId = "userId"
 
+        authDiskSource.storeDeviceKey(
+            userId = userId,
+            deviceKey = "9876-5432-1234",
+        )
         authDiskSource.storeUserBiometricUnlockKey(
             userId = userId,
             biometricsKey = "1234-9876-0192",
@@ -204,6 +225,7 @@ class AuthDiskSourceTest {
 
         authDiskSource.clearData(userId = userId)
 
+        assertNull(authDiskSource.getDeviceKey(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
@@ -482,6 +504,42 @@ class AuthDiskSourceTest {
             mockUserAutoUnlockKey,
             actual,
         )
+    }
+
+    @Test
+    fun `getDeviceKey should pull from SharedPreferences`() {
+        val deviceKeyBaseKey = "bwSecureStorage:deviceKey"
+        val mockUserId = "mockUserId"
+        val deviceKeyKey = "${deviceKeyBaseKey}_$mockUserId"
+        val devicesKey = "1234"
+        fakeEncryptedSharedPreferences.edit { putString(deviceKeyKey, devicesKey) }
+        val actual = authDiskSource.getDeviceKey(userId = mockUserId)
+        assertEquals(devicesKey, actual)
+    }
+
+    @Test
+    fun `storeDeviceKey for non-null values should update SharedPreferences`() {
+        val deviceKeyBaseKey = "bwSecureStorage:deviceKey"
+        val mockUserId = "mockUserId"
+        val deviceKeyKey = "${deviceKeyBaseKey}_$mockUserId"
+        val devicesKey = "1234"
+        authDiskSource.storeDeviceKey(userId = mockUserId, deviceKey = devicesKey)
+        val actual = fakeEncryptedSharedPreferences.getString(
+            key = deviceKeyKey,
+            defaultValue = null,
+        )
+        assertEquals(devicesKey, actual)
+    }
+
+    @Test
+    fun `storeDeviceKey for null values should clear SharedPreferences`() {
+        val deviceKeyBaseKey = "bwSecureStorage:deviceKey"
+        val mockUserId = "mockUserId"
+        val deviceKeyKey = "${deviceKeyBaseKey}_$mockUserId"
+        val deviceKey = "1234"
+        fakeEncryptedSharedPreferences.edit { putString(deviceKeyKey, deviceKey) }
+        authDiskSource.storeDeviceKey(userId = mockUserId, deviceKey = null)
+        assertFalse(fakeEncryptedSharedPreferences.contains(deviceKeyKey))
     }
 
     @Test
