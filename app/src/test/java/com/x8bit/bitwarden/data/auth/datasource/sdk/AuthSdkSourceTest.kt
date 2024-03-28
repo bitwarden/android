@@ -6,12 +6,10 @@ import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
-import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 import io.mockk.coEvery
@@ -47,33 +45,6 @@ class AuthSdkSourceTest {
         coVerify(exactly = 1) {
             featureFlagManager.featureFlags
             clientPlatform.loadFlags(any())
-        }
-    }
-
-    @Test
-    fun `getTrustDevice with trustDevice success should return success with correct data`() =
-        runBlocking {
-            val expectedResult = mockk<TrustDeviceResponse>()
-            coEvery { clientAuth.trustDevice() } returns expectedResult
-
-            val result = authSkdSource.getTrustDevice()
-
-            assertEquals(expectedResult.asSuccess(), result)
-            coVerify(exactly = 1) {
-                clientAuth.trustDevice()
-            }
-        }
-
-    @Test
-    fun `getTrustDevice with trustDevice exception should return a failure`() = runBlocking {
-        val error = Throwable("Fail")
-        coEvery { clientAuth.trustDevice() } throws error
-
-        val result = authSkdSource.getTrustDevice()
-
-        assertEquals(error.asFailure(), result)
-        coVerify(exactly = 1) {
-            clientAuth.trustDevice()
         }
     }
 

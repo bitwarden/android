@@ -21,6 +21,7 @@ import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
@@ -37,6 +38,14 @@ class VaultSdkSourceImpl(
 ) : VaultSdkSource {
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
+    }
+
+    override suspend fun getTrustDevice(
+        userId: String,
+    ): Result<TrustDeviceResponse> = runCatching {
+        getClient(userId = userId)
+            .auth()
+            .trustDevice()
     }
 
     override suspend fun derivePinKey(

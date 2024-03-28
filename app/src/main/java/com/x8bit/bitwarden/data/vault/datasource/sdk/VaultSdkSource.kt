@@ -22,6 +22,7 @@ import com.bitwarden.core.Send
 import com.bitwarden.core.SendView
 import com.bitwarden.core.TotpResponse
 import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.crypto.TrustDeviceResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 
 /**
@@ -35,6 +36,14 @@ interface VaultSdkSource {
      * the associated vault.
      */
     fun clearCrypto(userId: String)
+
+    /**
+     * Gets the data to authenticate with trusted device encryption.
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun getTrustDevice(userId: String): Result<TrustDeviceResponse>
 
     /**
      * Derives a "pin key" from the given [pin] for the given [userId]. This can be used to later

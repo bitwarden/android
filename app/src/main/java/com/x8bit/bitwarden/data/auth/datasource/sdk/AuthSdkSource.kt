@@ -5,18 +5,12 @@ import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.crypto.TrustDeviceResponse
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 
 /**
  * Source of authentication information and functionality from the Bitwarden SDK.
  */
 interface AuthSdkSource {
-    /**
-     * Gets the data to authenticate with trusted device encryption.
-     */
-    suspend fun getTrustDevice(): Result<TrustDeviceResponse>
-
     /**
      * Gets the data needed to create a new auth request.
      */
