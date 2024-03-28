@@ -119,7 +119,7 @@ namespace Bit.Droid.Autofill
             {
                 await MainThread.InvokeOnMainThreadAsync(async() =>
                 {
-                    await _deviceActionService.Value.DisplayAlertAsync("Error reading passkey", $"There was a problem reading your passkey for {RpId}. Try again later.", AppResources.Ok); //TODO: i18n
+                    await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
                     Finish();
                 });
             }
@@ -128,7 +128,7 @@ namespace Bit.Droid.Autofill
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
                 await MainThread.InvokeOnMainThreadAsync(async() =>
                 {
-                    await _deviceActionService.Value.DisplayAlertAsync("Error reading passkey", $"There was a problem reading your passkey for {RpId}. Try again later.", AppResources.Ok); //TODO: i18n
+                    await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
                     Finish();
                 });
             }
