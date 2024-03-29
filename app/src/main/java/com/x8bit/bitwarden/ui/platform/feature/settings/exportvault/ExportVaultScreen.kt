@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
@@ -164,8 +165,14 @@ fun ExportVaultScreen(
     ) { innerPadding ->
         ExportVaultScreenContent(
             state = state,
+            onConfirmFilePasswordInputChanged = remember(viewModel) {
+                { viewModel.trySendAction(ExportVaultAction.ConfirmFilePasswordInputChange(it)) }
+            },
             onExportFormatOptionSelected = remember(viewModel) {
                 { viewModel.trySendAction(ExportVaultAction.ExportFormatOptionSelect(it)) }
+            },
+            onFilePasswordInputChanged = remember(viewModel) {
+                { viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(it)) }
             },
             onPasswordInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(it)) }
@@ -182,7 +189,9 @@ fun ExportVaultScreen(
 @Suppress("LongMethod")
 private fun ExportVaultScreenContent(
     state: ExportVaultState,
+    onConfirmFilePasswordInputChanged: (String) -> Unit,
     onExportFormatOptionSelected: (ExportVaultFormat) -> Unit,
+    onFilePasswordInputChanged: (String) -> Unit,
     onPasswordInputChanged: (String) -> Unit,
     onExportVaultClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -225,6 +234,37 @@ private fun ExportVaultScreenContent(
         )
 
         Spacer(modifier = Modifier.height(8.dp))
+
+        if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.file_password),
+                value = state.filePasswordInput,
+                onValueChange = onFilePasswordInputChanged,
+                hint = stringResource(id = R.string.password_used_to_export),
+                modifier = Modifier
+                    .semantics { testTag = "FilePasswordEntry" }
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            PasswordStrengthIndicator(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                state = state.passwordStrengthState,
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.confirm_file_password),
+                value = state.confirmFilePasswordInput,
+                onValueChange = onConfirmFilePasswordInputChanged,
+                modifier = Modifier
+                    .semantics { testTag = "ConfirmFilePasswordEntry" }
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+        }
 
         BitwardenPasswordField(
             label = stringResource(id = R.string.master_password),

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
@@ -14,6 +15,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
@@ -216,6 +218,36 @@ class ExportVaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `confirm file password input change should send ConfirmFilePasswordInputChange action`() {
+        composeTestRule.onNodeWithText("Confirm file password").assertIsNotDisplayed()
+        mutableStateFlow.update {
+            it.copy(
+                exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+            )
+        }
+        val input = "Test123"
+        composeTestRule.onNodeWithText("Confirm file password").performTextInput(input)
+        verify {
+            viewModel.trySendAction(ExportVaultAction.ConfirmFilePasswordInputChange("Test123"))
+        }
+    }
+
+    @Test
+    fun `file password input change should send FilePasswordInputChange action`() {
+        composeTestRule.onNodeWithText("File password").assertIsNotDisplayed()
+        mutableStateFlow.update {
+            it.copy(
+                exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+            )
+        }
+        val input = "Test123"
+        composeTestRule.onNodeWithText("File password").performTextInput(input)
+        verify {
+            viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange("Test123"))
+        }
+    }
+
+    @Test
     fun `password input change should send PasswordInputChange action`() {
         val input = "Test123"
         composeTestRule.onNodeWithText("Master password").performTextInput(input)
@@ -226,9 +258,12 @@ class ExportVaultScreenTest : BaseComposeTest() {
 }
 
 private val DEFAULT_STATE = ExportVaultState(
+    confirmFilePasswordInput = "",
     dialogState = null,
     exportFormat = ExportVaultFormat.JSON,
+    filePasswordInput = "",
     passwordInput = "",
     exportData = "",
+    passwordStrengthState = PasswordStrengthState.NONE,
     policyPreventsExport = false,
 )
