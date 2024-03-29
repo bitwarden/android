@@ -143,7 +143,7 @@ The following is a list of all third-party dependencies included as part of the 
     - License: Apache 2.0
 
 - **kotlinx.serialization converter**
-    - https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter
+    - https://github.com/square/retrofit/tree/trunk/retrofit-converters/kotlinx-serialization
     - Purpose: Converter for Retrofit 2 and kotlinx.serialization.
     - License: Apache 2.0
 
@@ -159,7 +159,7 @@ The following is a list of all third-party dependencies included as part of the 
 
 - **Retrofit 2**
     - https://github.com/square/retrofit
-    - Purpose: A networking layer interface used by the sample app.
+    - Purpose: A networking layer interface.
     - License: Apache 2.0
 
 - **zxcvbn4j**
