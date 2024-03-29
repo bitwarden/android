@@ -35,8 +35,8 @@ jvmTarget = "17"
 # kotlin and kotlinCompileExtensions **must** use compatible versions. Do not update either without
 # first checking the Compose to Kotlin Compatibility Map.
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-kotlin = "1.9.22"
-kotlinCompilerExtensionVersion = "1.5.9"
+kotlin = "1.9.23"
+kotlinCompilerExtensionVersion = "1.5.11"
 kotlinxCollectionsImmutable = "0.3.6"
 kotlinxCoroutines = "1.7.3"
 kotlinxSerialization = "1.6.2"
