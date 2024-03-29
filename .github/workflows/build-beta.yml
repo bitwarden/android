@@ -146,7 +146,6 @@ jobs:
       - name: Update Entitlements
         run: |
           echo "##### Updating Entitlements"
-
           perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>beta<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
 
       - name: Get certificates
@@ -201,10 +200,9 @@ jobs:
           cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
 
       - name: Restore packages
-        run:  dotnet restore
-
-      - name: Restore tools
-        run: dotnet tool restore
+        run: |
+          dotnet restore
+          dotnet tool restore
 
       - name: Setup iOS build CAKE (Testing)
         run: dotnet cake build.cake --target iOS --variant beta
@@ -212,7 +210,6 @@ jobs:
       - name: Bulid WatchApp
         run: |
           echo "##### Build WatchApp with Release Configuration"
-
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "##### Done"
@@ -221,7 +218,6 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "##### Archive for Release ios-arm64"
-
           dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "##### Done"
@@ -230,7 +226,6 @@ jobs:
         shell: pwsh
         run: |
           Write-Output "##### Archive Debug for iossimulator-x64"
-
           dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
 
           Write-Output "##### Done"
@@ -297,7 +292,6 @@ jobs:
       - name: Upload Watch dSYMs to Firebase Crashlytics
         run: |
           echo "##### Uploading Watch dSYMs to Firebase"
-
           find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
 
       - name: Validate app in App Store
