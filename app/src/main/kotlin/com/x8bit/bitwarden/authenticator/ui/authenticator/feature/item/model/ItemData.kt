@@ -6,11 +6,14 @@ import kotlinx.parcelize.Parcelize
 /**
  * Represents the item data displayed to users.
  *
- * @property accountName Name of the account associated to the item.
+ * @property name Name of the account associated to the item.
+ * @property alertThresholdSeconds Threshold, in seconds, at which an Item is considered near
+ * expiration.
  * @property totpCodeItemData TOTP data for the account.
  */
 @Parcelize
 data class ItemData(
-    val accountName: String,
+    val name: String,
+    val alertThresholdSeconds: Int,
     val totpCodeItemData: TotpCodeItemData?,
 ) : Parcelable

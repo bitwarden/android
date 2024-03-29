@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
+import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.authenticator.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.model.ItemData
@@ -28,6 +29,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class ItemViewModel @Inject constructor(
     authenticatorRepository: AuthenticatorRepository,
+    settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<ItemState, ItemEvent, ItemAction>(
     initialState = savedStateHandle[KEY_STATE] ?: ItemState(
@@ -40,21 +42,28 @@ class ItemViewModel @Inject constructor(
     init {
         combine(
             authenticatorRepository.getItemStateFlow(state.itemId),
-            authenticatorRepository.getAuthCodeFlow(state.itemId)
-        ) { itemState, authCodeState ->
-            val totpData = authCodeState.data?.let {
-                TotpCodeItemData(
-                    periodSeconds = it.periodSeconds,
-                    timeLeftSeconds = it.timeLeftSeconds,
-                    totpCode = it.totpCode,
-                    verificationCode = it.code
-                )
-            }
+            authenticatorRepository.getAuthCodeFlow(state.itemId),
+            settingsRepository.authenticatorAlertThresholdSecondsFlow,
+        ) { itemState, authCodeState, alertThresholdSeconds ->
+
             ItemAction.Internal.ItemDataReceive(
                 item = itemState.data,
-                itemDataState = combineDataStates(itemState, authCodeState) { item, _ ->
+                itemDataState = combineDataStates(
+                    itemState,
+                    authCodeState,
+                ) { item, authCode ->
+                    val totpData = authCode?.let {
+                        TotpCodeItemData(
+                            periodSeconds = it.periodSeconds,
+                            timeLeftSeconds = it.timeLeftSeconds,
+                            totpCode = it.totpCode,
+                            verificationCode = it.code
+                        )
+                    }
+
                     ItemData(
-                        accountName = itemState.data?.name.orEmpty(),
+                        name = item?.name.orEmpty(),
+                        alertThresholdSeconds = alertThresholdSeconds,
                         totpCodeItemData = totpData
                     )
                 }
@@ -122,7 +131,11 @@ class ItemViewModel @Inject constructor(
             it.copy(
                 itemId = action.item?.id.orEmpty(),
                 viewState = ItemState.ViewState.Content(
-                    totpCodeItemData = totpItemData
+                    itemData = ItemData(
+                        name = action.item?.name.orEmpty(),
+                        alertThresholdSeconds = action.itemDataState.data?.alertThresholdSeconds ?: 0,
+                        totpCodeItemData = totpItemData,
+                    )
                 )
             )
         }
@@ -167,7 +180,7 @@ data class ItemState(
          */
         @Parcelize
         data class Content(
-            val totpCodeItemData: TotpCodeItemData,
+            val itemData: ItemData,
         ) : ViewState()
     }
 

@@ -19,6 +19,24 @@ interface SettingsDiskSource {
     val appThemeFlow: Flow<AppTheme>
 
     /**
+     * Stores the threshold at which users are alerted that an items validity period is nearing
+     * expiration.
+     */
+    fun storeAlertThresholdSeconds(thresholdSeconds: Int)
+
+    /**
+     * Gets the threshold at which users are alerted that an items validity period is nearing
+     * expiration.
+     */
+    fun getAlertThresholdSeconds(): Int
+
+    /**
+     * Emits updates that track the threshold at which users are alerted that an items validity
+     * period is nearing expiration.
+     */
+    fun getAlertThresholdSecondsFlow(): Flow<Int>
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)

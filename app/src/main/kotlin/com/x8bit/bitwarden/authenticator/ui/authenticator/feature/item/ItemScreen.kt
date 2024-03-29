@@ -31,6 +31,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.authenticator.R
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.authenticator.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.authenticator.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
@@ -124,10 +125,21 @@ fun ItemContent(
     LazyColumn(modifier = modifier) {
 
         item {
+            BitwardenTextField(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.name),
+                value = viewState.itemData.name,
+                onValueChange = {},
+                readOnly = true,
+                singleLine = true,
+            )
+        }
+
+        item {
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextFieldWithActions(
                 label = stringResource(id = R.string.verification_code_totp),
-                value = viewState.totpCodeItemData.verificationCode
+                value = viewState.itemData.totpCodeItemData?.verificationCode.orEmpty()
                     .chunked(AUTH_CODE_SPACING_INTERVAL)
                     .joinToString(" "),
                 onValueChange = { },
@@ -135,8 +147,9 @@ fun ItemContent(
                 singleLine = true,
                 actions = {
                     BitwardenCircularCountdownIndicator(
-                        timeLeftSeconds = viewState.totpCodeItemData.timeLeftSeconds,
-                        periodSeconds = viewState.totpCodeItemData.periodSeconds,
+                        timeLeftSeconds = viewState.itemData.totpCodeItemData?.timeLeftSeconds ?: 0,
+                        periodSeconds = viewState.itemData.totpCodeItemData?.periodSeconds ?: 0,
+                        alertThresholdSeconds = viewState.itemData.alertThresholdSeconds
                     )
                     BitwardenIconButtonWithResource(
                         iconRes = IconResource(

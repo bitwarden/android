@@ -5,7 +5,7 @@
     <string name="add_item">Add item</string>
     <string name="an_error_has_occurred">An error has occurred.</string>
     <string name="generic_error_message">We were unable to process your request. Please try again or contact us.</string>
-    <string name="syncing_complete">SyncingComplete</string>
+    <string name="syncing_complete">Syncing Complete</string>
     <string name="internet_connection_required_title">Internet connection required</string>
     <string name="internet_connection_required_message">Please connect to the internet before continuing.</string>
     <string name="ok">OK</string>
@@ -17,4 +17,5 @@
     <string name="close">Close</string>
     <string name="view_item">View Item</string>
     <string name="bitwarden_authenticator">Bitwarden Authenticator</string>
+    <string name="name">Name</string>
 </resources>

@@ -17,4 +17,14 @@ interface SettingsRepository {
      * Tracks changes to the [AppTheme].
      */
     val appThemeStateFlow: StateFlow<AppTheme>
+
+    /**
+     * The currently stored expiration alert threshold.
+     */
+    var authenticatorAlertThresholdSeconds : Int
+
+    /**
+     * Tracks changes to the expiration alert threshold.
+     */
+    val authenticatorAlertThresholdSecondsFlow: StateFlow<Int>
 }

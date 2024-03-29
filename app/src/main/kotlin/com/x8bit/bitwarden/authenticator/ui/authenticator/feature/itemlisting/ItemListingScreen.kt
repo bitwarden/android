@@ -111,19 +111,20 @@ fun ItemListingScreen(
                     LazyColumn {
                         items(currentState.itemList) {
                             VaultVerificationCodeItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp),
                                 startIcon = it.startIcon,
                                 label = it.label,
                                 supportingLabel = it.supportingLabel,
                                 timeLeftSeconds = it.timeLeftSeconds,
                                 periodSeconds = it.periodSeconds,
+                                alertThresholdSeconds = it.alertThresholdSeconds,
                                 authCode = it.authCode,
                                 onCopyClick = { /*TODO*/ },
                                 onItemClick = {
                                     onNavigateToItemScreen(it.id)
                                 },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp),
                             )
                         }
                     }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.onSubscription
 private const val APP_THEME_KEY = "$BASE_KEY:theme"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
+private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -24,6 +25,9 @@ class SettingsDiskSourceImpl(
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+
+    private val mutableAlertThresholdSecondsFlow =
+        bufferedMutableSharedFlow<Int>()
 
     override var appTheme: AppTheme
         get() = getString(key = APP_THEME_KEY)
@@ -42,6 +46,21 @@ class SettingsDiskSourceImpl(
     override val appThemeFlow: Flow<AppTheme>
         get() = mutableAppThemeFlow
             .onSubscription { emit(appTheme) }
+
+    override fun storeAlertThresholdSeconds(thresholdSeconds: Int) {
+        putInt(
+            ALERT_THRESHOLD_SECONDS_KEY,
+            thresholdSeconds
+        )
+        mutableAlertThresholdSecondsFlow.tryEmit(thresholdSeconds)
+    }
+
+    override fun getAlertThresholdSeconds(): Int {
+        return getInt(ALERT_THRESHOLD_SECONDS_KEY, default = 7) ?: 7
+    }
+
+    override fun getAlertThresholdSecondsFlow(): Flow<Int> = mutableAlertThresholdSecondsFlow
+        .onSubscription { emit(getAlertThresholdSeconds()) }
 
     override fun clearData(userId: String) {
         storeScreenCaptureAllowed(userId = userId, isScreenCaptureAllowed = null)
