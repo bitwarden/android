@@ -201,8 +201,7 @@ jobs:
           cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
 
       - name: Restore packages
-        run: |
-          dotnet restore
+        run:  dotnet restore
 
       - name: Restore tools
         run: dotnet tool restore
@@ -257,8 +256,7 @@ jobs:
 
       - name: Show Bitwarden Export
         shell: bash
-        run: |
-          ls -a -R ./bitwarden-export
+        run:  ls -a -R ./bitwarden-export
 
       - name: Copy all dSYMs files to upload
         env:
