@@ -141,14 +141,15 @@ dependencies {
     implementation(libs.bumptech.glide)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
-    implementation(libs.jakewharton.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
     implementation(libs.nulab.zxcvbn4j)
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)
+    implementation(platform(libs.square.retrofit.bom))
     implementation(libs.square.retrofit)
+    implementation(libs.square.retrofit.kotlinx.serialization)
     implementation(libs.zxing.zxing.core)
 
     // For now we are restricted to running Compose tests for debug builds only
