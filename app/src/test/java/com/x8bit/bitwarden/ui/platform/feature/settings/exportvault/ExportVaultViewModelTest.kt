@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.ExportVaultFormat
@@ -194,18 +195,42 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `PasswordInputChanged should update the password input in the state`() = runTest {
+    fun `ConfirmFilePasswordInputChanged should update the confirm password input in the state`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged("Test123"))
+        viewModel.trySendAction(ExportVaultAction.ConfirmFilePasswordInputChange("Test123"))
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    passwordInput = "Test123",
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                confirmFilePasswordInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `FilePasswordInputChanged should update the file password input in the state`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange("Test123"))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                filePasswordInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `PasswordInputChanged should update the password input in the state`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged("Test123"))
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                passwordInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -327,23 +352,25 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         initialState: ExportVaultState? = null,
-    ): ExportVaultViewModel =
-        ExportVaultViewModel(
-            authRepository = authRepository,
-            policyManager = policyManager,
-            savedStateHandle = SavedStateHandle(
-                initialState = mapOf("state" to initialState),
-            ),
-            fileManager = fileManager,
-            vaultRepository = vaultRepository,
-            clock = clock,
-        )
+    ): ExportVaultViewModel = ExportVaultViewModel(
+        authRepository = authRepository,
+        policyManager = policyManager,
+        savedStateHandle = SavedStateHandle(
+            initialState = mapOf("state" to initialState),
+        ),
+        fileManager = fileManager,
+        vaultRepository = vaultRepository,
+        clock = clock,
+    )
 }
 
 private val DEFAULT_STATE = ExportVaultState(
+    confirmFilePasswordInput = "",
     dialogState = null,
     exportFormat = ExportVaultFormat.JSON,
+    filePasswordInput = "",
     passwordInput = "",
     exportData = null,
+    passwordStrengthState = PasswordStrengthState.NONE,
     policyPreventsExport = false,
 )

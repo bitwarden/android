@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.PasswordStrengthState
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -46,10 +47,13 @@ class ExportVaultViewModel @Inject constructor(
 ) : BaseViewModel<ExportVaultState, ExportVaultEvent, ExportVaultAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: ExportVaultState(
+            confirmFilePasswordInput = "",
             dialogState = null,
             exportData = null,
             exportFormat = ExportVaultFormat.JSON,
+            filePasswordInput = "",
             passwordInput = "",
+            passwordStrengthState = PasswordStrengthState.NONE,
             policyPreventsExport = policyManager
                 .getActivePolicies(type = PolicyTypeJson.DISABLE_PERSONAL_VAULT_EXPORT)
                 .any(),
@@ -66,7 +70,12 @@ class ExportVaultViewModel @Inject constructor(
         when (action) {
             ExportVaultAction.CloseButtonClick -> handleCloseButtonClicked()
             ExportVaultAction.ConfirmExportVaultClicked -> handleConfirmExportVaultClicked()
+            is ExportVaultAction.ConfirmFilePasswordInputChange -> {
+                handleConfirmFilePasswordInputChanged(action)
+            }
+
             ExportVaultAction.DialogDismiss -> handleDialogDismiss()
+            is ExportVaultAction.FilePasswordInputChange -> handleFilePasswordInputChanged(action)
             is ExportVaultAction.ExportFormatOptionSelect -> handleExportFormatOptionSelect(action)
             is ExportVaultAction.PasswordInputChanged -> handlePasswordInputChanged(action)
             is ExportVaultAction.ExportLocationReceive -> handleExportLocationReceive(action)
@@ -119,6 +128,17 @@ class ExportVaultViewModel @Inject constructor(
     }
 
     /**
+     * Update the state with the new confirm file password input.
+     */
+    private fun handleConfirmFilePasswordInputChanged(
+        action: ExportVaultAction.ConfirmFilePasswordInputChange,
+    ) {
+        mutableStateFlow.update {
+            it.copy(confirmFilePasswordInput = action.input)
+        }
+    }
+
+    /**
      * Dismiss the dialog.
      */
     private fun handleDialogDismiss() {
@@ -152,6 +172,15 @@ class ExportVaultViewModel @Inject constructor(
                 )
 
             sendAction(ExportVaultAction.Internal.SaveExportDataToUriResultReceive(result))
+        }
+    }
+
+    /**
+     * Update the state with the new file password input.
+     */
+    private fun handleFilePasswordInputChanged(action: ExportVaultAction.FilePasswordInputChange) {
+        mutableStateFlow.update {
+            it.copy(filePasswordInput = action.input)
         }
     }
 
@@ -267,9 +296,12 @@ class ExportVaultViewModel @Inject constructor(
 data class ExportVaultState(
     @IgnoredOnParcel
     val exportData: String? = null,
+    val confirmFilePasswordInput: String,
     val dialogState: DialogState?,
     val exportFormat: ExportVaultFormat,
+    val filePasswordInput: String,
     val passwordInput: String,
+    val passwordStrengthState: PasswordStrengthState,
     val policyPreventsExport: Boolean,
 ) : Parcelable {
     /**
@@ -331,6 +363,11 @@ sealed class ExportVaultAction {
     data object ConfirmExportVaultClicked : ExportVaultAction()
 
     /**
+     * Indicates that the confirm file password input has changed.
+     */
+    data class ConfirmFilePasswordInputChange(val input: String) : ExportVaultAction()
+
+    /**
      * Indicates that the dialog has been dismissed.
      */
     data object DialogDismiss : ExportVaultAction()
@@ -346,6 +383,11 @@ sealed class ExportVaultAction {
     data class ExportLocationReceive(
         val fileUri: Uri,
     ) : ExportVaultAction()
+
+    /**
+     * Indicates that the file password input has changed.
+     */
+    data class FilePasswordInputChange(val input: String) : ExportVaultAction()
 
     /**
      * Indicates that the password input has changed.
