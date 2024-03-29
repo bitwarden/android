@@ -2,6 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["github>bitwarden/renovate-config"],
   "enabledManagers": ["cargo", "github-actions", "npm", "nuget"],
+  "commitMessagePrefix": "[deps]:",
+  "commitMessageTopic": "{{depName}}",
   "packageRules": [
     {
       "groupName": "cargo minor",
