@@ -218,6 +218,8 @@ namespace Bit.iOS.Autofill
                         await _platformUtilsService.Value.ShowDialogAsync(
                             string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier),
                             AppResources.ErrorReadingPasskey);
+
+                        Cancel();
                     }
                 }
                 catch (Exception ex)
