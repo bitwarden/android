@@ -96,6 +96,17 @@ namespace Bit.iOS.Autofill
                 TableView.Source = tableSource;
                 tableSource.RegisterTableViewCells(TableView);
 
+                //In some scenarios iOS can send an RPId for which we have no passkeys. In that case we want to be able to fallback to Passwords
+                if (Context.IsPreparingListForPasskey && UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+                {
+                    var credentials = await _fido2MediatorService.Value.SilentCredentialDiscoveryAsync(Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier);
+                    if (credentials == null || credentials.Count() == 0)
+                    {
+                        Context.PasskeyCredentialRequestParameters = null;
+                        TableView.SectionHeaderHeight = 0;
+                    }
+                }
+
                 if (Context.IsCreatingOrPreparingListForPasskey)
                 {
                     TableView.SectionHeaderHeight = 55;
