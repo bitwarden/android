@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -48,6 +49,8 @@ fun BitwardenPasswordFieldWithActions(
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     singleLine: Boolean = false,
+    showPasswordTestTag: String? = null,
+    passwordFieldTestTag: String? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Row(
@@ -63,8 +66,10 @@ fun BitwardenPasswordFieldWithActions(
             readOnly = readOnly,
             singleLine = singleLine,
             modifier = Modifier
+                .semantics { passwordFieldTestTag?.let { testTag = it } }
                 .weight(1f)
                 .padding(end = 8.dp),
+            showPasswordTestTag = showPasswordTestTag,
         )
         actions()
     }
@@ -98,6 +103,8 @@ fun BitwardenPasswordFieldWithActions(
     readOnly: Boolean = false,
     singleLine: Boolean = false,
     initialShowPassword: Boolean = false,
+    showPasswordTestTag: String? = null,
+    passwordFieldTestTag: String? = null,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     var shouldShowPassword by remember { mutableStateOf(initialShowPassword) }
@@ -110,6 +117,8 @@ fun BitwardenPasswordFieldWithActions(
         modifier = modifier,
         readOnly = readOnly,
         singleLine = singleLine,
+        showPasswordTestTag = showPasswordTestTag,
+        passwordFieldTestTag = passwordFieldTestTag,
         actions = actions,
     )
 }
