@@ -43,6 +43,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
+                .semantics { testTag = "ItemNameEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
