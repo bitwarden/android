@@ -130,6 +130,7 @@ fun createMockUriView(number: Int): LoginUriView =
     LoginUriView(
         uri = "www.mockuri$number.com",
         match = UriMatchType.HOST,
+        uriChecksum = null,
     )
 
 /**

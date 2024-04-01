@@ -432,6 +432,7 @@ fun SyncResponseJson.Cipher.Login.Uri.toSdkLoginUri(): LoginUri =
     LoginUri(
         uri = uri,
         match = uriMatchType?.toSdkMatchType(),
+        uriChecksum = null,
     )
 
 /**

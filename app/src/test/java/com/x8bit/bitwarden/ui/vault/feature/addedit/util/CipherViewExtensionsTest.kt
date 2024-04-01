@@ -543,6 +543,7 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
             LoginUriView(
                 uri = "www.example.com",
                 match = null,
+                uriChecksum = null,
             ),
         ),
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",

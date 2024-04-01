@@ -208,5 +208,5 @@ private fun VaultAddEditState.Custom.toFieldView(): FieldView =
 private fun List<UriItem>?.toLoginUriView(): List<LoginUriView>? =
     this
         ?.filter { it.uri?.isNotBlank() == true }
-        ?.map { LoginUriView(uri = it.uri.orEmpty(), match = it.match) }
+        ?.map { LoginUriView(uri = it.uri.orEmpty(), match = it.match, uriChecksum = null) }
         .takeUnless { it.isNullOrEmpty() }

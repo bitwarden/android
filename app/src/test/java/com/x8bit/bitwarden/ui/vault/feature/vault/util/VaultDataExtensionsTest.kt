@@ -337,6 +337,7 @@ class VaultDataExtensionsTest {
             LoginUriView(
                 uri = "",
                 match = UriMatchType.HOST,
+                uriChecksum = null,
             ),
         )
             .toLoginIconData(
@@ -356,6 +357,7 @@ class VaultDataExtensionsTest {
             LoginUriView(
                 uri = "androidapp://test.com",
                 match = UriMatchType.HOST,
+                uriChecksum = null,
             ),
         )
             .toLoginIconData(
@@ -375,6 +377,7 @@ class VaultDataExtensionsTest {
             LoginUriView(
                 uri = "iosapp://test.com",
                 match = UriMatchType.HOST,
+                uriChecksum = null,
             ),
         )
             .toLoginIconData(

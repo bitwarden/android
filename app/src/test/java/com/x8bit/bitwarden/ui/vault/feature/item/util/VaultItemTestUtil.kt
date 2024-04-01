@@ -39,6 +39,7 @@ fun createLoginView(isEmpty: Boolean): LoginView =
             LoginUriView(
                 uri = "www.example.com",
                 match = null,
+                uriChecksum = null,
             ),
         )
             .takeUnless { isEmpty },
