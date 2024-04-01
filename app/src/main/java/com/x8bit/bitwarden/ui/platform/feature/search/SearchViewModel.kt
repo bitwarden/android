@@ -180,6 +180,7 @@ class SearchViewModel @Inject constructor(
                             uris = uris + LoginUriView(
                                 uri = state.autofillSelectionData?.uri,
                                 match = null,
+                                uriChecksum = null,
                             ),
                         ),
                 ),

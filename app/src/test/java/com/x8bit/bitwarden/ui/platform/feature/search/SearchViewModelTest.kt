@@ -215,6 +215,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                     LoginUriView(
                         uri = AUTOFILL_URI,
                         match = null,
+                        uriChecksum = null,
                     ),
             ),
         )
@@ -266,6 +267,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         LoginUriView(
                             uri = AUTOFILL_URI,
                             match = null,
+                            uriChecksum = null,
                         ),
                 ),
             )
@@ -425,6 +427,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         LoginUriView(
                             uri = AUTOFILL_URI,
                             match = null,
+                            uriChecksum = null,
                         ),
                 ),
             )
