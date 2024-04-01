@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -236,10 +237,13 @@ private fun ExportVaultScreenContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+            var showPassword by rememberSaveable { mutableStateOf(false) }
             BitwardenPasswordField(
                 label = stringResource(id = R.string.file_password),
                 value = state.filePasswordInput,
                 onValueChange = onFilePasswordInputChanged,
+                showPassword = showPassword,
+                showPasswordChange = { showPassword = it },
                 hint = stringResource(id = R.string.password_used_to_export),
                 modifier = Modifier
                     .semantics { testTag = "FilePasswordEntry" }
@@ -258,6 +262,8 @@ private fun ExportVaultScreenContent(
                 label = stringResource(id = R.string.confirm_file_password),
                 value = state.confirmFilePasswordInput,
                 onValueChange = onConfirmFilePasswordInputChanged,
+                showPassword = showPassword,
+                showPasswordChange = { showPassword = it },
                 modifier = Modifier
                     .semantics { testTag = "ConfirmFilePasswordEntry" }
                     .padding(horizontal = 16.dp)
