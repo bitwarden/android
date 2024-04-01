@@ -2,15 +2,19 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
+import com.x8bit.bitwarden.data.auth.manager.util.isSso
+import com.x8bit.bitwarden.data.auth.manager.util.toAuthRequestTypeJson
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -57,11 +61,17 @@ class AuthRequestManagerImpl(
     @Suppress("LongMethod")
     override fun createAuthRequestWithUpdates(
         email: String,
+        authRequestType: AuthRequestType,
     ): Flow<CreateAuthRequestResult> = flow {
-        val initialResult = createNewAuthRequest(email).getOrNull() ?: run {
-            emit(CreateAuthRequestResult.Error)
-            return@flow
-        }
+        val initialResult = createNewAuthRequest(
+            email = email,
+            authRequestType = authRequestType.toAuthRequestTypeJson(),
+        )
+            .getOrNull()
+            ?: run {
+                emit(CreateAuthRequestResult.Error)
+                return@flow
+            }
         val authRequestResponse = initialResult.authRequestResponse
         var authRequest = initialResult.authRequest
         emit(CreateAuthRequestResult.Update(authRequest))
@@ -73,6 +83,7 @@ class AuthRequestManagerImpl(
                 .getAuthRequestUpdate(
                     requestId = authRequest.id,
                     accessCode = authRequestResponse.accessCode,
+                    isSso = authRequestType.isSso,
                 )
                 .map { request ->
                     AuthRequest(
@@ -310,6 +321,7 @@ class AuthRequestManagerImpl(
      */
     private suspend fun createNewAuthRequest(
         email: String,
+        authRequestType: AuthRequestTypeJson,
     ): Result<NewAuthRequestData> =
         authSdkSource
             .getNewAuthRequest(email)
@@ -321,6 +333,7 @@ class AuthRequestManagerImpl(
                         deviceId = authDiskSource.uniqueAppId,
                         accessCode = authRequestResponse.accessCode,
                         fingerprint = authRequestResponse.fingerprint,
+                        authRequestType = authRequestType,
                     )
                     .map { request ->
                         AuthRequest(

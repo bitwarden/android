@@ -11,6 +11,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -176,7 +177,9 @@ private val DEFAULT_STATE = LoginWithDeviceState(
     viewState = LoginWithDeviceState.ViewState.Content(
         fingerprintPhrase = "alabster-drinkable-mystified-rapping-irrigate",
         isResendNotificationLoading = false,
+        loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
     ),
     dialogState = null,
     loginData = null,
+    loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
 )

@@ -5,11 +5,13 @@ import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.CreateAuthRequestResult
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.awaits
@@ -31,7 +33,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val authRepository = mockk<AuthRepository> {
         coEvery {
-            createAuthRequestWithUpdates(EMAIL)
+            createAuthRequestWithUpdates(email = EMAIL, authRequestType = any())
         } returns mutableCreateAuthRequestWithUpdatesFlow
         coEvery { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
     }
@@ -44,7 +46,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         coVerify(exactly = 1) {
-            authRepository.createAuthRequestWithUpdates(EMAIL)
+            authRepository.createAuthRequestWithUpdates(
+                email = EMAIL,
+                authRequestType = AuthRequestType.OTHER_DEVICE,
+            )
         }
     }
 
@@ -53,12 +58,18 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
         val newEmail = "newEmail@gmail.com"
         val state = DEFAULT_STATE.copy(emailAddress = newEmail)
         coEvery {
-            authRepository.createAuthRequestWithUpdates(newEmail)
+            authRepository.createAuthRequestWithUpdates(
+                email = newEmail,
+                authRequestType = AuthRequestType.OTHER_DEVICE,
+            )
         } returns mutableCreateAuthRequestWithUpdatesFlow
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
         coVerify(exactly = 1) {
-            authRepository.createAuthRequestWithUpdates(newEmail)
+            authRepository.createAuthRequestWithUpdates(
+                email = newEmail,
+                authRequestType = AuthRequestType.OTHER_DEVICE,
+            )
         }
     }
 
@@ -100,7 +111,10 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
         verify(exactly = 2) {
-            authRepository.createAuthRequestWithUpdates(EMAIL)
+            authRepository.createAuthRequestWithUpdates(
+                email = EMAIL,
+                authRequestType = AuthRequestType.OTHER_DEVICE,
+            )
         }
     }
 
@@ -187,6 +201,43 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                     requestPrivateKey = AUTH_REQUEST_RESPONSE.privateKey,
                     masterPasswordHash = AUTH_REQUEST.masterPasswordHash,
                     captchaToken = null,
+                )
+            }
+        }
+
+    @Test
+    fun `on createAuthRequestWithUpdates Success with SSO_ADMIN_APPROVAL should emit toast`() =
+        runTest {
+            val initialViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                loginWithDeviceType = LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+            )
+            val initialState = DEFAULT_STATE.copy(
+                viewState = initialViewState,
+                loginWithDeviceType = LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+            )
+            val viewModel = createViewModel(initialState)
+
+            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
+                assertEquals(initialState, stateFlow.awaitItem())
+                mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
+                    CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
+                )
+                assertEquals(
+                    initialState.copy(
+                        viewState = initialViewState.copy(
+                            fingerprintPhrase = "",
+                        ),
+                        dialogState = LoginWithDeviceState.DialogState.Loading(
+                            message = R.string.logging_in.asText(),
+                        ),
+                        loginData = DEFAULT_LOGIN_DATA,
+                    ),
+                    stateFlow.awaitItem(),
+                )
+
+                assertEquals(
+                    LoginWithDeviceEvent.ShowToast("Not yet implemented!"),
+                    eventFlow.awaitItem(),
                 )
             }
         }
@@ -419,6 +470,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle().apply {
                 set("state", state)
                 set("email_address", state?.emailAddress ?: EMAIL)
+                set("login_type", state?.loginWithDeviceType ?: LoginWithDeviceType.OTHER_DEVICE)
             },
         )
 }
@@ -429,6 +481,7 @@ private const val FINGERPRINT = "fingerprint"
 private val DEFAULT_CONTENT_VIEW_STATE = LoginWithDeviceState.ViewState.Content(
     fingerprintPhrase = FINGERPRINT,
     isResendNotificationLoading = false,
+    loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
 )
 
 private val DEFAULT_STATE = LoginWithDeviceState(
@@ -436,6 +489,7 @@ private val DEFAULT_STATE = LoginWithDeviceState(
     viewState = DEFAULT_CONTENT_VIEW_STATE,
     dialogState = null,
     loginData = null,
+    loginWithDeviceType = LoginWithDeviceType.OTHER_DEVICE,
 )
 
 private val AUTH_REQUEST = AuthRequest(
