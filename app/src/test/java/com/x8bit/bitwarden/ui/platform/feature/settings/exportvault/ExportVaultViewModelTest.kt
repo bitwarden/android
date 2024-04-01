@@ -4,9 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.manager.FileManager
@@ -20,6 +24,8 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -28,7 +34,10 @@ import java.time.Instant
 import java.time.ZoneOffset
 
 class ExportVaultViewModelTest : BaseViewModelTest() {
-    private val authRepository: AuthRepository = mockk()
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
 
     private val policyManager: PolicyManager = mockk {
         every {
@@ -61,6 +70,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+        verify { authRepository.userStateFlow }
     }
 
     @Test
@@ -147,6 +157,11 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+        coVerify {
+            authRepository.validatePassword(
+                password = password,
+            )
+        }
     }
 
     @Test
@@ -209,15 +224,31 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `FilePasswordInputChanged should update the file password input in the state`() {
+        val password = "Test123"
+        coEvery {
+            authRepository.getPasswordStrength(
+                email = EMAIL_ADDRESS,
+                password = password,
+            )
+        } returns PasswordStrengthResult.Success(
+            passwordStrength = PasswordStrength.LEVEL_4,
+        )
         val viewModel = createViewModel()
-        viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange("Test123"))
+        viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(password))
 
         assertEquals(
             DEFAULT_STATE.copy(
-                filePasswordInput = "Test123",
+                filePasswordInput = password,
+                passwordStrengthState = PasswordStrengthState.STRONG,
             ),
             viewModel.stateFlow.value,
         )
+        coVerify {
+            authRepository.getPasswordStrength(
+                email = EMAIL_ADDRESS,
+                password = password,
+            )
+        }
     }
 
     @Test
@@ -276,6 +307,89 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `ReceivePasswordStrengthResult should update password strength state`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.stateFlow.test {
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.NONE,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                ExportVaultAction.Internal.ReceivePasswordStrengthResult(
+                    PasswordStrengthResult.Success(
+                        PasswordStrength.LEVEL_0,
+                    ),
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                ExportVaultAction.Internal.ReceivePasswordStrengthResult(
+                    PasswordStrengthResult.Success(
+                        PasswordStrength.LEVEL_1,
+                    ),
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_2,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                ExportVaultAction.Internal.ReceivePasswordStrengthResult(
+                    PasswordStrengthResult.Success(
+                        PasswordStrength.LEVEL_2,
+                    ),
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_3,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                ExportVaultAction.Internal.ReceivePasswordStrengthResult(
+                    PasswordStrengthResult.Success(
+                        PasswordStrength.LEVEL_3,
+                    ),
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.GOOD,
+                ),
+                awaitItem(),
+            )
+
+            viewModel.trySendAction(
+                ExportVaultAction.Internal.ReceivePasswordStrengthResult(
+                    PasswordStrengthResult.Success(
+                        PasswordStrength.LEVEL_4,
+                    ),
+                ),
+            )
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    passwordStrengthState = PasswordStrengthState.STRONG,
+                ),
+                awaitItem(),
+            )
+        }
+    }
 
     @Test
     fun `ExportLocationReceive should update state to error if exportData is null`() {
@@ -364,9 +478,31 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     )
 }
 
+private const val EMAIL_ADDRESS = "active@bitwarden.com"
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "Active User",
+            email = EMAIL_ADDRESS,
+            avatarColorHex = "#aa00aa",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+        ),
+    ),
+)
+
 private val DEFAULT_STATE = ExportVaultState(
     confirmFilePasswordInput = "",
     dialogState = null,
+    email = EMAIL_ADDRESS,
     exportFormat = ExportVaultFormat.JSON,
     filePasswordInput = "",
     passwordInput = "",
