@@ -9,7 +9,7 @@
     <!-- TODO BIT-2140: Update typeform and vault export strings -->
     <string name="confirm_file_password" translatable="false">Confirm file password</string>
     <string name="continue_to_give_feedback" translatable="false">Continue to Give Feedback?</string>
-    <string name="continue_to_provide_feedback" translatable="false">Select continue to provide feedback on your experience in a web form.</string>
+    <string name="continue_to_provide_feedback" translatable="false">Select continue to give feedback on the new app!</string>
     <string name="file_password" translatable="false">File password</string>
     <string name="give_feedback" translatable="false">Give Feedback</string>
     <string name="password_protected" translatable="false">Password Protected</string>
