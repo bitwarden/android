@@ -323,7 +323,7 @@ class SettingsRepositoryImpl(
     override fun setDefaultsIfNecessary(userId: String) {
         // Set Vault Settings defaults
         if (!isVaultTimeoutActionSet(userId = userId)) {
-            storeVaultTimeout(userId, VaultTimeout.ThirtyMinutes)
+            storeVaultTimeout(userId, VaultTimeout.FifteenMinutes)
             storeVaultTimeoutAction(userId, VaultTimeoutAction.LOCK)
         }
     }
