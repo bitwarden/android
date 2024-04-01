@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
@@ -120,6 +121,19 @@ interface AuthDiskSource {
      * Stores the device key for the given [userId].
      */
     fun storeDeviceKey(userId: String, deviceKey: String?)
+
+    /**
+     * Gets the stored [PendingAuthRequestJson] for the given [userId].
+     */
+    fun getPendingAuthRequest(userId: String): PendingAuthRequestJson?
+
+    /**
+     * Stores the [PendingAuthRequestJson] for the given [userId].
+     */
+    fun storePendingAuthRequest(
+        userId: String,
+        pendingAuthRequest: PendingAuthRequestJson?,
+    )
 
     /**
      * Gets the biometrics key for the given [userId].

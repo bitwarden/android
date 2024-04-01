@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
@@ -21,6 +22,7 @@ private const val ACCOUNT_TOKENS_KEY = "$ENCRYPTED_BASE_KEY:accountTokens"
 private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
 private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
 private const val DEVICE_KEY_KEY = "$ENCRYPTED_BASE_KEY:deviceKey"
+private const val PENDING_ADMIN_AUTH_REQUEST_KEY = "$ENCRYPTED_BASE_KEY:pendingAdminAuthRequest"
 
 private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
@@ -125,6 +127,7 @@ class AuthDiskSourceImpl(
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
         storeDeviceKey(userId = userId, deviceKey = null)
+        storePendingAuthRequest(userId = userId, pendingAuthRequest = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
@@ -199,6 +202,22 @@ class AuthDiskSourceImpl(
 
     override fun storeDeviceKey(userId: String, deviceKey: String?) {
         putEncryptedString(key = "${DEVICE_KEY_KEY}_$userId", value = deviceKey)
+    }
+
+    override fun getPendingAuthRequest(
+        userId: String,
+    ): PendingAuthRequestJson? =
+        getEncryptedString(key = "${PENDING_ADMIN_AUTH_REQUEST_KEY}_$userId")
+            ?.let { json.decodeFromStringOrNull(it) }
+
+    override fun storePendingAuthRequest(
+        userId: String,
+        pendingAuthRequest: PendingAuthRequestJson?,
+    ) {
+        putEncryptedString(
+            key = "${PENDING_ADMIN_AUTH_REQUEST_KEY}_$userId",
+            value = pendingAuthRequest?.let { json.encodeToString(it) },
+        )
     }
 
     override fun getUserBiometricUnlockKey(userId: String): String? =

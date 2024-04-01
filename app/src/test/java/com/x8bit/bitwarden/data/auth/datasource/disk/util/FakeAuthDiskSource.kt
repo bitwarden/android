@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -38,6 +39,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
     private val storedAccountTokens = mutableMapOf<String, AccountTokensJson?>()
     private val storedDeviceKey = mutableMapOf<String, String?>()
+    private val storedPendingAuthRequests = mutableMapOf<String, PendingAuthRequestJson?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
@@ -65,6 +67,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
+        storedPendingAuthRequests.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
 
@@ -168,6 +171,16 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeDeviceKey(userId: String, deviceKey: String?) {
         storedDeviceKey[userId] = deviceKey
+    }
+
+    override fun getPendingAuthRequest(userId: String): PendingAuthRequestJson? =
+        storedPendingAuthRequests[userId]
+
+    override fun storePendingAuthRequest(
+        userId: String,
+        pendingAuthRequest: PendingAuthRequestJson?,
+    ) {
+        storedPendingAuthRequests[userId] = pendingAuthRequest
     }
 
     override fun getUserBiometricUnlockKey(userId: String): String? =
@@ -287,6 +300,13 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertDeviceKey(userId: String, deviceKey: String?) {
         assertEquals(deviceKey, storedDeviceKey[userId])
+    }
+
+    /**
+     * Assert that the [pendingAuthRequest] was stored successfully using the [userId].
+     */
+    fun assertPendingAuthRequest(userId: String, pendingAuthRequest: PendingAuthRequestJson?) {
+        assertEquals(pendingAuthRequest, storedPendingAuthRequests[userId])
     }
 
     /**

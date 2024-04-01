@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
@@ -185,6 +186,13 @@ class AuthDiskSourceTest {
             userId = userId,
             deviceKey = "9876-5432-1234",
         )
+        authDiskSource.storePendingAuthRequest(
+            userId = userId,
+            pendingAuthRequest = PendingAuthRequestJson(
+                requestId = "12345",
+                requestPrivateKey = "67890",
+            ),
+        )
         authDiskSource.storeUserBiometricUnlockKey(
             userId = userId,
             biometricsKey = "1234-9876-0192",
@@ -226,6 +234,7 @@ class AuthDiskSourceTest {
         authDiskSource.clearData(userId = userId)
 
         assertNull(authDiskSource.getDeviceKey(userId = userId))
+        assertNull(authDiskSource.getPendingAuthRequest(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
@@ -540,6 +549,60 @@ class AuthDiskSourceTest {
         fakeEncryptedSharedPreferences.edit { putString(deviceKeyKey, deviceKey) }
         authDiskSource.storeDeviceKey(userId = mockUserId, deviceKey = null)
         assertFalse(fakeEncryptedSharedPreferences.contains(deviceKeyKey))
+    }
+
+    @Test
+    fun `getPendingAuthRequest should pull from SharedPreferences`() {
+        val pendingAdminAuthRequestBaseKey = "bwSecureStorage:pendingAdminAuthRequest"
+        val mockUserId = "mockUserId"
+        val pendingAdminAuthRequestKey = "${pendingAdminAuthRequestBaseKey}_$mockUserId"
+        fakeEncryptedSharedPreferences.edit {
+            putString(
+                pendingAdminAuthRequestKey,
+                """
+                {
+                  "Id": "12345",
+                  "PrivateKey": "67890"
+                }
+                """,
+            )
+        }
+        val actual = authDiskSource.getPendingAuthRequest(userId = mockUserId)
+        assertEquals(
+            PendingAuthRequestJson(requestId = "12345", requestPrivateKey = "67890"),
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePendingAuthRequest for non-null values should update SharedPreferences`() {
+        val pendingAdminAuthRequestKeyBaseKey = "bwSecureStorage:pendingAdminAuthRequest"
+        val mockUserId = "mockUserId"
+        val pendingAuthRequestKey = "${pendingAdminAuthRequestKeyBaseKey}_$mockUserId"
+        val pendingAdminAuthRequest = PendingAuthRequestJson(
+            requestId = "12345",
+            requestPrivateKey = "67890",
+        )
+        authDiskSource.storePendingAuthRequest(
+            userId = mockUserId,
+            pendingAuthRequest = pendingAdminAuthRequest,
+        )
+        val actual = fakeEncryptedSharedPreferences.getString(
+            key = pendingAuthRequestKey,
+            defaultValue = null,
+        )
+        assertEquals(
+            json.parseToJsonElement(
+                """
+                {
+                  "Id": "12345",
+                  "PrivateKey": "67890"
+                }
+                """
+                    .trimIndent(),
+            ),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
     }
 
     @Test
