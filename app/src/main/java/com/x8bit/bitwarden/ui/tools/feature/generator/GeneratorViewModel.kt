@@ -372,7 +372,7 @@ class GeneratorViewModel @Inject constructor(
         val options = generatorRepository
             .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
         val newOptions = options.copy(
-            length = password.length,
+            length = password.minimumLength,
             allowAmbiguousChar = password.avoidAmbiguousChars,
             hasNumbers = password.useNumbers,
             minNumber = password.minNumbers,
@@ -477,7 +477,7 @@ class GeneratorViewModel @Inject constructor(
         val defaultPassphrase = Passphrase()
 
         return PasscodeGenerationOptions(
-            length = defaultPassword.length,
+            length = defaultPassword.minimumLength,
             allowAmbiguousChar = defaultPassword.avoidAmbiguousChars,
             hasNumbers = defaultPassword.useNumbers,
             minNumber = defaultPassword.minNumbers,
@@ -518,7 +518,7 @@ class GeneratorViewModel @Inject constructor(
             uppercase = password.useCapitals,
             numbers = password.useNumbers,
             special = password.useSpecialChars,
-            length = password.length.toUByte(),
+            length = password.minimumLength.toUByte(),
             avoidAmbiguous = password.avoidAmbiguousChars,
             minLowercase = null,
             minUppercase = null,
@@ -773,6 +773,7 @@ class GeneratorViewModel @Inject constructor(
                 useCapitals = action.useCapitals,
             )
         }
+        updatePasswordLength()
     }
 
     private fun handleToggleLowercaseLetters(
@@ -780,16 +781,22 @@ class GeneratorViewModel @Inject constructor(
         .ToggleLowercaseLettersChange,
     ) {
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(useLowercase = action.useLowercase)
+            currentPasswordType.copy(
+                useLowercase = action.useLowercase,
+            )
         }
+        updatePasswordLength()
     }
 
     private fun handleToggleNumbers(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Password.ToggleNumbersChange,
     ) {
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(useNumbers = action.useNumbers)
+            currentPasswordType.copy(
+                useNumbers = action.useNumbers,
+            )
         }
+        updatePasswordLength()
     }
 
     private fun handleToggleSpecialChars(
@@ -797,24 +804,33 @@ class GeneratorViewModel @Inject constructor(
         .ToggleSpecialCharactersChange,
     ) {
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(useSpecialChars = action.useSpecialChars)
+            currentPasswordType.copy(
+                useSpecialChars = action.useSpecialChars,
+            )
         }
+        updatePasswordLength()
     }
 
     private fun handleMinNumbersChange(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinNumbersCounterChange,
     ) {
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(minNumbers = action.minNumbers)
+            currentPasswordType.copy(
+                minNumbers = action.minNumbers,
+            )
         }
+        updatePasswordLength()
     }
 
     private fun handleMinSpecialChange(
         action: GeneratorAction.MainType.Passcode.PasscodeType.Password.MinSpecialCharactersChange,
     ) {
         updatePasswordType { currentPasswordType ->
-            currentPasswordType.copy(minSpecial = action.minSpecial)
+            currentPasswordType.copy(
+                minSpecial = action.minSpecial,
+            )
         }
+        updatePasswordLength()
     }
 
     private fun handleToggleAmbiguousChars(
@@ -1385,6 +1401,17 @@ class GeneratorViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Updates the length property of the [Password] to reflect the new minimum.
+     */
+    private inline fun updatePasswordLength() {
+        updatePasswordType { currentPasswordType ->
+            currentPasswordType.copy(
+                length = currentPasswordType.minimumLength,
+            )
+        }
+    }
+
     private inline fun updatePasswordType(
         crossinline block: (Password) -> Password,
     ) {
@@ -1706,13 +1733,24 @@ data class GeneratorState(
                  * length, character types, and requirements.
                  *
                  * @property length The length of the generated password.
+                 * @property minLength The number available on the low end of the slider.
+                 * @property maxLength The number available on the high end of the slider.
                  * @property useCapitals Whether to include capital letters.
+                 * @property capitalsEnabled Whether capitals are enabled for this password.
                  * @property useLowercase Whether to include lowercase letters.
+                 * @property lowercaseEnabled Whether lowercase letters are enabled.
                  * @property useNumbers Whether to include numbers.
+                 * @property numbersEnabled Whether numbers are enabled for this password.
                  * @property useSpecialChars Whether to include special characters.
+                 * @property specialCharsEnabled Whether special characters are enabled.
                  * @property minNumbers The minimum number of numeric characters.
+                 * @property minNumbersAllowed The minimum number of numbers permitted.
+                 * @property maxNumbersAllowed The maximum number of numbers permitted.
                  * @property minSpecial The minimum number of special characters.
+                 * @property minSpecialAllowed The minimum number of special characters permitted.
+                 * @property maxSpecialAllowed The maximum number of special characters permitted.
                  * @property avoidAmbiguousChars Whether to avoid characters that look similar.
+                 * @property ambiguousCharsEnabled Whether to allow ambiguous characters.
                  * @property isUserInteracting Indicates whether the user is currently interacting
                  * with a control. This flag can be used to prevent unnecessary updates or
                  * processing during continuous interaction.
@@ -2506,6 +2544,21 @@ private fun Password.enforceAtLeastOneToggleOn(): Password =
         this.copy(useLowercase = true)
     } else {
         this
+    }
+
+/**
+ * The computed minimum length for the generated Password based on what characters must be included.
+ */
+private val Password.minimumLength: Int
+    get() {
+        val minLowercase = if (useLowercase) 1 else 0
+        val minUppercase = if (useCapitals) 1 else 0
+        val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
+        val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
+        return max(
+            minLowercase + minUppercase + minimumNumbers + minimumSpecial,
+            length,
+        )
     }
 
 private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
