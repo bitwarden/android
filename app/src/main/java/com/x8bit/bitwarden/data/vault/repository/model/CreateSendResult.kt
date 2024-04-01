@@ -15,5 +15,5 @@ sealed class CreateSendResult {
     /**
      * Generic error while creating a send.
      */
-    data object Error : CreateSendResult()
+    data class Error(val message: String?) : CreateSendResult()
 }

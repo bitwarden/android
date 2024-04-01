@@ -10,6 +10,7 @@ import com.bitwarden.core.ExportFormat
 import com.bitwarden.core.FolderView
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.Send
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
@@ -35,10 +36,13 @@ import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
@@ -980,11 +984,12 @@ class VaultRepositoryImpl(
             )
     }
 
+    @Suppress("ReturnCount")
     override suspend fun createSend(
         sendView: SendView,
         fileUri: Uri?,
     ): CreateSendResult {
-        val userId = activeUserId ?: return CreateSendResult.Error
+        val userId = activeUserId ?: return CreateSendResult.Error(message = null)
         return vaultSdkSource
             .encryptSend(
                 userId = userId,
@@ -992,54 +997,33 @@ class VaultRepositoryImpl(
             )
             .flatMap { send ->
                 when (send.type) {
-                    SendType.TEXT -> {
-                        sendsService.createTextSend(body = send.toEncryptedNetworkSend())
+                    SendType.TEXT -> sendsService.createTextSend(send.toEncryptedNetworkSend())
+                    SendType.FILE -> createFileSend(fileUri, userId, send)
+                }
+            }
+            .map { createSendResponse ->
+                when (createSendResponse) {
+                    is CreateSendJsonResponse.Invalid -> {
+                        return CreateSendResult.Error(
+                            message = createSendResponse.firstValidationErrorMessage,
+                        )
                     }
 
-                    SendType.FILE -> {
-                        val uri = fileUri ?: return@flatMap IllegalArgumentException(
-                            "File URI must be present to create a File Send.",
-                        )
-                            .asFailure()
-
-                        fileManager
-                            .uriToByteArray(fileUri = uri)
-                            .flatMap {
-                                vaultSdkSource.encryptBuffer(
-                                    userId = userId,
-                                    send = send,
-                                    fileBuffer = it,
-                                )
-                            }
-                            .flatMap { encryptedFile ->
-                                sendsService
-                                    .createFileSend(
-                                        body = send.toEncryptedNetworkSend(
-                                            fileLength = encryptedFile.size,
-                                        ),
-                                    )
-                                    .flatMap { sendFileResponse ->
-                                        sendsService.uploadFile(
-                                            sendFileResponse = sendFileResponse,
-                                            encryptedFile = encryptedFile,
-                                        )
-                                    }
-                            }
+                    is CreateSendJsonResponse.Success -> {
+                        // Save the send immediately, regardless of whether the decrypt succeeds
+                        vaultDiskSource.saveSend(userId = userId, send = createSendResponse.send)
+                        createSendResponse
                     }
                 }
             }
-            .onSuccess {
-                // Save the send immediately, regardless of whether the decrypt succeeds
-                vaultDiskSource.saveSend(userId = userId, send = it)
-            }
-            .flatMap {
+            .flatMap { createSendSuccessResponse ->
                 vaultSdkSource.decryptSend(
                     userId = userId,
-                    send = it.toEncryptedSdkSend(),
+                    send = createSendSuccessResponse.send.toEncryptedSdkSend(),
                 )
             }
             .fold(
-                onFailure = { CreateSendResult.Error },
+                onFailure = { CreateSendResult.Error(message = null) },
                 onSuccess = { CreateSendResult.Success(it) },
             )
     }
@@ -1592,6 +1576,56 @@ class VaultRepositoryImpl(
                     }
                 },
             )
+    }
+
+    private suspend fun createFileSend(
+        uri: Uri?,
+        userId: String,
+        send: Send,
+    ): Result<CreateSendJsonResponse> {
+        uri ?: return IllegalArgumentException(
+            "File URI must be present to create a File Send.",
+        )
+            .asFailure()
+
+        return fileManager
+            .uriToByteArray(fileUri = uri)
+            .flatMap {
+                vaultSdkSource.encryptBuffer(
+                    userId = userId,
+                    send = send,
+                    fileBuffer = it,
+                )
+            }
+            .flatMap { encryptedFile ->
+                sendsService
+                    .createFileSend(
+                        body = send.toEncryptedNetworkSend(
+                            fileLength = encryptedFile.size,
+                        ),
+                    )
+                    .flatMap { sendFileResponse ->
+                        when (sendFileResponse) {
+                            is CreateFileSendResponse.Invalid -> {
+                                CreateSendJsonResponse
+                                    .Invalid(
+                                        message = sendFileResponse.message,
+                                        validationErrors = sendFileResponse.validationErrors,
+                                    )
+                                    .asSuccess()
+                            }
+
+                            is CreateFileSendResponse.Success -> {
+                                sendsService
+                                    .uploadFile(
+                                        sendFileResponse = sendFileResponse.createFileJsonResponse,
+                                        encryptedFile = encryptedFile,
+                                    )
+                                    .map { CreateSendJsonResponse.Success(it) }
+                            }
+                        }
+                    }
+            }
     }
 
     /**

@@ -4,10 +4,11 @@ import android.net.Uri
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SendsApi
-import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFileSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSendJsonRequest
 import io.mockk.every
@@ -52,16 +53,18 @@ class SendsServiceTest : BaseServiceTest() {
 
     @Test
     fun `createFileSend should return the correct response`() = runTest {
-        val response = SendFileResponseJson(
-            url = "www.test.com",
-            fileUploadType = FileUploadType.AZURE,
-            sendResponse = createMockSend(number = 1, type = SendTypeJson.FILE),
+        val sendFileResponse = CreateFileSendResponse.Success(
+            createFileJsonResponse = createMockFileSendResponseJson(number = 1),
         )
         server.enqueue(MockResponse().setBody(CREATE_FILE_SEND_SUCCESS_JSON))
         val result = sendsService.createFileSend(
             body = createMockSendJsonRequest(number = 1, type = SendTypeJson.FILE),
         )
-        assertEquals(response, result.getOrThrow())
+
+        assertEquals(
+            sendFileResponse,
+            result.getOrThrow(),
+        )
     }
 
     @Test
@@ -71,7 +74,7 @@ class SendsServiceTest : BaseServiceTest() {
             body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT),
         )
         assertEquals(
-            createMockSend(number = 1),
+            CreateSendJsonResponse.Success(createMockSend(number = 1)),
             result.getOrThrow(),
         )
     }
@@ -113,13 +116,9 @@ class SendsServiceTest : BaseServiceTest() {
     fun `uploadFile with Azure uploadFile success should return send`() = runTest {
         val url = "www.test.com"
         setupMockUri(url = url, queryParams = mapOf("sv" to "2024-04-03"))
-        val mockSend = createMockSend(number = 1, type = SendTypeJson.FILE)
-        val sendFileResponse = SendFileResponseJson(
-            url = url,
-            fileUploadType = FileUploadType.AZURE,
-            sendResponse = mockSend,
-        )
+        val sendFileResponse = createMockFileSendResponseJson(number = 1)
         val encryptedFile = byteArrayOf()
+
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = sendsService.uploadFile(
@@ -127,17 +126,14 @@ class SendsServiceTest : BaseServiceTest() {
             encryptedFile = encryptedFile,
         )
 
-        assertEquals(mockSend, result.getOrThrow())
+        assertEquals(sendFileResponse.sendResponse, result.getOrThrow())
     }
 
     @Test
     fun `uploadFile with Direct uploadFile success should return send`() = runTest {
-        val mockSend = createMockSend(number = 1, type = SendTypeJson.FILE)
-        val sendFileResponse = SendFileResponseJson(
-            url = "www.test.com",
-            fileUploadType = FileUploadType.DIRECT,
-            sendResponse = mockSend,
-        )
+        val url = "www.test.com"
+        setupMockUri(url = url, queryParams = mapOf("sv" to "2024-04-03"))
+        val sendFileResponse = createMockFileSendResponseJson(number = 1)
         val encryptedFile = byteArrayOf()
         server.enqueue(MockResponse().setResponseCode(201))
 
@@ -146,7 +142,7 @@ class SendsServiceTest : BaseServiceTest() {
             encryptedFile = encryptedFile,
         )
 
-        assertEquals(mockSend, result.getOrThrow())
+        assertEquals(sendFileResponse.sendResponse, result.getOrThrow())
     }
 
     @Test

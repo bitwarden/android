@@ -39,9 +39,9 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -55,6 +55,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCollection
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockDomains
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFileSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockFolder
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganizationKeys
@@ -2430,7 +2431,7 @@ class VaultRepositoryTest {
             )
 
             assertEquals(
-                CreateSendResult.Error,
+                CreateSendResult.Error(message = null),
                 result,
             )
         }
@@ -2447,7 +2448,7 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
 
-            assertEquals(CreateSendResult.Error, result)
+            assertEquals(CreateSendResult.Error(message = null), result)
         }
 
     @Test
@@ -2469,7 +2470,7 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = null)
 
-            assertEquals(CreateSendResult.Error, result)
+            assertEquals(CreateSendResult.Error(IllegalStateException().message), result)
         }
 
     @Suppress("MaxLineLength")
@@ -2482,6 +2483,7 @@ class VaultRepositoryTest {
             val mockSdkSend = createMockSdkSend(number = 1, type = SendType.TEXT)
             val mockSend = createMockSend(number = 1, type = SendTypeJson.TEXT)
             val mockSendViewResult = createMockSendView(number = 2)
+            val sendTextResponse = CreateSendJsonResponse.Success(send = mockSend)
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
@@ -2490,7 +2492,7 @@ class VaultRepositoryTest {
                     body = createMockSendJsonRequest(number = 1, type = SendTypeJson.TEXT)
                         .copy(fileLength = null),
                 )
-            } returns mockSend.asSuccess()
+            } returns sendTextResponse.asSuccess()
             coEvery { vaultDiskSource.saveSend(userId, mockSend) } just runs
             coEvery {
                 vaultSdkSource.decryptSend(userId, mockSdkSend)
@@ -2529,7 +2531,7 @@ class VaultRepositoryTest {
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
-            assertEquals(CreateSendResult.Error, result)
+            assertEquals(CreateSendResult.Error(IllegalStateException().message), result)
         }
 
     @Test
@@ -2544,14 +2546,18 @@ class VaultRepositoryTest {
             val mockSdkSend = createMockSdkSend(number = 1)
             val byteArray = byteArrayOf(1)
             val encryptedByteArray = byteArrayOf(2)
-            val sendFileResponse = SendFileResponseJson(
-                url = url,
-                fileUploadType = FileUploadType.AZURE,
-                sendResponse = createMockSend(number = 1, type = SendTypeJson.FILE),
+            val sendFileResponse = CreateFileSendResponse.Success(
+                createMockFileSendResponseJson(
+                    number = 1,
+                    type = SendTypeJson.FILE,
+                ),
             )
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptSend(userId, mockSdkSend)
+            } returns mockSendView.asSuccess()
             coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
             coEvery {
                 vaultSdkSource.encryptBuffer(
@@ -2561,18 +2567,24 @@ class VaultRepositoryTest {
                 )
             } returns encryptedByteArray.asSuccess()
             coEvery {
+                vaultDiskSource.saveSend(
+                    userId,
+                    sendFileResponse.createFileJsonResponse.sendResponse,
+                )
+            } just runs
+            coEvery {
                 sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
             } returns sendFileResponse.asSuccess()
             coEvery {
                 sendsService.uploadFile(
-                    sendFileResponse = sendFileResponse,
+                    sendFileResponse = sendFileResponse.createFileJsonResponse,
                     encryptedFile = encryptedByteArray,
                 )
-            } returns Throwable("Fail").asFailure()
+            } returns Throwable().asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
-            assertEquals(CreateSendResult.Error, result)
+            assertEquals(CreateSendResult.Error(null), result)
         }
 
     @Test
@@ -2588,11 +2600,11 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns Throwable("Fail").asFailure()
+            coEvery { fileManager.uriToByteArray(any()) } returns Throwable().asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
-            assertEquals(CreateSendResult.Error, result)
+            assertEquals(CreateSendResult.Error(message = null), result)
         }
 
     @Test
@@ -2607,11 +2619,8 @@ class VaultRepositoryTest {
             val mockSdkSend = createMockSdkSend(number = 1)
             val byteArray = byteArrayOf(1)
             val encryptedByteArray = byteArrayOf(2)
-            val sendResponse = createMockSend(number = 1)
-            val sendFileResponse = SendFileResponseJson(
-                url = url,
-                fileUploadType = FileUploadType.AZURE,
-                sendResponse = sendResponse,
+            val sendFileResponse = CreateFileSendResponse.Success(
+                createMockFileSendResponseJson(number = 1),
             )
             val mockSendViewResult = createMockSendView(number = 1)
             coEvery {
@@ -2630,11 +2639,16 @@ class VaultRepositoryTest {
             } returns sendFileResponse.asSuccess()
             coEvery {
                 sendsService.uploadFile(
-                    sendFileResponse = sendFileResponse,
+                    sendFileResponse = sendFileResponse.createFileJsonResponse,
                     encryptedFile = encryptedByteArray,
                 )
-            } returns sendResponse.asSuccess()
-            coEvery { vaultDiskSource.saveSend(userId, sendResponse) } just runs
+            } returns sendFileResponse.createFileJsonResponse.sendResponse.asSuccess()
+            coEvery {
+                vaultDiskSource.saveSend(
+                    userId,
+                    sendFileResponse.createFileJsonResponse.sendResponse,
+                )
+            } just runs
             coEvery {
                 vaultSdkSource.decryptSend(userId, mockSdkSend)
             } returns mockSendViewResult.asSuccess()

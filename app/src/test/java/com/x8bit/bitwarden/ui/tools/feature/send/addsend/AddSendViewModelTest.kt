@@ -259,7 +259,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
         every { viewState.toSendView(clock) } returns mockSendView
         coEvery {
             vaultRepository.createSend(sendView = mockSendView, fileUri = null)
-        } returns CreateSendResult.Error
+        } returns CreateSendResult.Error("Fail")
         val viewModel = createViewModel(initialState)
 
         viewModel.stateFlow.test {
@@ -277,7 +277,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
                 initialState.copy(
                     dialogState = AddSendState.DialogState.Error(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
+                        message = "Fail".asText(),
                     ),
                 ),
                 awaitItem(),

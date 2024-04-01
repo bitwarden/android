@@ -184,12 +184,13 @@ class AddSendViewModel @Inject constructor(
         action: AddSendAction.Internal.CreateSendResultReceive,
     ) {
         when (val result = action.result) {
-            CreateSendResult.Error -> {
+            is CreateSendResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = AddSendState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
+                            message = result.message?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         ),
                     )
                 }
