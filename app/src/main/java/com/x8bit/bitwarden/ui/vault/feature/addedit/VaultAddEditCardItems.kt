@@ -52,6 +52,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = commonState.name,
             onValueChange = commonHandlers.onNameTextChange,
             modifier = Modifier
+                .semantics { testTag = "ItemNameEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -63,6 +64,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = cardState.cardHolderName,
             onValueChange = cardHandlers.onCardHolderNameTextChange,
             modifier = Modifier
+                .semantics { testTag = "CardholderNameEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -74,8 +76,10 @@ fun LazyListScope.vaultAddEditCardItems(
             value = cardState.number,
             onValueChange = cardHandlers.onNumberTextChange,
             modifier = Modifier
+                .semantics { testTag = "CardNumberEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            showPasswordTestTag = "ShowCardNumberButton",
         )
     }
     item {
@@ -95,7 +99,9 @@ fun LazyListScope.vaultAddEditCardItems(
                         .first { it.longName.toString(resources) == selectedString },
                 )
             },
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .semantics { testTag = "CardBrandPicker" }
+                .padding(horizontal = 16.dp),
         )
     }
     item {
@@ -115,7 +121,9 @@ fun LazyListScope.vaultAddEditCardItems(
                         .first { it.value.toString(resources) == selectedString },
                 )
             },
-            modifier = Modifier.padding(horizontal = 16.dp),
+            modifier = Modifier
+                .semantics { testTag = "CardExpirationMonthPicker" }
+                .padding(horizontal = 16.dp),
         )
     }
     item {
@@ -126,6 +134,7 @@ fun LazyListScope.vaultAddEditCardItems(
             onValueChange = cardHandlers.onExpirationYearTextChange,
             keyboardType = KeyboardType.Number,
             modifier = Modifier
+                .semantics { testTag = "CardExpirationYearEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -138,8 +147,10 @@ fun LazyListScope.vaultAddEditCardItems(
             onValueChange = cardHandlers.onSecurityCodeTextChange,
             keyboardType = KeyboardType.NumberPassword,
             modifier = Modifier
+                .semantics { testTag = "CardSecurityCodeEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            showPasswordTestTag = "CardShowSecurityCodeButton",
         )
     }
     item {
