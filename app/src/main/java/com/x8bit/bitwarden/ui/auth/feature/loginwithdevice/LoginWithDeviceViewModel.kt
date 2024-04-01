@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
+import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.util.toAuthRequestType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -35,12 +37,16 @@ class LoginWithDeviceViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginWithDeviceState, LoginWithDeviceEvent, LoginWithDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: LoginWithDeviceState(
-            emailAddress = LoginWithDeviceArgs(savedStateHandle).emailAddress,
-            viewState = LoginWithDeviceState.ViewState.Loading,
-            dialogState = null,
-            loginData = null,
-        ),
+        ?: run {
+            val args = LoginWithDeviceArgs(savedStateHandle)
+            LoginWithDeviceState(
+                loginWithDeviceType = args.loginType,
+                emailAddress = args.emailAddress,
+                viewState = LoginWithDeviceState.ViewState.Loading,
+                dialogState = null,
+                loginData = null,
+            )
+        },
 ) {
     private var authJob: Job = Job().apply { complete() }
 
@@ -104,6 +110,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
+                            loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = "",
                             isResendNotificationLoading = false,
                         ),
@@ -125,6 +132,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
+                            loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = result.authRequest.fingerprint,
                             isResendNotificationLoading = false,
                         ),
@@ -137,6 +145,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
+                            loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = "",
                             isResendNotificationLoading = false,
                         ),
@@ -152,6 +161,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
+                            loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = "",
                             isResendNotificationLoading = false,
                         ),
@@ -167,6 +177,7 @@ class LoginWithDeviceViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = LoginWithDeviceState.ViewState.Content(
+                            loginWithDeviceType = it.loginWithDeviceType,
                             fingerprintPhrase = "",
                             isResendNotificationLoading = false,
                         ),
@@ -256,16 +267,26 @@ class LoginWithDeviceViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            val result = authRepository.login(
-                email = state.emailAddress,
-                requestId = loginData.requestId,
-                accessCode = loginData.accessCode,
-                asymmetricalKey = loginData.asymmetricalKey,
-                requestPrivateKey = loginData.privateKey,
-                masterPasswordHash = loginData.masterPasswordHash,
-                captchaToken = loginData.captchaToken,
-            )
-            sendAction(LoginWithDeviceAction.Internal.ReceiveLoginResult(result))
+            when (state.loginWithDeviceType) {
+                LoginWithDeviceType.OTHER_DEVICE -> {
+                    val result = authRepository.login(
+                        email = state.emailAddress,
+                        requestId = loginData.requestId,
+                        accessCode = loginData.accessCode,
+                        asymmetricalKey = loginData.asymmetricalKey,
+                        requestPrivateKey = loginData.privateKey,
+                        masterPasswordHash = loginData.masterPasswordHash,
+                        captchaToken = loginData.captchaToken,
+                    )
+                    sendAction(LoginWithDeviceAction.Internal.ReceiveLoginResult(result))
+                }
+
+                LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+                LoginWithDeviceType.SSO_OTHER_DEVICE,
+                -> {
+                    sendEvent(LoginWithDeviceEvent.ShowToast("Not yet implemented!"))
+                }
+            }
         }
     }
 
@@ -273,7 +294,10 @@ class LoginWithDeviceViewModel @Inject constructor(
         setIsResendNotificationLoading(isResend)
         authJob.cancel()
         authJob = authRepository
-            .createAuthRequestWithUpdates(email = state.emailAddress)
+            .createAuthRequestWithUpdates(
+                email = state.emailAddress,
+                authRequestType = state.loginWithDeviceType.toAuthRequestType(),
+            )
             .map { LoginWithDeviceAction.Internal.NewAuthRequestResultReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
@@ -301,11 +325,25 @@ class LoginWithDeviceViewModel @Inject constructor(
  */
 @Parcelize
 data class LoginWithDeviceState(
+    val loginWithDeviceType: LoginWithDeviceType,
     val emailAddress: String,
     val viewState: ViewState,
     val dialogState: DialogState?,
     val loginData: LoginData?,
 ) : Parcelable {
+
+    /**
+     * The toolbar text for the UI.
+     */
+    val toolbarTitle: Text
+        get() = when (loginWithDeviceType) {
+            LoginWithDeviceType.OTHER_DEVICE,
+            LoginWithDeviceType.SSO_OTHER_DEVICE,
+            -> R.string.log_in_with_device.asText()
+
+            LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.log_in_initiated.asText()
+        }
+
     /**
      * Represents the specific view states for the [LoginWithDeviceScreen].
      */
@@ -322,12 +360,74 @@ data class LoginWithDeviceState(
          * Content state for the [LoginWithDeviceScreen] showing the actual content or items.
          *
          * @property fingerprintPhrase The fingerprint phrase to present to the user.
+         * @property isResendNotificationLoading Indicates if the resend loading spinner should be
+         * displayed.
          */
         @Parcelize
         data class Content(
             val fingerprintPhrase: String,
             val isResendNotificationLoading: Boolean,
-        ) : ViewState()
+            private val loginWithDeviceType: LoginWithDeviceType,
+        ) : ViewState() {
+            /**
+             * The title text for the UI.
+             */
+            val title: Text
+                get() = when (loginWithDeviceType) {
+                    LoginWithDeviceType.OTHER_DEVICE,
+                    LoginWithDeviceType.SSO_OTHER_DEVICE,
+                    -> R.string.log_in_initiated.asText()
+
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+                    -> R.string.admin_approval_requested.asText()
+                }
+
+            /**
+             * The subtitle text for the UI.
+             */
+            val subtitle: Text
+                get() = when (loginWithDeviceType) {
+                    LoginWithDeviceType.OTHER_DEVICE,
+                    LoginWithDeviceType.SSO_OTHER_DEVICE,
+                    -> R.string.a_notification_has_been_sent_to_your_device.asText()
+
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+                    -> R.string.your_request_has_been_sent_to_your_admin.asText()
+                }
+
+            /**
+             * The description text for the UI.
+             */
+            @Suppress("MaxLineLength")
+            val description: Text
+                get() = when (loginWithDeviceType) {
+                    LoginWithDeviceType.OTHER_DEVICE,
+                    LoginWithDeviceType.SSO_OTHER_DEVICE,
+                    -> R.string.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device.asText()
+
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+                    -> R.string.you_will_be_notified_once_approved.asText()
+                }
+
+            /**
+             * The text to display indicating that there are other option for logging in.
+             */
+            @Suppress("MaxLineLength")
+            val otherOptions: Text
+                get() = when (loginWithDeviceType) {
+                    LoginWithDeviceType.OTHER_DEVICE,
+                    LoginWithDeviceType.SSO_OTHER_DEVICE,
+                    -> R.string.log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option.asText()
+
+                    LoginWithDeviceType.SSO_ADMIN_APPROVAL -> R.string.trouble_logging_in.asText()
+                }
+
+            /**
+             * Indicates if the resend button should be available.
+             */
+            val allowsResend: Boolean
+                get() = loginWithDeviceType != LoginWithDeviceType.SSO_ADMIN_APPROVAL
+        }
     }
 
     /**

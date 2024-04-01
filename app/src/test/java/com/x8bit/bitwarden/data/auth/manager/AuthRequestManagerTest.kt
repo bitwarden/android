@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestSe
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
@@ -74,13 +76,19 @@ class AuthRequestManagerTest {
                     deviceId = fakeAuthDiskSource.uniqueAppId,
                     accessCode = authRequestResponse.accessCode,
                     fingerprint = authRequestResponse.fingerprint,
+                    authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
                 )
             } returns Throwable("Fail").asFailure()
 
-            repository.createAuthRequestWithUpdates(email = email).test {
-                assertEquals(CreateAuthRequestResult.Error, awaitItem())
-                awaitComplete()
-            }
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.OTHER_DEVICE,
+                )
+                .test {
+                    assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                    awaitComplete()
+                }
         }
 
     @Suppress("MaxLineLength")
@@ -127,30 +135,37 @@ class AuthRequestManagerTest {
                     deviceId = fakeAuthDiskSource.uniqueAppId,
                     accessCode = authRequestResponse.accessCode,
                     fingerprint = authRequestResponse.fingerprint,
+                    authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
                 )
             } returns authRequestResponseJson.asSuccess()
             coEvery {
                 newAuthRequestService.getAuthRequestUpdate(
                     requestId = authRequest.id,
                     accessCode = authRequestResponse.accessCode,
+                    isSso = false,
                 )
             } returnsMany listOf(
                 authRequestResponseJson.asSuccess(),
                 updatedAuthRequestResponseJson.asSuccess(),
             )
 
-            repository.createAuthRequestWithUpdates(email = email).test {
-                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
-                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
-                assertEquals(
-                    CreateAuthRequestResult.Success(
-                        authRequest = authRequest.copy(requestApproved = true),
-                        authRequestResponse = authRequestResponse,
-                    ),
-                    awaitItem(),
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.OTHER_DEVICE,
                 )
-                awaitComplete()
-            }
+                .test {
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(
+                        CreateAuthRequestResult.Success(
+                            authRequest = authRequest.copy(requestApproved = true),
+                            authRequestResponse = authRequestResponse,
+                        ),
+                        awaitItem(),
+                    )
+                    awaitComplete()
+                }
         }
 
     @Suppress("MaxLineLength")
@@ -197,20 +212,27 @@ class AuthRequestManagerTest {
                     deviceId = fakeAuthDiskSource.uniqueAppId,
                     accessCode = authRequestResponse.accessCode,
                     fingerprint = authRequestResponse.fingerprint,
+                    authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
                 )
             } returns authRequestResponseJson.asSuccess()
             coEvery {
                 newAuthRequestService.getAuthRequestUpdate(
                     requestId = authRequest.id,
                     accessCode = authRequestResponse.accessCode,
+                    isSso = false,
                 )
             } returns updatedAuthRequestResponseJson.asSuccess()
 
-            repository.createAuthRequestWithUpdates(email = email).test {
-                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
-                assertEquals(CreateAuthRequestResult.Declined, awaitItem())
-                awaitComplete()
-            }
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.OTHER_DEVICE,
+                )
+                .test {
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(CreateAuthRequestResult.Declined, awaitItem())
+                    awaitComplete()
+                }
         }
 
     @Suppress("MaxLineLength")
@@ -257,20 +279,27 @@ class AuthRequestManagerTest {
                     deviceId = fakeAuthDiskSource.uniqueAppId,
                     accessCode = authRequestResponse.accessCode,
                     fingerprint = authRequestResponse.fingerprint,
+                    authRequestType = AuthRequestTypeJson.ADMIN_APPROVAL,
                 )
             } returns authRequestResponseJson.asSuccess()
             coEvery {
                 newAuthRequestService.getAuthRequestUpdate(
                     requestId = authRequest.id,
                     accessCode = authRequestResponse.accessCode,
+                    isSso = true,
                 )
             } returns updatedAuthRequestResponseJson.asSuccess()
 
-            repository.createAuthRequestWithUpdates(email = email).test {
-                assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
-                assertEquals(CreateAuthRequestResult.Expired, awaitItem())
-                awaitComplete()
-            }
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.SSO_ADMIN_APPROVAL,
+                )
+                .test {
+                    assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    assertEquals(CreateAuthRequestResult.Expired, awaitItem())
+                    awaitComplete()
+                }
         }
 
     @Suppress("MaxLineLength")
@@ -282,10 +311,15 @@ class AuthRequestManagerTest {
                 authSdkSource.getNewAuthRequest(email = email)
             } returns Throwable("Fail").asFailure()
 
-            repository.createAuthRequestWithUpdates(email = email).test {
-                assertEquals(CreateAuthRequestResult.Error, awaitItem())
-                awaitComplete()
-            }
+            repository
+                .createAuthRequestWithUpdates(
+                    email = email,
+                    authRequestType = AuthRequestType.OTHER_DEVICE,
+                )
+                .test {
+                    assertEquals(CreateAuthRequestResult.Error, awaitItem())
+                    awaitComplete()
+                }
         }
 
     @Suppress("MaxLineLength")

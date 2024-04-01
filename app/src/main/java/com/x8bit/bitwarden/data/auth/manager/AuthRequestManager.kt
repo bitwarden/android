@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestResult
+import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestUpdatesResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsResult
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestsUpdatesResult
@@ -15,7 +16,10 @@ interface AuthRequestManager {
     /**
      * Creates a new authentication request and then continues to emit updates over time.
      */
-    fun createAuthRequestWithUpdates(email: String): Flow<CreateAuthRequestResult>
+    fun createAuthRequestWithUpdates(
+        email: String,
+        authRequestType: AuthRequestType,
+    ): Flow<CreateAuthRequestResult>
 
     /**
      * Get an auth request by its [fingerprint] and emits updates for that request.

@@ -17,6 +17,8 @@ abstract class BaseServiceTest {
 
     protected val server = MockWebServer().apply { start() }
 
+    protected val urlPrefix: String get() = "http://${server.hostName}:${server.port}"
+
     protected val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(server.url("/").toString())
         .addCallAdapterFactory(ResultCallAdapterFactory())

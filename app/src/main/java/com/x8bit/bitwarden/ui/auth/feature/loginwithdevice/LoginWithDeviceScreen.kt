@@ -96,7 +96,7 @@ fun LoginWithDeviceScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.log_in_with_device),
+                title = state.toolbarTitle(),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
@@ -144,7 +144,7 @@ private fun LoginWithDeviceScreenContent(
             .verticalScroll(rememberScrollState()),
     ) {
         Text(
-            text = stringResource(id = R.string.log_in_initiated),
+            text = state.title(),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -156,7 +156,7 @@ private fun LoginWithDeviceScreenContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         Text(
-            text = stringResource(id = R.string.a_notification_has_been_sent_to_your_device),
+            text = state.subtitle(),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -167,9 +167,8 @@ private fun LoginWithDeviceScreenContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        @Suppress("MaxLineLength")
         Text(
-            text = stringResource(id = R.string.please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device),
+            text = state.description(),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -204,33 +203,35 @@ private fun LoginWithDeviceScreenContent(
                 .fillMaxWidth(),
         )
 
-        Column(
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .defaultMinSize(minHeight = 40.dp)
-                .align(Alignment.Start),
-        ) {
-            if (state.isResendNotificationLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(horizontal = 64.dp)
-                        .size(size = 16.dp),
-                )
-            } else {
-                BitwardenClickableText(
-                    modifier = Modifier.semantics { testTag = "ResendNotificationButton" },
-                    label = stringResource(id = R.string.resend_notification),
-                    style = MaterialTheme.typography.labelLarge,
-                    innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-                    onClick = onResendNotificationClick,
-                )
+        if (state.allowsResend) {
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .defaultMinSize(minHeight = 40.dp)
+                    .align(Alignment.Start),
+            ) {
+                if (state.isResendNotificationLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .padding(horizontal = 64.dp)
+                            .size(size = 16.dp),
+                    )
+                } else {
+                    BitwardenClickableText(
+                        modifier = Modifier.semantics { testTag = "ResendNotificationButton" },
+                        label = stringResource(id = R.string.resend_notification),
+                        style = MaterialTheme.typography.labelLarge,
+                        innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
+                        onClick = onResendNotificationClick,
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(28.dp))
 
         Text(
-            text = stringResource(id = R.string.need_another_option),
+            text = state.otherOptions(),
             textAlign = TextAlign.Start,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,

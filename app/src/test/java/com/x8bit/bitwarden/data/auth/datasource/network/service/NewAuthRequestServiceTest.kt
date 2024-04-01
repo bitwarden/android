@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAuthRequestsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -14,15 +16,97 @@ import java.time.ZonedDateTime
 
 class NewAuthRequestServiceTest : BaseServiceTest() {
 
-    private val authRequestsApi: UnauthenticatedAuthRequestsApi = retrofit.create()
+    private val authenticatedAuthRequestsApi: AuthenticatedAuthRequestsApi = retrofit.create()
+    private val unauthenticatedAuthRequestsApi: UnauthenticatedAuthRequestsApi = retrofit.create()
     private val service = NewAuthRequestServiceImpl(
-        unauthenticatedAuthRequestsApi = authRequestsApi,
+        authenticatedAuthRequestsApi = authenticatedAuthRequestsApi,
+        unauthenticatedAuthRequestsApi = unauthenticatedAuthRequestsApi,
     )
 
     @Test
-    fun `createAuthRequest when request response is Failure should return Failure`() = runTest {
-        val response = MockResponse().setResponseCode(400)
-        server.enqueue(response)
+    fun `createAuthRequest when LOGIN_WITH_DEVICE and request is Failure should return Failure`() =
+        runTest {
+            val response = MockResponse().setResponseCode(400)
+            server.enqueue(response)
+            val deviceIdentifier = "4321"
+            val actual = service.createAuthRequest(
+                email = "test@gmail.com",
+                publicKey = "1234",
+                deviceId = deviceIdentifier,
+                accessCode = "accessCode",
+                fingerprint = "fingerprint",
+                authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
+            )
+
+            val request = server.takeRequest()
+            assertEquals(deviceIdentifier, request.getHeader("Device-Identifier"))
+            assertEquals("$urlPrefix/auth-requests", request.requestUrl.toString())
+            assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `createAuthRequest when LOGIN_WITH_DEVICE and request is Success should return Success`() =
+        runTest {
+            val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
+            server.enqueue(response)
+            val deviceIdentifier = "4321"
+            val actual = service.createAuthRequest(
+                email = "test@gmail.com",
+                publicKey = "1234",
+                deviceId = deviceIdentifier,
+                accessCode = "accessCode",
+                fingerprint = "fingerprint",
+                authRequestType = AuthRequestTypeJson.LOGIN_WITH_DEVICE,
+            )
+            val request = server.takeRequest()
+            assertEquals(deviceIdentifier, request.getHeader("Device-Identifier"))
+            assertEquals("$urlPrefix/auth-requests", request.requestUrl.toString())
+            assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
+        }
+
+    @Test
+    fun `createAuthRequest when ADMIN_APPROVAL and request is Failure should return Failure`() =
+        runTest {
+            val response = MockResponse().setResponseCode(400)
+            server.enqueue(response)
+            val deviceIdentifier = "4321"
+            val actual = service.createAuthRequest(
+                email = "test@gmail.com",
+                publicKey = "1234",
+                deviceId = deviceIdentifier,
+                accessCode = "accessCode",
+                fingerprint = "fingerprint",
+                authRequestType = AuthRequestTypeJson.ADMIN_APPROVAL,
+            )
+
+            val request = server.takeRequest()
+            assertEquals(deviceIdentifier, request.getHeader("Device-Identifier"))
+            assertEquals("$urlPrefix/auth-requests/admin-request", request.requestUrl.toString())
+            assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `createAuthRequest when ADMIN_APPROVAL and request is Success should return Success`() =
+        runTest {
+            val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
+            server.enqueue(response)
+            val deviceIdentifier = "4321"
+            val actual = service.createAuthRequest(
+                email = "test@gmail.com",
+                publicKey = "1234",
+                deviceId = deviceIdentifier,
+                accessCode = "accessCode",
+                fingerprint = "fingerprint",
+                authRequestType = AuthRequestTypeJson.ADMIN_APPROVAL,
+            )
+            val request = server.takeRequest()
+            assertEquals(deviceIdentifier, request.getHeader("Device-Identifier"))
+            assertEquals("$urlPrefix/auth-requests/admin-request", request.requestUrl.toString())
+            assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
+        }
+
+    @Test
+    fun `createAuthRequest when UNLOCK should return Failure`() = runTest {
         val deviceIdentifier = "4321"
         val actual = service.createAuthRequest(
             email = "test@gmail.com",
@@ -30,48 +114,82 @@ class NewAuthRequestServiceTest : BaseServiceTest() {
             deviceId = deviceIdentifier,
             accessCode = "accessCode",
             fingerprint = "fingerprint",
-        )
-        assertEquals(deviceIdentifier, server.takeRequest().getHeader("Device-Identifier"))
-        assertTrue(actual.isFailure)
-    }
-
-    @Test
-    fun `createAuthRequest when request response is Success should return Success`() = runTest {
-        val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
-        server.enqueue(response)
-        val deviceIdentifier = "4321"
-        val actual = service.createAuthRequest(
-            email = "test@gmail.com",
-            publicKey = "1234",
-            deviceId = deviceIdentifier,
-            accessCode = "accessCode",
-            fingerprint = "fingerprint",
-        )
-        assertEquals(deviceIdentifier, server.takeRequest().getHeader("Device-Identifier"))
-        assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
-    }
-
-    @Test
-    fun `getAuthRequestUpdate when request response is Failure should return Failure`() = runTest {
-        val response = MockResponse().setResponseCode(400)
-        server.enqueue(response)
-        val actual = service.getAuthRequestUpdate(
-            requestId = "1",
-            accessCode = "accessCode",
+            authRequestType = AuthRequestTypeJson.UNLOCK,
         )
         assertTrue(actual.isFailure)
     }
 
     @Test
-    fun `getAuthRequestUpdate when request response is Success should return Success`() = runTest {
-        val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
-        server.enqueue(response)
-        val actual = service.getAuthRequestUpdate(
-            requestId = "1",
-            accessCode = "accessCode",
-        )
-        assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
-    }
+    fun `getAuthRequestUpdate when not SSO and response is Failure should return Failure`() =
+        runTest {
+            val response = MockResponse().setResponseCode(400)
+            server.enqueue(response)
+            val requestId = "1"
+            val accessCode = "accessCode"
+            val actual = service.getAuthRequestUpdate(
+                requestId = requestId,
+                accessCode = accessCode,
+                isSso = false,
+            )
+            val request = server.takeRequest()
+            assertEquals(
+                "$urlPrefix/auth-requests/$requestId/response?code=$accessCode",
+                request.requestUrl.toString(),
+            )
+            assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `getAuthRequestUpdate when not SSO and response is Success should return Success`() =
+        runTest {
+            val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
+            server.enqueue(response)
+            val requestId = "1"
+            val accessCode = "accessCode"
+            val actual = service.getAuthRequestUpdate(
+                requestId = requestId,
+                accessCode = accessCode,
+                isSso = false,
+            )
+            val request = server.takeRequest()
+            assertEquals(
+                "$urlPrefix/auth-requests/$requestId/response?code=$accessCode",
+                request.requestUrl.toString(),
+            )
+            assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
+        }
+
+    @Test
+    fun `getAuthRequestUpdate when SSO and response is Failure should return Failure`() =
+        runTest {
+            val response = MockResponse().setResponseCode(400)
+            server.enqueue(response)
+            val requestId = "1"
+            val actual = service.getAuthRequestUpdate(
+                requestId = requestId,
+                accessCode = "accessCode",
+                isSso = true,
+            )
+            val request = server.takeRequest()
+            assertEquals("$urlPrefix/auth-requests/$requestId", request.requestUrl.toString())
+            assertTrue(actual.isFailure)
+        }
+
+    @Test
+    fun `getAuthRequestUpdate when SSO and response is Success should return Success`() =
+        runTest {
+            val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
+            server.enqueue(response)
+            val requestId = "1"
+            val actual = service.getAuthRequestUpdate(
+                requestId = requestId,
+                accessCode = "accessCode",
+                isSso = true,
+            )
+            val request = server.takeRequest()
+            assertEquals("$urlPrefix/auth-requests/$requestId", request.requestUrl.toString())
+            assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
+        }
 }
 
 private const val AUTH_REQUEST_RESPONSE_JSON = """

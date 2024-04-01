@@ -85,6 +85,7 @@ object AuthNetworkModule {
     fun providesNewAuthRequestService(
         retrofits: Retrofits,
     ): NewAuthRequestService = NewAuthRequestServiceImpl(
+        authenticatedAuthRequestsApi = retrofits.authenticatedApiRetrofit.create(),
         unauthenticatedAuthRequestsApi = retrofits.unauthenticatedApiRetrofit.create(),
     )
 
