@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * Represents the JSON response from creating a new file send.
  */
 @Serializable
-data class SendFileResponseJson(
+data class CreateFileSendResponseJson(
     @SerialName("url")
     val url: String,
 

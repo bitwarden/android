@@ -2,6 +2,13 @@ package com.x8bit.bitwarden.data.vault.datasource.network.model
 
 import java.time.ZonedDateTime
 
+fun createMockFileSendResponseJson(number: Int, type: SendTypeJson = SendTypeJson.FILE) =
+    CreateFileSendResponseJson(
+        url = "www.test.com",
+        fileUploadType = FileUploadType.AZURE,
+        sendResponse = createMockSend(number = number, type = type),
+    )
+
 fun createMockSend(
     number: Int,
     type: SendTypeJson = SendTypeJson.FILE,

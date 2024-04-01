@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.api
 
 import androidx.annotation.Keep
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import okhttp3.MultipartBody
@@ -28,7 +28,7 @@ interface SendsApi {
      * Create a file send.
      */
     @POST("sends/file/v2")
-    suspend fun createFileSend(@Body body: SendJsonRequest): Result<SendFileResponseJson>
+    suspend fun createFileSend(@Body body: SendJsonRequest): Result<CreateFileSendResponseJson>
 
     /**
      * Updates a send.

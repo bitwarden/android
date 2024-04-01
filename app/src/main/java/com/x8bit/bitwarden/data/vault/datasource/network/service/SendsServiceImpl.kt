@@ -5,8 +5,10 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenErr
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.SendsApi
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FileUploadType
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
@@ -28,11 +30,33 @@ class SendsServiceImpl(
     private val clock: Clock,
     private val json: Json,
 ) : SendsService {
-    override suspend fun createTextSend(body: SendJsonRequest): Result<SyncResponseJson.Send> =
+    override suspend fun createTextSend(
+        body: SendJsonRequest,
+    ): Result<CreateSendJsonResponse> =
         sendsApi.createTextSend(body = body)
+            .map { CreateSendJsonResponse.Success(send = it) }
+            .recoverCatching { throwable ->
+                throwable.toBitwardenError()
+                    .parseErrorBodyOrNull<CreateSendJsonResponse.Invalid>(
+                        code = 400,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
-    override suspend fun createFileSend(body: SendJsonRequest): Result<SendFileResponseJson> =
+    override suspend fun createFileSend(
+        body: SendJsonRequest,
+    ): Result<CreateFileSendResponse> =
         sendsApi.createFileSend(body = body)
+            .map { CreateFileSendResponse.Success(it) }
+            .recoverCatching { throwable ->
+                throwable.toBitwardenError()
+                    .parseErrorBodyOrNull<CreateFileSendResponse.Invalid>(
+                        code = 400,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
     override suspend fun updateSend(
         sendId: String,
@@ -55,7 +79,7 @@ class SendsServiceImpl(
             }
 
     override suspend fun uploadFile(
-        sendFileResponse: SendFileResponseJson,
+        sendFileResponse: CreateFileSendResponseJson,
         encryptedFile: ByteArray,
     ): Result<SyncResponseJson.Send> {
         val send = sendFileResponse.sendResponse

@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
-import com.x8bit.bitwarden.data.vault.datasource.network.model.SendFileResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
@@ -14,20 +16,20 @@ interface SendsService {
      */
     suspend fun createTextSend(
         body: SendJsonRequest,
-    ): Result<SyncResponseJson.Send>
+    ): Result<CreateSendJsonResponse>
 
     /**
      * Attempt to create a file send.
      */
     suspend fun createFileSend(
         body: SendJsonRequest,
-    ): Result<SendFileResponseJson>
+    ): Result<CreateFileSendResponse>
 
     /**
      * Attempt to upload the given [encryptedFile] associated with the [sendFileResponse].
      */
     suspend fun uploadFile(
-        sendFileResponse: SendFileResponseJson,
+        sendFileResponse: CreateFileSendResponseJson,
         encryptedFile: ByteArray,
     ): Result<SyncResponseJson.Send>
 
