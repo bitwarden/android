@@ -78,7 +78,7 @@ class SettingsRepositoryTest {
 
         // Calling once sets values
         assertEquals(
-            30,
+            15,
             fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
         )
         assertEquals(
