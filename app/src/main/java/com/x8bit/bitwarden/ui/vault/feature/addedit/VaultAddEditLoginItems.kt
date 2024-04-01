@@ -61,6 +61,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             value = commonState.name,
             onValueChange = commonActionHandler.onNameTextChange,
             modifier = Modifier
+                .semantics { testTag = "ItemNameEntry" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -109,7 +110,8 @@ fun LazyListScope.vaultAddEditLoginItems(
             BitwardenTextFieldWithActions(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp)
+                    .semantics { testTag = "LoginTotpEntry" },
                 label = stringResource(id = R.string.totp),
                 value = loginState.totp,
                 trailingIconContent = {
@@ -153,6 +155,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 icon = painterResource(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
                 modifier = Modifier
+                    .semantics { testTag = "SetupTotpButton" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -184,6 +187,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             label = stringResource(id = R.string.new_uri),
             onClick = loginItemTypeHandlers.onAddNewUriClick,
             modifier = Modifier
+                .semantics { testTag = "LoginAddNewUriButton" }
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -393,7 +397,9 @@ private fun UsernameRow(
                 modifier = Modifier.semantics { testTag = "GenerateUsernameButton" },
             )
         },
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = Modifier
+            .semantics { testTag = "LoginUsernameEntry" }
+            .padding(horizontal = 16.dp),
     )
 
     if (shouldShowDialog) {
@@ -432,6 +438,8 @@ private fun PasswordRow(
             label = stringResource(id = R.string.password),
             value = loginState.password,
             onValueChange = loginItemTypeHandlers.onPasswordTextChange,
+            showPasswordTestTag = "ViewPasswordButton",
+            passwordFieldTestTag = "LoginPasswordEntry",
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
@@ -442,6 +450,8 @@ private fun PasswordRow(
                     contentDescription = stringResource(id = R.string.check_password),
                 ),
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
+                modifier = Modifier
+                    .semantics { testTag = "CheckPasswordButton" },
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -455,6 +465,8 @@ private fun PasswordRow(
                         shouldShowDialog = true
                     }
                 },
+                modifier = Modifier
+                    .semantics { testTag = "RegeneratePasswordButton" },
             )
 
             if (shouldShowDialog) {
@@ -485,7 +497,8 @@ private fun PasswordRow(
             value = loginState.password,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .semantics { testTag = "LoginPasswordEntry" },
         )
     }
 }
