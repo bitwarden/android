@@ -5,7 +5,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -21,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model.toExpo
 import com.x8bit.bitwarden.ui.platform.util.fileExtension
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
@@ -49,6 +52,7 @@ class ExportVaultViewModel @Inject constructor(
         ?: ExportVaultState(
             confirmFilePasswordInput = "",
             dialogState = null,
+            email = requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
             exportData = null,
             exportFormat = ExportVaultFormat.JSON,
             filePasswordInput = "",
@@ -59,6 +63,12 @@ class ExportVaultViewModel @Inject constructor(
                 .any(),
         ),
 ) {
+    /**
+     * Keeps track of async request to get password strength. Should be cancelled
+     * when user input changes.
+     */
+    private var passwordStrengthJob: Job = Job().apply { complete() }
+
     init {
         // As state updates, write to saved state handle.
         stateFlow
@@ -86,6 +96,10 @@ class ExportVaultViewModel @Inject constructor(
 
             is ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult -> {
                 handleReceivePrepareVaultDataResult(action)
+            }
+
+            is ExportVaultAction.Internal.ReceivePasswordStrengthResult -> {
+                handleReceivePasswordStrengthResult(action)
             }
 
             is ExportVaultAction.Internal.SaveExportDataToUriResultReceive -> {
@@ -182,6 +196,21 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(filePasswordInput = action.input)
         }
+        // Update password strength
+        passwordStrengthJob.cancel()
+        if (action.input.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(passwordStrengthState = PasswordStrengthState.NONE)
+            }
+        } else {
+            passwordStrengthJob = viewModelScope.launch {
+                val result = authRepository.getPasswordStrength(
+                    email = state.email,
+                    password = action.input,
+                )
+                trySendAction(ExportVaultAction.Internal.ReceivePasswordStrengthResult(result))
+            }
+        }
     }
 
     /**
@@ -266,6 +295,31 @@ class ExportVaultViewModel @Inject constructor(
         }
     }
 
+    private fun handleReceivePasswordStrengthResult(
+        action: ExportVaultAction.Internal.ReceivePasswordStrengthResult,
+    ) {
+        when (val result = action.result) {
+            is PasswordStrengthResult.Success -> {
+                val updatedState = when (result.passwordStrength) {
+                    PasswordStrength.LEVEL_0 -> PasswordStrengthState.WEAK_1
+                    PasswordStrength.LEVEL_1 -> PasswordStrengthState.WEAK_2
+                    PasswordStrength.LEVEL_2 -> PasswordStrengthState.WEAK_3
+                    PasswordStrength.LEVEL_3 -> PasswordStrengthState.GOOD
+                    PasswordStrength.LEVEL_4 -> PasswordStrengthState.STRONG
+                }
+                mutableStateFlow.update { oldState ->
+                    oldState.copy(
+                        passwordStrengthState = updatedState,
+                    )
+                }
+            }
+
+            PasswordStrengthResult.Error -> {
+                // Leave UI the same
+            }
+        }
+    }
+
     private fun handleExportDataFinishedSavingToDisk(
         action: ExportVaultAction.Internal.SaveExportDataToUriResultReceive,
     ) {
@@ -298,6 +352,7 @@ data class ExportVaultState(
     val exportData: String? = null,
     val confirmFilePasswordInput: String,
     val dialogState: DialogState?,
+    val email: String,
     val exportFormat: ExportVaultFormat,
     val filePasswordInput: String,
     val passwordInput: String,
@@ -411,6 +466,13 @@ sealed class ExportVaultAction {
          */
         data class ReceiveExportVaultDataToStringResult(
             val result: ExportVaultDataResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the result for getting the password strength has been received.
+         */
+        data class ReceivePasswordStrengthResult(
+            val result: PasswordStrengthResult,
         ) : Internal()
 
         /**
