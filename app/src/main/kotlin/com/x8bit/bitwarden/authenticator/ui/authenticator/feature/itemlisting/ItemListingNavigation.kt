@@ -10,7 +10,8 @@ const val ITEM_LIST_ROUTE = "item_list"
  */
 fun NavGraphBuilder.itemListingDestination(
     onNavigateBack: () -> Unit = { },
-    onNavigateToAddItemScreen: () -> Unit = { },
+    onNavigateToQrCodeScanner: () -> Unit = { },
+    onNavigateToManualKeyEntry: () -> Unit = { },
     onNavigateToItemScreen: (id: String) -> Unit = { },
     onNavigateToEditItemScreen: (id: String) -> Unit = { },
 ) {
@@ -19,7 +20,8 @@ fun NavGraphBuilder.itemListingDestination(
     ) {
         ItemListingScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToAddItemScreen = onNavigateToAddItemScreen,
+            onNavigateToQrCodeScanner = onNavigateToQrCodeScanner,
+            onNavigateToManualKeyEntry = onNavigateToManualKeyEntry,
             onNavigateToItemScreen = onNavigateToItemScreen,
             onNavigateToEditItemScreen = onNavigateToEditItemScreen
         )

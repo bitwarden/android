@@ -18,4 +18,7 @@
     <string name="view_item">View Item</string>
     <string name="bitwarden_authenticator">Bitwarden Authenticator</string>
     <string name="name">Name</string>
+    <string name="add_item_rotation">Add Item Rotation</string>
+    <string name="scan_a_qr_code">Scan a QR code</string>
+    <string name="enter_a_setup_key">Enter a setup key</string>
 </resources>

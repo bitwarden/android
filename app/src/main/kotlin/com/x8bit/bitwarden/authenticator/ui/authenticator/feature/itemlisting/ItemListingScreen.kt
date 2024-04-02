@@ -9,16 +9,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.authenticator.R
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
 import com.x8bit.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
@@ -37,6 +34,9 @@ import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.BasicDial
 import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
+import com.x8bit.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabIcon
+import com.x8bit.bitwarden.authenticator.ui.platform.components.fab.ExpandableFloatingActionButton
+import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 
 /**
@@ -47,7 +47,8 @@ import com.x8bit.bitwarden.authenticator.ui.platform.components.scaffold.Bitward
 fun ItemListingScreen(
     viewModel: ItemListingViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
-    onNavigateToAddItemScreen: () -> Unit,
+    onNavigateToQrCodeScanner: () -> Unit,
+    onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToItemScreen: (id: String) -> Unit,
     onNavigateToEditItemScreen: (id: String) -> Unit,
 ) {
@@ -60,7 +61,8 @@ fun ItemListingScreen(
         when (event) {
             ItemListingEvent.NavigateBack -> onNavigateBack()
             ItemListingEvent.DismissPullToRefresh -> pullToRefreshState.endRefresh()
-            ItemListingEvent.NavigateToAddItem -> onNavigateToAddItemScreen()
+            ItemListingEvent.NavigateToQrCodeScanner -> onNavigateToQrCodeScanner()
+            ItemListingEvent.NavigateToManualAddItem -> onNavigateToManualKeyEntry()
             is ItemListingEvent.NavigateToItem -> onNavigateToItemScreen(event.id)
             is ItemListingEvent.ShowToast -> {
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_LONG)
@@ -83,20 +85,48 @@ fun ItemListingScreen(
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(ItemListingAction.AddItemClick) }
-                },
+            ExpandableFloatingActionButton(
                 modifier = Modifier
                     .semantics { testTag = "AddItemButton" }
                     .padding(bottom = 16.dp),
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_plus),
-                    contentDescription = stringResource(id = R.string.add_item),
-                )
-            }
+                label = R.string.add_item.asText(),
+                items = listOf(
+                    ItemListingExpandableFabAction.ScanQrCode(
+                        label = R.string.scan_a_qr_code.asText(),
+                        icon = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_camera),
+                            contentDescription = stringResource(id = R.string.scan_a_qr_code),
+                            testTag = "ScanQRCodeButton"
+                        ),
+                        onScanQrCodeClick = {
+                            viewModel.trySendAction(
+                                ItemListingAction.ScanQrCodeClick
+                            )
+                        }
+                    ),
+                    ItemListingExpandableFabAction.EnterSetupKey(
+                        label = R.string.enter_a_setup_key.asText(),
+                        icon = IconResource(
+                            iconPainter = painterResource(id = R.drawable.ic_copy),
+                            contentDescription = stringResource(id = R.string.enter_a_setup_key),
+                            testTag = "EnterSetupKeyButton"
+                        ),
+                        onEnterSetupKeyClick = {
+                            viewModel.trySendAction(
+                                ItemListingAction.EnterSetupKeyClick
+                            )
+                        }
+                    )
+                ),
+                expandableFabIcon = ExpandableFabIcon(
+                    iconData = IconResource(
+                        iconPainter = painterResource(id = R.drawable.ic_plus),
+                        contentDescription = stringResource(id = R.string.add_item),
+                        testTag = "AddItemButton",
+                    ),
+                    iconRotation = 45f,
+                ),
+            )
         },
         floatingActionButtonPosition = FabPosition.EndOverlay,
     ) { paddingValues ->

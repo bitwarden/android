@@ -91,9 +91,9 @@ class ItemListingViewModel @Inject constructor(
 
     override fun handleAction(action: ItemListingAction) {
         when (action) {
-            ItemListingAction.AddItemClick -> sendEvent(ItemListingEvent.NavigateToAddItem)
+            ItemListingAction.ScanQrCodeClick -> sendEvent(ItemListingEvent.NavigateToQrCodeScanner)
+            ItemListingAction.EnterSetupKeyClick -> sendEvent(ItemListingEvent.NavigateToManualAddItem)
             ItemListingAction.BackClick -> sendEvent(ItemListingEvent.NavigateBack)
-
             is ItemListingAction.ItemClick -> sendEvent(ItemListingEvent.NavigateToItem(action.id))
             ItemListingAction.DialogDismiss -> handleDialogDismiss()
             is ItemListingAction.Internal.AuthenticatorDataReceive -> handleAuthenticatorDataReceive(
@@ -276,9 +276,14 @@ sealed class ItemListingEvent {
     data object NavigateBack : ItemListingEvent()
 
     /**
-     * Navigate to the Add Item screen.
+     * Navigate to the QR Code Scanner screen.
      */
-    data object NavigateToAddItem : ItemListingEvent()
+    data object NavigateToQrCodeScanner : ItemListingEvent()
+
+    /**
+     * Navigate to the Manual Add Item screen.
+     */
+    data object NavigateToManualAddItem : ItemListingEvent()
 
     /**
      * Navigate to the View Item screen.
@@ -314,9 +319,14 @@ sealed class ItemListingAction {
     data object BackClick : ItemListingAction()
 
     /**
-     * The user clicked the Add Item button.
+     * The user clicked the Scan QR Code button.
      */
-    data object AddItemClick : ItemListingAction()
+    data object ScanQrCodeClick : ItemListingAction()
+
+    /**
+     * The user clicked the Enter Setup Key button.
+     */
+    data object EnterSetupKeyClick : ItemListingAction()
 
     /**
      * The user clicked a list item.

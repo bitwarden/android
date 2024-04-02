@@ -21,9 +21,10 @@ fun NavGraphBuilder.itemListingGraph(
     ) {
         itemListingDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToAddItemScreen = { /*navController.navigateToAddItem()*/ },
+            onNavigateToQrCodeScanner = { /*navController.navigateToQrCodeScanner()*/ },
             onNavigateToItemScreen = { navController.navigateToItem(itemId = it) },
             onNavigateToEditItemScreen = { /*navController.navigateToEditItem(itemId = it)*/ },
+            onNavigateToManualKeyEntry = { /*navController.navigateToManualKeySetup()*/ },
         )
         itemDestination(
             onNavigateBack = { navController.popBackStack() },
