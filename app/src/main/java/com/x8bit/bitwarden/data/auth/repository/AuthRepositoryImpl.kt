@@ -471,6 +471,7 @@ class AuthRepositoryImpl(
                                 .environment
                                 .environmentUrlData,
                         )
+                        val userId = userStateJson.activeUserId
 
                         // If the user just authenticated with a two-factor code and selected
                         // the option to remember it, then the API response will return a token
@@ -498,7 +499,7 @@ class AuthRepositoryImpl(
                         password?.let {
                             if (loginResponse.privateKey != null && loginResponse.key != null) {
                                 vaultRepository.unlockVault(
-                                    userId = userStateJson.activeUserId,
+                                    userId = userId,
                                     email = userStateJson.activeAccount.profile.email,
                                     kdf = userStateJson.activeAccount.profile.toSdkParams(),
                                     userKey = loginResponse.key,
@@ -520,7 +521,7 @@ class AuthRepositoryImpl(
                                 )
                                 .onSuccess { passwordHash ->
                                     authDiskSource.storeMasterPasswordHash(
-                                        userId = userStateJson.activeUserId,
+                                        userId = userId,
                                         passwordHash = passwordHash,
                                     )
                                 }
@@ -535,7 +536,7 @@ class AuthRepositoryImpl(
                         if (loginResponse.privateKey != null && loginResponse.key != null) {
                             deviceData?.let { model ->
                                 vaultRepository.unlockVault(
-                                    userId = userStateJson.activeUserId,
+                                    userId = userId,
                                     email = userStateJson.activeAccount.profile.email,
                                     kdf = userStateJson.activeAccount.profile.toSdkParams(),
                                     privateKey = loginResponse.privateKey,
@@ -565,24 +566,19 @@ class AuthRepositoryImpl(
                         }
 
                         authDiskSource.storeAccountTokens(
-                            userId = userStateJson.activeUserId,
+                            userId = userId,
                             accountTokens = AccountTokensJson(
                                 accessToken = loginResponse.accessToken,
                                 refreshToken = loginResponse.refreshToken,
                             ),
                         )
                         authDiskSource.userState = userStateJson
-                        authDiskSource.storeUserKey(
-                            userId = userStateJson.activeUserId,
-                            userKey = loginResponse.key,
-                        )
+                        authDiskSource.storeUserKey(userId = userId, userKey = loginResponse.key)
                         authDiskSource.storePrivateKey(
-                            userId = userStateJson.activeUserId,
+                            userId = userId,
                             privateKey = loginResponse.privateKey,
                         )
-                        settingsRepository.setDefaultsIfNecessary(
-                            userId = userStateJson.activeUserId,
-                        )
+                        settingsRepository.setDefaultsIfNecessary(userId = userId)
                         vaultRepository.syncIfNecessary()
                         hasPendingAccountAddition = false
                         LoginResult.Success
