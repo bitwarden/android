@@ -37,7 +37,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
-import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -127,7 +126,7 @@ fun ExportVaultScreen(
         is ExportVaultState.DialogState.Error -> {
             BitwardenBasicDialog(
                 visibilityState = BasicDialogState.Shown(
-                    title = dialog.title ?: R.string.an_error_has_occurred.asText(),
+                    title = dialog.title,
                     message = dialog.message,
                 ),
                 onDismissRequest = remember(viewModel) {

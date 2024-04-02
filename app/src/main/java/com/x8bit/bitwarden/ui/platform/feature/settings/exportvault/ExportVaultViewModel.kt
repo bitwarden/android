@@ -118,15 +118,30 @@ class ExportVaultViewModel @Inject constructor(
     /**
      * Verify the master password after confirming exporting the vault.
      */
+    @Suppress("ReturnCount")
     private fun handleConfirmExportVaultClicked() {
         // Display an error alert if the user hasn't entered a password.
         if (mutableStateFlow.value.passwordInput.isBlank()) {
             updateStateWithError(
-                R.string.validation_field_required.asText(
+                message = R.string.validation_field_required.asText(
                     R.string.master_password.asText(),
                 ),
             )
             return
+        } else if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+            if (state.filePasswordInput.isBlank()) {
+                updateStateWithError(
+                    message = R.string.validation_field_required
+                        .asText(R.string.file_password.asText()),
+                )
+                return
+            } else if (state.confirmFilePasswordInput.isBlank()) {
+                updateStateWithError(
+                    message = R.string.validation_field_required
+                        .asText(R.string.confirm_file_password.asText()),
+                )
+                return
+            }
         }
 
         // Otherwise, validate the password.
@@ -335,7 +350,7 @@ class ExportVaultViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = null,
+                    title = R.string.an_error_has_occurred.asText(),
                     message = message,
                 ),
             )
