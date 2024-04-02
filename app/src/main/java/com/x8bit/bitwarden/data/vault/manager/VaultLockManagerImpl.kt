@@ -248,8 +248,7 @@ class VaultLockManagerImpl(
 
     private fun storeUserAutoUnlockKeyIfNecessary(userId: String) {
         val vaultTimeout = settingsRepository.getVaultTimeoutStateFlow(userId = userId).value
-        if (
-            vaultTimeout == VaultTimeout.Never &&
+        if (vaultTimeout == VaultTimeout.Never &&
             authDiskSource.getUserAutoUnlockKey(userId = userId) == null
         ) {
             unconfinedScope.launch {
@@ -354,10 +353,9 @@ class VaultLockManagerImpl(
 
         if (isVaultUnlocked(userId = userId)) {
             // Get and save the key if necessary
-            val userAutoUnlockKey =
-                vaultSdkSource
-                    .getUserEncryptionKey(userId = userId)
-                    .getOrNull()
+            val userAutoUnlockKey = vaultSdkSource
+                .getUserEncryptionKey(userId = userId)
+                .getOrNull()
             authDiskSource.storeUserAutoUnlockKey(
                 userId = userId,
                 userAutoUnlockKey = userAutoUnlockKey,
@@ -367,8 +365,7 @@ class VaultLockManagerImpl(
             authDiskSource.getUserAutoUnlockKey(userId = userId)?.let {
                 val result = unlockVaultForUser(
                     userId = userId,
-                    initUserCryptoMethod =
-                    InitUserCryptoMethod.DecryptedKey(
+                    initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = it,
                     ),
                 )
@@ -410,14 +407,11 @@ class VaultLockManagerImpl(
         isAppRestart: Boolean = false,
     ) {
         val currentTimeMillis = elapsedRealtimeMillisProvider()
-        val lastActiveTimeMillis =
-            authDiskSource
-                .getLastActiveTimeMillis(userId = userId)
-                ?: 0
-        val vaultTimeout =
-            settingsRepository.getVaultTimeoutStateFlow(userId = userId).value
-        val vaultTimeoutAction =
-            settingsRepository.getVaultTimeoutActionStateFlow(userId = userId).value
+        val lastActiveTimeMillis = authDiskSource.getLastActiveTimeMillis(userId = userId) ?: 0
+        val vaultTimeout = settingsRepository.getVaultTimeoutStateFlow(userId = userId).value
+        val vaultTimeoutAction = settingsRepository
+            .getVaultTimeoutActionStateFlow(userId = userId)
+            .value
 
         val vaultTimeoutInMinutes = when (vaultTimeout) {
             VaultTimeout.Never -> {
@@ -470,8 +464,7 @@ class VaultLockManagerImpl(
             ?: return VaultUnlockResult.InvalidStateError
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
             ?: return VaultUnlockResult.InvalidStateError
-        val organizationKeys = authDiskSource
-            .getOrganizationKeys(userId = userId)
+        val organizationKeys = authDiskSource.getOrganizationKeys(userId = userId)
         return unlockVault(
             userId = userId,
             email = account.profile.email,
