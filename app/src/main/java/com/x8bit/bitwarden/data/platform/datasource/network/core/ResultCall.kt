@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.network.core
 
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout
@@ -25,9 +26,9 @@ class ResultCall<T>(
     @Suppress("UNCHECKED_CAST")
     private fun createResult(body: T?): Result<T> {
         return when {
-            body != null -> Result.success(body)
-            successType == Unit::class.java -> Result.success(Unit as T)
-            else -> Result.failure(IllegalStateException("Unexpected null body!"))
+            body != null -> body.asSuccess()
+            successType == Unit::class.java -> (Unit as T).asSuccess()
+            else -> IllegalStateException("Unexpected null body!").asFailure()
         }
     }
 
@@ -36,7 +37,7 @@ class ResultCall<T>(
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 val body = response.body()
                 val result: Result<T> = if (!response.isSuccessful) {
-                    Result.failure(HttpException(response))
+                    HttpException(response).asFailure()
                 } else {
                     createResult(body)
                 }
@@ -44,7 +45,7 @@ class ResultCall<T>(
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                val result: Result<T> = Result.failure(t)
+                val result: Result<T> = t.asFailure()
                 callback.onResponse(this@ResultCall, success(result))
             }
         },

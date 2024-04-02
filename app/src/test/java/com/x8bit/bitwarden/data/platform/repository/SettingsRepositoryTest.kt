@@ -603,7 +603,7 @@ class SettingsRepositoryTest {
                 vaultSdkSource.getUserFingerprint(
                     userId = MOCK_USER_STATE.activeUserId,
                 )
-            } returns Result.failure(Throwable())
+            } returns Throwable().asFailure()
 
             val result = settingsRepository.getUserFingerprint()
 
@@ -624,7 +624,7 @@ class SettingsRepositoryTest {
                 vaultSdkSource.getUserFingerprint(
                     userId = MOCK_USER_STATE.activeUserId,
                 )
-            } returns Result.success(fingerprint)
+            } returns fingerprint.asSuccess()
 
             val result = settingsRepository.getUserFingerprint()
 

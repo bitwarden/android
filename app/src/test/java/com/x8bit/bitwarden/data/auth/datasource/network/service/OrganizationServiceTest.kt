@@ -59,7 +59,7 @@ class OrganizationServiceTest : BaseServiceTest() {
                 MockResponse().setResponseCode(200).setBody(ORGANIZATION_DOMAIN_SSO_DETAILS_JSON),
             )
             val result = organizationService.getOrganizationDomainSsoDetails(email)
-            assertEquals(Result.success(ORGANIZATION_DOMAIN_SSO_BODY), result)
+            assertEquals(ORGANIZATION_DOMAIN_SSO_BODY.asSuccess(), result)
         }
 
     @Test
@@ -78,7 +78,7 @@ class OrganizationServiceTest : BaseServiceTest() {
                 MockResponse().setResponseCode(200).setBody(ORGANIZATION_AUTO_ENROLL_STATUS_JSON),
             )
             val result = organizationService.getOrganizationAutoEnrollStatus("orgId")
-            assertEquals(Result.success(ORGANIZATION_AUTO_ENROLL_STATUS_RESPONSE), result)
+            assertEquals(ORGANIZATION_AUTO_ENROLL_STATUS_RESPONSE.asSuccess(), result)
         }
 
     @Test
@@ -95,7 +95,7 @@ class OrganizationServiceTest : BaseServiceTest() {
             MockResponse().setResponseCode(200).setBody(ORGANIZATION_KEYS_JSON),
         )
         val result = organizationService.getOrganizationKeys("orgId")
-        assertEquals(Result.success(ORGANIZATION_KEYS_RESPONSE), result)
+        assertEquals(ORGANIZATION_KEYS_RESPONSE.asSuccess(), result)
     }
 
     @Test

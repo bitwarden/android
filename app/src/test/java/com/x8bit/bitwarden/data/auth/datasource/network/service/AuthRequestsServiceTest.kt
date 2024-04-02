@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAuthRequestsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestsResponseJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -74,7 +75,7 @@ class AuthRequestsServiceTest : BaseServiceTest() {
             masterPasswordHash = "verySecureHash",
             isApproved = true,
         )
-        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
+        assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
     }
 
     @Test
@@ -90,7 +91,7 @@ class AuthRequestsServiceTest : BaseServiceTest() {
         val response = MockResponse().setBody(AUTH_REQUEST_RESPONSE_JSON).setResponseCode(200)
         server.enqueue(response)
         val actual = service.getAuthRequest(requestId = "1")
-        assertEquals(Result.success(AUTH_REQUEST_RESPONSE), actual)
+        assertEquals(AUTH_REQUEST_RESPONSE.asSuccess(), actual)
     }
 }
 

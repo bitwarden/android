@@ -9,7 +9,7 @@ import kotlinx.coroutines.coroutineScope
  */
 inline fun <T, R> Result<T>.flatMap(transform: (T) -> Result<R>): Result<R> =
     this.exceptionOrNull()
-        ?.let { Result.failure(it) }
+        ?.asFailure()
         ?: transform(this.getOrThrow())
 
 /**

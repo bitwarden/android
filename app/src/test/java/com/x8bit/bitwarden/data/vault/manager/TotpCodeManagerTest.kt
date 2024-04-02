@@ -5,6 +5,8 @@ import com.bitwarden.core.TotpResponse
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
@@ -41,9 +43,9 @@ class TotpCodeManagerTest {
     @Test
     fun `getTotpCodeStateFlow should have loaded data with a valid values passed in`() = runTest {
         val totpResponse = TotpResponse("123456", 30u)
-        coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
-            totpResponse,
-        )
+        coEvery {
+            vaultSdkSource.generateTotp(any(), any(), any())
+        } returns totpResponse.asSuccess()
 
         val expected = createVerificationCodeItem()
 
@@ -57,9 +59,9 @@ class TotpCodeManagerTest {
     fun `getTotpCodeStateFlow should have loaded data with empty list if no totp code is provided`() =
         runTest {
             val totpResponse = TotpResponse("123456", 30u)
-            coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
-                totpResponse,
-            )
+            coEvery {
+                vaultSdkSource.generateTotp(any(), any(), any())
+            } returns totpResponse.asSuccess()
 
             val cipherView = createMockCipherView(1).copy(
                 login = createMockLoginView(number = 1, clock = clock).copy(
@@ -76,10 +78,9 @@ class TotpCodeManagerTest {
     @Test
     fun `getTotpCodesStateFlow should have loaded data with empty list if unable to generate auth code`() =
         runTest {
-            coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns
-                Result.failure(
-                    exception = Exception(),
-                )
+            coEvery {
+                vaultSdkSource.generateTotp(any(), any(), any())
+            } returns Exception().asFailure()
 
             val cipherView = createMockCipherView(1).copy(
                 login = createMockLoginView(number = 1, clock = clock).copy(
@@ -96,9 +97,9 @@ class TotpCodeManagerTest {
     fun `getTotpCodeStateFlow should have loaded item with a valid data passed in`() = runTest {
 
         val totpResponse = TotpResponse("123456", 30u)
-        coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
-            totpResponse,
-        )
+        coEvery {
+            vaultSdkSource.generateTotp(any(), any(), any())
+        } returns totpResponse.asSuccess()
 
         val cipherView = createMockCipherView(1)
 
@@ -113,9 +114,9 @@ class TotpCodeManagerTest {
     fun `getTotpCodeFlow should have null data if unable to get item`() =
         runTest {
             val totpResponse = TotpResponse("123456", 30u)
-            coEvery { vaultSdkSource.generateTotp(any(), any(), any()) } returns Result.success(
-                totpResponse,
-            )
+            coEvery {
+                vaultSdkSource.generateTotp(any(), any(), any())
+            } returns totpResponse.asSuccess()
 
             val cipherView = createMockCipherView(1).copy(
                 login = null,

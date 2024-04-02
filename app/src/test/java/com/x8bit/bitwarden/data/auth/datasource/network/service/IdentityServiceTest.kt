@@ -52,7 +52,7 @@ class IdentityServiceTest : BaseServiceTest() {
             captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
-        assertEquals(Result.success(LOGIN_SUCCESS), result)
+        assertEquals(LOGIN_SUCCESS.asSuccess(), result)
     }
 
     @Test
@@ -82,7 +82,7 @@ class IdentityServiceTest : BaseServiceTest() {
             captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
-        assertEquals(Result.success(CAPTCHA_BODY), result)
+        assertEquals(CAPTCHA_BODY.asSuccess(), result)
     }
 
     @Test
@@ -97,7 +97,7 @@ class IdentityServiceTest : BaseServiceTest() {
             captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
-        assertEquals(Result.success(TWO_FACTOR_BODY), result)
+        assertEquals(TWO_FACTOR_BODY.asSuccess(), result)
     }
 
     @Test
@@ -112,7 +112,7 @@ class IdentityServiceTest : BaseServiceTest() {
             captchaToken = null,
             uniqueAppId = UNIQUE_APP_ID,
         )
-        assertEquals(Result.success(INVALID_LOGIN), result)
+        assertEquals(INVALID_LOGIN.asSuccess(), result)
     }
 
     @Test
@@ -121,7 +121,7 @@ class IdentityServiceTest : BaseServiceTest() {
             val organizationId = "organizationId"
             server.enqueue(MockResponse().setResponseCode(200).setBody(PREVALIDATE_SSO_JSON))
             val result = identityService.prevalidateSso(organizationId)
-            assertEquals(Result.success(PREVALIDATE_SSO_BODY), result)
+            assertEquals(PREVALIDATE_SSO_BODY.asSuccess(), result)
         }
 
     @Test
