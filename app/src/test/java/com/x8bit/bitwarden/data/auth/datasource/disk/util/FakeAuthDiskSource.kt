@@ -38,7 +38,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, List<SyncResponseJson.Profile.Organization>?>()
     private val storedOrganizationKeys = mutableMapOf<String, Map<String, String>?>()
     private val storedAccountTokens = mutableMapOf<String, AccountTokensJson?>()
-    private val storedDeviceKey = mutableMapOf<String, String?>()
+    private val storedDeviceKey = mutableMapOf<String, Pair<String?, Boolean>>()
     private val storedPendingAuthRequests = mutableMapOf<String, PendingAuthRequestJson?>()
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
@@ -167,10 +167,14 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableOrganizationsFlow(userId = userId).tryEmit(organizations)
     }
 
-    override fun getDeviceKey(userId: String): String? = storedDeviceKey[userId]
+    override fun getDeviceKey(userId: String): String? = storedDeviceKey[userId]?.first
 
-    override fun storeDeviceKey(userId: String, deviceKey: String?) {
-        storedDeviceKey[userId] = deviceKey
+    override fun storeDeviceKey(
+        userId: String,
+        deviceKey: String?,
+        inMemoryOnly: Boolean,
+    ) {
+        storedDeviceKey[userId] = deviceKey to inMemoryOnly
     }
 
     override fun getPendingAuthRequest(userId: String): PendingAuthRequestJson? =
@@ -298,8 +302,8 @@ class FakeAuthDiskSource : AuthDiskSource {
     /**
      * Assert that the [deviceKey] was stored successfully using the [userId].
      */
-    fun assertDeviceKey(userId: String, deviceKey: String?) {
-        assertEquals(deviceKey, storedDeviceKey[userId])
+    fun assertDeviceKey(userId: String, deviceKey: String?, inMemoryOnly: Boolean = false) {
+        assertEquals(deviceKey to inMemoryOnly, storedDeviceKey[userId])
     }
 
     /**

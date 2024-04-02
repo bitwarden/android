@@ -119,8 +119,15 @@ interface AuthDiskSource {
 
     /**
      * Stores the device key for the given [userId].
+     *
+     * When [inMemoryOnly] is `true`, the value will only be available via a call to [getDeviceKey]
+     * during the current app session.
      */
-    fun storeDeviceKey(userId: String, deviceKey: String?)
+    fun storeDeviceKey(
+        userId: String,
+        deviceKey: String?,
+        inMemoryOnly: Boolean = false,
+    )
 
     /**
      * Gets the stored [PendingAuthRequestJson] for the given [userId].
