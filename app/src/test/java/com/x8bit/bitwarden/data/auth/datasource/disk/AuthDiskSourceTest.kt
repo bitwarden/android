@@ -182,10 +182,6 @@ class AuthDiskSourceTest {
     fun `clearData should clear all necessary data for the given user`() {
         val userId = "userId"
 
-        authDiskSource.storeDeviceKey(
-            userId = userId,
-            deviceKey = "9876-5432-1234",
-        )
         authDiskSource.storePendingAuthRequest(
             userId = userId,
             pendingAuthRequest = PendingAuthRequestJson(
@@ -233,7 +229,6 @@ class AuthDiskSourceTest {
 
         authDiskSource.clearData(userId = userId)
 
-        assertNull(authDiskSource.getDeviceKey(userId = userId))
         assertNull(authDiskSource.getPendingAuthRequest(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
