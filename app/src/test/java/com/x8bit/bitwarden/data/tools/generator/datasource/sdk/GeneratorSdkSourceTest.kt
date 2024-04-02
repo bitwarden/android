@@ -6,6 +6,7 @@ import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
 import com.bitwarden.sdk.ClientGenerators
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -40,7 +41,7 @@ class GeneratorSdkSourceTest {
 
             val result = generatorSdkSource.generatePassword(request)
 
-            assertEquals(Result.success(expectedResult), result)
+            assertEquals(expectedResult.asSuccess(), result)
 
             coVerify {
                 clientGenerators.password(request)
@@ -64,7 +65,7 @@ class GeneratorSdkSourceTest {
 
             val result = generatorSdkSource.generatePassphrase(request)
 
-            assertEquals(Result.success(expectedResult), result)
+            assertEquals(expectedResult.asSuccess(), result)
 
             coVerify {
                 clientGenerators.passphrase(request)
@@ -87,7 +88,7 @@ class GeneratorSdkSourceTest {
 
             val result = generatorSdkSource.generatePlusAddressedEmail(request)
 
-            assertEquals(Result.success(expectedResult), result)
+            assertEquals(expectedResult.asSuccess(), result)
             coVerify {
                 clientGenerators.username(request)
             }
@@ -109,7 +110,7 @@ class GeneratorSdkSourceTest {
 
             val result = generatorSdkSource.generateCatchAllEmail(request)
 
-            assertEquals(Result.success(expectedResult), result)
+            assertEquals(expectedResult.asSuccess(), result)
             coVerify {
                 clientGenerators.username(request)
             }
@@ -131,7 +132,7 @@ class GeneratorSdkSourceTest {
 
             val result = generatorSdkSource.generateRandomWord(request)
 
-            assertEquals(Result.success(expectedResult), result)
+            assertEquals(expectedResult.asSuccess(), result)
             coVerify {
                 clientGenerators.username(request)
             }
@@ -153,7 +154,7 @@ class GeneratorSdkSourceTest {
 
             val result = generatorSdkSource.generateForwardedServiceEmail(request)
 
-            assertEquals(Result.success(expectedResult), result)
+            assertEquals(expectedResult.asSuccess(), result)
 
             coVerify {
                 clientGenerators.username(request)

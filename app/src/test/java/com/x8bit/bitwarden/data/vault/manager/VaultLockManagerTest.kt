@@ -53,7 +53,7 @@ class VaultLockManagerTest {
                 kdf = MOCK_PROFILE.toSdkParams(),
                 purpose = HashPurpose.LOCAL_AUTHORIZATION,
             )
-        } returns Result.success("hashedPassword")
+        } returns "hashedPassword".asSuccess()
     }
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs

@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import okhttp3.mockwebserver.MockResponse
@@ -100,7 +101,7 @@ class AccountsServiceTest : BaseServiceTest() {
         )
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assertEquals(Result.success(expectedResponse), service.preLogin(EMAIL))
+        assertEquals(expectedResponse.asSuccess(), service.preLogin(EMAIL))
     }
 
     @Test
@@ -116,7 +117,7 @@ class AccountsServiceTest : BaseServiceTest() {
         )
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assertEquals(Result.success(expectedResponse), service.preLogin(EMAIL))
+        assertEquals(expectedResponse.asSuccess(), service.preLogin(EMAIL))
     }
 
     @Test
@@ -131,7 +132,7 @@ class AccountsServiceTest : BaseServiceTest() {
         )
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assertEquals(Result.success(expectedResponse), service.register(registerRequestBody))
+        assertEquals(expectedResponse.asSuccess(), service.register(registerRequestBody))
     }
 
     @Test
@@ -199,7 +200,7 @@ class AccountsServiceTest : BaseServiceTest() {
         )
         val response = MockResponse().setResponseCode(400).setBody(json)
         server.enqueue(response)
-        assertEquals(Result.success(expectedResponse), service.register(registerRequestBody))
+        assertEquals(expectedResponse.asSuccess(), service.register(registerRequestBody))
     }
 
     @Test

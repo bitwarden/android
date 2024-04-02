@@ -846,10 +846,7 @@ class VaultSdkSourceTest {
             time = time,
         )
 
-        assertEquals(
-            Result.success(totpResponse),
-            result,
-        )
+        assertEquals(totpResponse.asSuccess(), result)
         coVerify {
             clientVault.generateTotp(
                 key = "Totp",

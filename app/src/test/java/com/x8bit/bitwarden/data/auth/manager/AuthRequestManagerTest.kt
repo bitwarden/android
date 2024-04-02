@@ -517,7 +517,7 @@ class AuthRequestManagerTest {
             coEvery { authRequestsService.getAuthRequests() } returns responseJsonOne.asSuccess()
             coEvery {
                 authRequestsService.getAuthRequest(requestId = REQUEST_ID)
-            } returns Result.success(authRequestsResponse)
+            } returns authRequestsResponse.asSuccess()
             fakeAuthDiskSource.userState = SINGLE_USER_STATE
 
             repository
@@ -827,7 +827,7 @@ class AuthRequestManagerTest {
         )
         coEvery {
             authSdkSource.getUserFingerprint(email = EMAIL, publicKey = PUBLIC_KEY)
-        } returns Result.success(fingerprint)
+        } returns fingerprint.asSuccess()
         coEvery { authRequestsService.getAuthRequests() } returns responseJson.asSuccess()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE
 

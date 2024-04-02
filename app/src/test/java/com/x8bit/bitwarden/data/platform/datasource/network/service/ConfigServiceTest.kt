@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.service
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.datasource.network.api.ConfigApi
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -17,7 +18,7 @@ class ConfigServiceTest : BaseServiceTest() {
     @Test
     fun `getConfig should call ConfigApi`() = runTest {
         server.enqueue(MockResponse().setBody(CONFIG_RESPONSE_JSON))
-        assertEquals(Result.success(CONFIG_RESPONSE), service.getConfig())
+        assertEquals(CONFIG_RESPONSE.asSuccess(), service.getConfig())
     }
 }
 
