@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
+import com.x8bit.bitwarden.data.auth.manager.util.toUserStateJson
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 
@@ -43,6 +44,10 @@ class TrustedDeviceManagerImpl(
                             authDiskSource.storeDeviceKey(
                                 userId = userId,
                                 deviceKey = trustedDevice.deviceKey,
+                            )
+                            authDiskSource.userState = trustedDevice.toUserStateJson(
+                                userId = userId,
+                                previousUserState = requireNotNull(authDiskSource.userState),
                             )
                         }
                 }
