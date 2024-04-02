@@ -115,7 +115,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required.asText(
                             R.string.master_password.asText(),
                         ),
@@ -131,6 +131,89 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked blank file password should show an error when export type is JSON_ENCRYPTED`() =
+        runTest {
+            val password = "password"
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.JSON_ENCRYPTED),
+            )
+            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = ExportVaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required.asText(
+                            R.string.file_password.asText(),
+                        ),
+                    ),
+                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                    passwordInput = password,
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.trySendAction(ExportVaultAction.DialogDismiss)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                    passwordInput = password,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked blank confirm file password should show an error when export type is JSON_ENCRYPTED`() =
+        runTest {
+            val password = "password"
+            coEvery {
+                authRepository.getPasswordStrength(
+                    email = EMAIL_ADDRESS,
+                    password = password,
+                )
+            } returns PasswordStrengthResult.Success(
+                passwordStrength = PasswordStrength.LEVEL_4,
+            )
+            val viewModel = createViewModel()
+            viewModel.trySendAction(
+                ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.JSON_ENCRYPTED),
+            )
+            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+            viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(password))
+            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialogState = ExportVaultState.DialogState.Error(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.validation_field_required.asText(
+                            R.string.confirm_file_password.asText(),
+                        ),
+                    ),
+                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                    filePasswordInput = password,
+                    passwordInput = password,
+                    passwordStrengthState = PasswordStrengthState.STRONG,
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.trySendAction(ExportVaultAction.DialogDismiss)
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                    filePasswordInput = password,
+                    passwordInput = password,
+                    passwordStrengthState = PasswordStrengthState.STRONG,
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
     @Test
     fun `ConfirmExportVaultClicked invalid password should show an error`() = runTest {
@@ -149,7 +232,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.invalid_master_password.asText(),
                     ),
                     passwordInput = password,
@@ -181,7 +264,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.generic_error_message.asText(),
                     ),
                     passwordInput = password,
@@ -278,7 +361,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
             assertEquals(
                 DEFAULT_STATE.copy(
                     dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.export_vault_failure.asText(),
                     ),
                 ),
@@ -401,7 +484,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 dialogState = ExportVaultState.DialogState.Error(
-                    title = null,
+                    title = R.string.an_error_has_occurred.asText(),
                     message = R.string.export_vault_failure.asText(),
                 ),
             ),
@@ -433,7 +516,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     exportData = exportData,
                     dialogState = ExportVaultState.DialogState.Error(
-                        title = null,
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.export_vault_failure.asText(),
                     ),
                 ),
