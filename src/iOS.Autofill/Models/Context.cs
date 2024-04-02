@@ -70,7 +70,9 @@ namespace Bit.iOS.Autofill.Models
 
         public bool IsPasskey => PasskeyCredentialRequest != null;
 
-        public bool IsPreparingListForPasskey => PasskeyCredentialRequestParameters != null;
+        public bool IsPasswordFallback { get; set; }
+
+        public bool IsPreparingListForPasskey => PasskeyCredentialRequestParameters != null && !IsPasswordFallback;
 
         public bool IsCreatingOrPreparingListForPasskey => IsCreatingPasskey || IsPreparingListForPasskey;
     }

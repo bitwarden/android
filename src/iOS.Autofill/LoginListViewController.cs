@@ -215,9 +215,14 @@ namespace Bit.iOS.Autofill
                 {
                     if (Context?.IsExecutingWithoutUserInteraction == false)
                     {
-                        await _platformUtilsService.Value.ShowDialogAsync(
+                        _ = _platformUtilsService.Value.ShowDialogAsync(
                             string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier),
                             AppResources.ErrorReadingPasskey);
+
+                        TableView.SectionHeaderHeight = 0; 
+                        Context.IsPasswordFallback = true;
+                        await ReloadItemsAsync();
+                        _alreadyLoadItemsOnce = true;
                     }
                 }
                 catch (Exception ex)
