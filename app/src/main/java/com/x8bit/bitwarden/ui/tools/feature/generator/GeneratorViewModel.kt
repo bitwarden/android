@@ -1404,7 +1404,7 @@ class GeneratorViewModel @Inject constructor(
     /**
      * Updates the length property of the [Password] to reflect the new minimum.
      */
-    private inline fun updatePasswordLength() {
+    private fun updatePasswordLength() {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
                 length = currentPasswordType.minimumLength,
