@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.authenticator.ui.platform.base.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
 import kotlin.math.floor
@@ -35,3 +36,8 @@ fun String.withLineBreaksAtWidth(
         }
     }
 }
+
+/**
+ * Returns the [String] as an [AnnotatedString].
+ */
+fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)

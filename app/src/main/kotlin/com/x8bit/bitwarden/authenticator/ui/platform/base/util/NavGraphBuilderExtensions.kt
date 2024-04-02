@@ -10,6 +10,27 @@ import androidx.navigation.compose.composable
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.TransitionProviders
 
 /**
+ * A wrapper around [NavGraphBuilder.composable] that supplies slide up/down transitions.
+ */
+fun NavGraphBuilder.composableWithSlideTransitions(
+    route: String,
+    arguments: List<NamedNavArgument> = emptyList(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
+) {
+    this.composable(
+        route = route,
+        arguments = arguments,
+        deepLinks = deepLinks,
+        enterTransition = TransitionProviders.Enter.slideUp,
+        exitTransition = TransitionProviders.Exit.stay,
+        popEnterTransition = TransitionProviders.Enter.stay,
+        popExitTransition = TransitionProviders.Exit.slideDown,
+        content = content,
+    )
+}
+
+/**
  * A wrapper around [NavGraphBuilder.composable] that supplies push transitions.
  *
  * This is suitable for screens deeper within a hierarchy that uses push transitions; the root

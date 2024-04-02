@@ -21,4 +21,15 @@
     <string name="add_item_rotation">Add Item Rotation</string>
     <string name="scan_a_qr_code">Scan a QR code</string>
     <string name="enter_a_setup_key">Enter a setup key</string>
+    <string name="scan_qr_code">Scan QR code</string>
+    <string name="point_your_camera_at_the_qr_code">Point your camera at the QR code.</string>
+    <string name="cannot_scan_qr_code">Cannot scan QR code.</string>
+    <string name="enter_key_manually">Enter key manually.</string>
+    <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
+    <string name="once_the_key_is_successfully_entered">Once the key is successfully entered,\nselect Add TOTP to store the key safely</string>
+    <string name="add_totp">Add TOTP</string>
+    <string name="authenticator_key_scanner">Authenticator key</string>
+    <string name="no_thanks">No thanks</string>
+    <string name="settings">Settings</string>
+    <string name="enable_camer_permission_to_use_the_scanner">Enable camera permission to use the scanner</string>
 </resources>
