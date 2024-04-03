@@ -90,6 +90,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     var rememberedOrgIdentifier: String?
 
     /**
+     * The currently persisted state indicating whether the user has trusted this device.
+     */
+    var shouldTrustDevice: Boolean
+
+    /**
      * Tracks whether there is an additional account that is pending login/registration in order to
      * have multiple accounts available.
      *
