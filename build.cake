@@ -15,16 +15,17 @@ abstract record VariantConfig(
     string AppName, 
     string AndroidPackageName,
     string iOSBundleId,
-    string ApsEnvironment
+    string ApsEnvironment,
+    string DistProvisioningProfilePrefix
     );
 
 const string BASE_BUNDLE_ID_DROID = "com.x8bit.bitwarden";
 const string BASE_BUNDLE_ID_IOS = "com.8bit.bitwarden";
 
-record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development");
-record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development");
-record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production");
-record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production");
+record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development", "Dist:");
+record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development", "Dist:");
+record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production", "Dist: Beta");
+record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production", "Dist:");
 
 VariantConfig GetVariant() => variant.ToLower() switch{
     "qa" => new QA(),
@@ -197,7 +198,8 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     var prevBundleId = plist["CFBundleIdentifier"];
     var prevBundleName = plist["CFBundleName"];
     //var newVersion = CreateBuildNumber(prevVersion).ToString();
-    var newVersionName = GetVersionName(prevVersionName, buildVariant, git);
+    // we need to maintain version formatting here composed of one to three period-separated integers, so we cannot use the GetVersionName method as in Android for non-Prod.
+    var newVersionName = prevVersionName;
     var newBundleId = GetiOSBundleId(buildVariant, projectType);
     var newBundleName = GetiOSBundleName(buildVariant, projectType);
 
@@ -219,6 +221,13 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
         plist["NSExtension"]["NSExtensionAttributes"]["NSExtensionActivationRule"] = keyText.Replace("com.8bit.bitwarden", buildVariant.iOSBundleId);
     }
 
+    //TODO DEVOPS-1822 testing
+    if(buildVariant is Beta)
+    {
+        plist.Remove("ITSAppUsesNonExemptEncryption");
+        plist.Remove("ITSEncryptionExportComplianceCode");
+    }
+
     SerializePlist(plistFile, plist);
 
     Information($"Changed app name from {prevBundleName} to {newBundleName}");
@@ -228,12 +237,15 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     Information($"{plistPath} updated with success!");
 }
 
-private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant)
+private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant, bool updateApsEnv)
 {
     var EntitlementlistFile = File(entitlementsPath);
     dynamic Entitlements = DeserializePlist(EntitlementlistFile);
 
-    Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    if (updateApsEnv)
+    {
+        Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    }
     Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
     Entitlements["com.apple.security.application-groups"] = new List<string>() { $"group.{buildVariant.iOSBundleId}" };;
 
@@ -272,9 +284,10 @@ private void UpdateWatchPbxproj(string pbxprojPath, string newVersion)
     const string pattern = @"MARKETING_VERSION = [^;]*;";
 
     fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersion};");
-
+    
     FileWriteText(pbxprojPath, fileText);
-    Information($"{pbxprojPath} modified successfully.");
+
+    Information($"{pbxprojPath} modified Marketing Version successfully.");
 }
 
 /// <summary>
@@ -327,7 +340,7 @@ Task("UpdateiOSPlist")
         var infoPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, true);
     });
 
 Task("UpdateiOSAutofillPlist")
@@ -338,7 +351,7 @@ Task("UpdateiOSAutofillPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Autofill);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSExtensionPlist")
@@ -349,7 +362,7 @@ Task("UpdateiOSExtensionPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Extension);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSShareExtensionPlist")
@@ -360,7 +373,7 @@ Task("UpdateiOSShareExtensionPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.ShareExtension);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSCodeFiles")
@@ -397,6 +410,22 @@ Task("UpdateWatchKitAppInfoPlist")
         UpdateWatchKitAppInfoPlist(infoPath, buildVariant);
     });
 
+Task("UpdateDistProfiles")
+    .IsDependentOn("UpdateiOSCodeFiles")
+    .Does(()=> {
+        var buildVariant = GetVariant();
+    
+        var filesToReplace = new string[] {
+            Path.Combine(".github", "resources", "export-options-app-store.plist"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj")
+        };
+
+        foreach(string path in filesToReplace)
+        {
+            ReplaceInFile(path, "Dist:", buildVariant.DistProvisioningProfilePrefix);
+        }
+    });
+
 #endregion iOS
 
 #region Main Tasks
@@ -418,6 +447,7 @@ Task("iOS")
     .IsDependentOn("UpdateiOSCodeFiles")
     .IsDependentOn("UpdateWatchProject")
     .IsDependentOn("UpdateWatchKitAppInfoPlist")
+    .IsDependentOn("UpdateDistProfiles")
     .Does(()=>
     {
         Information("iOS app updated");
