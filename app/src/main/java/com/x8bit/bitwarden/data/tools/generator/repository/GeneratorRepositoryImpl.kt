@@ -200,7 +200,7 @@ class GeneratorRepositoryImpl(
                     GeneratedForwardedServiceUsernameResult.Success(generatedEmail)
                 },
                 onFailure = {
-                    GeneratedForwardedServiceUsernameResult.InvalidRequest
+                    GeneratedForwardedServiceUsernameResult.InvalidRequest(it.message)
                 },
             )
 
