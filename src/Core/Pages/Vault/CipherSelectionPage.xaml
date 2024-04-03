@@ -83,7 +83,7 @@
                         Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"></Label>
                     <Button
-                        Text="{u:I18n AddAnItem}"
+                        Text="{Binding AddNewItemText}"
                         Command="{Binding AddCipherCommand}" />
                 </StackLayout>
 

@@ -44,6 +44,7 @@ namespace Bit.App.Pages
             Name = name;
             PageTitle = string.Format(AppResources.ItemsForUri, Name ?? "--");
             NoDataText = string.Format(AppResources.NoItemsForUri, Name ?? "--");
+            AddNewItemText = appOptions.FromFido2Framework ? AppResources.SavePasskeyAsNewLogin : AppResources.AddAnItem;
         }
 
         protected override async Task<List<GroupingsPageListGroup>> LoadGroupedItemsAsync()

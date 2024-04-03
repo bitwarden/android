@@ -576,12 +576,10 @@ namespace Bit.Droid.Services
 
             if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialGet)
             {
-                //TODO: Old POC code used for auth of a passkey after unlock. Maybe it can be reused
                 await ExecuteFido2GetCredentialAsync(appOptions);
             }
             else if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
             {
-                //TODO: Old POC code used for creating a passkey after unlock. Maybe it can be reused
                 await ExecuteFido2CreateCredentialAsync();
             }
 
