@@ -4,6 +4,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
+using Bit.Core.Utilities.Fido2.Extensions;
 
 namespace Bit.Core.Services
 {
@@ -124,6 +125,15 @@ namespace Bit.Core.Services
             {
                 var makeCredentialResult = await _fido2AuthenticatorService.MakeCredentialAsync(makeCredentialParams, _makeCredentialUserInterface);
 
+                Fido2CredPropsResult credProps = null;
+                if (createCredentialParams.Extensions?.CredProps == true)
+                {
+                    credProps = new Fido2CredPropsResult
+                    {
+                        Rk = makeCredentialParams.RequireResidentKey
+                    };
+                }
+
                 return new Fido2ClientCreateCredentialResult
                 {
                     CredentialId = makeCredentialResult.CredentialId,
@@ -132,7 +142,11 @@ namespace Bit.Core.Services
                     ClientDataJSON = clientDataJSONBytes,
                     PublicKey = makeCredentialResult.PublicKey,
                     PublicKeyAlgorithm = makeCredentialResult.PublicKeyAlgorithm,
-                    Transports = createCredentialParams.Rp.Id == "google.com" ? new string[] { "internal", "usb" } : new string[] { "internal" } // workaround for a bug on Google's side
+                    Transports = createCredentialParams.Rp.Id == "google.com" ? new string[] { "internal", "usb" } : new string[] { "internal" }, // workaround for a bug on Google's side
+                    Extensions = new Fido2CreateCredentialExtensionsResult
+                    {
+                        CredProps = credProps
+                    }
                 };
             }
             catch (InvalidStateError)
@@ -249,7 +263,8 @@ namespace Bit.Core.Services
             Fido2ClientAssertCredentialParams assertCredentialParams,
             byte[] cliendDataHash)
         {
-            return new Fido2AuthenticatorGetAssertionParams {
+            return new Fido2AuthenticatorGetAssertionParams
+            {
                 RpId = assertCredentialParams.RpId,
                 Challenge = assertCredentialParams.Challenge,
                 AllowCredentialDescriptorList = assertCredentialParams.AllowCredentials,
