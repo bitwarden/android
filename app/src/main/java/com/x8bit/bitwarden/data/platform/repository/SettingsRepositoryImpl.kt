@@ -324,7 +324,21 @@ class SettingsRepositoryImpl(
         // Set Vault Settings defaults
         if (!isVaultTimeoutActionSet(userId = userId)) {
             storeVaultTimeout(userId, VaultTimeout.FifteenMinutes)
-            storeVaultTimeoutAction(userId, VaultTimeoutAction.LOCK)
+            val hasTrustedDeviceEncryption = authDiskSource
+                .userState
+                ?.activeAccount
+                ?.profile
+                ?.userDecryptionOptions
+                ?.trustedDeviceUserDecryptionOptions != null
+            storeVaultTimeoutAction(
+                userId = userId,
+                vaultTimeoutAction = if (hasTrustedDeviceEncryption) {
+                    // Always logout by default when using TDE
+                    VaultTimeoutAction.LOGOUT
+                } else {
+                    VaultTimeoutAction.LOCK
+                },
+            )
         }
     }
 

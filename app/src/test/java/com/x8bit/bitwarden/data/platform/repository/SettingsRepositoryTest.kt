@@ -3,8 +3,13 @@ package com.x8bit.bitwarden.data.platform.repository
 import android.view.autofill.AutofillManager
 import app.cash.turbine.test
 import com.bitwarden.core.DerivePinKeyResponse
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManagerImpl
@@ -69,43 +74,78 @@ class SettingsRepositoryTest {
     )
 
     @Test
-    fun `setDefaultsIfNecessary should set default values for the given user if necessary`() {
-        val userId = "userId"
-        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
-        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId))
+    fun `setDefaultsIfNecessary should set LOCK default values for the given user if necessary`() {
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID))
 
-        settingsRepository.setDefaultsIfNecessary(userId = userId)
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
 
         // Calling once sets values
         assertEquals(
             15,
-            fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+            fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID),
         )
         assertEquals(
             VaultTimeoutAction.LOCK,
-            fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
         )
 
         // Updating the Vault settings values and calling setDefaultsIfNecessary again has no effect
         // on the currently stored values.
         fakeSettingsDiskSource.apply {
             storeVaultTimeoutInMinutes(
-                userId = userId,
+                userId = USER_ID,
                 vaultTimeoutInMinutes = 240,
             )
             storeVaultTimeoutAction(
-                userId = userId,
+                userId = USER_ID,
                 vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
             )
         }
-        settingsRepository.setDefaultsIfNecessary(userId = userId)
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
         assertEquals(
             240,
-            fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+            fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID),
         )
         assertEquals(
             VaultTimeoutAction.LOGOUT,
-            fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `setDefaultsIfNecessary should set LOGOUT default values for the given user if necessary`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID))
+
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
+
+        // Calling once sets values
+        assertEquals(15, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertEquals(
+            VaultTimeoutAction.LOGOUT,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
+        )
+
+        // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
+        // effect on the currently stored values.
+        fakeSettingsDiskSource.apply {
+            storeVaultTimeoutInMinutes(
+                userId = USER_ID,
+                vaultTimeoutInMinutes = 240,
+            )
+            storeVaultTimeoutAction(
+                userId = USER_ID,
+                vaultTimeoutAction = VaultTimeoutAction.LOCK,
+            )
+        }
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
+        assertEquals(240, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertEquals(
+            VaultTimeoutAction.LOCK,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
         )
     }
 
@@ -246,13 +286,12 @@ class SettingsRepositoryTest {
             settingsRepository.vaultTimeout,
         )
 
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Updates to the disk source change the repository value
         VAULT_TIMEOUT_MAP.forEach { (vaultTimeout, vaultTimeoutInMinutes) ->
             fakeSettingsDiskSource.storeVaultTimeoutInMinutes(
-                userId = userId,
+                userId = USER_ID,
                 vaultTimeoutInMinutes = vaultTimeoutInMinutes,
             )
             assertEquals(
@@ -266,7 +305,7 @@ class SettingsRepositoryTest {
             settingsRepository.vaultTimeout = vaultTimeout
             assertEquals(
                 vaultTimeoutInMinutes,
-                fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+                fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID),
             )
         }
     }
@@ -279,13 +318,12 @@ class SettingsRepositoryTest {
             settingsRepository.vaultTimeoutAction,
         )
 
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Updates to the disk source change the repository value
         VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
             fakeSettingsDiskSource.storeVaultTimeoutAction(
-                userId = userId,
+                userId = USER_ID,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
             assertEquals(
@@ -299,16 +337,15 @@ class SettingsRepositoryTest {
             settingsRepository.vaultTimeoutAction = vaultTimeoutAction
             assertEquals(
                 vaultTimeoutAction,
-                fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+                fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
             )
         }
     }
 
     @Test
     fun `getVaultTimeoutStateFlow should react to changes in SettingsDiskSource`() = runTest {
-        val userId = "userId"
         settingsRepository
-            .getVaultTimeoutStateFlow(userId = userId)
+            .getVaultTimeoutStateFlow(userId = USER_ID)
             .test {
                 assertEquals(
                     VaultTimeout.Never,
@@ -316,7 +353,7 @@ class SettingsRepositoryTest {
                 )
                 VAULT_TIMEOUT_MAP.forEach { (vaultTimeout, vaultTimeoutInMinutes) ->
                     fakeSettingsDiskSource.storeVaultTimeoutInMinutes(
-                        userId = userId,
+                        userId = USER_ID,
                         vaultTimeoutInMinutes = vaultTimeoutInMinutes,
                     )
                     assertEquals(
@@ -329,24 +366,22 @@ class SettingsRepositoryTest {
 
     @Test
     fun `storeVaultTimeout should properly update SettingsDiskSource`() {
-        val userId = "userId"
         VAULT_TIMEOUT_MAP.forEach { (vaultTimeout, vaultTimeoutInMinutes) ->
             settingsRepository.storeVaultTimeout(
-                userId = userId,
+                userId = USER_ID,
                 vaultTimeout = vaultTimeout,
             )
             assertEquals(
                 vaultTimeoutInMinutes,
-                fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = userId),
+                fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID),
             )
         }
     }
 
     @Test
     fun `getVaultTimeoutActionStateFlow should react to changes in SettingsDiskSource`() = runTest {
-        val userId = "userId"
         settingsRepository
-            .getVaultTimeoutActionStateFlow(userId = userId)
+            .getVaultTimeoutActionStateFlow(userId = USER_ID)
             .test {
                 assertEquals(
                     VaultTimeoutAction.LOCK,
@@ -354,7 +389,7 @@ class SettingsRepositoryTest {
                 )
                 VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
                     fakeSettingsDiskSource.storeVaultTimeoutAction(
-                        userId = userId,
+                        userId = USER_ID,
                         vaultTimeoutAction = vaultTimeoutAction,
                     )
                     assertEquals(
@@ -367,35 +402,30 @@ class SettingsRepositoryTest {
 
     @Test
     fun `isVaultTimeoutActionSet when no value is persisted should return false`() {
-        val userId = "userId"
-        assertFalse(
-            settingsRepository.isVaultTimeoutActionSet(userId = userId),
-        )
+        assertFalse(settingsRepository.isVaultTimeoutActionSet(userId = USER_ID))
     }
 
     @Test
     fun `isVaultTimeoutActionSet when a value is persisted should return true`() {
-        val userId = "userId"
         fakeSettingsDiskSource.storeVaultTimeoutAction(
-            userId = userId,
+            userId = USER_ID,
             vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
         )
         assertTrue(
-            settingsRepository.isVaultTimeoutActionSet(userId = userId),
+            settingsRepository.isVaultTimeoutActionSet(userId = USER_ID),
         )
     }
 
     @Test
     fun `storeVaultTimeoutAction should properly update SettingsDiskSource`() {
-        val userId = "userId"
         VAULT_TIMEOUT_ACTIONS.forEach { vaultTimeoutAction ->
             settingsRepository.storeVaultTimeoutAction(
-                userId = userId,
+                userId = USER_ID,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
             assertEquals(
                 vaultTimeoutAction,
-                fakeSettingsDiskSource.getVaultTimeoutAction(userId = userId),
+                fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
             )
         }
     }
@@ -408,13 +438,12 @@ class SettingsRepositoryTest {
             settingsRepository.defaultUriMatchType,
         )
 
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Updates to the disk source change the repository value
         UriMatchType.entries.forEach { uriMatchType ->
             fakeSettingsDiskSource.storeDefaultUriMatchType(
-                userId = userId,
+                userId = USER_ID,
                 uriMatchType = uriMatchType,
             )
             assertEquals(
@@ -428,7 +457,7 @@ class SettingsRepositoryTest {
             settingsRepository.defaultUriMatchType = uriMatchType
             assertEquals(
                 uriMatchType,
-                fakeSettingsDiskSource.getDefaultUriMatchType(userId = userId),
+                fakeSettingsDiskSource.getDefaultUriMatchType(userId = USER_ID),
             )
         }
     }
@@ -436,16 +465,15 @@ class SettingsRepositoryTest {
     @Suppress("MaxLineLength")
     @Test
     fun `isUnlockWithBiometricsEnabled should return a value that tracks the existence of a biometrics key for the current user`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeAuthDiskSource.storeUserBiometricUnlockKey(
-            userId = userId,
+            userId = USER_ID,
             biometricsKey = null,
         )
         assertFalse(settingsRepository.isUnlockWithBiometricsEnabled)
 
         fakeAuthDiskSource.storeUserBiometricUnlockKey(
-            userId = userId,
+            userId = USER_ID,
             biometricsKey = "biometricsKey",
         )
         assertTrue(settingsRepository.isUnlockWithBiometricsEnabled)
@@ -454,16 +482,15 @@ class SettingsRepositoryTest {
     @Suppress("MaxLineLength")
     @Test
     fun `isUnlockWithPinEnabled should return a value that tracks the existence of an encrypted PIN for the current user`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeAuthDiskSource.storeEncryptedPin(
-            userId = userId,
+            userId = USER_ID,
             encryptedPin = null,
         )
         assertFalse(settingsRepository.isUnlockWithPinEnabled)
 
         fakeAuthDiskSource.storeEncryptedPin(
-            userId = userId,
+            userId = USER_ID,
             encryptedPin = "encryptedPin",
         )
         assertTrue(settingsRepository.isUnlockWithPinEnabled)
@@ -471,7 +498,6 @@ class SettingsRepositoryTest {
 
     @Test
     fun `isInlineAutofillEnabled should pull from and update SettingsDiskSource`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertTrue(settingsRepository.isInlineAutofillEnabled)
 
@@ -481,48 +507,45 @@ class SettingsRepositoryTest {
 
         // Updates to the repository change the disk source value
         settingsRepository.isInlineAutofillEnabled = true
-        assertTrue(fakeSettingsDiskSource.getInlineAutofillEnabled(userId = userId)!!)
+        assertTrue(fakeSettingsDiskSource.getInlineAutofillEnabled(userId = USER_ID)!!)
     }
 
     @Test
     fun `isAutoCopyTotpDisabled should pull from and update SettingsDiskSource`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertFalse(settingsRepository.isAutoCopyTotpDisabled)
 
         // Updates to the disk source change the repository value.
         fakeSettingsDiskSource.storeAutoCopyTotpDisabled(
-            userId = userId,
+            userId = USER_ID,
             isAutomaticallyCopyTotpDisabled = true,
         )
         assertTrue(settingsRepository.isAutoCopyTotpDisabled)
 
         // Updates to the repository change the disk source value
         settingsRepository.isAutoCopyTotpDisabled = false
-        assertFalse(fakeSettingsDiskSource.getAutoCopyTotpDisabled(userId = userId)!!)
+        assertFalse(fakeSettingsDiskSource.getAutoCopyTotpDisabled(userId = USER_ID)!!)
     }
 
     @Test
     fun `isAutofillSavePromptDisabled should pull from and update SettingsDiskSource`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertFalse(settingsRepository.isAutofillSavePromptDisabled)
 
         // Updates to the disk source change the repository value.
         fakeSettingsDiskSource.storeAutofillSavePromptDisabled(
-            userId = userId,
+            userId = USER_ID,
             isAutofillSavePromptDisabled = true,
         )
         assertTrue(settingsRepository.isAutofillSavePromptDisabled)
 
         // Updates to the repository change the disk source value
         settingsRepository.isAutofillSavePromptDisabled = false
-        assertFalse(fakeSettingsDiskSource.getAutofillSavePromptDisabled(userId = userId)!!)
+        assertFalse(fakeSettingsDiskSource.getAutofillSavePromptDisabled(userId = USER_ID)!!)
     }
 
     @Test
     fun `blockedAutofillUris should pull from and update SettingsDiskSource`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertEquals(
             emptyList<String>(),
@@ -531,7 +554,7 @@ class SettingsRepositoryTest {
 
         // Updates to the disk source change the repository value.
         fakeSettingsDiskSource.storeBlockedAutofillUris(
-            userId = userId,
+            userId = USER_ID,
             blockedAutofillUris = listOf(
                 "https://www.example1.com",
                 "https://www.example2.com",
@@ -549,11 +572,10 @@ class SettingsRepositoryTest {
         settingsRepository.blockedAutofillUris = emptyList()
         assertEquals(
             emptyList<String>(),
-            fakeSettingsDiskSource.getBlockedAutofillUris(userId = userId),
+            fakeSettingsDiskSource.getBlockedAutofillUris(userId = USER_ID),
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `isAutofillEnabledStateFlow should emit whenever the AutofillEnabledManager does`() =
         runTest {
@@ -600,17 +622,13 @@ class SettingsRepositoryTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery {
-                vaultSdkSource.getUserFingerprint(
-                    userId = MOCK_USER_STATE.activeUserId,
-                )
+                vaultSdkSource.getUserFingerprint(userId = USER_ID)
             } returns Throwable().asFailure()
 
             val result = settingsRepository.getUserFingerprint()
 
             coVerify(exactly = 1) {
-                vaultSdkSource.getUserFingerprint(
-                    userId = MOCK_USER_STATE.activeUserId,
-                )
+                vaultSdkSource.getUserFingerprint(userId = USER_ID)
             }
             assertEquals(UserFingerprintResult.Error, result)
         }
@@ -621,36 +639,31 @@ class SettingsRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val fingerprint = "fingerprint"
             coEvery {
-                vaultSdkSource.getUserFingerprint(
-                    userId = MOCK_USER_STATE.activeUserId,
-                )
+                vaultSdkSource.getUserFingerprint(userId = USER_ID)
             } returns fingerprint.asSuccess()
 
             val result = settingsRepository.getUserFingerprint()
 
             coVerify(exactly = 1) {
-                vaultSdkSource.getUserFingerprint(
-                    userId = MOCK_USER_STATE.activeUserId,
-                )
+                vaultSdkSource.getUserFingerprint(userId = USER_ID)
             }
             assertEquals(UserFingerprintResult.Success(fingerprint), result)
         }
 
     @Test
     fun `getPullToRefreshEnabledFlow should react to changes in SettingsDiskSource`() = runTest {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         settingsRepository
             .getPullToRefreshEnabledFlow()
             .test {
                 assertFalse(awaitItem())
                 fakeSettingsDiskSource.storePullToRefreshEnabled(
-                    userId = userId,
+                    userId = USER_ID,
                     isPullToRefreshEnabled = true,
                 )
                 assertTrue(awaitItem())
                 fakeSettingsDiskSource.storePullToRefreshEnabled(
-                    userId = userId,
+                    userId = USER_ID,
                     isPullToRefreshEnabled = false,
                 )
                 assertFalse(awaitItem())
@@ -659,21 +672,19 @@ class SettingsRepositoryTest {
 
     @Test
     fun `storePullToRefreshEnabled should properly update SettingsDiskSource`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         settingsRepository.storePullToRefreshEnabled(true)
-        assertEquals(true, fakeSettingsDiskSource.getPullToRefreshEnabled(userId = userId))
+        assertEquals(true, fakeSettingsDiskSource.getPullToRefreshEnabled(userId = USER_ID))
     }
 
     @Test
     fun `clearBiometricsKey should remove the stored biometrics key`() {
-        val userId = MOCK_USER_STATE.activeUserId
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         settingsRepository.clearBiometricsKey()
 
         fakeAuthDiskSource.assertBiometricsKey(
-            userId = userId,
+            userId = USER_ID,
             biometricsKey = null,
         )
     }
@@ -696,20 +707,19 @@ class SettingsRepositoryTest {
     fun `setupBiometricsKey with getUserEncryptionKey failure should return BiometricsKeyResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = MOCK_USER_STATE.activeUserId
-            every { biometricsEncryptionManager.setupBiometrics(userId) } just runs
+            every { biometricsEncryptionManager.setupBiometrics(USER_ID) } just runs
             coEvery {
-                vaultSdkSource.getUserEncryptionKey(userId = userId)
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             } returns Throwable("Fail").asFailure()
 
             val result = settingsRepository.setupBiometricsKey()
 
             assertEquals(BiometricsKeyResult.Error, result)
             verify(exactly = 1) {
-                biometricsEncryptionManager.setupBiometrics(userId)
+                biometricsEncryptionManager.setupBiometrics(USER_ID)
             }
             coVerify(exactly = 1) {
-                vaultSdkSource.getUserEncryptionKey(userId = userId)
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }
         }
 
@@ -718,29 +728,27 @@ class SettingsRepositoryTest {
     fun `setupBiometricsKey with getUserEncryptionKey success should return BiometricsKeyResult Success`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            val userId = MOCK_USER_STATE.activeUserId
             val encryptedKey = "asdf1234"
-            every { biometricsEncryptionManager.setupBiometrics(userId) } just runs
+            every { biometricsEncryptionManager.setupBiometrics(USER_ID) } just runs
             coEvery {
-                vaultSdkSource.getUserEncryptionKey(userId = userId)
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             } returns encryptedKey.asSuccess()
 
             val result = settingsRepository.setupBiometricsKey()
 
             assertEquals(BiometricsKeyResult.Success, result)
-            fakeAuthDiskSource.assertBiometricsKey(userId = userId, biometricsKey = encryptedKey)
+            fakeAuthDiskSource.assertBiometricsKey(userId = USER_ID, biometricsKey = encryptedKey)
             verify(exactly = 1) {
-                biometricsEncryptionManager.setupBiometrics(userId)
+                biometricsEncryptionManager.setupBiometrics(USER_ID)
             }
             coVerify(exactly = 1) {
-                vaultSdkSource.getUserEncryptionKey(userId = userId)
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }
         }
 
     @Suppress("MaxLineLength")
     @Test
     fun `storeUnlockPin when the master password on restart is required should only save an encrypted PIN to disk`() {
-        val userId = "userId"
         val pin = "1234"
         val encryptedPin = "encryptedPin"
         val pinProtectedUserKey = "pinProtectedUserKey"
@@ -751,7 +759,7 @@ class SettingsRepositoryTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
             vaultSdkSource.derivePinKey(
-                userId = userId,
+                userId = USER_ID,
                 pin = pin,
             )
         } returns derivePinKeyResponse.asSuccess()
@@ -763,18 +771,18 @@ class SettingsRepositoryTest {
 
         fakeAuthDiskSource.apply {
             assertEncryptedPin(
-                userId = userId,
+                userId = USER_ID,
                 encryptedPin = encryptedPin,
             )
             assertPinProtectedUserKey(
-                userId = userId,
+                userId = USER_ID,
                 pinProtectedUserKey = pinProtectedUserKey,
                 inMemoryOnly = true,
             )
         }
         coVerify {
             vaultSdkSource.derivePinKey(
-                userId = userId,
+                userId = USER_ID,
                 pin = pin,
             )
         }
@@ -783,7 +791,6 @@ class SettingsRepositoryTest {
     @Suppress("MaxLineLength")
     @Test
     fun `storeUnlockPin when the master password on restart is not required should save all PIN data to disk`() {
-        val userId = "userId"
         val pin = "1234"
         val encryptedPin = "encryptedPin"
         val pinProtectedUserKey = "pinProtectedUserKey"
@@ -794,7 +801,7 @@ class SettingsRepositoryTest {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         coEvery {
             vaultSdkSource.derivePinKey(
-                userId = userId,
+                userId = USER_ID,
                 pin = pin,
             )
         } returns derivePinKeyResponse.asSuccess()
@@ -806,18 +813,18 @@ class SettingsRepositoryTest {
 
         fakeAuthDiskSource.apply {
             assertEncryptedPin(
-                userId = userId,
+                userId = USER_ID,
                 encryptedPin = encryptedPin,
             )
             assertPinProtectedUserKey(
-                userId = userId,
+                userId = USER_ID,
                 pinProtectedUserKey = pinProtectedUserKey,
                 inMemoryOnly = false,
             )
         }
         coVerify {
             vaultSdkSource.derivePinKey(
-                userId = userId,
+                userId = USER_ID,
                 pin = pin,
             )
         }
@@ -826,15 +833,14 @@ class SettingsRepositoryTest {
     @Suppress("MaxLineLength")
     @Test
     fun `clearUnlockPin should clear any previously stored PIN-related values for the current user`() {
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         fakeAuthDiskSource.apply {
             storeEncryptedPin(
-                userId = userId,
+                userId = USER_ID,
                 encryptedPin = "encryptedPin",
             )
             storePinProtectedUserKey(
-                userId = userId,
+                userId = USER_ID,
                 pinProtectedUserKey = "pinProtectedUserKey",
             )
         }
@@ -843,11 +849,11 @@ class SettingsRepositoryTest {
 
         fakeAuthDiskSource.apply {
             assertEncryptedPin(
-                userId = userId,
+                userId = USER_ID,
                 encryptedPin = null,
             )
             assertPinProtectedUserKey(
-                userId = userId,
+                userId = USER_ID,
                 pinProtectedUserKey = null,
             )
         }
@@ -858,12 +864,11 @@ class SettingsRepositoryTest {
         fakeAuthDiskSource.userState = null
         assertFalse(settingsRepository.isApprovePasswordlessLoginsEnabled)
 
-        val userId = "userId"
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Updates to the disk source change the repository value
         fakeSettingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-            userId = userId,
+            userId = USER_ID,
             isApprovePasswordlessLoginsEnabled = true,
         )
         assertEquals(
@@ -875,18 +880,16 @@ class SettingsRepositoryTest {
         settingsRepository.isApprovePasswordlessLoginsEnabled = false
         assertEquals(
             false,
-            fakeSettingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId),
+            fakeSettingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = USER_ID),
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `isScreenCaptureAllowed property should update SettingsDiskSource and emit changes`() =
         runTest {
-            val userId = "userId"
             fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-            fakeSettingsDiskSource.storeScreenCaptureAllowed(userId, false)
+            fakeSettingsDiskSource.storeScreenCaptureAllowed(USER_ID, false)
 
             settingsRepository.isScreenCaptureAllowedStateFlow.test {
                 assertFalse(awaitItem())
@@ -894,59 +897,93 @@ class SettingsRepositoryTest {
                 settingsRepository.isScreenCaptureAllowed = true
                 assertTrue(awaitItem())
 
-                assertEquals(true, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+                assertEquals(true, fakeSettingsDiskSource.getScreenCaptureAllowed(USER_ID))
 
                 settingsRepository.isScreenCaptureAllowed = false
                 assertFalse(awaitItem())
 
-                assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(userId))
+                assertEquals(false, fakeSettingsDiskSource.getScreenCaptureAllowed(USER_ID))
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `clearClipboardFrequency should pull from and update SettingsDiskSource`() =
-        runTest {
-            val userId = "userId"
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+    fun `clearClipboardFrequency should pull from and update SettingsDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-            fakeSettingsDiskSource.storeClearClipboardFrequencySeconds(
-                userId,
-                ClearClipboardFrequency.ONE_MINUTE.frequencySeconds,
-            )
+        fakeSettingsDiskSource.storeClearClipboardFrequencySeconds(
+            USER_ID,
+            ClearClipboardFrequency.ONE_MINUTE.frequencySeconds,
+        )
 
-            assertEquals(
-                ClearClipboardFrequency.ONE_MINUTE,
-                settingsRepository.clearClipboardFrequency,
-            )
+        assertEquals(
+            ClearClipboardFrequency.ONE_MINUTE,
+            settingsRepository.clearClipboardFrequency,
+        )
 
-            settingsRepository.clearClipboardFrequency = ClearClipboardFrequency.TEN_SECONDS
+        settingsRepository.clearClipboardFrequency = ClearClipboardFrequency.TEN_SECONDS
 
-            assertEquals(
-                ClearClipboardFrequency.TEN_SECONDS,
-                settingsRepository.clearClipboardFrequency,
-            )
-        }
+        assertEquals(
+            ClearClipboardFrequency.TEN_SECONDS,
+            settingsRepository.clearClipboardFrequency,
+        )
+    }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `initialAutofillDialogShown should pull from and update SettingsDiskSource`() =
-        runTest {
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
+    fun `initialAutofillDialogShown should pull from and update SettingsDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
 
-            fakeSettingsDiskSource.initialAutofillDialogShown = true
-            assertTrue(settingsRepository.initialAutofillDialogShown)
+        fakeSettingsDiskSource.initialAutofillDialogShown = true
+        assertTrue(settingsRepository.initialAutofillDialogShown)
 
-            settingsRepository.initialAutofillDialogShown = false
-            assertEquals(false, fakeSettingsDiskSource.initialAutofillDialogShown)
-        }
+        settingsRepository.initialAutofillDialogShown = false
+        assertEquals(false, fakeSettingsDiskSource.initialAutofillDialogShown)
+    }
 }
 
-private val MOCK_USER_STATE =
-    UserStateJson(
-        activeUserId = "userId",
-        accounts = mapOf("userId" to mockk()),
-    )
+private const val USER_ID: String = "userId"
+
+private val MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS = TrustedDeviceUserDecryptionOptionsJson(
+    encryptedPrivateKey = null,
+    encryptedUserKey = null,
+    hasAdminApproval = false,
+    hasLoginApprovingDevice = false,
+    hasManageResetPasswordPermission = false,
+)
+
+private val MOCK_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryptionOptionsJson(
+    hasMasterPassword = false,
+    trustedDeviceUserDecryptionOptions = MOCK_TRUSTED_DEVICE_USER_DECRYPTION_OPTIONS,
+    keyConnectorUserDecryptionOptions = null,
+)
+
+private val MOCK_ACCOUNT = AccountJson(
+    profile = AccountJson.Profile(
+        userId = USER_ID,
+        email = "test@bitwarden.com",
+        isEmailVerified = true,
+        name = "Bitwarden Tester",
+        hasPremium = false,
+        stamp = null,
+        organizationId = null,
+        avatarColorHex = null,
+        forcePasswordResetReason = null,
+        kdfType = KdfTypeJson.ARGON2_ID,
+        kdfIterations = 600000,
+        kdfMemory = 16,
+        kdfParallelism = 4,
+        userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
+    ),
+    settings = AccountJson.Settings(
+        environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+    ),
+)
+
+private val MOCK_USER_STATE = UserStateJson(
+    activeUserId = USER_ID,
+    accounts = mapOf(
+        USER_ID to MOCK_ACCOUNT,
+    ),
+)
 
 /**
  * A list of all [VaultTimeoutAction].
