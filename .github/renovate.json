@@ -1,38 +1,57 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
-    "github>bitwarden/renovate-config:pin-actions",
-    ":combinePatchMinorReleases",
-    ":dependencyDashboard",
-    ":maintainLockFilesWeekly",
-    ":pinAllExceptPeerDependencies",
-    ":prConcurrentLimit10",
-    ":rebaseStalePrs",
-    "schedule:weekends",
-    ":separateMajorReleases"
+    "github>bitwarden/renovate-config"
   ],
-  "enabledManagers": ["cargo", "github-actions", "npm", "nuget"],
+  "enabledManagers": [
+    "github-actions",
+    "gradle",
+    "bundler"
+  ],
+  "commitMessagePrefix": "[deps]:",
+  "commitMessageTopic": "{{depName}}",
   "packageRules": [
     {
-      "groupName": "cargo minor",
-      "matchManagers": ["cargo"],
-      "matchUpdateTypes": ["minor", "patch"]
-    },
-    {
       "groupName": "gh minor",
-      "matchManagers": ["github-actions"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
     },
     {
-      "groupName": "npm minor",
-      "matchManagers": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "groupName": "gradle minor",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchManagers": [
+        "gradle"
+      ]
     },
     {
-      "groupName": "nuget minor",
-      "matchManagers": ["nuget"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "groupName": "kotlin",
+      "description": "Kotlin and Compose dependencies that must be updated together to maintain compatibility.",
+      "matchPackagePatterns": [
+        "androidx.compose:compose-bom",
+        "org.jetbrains.kotlin.*",
+        "com.google.devtools.ksp"
+      ],
+      "matchManagers": [
+        "gradle"
+      ]
+    },
+    {
+      "groupName": "bundler minor",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchManagers": [
+        "bundler"
+      ]
     }
   ]
 }
