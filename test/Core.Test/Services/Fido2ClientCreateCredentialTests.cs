@@ -8,6 +8,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
+using Bit.Core.Utilities.Fido2.Extensions;
 using Bit.Test.Common.AutoFixture;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
@@ -20,6 +21,7 @@ namespace Bit.Core.Test.Services
         private readonly SutProvider<Fido2ClientService> _sutProvider = new SutProvider<Fido2ClientService>().Create();
 
         private Fido2ClientCreateCredentialParams _params;
+        private Fido2AuthenticatorMakeCredentialResult _authenticatorResult;
 
         public Fido2ClientCreateCredentialTests()
         {
@@ -37,22 +39,33 @@ namespace Bit.Core.Test.Services
                         Alg = (int) Fido2AlgorithmIdentifier.ES256
                     }
                 },
-                Rp = new PublicKeyCredentialRpEntity {
+                Rp = new PublicKeyCredentialRpEntity
+                {
                     Id = "bitwarden.com",
                     Name = "Bitwarden"
                 },
-                User = new PublicKeyCredentialUserEntity {
+                User = new PublicKeyCredentialUserEntity
+                {
                     Id = RandomBytes(32),
                     Name = "user@bitwarden.com",
                     DisplayName = "User"
                 }
             };
 
+            _authenticatorResult = new Fido2AuthenticatorMakeCredentialResult
+            {
+                CredentialId = RandomBytes(32),
+                AttestationObject = RandomBytes(32),
+                AuthData = RandomBytes(32),
+                PublicKey = RandomBytes(32),
+                PublicKeyAlgorithm = (int)Fido2AlgorithmIdentifier.ES256,
+            };
+
             _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns(Task.FromResult(new List<string>()));
             _sutProvider.GetDependency<IStateService>().IsAuthenticatedAsync().Returns(true);
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
         }
 
@@ -69,7 +82,7 @@ namespace Bit.Core.Test.Services
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.NotAllowedError, exception.Code);
         }
-        
+
         [Fact]
         // Spec: If the length of options.user.id is not between 1 and 64 bytes (inclusive) then return a TypeError.
         public async Task CreateCredentialAsync_ThrowsTypeError_UserIdIsTooSmall()
@@ -198,16 +211,18 @@ namespace Bit.Core.Test.Services
         public async Task CreateCredentialAsync_ReturnsNewCredential()
         {
             // Arrange
-            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria {
+            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria
+            {
                 ResidentKey = "required",
                 UserVerification = "required"
             };
-            var authenticatorResult = new Fido2AuthenticatorMakeCredentialResult {
+            var authenticatorResult = new Fido2AuthenticatorMakeCredentialResult
+            {
                 CredentialId = RandomBytes(32),
                 AttestationObject = RandomBytes(32),
                 AuthData = RandomBytes(32),
                 PublicKey = RandomBytes(32),
-                PublicKeyAlgorithm = (int) Fido2AlgorithmIdentifier.ES256,
+                PublicKeyAlgorithm = (int)Fido2AlgorithmIdentifier.ES256,
             };
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
                 .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
@@ -246,7 +261,8 @@ namespace Bit.Core.Test.Services
         public async Task CreateCredentialAsync_ThrowsInvalidStateError_AuthenticatorThrowsInvalidStateError()
         {
             // Arrange
-            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria {
+            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria
+            {
                 ResidentKey = "required",
                 UserVerification = "required"
             };
@@ -302,6 +318,66 @@ namespace Bit.Core.Test.Services
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.NotAllowedError, exception.Code);
+        }
+
+        [Fact]
+        public async Task CreateCredentialAsync_ReturnsCredPropsRkTrue_WhenCreatingDiscoverableCredential()
+        {
+            // Arrange
+            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria
+            {
+                ResidentKey = "required"
+            };
+            _params.Extensions = new Fido2CreateCredentialExtensionsParams { CredProps = true };
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            var result = await _sutProvider.Sut.CreateCredentialAsync(_params);
+
+            // Assert
+            Assert.True(result.Extensions.CredProps?.Rk);
+        }
+
+        [Fact]
+        public async Task CreateCredentialAsync_ReturnsCredPropsRkFalse_WhenCreatingNonDiscoverableCredential()
+        {
+            // Arrange
+            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria
+            {
+                ResidentKey = "discouraged"
+            };
+            _params.Extensions = new Fido2CreateCredentialExtensionsParams { CredProps = true };
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            var result = await _sutProvider.Sut.CreateCredentialAsync(_params);
+
+            // Assert
+            Assert.False(result.Extensions.CredProps?.Rk);
+        }
+
+        [Fact]
+        public async Task CreateCredentialAsync_ReturnsCredPropsUndefined_WhenExtensionIsNotRequested()
+        {
+            // Arrange
+            _params.AuthenticatorSelection = new AuthenticatorSelectionCriteria
+            {
+                ResidentKey = "required"
+            };
+            _params.Extensions = new Fido2CreateCredentialExtensionsParams();
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            var result = await _sutProvider.Sut.CreateCredentialAsync(_params);
+
+            // Assert
+            Assert.Null(result.Extensions.CredProps);
         }
 
         private byte[] RandomBytes(int length)

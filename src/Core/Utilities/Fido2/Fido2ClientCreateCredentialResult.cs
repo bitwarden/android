@@ -1,3 +1,5 @@
+using Bit.Core.Utilities.Fido2.Extensions;
+
 namespace Bit.Core.Utilities.Fido2
 {
     /// <summary>
@@ -15,5 +17,6 @@ namespace Bit.Core.Utilities.Fido2
         public byte[] PublicKey { get; set; }
         public int PublicKeyAlgorithm { get; set; }
         public string[] Transports { get; set; }
+        public Fido2CreateCredentialExtensionsResult Extensions { get; set; }
     }
 }

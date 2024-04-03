@@ -36,7 +36,7 @@ namespace Bit.Core.Utilities.Fido2
         /// The effective user verification preference for assertion, provided by the client.
         /// </summary>
         public Fido2UserVerificationPreference UserVerificationPreference { get; set; }
-        
+
         /// <summary>
         /// CTAP2 authenticators support setting this to false, but we only support the WebAuthn authenticator model which does not have that option.
         /// </summary>
