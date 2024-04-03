@@ -208,6 +208,40 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked non-matching file passwords should show an error when export type is JSON_ENCRYPTED`() {
+        val password = "password"
+        val initialState = DEFAULT_STATE.copy(
+            confirmFilePasswordInput = "random",
+            exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+            filePasswordInput = password,
+            passwordInput = password,
+            passwordStrengthState = PasswordStrengthState.STRONG,
+        )
+        coEvery {
+            authRepository.getPasswordStrength(
+                email = EMAIL_ADDRESS,
+                password = password,
+            )
+        } returns PasswordStrengthResult.Success(
+            passwordStrength = PasswordStrength.LEVEL_4,
+        )
+        val viewModel = createViewModel(
+            initialState = initialState,
+        )
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            initialState.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.master_password_confirmation_val_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
     @Test
     fun `ConfirmExportVaultClicked invalid password should show an error`() {
         val password = "password"
