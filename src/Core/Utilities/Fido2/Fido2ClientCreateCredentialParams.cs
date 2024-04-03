@@ -1,6 +1,8 @@
+using Bit.Core.Utilities.Fido2.Extensions;
+
 namespace Bit.Core.Utilities.Fido2
 {
-    #nullable enable
+#nullable enable
 
     /// <summary>
     /// Parameters for creating a new credential.
@@ -42,9 +44,8 @@ namespace Bit.Core.Utilities.Fido2
 
         /// <summary>
         /// This member contains additional parameters requesting additional processing by the client and authenticator.
-        /// Not currently supported.
         /// </summary>
-        public object? Extensions { get; set; }
+        public Fido2CreateCredentialExtensionsParams? Extensions { get; set; }
 
         /// <summary>
         /// This member contains information about the desired properties of the credential to be created.
