@@ -78,8 +78,8 @@ fun BitwardenTwoButtonDialog(
                 ),
             horizontalAlignment = Alignment.End,
         ) {
+            Spacer(modifier = Modifier.height(24.dp))
             title?.let {
-                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     modifier = Modifier
                         .padding(horizontal = 24.dp)
