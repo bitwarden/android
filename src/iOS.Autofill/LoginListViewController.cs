@@ -215,10 +215,12 @@ namespace Bit.iOS.Autofill
                 {
                     if (Context?.IsExecutingWithoutUserInteraction == false)
                     {
-                        _ = _platformUtilsService.Value.ShowDialogAsync(
-                            string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier),
-                            AppResources.ErrorReadingPasskey);
+                        // Ideally we should inform the user an error has occurred but for the specific scenario where we have user interaction and we can fallback to password list we'll try to do that.
+                        //_ = _platformUtilsService.Value.ShowDialogAsync(
+                        //    string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, Context.PasskeyCredentialRequestParameters.RelyingPartyIdentifier),
+                        //    AppResources.ErrorReadingPasskey);
 
+                        //Reset TableView formatting to Password and reload passwords
                         TableView.SectionHeaderHeight = 0; 
                         Context.IsPasswordFallback = true;
                         await ReloadItemsAsync();
