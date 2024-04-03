@@ -5,7 +5,8 @@
   ],
   "enabledManagers": [
     "github-actions",
-    "gradle"
+    "gradle",
+    "ruby"
   ],
   "commitMessagePrefix": "[deps]:",
   "commitMessageTopic": "{{depName}}",
@@ -40,6 +41,17 @@
       ],
       "matchManagers": [
         "gradle"
+      ]
+    },
+    {
+      "groupName": "ruby minor",
+      "description": "Group minor and patch updates to Ruby gems.",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchManagers": [
+        "ruby"
       ]
     }
   ]

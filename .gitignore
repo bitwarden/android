@@ -21,3 +21,8 @@ Thumbs.db
 .externalNativeBuild
 .cxx
 local.properties
+/user.properties
+
+# Fastlane
+fastlane/report.xml
+fastlane/README.md
