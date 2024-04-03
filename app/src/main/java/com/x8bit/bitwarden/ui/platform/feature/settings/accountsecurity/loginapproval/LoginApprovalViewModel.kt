@@ -97,9 +97,9 @@ class LoginApprovalViewModel @Inject constructor(
             trySendAction(
                 LoginApprovalAction.Internal.ApproveRequestResultReceive(
                     result = authRepository.updateAuthRequest(
-                        requestId = mutableStateFlow.value.requestId,
-                        masterPasswordHash = mutableStateFlow.value.masterPasswordHash,
-                        publicKey = mutableStateFlow.value.publicKey,
+                        requestId = state.requestId,
+                        masterPasswordHash = state.masterPasswordHash,
+                        publicKey = state.publicKey,
                         isApproved = true,
                     ),
                 ),
@@ -116,9 +116,9 @@ class LoginApprovalViewModel @Inject constructor(
             trySendAction(
                 LoginApprovalAction.Internal.DeclineRequestResultReceive(
                     result = authRepository.updateAuthRequest(
-                        requestId = mutableStateFlow.value.requestId,
-                        masterPasswordHash = mutableStateFlow.value.masterPasswordHash,
-                        publicKey = mutableStateFlow.value.publicKey,
+                        requestId = state.requestId,
+                        masterPasswordHash = state.masterPasswordHash,
+                        publicKey = state.publicKey,
                         isApproved = false,
                     ),
                 ),

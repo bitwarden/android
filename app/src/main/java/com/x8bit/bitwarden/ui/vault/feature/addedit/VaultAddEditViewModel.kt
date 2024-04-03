@@ -434,7 +434,7 @@ class VaultAddEditViewModel @Inject constructor(
         when (action.customFieldAction) {
             CustomFieldAction.MOVE_UP -> {
                 val items =
-                    (mutableStateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    (state.viewState as VaultAddEditState.ViewState.Content)
                         .common
                         .customFieldData
                         .toMutableList()
@@ -455,7 +455,7 @@ class VaultAddEditViewModel @Inject constructor(
 
             CustomFieldAction.MOVE_DOWN -> {
                 val items =
-                    (mutableStateFlow.value.viewState as VaultAddEditState.ViewState.Content)
+                    (state.viewState as VaultAddEditState.ViewState.Content)
                         .common
                         .customFieldData
                         .toMutableList()

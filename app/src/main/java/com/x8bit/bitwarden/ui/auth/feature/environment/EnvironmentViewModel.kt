@@ -72,8 +72,6 @@ class EnvironmentViewModel @Inject constructor(
     }
 
     private fun handleSaveClickAction() {
-        val state = mutableStateFlow.value
-
         val urlsAreAllNullOrValid = listOf(
             state.serverUrl,
             state.webVaultServerUrl,

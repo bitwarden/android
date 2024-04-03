@@ -232,9 +232,9 @@ class LoginViewModel @Inject constructor(
         }
         viewModelScope.launch {
             val result = authRepository.login(
-                email = mutableStateFlow.value.emailAddress,
-                password = mutableStateFlow.value.passwordInput,
-                captchaToken = mutableStateFlow.value.captchaToken,
+                email = state.emailAddress,
+                password = state.passwordInput,
+                captchaToken = state.captchaToken,
             )
             sendAction(
                 LoginAction.Internal.ReceiveLoginResult(
@@ -245,7 +245,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleMasterPasswordHintClicked() {
-        val email = mutableStateFlow.value.emailAddress
+        val email = state.emailAddress
         sendEvent(LoginEvent.NavigateToMasterPasswordHint(email))
     }
 
@@ -254,7 +254,7 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun handleSingleSignOnClicked() {
-        val email = mutableStateFlow.value.emailAddress
+        val email = state.emailAddress
         sendEvent(LoginEvent.NavigateToEnterpriseSignOn(email))
     }
 

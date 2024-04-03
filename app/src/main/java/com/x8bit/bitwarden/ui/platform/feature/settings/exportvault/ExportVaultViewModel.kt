@@ -121,7 +121,7 @@ class ExportVaultViewModel @Inject constructor(
     @Suppress("ReturnCount")
     private fun handleConfirmExportVaultClicked() {
         // Display an error alert if the user hasn't entered a password.
-        if (mutableStateFlow.value.passwordInput.isBlank()) {
+        if (state.passwordInput.isBlank()) {
             updateStateWithError(
                 message = R.string.validation_field_required.asText(
                     R.string.master_password.asText(),
@@ -149,7 +149,7 @@ class ExportVaultViewModel @Inject constructor(
             sendAction(
                 ExportVaultAction.Internal.ReceiveValidatePasswordResult(
                     result = authRepository.validatePassword(
-                        password = mutableStateFlow.value.passwordInput,
+                        password = state.passwordInput,
                     ),
                 ),
             )
