@@ -363,15 +363,12 @@ class VaultLockManagerImpl(
         } else {
             // Retrieve the key. If non-null, unlock the user
             authDiskSource.getUserAutoUnlockKey(userId = userId)?.let {
-                val result = unlockVaultForUser(
+                unlockVaultForUser(
                     userId = userId,
                     initUserCryptoMethod = InitUserCryptoMethod.DecryptedKey(
                         decryptedUserKey = it,
                     ),
                 )
-                if (result is VaultUnlockResult.Success) {
-                    setVaultToUnlocked(userId = userId)
-                }
             }
         }
     }
