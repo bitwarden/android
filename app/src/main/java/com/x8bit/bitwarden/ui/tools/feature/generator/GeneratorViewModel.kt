@@ -651,8 +651,13 @@ class GeneratorViewModel @Inject constructor(
                 }
             }
 
-            GeneratedForwardedServiceUsernameResult.InvalidRequest -> {
-                sendEvent(GeneratorEvent.ShowSnackbar(R.string.an_error_has_occurred.asText()))
+            is GeneratedForwardedServiceUsernameResult.InvalidRequest -> {
+                sendEvent(
+                    GeneratorEvent.ShowSnackbar(
+                        message = result.message?.asText()
+                            ?: R.string.an_error_has_occurred.asText(),
+                    ),
+                )
             }
         }
     }

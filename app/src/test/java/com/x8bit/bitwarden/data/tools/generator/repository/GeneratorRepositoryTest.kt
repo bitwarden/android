@@ -410,7 +410,10 @@ class GeneratorRepositoryTest {
 
             val result = repository.generateForwardedServiceUsername(request)
 
-            assertEquals(GeneratedForwardedServiceUsernameResult.InvalidRequest, result)
+            assertEquals(
+                GeneratedForwardedServiceUsernameResult.InvalidRequest(exception.message),
+                result,
+            )
             coVerify { generatorSdkSource.generateForwardedServiceEmail(request) }
         }
 
