@@ -29,6 +29,10 @@ fun NavGraphBuilder.itemListingGraph(
             onNavigateToItemScreen = { navController.navigateToItem(itemId = it) },
             onNavigateToEditItemScreen = { /*navController.navigateToEditItem(itemId = it)*/ },
             onNavigateToManualKeyEntry = { navController.navigateToManualCodeEntryScreen() },
+            onNavigateToSyncWithBitwardenScreen = {
+                /*navController.navigateToSyncWithBitwardenScreen()*/
+            },
+            onNavigateToImportScreen = { /*navController.navigateToImportScreen()*/ }
         )
         itemDestination(
             onNavigateBack = { navController.popBackStack() },

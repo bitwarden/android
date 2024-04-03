@@ -29,5 +29,4 @@ sealed class ItemListingExpandableFabAction(
         icon,
         onEnterSetupKeyClick
     )
-
 }

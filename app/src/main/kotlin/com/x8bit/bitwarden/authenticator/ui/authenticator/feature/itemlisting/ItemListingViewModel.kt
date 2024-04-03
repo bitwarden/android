@@ -7,14 +7,15 @@ import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.Verifi
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingData
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
+import com.x8bit.bitwarden.authenticator.ui.platform.base.util.concat
 import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconData
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -27,77 +28,75 @@ import javax.inject.Inject
 class ItemListingViewModel @Inject constructor(
     authenticatorRepository: AuthenticatorRepository,
     settingsRepository: SettingsRepository,
-) :
-    BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
-        initialState = ItemListingState(
-            viewState = ItemListingState.ViewState.Loading,
-            dialog = null
-        )
-    ) {
+) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
+    initialState = ItemListingState(
+        settingsRepository.authenticatorAlertThresholdSeconds,
+        viewState = ItemListingState.ViewState.Loading,
+        dialog = null
+    )
+) {
 
     init {
-        combine(
-            authenticatorRepository.getAuthCodesFlow(),
-            settingsRepository.authenticatorAlertThresholdSecondsFlow,
-        ) { authCodeState, alertThresholdSeconds ->
-            when (authCodeState) {
-                is DataState.Error -> {
-                    DataState.Error(
-                        error = authCodeState.error,
-                        data = ItemListingData(
-                            alertThresholdSeconds = alertThresholdSeconds,
-                            authenticatorData = authCodeState.data,
-                        )
-                    )
-                }
 
-                is DataState.Loaded -> {
-                    DataState.Loaded(
-                        ItemListingData(
-                            alertThresholdSeconds = alertThresholdSeconds,
-                            authCodeState.data
-                        )
-                    )
-                }
+        settingsRepository
+            .authenticatorAlertThresholdSecondsFlow
+            .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
 
-                DataState.Loading -> {
-                    DataState.Loading
-                }
-
-                is DataState.NoNetwork -> {
-                    DataState.NoNetwork(
-                        ItemListingData(
-                            alertThresholdSeconds = alertThresholdSeconds,
-                            authenticatorData = authCodeState.data ?: emptyList()
-                        )
-                    )
-                }
-
-                is DataState.Pending -> {
-                    DataState.Pending(
-                        ItemListingData(
-                            alertThresholdSeconds = alertThresholdSeconds,
-                            authCodeState.data
-                        )
-                    )
-                }
-            }
-        }
-            .onEach {
-                sendAction(ItemListingAction.Internal.AuthenticatorDataReceive(it))
-            }
+        authenticatorRepository
+            .getAuthCodesFlow()
+            .map { ItemListingAction.Internal.AuthCodesUpdated(it) }
+            .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: ItemListingAction) {
         when (action) {
-            ItemListingAction.ScanQrCodeClick -> sendEvent(ItemListingEvent.NavigateToQrCodeScanner)
-            ItemListingAction.EnterSetupKeyClick -> sendEvent(ItemListingEvent.NavigateToManualAddItem)
-            ItemListingAction.BackClick -> sendEvent(ItemListingEvent.NavigateBack)
-            is ItemListingAction.ItemClick -> sendEvent(ItemListingEvent.NavigateToItem(action.id))
-            ItemListingAction.DialogDismiss -> handleDialogDismiss()
-            is ItemListingAction.Internal.AuthenticatorDataReceive -> handleAuthenticatorDataReceive(
-                action
+            ItemListingAction.ScanQrCodeClick -> {
+                sendEvent(ItemListingEvent.NavigateToQrCodeScanner)
+            }
+
+            ItemListingAction.EnterSetupKeyClick -> {
+                sendEvent(ItemListingEvent.NavigateToManualAddItem)
+            }
+
+            ItemListingAction.BackClick -> {
+                sendEvent(ItemListingEvent.NavigateBack)
+            }
+
+            is ItemListingAction.ItemClick -> {
+                sendEvent(ItemListingEvent.NavigateToItem(action.id))
+            }
+
+            ItemListingAction.DialogDismiss -> {
+                handleDialogDismiss()
+            }
+
+            is ItemListingAction.Internal -> {
+                handleInternalAction(action)
+            }
+        }
+    }
+
+    private fun handleInternalAction(internalAction: ItemListingAction.Internal) {
+        when (internalAction) {
+            is ItemListingAction.Internal.AuthCodesUpdated -> {
+                handleAuthenticatorDataReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.AlertThresholdSecondsReceive -> {
+                handleAlertThresholdSecondsReceive(internalAction)
+            }
+        }
+    }
+
+    private fun handleAlertThresholdSecondsReceive(
+        action: ItemListingAction.Internal.AlertThresholdSecondsReceive,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                alertThresholdSeconds = action.thresholdSeconds,
             )
         }
     }
@@ -108,72 +107,50 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun handleAuthenticatorDataReceive(action: ItemListingAction.Internal.AuthenticatorDataReceive) {
-        when (val viewState = action.itemListingDataState) {
-            is DataState.Error -> authenticatorErrorReceive(viewState)
-            is DataState.Loaded -> authenticatorDataLoadedReceive(viewState.data)
+    private fun handleAuthenticatorDataReceive(
+        action: ItemListingAction.Internal.AuthCodesUpdated,
+    ) {
+        updateViewState(action.itemListingDataState)
+    }
+
+    private fun updateViewState(authenticatorData: DataState<List<VerificationCodeItem>>) {
+        when (authenticatorData) {
+            is DataState.Error -> authenticatorErrorReceive(authenticatorData)
+            is DataState.Loaded -> authenticatorDataLoadedReceive(authenticatorData)
             is DataState.Loading -> authenticatorDataLoadingReceive()
-            is DataState.NoNetwork -> authenticatorNoNetworkReceive(viewState.data)
-            is DataState.Pending -> authenticatorPendingReceive()
+            is DataState.NoNetwork -> authenticatorNoNetworkReceive(authenticatorData)
+            is DataState.Pending -> authenticatorPendingReceive(authenticatorData)
         }
     }
 
-    private fun authenticatorErrorReceive(authenticatorData: DataState.Error<ItemListingData>) {
-        mutableStateFlow.update {
-            if (authenticatorData.data != null) {
-                val viewState = updateViewState(authenticatorData.data)
-
-                it.copy(
-                    viewState = viewState,
-                    dialog = ItemListingState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
-                    )
-                )
-            } else {
+    private fun authenticatorErrorReceive(authenticatorData: DataState.Error<List<VerificationCodeItem>>) {
+        if (authenticatorData.data != null) {
+            updateStateWithVerificationCodeItems(
+                authenticatorData = authenticatorData.data,
+                clearDialogState = true
+            )
+        } else {
+            mutableStateFlow.update {
                 it.copy(
                     viewState = ItemListingState.ViewState.Error(
                         R.string.generic_error_message.asText(),
-                    )
+                    ),
+                    dialog = null,
                 )
             }
         }
     }
 
-    private fun authenticatorDataLoadedReceive(authenticatorData: ItemListingData) {
-        if (state.dialog == ItemListingState.DialogState.Syncing) {
-            sendEvent(ItemListingEvent.ShowToast(R.string.syncing_complete.asText()))
-        }
-        mutableStateFlow.update {
-            it.copy(
-                viewState = updateViewState(authenticatorData),
-                dialog = null
-            )
-        }
+    private fun authenticatorDataLoadedReceive(
+        authenticatorData: DataState.Loaded<List<VerificationCodeItem>>,
+    ) {
+        updateStateWithVerificationCodeItems(
+            authenticatorData = authenticatorData.data,
+            clearDialogState = true
+        )
     }
 
     private fun authenticatorDataLoadingReceive() {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = ItemListingState.ViewState.Loading,
-                dialog = ItemListingState.DialogState.Syncing
-            )
-        }
-    }
-
-    private fun authenticatorNoNetworkReceive(authenticatorData: ItemListingData?) {
-        mutableStateFlow.update {
-            it.copy(
-                viewState = updateViewState(authenticatorData),
-                dialog = ItemListingState.DialogState.Error(
-                    title = R.string.internet_connection_required_title.asText(),
-                    message = R.string.internet_connection_required_message.asText(),
-                )
-            )
-        }
-    }
-
-    private fun authenticatorPendingReceive() {
         mutableStateFlow.update {
             it.copy(
                 viewState = ItemListingState.ViewState.Loading
@@ -181,13 +158,47 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun updateViewState(
-        itemListingData: ItemListingData?,
-    ): ItemListingState.ViewState {
-        val items = itemListingData?.authenticatorData ?: return ItemListingState.ViewState.NoItems
-        return ItemListingState.ViewState.Content(
-            itemList = items.toDisplayItems(itemListingData.alertThresholdSeconds)
+    private fun authenticatorNoNetworkReceive(state: DataState.NoNetwork<List<VerificationCodeItem>>) {
+        if (state.data != null) {
+            updateStateWithVerificationCodeItems(
+                authenticatorData = state.data,
+                clearDialogState = true
+            )
+        } else {
+            mutableStateFlow.update {
+                it.copy(
+                    viewState = ItemListingState.ViewState.Error(
+                        message = R.string.internet_connection_required_title
+                            .asText()
+                            .concat(R.string.internet_connection_required_message.asText())
+                    ),
+                    dialog = null,
+                )
+            }
+        }
+    }
+
+    private fun authenticatorPendingReceive(
+        action: DataState.Pending<List<VerificationCodeItem>>,
+    ) {
+        updateStateWithVerificationCodeItems(
+            authenticatorData = action.data,
+            clearDialogState = false
         )
+    }
+
+    private fun updateStateWithVerificationCodeItems(
+        authenticatorData: List<VerificationCodeItem>,
+        clearDialogState: Boolean,
+    ) {
+        mutableStateFlow.update { currentState ->
+            currentState.copy(
+                viewState = authenticatorData.toViewState(
+                    alertThresholdSeconds = state.alertThresholdSeconds,
+                ),
+                dialog = currentState.dialog.takeUnless { clearDialogState },
+            )
+        }
     }
 }
 
@@ -200,6 +211,7 @@ class ItemListingViewModel @Inject constructor(
  */
 @Parcelize
 data class ItemListingState(
+    val alertThresholdSeconds: Int,
     val viewState: ViewState,
     val dialog: DialogState?,
 ) : Parcelable {
@@ -346,14 +358,18 @@ sealed class ItemListingAction {
         /**
          * Indicates authenticator item listing data has been received.
          */
-        data class AuthenticatorDataReceive(
-            val itemListingDataState: DataState<ItemListingData>,
+        data class AuthCodesUpdated(
+            val itemListingDataState: DataState<List<VerificationCodeItem>>,
+        ) : Internal()
+
+        data class AlertThresholdSecondsReceive(
+            val thresholdSeconds: Int,
         ) : Internal()
     }
 }
 
 /**
- * The data for the verification code item to displayed.
+ * The data for the verification code item to display.
  */
 @Parcelize
 data class VerificationCodeDisplayItem(
@@ -366,15 +382,3 @@ data class VerificationCodeDisplayItem(
     val authCode: String,
     val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
 ) : Parcelable
-
-private fun List<VerificationCodeItem>.toDisplayItems(alertThresholdSeconds: Int) = this.map {
-    VerificationCodeDisplayItem(
-        id = it.id,
-        label = it.name,
-        authCode = it.code,
-        supportingLabel = it.username,
-        periodSeconds = it.periodSeconds,
-        timeLeftSeconds = it.timeLeftSeconds,
-        alertThresholdSeconds = alertThresholdSeconds
-    )
-}

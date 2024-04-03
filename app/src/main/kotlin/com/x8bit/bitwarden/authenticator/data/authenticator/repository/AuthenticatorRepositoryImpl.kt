@@ -36,7 +36,7 @@ import javax.inject.Inject
  * A "stop timeout delay" in milliseconds used to let a shared coroutine continue to run for the
  * specified period of time after it no longer has subscribers.
  */
-private const val STOP_TIMEOUT_DELAY_MS: Long = 1_000L
+private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 
 class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorDiskSource: AuthenticatorDiskSource,
@@ -57,7 +57,6 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     override val authenticatorDataFlow: StateFlow<DataState<AuthenticatorData>> =
         ciphersStateFlow.map { cipherDataState ->
-
             when (cipherDataState) {
                 is DataState.Error -> {
                     DataState.Error(
@@ -114,7 +113,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             }
             .stateIn(
                 scope = unconfinedScope,
-                started = SharingStarted.Lazily,
+                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
                 initialValue = DataState.Loading,
             )
 
@@ -139,7 +138,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             }
             .stateIn(
                 scope = unconfinedScope,
-                started = SharingStarted.WhileSubscribed(),
+                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
                 initialValue = DataState.Loading,
             )
     }
@@ -177,7 +176,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             }
             .stateIn(
                 scope = unconfinedScope,
-                started = SharingStarted.WhileSubscribed(),
+                started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_DELAY_MS),
                 initialValue = DataState.Loading,
             )
     }
