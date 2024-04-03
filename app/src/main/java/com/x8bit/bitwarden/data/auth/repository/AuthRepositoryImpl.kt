@@ -252,6 +252,8 @@ class AuthRepositoryImpl(
 
     override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
 
+    override var shouldTrustDevice: Boolean by authDiskSource::shouldTrustDevice
+
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value
 

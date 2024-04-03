@@ -519,6 +519,21 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `shouldTrustDevice should directly access the authDiskSource`() {
+        // AuthDiskSource and the repository start with the same default value.
+        assertFalse(repository.shouldTrustDevice)
+        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+
+        // Updating the repository updates AuthDiskSource
+        repository.shouldTrustDevice = true
+        assertTrue(fakeAuthDiskSource.shouldTrustDevice)
+
+        // Updating AuthDiskSource updates the repository
+        fakeAuthDiskSource.shouldTrustDevice = false
+        assertFalse(repository.shouldTrustDevice)
+    }
+
+    @Test
     fun `passwordResetReason should pull from the user's profile in AuthDiskSource`() = runTest {
         val updatedProfile = ACCOUNT_1.profile.copy(
             forcePasswordResetReason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
