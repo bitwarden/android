@@ -76,7 +76,7 @@ class PendingRequestsViewModel @Inject constructor(
                     viewState = PendingRequestsState.ViewState.Loading,
                 )
             }
-            mutableStateFlow.value.authRequests.forEach { request ->
+            state.authRequests.forEach { request ->
                 authRepository.updateAuthRequest(
                     requestId = request.id,
                     masterPasswordHash = request.masterPasswordHash,

@@ -128,7 +128,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleContinueButtonClicked() {
-        if (!mutableStateFlow.value.emailInput.isValidEmail()) {
+        if (!state.emailInput.isValidEmail()) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = LandingState.DialogState.Error(
@@ -150,8 +150,8 @@ class LandingViewModel @Inject constructor(
             return
         }
 
-        val email = mutableStateFlow.value.emailInput
-        val isRememberMeEnabled = mutableStateFlow.value.isRememberMeEnabled
+        val email = state.emailInput
+        val isRememberMeEnabled = state.isRememberMeEnabled
 
         // Update the remembered email address
         authRepository.rememberedEmailAddress = email.takeUnless { !isRememberMeEnabled }

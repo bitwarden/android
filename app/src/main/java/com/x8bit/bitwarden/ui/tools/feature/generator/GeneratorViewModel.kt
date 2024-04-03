@@ -550,7 +550,7 @@ class GeneratorViewModel @Inject constructor(
     private fun handleRegenerationClick() {
         // Go through the update process with the current state to trigger a
         // regeneration of the generated text for the same state.
-        updateGeneratorMainType(forceRegeneration = true) { mutableStateFlow.value.selectedType }
+        updateGeneratorMainType(forceRegeneration = true) { state.selectedType }
     }
 
     private fun handleCopyClick() {
@@ -1294,7 +1294,7 @@ class GeneratorViewModel @Inject constructor(
         forceRegeneration: Boolean = false,
         crossinline block: (GeneratorState.MainType) -> GeneratorState.MainType?,
     ) {
-        val currentSelectedType = mutableStateFlow.value.selectedType
+        val currentSelectedType = state.selectedType
         val updatedMainType = block(currentSelectedType) ?: return
         mutableStateFlow.update { it.copy(selectedType = updatedMainType) }
 

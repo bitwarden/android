@@ -42,75 +42,67 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CurrentPasswordInputChanged should update the current password input in the state`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged("Test123"))
-
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        currentPasswordInput = "Test123",
-                    ),
-                    viewModel.stateFlow.value,
-                )
-            }
-        }
-
-    @Test
-    fun `SubmitClicked with blank password shows error alert`() = runTest {
+    fun `CurrentPasswordInputChanged should update the current password input in the state`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.CurrentPasswordInputChanged("Test123"))
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
-                        message = R.string.validation_field_required
-                            .asText(R.string.master_password.asText()),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
-
-            // Dismiss the alert.
-            viewModel.trySendAction(ResetPasswordAction.DialogDismiss)
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                currentPasswordInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `SubmitClicked with invalid password shows error alert for weak password reason`() =
-        runTest {
-            val password = "Test123"
-            coEvery {
-                authRepository.validatePasswordAgainstPolicies(password)
-            } returns false
+    fun `SubmitClicked with blank password shows error alert`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
 
-            val viewModel = createViewModel()
-            viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = null,
+                    message = R.string.validation_field_required
+                        .asText(R.string.master_password.asText()),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
 
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        dialogState = ResetPasswordState.DialogState.Error(
-                            title = R.string.master_password_policy_validation_title.asText(),
-                            message = R.string.master_password_policy_validation_message.asText(),
-                        ),
-                        passwordInput = password,
-                    ),
-                    viewModel.stateFlow.value,
-                )
-            }
-        }
+        // Dismiss the alert.
+        viewModel.trySendAction(ResetPasswordAction.DialogDismiss)
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
-    fun `SubmitClicked with invalid password shows error alert for admin reset reason`() = runTest {
+    fun `SubmitClicked with invalid password shows error alert for weak password reason`() {
+        val password = "Test123"
+        coEvery {
+            authRepository.validatePasswordAgainstPolicies(password)
+        } returns false
+
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
+        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = R.string.master_password_policy_validation_title.asText(),
+                    message = R.string.master_password_policy_validation_message.asText(),
+                ),
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `SubmitClicked with invalid password shows error alert for admin reset reason`() {
         val password = "Test123"
         every {
             authRepository.passwordResetReason
@@ -118,26 +110,24 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
-                    dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
-                        message = R.string.master_password_length_val_message_x
-                            .asText(MIN_PASSWORD_LENGTH),
-                    ),
-                    passwordInput = password,
+        assertEquals(
+            DEFAULT_STATE.copy(
+                resetReason = ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = null,
+                    message = R.string.master_password_length_val_message_x
+                        .asText(MIN_PASSWORD_LENGTH),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `SubmitClicked with non-matching retyped password shows error alert`() = runTest {
+    fun `SubmitClicked with non-matching retyped password shows error alert`() {
         val password = "Test123"
         coEvery {
             authRepository.validatePasswordAgainstPolicies(password)
@@ -146,24 +136,22 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
-                        message = R.string.master_password_confirmation_val_message.asText(),
-                    ),
-                    passwordInput = password,
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = null,
+                    message = R.string.master_password_confirmation_val_message.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `SubmitClicked with error for validating current password shows error alert`() = runTest {
+    fun `SubmitClicked with error for validating current password shows error alert`() {
         val currentPassword = "CurrentTest123"
         val password = "Test123"
         coEvery {
@@ -178,26 +166,24 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
         viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(password))
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
-                        message = R.string.generic_error_message.asText(),
-                    ),
-                    currentPasswordInput = currentPassword,
-                    passwordInput = password,
-                    retypePasswordInput = password,
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = null,
+                    message = R.string.generic_error_message.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                currentPasswordInput = currentPassword,
+                passwordInput = password,
+                retypePasswordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `SubmitClicked with invalid current password shows alert`() = runTest {
+    fun `SubmitClicked with invalid current password shows alert`() {
         val currentPassword = "CurrentTest123"
         val password = "Test123"
         coEvery {
@@ -212,22 +198,20 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged(password))
         viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged(password))
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.SubmitClick)
+        viewModel.trySendAction(ResetPasswordAction.SubmitClick)
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
-                        message = R.string.invalid_master_password.asText(),
-                    ),
-                    currentPasswordInput = currentPassword,
-                    passwordInput = password,
-                    retypePasswordInput = password,
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ResetPasswordState.DialogState.Error(
+                    title = null,
+                    message = R.string.invalid_master_password.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                currentPasswordInput = currentPassword,
+                passwordInput = password,
+                retypePasswordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -289,49 +273,42 @@ class ResetPasswordViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `PasswordInputChanged should update the password input in the state`() = runTest {
+    fun `PasswordInputChanged should update the password input in the state`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged("Test123"))
+        viewModel.trySendAction(ResetPasswordAction.PasswordInputChanged("Test123"))
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    passwordInput = "Test123",
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                passwordInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `RetypePasswordInputChanged should update the retype password input in the state`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged("Test123"))
+    fun `RetypePasswordInputChanged should update the retype password input in the state`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ResetPasswordAction.RetypePasswordInputChanged("Test123"))
 
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        retypePasswordInput = "Test123",
-                    ),
-                    viewModel.stateFlow.value,
-                )
-            }
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                retypePasswordInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
-    fun `PasswordHintInputChanged should update the password hint input in the state`() = runTest {
+    fun `PasswordHintInputChanged should update the password hint input in the state`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged("Test123"))
+        viewModel.trySendAction(ResetPasswordAction.PasswordHintInputChanged("Test123"))
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    passwordHintInput = "Test123",
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                passwordHintInput = "Test123",
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     private fun createViewModel(): ResetPasswordViewModel =

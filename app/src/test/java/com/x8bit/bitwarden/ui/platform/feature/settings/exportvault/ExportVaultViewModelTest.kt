@@ -86,137 +86,130 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString`() =
-        runTest {
-            val password = "password"
-            coEvery {
-                authRepository.validatePassword(
-                    password = password,
-                )
-            } returns ValidatePasswordResult.Success(isValid = true)
+    fun `ConfirmExportVaultClicked correct password should call exportVaultDataToString`() {
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
 
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+        val viewModel = createViewModel()
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
 
-                viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
 
-                coVerify {
-                    vaultRepository.exportVaultDataToString(any())
-                }
-            }
+        coVerify {
+            vaultRepository.exportVaultDataToString(any())
         }
+    }
 
     @Test
-    fun `ConfirmExportVaultClicked blank password should show an error`() = runTest {
+    fun `ConfirmExportVaultClicked blank password should show an error`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(
-                            R.string.master_password.asText(),
-                        ),
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required.asText(
+                        R.string.master_password.asText(),
                     ),
                 ),
-                viewModel.stateFlow.value,
-            )
+            ),
+            viewModel.stateFlow.value,
+        )
 
-            viewModel.trySendAction(ExportVaultAction.DialogDismiss)
-            assertEquals(
-                DEFAULT_STATE,
-                viewModel.stateFlow.value,
-            )
-        }
+        viewModel.trySendAction(ExportVaultAction.DialogDismiss)
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmExportVaultClicked blank file password should show an error when export type is JSON_ENCRYPTED`() =
-        runTest {
-            val password = "password"
-            val viewModel = createViewModel()
-            viewModel.trySendAction(
-                ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.JSON_ENCRYPTED),
-            )
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
-            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(
-                            R.string.file_password.asText(),
-                        ),
+    fun `ConfirmExportVaultClicked blank file password should show an error when export type is JSON_ENCRYPTED`() {
+        val password = "password"
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.JSON_ENCRYPTED),
+        )
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required.asText(
+                        R.string.file_password.asText(),
                     ),
-                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
-                    passwordInput = password,
                 ),
-                viewModel.stateFlow.value,
-            )
+                exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
 
-            viewModel.trySendAction(ExportVaultAction.DialogDismiss)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
-                    passwordInput = password,
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        viewModel.trySendAction(ExportVaultAction.DialogDismiss)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmExportVaultClicked blank confirm file password should show an error when export type is JSON_ENCRYPTED`() =
-        runTest {
-            val password = "password"
-            coEvery {
-                authRepository.getPasswordStrength(
-                    email = EMAIL_ADDRESS,
-                    password = password,
-                )
-            } returns PasswordStrengthResult.Success(
-                passwordStrength = PasswordStrength.LEVEL_4,
+    fun `ConfirmExportVaultClicked blank confirm file password should show an error when export type is JSON_ENCRYPTED`() {
+        val password = "password"
+        coEvery {
+            authRepository.getPasswordStrength(
+                email = EMAIL_ADDRESS,
+                password = password,
             )
-            val viewModel = createViewModel()
-            viewModel.trySendAction(
-                ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.JSON_ENCRYPTED),
-            )
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
-            viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(password))
-            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(
-                            R.string.confirm_file_password.asText(),
-                        ),
+        } returns PasswordStrengthResult.Success(
+            passwordStrength = PasswordStrength.LEVEL_4,
+        )
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.JSON_ENCRYPTED),
+        )
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+        viewModel.trySendAction(ExportVaultAction.FilePasswordInputChange(password))
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.validation_field_required.asText(
+                        R.string.confirm_file_password.asText(),
                     ),
-                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
-                    filePasswordInput = password,
-                    passwordInput = password,
-                    passwordStrengthState = PasswordStrengthState.STRONG,
                 ),
-                viewModel.stateFlow.value,
-            )
+                exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                filePasswordInput = password,
+                passwordInput = password,
+                passwordStrengthState = PasswordStrengthState.STRONG,
+            ),
+            viewModel.stateFlow.value,
+        )
 
-            viewModel.trySendAction(ExportVaultAction.DialogDismiss)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
-                    filePasswordInput = password,
-                    passwordInput = password,
-                    passwordStrengthState = PasswordStrengthState.STRONG,
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        viewModel.trySendAction(ExportVaultAction.DialogDismiss)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+                filePasswordInput = password,
+                passwordInput = password,
+                passwordStrengthState = PasswordStrengthState.STRONG,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
-    fun `ConfirmExportVaultClicked invalid password should show an error`() = runTest {
+    fun `ConfirmExportVaultClicked invalid password should show an error`() {
         val password = "password"
         coEvery {
             authRepository.validatePassword(
@@ -225,21 +218,19 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns ValidatePasswordResult.Success(isValid = false)
 
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
 
-            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.invalid_master_password.asText(),
-                    ),
-                    passwordInput = password,
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.invalid_master_password.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
         coVerify {
             authRepository.validatePassword(
                 password = password,
@@ -248,7 +239,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ConfirmExportVaultClicked error checking password should show an error`() = runTest {
+    fun `ConfirmExportVaultClicked error checking password should show an error`() {
         val password = "password"
         coEvery {
             authRepository.validatePassword(
@@ -257,40 +248,35 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         } returns ValidatePasswordResult.Error
 
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
+        viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(password))
 
-            viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.generic_error_message.asText(),
-                    ),
-                    passwordInput = password,
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+                passwordInput = password,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `ExportFormatOptionSelect should update the selected export format in the state`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(
-                    ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.CSV),
-                )
+    fun `ExportFormatOptionSelect should update the selected export format in the state`() {
+        val viewModel = createViewModel()
+        viewModel.trySendAction(
+            ExportVaultAction.ExportFormatOptionSelect(ExportVaultFormat.CSV),
+        )
 
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        exportFormat = ExportVaultFormat.CSV,
-                    ),
-                    viewModel.stateFlow.value,
-                )
-            }
-        }
+        assertEquals(
+            DEFAULT_STATE.copy(
+                exportFormat = ExportVaultFormat.CSV,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `ConfirmFilePasswordInputChanged should update the confirm password input in the state`() {
@@ -348,26 +334,25 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ReceiveExportVaultDataToStringResult should update state to error if result is error`() =
-        runTest {
-            val viewModel = createViewModel()
+    fun `ReceiveExportVaultDataToStringResult should update state to error if result is error`() {
+        val viewModel = createViewModel()
 
-            viewModel.trySendAction(
-                ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult(
-                    result = ExportVaultDataResult.Error,
-                ),
-            )
+        viewModel.trySendAction(
+            ExportVaultAction.Internal.ReceiveExportVaultDataToStringResult(
+                result = ExportVaultDataResult.Error,
+            ),
+        )
 
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.export_vault_failure.asText(),
-                    ),
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.export_vault_failure.asText(),
                 ),
-                viewModel.stateFlow.value,
-            )
-        }
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -493,36 +478,35 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ExportLocationReceive should update state to error if saving the data fails`() =
-        runTest {
-            val exportData = "TestExportVaultData"
-            val viewModel = createViewModel(
-                DEFAULT_STATE.copy(
-                    exportData = exportData,
-                ),
-            )
-            val uri = mockk<Uri>()
-            coEvery {
-                fileManager.stringToUri(fileUri = any(), dataString = exportData)
-            } returns false
+    fun `ExportLocationReceive should update state to error if saving the data fails`() {
+        val exportData = "TestExportVaultData"
+        val viewModel = createViewModel(
+            DEFAULT_STATE.copy(
+                exportData = exportData,
+            ),
+        )
+        val uri = mockk<Uri>()
+        coEvery {
+            fileManager.stringToUri(fileUri = any(), dataString = exportData)
+        } returns false
 
-            viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(fileUri = uri))
+        viewModel.trySendAction(ExportVaultAction.ExportLocationReceive(fileUri = uri))
 
-            coVerify {
-                fileManager.stringToUri(fileUri = any(), dataString = exportData)
-            }
-
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    exportData = exportData,
-                    dialogState = ExportVaultState.DialogState.Error(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.export_vault_failure.asText(),
-                    ),
-                ),
-                viewModel.stateFlow.value,
-            )
+        coVerify {
+            fileManager.stringToUri(fileUri = any(), dataString = exportData)
         }
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                exportData = exportData,
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.export_vault_failure.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
     fun `ExportLocationReceive should emit ShowToast on success`() = runTest {

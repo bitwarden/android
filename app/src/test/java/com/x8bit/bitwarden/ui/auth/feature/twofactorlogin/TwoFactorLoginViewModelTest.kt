@@ -162,24 +162,6 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         runTest {
             val input = "123456"
             val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(input))
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        codeInput = input,
-                        isContinueButtonEnabled = true,
-                    ),
-                    viewModel.stateFlow.value,
-                )
-            }
-        }
-
-    @Test
-    fun `CodeInputChanged should update input and disable button if code is blank`() = runTest {
-        val input = "123456"
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            // Set it to true.
             viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(input))
             assertEquals(
                 DEFAULT_STATE.copy(
@@ -188,17 +170,31 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value,
             )
-
-            // Set it to false.
-            viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(""))
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    codeInput = "",
-                    isContinueButtonEnabled = false,
-                ),
-                viewModel.stateFlow.value,
-            )
         }
+
+    @Test
+    fun `CodeInputChanged should update input and disable button if code is blank`() {
+        val input = "123456"
+        val viewModel = createViewModel()
+        // Set it to true.
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(input))
+        assertEquals(
+            DEFAULT_STATE.copy(
+                codeInput = input,
+                isContinueButtonEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        // Set it to false.
+        viewModel.trySendAction(TwoFactorLoginAction.CodeInputChanged(""))
+        assertEquals(
+            DEFAULT_STATE.copy(
+                codeInput = "",
+                isContinueButtonEnabled = false,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -415,17 +411,15 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `RememberMeToggle should update the state`() = runTest {
+    fun `RememberMeToggle should update the state`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    isRememberMeEnabled = true,
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        viewModel.trySendAction(TwoFactorLoginAction.RememberMeToggle(true))
+        assertEquals(
+            DEFAULT_STATE.copy(
+                isRememberMeEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -534,21 +528,19 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `SelectAuthMethod with other method should update the state`() = runTest {
+    fun `SelectAuthMethod with other method should update the state`() {
         val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(
-                TwoFactorLoginAction.SelectAuthMethod(
-                    TwoFactorAuthMethod.AUTHENTICATOR_APP,
-                ),
-            )
-            assertEquals(
-                DEFAULT_STATE.copy(
-                    authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
-                ),
-                viewModel.stateFlow.value,
-            )
-        }
+        viewModel.trySendAction(
+            TwoFactorLoginAction.SelectAuthMethod(
+                TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            ),
+        )
+        assertEquals(
+            DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -569,8 +561,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     ),
                     awaitItem(),
                 )
+            }
         }
-    }
 
     @Test
     @Suppress("MaxLineLength")

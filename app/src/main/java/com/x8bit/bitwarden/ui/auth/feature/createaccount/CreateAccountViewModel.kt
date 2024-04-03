@@ -191,7 +191,7 @@ class CreateAccountViewModel @Inject constructor(
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(
                     CreateAccountEvent.NavigateToLogin(
-                        email = mutableStateFlow.value.emailInput,
+                        email = state.emailInput,
                         captchaToken = registerAccountResult.captchaToken,
                     ),
                 )
@@ -251,7 +251,7 @@ class CreateAccountViewModel @Inject constructor(
         } else {
             passwordStrengthJob = viewModelScope.launch {
                 val result = authRepository.getPasswordStrength(
-                    email = mutableStateFlow.value.emailInput,
+                    email = state.emailInput,
                     password = action.input,
                 )
                 trySendAction(ReceivePasswordStrengthResult(result))
@@ -264,7 +264,7 @@ class CreateAccountViewModel @Inject constructor(
     }
 
     private fun handleSubmitClick() = when {
-        mutableStateFlow.value.emailInput.isBlank() -> {
+        state.emailInput.isBlank() -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.validation_field_required
@@ -273,7 +273,7 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
-        !mutableStateFlow.value.emailInput.isValidEmail() -> {
+        !state.emailInput.isValidEmail() -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.invalid_email.asText(),
@@ -281,7 +281,7 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
-        mutableStateFlow.value.passwordInput.length < MIN_PASSWORD_LENGTH -> {
+        state.passwordInput.length < MIN_PASSWORD_LENGTH -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.master_password_length_val_message_x.asText(MIN_PASSWORD_LENGTH),
@@ -289,7 +289,7 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
-        mutableStateFlow.value.passwordInput != mutableStateFlow.value.confirmPasswordInput -> {
+        state.passwordInput != state.confirmPasswordInput -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.master_password_confirmation_val_message.asText(),
@@ -297,7 +297,7 @@ class CreateAccountViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = CreateAccountDialog.Error(dialog)) }
         }
 
-        !mutableStateFlow.value.isAcceptPoliciesToggled -> {
+        !state.isAcceptPoliciesToggled -> {
             val dialog = BasicDialogState.Shown(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.accept_policies_error.asText(),
@@ -307,7 +307,7 @@ class CreateAccountViewModel @Inject constructor(
 
         else -> {
             submitRegisterAccountRequest(
-                shouldCheckForDataBreaches = mutableStateFlow.value.isCheckDataBreachesToggled,
+                shouldCheckForDataBreaches = state.isCheckDataBreachesToggled,
                 captchaToken = null,
             )
         }
@@ -327,9 +327,9 @@ class CreateAccountViewModel @Inject constructor(
         viewModelScope.launch {
             val result = authRepository.register(
                 shouldCheckDataBreaches = shouldCheckForDataBreaches,
-                email = mutableStateFlow.value.emailInput,
-                masterPassword = mutableStateFlow.value.passwordInput,
-                masterPasswordHint = mutableStateFlow.value.passwordHintInput.ifBlank { null },
+                email = state.emailInput,
+                masterPassword = state.passwordInput,
+                masterPasswordHint = state.passwordHintInput.ifBlank { null },
                 captchaToken = captchaToken,
             )
             sendAction(
