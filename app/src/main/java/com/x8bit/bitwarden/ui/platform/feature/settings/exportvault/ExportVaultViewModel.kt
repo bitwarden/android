@@ -129,18 +129,29 @@ class ExportVaultViewModel @Inject constructor(
             )
             return
         } else if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
-            if (state.filePasswordInput.isBlank()) {
-                updateStateWithError(
-                    message = R.string.validation_field_required
-                        .asText(R.string.file_password.asText()),
-                )
-                return
-            } else if (state.confirmFilePasswordInput.isBlank()) {
-                updateStateWithError(
-                    message = R.string.validation_field_required
-                        .asText(R.string.confirm_file_password.asText()),
-                )
-                return
+            when {
+                state.filePasswordInput.isBlank() -> {
+                    updateStateWithError(
+                        message = R.string.validation_field_required
+                            .asText(R.string.file_password.asText()),
+                    )
+                    return
+                }
+
+                state.confirmFilePasswordInput.isBlank() -> {
+                    updateStateWithError(
+                        message = R.string.validation_field_required
+                            .asText(R.string.confirm_file_password.asText()),
+                    )
+                    return
+                }
+
+                state.filePasswordInput != state.confirmFilePasswordInput -> {
+                    updateStateWithError(
+                        message = R.string.master_password_confirmation_val_message.asText(),
+                    )
+                    return
+                }
             }
         }
 
