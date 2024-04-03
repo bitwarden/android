@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.OS;
 using AndroidX.Credentials;
+using AndroidX.Credentials.Exceptions;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
 using Bit.Core.Abstractions;
@@ -19,7 +20,6 @@ namespace Bit.App.Platforms.Android.Autofill
             BeginGetPublicKeyCredentialOption option, Context context, bool hasVaultBeenUnlockedInThisTransaction)
         {
             var passkeyEntries = new List<CredentialEntry>();
-
             var requestOptions = new PublicKeyCredentialRequestOptions(option.RequestJson);
 
             var authenticator = Bit.Core.Utilities.ServiceContainer.Resolve<IFido2AuthenticatorService>();
@@ -69,14 +69,13 @@ namespace Bit.App.Platforms.Android.Autofill
             {
                 Id = credentialCreationOptions.User.GetId(),
                 Name = credentialCreationOptions.User.Name,
-                DisplayName = credentialCreationOptions.User.DisplayName,
-                //Icon = //TODO: Is Icon needed?
+                DisplayName = credentialCreationOptions.User.DisplayName
             };
 
             var pubKeyCredParams = new List<Core.Utilities.Fido2.PublicKeyCredentialParameters>();
             foreach (var pubKeyCredParam in credentialCreationOptions.PubKeyCredParams)
             {
-                pubKeyCredParams.Add(new Core.Utilities.Fido2.PublicKeyCredentialParameters() { Alg = Convert.ToInt32(pubKeyCredParam.Alg), Type = pubKeyCredParam.Type }); //TODO: Can we assume Alg is never outside int range?
+                pubKeyCredParams.Add(new Core.Utilities.Fido2.PublicKeyCredentialParameters() { Alg = Convert.ToInt32(pubKeyCredParam.Alg), Type = pubKeyCredParam.Type });
             }
 
             var excludeCredentials = new List<Core.Utilities.Fido2.PublicKeyCredentialDescriptor>();
@@ -92,7 +91,6 @@ namespace Bit.App.Platforms.Android.Autofill
                 RequireResidentKey = credentialCreationOptions.AuthenticatorSelection.RequireResidentKey
             };
 
-            //TODO: Change to something else or handle overflow exception?
             var timeout = Convert.ToInt32(credentialCreationOptions.Timeout);
             
             var credentialCreateParams = new Bit.Core.Utilities.Fido2.Fido2ClientCreateCredentialParams()
@@ -106,15 +104,19 @@ namespace Bit.App.Platforms.Android.Autofill
                 Attestation = credentialCreationOptions.Attestation,
                 AuthenticatorSelection = authenticatorSelection,
                 ExcludeCredentials = excludeCredentials.ToArray(),
-                //Extensions = //TODO: Do we need to handle Extensions?
-                SameOriginWithAncestors = true //TODO: Where to get value? Or logic to set?
+                //Extensions = // Can be improved later to add support for 'credProps'
+                SameOriginWithAncestors = true
             };
 
             var fido2MediatorService = ServiceContainer.Resolve<IFido2MediatorService>();
             var clientCreateCredentialResult = await fido2MediatorService.CreateCredentialAsync(credentialCreateParams);
             if (clientCreateCredentialResult == null)
             {
-                //TODO: Cancel process?
+                var resultErrorIntent = new Intent();
+                PendingIntentHandler.SetCreateCredentialException(resultErrorIntent, new CreateCredentialUnknownException());
+                activity.SetResult(Result.Ok, resultErrorIntent);
+                activity.Finish();
+                return;
             }
             
             var transportsArray = new JSONArray();

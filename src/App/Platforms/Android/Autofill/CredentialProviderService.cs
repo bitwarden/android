@@ -37,7 +37,7 @@ namespace Bit.Droid.Autofill
             } 
             else
             {
-                callback.OnError("Error creating credential"); //TODO: Improve message
+                callback.OnError("Error creating credential");
             }
         }
 
@@ -70,7 +70,7 @@ namespace Bit.Droid.Autofill
             catch (GetCredentialException e)
             {
                 _logger.Value.Exception(e);
-                callback.OnError(e.ErrorMessage ?? "Error getting credentials"); //TODO: Improve message
+                callback.OnError(e.ErrorMessage ?? "Error getting credentials");
             }
             catch (Exception e)
             {
@@ -86,7 +86,7 @@ namespace Bit.Droid.Autofill
 
             if (request is BeginCreatePasswordCredentialRequest beginCreatePasswordCredentialRequest)
             {
-                //TODO: Is the Create Password needed?
+                //This flow can be used if Password flow needs to be implemented
                 throw new NotImplementedException();
                 //return HandleCreatePasswordQuery(beginCreatePasswordCredentialRequest);
             }
