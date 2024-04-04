@@ -211,12 +211,6 @@ private fun ContentColumn(
             ),
         )
         BitwardenExternalLinkRow(
-            text = stringResource(id = R.string.rate_the_app),
-            onConfirmClick = onRateTheAppClick,
-            dialogTitle = stringResource(id = R.string.continue_to_app_store),
-            dialogMessage = stringResource(id = R.string.rate_app_description_long),
-        )
-        BitwardenExternalLinkRow(
             text = stringResource(R.string.give_feedback),
             onConfirmClick = onGiveFeedbackClick,
             dialogTitle = stringResource(R.string.continue_to_give_feedback),

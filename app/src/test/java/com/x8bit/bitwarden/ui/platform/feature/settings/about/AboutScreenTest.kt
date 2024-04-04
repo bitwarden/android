@@ -201,22 +201,6 @@ class AboutScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on rate the app click should display confirmation dialog and confirm click should emit RateAppClick`() {
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Rate the app").performClick()
-        composeTestRule.onNode(isDialog()).assertExists()
-        composeTestRule
-            .onAllNodesWithText("Continue")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        verify {
-            viewModel.trySendAction(AboutAction.RateAppClick)
-        }
-    }
-
     @Test
     fun `submit crash logs switch should be displayed according to state`() {
         mutableStateFlow.update { it.copy(shouldShowCrashLogsButton = true) }
