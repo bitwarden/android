@@ -183,6 +183,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 name = "Test Organization",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                 ),
             )
@@ -261,6 +262,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                                 name = "Test Organization",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                 ),
             )
@@ -1473,6 +1475,7 @@ private val DEFAULT_USER_STATE = UserState(
             isBiometricsEnabled = false,
             organizations = emptyList(),
             needsMasterPassword = false,
+            trustedDevice = null,
         ),
         UserState.Account(
             userId = "lockedUserId",
@@ -1487,6 +1490,7 @@ private val DEFAULT_USER_STATE = UserState(
             isBiometricsEnabled = false,
             organizations = emptyList(),
             needsMasterPassword = false,
+            trustedDevice = null,
         ),
     ),
 )

@@ -211,6 +211,7 @@ class AuthRepositoryImpl(
                 isBiometricsEnabledProvider = ::isBiometricsEnabled,
                 vaultUnlockTypeProvider = ::getVaultUnlockType,
                 isLoggedInProvider = ::isUserLoggedIn,
+                isDeviceTrustedProvider = ::isDeviceTrusted,
             )
     }
         .filter {
@@ -230,6 +231,7 @@ class AuthRepositoryImpl(
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
                     isLoggedInProvider = ::isUserLoggedIn,
+                    isDeviceTrustedProvider = ::isDeviceTrusted,
                 ),
         )
 
@@ -1153,6 +1155,10 @@ class AuthRepositoryImpl(
     private fun isBiometricsEnabled(
         userId: String,
     ): Boolean = authDiskSource.getUserBiometricUnlockKey(userId = userId) != null
+
+    private fun isDeviceTrusted(
+        userId: String,
+    ): Boolean = authDiskSource.getDeviceKey(userId = userId) != null
 
     private fun isUserLoggedIn(
         userId: String,

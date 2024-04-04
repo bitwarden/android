@@ -2377,6 +2377,7 @@ private val DEFAULT_USER_STATE = UserState(
             isBiometricsEnabled = false,
             organizations = emptyList(),
             needsMasterPassword = false,
+            trustedDevice = null,
         ),
     ),
 )

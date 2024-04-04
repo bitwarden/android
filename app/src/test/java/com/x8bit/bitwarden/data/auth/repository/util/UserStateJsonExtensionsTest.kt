@@ -229,6 +229,7 @@ class UserStateJsonExtensionsTest {
                         isBiometricsEnabled = false,
                         vaultUnlockType = VaultUnlockType.PIN,
                         needsMasterPassword = false,
+                        trustedDevice = null,
                     ),
                 ),
             ),
@@ -281,6 +282,7 @@ class UserStateJsonExtensionsTest {
                     isBiometricsEnabledProvider = { false },
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                     isLoggedInProvider = { true },
+                    isDeviceTrustedProvider = { false },
                 ),
         )
     }
@@ -311,6 +313,7 @@ class UserStateJsonExtensionsTest {
                         isBiometricsEnabled = true,
                         vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
                         needsMasterPassword = true,
+                        trustedDevice = null,
                     ),
                 ),
                 hasPendingAccountAddition = true,
@@ -359,6 +362,97 @@ class UserStateJsonExtensionsTest {
                     isBiometricsEnabledProvider = { true },
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                     isLoggedInProvider = { false },
+                    isDeviceTrustedProvider = { false },
+                ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toUserState should preserve values of trustedDeviceUserDecryptionOptions`() {
+        assertEquals(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "activeName",
+                        email = "activeEmail",
+                        // This value is calculated from the userId
+                        avatarColorHex = "#ffecbc49",
+                        environment = Environment.Eu,
+                        isPremium = true,
+                        isLoggedIn = false,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        organizations = listOf(
+                            Organization(
+                                id = "organizationId",
+                                name = "organizationName",
+                            ),
+                        ),
+                        isBiometricsEnabled = false,
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        needsMasterPassword = false,
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = true,
+                            hasMasterPassword = false,
+                            hasAdminApproval = false,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = false,
+                        ),
+                    ),
+                ),
+                hasPendingAccountAddition = true,
+            ),
+            UserStateJson(
+                activeUserId = "activeUserId",
+                accounts = mapOf(
+                    "activeUserId" to AccountJson(
+                        profile = mockk {
+                            every { userId } returns "activeUserId"
+                            every { name } returns "activeName"
+                            every { email } returns "activeEmail"
+                            every { avatarColorHex } returns null
+                            every { hasPremium } returns true
+                            every { forcePasswordResetReason } returns null
+                            every { userDecryptionOptions } returns UserDecryptionOptionsJson(
+                                hasMasterPassword = false,
+                                trustedDeviceUserDecryptionOptions = TrustedDeviceUserDecryptionOptionsJson(
+                                    encryptedPrivateKey = null,
+                                    encryptedUserKey = null,
+                                    hasAdminApproval = false,
+                                    hasLoginApprovingDevice = true,
+                                    hasManageResetPasswordPermission = false,
+                                ),
+                                keyConnectorUserDecryptionOptions = null,
+                            )
+                        },
+                        tokens = null,
+                        settings = AccountJson.Settings(
+                            environmentUrlData = EnvironmentUrlDataJson.DEFAULT_EU,
+                        ),
+                    ),
+                ),
+            )
+                .toUserState(
+                    vaultState = emptyList(),
+                    userOrganizationsList = listOf(
+                        UserOrganizations(
+                            userId = "activeUserId",
+                            organizations = listOf(
+                                Organization(
+                                    id = "organizationId",
+                                    name = "organizationName",
+                                ),
+                            ),
+                        ),
+                    ),
+                    hasPendingAccountAddition = true,
+                    isBiometricsEnabledProvider = { false },
+                    vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
+                    isLoggedInProvider = { false },
+                    isDeviceTrustedProvider = { true },
                 ),
         )
     }

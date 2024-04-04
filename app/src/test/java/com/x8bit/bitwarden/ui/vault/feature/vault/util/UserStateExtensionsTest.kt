@@ -78,6 +78,7 @@ class UserStateExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                     UserState.Account(
                         userId = "lockedUserId",
@@ -97,6 +98,7 @@ class UserStateExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                     UserState.Account(
                         userId = "unlockedUserId",
@@ -120,6 +122,7 @@ class UserStateExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                     UserState.Account(
                         userId = "loggedOutUserId",
@@ -143,6 +146,7 @@ class UserStateExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                 ),
             )
@@ -181,6 +185,7 @@ class UserStateExtensionsTest {
                         name = "organizationName",
                     ),
                 ),
+                trustedDevice = null,
             )
                 .toAccountSummary(isActive = true),
         )
@@ -217,6 +222,7 @@ class UserStateExtensionsTest {
                         name = "organizationName",
                     ),
                 ),
+                trustedDevice = null,
             )
                 .toAccountSummary(isActive = false),
         )
@@ -257,6 +263,7 @@ class UserStateExtensionsTest {
                                 name = "organizationName",
                             ),
                         ),
+                        trustedDevice = null,
                     ),
                 ),
             )
@@ -280,6 +287,7 @@ class UserStateExtensionsTest {
                 isBiometricsEnabled = false,
                 organizations = emptyList(),
                 needsMasterPassword = false,
+                trustedDevice = null,
             )
                 .toVaultFilterData(isIndividualVaultDisabled = false),
         )
@@ -326,6 +334,7 @@ class UserStateExtensionsTest {
                         name = "Organization A",
                     ),
                 ),
+                trustedDevice = null,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = false,
@@ -373,6 +382,7 @@ class UserStateExtensionsTest {
                         name = "Organization A",
                     ),
                 ),
+                trustedDevice = null,
             )
                 .toVaultFilterData(
                     isIndividualVaultDisabled = true,

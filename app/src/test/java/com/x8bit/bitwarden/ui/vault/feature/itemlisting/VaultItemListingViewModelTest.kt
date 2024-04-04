@@ -1459,6 +1459,7 @@ private val DEFAULT_ACCOUNT = UserState.Account(
     isBiometricsEnabled = false,
     organizations = emptyList(),
     needsMasterPassword = false,
+    trustedDevice = null,
 )
 
 private val DEFAULT_USER_STATE = UserState(

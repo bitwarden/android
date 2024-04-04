@@ -59,8 +59,20 @@ data class UserState(
         val isVaultUnlocked: Boolean,
         val needsPasswordReset: Boolean,
         val needsMasterPassword: Boolean,
+        val trustedDevice: TrustedDevice?,
         val organizations: List<Organization>,
         val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+    )
+
+    /**
+     * Models the data related to trusted device encryption (TDE).
+     */
+    data class TrustedDevice(
+        val isDeviceTrusted: Boolean,
+        val hasMasterPassword: Boolean,
+        val hasAdminApproval: Boolean,
+        val hasLoginApprovingDevice: Boolean,
+        val hasResetPasswordPermission: Boolean,
     )
 }

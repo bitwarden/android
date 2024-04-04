@@ -129,6 +129,7 @@ class LoginViewModelTest : BaseViewModelTest() {
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
                     needsMasterPassword = false,
+                    trustedDevice = null,
                 ),
             ),
         )
