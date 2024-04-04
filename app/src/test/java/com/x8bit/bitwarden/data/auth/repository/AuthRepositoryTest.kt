@@ -306,6 +306,7 @@ class AuthRepositoryTest {
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 isLoggedInProvider = { false },
+                isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -329,6 +330,7 @@ class AuthRepositoryTest {
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 isLoggedInProvider = { false },
+                isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -343,6 +345,7 @@ class AuthRepositoryTest {
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
                 isLoggedInProvider = { false },
+                isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -369,6 +372,7 @@ class AuthRepositoryTest {
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
                 isLoggedInProvider = { false },
+                isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
         )
@@ -563,6 +567,7 @@ class AuthRepositoryTest {
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isLoggedInProvider = { false },
+            isDeviceTrustedProvider = { false },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
@@ -571,6 +576,7 @@ class AuthRepositoryTest {
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isLoggedInProvider = { false },
+            isDeviceTrustedProvider = { false },
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
         coEvery {
@@ -3150,6 +3156,7 @@ class AuthRepositoryTest {
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isLoggedInProvider = { false },
+            isDeviceTrustedProvider = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -3181,6 +3188,7 @@ class AuthRepositoryTest {
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isLoggedInProvider = { false },
+            isDeviceTrustedProvider = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         assertEquals(
@@ -3210,6 +3218,7 @@ class AuthRepositoryTest {
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
             isLoggedInProvider = { false },
+            isDeviceTrustedProvider = { false },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE
         assertEquals(

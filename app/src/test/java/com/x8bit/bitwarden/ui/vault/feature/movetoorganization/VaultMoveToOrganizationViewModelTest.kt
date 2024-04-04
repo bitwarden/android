@@ -491,6 +491,7 @@ private val DEFAULT_USER_STATE = UserState(
                     name = "mockOrganizationName-3",
                 ),
             ),
+            trustedDevice = null,
         ),
     ),
 )

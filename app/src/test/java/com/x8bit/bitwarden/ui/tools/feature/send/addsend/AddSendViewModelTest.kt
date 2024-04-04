@@ -1098,6 +1098,7 @@ class AddSendViewModelTest : BaseViewModelTest() {
             isBiometricsEnabled = false,
             organizations = emptyList(),
             needsMasterPassword = false,
+            trustedDevice = null,
         )
 
         private val DEFAULT_USER_STATE = UserState(

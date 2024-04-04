@@ -81,6 +81,7 @@ fun UserStateJson.toUserState(
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
     isLoggedInProvider: (userId: String) -> Boolean,
+    isDeviceTrustedProvider: (userId: String) -> Boolean,
 ): UserState =
     UserState(
         activeUserId = this.activeUserId,
@@ -92,7 +93,21 @@ fun UserStateJson.toUserState(
                 val userId = profile.userId
                 val vaultUnlocked = vaultState.statusFor(userId) == VaultUnlockData.Status.UNLOCKED
                 val needsPasswordReset = profile.forcePasswordResetReason != null
-                val needsMasterPassword = profile.userDecryptionOptions?.hasMasterPassword == false
+                val decryptionOptions = profile.userDecryptionOptions
+                val trustedDeviceOptions = decryptionOptions?.trustedDeviceUserDecryptionOptions
+                val keyConnectorOptions = decryptionOptions?.keyConnectorUserDecryptionOptions
+                val needsMasterPassword = decryptionOptions?.hasMasterPassword == false &&
+                    trustedDeviceOptions?.hasManageResetPasswordPermission != false &&
+                    keyConnectorOptions == null
+                val trustedDevice = trustedDeviceOptions?.let {
+                    UserState.TrustedDevice(
+                        isDeviceTrusted = isDeviceTrustedProvider(userId),
+                        hasMasterPassword = decryptionOptions.hasMasterPassword,
+                        hasAdminApproval = it.hasAdminApproval,
+                        hasLoginApprovingDevice = it.hasLoginApprovingDevice,
+                        hasResetPasswordPermission = it.hasManageResetPasswordPermission,
+                    )
+                }
 
                 UserState.Account(
                     userId = userId,
@@ -114,6 +129,7 @@ fun UserStateJson.toUserState(
                     isBiometricsEnabled = isBiometricsEnabledProvider(userId),
                     vaultUnlockType = vaultUnlockTypeProvider(userId),
                     needsMasterPassword = needsMasterPassword,
+                    trustedDevice = trustedDevice,
                 )
             },
         hasPendingAccountAddition = hasPendingAccountAddition,

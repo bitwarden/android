@@ -115,6 +115,7 @@ private fun createMockUserState(hasOrganizations: Boolean = true): UserState =
                 } else {
                     emptyList()
                 },
+                trustedDevice = null,
             ),
         ),
     )

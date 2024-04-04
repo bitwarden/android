@@ -291,6 +291,7 @@ private val DEFAULT_USER_STATE = UserState(
             needsPasswordReset = false,
             organizations = emptyList(),
             needsMasterPassword = false,
+            trustedDevice = null,
         ),
     ),
 )

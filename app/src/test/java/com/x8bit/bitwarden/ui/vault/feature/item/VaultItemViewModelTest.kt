@@ -2014,6 +2014,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     isBiometricsEnabled = false,
                     organizations = emptyList(),
                     needsMasterPassword = false,
+                    trustedDevice = null,
                 ),
             ),
         )

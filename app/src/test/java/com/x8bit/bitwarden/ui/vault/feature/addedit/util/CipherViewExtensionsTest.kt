@@ -432,6 +432,7 @@ class CipherViewExtensionsTest {
             isBiometricsEnabled = true,
             vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
             needsMasterPassword = false,
+            trustedDevice = null,
         )
 }
 
