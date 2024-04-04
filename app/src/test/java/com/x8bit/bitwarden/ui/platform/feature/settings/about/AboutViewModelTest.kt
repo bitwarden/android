@@ -45,6 +45,15 @@ class AboutViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on GiveFeedbackClick should emit NavigateToFeedbackForm`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AboutAction.GiveFeedbackClick)
+            assertEquals(AboutEvent.NavigateToFeedbackForm, awaitItem())
+        }
+    }
+
+    @Test
     fun `on HelpCenterClick should emit NavigateToHelpCenter`() = runTest {
         val viewModel = createViewModel(DEFAULT_ABOUT_STATE)
         viewModel.eventFlow.test {

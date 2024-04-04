@@ -109,15 +109,6 @@ class OtherViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on GiveFeedbackClick should emit NavigateToFeedbackForm`() = runTest {
-        val viewModel = createViewModel()
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(OtherAction.GiveFeedbackClick)
-            assertEquals(OtherEvent.NavigateToFeedbackForm, awaitItem())
-        }
-    }
-
-    @Test
     fun `on ClearClipboardFrequencyChange should update state`() = runTest {
         val viewModel = createViewModel()
         viewModel.stateFlow.test {

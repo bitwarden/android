@@ -149,22 +149,6 @@ class OtherScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on give feedback click should display confirmation dialog and confirm click should emit GiveFeedbackClick`() {
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        composeTestRule.onNodeWithText("Give Feedback").performClick()
-        composeTestRule.onNode(isDialog()).assertExists()
-        composeTestRule
-            .onAllNodesWithText("Continue")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        composeTestRule.onNode(isDialog()).assertDoesNotExist()
-        verify {
-            viewModel.trySendAction(OtherAction.GiveFeedbackClick)
-        }
-    }
 }
 
 private val DEFAULT_STATE = OtherState(

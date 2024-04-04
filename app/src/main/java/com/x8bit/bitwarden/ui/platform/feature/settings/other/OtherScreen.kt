@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequency
@@ -42,7 +41,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
-import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
@@ -64,9 +62,6 @@ fun OtherScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             OtherEvent.NavigateBack -> onNavigateBack.invoke()
-            OtherEvent.NavigateToFeedbackForm -> {
-                intentManager.launchUri("https://livefrontinc.typeform.com/to/irgrRu4a".toUri())
-            }
         }
     }
 
@@ -165,16 +160,6 @@ fun OtherScreen(
                     .fillMaxWidth()
                     .semantics { testTag = "AllowScreenCaptureSwitch" }
                     .padding(horizontal = 16.dp),
-            )
-
-            BitwardenExternalLinkRow(
-                text = stringResource(R.string.give_feedback),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(OtherAction.GiveFeedbackClick) }
-                },
-                dialogTitle = stringResource(R.string.continue_to_give_feedback),
-                dialogMessage = stringResource(R.string.continue_to_provide_feedback),
-                withDivider = false,
             )
         }
     }
