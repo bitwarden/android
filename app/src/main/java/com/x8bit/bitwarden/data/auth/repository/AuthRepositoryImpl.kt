@@ -10,9 +10,6 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.CaptchaRequired
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.Success
-import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson.TwoFactorRequired
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
@@ -162,7 +159,7 @@ class AuthRepositoryImpl(
 
     private val ioScope = CoroutineScope(dispatcherManager.io)
 
-    override var twoFactorResponse: TwoFactorRequired? = null
+    override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
     override val ssoOrganizationIdentifier: String? get() = organizationIdentifier
     override val activeUserId: String? get() = authDiskSource.userState?.activeUserId
@@ -421,179 +418,6 @@ class AuthRepositoryImpl(
         captchaToken = captchaToken,
         orgIdentifier = organizationIdentifier,
     )
-
-    /**
-     * A helper function to extract the common logic of logging in through
-     * any of the available methods.
-     */
-    @Suppress("CyclomaticComplexMethod", "LongMethod")
-    private suspend fun loginCommon(
-        email: String,
-        password: String? = null,
-        authModel: IdentityTokenAuthModel,
-        twoFactorData: TwoFactorDataModel? = null,
-        deviceData: DeviceDataModel? = null,
-        orgIdentifier: String? = null,
-        captchaToken: String?,
-    ): LoginResult = identityService
-        .getToken(
-            uniqueAppId = authDiskSource.uniqueAppId,
-            email = email,
-            authModel = authModel,
-            twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),
-            captchaToken = captchaToken,
-        )
-        .fold(
-            onFailure = { LoginResult.Error(errorMessage = null) },
-            onSuccess = { loginResponse ->
-                when (loginResponse) {
-                    is CaptchaRequired -> LoginResult.CaptchaRequired(loginResponse.captchaKey)
-
-                    is TwoFactorRequired -> {
-                        // Cache the data necessary for the remaining two-factor auth flow.
-                        identityTokenAuthModel = authModel
-                        twoFactorResponse = loginResponse
-                        twoFactorDeviceData = deviceData
-                        resendEmailRequestJson = ResendEmailRequestJson(
-                            deviceIdentifier = authDiskSource.uniqueAppId,
-                            email = email,
-                            passwordHash = authModel.password,
-                            ssoToken = loginResponse.ssoToken,
-                        )
-
-                        // If this error was received, it also means any cached two-factor
-                        // token is invalid.
-                        authDiskSource.storeTwoFactorToken(email, null)
-
-                        LoginResult.TwoFactorRequired
-                    }
-
-                    is Success -> {
-                        val userStateJson = loginResponse.toUserState(
-                            previousUserState = authDiskSource.userState,
-                            environmentUrlData = environmentRepository
-                                .environment
-                                .environmentUrlData,
-                        )
-                        val userId = userStateJson.activeUserId
-
-                        // If the user just authenticated with a two-factor code and selected
-                        // the option to remember it, then the API response will return a token
-                        // that will be used in place of the two-factor code on the next login
-                        // attempt.
-                        loginResponse.twoFactorToken?.let {
-                            authDiskSource.storeTwoFactorToken(
-                                email = email,
-                                twoFactorToken = it,
-                            )
-                        }
-
-                        // Set the current organization identifier for use in JIT provisioning.
-                        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
-                            organizationIdentifier = orgIdentifier
-                        }
-
-                        // Remove any cached data after successfully logging in.
-                        identityTokenAuthModel = null
-                        twoFactorResponse = null
-                        resendEmailRequestJson = null
-                        twoFactorDeviceData = null
-
-                        // Attempt to unlock the vault with password if possible.
-                        password?.let {
-                            if (loginResponse.privateKey != null && loginResponse.key != null) {
-                                vaultRepository.unlockVault(
-                                    userId = userId,
-                                    email = userStateJson.activeAccount.profile.email,
-                                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                                    userKey = loginResponse.key,
-                                    privateKey = loginResponse.privateKey,
-                                    masterPassword = it,
-                                    // We can separately unlock vault for organization data after
-                                    // receiving the sync response if this data is currently absent.
-                                    organizationKeys = null,
-                                )
-                            }
-
-                            // Save the master password hash.
-                            authSdkSource
-                                .hashPassword(
-                                    email = email,
-                                    password = it,
-                                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
-                                )
-                                .onSuccess { passwordHash ->
-                                    authDiskSource.storeMasterPasswordHash(
-                                        userId = userId,
-                                        passwordHash = passwordHash,
-                                    )
-                                }
-
-                            // Cache the password to verify against any password policies
-                            // after the sync completes.
-                            passwordToCheck = it
-                        }
-
-                        // Attempt to unlock the vault with auth request if possible.
-                        // These values will only be null during the Just-in-Time provisioning flow.
-                        if (loginResponse.privateKey != null && loginResponse.key != null) {
-                            deviceData?.let { model ->
-                                vaultRepository.unlockVault(
-                                    userId = userId,
-                                    email = userStateJson.activeAccount.profile.email,
-                                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                                    privateKey = loginResponse.privateKey,
-                                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                                        requestPrivateKey = model.privateKey,
-                                        method = model
-                                            .masterPasswordHash
-                                            ?.let {
-                                                AuthRequestMethod.MasterKey(
-                                                    protectedMasterKey = model.asymmetricalKey,
-                                                    authRequestKey = loginResponse.key,
-                                                )
-                                            }
-                                            ?: AuthRequestMethod.UserKey(
-                                                protectedUserKey = model.asymmetricalKey,
-                                            ),
-                                    ),
-                                    // We can separately unlock  vault for organization data after
-                                    // receiving the sync response if this data is currently absent.
-                                    organizationKeys = null,
-                                )
-                                // We are purposely not storing the master password hash here since
-                                // it is not formatted in in a manner that we can use. We will store
-                                // it properly the next time the user enters their master password
-                                // and it is validated.
-                            }
-                        }
-
-                        authDiskSource.storeAccountTokens(
-                            userId = userId,
-                            accountTokens = AccountTokensJson(
-                                accessToken = loginResponse.accessToken,
-                                refreshToken = loginResponse.refreshToken,
-                            ),
-                        )
-                        authDiskSource.userState = userStateJson
-                        authDiskSource.storeUserKey(userId = userId, userKey = loginResponse.key)
-                        authDiskSource.storePrivateKey(
-                            userId = userId,
-                            privateKey = loginResponse.privateKey,
-                        )
-                        settingsRepository.setDefaultsIfNecessary(userId = userId)
-                        vaultRepository.syncIfNecessary()
-                        hasPendingAccountAddition = false
-                        LoginResult.Success
-                    }
-
-                    is GetTokenResponseJson.Invalid -> {
-                        LoginResult.Error(errorMessage = loginResponse.errorModel.errorMessage)
-                    }
-                }
-            },
-        )
 
     override fun refreshAccessTokenSynchronously(userId: String): Result<RefreshTokenResponseJson> {
         val refreshToken = authDiskSource
@@ -1195,4 +1019,201 @@ class AuthRepositoryImpl(
             .userState
             ?.copy(accounts = accounts)
     }
+
+    //region LoginCommon
+
+    /**
+     * A helper function to extract the common logic of logging in through
+     * any of the available methods.
+     */
+    private suspend fun loginCommon(
+        email: String,
+        password: String? = null,
+        authModel: IdentityTokenAuthModel,
+        twoFactorData: TwoFactorDataModel? = null,
+        deviceData: DeviceDataModel? = null,
+        orgIdentifier: String? = null,
+        captchaToken: String?,
+    ): LoginResult = identityService
+        .getToken(
+            uniqueAppId = authDiskSource.uniqueAppId,
+            email = email,
+            authModel = authModel,
+            twoFactorData = twoFactorData ?: getRememberedTwoFactorData(email),
+            captchaToken = captchaToken,
+        )
+        .fold(
+            onFailure = { LoginResult.Error(errorMessage = null) },
+            onSuccess = { loginResponse ->
+                when (loginResponse) {
+                    is GetTokenResponseJson.CaptchaRequired -> LoginResult.CaptchaRequired(
+                        captchaId = loginResponse.captchaKey,
+                    )
+
+                    is GetTokenResponseJson.TwoFactorRequired -> handleLoginCommonTwoFactorRequired(
+                        loginResponse = loginResponse,
+                        email = email,
+                        authModel = authModel,
+                        deviceData = deviceData,
+                    )
+
+                    is GetTokenResponseJson.Success -> handleLoginCommonSuccess(
+                        loginResponse = loginResponse,
+                        email = email,
+                        password = password,
+                        deviceData = deviceData,
+                        orgIdentifier = orgIdentifier,
+                    )
+
+                    is GetTokenResponseJson.Invalid -> LoginResult.Error(
+                        errorMessage = loginResponse.errorModel.errorMessage,
+                    )
+                }
+            },
+        )
+
+    /**
+     * A helper method that processes the [GetTokenResponseJson.Success] when logging in.
+     */
+    @Suppress("CyclomaticComplexMethod", "LongMethod")
+    private suspend fun handleLoginCommonSuccess(
+        loginResponse: GetTokenResponseJson.Success,
+        email: String,
+        password: String?,
+        deviceData: DeviceDataModel?,
+        orgIdentifier: String?,
+    ): LoginResult {
+        val userStateJson = loginResponse.toUserState(
+            previousUserState = authDiskSource.userState,
+            environmentUrlData = environmentRepository.environment.environmentUrlData,
+        )
+        val userId = userStateJson.activeUserId
+
+        // If the user just authenticated with a two-factor code and selected the option to
+        // remember it, then the API response will return a token that will be used in place
+        // of the two-factor code on the next login attempt.
+        loginResponse.twoFactorToken?.let {
+            authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = it)
+        }
+
+        // Set the current organization identifier for use in JIT provisioning.
+        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
+            organizationIdentifier = orgIdentifier
+        }
+
+        // Remove any cached data after successfully logging in.
+        identityTokenAuthModel = null
+        twoFactorResponse = null
+        resendEmailRequestJson = null
+        twoFactorDeviceData = null
+
+        // Attempt to unlock the vault with password if possible.
+        password?.let {
+            if (loginResponse.privateKey != null && loginResponse.key != null) {
+                vaultRepository.unlockVault(
+                    userId = userId,
+                    email = userStateJson.activeAccount.profile.email,
+                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                    userKey = loginResponse.key,
+                    privateKey = loginResponse.privateKey,
+                    masterPassword = it,
+                    // We can separately unlock vault for organization data after
+                    // receiving the sync response if this data is currently absent.
+                    organizationKeys = null,
+                )
+            }
+
+            // Save the master password hash.
+            authSdkSource
+                .hashPassword(
+                    email = email,
+                    password = it,
+                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                    purpose = HashPurpose.LOCAL_AUTHORIZATION,
+                )
+                .onSuccess { passwordHash ->
+                    authDiskSource.storeMasterPasswordHash(
+                        userId = userId,
+                        passwordHash = passwordHash,
+                    )
+                }
+
+            // Cache the password to verify against any password policies
+            // after the sync completes.
+            passwordToCheck = it
+        }
+
+        // Attempt to unlock the vault with auth request if possible.
+        // These values will only be null during the Just-in-Time provisioning flow.
+        if (loginResponse.privateKey != null && loginResponse.key != null) {
+            deviceData?.let { model ->
+                vaultRepository.unlockVault(
+                    userId = userId,
+                    email = userStateJson.activeAccount.profile.email,
+                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
+                    privateKey = loginResponse.privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = model.privateKey,
+                        method = model
+                            .masterPasswordHash
+                            ?.let {
+                                AuthRequestMethod.MasterKey(
+                                    protectedMasterKey = model.asymmetricalKey,
+                                    authRequestKey = loginResponse.key,
+                                )
+                            }
+                            ?: AuthRequestMethod.UserKey(protectedUserKey = model.asymmetricalKey),
+                    ),
+                    // We can separately unlock vault for organization data after
+                    // receiving the sync response if this data is currently absent.
+                    organizationKeys = null,
+                )
+                // We are purposely not storing the master password hash here since it is not
+                // formatted in in a manner that we can use. We will store it properly the next
+                // time the user enters their master password and it is validated.
+            }
+        }
+
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = AccountTokensJson(
+                accessToken = loginResponse.accessToken,
+                refreshToken = loginResponse.refreshToken,
+            ),
+        )
+        authDiskSource.userState = userStateJson
+        authDiskSource.storeUserKey(userId = userId, userKey = loginResponse.key)
+        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
+        settingsRepository.setDefaultsIfNecessary(userId = userId)
+        vaultRepository.syncIfNecessary()
+        hasPendingAccountAddition = false
+        return LoginResult.Success
+    }
+
+    /**
+     * A helper method that processes the [GetTokenResponseJson.TwoFactorRequired] when logging in.
+     */
+    private fun handleLoginCommonTwoFactorRequired(
+        loginResponse: GetTokenResponseJson.TwoFactorRequired,
+        email: String,
+        authModel: IdentityTokenAuthModel,
+        deviceData: DeviceDataModel?,
+    ): LoginResult {
+        // Cache the data necessary for the remaining two-factor auth flow.
+        identityTokenAuthModel = authModel
+        twoFactorResponse = loginResponse
+        twoFactorDeviceData = deviceData
+        resendEmailRequestJson = ResendEmailRequestJson(
+            deviceIdentifier = authDiskSource.uniqueAppId,
+            email = email,
+            passwordHash = authModel.password,
+            ssoToken = loginResponse.ssoToken,
+        )
+
+        // If this error was received, it also means any cached two-factor token is invalid.
+        authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = null)
+        return LoginResult.TwoFactorRequired
+    }
+
+    //endregion LoginCommon
 }
