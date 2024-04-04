@@ -71,6 +71,10 @@ fun AboutScreen(
 
             AboutEvent.NavigateBack -> onNavigateBack.invoke()
 
+            AboutEvent.NavigateToFeedbackForm -> {
+                intentManager.launchUri("https://livefrontinc.typeform.com/to/irgrRu4a".toUri())
+            }
+
             AboutEvent.NavigateToHelpCenter -> {
                 intentManager.launchUri("https://bitwarden.com/help".toUri())
             }
@@ -126,6 +130,9 @@ fun AboutScreen(
             onRateTheAppClick = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.RateAppClick) }
             },
+            onGiveFeedbackClick = remember(viewModel) {
+                { viewModel.trySendAction(AboutAction.GiveFeedbackClick) }
+            },
             onSubmitCrashLogsCheckedChange = remember(viewModel) {
                 { viewModel.trySendAction(AboutAction.SubmitCrashLogsClick(it)) }
             },
@@ -147,6 +154,7 @@ private fun ContentColumn(
     onPrivacyPolicyClick: () -> Unit,
     onLearnAboutOrgsClick: () -> Unit,
     onRateTheAppClick: () -> Unit,
+    onGiveFeedbackClick: () -> Unit,
     onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
     onVersionClick: () -> Unit,
     onWebVaultClick: () -> Unit,
@@ -207,6 +215,12 @@ private fun ContentColumn(
             onConfirmClick = onRateTheAppClick,
             dialogTitle = stringResource(id = R.string.continue_to_app_store),
             dialogMessage = stringResource(id = R.string.rate_app_description_long),
+        )
+        BitwardenExternalLinkRow(
+            text = stringResource(R.string.give_feedback),
+            onConfirmClick = onGiveFeedbackClick,
+            dialogTitle = stringResource(R.string.continue_to_give_feedback),
+            dialogMessage = stringResource(R.string.continue_to_provide_feedback),
         )
         CopyRow(
             text = state.version,

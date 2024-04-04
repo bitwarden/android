@@ -74,6 +74,22 @@ class AboutScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on give feedback click should display confirmation dialog and confirm click should emit GiveFeedbackClick`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText("Give Feedback").performScrollTo().performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        verify {
+            viewModel.trySendAction(AboutAction.GiveFeedbackClick)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on bitwarden help center click should display confirmation dialog and confirm click should emit HelpCenterClick`() {
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
         composeTestRule.onNodeWithText("Bitwarden Help Center").performClick()

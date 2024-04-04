@@ -49,6 +49,7 @@ class AboutViewModel @Inject constructor(
 
     override fun handleAction(action: AboutAction): Unit = when (action) {
         AboutAction.BackClick -> handleBackClick()
+        AboutAction.GiveFeedbackClick -> handleGiveFeedbackClick()
         AboutAction.HelpCenterClick -> handleHelpCenterClick()
         AboutAction.PrivacyPolicyClick -> handlePrivacyPolicyClick()
         AboutAction.LearnAboutOrganizationsClick -> handleLearnAboutOrganizationsClick()
@@ -64,6 +65,10 @@ class AboutViewModel @Inject constructor(
 
     private fun handleHelpCenterClick() {
         sendEvent(AboutEvent.NavigateToHelpCenter)
+    }
+
+    private fun handleGiveFeedbackClick() {
+        sendEvent(AboutEvent.NavigateToFeedbackForm)
     }
 
     private fun handlePrivacyPolicyClick() {
@@ -140,6 +145,11 @@ sealed class AboutEvent {
     data object NavigateBack : AboutEvent()
 
     /**
+     * Navigate to the feedback form.
+     */
+    data object NavigateToFeedbackForm : AboutEvent()
+
+    /**
      * Navigates to the help center.
      */
     data object NavigateToHelpCenter : AboutEvent()
@@ -173,6 +183,11 @@ sealed class AboutAction {
      * User clicked back button.
      */
     data object BackClick : AboutAction()
+
+    /**
+     * User clicked the give feedback row.
+     */
+    data object GiveFeedbackClick : AboutAction()
 
     /**
      *  User clicked the helper center row.
