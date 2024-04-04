@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.service.AuthRequestsService
 import com.x8bit.bitwarden.data.auth.datasource.network.service.NewAuthRequestService
@@ -246,6 +247,31 @@ class AuthRequestManagerImpl(
             )
     }
 
+    override suspend fun getAuthRequestIfApproved(requestId: String): Result<AuthRequest> =
+        authRequestsService
+            .getAuthRequest(requestId)
+            .flatMap { request ->
+                if (request.requestApproved == true) {
+                    getFingerprintPhrase(request.publicKey).map { fingerprint ->
+                        AuthRequest(
+                            id = request.id,
+                            publicKey = request.publicKey,
+                            platform = request.platform,
+                            ipAddress = request.ipAddress,
+                            key = request.key,
+                            masterPasswordHash = request.masterPasswordHash,
+                            creationDate = request.creationDate,
+                            responseDate = request.responseDate,
+                            requestApproved = true,
+                            originUrl = request.originUrl,
+                            fingerprint = fingerprint,
+                        )
+                    }
+                } else {
+                    IllegalStateException("Request not approved.").asFailure()
+                }
+            }
+
     override suspend fun getAuthRequests(): AuthRequestsResult =
         authRequestsService
             .getAuthRequests()
@@ -335,6 +361,17 @@ class AuthRequestManagerImpl(
                         fingerprint = authRequestResponse.fingerprint,
                         authRequestType = authRequestType,
                     )
+                    .onSuccess {
+                        if (authRequestType == AuthRequestTypeJson.ADMIN_APPROVAL) {
+                            authDiskSource.storePendingAuthRequest(
+                                userId = requireNotNull(activeUserId),
+                                pendingAuthRequest = PendingAuthRequestJson(
+                                    requestId = it.id,
+                                    requestPrivateKey = authRequestResponse.privateKey,
+                                ),
+                            )
+                        }
+                    }
                     .map { request ->
                         AuthRequest(
                             id = request.id,

@@ -4,6 +4,7 @@ import app.cash.turbine.test
 import com.bitwarden.core.AuthRequestResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson
@@ -29,6 +30,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Clock
 import java.time.Instant
@@ -240,6 +242,7 @@ class AuthRequestManagerTest {
     fun `createAuthRequestWithUpdates with createNewAuthRequest Success and getAuthRequestUpdate with old creation date should emit Expired`() =
         runTest {
             val email = "email@email.com"
+            fakeAuthDiskSource.userState = SINGLE_USER_STATE
             val authRequestResponse = AUTH_REQUEST_RESPONSE
             val authRequestResponseJson = AuthRequestsResponseJson.AuthRequest(
                 id = "1",
@@ -300,6 +303,13 @@ class AuthRequestManagerTest {
                     assertEquals(CreateAuthRequestResult.Expired, awaitItem())
                     awaitComplete()
                 }
+            fakeAuthDiskSource.assertPendingAuthRequest(
+                userId = USER_ID,
+                pendingAuthRequest = PendingAuthRequestJson(
+                    requestId = authRequestResponseJson.id,
+                    requestPrivateKey = authRequestResponse.privateKey,
+                ),
+            )
         }
 
     @Suppress("MaxLineLength")
@@ -776,6 +786,62 @@ class AuthRequestManagerTest {
                 authRequestsService.getAuthRequests()
             }
         }
+
+    @Test
+    fun `getAuthRequestIfApproved should return failure when service returns failure`() = runTest {
+        val requestId = "requestId"
+        coEvery {
+            authRequestsService.getAuthRequest(requestId)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.getAuthRequestIfApproved(requestId)
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequest(requestId)
+        }
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `getAuthRequestIfApproved should return failure when request is not approved`() = runTest {
+        val requestId = "requestId"
+        val response = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.copy(requestApproved = false)
+        coEvery { authRequestsService.getAuthRequest(requestId) } returns response.asSuccess()
+
+        val result = repository.getAuthRequestIfApproved(requestId)
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequest(requestId)
+        }
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `getAuthRequestIfApproved should return success when request is approved`() = runTest {
+        val requestId = "requestId"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery {
+            authRequestsService.getAuthRequest(requestId)
+        } returns AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.asSuccess()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE
+        coEvery {
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.publicKey,
+            )
+        } returns FINGER_PRINT.asSuccess()
+
+        val result = repository.getAuthRequestIfApproved(requestId)
+
+        coVerify(exactly = 1) {
+            authRequestsService.getAuthRequest(requestId)
+            authSdkSource.getUserFingerprint(
+                email = EMAIL,
+                publicKey = AUTH_REQUESTS_RESPONSE_JSON_AUTH_RESPONSE.publicKey,
+            )
+        }
+        assertEquals(AUTH_REQUEST.asSuccess(), result)
+    }
 
     @Test
     fun `getAuthRequests should return failure when service returns failure`() = runTest {

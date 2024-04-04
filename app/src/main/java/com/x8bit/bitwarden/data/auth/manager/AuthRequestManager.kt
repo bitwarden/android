@@ -37,6 +37,11 @@ interface AuthRequestManager {
     fun getAuthRequestsWithUpdates(): Flow<AuthRequestsUpdatesResult>
 
     /**
+     * Get an [AuthRequest] by its request ID.
+     */
+    suspend fun getAuthRequestIfApproved(requestId: String): Result<AuthRequest>
+
+    /**
      * Get a list of the current user's [AuthRequest]s.
      */
     suspend fun getAuthRequests(): AuthRequestsResult
