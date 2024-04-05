@@ -22,6 +22,7 @@ abstract record VariantConfig(
 const string BASE_BUNDLE_ID_DROID = "com.x8bit.bitwarden";
 const string BASE_BUNDLE_ID_IOS = "com.8bit.bitwarden";
 
+//NOTE: Beta iOS variants have a different ITSEncryptionExportComplianceCode 
 record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development", "Dist:");
 record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development", "Dist:");
 record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production", "Dist: Beta");
@@ -221,11 +222,9 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
         plist["NSExtension"]["NSExtensionAttributes"]["NSExtensionActivationRule"] = keyText.Replace("com.8bit.bitwarden", buildVariant.iOSBundleId);
     }
 
-    //TODO DEVOPS-1822 testing
     if(buildVariant is Beta)
     {
-        plist.Remove("ITSAppUsesNonExemptEncryption");
-        plist.Remove("ITSEncryptionExportComplianceCode");
+        plist["ITSEncryptionExportComplianceCode"] = "3dd3e32f-efa6-4d99-b410-28aa28b1cb77";
     }
 
     SerializePlist(plistFile, plist);
