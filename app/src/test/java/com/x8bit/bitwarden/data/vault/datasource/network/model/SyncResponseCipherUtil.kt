@@ -154,4 +154,5 @@ fun createMockUri(number: Int): SyncResponseJson.Cipher.Login.Uri =
     SyncResponseJson.Cipher.Login.Uri(
         uri = "mockUri-$number",
         uriMatchType = UriMatchTypeJson.HOST,
+        uriChecksum = "mockUriChecksum-$number",
     )

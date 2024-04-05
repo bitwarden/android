@@ -184,6 +184,7 @@ private fun LoginUri.toEncryptedNetworkUri(): SyncResponseJson.Cipher.Login.Uri 
     SyncResponseJson.Cipher.Login.Uri(
         uriMatchType = match?.toNetworkMatchType(),
         uri = uri,
+        uriChecksum = uriChecksum,
     )
 
 private fun UriMatchType.toNetworkMatchType(): UriMatchTypeJson =
@@ -432,7 +433,7 @@ fun SyncResponseJson.Cipher.Login.Uri.toSdkLoginUri(): LoginUri =
     LoginUri(
         uri = uri,
         match = uriMatchType?.toSdkMatchType(),
-        uriChecksum = null,
+        uriChecksum = uriChecksum,
     )
 
 /**

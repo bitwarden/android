@@ -53,6 +53,7 @@ class AutofillSelectionDataExtensionsTest {
                             id = "uuid",
                             uri = "https://www.test.com",
                             match = null,
+                            checksum = null,
                         ),
                     ),
                 ),

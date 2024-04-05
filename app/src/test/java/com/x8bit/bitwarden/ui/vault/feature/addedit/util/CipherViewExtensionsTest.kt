@@ -192,7 +192,14 @@ class CipherViewExtensionsTest {
                 type = VaultAddEditState.ViewState.Content.ItemType.Login(
                     username = "username",
                     password = "password",
-                    uriList = listOf(UriItem(TEST_ID, "www.example.com", null)),
+                    uriList = listOf(
+                        UriItem(
+                            id = TEST_ID,
+                            uri = "www.example.com",
+                            match = null,
+                            checksum = null,
+                        ),
+                    ),
                     totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                     canViewPassword = false,
                     fido2CredentialCreationDateTime = R.string.created_xy.asText(

@@ -12,4 +12,5 @@ data class UriItem(
     val id: String,
     val uri: String?,
     val match: UriMatchType?,
+    val checksum: String?,
 ) : Parcelable

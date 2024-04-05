@@ -808,7 +808,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Login state changing URI text field should trigger UriValueChange`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
-                copy(uriList = listOf(UriItem("TestId", "URI", null)))
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = "URI", match = null, checksum = null),
+                    ),
+                )
             }
         }
 
@@ -819,7 +823,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    UriItem("TestId", "TestURI", null),
+                    UriItem(id = "TestId", uri = "TestURI", match = null, checksum = null),
                 ),
             )
         }
@@ -833,7 +837,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
-                copy(uriList = listOf(UriItem("TestId", "NewURI", null)))
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = "NewURI", match = null, checksum = null),
+                    ),
+                )
             }
         }
 
@@ -863,7 +871,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Login Uri settings dialog should send RemoveUriClick action if remove is clicked`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
-                copy(uriList = listOf(UriItem("TestId", null, null)))
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
             }
         }
 
@@ -883,11 +895,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.RemoveUriClick(
-                    UriItem(
-                        "TestId",
-                        null,
-                        null,
-                    ),
+                    UriItem(id = "TestId", uri = null, match = null, checksum = null),
                 ),
             )
         }
@@ -948,7 +956,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Login on URI settings click and on match detection click and option click should emit UriValueChange action`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
-                copy(uriList = listOf(UriItem("TestId", null, null)))
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
             }
         }
 
@@ -978,11 +990,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    UriItem(
-                        "TestId",
-                        null,
-                        UriMatchType.EXACT,
-                    ),
+                    UriItem(id = "TestId", uri = null, match = UriMatchType.EXACT, checksum = null),
                 ),
             )
         }
@@ -993,7 +1001,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     fun `in ItemType_Login on URI settings click and on match detection click and cancel click should dismiss the dialog`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) {
-                copy(uriList = listOf(UriItem("TestId", null, null)))
+                copy(
+                    uriList = listOf(
+                        UriItem(id = "TestId", uri = null, match = null, checksum = null),
+                    ),
+                )
             }
         }
 

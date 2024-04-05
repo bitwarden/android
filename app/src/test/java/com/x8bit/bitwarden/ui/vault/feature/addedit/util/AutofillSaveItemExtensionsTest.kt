@@ -63,6 +63,7 @@ class AutofillSaveItemExtensionsTest {
                             id = "uuid",
                             uri = "https://www.test.com",
                             match = null,
+                            checksum = null,
                         ),
                     ),
                 ),

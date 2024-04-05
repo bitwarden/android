@@ -482,7 +482,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     typeContentViewState = createLoginTypeContentViewState(
                         username = "mockUsername-1",
                         password = "mockPassword-1",
-                        uri = listOf(UriItem("testId", "www.mockuri1.com", UriMatchType.HOST)),
+                        uri = listOf(
+                            UriItem(
+                                id = "testId",
+                                uri = "www.mockuri1.com",
+                                match = UriMatchType.HOST,
+                                checksum = "mockUriChecksum-1",
+                            ),
+                        ),
                         totpCode = "mockTotp-1",
                         canViewPassword = true,
                         fido2CredentialCreationDateTime = R.string.created_xy.asText(
@@ -1354,14 +1361,15 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `UriValueChange should update URI value in state`() = runTest {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = createVaultAddItemState(
                         typeContentViewState = createLoginTypeContentViewState(
-                            uri = listOf(UriItem("testID", null, null)),
+                            uri = listOf(
+                                UriItem(id = "testID", uri = null, match = null, checksum = null),
+                            ),
                         ),
                     ),
                     vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
@@ -1372,28 +1380,31 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     common = createCommonContentViewState(),
                     isIndividualVaultDisabled = false,
                     type = createLoginTypeContentViewState(
-                        uri = listOf(UriItem("testID", "Test", null)),
+                        uri = listOf(
+                            UriItem(id = "testID", uri = "Test", match = null, checksum = null),
+                        ),
                     ),
                 ),
             )
 
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.UriValueChange(
-                    uriItem = UriItem("testID", "Test", null),
+                    uriItem = UriItem(id = "testID", uri = "Test", match = null, checksum = null),
                 ),
             )
 
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
 
-        @Suppress("MaxLineLength")
         @Test
         fun `RemoveUriClick should remove URI value in state`() = runTest {
             val viewModel = createAddVaultItemViewModel(
                 savedStateHandle = createSavedStateHandleWithState(
                     state = createVaultAddItemState(
                         typeContentViewState = createLoginTypeContentViewState(
-                            uri = listOf(UriItem("testID", null, null)),
+                            uri = listOf(
+                                UriItem(id = "testID", uri = null, match = null, checksum = null),
+                            ),
                         ),
                     ),
                     vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
@@ -1412,7 +1423,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 VaultAddEditAction.ItemType.LoginType.RemoveUriClick(
-                    uriItem = UriItem("testID", null, null),
+                    uriItem = UriItem(id = "testID", uri = null, match = null, checksum = null),
                 ),
             )
 
@@ -1428,7 +1439,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             val expectedState = createVaultAddItemState(
                 typeContentViewState = createLoginTypeContentViewState().copy(
-                    uriList = listOf(UriItem("testId", "", null), UriItem("testId2", "", null)),
+                    uriList = listOf(
+                        UriItem(id = "testId", uri = "", match = null, checksum = null),
+                        UriItem(id = "testId2", uri = "", match = null, checksum = null),
+                    ),
                 ),
             )
 
@@ -2391,7 +2405,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private fun createLoginTypeContentViewState(
         username: String = "",
         password: String = "",
-        uri: List<UriItem> = listOf(UriItem("testId", "", null)),
+        uri: List<UriItem> = listOf(
+            UriItem(id = "testId", uri = "", match = null, checksum = null),
+        ),
         totpCode: String? = null,
         canViewPassword: Boolean = true,
         fido2CredentialCreationDateTime: Text? = null,
