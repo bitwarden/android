@@ -3,7 +3,7 @@
 ## Contents
 
 * [Style : Kotlin](#style--kotlin)
-* [Style : ViewModels](#style--view-models)
+* [Style : ViewModels](#style--viewmodels)
 * [Best Practices : Kotlin](#best-practices--kotlin)
 * [Best Practices : Jetpack Compose](#best-practices--jetpack-compose)
 
