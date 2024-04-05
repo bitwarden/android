@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.autofill
 
 import android.content.Context
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -45,12 +46,14 @@ class BitwardenRemoteViewsTest {
 
     @BeforeEach
     fun setup() {
+        mockkStatic(ContextCompat::getString)
         mockkStatic(Context::isSystemDarkMode)
         mockkConstructor(RemoteViews::class)
     }
 
     @AfterEach
     fun teardown() {
+        unmockkStatic(ContextCompat::getString)
         unmockkStatic(Context::isSystemDarkMode)
         unmockkConstructor(RemoteViews::class)
     }
@@ -59,6 +62,15 @@ class BitwardenRemoteViewsTest {
     fun `buildAutofillRemoteViews should set values and light mode colors when not night mode`() {
         // Setup
         every { testContext.isSystemDarkMode } returns false
+        every {
+            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+        } returns "Autofill suggestion"
+        every {
+            ContextCompat.getString(testContext, R.string.type_card)
+        } returns "Card"
+        every {
+            ContextCompat.getString(testContext, R.string.type_login)
+        } returns "Login"
         prepareRemoteViews(
             name = NAME,
             subtitle = SUBTITLE,
@@ -123,6 +135,15 @@ class BitwardenRemoteViewsTest {
     fun `buildAutofillRemoteViews should set values and dark mode colors when night mode`() {
         // Setup
         every { testContext.isSystemDarkMode } returns true
+        every {
+            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+        } returns "Autofill suggestion"
+        every {
+            ContextCompat.getString(testContext, R.string.type_card)
+        } returns "Card"
+        every {
+            ContextCompat.getString(testContext, R.string.type_login)
+        } returns "Login"
         prepareRemoteViews(
             name = NAME,
             subtitle = SUBTITLE,

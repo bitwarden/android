@@ -35,6 +35,7 @@ fun InlinePresentationSpec.createCipherInlinePresentationOrNull(
                 PendingIntent.FLAG_IMMUTABLE,
         ),
         autofillAppInfo = autofillAppInfo,
+        autofillCipher = autofillCipher,
         title = autofillCipher.name,
         subtitle = autofillCipher.subtitle,
         iconRes = autofillCipher.iconRes,
@@ -54,6 +55,7 @@ fun InlinePresentationSpec.createVaultItemInlinePresentationOrNull(
     createInlinePresentationOrNull(
         pendingIntent = pendingIntent,
         autofillAppInfo = autofillAppInfo,
+        autofillCipher = null,
         title = autofillAppInfo.context.getString(R.string.app_name),
         subtitle = if (isLocked) {
             autofillAppInfo.context.getString(R.string.vault_is_locked)
@@ -70,6 +72,7 @@ fun InlinePresentationSpec.createVaultItemInlinePresentationOrNull(
 private fun InlinePresentationSpec.createInlinePresentationOrNull(
     pendingIntent: PendingIntent,
     autofillAppInfo: AutofillAppInfo,
+    autofillCipher: AutofillCipher?,
     title: String,
     subtitle: String,
     @DrawableRes iconRes: Int,
@@ -96,6 +99,16 @@ private fun InlinePresentationSpec.createInlinePresentationOrNull(
         }
     val slice = InlineSuggestionUi
         .newContentBuilder(pendingIntent)
+        .also { contentBuilder ->
+            autofillCipher?.let {
+                contentBuilder.setContentDescription(
+                    getAutofillSuggestionContentDescription(
+                        autofillAppInfo = autofillAppInfo,
+                        autofillCipher = it,
+                    ),
+                )
+            }
+        }
         .setTitle(title)
         .setSubtitle(subtitle)
         .setStartIcon(icon)

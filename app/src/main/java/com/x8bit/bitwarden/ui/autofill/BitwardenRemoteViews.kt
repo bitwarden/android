@@ -6,6 +6,7 @@ import androidx.annotation.DrawableRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
+import com.x8bit.bitwarden.ui.autofill.util.getAutofillSuggestionContentDescription
 import com.x8bit.bitwarden.ui.autofill.util.isSystemDarkMode
 
 /**
@@ -21,6 +22,10 @@ fun buildAutofillRemoteViews(
         subtitle = autofillCipher.subtitle,
         iconRes = autofillCipher.iconRes,
         shouldTintIcon = true,
+        autofillContentDescription = getAutofillSuggestionContentDescription(
+            autofillCipher = autofillCipher,
+            autofillAppInfo = autofillAppInfo,
+        ),
     )
 
 /**
@@ -42,10 +47,13 @@ fun buildVaultItemAutofillRemoteViews(
         },
         iconRes = R.drawable.icon,
         shouldTintIcon = false,
+        autofillContentDescription = null,
     )
 
+@Suppress("LongParameterList")
 private fun buildAutofillRemoteViews(
     autofillAppInfo: AutofillAppInfo,
+    autofillContentDescription: String?,
     name: String,
     subtitle: String,
     @DrawableRes iconRes: Int,
@@ -56,6 +64,12 @@ private fun buildAutofillRemoteViews(
         R.layout.autofill_remote_view,
     )
         .apply {
+            autofillContentDescription?.let {
+                setContentDescription(
+                    R.id.container,
+                    it,
+                )
+            }
             setTextViewText(
                 R.id.title,
                 name,

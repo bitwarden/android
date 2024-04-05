@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.widget.inline.InlinePresentationSpec
 import androidx.autofill.inline.UiVersions
 import androidx.autofill.inline.v1.InlineSuggestionUi
+import androidx.core.content.ContextCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
@@ -36,6 +37,7 @@ class InlinePresentationSpecExtensionsTest {
 
     @BeforeEach
     fun setup() {
+        mockkStatic(ContextCompat::getString)
         mockkStatic(Context::isSystemDarkMode)
         mockkStatic(Icon::class)
         mockkStatic(InlineSuggestionUi::class)
@@ -45,7 +47,8 @@ class InlinePresentationSpecExtensionsTest {
 
     @AfterEach
     fun teardown() {
-        mockkStatic(Context::isSystemDarkMode)
+        unmockkStatic(ContextCompat::getString)
+        unmockkStatic(Context::isSystemDarkMode)
         unmockkStatic(Icon::class)
         unmockkStatic(InlineSuggestionUi::class)
         unmockkStatic(PendingIntent::getService)
@@ -103,6 +106,7 @@ class InlinePresentationSpecExtensionsTest {
             icon = icon,
             pendingIntent = pendingIntent,
             isSystemDarkMode = true,
+            cipherType = CARD,
         )
 
         // Test
@@ -141,6 +145,15 @@ class InlinePresentationSpecExtensionsTest {
     @Test
     fun `createCipherInlinePresentationOrNull should return presentation with login icon when login cipher and compatible`() {
         // Setup
+        every {
+            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+        } returns AUTOFILL_SUGGESTION
+        every {
+            ContextCompat.getString(testContext, R.string.type_card)
+        } returns CARD
+        every {
+            ContextCompat.getString(testContext, R.string.type_login)
+        } returns LOGIN
         val icon: Icon = mockk()
         val iconRes = R.drawable.ic_login_item
         val autofillCipher: AutofillCipher.Login = mockk {
@@ -297,7 +310,17 @@ class InlinePresentationSpecExtensionsTest {
         icon: Icon,
         pendingIntent: PendingIntent,
         isSystemDarkMode: Boolean,
+        cipherType: String = LOGIN,
     ) {
+        every {
+            ContextCompat.getString(testContext, R.string.autofill_suggestion)
+        } returns AUTOFILL_SUGGESTION
+        every {
+            ContextCompat.getString(testContext, R.string.type_card)
+        } returns CARD
+        every {
+            ContextCompat.getString(testContext, R.string.type_login)
+        } returns LOGIN
         val slice: Slice = mockk()
         every {
             UiVersions.getVersions(testStyle)
@@ -320,6 +343,19 @@ class InlinePresentationSpecExtensionsTest {
             )
                 .setTint(ICON_TINT)
         } returns icon
+        every {
+            InlineSuggestionUi
+                .newContentBuilder(pendingIntent)
+                .setContentDescription(
+                    createMockContentDescription(cipherType),
+                )
+                .setTitle(AUTOFILL_CIPHER_NAME)
+                .setSubtitle(AUTOFILL_CIPHER_SUBTITLE)
+                .setStartIcon(icon)
+                .build()
+                .slice
+        } returns slice
+
         every {
             InlineSuggestionUi
                 .newContentBuilder(pendingIntent)
@@ -371,6 +407,12 @@ class InlinePresentationSpecExtensionsTest {
     }
 }
 
+private fun createMockContentDescription(cipherType: String): String =
+    "${AUTOFILL_SUGGESTION}, $cipherType, ${AUTOFILL_CIPHER_NAME}, ${AUTOFILL_CIPHER_SUBTITLE}"
+
+private const val AUTOFILL_SUGGESTION = "Autofill suggestion"
+private const val CARD = "Card"
+private const val LOGIN = "Login"
 private const val APP_NAME = "Bitwarden"
 private const val AUTOFILL_CIPHER_NAME = "Cipher1"
 private const val AUTOFILL_CIPHER_SUBTITLE = "Subtitle"
