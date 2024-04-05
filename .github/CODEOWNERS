@@ -21,7 +21,6 @@ src/App/Platforms/iOS/Info.plist
 
 ## Platform team files ##
 appIcons @bitwarden/team-platform-dev
-build.cake @bitwarden/team-platform-dev
 
 ## Vault team files ##
 src/watchOS @bitwarden/team-vault-dev
