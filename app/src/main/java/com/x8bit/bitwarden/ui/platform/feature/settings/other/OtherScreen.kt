@@ -44,8 +44,6 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionR
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 
 /**
  * Displays the other screen.
@@ -56,7 +54,6 @@ import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
 fun OtherScreen(
     onNavigateBack: () -> Unit,
     viewModel: OtherViewModel = hiltViewModel(),
-    intentManager: IntentManager = LocalIntentManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     EventsEffect(viewModel = viewModel) { event ->
