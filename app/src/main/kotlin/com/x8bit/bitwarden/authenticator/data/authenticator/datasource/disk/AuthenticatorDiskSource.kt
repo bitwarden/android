@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk
 
-import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,18 +9,18 @@ import kotlinx.coroutines.flow.Flow
 interface AuthenticatorDiskSource {
 
     /**
-     * Saves a cipher to the data source.
+     * Saves an authenticator item to the data source.
      */
-    suspend fun saveCipher(cipher: CipherView)
+    suspend fun saveItem(authenticatorItem: AuthenticatorItemEntity)
 
     /**
-     * Retrieves all ciphers from the data source.
+     * Retrieves all authenticator items from the data source.
      */
-    fun getCiphers(): Flow<List<CipherView>>
+    fun getItems(): Flow<List<AuthenticatorItemEntity>>
 
     /**
-     * Deletes a cipher from the data source for the given [cipherId].
+     * Deletes an authenticator item from the data source with the given [itemId].
      */
-    suspend fun deleteCipher(cipherId: String)
+    suspend fun deleteItem(itemId: String)
 
 }

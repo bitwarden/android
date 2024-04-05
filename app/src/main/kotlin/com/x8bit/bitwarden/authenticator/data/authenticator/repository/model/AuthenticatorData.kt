@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.authenticator.data.authenticator.repository.model
 
-import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 
 /**
  * Represents decrypted authenticator data.
  *
- * @property ciphers List of decrypted ciphers.
+ * @property items List of decrypted authenticator items.
  */
 data class AuthenticatorData(
-    val ciphers: List<CipherView>,
+    val items: List<AuthenticatorItemEntity>,
 )

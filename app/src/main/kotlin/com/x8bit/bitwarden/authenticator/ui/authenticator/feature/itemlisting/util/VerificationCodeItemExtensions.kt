@@ -11,14 +11,14 @@ fun List<VerificationCodeItem>.toViewState(
         ItemListingState.ViewState.NoItems
     } else {
         ItemListingState.ViewState.Content(
-            map { it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds) }
+            map { it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds) },
         )
     }
 
 fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
     VerificationCodeDisplayItem(
         id = id,
-        label = name,
+        label = label,
         supportingLabel = username,
         timeLeftSeconds = timeLeftSeconds,
         periodSeconds = periodSeconds,

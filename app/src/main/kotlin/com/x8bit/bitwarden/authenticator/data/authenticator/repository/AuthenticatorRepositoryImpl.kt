@@ -1,15 +1,16 @@
 package com.x8bit.bitwarden.authenticator.data.authenticator.repository
 
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorData
-import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.CreateCipherResult
-import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.DeleteCipherResult
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
-import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
 import com.x8bit.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
@@ -30,6 +31,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -47,7 +49,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     private val mutableCiphersStateFlow =
-        MutableStateFlow<DataState<List<CipherView>>>(DataState.Loading)
+        MutableStateFlow<DataState<List<AuthenticatorItemEntity>>>(DataState.Loading)
 
     private val mutableTotpCodeResultFlow =
         bufferedMutableSharedFlow<TotpCodeResult>()
@@ -66,7 +68,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 }
 
                 is DataState.Loaded -> {
-                    DataState.Loaded(AuthenticatorData(ciphers = cipherDataState.data))
+                    DataState.Loaded(AuthenticatorData(items = cipherDataState.data))
                 }
 
                 DataState.Loading -> {
@@ -74,11 +76,11 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 }
 
                 is DataState.NoNetwork -> {
-                    DataState.NoNetwork(AuthenticatorData(ciphers = cipherDataState.data.orEmpty()))
+                    DataState.NoNetwork(AuthenticatorData(items = cipherDataState.data.orEmpty()))
                 }
 
                 is DataState.Pending -> {
-                    DataState.Pending(AuthenticatorData(ciphers = cipherDataState.data))
+                    DataState.Pending(AuthenticatorData(items = cipherDataState.data))
                 }
             }
         }.stateIn(
@@ -87,12 +89,12 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             initialValue = DataState.Loading
         )
 
-    override val ciphersStateFlow: StateFlow<DataState<List<CipherView>>>
+    override val ciphersStateFlow: StateFlow<DataState<List<AuthenticatorItemEntity>>>
         get() = mutableCiphersStateFlow.asStateFlow()
 
     init {
         authenticatorDiskSource
-            .getCiphers()
+            .getItems()
             .onStart {
                 mutableCiphersStateFlow.value = DataState.Loading
             }
@@ -102,12 +104,12 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             .launchIn(unconfinedScope)
     }
 
-    override fun getItemStateFlow(itemId: String): StateFlow<DataState<CipherView?>> =
+    override fun getItemStateFlow(itemId: String): StateFlow<DataState<AuthenticatorItemEntity?>> =
         authenticatorDataFlow
             .map { dataState ->
-                dataState.map { vaultData ->
-                    vaultData
-                        .ciphers
+                dataState.map { authenticatorData ->
+                    authenticatorData
+                        .items
                         .find { it.id == itemId }
                 }
             }
@@ -124,7 +126,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 val cipher = cipherDataState.data
                     ?: return@flatMapLatest flowOf(DataState.Loaded(null))
                 totpCodeManager
-                    .getTotpCodeStateFlow(cipher = cipher)
+                    .getTotpCodeStateFlow(item = cipher)
                     .map { totpCodeDataState ->
                         combineDataStates(
                             totpCodeDataState,
@@ -147,21 +149,13 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     override fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>> {
         return authenticatorDataFlow
             .map { dataState ->
-                dataState.map { vaultData ->
-                    vaultData
-                        .ciphers
-                        .filter {
-                            it.type == CipherType.LOGIN &&
-                                !it.login?.totp.isNullOrBlank() &&
-                                it.deletedDate == null
-                        }
-                }
+                dataState.map { authenticatorData -> authenticatorData.items }
             }
             .flatMapLatest { cipherDataState ->
                 val cipherList = cipherDataState.data ?: emptyList()
                 totpCodeManager
                     .getTotpCodesStateFlow(
-                        cipherList = cipherList,
+                        itemList = cipherList,
                     )
                     .map { verificationCodeDataStates ->
                         combineDataStates(
@@ -185,33 +179,55 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
-    override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
+    override suspend fun createItem(code: String, issuer: String): CreateItemResult {
         return try {
-            authenticatorDiskSource.saveCipher(cipherView)
-            CreateCipherResult.Success
+            authenticatorDiskSource.saveItem(
+                AuthenticatorItemEntity(
+                    id = UUID.randomUUID().toString(),
+                    type = AuthenticatorItemType.TOTP,
+                    period = 30,
+                    digits = 6,
+                    key = code,
+                    issuer = issuer,
+                    userId = null,
+                    username = null,
+                )
+            )
+            CreateItemResult.Success
         } catch (e: Exception) {
-            CreateCipherResult.Error
+            CreateItemResult.Error
         }
     }
 
-    override suspend fun hardDeleteCipher(cipherId: String): DeleteCipherResult {
+    override suspend fun hardDeleteItem(itemId: String): DeleteItemResult {
         return try {
-            authenticatorDiskSource.deleteCipher(cipherId)
-            DeleteCipherResult.Success
+            authenticatorDiskSource.deleteItem(itemId)
+            DeleteItemResult.Success
         } catch (e: Exception) {
-            DeleteCipherResult.Error
+            DeleteItemResult.Error
         }
     }
 
-    override suspend fun updateCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): UpdateCipherResult {
+    override suspend fun updateItem(
+        itemId: String,
+        updateItemRequest: UpdateItemRequest,
+    ): UpdateItemResult {
         return try {
-            authenticatorDiskSource.saveCipher(cipherView)
-            UpdateCipherResult.Success
+            authenticatorDiskSource.saveItem(
+                AuthenticatorItemEntity(
+                    id = itemId,
+                    type = updateItemRequest.type,
+                    period = updateItemRequest.period,
+                    digits = updateItemRequest.digits,
+                    key = updateItemRequest.key,
+                    issuer = updateItemRequest.issuer,
+                    userId = null,
+                    username = null,
+                )
+            )
+            UpdateItemResult.Success
         } catch (e: Exception) {
-            UpdateCipherResult.Error(e.message)
+            UpdateItemResult.Error(e.message)
         }
     }
 }

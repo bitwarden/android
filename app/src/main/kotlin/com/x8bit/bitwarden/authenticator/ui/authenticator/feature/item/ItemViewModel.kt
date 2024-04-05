@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
@@ -62,7 +62,7 @@ class ItemViewModel @Inject constructor(
                     }
 
                     ItemData(
-                        name = item?.name.orEmpty(),
+                        name = item?.username.orEmpty(),
                         alertThresholdSeconds = alertThresholdSeconds,
                         totpCodeItemData = totpData
                     )
@@ -127,13 +127,14 @@ class ItemViewModel @Inject constructor(
 
     private fun handleItemDataReceive(action: ItemAction.Internal.ItemDataReceive) {
         val totpItemData = action.itemDataState.data?.totpCodeItemData ?: return
+        val alertThreshold = action.itemDataState.data?.alertThresholdSeconds ?: 0
         mutableStateFlow.update {
             it.copy(
                 itemId = action.item?.id.orEmpty(),
                 viewState = ItemState.ViewState.Content(
                     itemData = ItemData(
-                        name = action.item?.name.orEmpty(),
-                        alertThresholdSeconds = action.itemDataState.data?.alertThresholdSeconds ?: 0,
+                        name = action.item?.username.orEmpty(),
+                        alertThresholdSeconds = alertThreshold,
                         totpCodeItemData = totpItemData,
                     )
                 )
@@ -282,7 +283,7 @@ sealed class ItemAction {
          * Indicates that the item data has been received.
          */
         data class ItemDataReceive(
-            val item: CipherView?,
+            val item: AuthenticatorItemEntity?,
             val itemDataState: DataState<ItemData?>,
         ) : Internal()
 

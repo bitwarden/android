@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.authenticator.data.authenticator.manager
 
-import com.bitwarden.core.CipherView
 import com.bitwarden.core.DateTime
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.authenticator.data.platform.manager.DispatcherManager
@@ -33,14 +33,14 @@ class TotpCodeManagerImpl @Inject constructor(
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     private val mutableVerificationCodeStateFlowMap =
-        mutableMapOf<CipherView, StateFlow<DataState<VerificationCodeItem?>>>()
+        mutableMapOf<AuthenticatorItemEntity, StateFlow<DataState<VerificationCodeItem?>>>()
 
     override fun getTotpCodesStateFlow(
-        cipherList: List<CipherView>,
+        itemList: List<AuthenticatorItemEntity>,
     ): StateFlow<DataState<List<VerificationCodeItem>>> {
         // Generate state flows
-        val stateFlows = cipherList.map { cipherView ->
-            getTotpCodeStateFlowInternal(cipherView)
+        val stateFlows = itemList.map { itemEntity ->
+            getTotpCodeStateFlowInternal(itemEntity)
         }
         return combine(stateFlows) { results ->
             when {
@@ -63,25 +63,19 @@ class TotpCodeManagerImpl @Inject constructor(
     }
 
     override fun getTotpCodeStateFlow(
-        cipher: CipherView,
+        item: AuthenticatorItemEntity,
     ): StateFlow<DataState<VerificationCodeItem?>> =
-        getTotpCodeStateFlowInternal(cipher = cipher)
+        getTotpCodeStateFlowInternal(itemEntity = item)
 
     @Suppress("LongMethod")
     private fun getTotpCodeStateFlowInternal(
-        cipher: CipherView?,
+        itemEntity: AuthenticatorItemEntity?,
     ): StateFlow<DataState<VerificationCodeItem?>> {
-        val cipherId = cipher?.id ?: return MutableStateFlow(DataState.Loaded(null))
+        val cipherId = itemEntity?.id ?: return MutableStateFlow(DataState.Loaded(null))
 
-        return mutableVerificationCodeStateFlowMap.getOrPut(cipher) {
+        return mutableVerificationCodeStateFlowMap.getOrPut(itemEntity) {
             flow<DataState<VerificationCodeItem?>> {
-                val totpCode = cipher
-                    .login
-                    ?.totp
-                    ?: run {
-                        emit(DataState.Loaded(null))
-                        return@flow
-                    }
+                val totpCode = itemEntity.key
 
                 var item: VerificationCodeItem? = null
                 while (currentCoroutineContext().isActive) {
@@ -101,10 +95,9 @@ class TotpCodeManagerImpl @Inject constructor(
                                     timeLeftSeconds = response.period.toInt() -
                                         time % response.period.toInt(),
                                     issueTime = clock.millis(),
-                                    uriLoginViewList = cipher.login?.uris,
                                     id = cipherId,
-                                    name = cipher.name,
-                                    username = cipher.login?.username,
+                                    username = itemEntity.username,
+                                    issuer = itemEntity.issuer,
                                 )
                             }
                             .onFailure {
@@ -127,7 +120,7 @@ class TotpCodeManagerImpl @Inject constructor(
                 }
             }
                 .onCompletion {
-                    mutableVerificationCodeStateFlowMap.remove(cipher)
+                    mutableVerificationCodeStateFlowMap.remove(itemEntity)
                 }
                 .stateIn(
                     scope = unconfinedScope,

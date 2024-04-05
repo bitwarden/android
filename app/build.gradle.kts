@@ -22,6 +22,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ksp {
+            // The location in which the generated Room Database Schemas will be stored in the repo.
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     androidResources {
