@@ -126,6 +126,7 @@ class VaultAddEditViewModel @Inject constructor(
                                 type = vaultAddEditType.vaultItemCipherType.toItemType(),
                             )
                     }
+
                     is VaultAddEditType.EditItem -> VaultAddEditState.ViewState.Loading
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
@@ -718,6 +719,7 @@ class VaultAddEditViewModel @Inject constructor(
                     id = UUID.randomUUID().toString(),
                     uri = "",
                     match = null,
+                    checksum = null,
                 ),
             )
         }
@@ -1571,7 +1573,12 @@ data class VaultAddEditState(
                     val totp: String? = null,
                     val canViewPassword: Boolean = true,
                     val uriList: List<UriItem> = listOf(
-                        UriItem(id = UUID.randomUUID().toString(), uri = "", match = null),
+                        UriItem(
+                            id = UUID.randomUUID().toString(),
+                            uri = "",
+                            match = null,
+                            checksum = null,
+                        ),
                     ),
                     val fido2CredentialCreationDateTime: Text? = null,
                 ) : ItemType() {

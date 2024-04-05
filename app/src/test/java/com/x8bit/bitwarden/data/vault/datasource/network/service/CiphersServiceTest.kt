@@ -306,7 +306,8 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
       "uris": [
         {
           "match": 1,
-          "uri": "mockUri-1"
+          "uri": "mockUri-1",
+          "uriChecksum": "mockUriChecksum-1"
         }
       ],
       "totp": "mockTotp-1",
@@ -416,7 +417,8 @@ private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
     "uris": [
       {
         "match": 1,
-        "uri": "mockUri-1"
+        "uri": "mockUri-1",
+        "uriChecksum": "mockUriChecksum-1"
       }
     ],
     "totp": "mockTotp-1",

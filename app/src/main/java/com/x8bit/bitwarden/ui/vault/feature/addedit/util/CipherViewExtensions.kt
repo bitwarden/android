@@ -272,6 +272,7 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
                 id = UUID.randomUUID().toString(),
                 uri = "",
                 match = null,
+                checksum = null,
             ),
         )
     } else {
@@ -280,6 +281,7 @@ private fun List<LoginUriView>?.toUriItems(): List<UriItem> =
                 id = UUID.randomUUID().toString(),
                 uri = loginUriView.uri,
                 match = loginUriView.match,
+                checksum = loginUriView.uriChecksum,
             )
         }
     }

@@ -222,7 +222,8 @@ private const val SYNC_SUCCESS_JSON = """
         "uris": [
           {
             "match": 1,
-            "uri": "mockUri-1"
+            "uri": "mockUri-1",
+            "uriChecksum": "mockUriChecksum-1"
           }
         ],
         "totp": "mockTotp-1",

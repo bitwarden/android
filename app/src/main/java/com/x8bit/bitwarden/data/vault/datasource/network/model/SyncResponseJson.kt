@@ -753,6 +753,9 @@ data class SyncResponseJson(
 
                 @SerialName("uri")
                 val uri: String?,
+
+                @SerialName("uriChecksum")
+                val uriChecksum: String?,
             )
         }
 

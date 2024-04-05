@@ -55,7 +55,14 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
-                uriList = listOf(UriItem("testId", "mockUri-1", UriMatchType.DOMAIN)),
+                uriList = listOf(
+                    UriItem(
+                        id = "testId",
+                        uri = "mockUri-1",
+                        match = UriMatchType.DOMAIN,
+                        checksum = null,
+                    ),
+                ),
                 totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
                 fido2CredentialCreationDateTime = null,
             ),
@@ -138,7 +145,9 @@ class VaultAddItemStateExtensionsTest {
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
                 username = "mockUsername-1",
                 password = "mockPassword-1",
-                uriList = listOf(UriItem("TestId", "mockUri-1", null)),
+                uriList = listOf(
+                    UriItem(id = "TestId", uri = "mockUri-1", match = null, checksum = null),
+                ),
                 totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
             ),
         )

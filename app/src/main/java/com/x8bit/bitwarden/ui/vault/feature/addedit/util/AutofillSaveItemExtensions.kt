@@ -47,6 +47,7 @@ fun AutofillSaveItem.toDefaultAddTypeContent(
                             id = UUID.randomUUID().toString(),
                             uri = uri,
                             match = null,
+                            checksum = null,
                         ),
                     ),
                 ),

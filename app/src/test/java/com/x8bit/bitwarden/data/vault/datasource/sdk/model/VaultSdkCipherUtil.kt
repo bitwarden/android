@@ -159,5 +159,5 @@ fun createMockSdkUri(number: Int): LoginUri =
     LoginUri(
         uri = "mockUri-$number",
         match = UriMatchType.HOST,
-        uriChecksum = null,
+        uriChecksum = "mockUriChecksum-$number",
     )
