@@ -3,16 +3,17 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.x8bit.bitwarden.authenticator.R
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.authenticator.data.platform.repository.util.combineDataStates
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.model.ItemData
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
+import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
+import com.x8bit.bitwarden.authenticator.ui.platform.base.util.concat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -47,24 +48,23 @@ class ItemViewModel @Inject constructor(
         ) { itemState, authCodeState, alertThresholdSeconds ->
 
             ItemAction.Internal.ItemDataReceive(
-                item = itemState.data,
                 itemDataState = combineDataStates(
                     itemState,
                     authCodeState,
                 ) { item, authCode ->
-                    val totpData = authCode?.let {
-                        TotpCodeItemData(
-                            periodSeconds = it.periodSeconds,
-                            timeLeftSeconds = it.timeLeftSeconds,
-                            totpCode = it.totpCode,
-                            verificationCode = it.code
-                        )
-                    }
 
-                    ItemData(
-                        name = item?.username.orEmpty(),
+                    item ?: return@combineDataStates null
+                    authCode ?: return@combineDataStates null
+
+                    TotpCodeItemData(
+                        type = item.type,
+                        username = item.username?.asText(),
+                        issuer = item.issuer.orEmpty().asText(),
+                        periodSeconds = authCode.periodSeconds,
+                        timeLeftSeconds = authCode.timeLeftSeconds,
+                        totpCode = authCode.totpCode.asText(),
+                        verificationCode = authCode.code.asText(),
                         alertThresholdSeconds = alertThresholdSeconds,
-                        totpCodeItemData = totpData
                     )
                 }
             )
@@ -126,22 +126,63 @@ class ItemViewModel @Inject constructor(
     }
 
     private fun handleItemDataReceive(action: ItemAction.Internal.ItemDataReceive) {
-        val totpItemData = action.itemDataState.data?.totpCodeItemData ?: return
-        val alertThreshold = action.itemDataState.data?.alertThresholdSeconds ?: 0
-        mutableStateFlow.update {
-            it.copy(
-                itemId = action.item?.id.orEmpty(),
-                viewState = ItemState.ViewState.Content(
-                    itemData = ItemData(
-                        name = action.item?.username.orEmpty(),
-                        alertThresholdSeconds = alertThreshold,
-                        totpCodeItemData = totpItemData,
+        when (val itemState = action.itemDataState) {
+            is DataState.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = ItemState.ViewState.Error(
+                            message = R.string.generic_error_message.asText()
+                        ),
                     )
-                )
-            )
+                }
+            }
+
+            is DataState.Loaded -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = itemState
+                            .data
+                            ?.toViewState()
+                            ?: ItemState.ViewState.Error(
+                                message = R.string.generic_error_message.asText()
+                            ),
+                    )
+                }
+            }
+
+            DataState.Loading -> {
+                mutableStateFlow.update { it.copy(viewState = ItemState.ViewState.Loading) }
+            }
+
+            is DataState.NoNetwork -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = ItemState.ViewState.Error(
+                            message = R.string.internet_connection_required_title
+                                .asText()
+                                .concat(R.string.internet_connection_required_message.asText()),
+                        ),
+                    )
+                }
+            }
+
+            is DataState.Pending -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        viewState = itemState
+                            .data
+                            ?.toViewState()
+                            ?: ItemState.ViewState.Error(
+                                message = R.string.generic_error_message.asText()
+                            ),
+                    )
+                }
+            }
         }
     }
 }
+
+private fun TotpCodeItemData.toViewState() = ItemState.ViewState.Content(this)
 
 /**
  * Represents the state for displaying an item in the authenticator.
@@ -181,7 +222,7 @@ data class ItemState(
          */
         @Parcelize
         data class Content(
-            val itemData: ItemData,
+            val itemData: TotpCodeItemData,
         ) : ViewState()
     }
 
@@ -195,7 +236,7 @@ data class ItemState(
          */
         @Parcelize
         data class Generic(
-            val message: String,
+            val message: Text,
         ) : DialogState()
 
         /**
@@ -283,8 +324,7 @@ sealed class ItemAction {
          * Indicates that the item data has been received.
          */
         data class ItemDataReceive(
-            val item: AuthenticatorItemEntity?,
-            val itemDataState: DataState<ItemData?>,
+            val itemDataState: DataState<TotpCodeItemData?>,
         ) : Internal()
 
         /**

@@ -147,6 +147,22 @@ fun ManualCodeEntryScreen(
                     .padding(horizontal = 16.dp),
             )
 
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                label = stringResource(id = R.string.issuer),
+                value = state.issuer,
+                onValueChange = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            ManualCodeEntryAction.IssuerTextChange(it),
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenFilledTonalButton(
                 label = stringResource(id = R.string.add_totp),

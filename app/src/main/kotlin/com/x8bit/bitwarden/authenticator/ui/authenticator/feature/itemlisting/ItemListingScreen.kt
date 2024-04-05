@@ -159,7 +159,7 @@ fun ItemListingScreen(
                                     .fillMaxWidth()
                                     .padding(horizontal = 16.dp),
                                 startIcon = it.startIcon,
-                                label = it.label,
+                                issuer = it.issuer,
                                 supportingLabel = it.supportingLabel,
                                 timeLeftSeconds = it.timeLeftSeconds,
                                 periodSeconds = it.periodSeconds,

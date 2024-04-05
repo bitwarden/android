@@ -375,6 +375,7 @@ sealed class ItemListingAction {
 data class VerificationCodeDisplayItem(
     val id: String,
     val label: String,
+    val issuer: String?,
     val supportingLabel: String?,
     val timeLeftSeconds: Int,
     val periodSeconds: Int,

@@ -29,14 +29,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.authenticator.R
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
+import com.x8bit.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.x8bit.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.authenticator.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.authenticator.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.authenticator.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import kotlinx.collections.immutable.toImmutableList
 
 private const val AUTH_CODE_SPACING_INTERVAL = 3
 
@@ -104,7 +107,8 @@ fun ItemScreen(
                     .fillMaxSize()
                     .padding(innerPadding),
                 viewState = viewState,
-                onCopyTotpClick = { }
+                onCopyTotpClick = { },
+                onTypeOptionClicked = { }
             )
 
             is ItemState.ViewState.Error -> {
@@ -121,6 +125,7 @@ fun ItemContent(
     modifier: Modifier = Modifier,
     viewState: ItemState.ViewState.Content,
     onCopyTotpClick: () -> Unit,
+    onTypeOptionClicked: (AuthenticatorItemType) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
 
@@ -128,7 +133,7 @@ fun ItemContent(
             BitwardenTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.name),
-                value = viewState.itemData.name,
+                value = viewState.itemData.issuer(),
                 onValueChange = {},
                 readOnly = true,
                 singleLine = true,
@@ -136,10 +141,34 @@ fun ItemContent(
         }
 
         item {
+            val possibleTypeOptions = AuthenticatorItemType.entries
+            val typeOptionsWithStrings = possibleTypeOptions.associateWith { it.name }
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenMultiSelectButton(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+                    .semantics { testTag = "ItemTypePicker" },
+                label = stringResource(id = R.string.type),
+                options = typeOptionsWithStrings.values.toImmutableList(),
+                selectedOption = viewState.itemData.type.name,
+                onOptionSelected = { selectedOption ->
+                    val selectedOptionName = typeOptionsWithStrings
+                        .entries
+                        .first { it.value == selectedOption }
+                        .key
+
+                    onTypeOptionClicked(selectedOptionName)
+                },
+                isEnabled = false,
+            )
+        }
+
+        item {
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextFieldWithActions(
                 label = stringResource(id = R.string.verification_code_totp),
-                value = viewState.itemData.totpCodeItemData?.verificationCode.orEmpty()
+                value = viewState.itemData.verificationCode()
                     .chunked(AUTH_CODE_SPACING_INTERVAL)
                     .joinToString(" "),
                 onValueChange = { },
@@ -147,9 +176,9 @@ fun ItemContent(
                 singleLine = true,
                 actions = {
                     BitwardenCircularCountdownIndicator(
-                        timeLeftSeconds = viewState.itemData.totpCodeItemData?.timeLeftSeconds ?: 0,
-                        periodSeconds = viewState.itemData.totpCodeItemData?.periodSeconds ?: 0,
-                        alertThresholdSeconds = viewState.itemData.alertThresholdSeconds
+                        timeLeftSeconds = viewState.itemData.timeLeftSeconds,
+                        periodSeconds = viewState.itemData.periodSeconds,
+                        alertThresholdSeconds = viewState.itemData.alertThresholdSeconds,
                     )
                     BitwardenIconButtonWithResource(
                         iconRes = IconResource(
@@ -163,6 +192,38 @@ fun ItemContent(
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),
             )
+        }
+
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.totp_code),
+                value = viewState.itemData.totpCode(),
+                onValueChange = { },
+                readOnly = true,
+                singleLine = true,
+            )
+        }
+
+        viewState.itemData.username?.let { username ->
+            item {
+                if (username.invoke().isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    BitwardenTextField(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        label = stringResource(id = R.string.username),
+                        value = username(),
+                        onValueChange = {},
+                        readOnly = true,
+                        singleLine = true,
+                    )
+                }
+            }
         }
     }
 }

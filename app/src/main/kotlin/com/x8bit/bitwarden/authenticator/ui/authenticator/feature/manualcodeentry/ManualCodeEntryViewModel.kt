@@ -2,12 +2,13 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeent
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
-import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -23,15 +24,22 @@ class ManualCodeEntryViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
 ) : BaseViewModel<ManualCodeEntryState, ManualCodeEntryEvent, ManualCodeEntryAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: ManualCodeEntryState(code = ""),
+        ?: ManualCodeEntryState(code = "", issuer = ""),
 ) {
     override fun handleAction(action: ManualCodeEntryAction) {
         when (action) {
             is ManualCodeEntryAction.CloseClick -> handleCloseClick()
             is ManualCodeEntryAction.CodeTextChange -> handleCodeTextChange(action)
+            is ManualCodeEntryAction.IssuerTextChange -> handleIssuerTextChange(action)
             is ManualCodeEntryAction.CodeSubmit -> handleCodeSubmit()
             is ManualCodeEntryAction.ScanQrCodeTextClick -> handleScanQrCodeTextClick()
             is ManualCodeEntryAction.SettingsClick -> handleSettingsClick()
+        }
+    }
+
+    private fun handleIssuerTextChange(action: ManualCodeEntryAction.IssuerTextChange) {
+        mutableStateFlow.update {
+            it.copy(issuer = action.issuer)
         }
     }
 
@@ -46,7 +54,9 @@ class ManualCodeEntryViewModel @Inject constructor(
     }
 
     private fun handleCodeSubmit() {
-        authenticatorRepository.emitTotpCodeResult(TotpCodeResult.Success(state.code))
+        viewModelScope.launch {
+            authenticatorRepository.createItem(state.code, state.issuer)
+        }
         sendEvent(ManualCodeEntryEvent.NavigateBack)
     }
 
@@ -65,6 +75,7 @@ class ManualCodeEntryViewModel @Inject constructor(
 @Parcelize
 data class ManualCodeEntryState(
     val code: String,
+    val issuer: String,
 ) : Parcelable
 
 /**
@@ -112,6 +123,11 @@ sealed class ManualCodeEntryAction {
      * The user has changed the code text.
      */
     data class CodeTextChange(val code: String) : ManualCodeEntryAction()
+
+    /**
+     * The use has changed the issuer text.
+     */
+    data class IssuerTextChange(val issuer: String) : ManualCodeEntryAction()
 
     /**
      * The text to switch to QR code scanning is clicked.

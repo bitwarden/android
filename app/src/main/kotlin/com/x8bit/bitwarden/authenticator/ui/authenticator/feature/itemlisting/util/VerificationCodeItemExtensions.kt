@@ -19,6 +19,7 @@ fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
     VerificationCodeDisplayItem(
         id = id,
         label = label,
+        issuer = issuer,
         supportingLabel = username,
         timeLeftSeconds = timeLeftSeconds,
         periodSeconds = periodSeconds,

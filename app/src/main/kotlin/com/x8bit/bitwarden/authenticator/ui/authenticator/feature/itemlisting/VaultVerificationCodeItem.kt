@@ -32,7 +32,7 @@ import com.x8bit.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
  * The verification code item displayed to the user.
  *
  * @param authCode The code for the item.
- * @param label The label for the item.
+ * @param issuer The label for the item.
  * @param periodSeconds The times span where the code is valid.
  * @param timeLeftSeconds The seconds remaining until a new code is needed.
  * @param startIcon The leading icon for the item.
@@ -45,7 +45,7 @@ import com.x8bit.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 @Composable
 fun VaultVerificationCodeItem(
     authCode: String,
-    label: String,
+    issuer: String?,
     periodSeconds: Int,
     timeLeftSeconds: Int,
     alertThresholdSeconds: Int,
@@ -80,13 +80,15 @@ fun VaultVerificationCodeItem(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier.weight(1f),
         ) {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            issuer?.let {
+                Text(
+                    text = it,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
 
             supportingLabel?.let {
                 Text(
@@ -131,7 +133,7 @@ private fun VerificationCodeItem_preview() {
     AuthenticatorTheme {
         VaultVerificationCodeItem(
             startIcon = IconData.Local(R.drawable.ic_login_item),
-            label = "Sample Label",
+            issuer = "Sample Label",
             supportingLabel = "Supporting Label",
             authCode = "1234567890".chunked(3).joinToString(" "),
             timeLeftSeconds = 15,
