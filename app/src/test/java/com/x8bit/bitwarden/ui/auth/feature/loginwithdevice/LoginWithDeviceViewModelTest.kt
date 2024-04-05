@@ -208,6 +208,13 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
     @Test
     fun `on createAuthRequestWithUpdates Success with SSO_ADMIN_APPROVAL should emit toast`() =
         runTest {
+            coEvery {
+                authRepository.completeTdeLogin(
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
+                )
+            } returns LoginResult.Success
+
             val initialViewState = DEFAULT_CONTENT_VIEW_STATE.copy(
                 loginWithDeviceType = LoginWithDeviceType.SSO_ADMIN_APPROVAL,
             )
@@ -217,8 +224,8 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             )
             val viewModel = createViewModel(initialState)
 
-            viewModel.stateEventFlow(backgroundScope) { stateFlow, eventFlow ->
-                assertEquals(initialState, stateFlow.awaitItem())
+            viewModel.stateFlow.test {
+                assertEquals(initialState, awaitItem())
                 mutableCreateAuthRequestWithUpdatesFlow.tryEmit(
                     CreateAuthRequestResult.Success(AUTH_REQUEST, AUTH_REQUEST_RESPONSE),
                 )
@@ -232,12 +239,24 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
                         ),
                         loginData = DEFAULT_LOGIN_DATA,
                     ),
-                    stateFlow.awaitItem(),
+                    awaitItem(),
                 )
-
                 assertEquals(
-                    LoginWithDeviceEvent.ShowToast("Not yet implemented!"),
-                    eventFlow.awaitItem(),
+                    initialState.copy(
+                        viewState = initialViewState.copy(
+                            fingerprintPhrase = "",
+                        ),
+                        dialogState = null,
+                        loginData = DEFAULT_LOGIN_DATA,
+                    ),
+                    awaitItem(),
+                )
+            }
+
+            coVerify(exactly = 1) {
+                authRepository.completeTdeLogin(
+                    asymmetricalKey = DEFAULT_LOGIN_DATA.asymmetricalKey,
+                    requestPrivateKey = DEFAULT_LOGIN_DATA.privateKey,
                 )
             }
         }
