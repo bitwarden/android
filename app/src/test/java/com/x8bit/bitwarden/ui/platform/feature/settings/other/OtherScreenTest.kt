@@ -13,7 +13,6 @@ import com.x8bit.bitwarden.data.platform.repository.model.ClearClipboardFrequenc
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.mockk
@@ -33,9 +32,6 @@ class OtherScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
-    private val intentManager: IntentManager = mockk {
-        every { getShareDataFromIntent(any()) } returns null
-    }
 
     @Before
     fun setup() {
@@ -43,7 +39,6 @@ class OtherScreenTest : BaseComposeTest() {
             OtherScreen(
                 viewModel = viewModel,
                 onNavigateBack = { haveCalledNavigateBack = true },
-                intentManager = intentManager,
             )
         }
     }
