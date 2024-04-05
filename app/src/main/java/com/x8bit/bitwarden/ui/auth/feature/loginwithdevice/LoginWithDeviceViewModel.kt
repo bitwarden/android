@@ -267,9 +267,9 @@ class LoginWithDeviceViewModel @Inject constructor(
             )
         }
         viewModelScope.launch {
-            when (state.loginWithDeviceType) {
+            val result = when (state.loginWithDeviceType) {
                 LoginWithDeviceType.OTHER_DEVICE -> {
-                    val result = authRepository.login(
+                    authRepository.login(
                         email = state.emailAddress,
                         requestId = loginData.requestId,
                         accessCode = loginData.accessCode,
@@ -278,15 +278,18 @@ class LoginWithDeviceViewModel @Inject constructor(
                         masterPasswordHash = loginData.masterPasswordHash,
                         captchaToken = loginData.captchaToken,
                     )
-                    sendAction(LoginWithDeviceAction.Internal.ReceiveLoginResult(result))
                 }
 
                 LoginWithDeviceType.SSO_ADMIN_APPROVAL,
                 LoginWithDeviceType.SSO_OTHER_DEVICE,
                 -> {
-                    sendEvent(LoginWithDeviceEvent.ShowToast("Not yet implemented!"))
+                    authRepository.completeTdeLogin(
+                        requestPrivateKey = loginData.privateKey,
+                        asymmetricalKey = loginData.asymmetricalKey,
+                    )
                 }
             }
+            sendAction(LoginWithDeviceAction.Internal.ReceiveLoginResult(result))
         }
     }
 

@@ -124,6 +124,15 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     suspend fun deleteAccount(password: String): DeleteAccountResult
 
     /**
+     * Attempt to complete the trusted device login with the given [requestPrivateKey] and
+     * [asymmetricalKey]. This will unlock the vault and finish trusting the device.
+     */
+    suspend fun completeTdeLogin(
+        requestPrivateKey: String,
+        asymmetricalKey: String,
+    ): LoginResult
+
+    /**
      * Attempt to login with the given email and password. Updated access token will be reflected
      * in [authStateFlow].
      */
