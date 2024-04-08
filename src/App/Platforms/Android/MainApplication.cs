@@ -118,7 +118,6 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IDeviceActionService>());
                 ServiceContainer.Register<IFido2MakeCredentialConfirmationUserInterface>(fido2MakeCredentialUserInterface);
 
-                //TODO: WIP: Need to replace 'Fido2GetAssertionUserInterface' if needed
                 var fido2ClientService = new Fido2ClientService(
                     ServiceContainer.Resolve<IStateService>(),
                     ServiceContainer.Resolve<IEnvironmentService>(),
