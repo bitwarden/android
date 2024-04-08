@@ -21,6 +21,9 @@ import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPassword
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.SET_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
+import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.TRUSTED_DEVICE_GRAPH_ROUTE
+import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.navigateToTrustedDeviceGraph
+import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.trustedDeviceGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
@@ -83,6 +86,7 @@ fun RootNavScreen(
         splashDestination()
         authGraph(navController)
         resetPasswordDestination()
+        trustedDeviceGraph(navController)
         vaultUnlockDestination()
         vaultUnlockedGraph(navController)
     }
@@ -90,8 +94,9 @@ fun RootNavScreen(
     val targetRoute = when (state) {
         RootNavState.Auth -> AUTH_GRAPH_ROUTE
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
-        is RootNavState.SetPassword -> SET_PASSWORD_ROUTE
+        RootNavState.SetPassword -> SET_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
+        RootNavState.TrustedDevice -> TRUSTED_DEVICE_GRAPH_ROUTE
         RootNavState.VaultLocked -> VAULT_UNLOCK_ROUTE
         is RootNavState.VaultUnlocked,
         is RootNavState.VaultUnlockedForAutofillSave,
@@ -130,8 +135,9 @@ fun RootNavScreen(
         when (val currentState = state) {
             RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
             RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
-            is RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
+            RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
+            RootNavState.TrustedDevice -> navController.navigateToTrustedDeviceGraph(rootNavOptions)
             RootNavState.VaultLocked -> navController.navigateToVaultUnlock(rootNavOptions)
             is RootNavState.VaultUnlocked -> navController.navigateToVaultUnlockedGraph(
                 rootNavOptions,

@@ -14,10 +14,14 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
 class TrustedDeviceScreenTest : BaseComposeTest() {
+
+    private var onNavigateToAdminApprovalEmail: String? = null
+    private var onNavigateToLoginWithOtherDeviceEmail: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<TrustedDeviceEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -31,8 +35,24 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             TrustedDeviceScreen(
                 viewModel = viewModel,
+                onNavigateToAdminApproval = { onNavigateToAdminApprovalEmail = it },
+                onNavigateToLoginWithOtherDevice = { onNavigateToLoginWithOtherDeviceEmail = it },
             )
         }
+    }
+
+    @Test
+    fun `on NavigateToApproveWithDevice event should invoke onNavigateToAdminApproval`() {
+        val email = "test@bitwarden.com"
+        mutableEventFlow.tryEmit(TrustedDeviceEvent.NavigateToApproveWithAdmin(email))
+        assertEquals(onNavigateToAdminApprovalEmail, email)
+    }
+
+    @Test
+    fun `on NavigateToApproveWithDevice event should invoke onNavigateToLoginWithOtherDevice`() {
+        val email = "test@bitwarden.com"
+        mutableEventFlow.tryEmit(TrustedDeviceEvent.NavigateToApproveWithDevice(email))
+        assertEquals(onNavigateToLoginWithOtherDeviceEmail, email)
     }
 
     @Test

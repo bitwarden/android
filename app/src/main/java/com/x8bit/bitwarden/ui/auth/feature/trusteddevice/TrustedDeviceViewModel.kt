@@ -25,14 +25,19 @@ class TrustedDeviceViewModel @Inject constructor(
 ) : BaseViewModel<TrustedDeviceState, TrustedDeviceEvent, TrustedDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
+            val account = authRepository.userStateFlow.value?.activeAccount
+            val trustedDevice = account?.trustedDevice
+            if (trustedDevice == null) authRepository.logout()
             TrustedDeviceState(
-                emailAddress = TrustedDeviceArgs(savedStateHandle).emailAddress,
+                emailAddress = account?.email.orEmpty(),
                 environmentLabel = environmentRepository.environment.label,
-                isRemembered = false,
-                showContinueButton = false,
-                showOtherDeviceButton = false,
-                showRequestAdminButton = false,
-                showMasterPasswordButton = false,
+                isRemembered = true,
+                showContinueButton = trustedDevice
+                    ?.let { !it.hasAdminApproval && !it.hasMasterPassword }
+                    ?: false,
+                showOtherDeviceButton = trustedDevice?.hasLoginApprovingDevice ?: false,
+                showRequestAdminButton = trustedDevice?.hasAdminApproval ?: false,
+                showMasterPasswordButton = trustedDevice?.hasMasterPassword ?: false,
             )
         },
 ) {
@@ -61,11 +66,13 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleApproveWithAdminClick() {
-        sendEvent(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()))
+        authRepository.shouldTrustDevice = state.isRemembered
+        sendEvent(TrustedDeviceEvent.NavigateToApproveWithAdmin(state.emailAddress))
     }
 
     private fun handleApproveWithDeviceClick() {
-        sendEvent(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()))
+        authRepository.shouldTrustDevice = state.isRemembered
+        sendEvent(TrustedDeviceEvent.NavigateToApproveWithDevice(state.emailAddress))
     }
 
     private fun handleApproveWithPasswordClick() {
@@ -95,6 +102,20 @@ data class TrustedDeviceState(
  * Models events for the Trusted Device screen.
  */
 sealed class TrustedDeviceEvent {
+    /**
+     * Navigates to the approve with admin screen.
+     */
+    data class NavigateToApproveWithAdmin(
+        val email: String,
+    ) : TrustedDeviceEvent()
+
+    /**
+     * Navigates to the approve with device screen.
+     */
+    data class NavigateToApproveWithDevice(
+        val email: String,
+    ) : TrustedDeviceEvent()
+
     /**
      * Displays the [message] as a toast.
      */

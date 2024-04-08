@@ -1137,11 +1137,13 @@ class AuthRepositoryImpl(
 
         // Handle the Trusted Device Encryption flow
         loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions?.let { options ->
-            handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
-                trustedDeviceDecryptionOptions = options,
-                userStateJson = userStateJson,
-                privateKey = requireNotNull(loginResponse.privateKey),
-            )
+            loginResponse.privateKey?.let { privateKey ->
+                handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
+                    trustedDeviceDecryptionOptions = options,
+                    userStateJson = userStateJson,
+                    privateKey = privateKey,
+                )
+            }
         }
 
         // Remove any cached data after successfully logging in.
