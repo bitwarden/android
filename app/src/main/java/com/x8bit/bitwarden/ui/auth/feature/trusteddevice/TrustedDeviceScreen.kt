@@ -37,6 +37,10 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.appbar.NavigationIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenOutlinedButton
+import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -71,6 +75,11 @@ fun TrustedDeviceScreen(
             }
         }
     }
+
+    TrustedDeviceDialogs(
+        dialogState = state.dialogState,
+        handlers = handlers,
+    )
 
     TrustedDeviceScaffold(
         state = state,
@@ -192,11 +201,34 @@ private fun TrustedDeviceScaffold(
     }
 }
 
+@Composable
+private fun TrustedDeviceDialogs(
+    dialogState: TrustedDeviceState.DialogState?,
+    handlers: TrustedDeviceHandlers,
+) {
+    when (dialogState) {
+        is TrustedDeviceState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = handlers.onDismissDialog,
+        )
+
+        is TrustedDeviceState.DialogState.Loading -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        null -> Unit
+    }
+}
+
 @Preview
 @Composable
 private fun TrustedDeviceScaffold_preview() {
     TrustedDeviceScaffold(
         state = TrustedDeviceState(
+            dialogState = null,
             isRemembered = false,
             emailAddress = "email@bitwarden.com",
             environmentLabel = "vault.bitwarden.pw",
@@ -207,6 +239,7 @@ private fun TrustedDeviceScaffold_preview() {
         ),
         handlers = TrustedDeviceHandlers(
             onBackClick = {},
+            onDismissDialog = {},
             onRememberToggle = {},
             onContinueClick = {},
             onApproveWithAdminClick = {},

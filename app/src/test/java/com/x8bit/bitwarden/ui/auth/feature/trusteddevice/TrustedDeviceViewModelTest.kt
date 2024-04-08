@@ -52,6 +52,18 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on DismissDialog should clear dialogState`() {
+        val initialState = DEFAULT_STATE.copy(
+            dialogState = TrustedDeviceState.DialogState.Loading("Loading".asText()),
+        )
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(TrustedDeviceAction.DismissDialog)
+
+        assertEquals(initialState.copy(dialogState = null), viewModel.stateFlow.value)
+    }
+
+    @Test
     fun `on RememberToggle updates the isRemembered state`() = runTest {
         val viewModel = createViewModel()
 
@@ -142,6 +154,7 @@ private const val USER_ID: String = "userId"
 private const val EMAIL: String = "email@bitwarden.com"
 
 private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
+    dialogState = null,
     emailAddress = EMAIL,
     environmentLabel = "bitwarden.com",
     isRemembered = true,

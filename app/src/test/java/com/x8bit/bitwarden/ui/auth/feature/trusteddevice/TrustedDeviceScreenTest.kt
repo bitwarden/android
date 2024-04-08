@@ -1,14 +1,18 @@
 package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsOff
 import androidx.compose.ui.test.assertIsOn
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -229,9 +233,47 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
             .performScrollTo()
             .assertIsDisplayed()
     }
+
+    @Test
+    fun `dialog should update according to state`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TrustedDeviceState.DialogState.Loading(message = "Loading".asText()),
+            )
+        }
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Loading")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TrustedDeviceState.DialogState.Error(
+                    title = "Hello".asText(),
+                    message = "World".asText(),
+                ),
+            )
+        }
+        composeTestRule.onNode(isDialog()).assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Hello")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "World")
+            .assert(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+    }
 }
 
 private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
+    dialogState = null,
     emailAddress = "email@bitwarden.com",
     environmentLabel = "vault.bitwarden.pw",
     isRemembered = false,
