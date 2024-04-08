@@ -51,7 +51,7 @@ fun VaultItemSecureNoteContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .semantics { testTag = "ItemRow" }
+                    .semantics { testTag = "ItemNameEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -74,6 +74,7 @@ fun VaultItemSecureNoteContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
+                        .semantics { testTag = "CipherNotesLabel" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )

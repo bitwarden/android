@@ -55,7 +55,7 @@ fun VaultItemCardContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .semantics { testTag = "ItemRow" }
+                    .semantics { testTag = "CardItemNameEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -70,6 +70,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
+                        .semantics { testTag = "CardholderNameEntry" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -91,8 +92,11 @@ fun VaultItemCardContent(
                                 contentDescription = stringResource(id = R.string.copy_number),
                             ),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
+                            modifier = Modifier.semantics { testTag = "CardCopyNumberButton" },
                         )
                     },
+                    passwordFieldTestTag = "CardNumberEntry",
+                    showPasswordTestTag = "CardViewNumberButton",
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
@@ -110,6 +114,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
+                        .semantics { testTag = "CardBrandEntry" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -126,6 +131,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
+                        .semantics { testTag = "CardExpirationEntry" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -150,11 +156,15 @@ fun VaultItemCardContent(
                                 ),
                             ),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,
+                            modifier = Modifier
+                                .semantics { testTag = "CardCopySecurityCodeButton" },
                         )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    showPasswordTestTag = "CardViewSecurityCodeButton",
+                    passwordFieldTestTag = "CardSecurityCodeEntry",
                 )
             }
         }
@@ -176,6 +186,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
+                        .semantics { testTag = "CipherNotesLabel" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
