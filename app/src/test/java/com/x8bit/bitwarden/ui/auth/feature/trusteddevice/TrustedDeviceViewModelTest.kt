@@ -3,7 +3,9 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -12,16 +14,31 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class TrustedDeviceViewModelTest : BaseViewModelTest() {
 
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
         every { logout() } just runs
     }
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
+
+    @Test
+    fun `on init should logout when trusted device is not present`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(DEFAULT_ACCOUNT.copy(trustedDevice = null)),
+        )
+        createViewModel()
+
+        verify(exactly = 1) {
+            authRepository.logout()
+        }
+    }
 
     @Test
     fun `on BackClick should logout`() {
@@ -40,10 +57,10 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
 
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE, awaitItem())
-            viewModel.trySendAction(TrustedDeviceAction.RememberToggle(isRemembered = true))
-            assertEquals(DEFAULT_STATE.copy(isRemembered = true), awaitItem())
             viewModel.trySendAction(TrustedDeviceAction.RememberToggle(isRemembered = false))
             assertEquals(DEFAULT_STATE.copy(isRemembered = false), awaitItem())
+            viewModel.trySendAction(TrustedDeviceAction.RememberToggle(isRemembered = true))
+            assertEquals(DEFAULT_STATE.copy(isRemembered = true), awaitItem())
         }
     }
 
@@ -58,22 +75,30 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ApproveWithAdminClick emits ShowToast`() = runTest {
+    fun `on ApproveWithAdminClick emits NavigateToApproveWithAdmin`() = runTest {
+        every { authRepository.shouldTrustDevice = true } just runs
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(TrustedDeviceAction.ApproveWithAdminClick)
-            assertEquals(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(TrustedDeviceEvent.NavigateToApproveWithAdmin(email = EMAIL), awaitItem())
+        }
+        verify(exactly = 1) {
+            authRepository.shouldTrustDevice = true
         }
     }
 
     @Test
-    fun `on ApproveWithDeviceClick emits ShowToast`() = runTest {
+    fun `on ApproveWithDeviceClick emits NavigateToApproveWithDevice`() = runTest {
+        every { authRepository.shouldTrustDevice = true } just runs
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(TrustedDeviceAction.ApproveWithDeviceClick)
-            assertEquals(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(TrustedDeviceEvent.NavigateToApproveWithDevice(email = EMAIL), awaitItem())
+        }
+        verify(exactly = 1) {
+            authRepository.shouldTrustDevice = true
         }
     }
 
@@ -113,12 +138,44 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
         )
 }
 
+private const val USER_ID: String = "userId"
+private const val EMAIL: String = "email@bitwarden.com"
+
 private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
-    emailAddress = "email@bitwarden.com",
+    emailAddress = EMAIL,
     environmentLabel = "bitwarden.com",
-    isRemembered = false,
+    isRemembered = true,
     showContinueButton = false,
-    showOtherDeviceButton = false,
-    showRequestAdminButton = false,
+    showOtherDeviceButton = true,
+    showRequestAdminButton = true,
     showMasterPasswordButton = false,
+)
+
+private val TRUSTED_DEVICE = UserState.TrustedDevice(
+    isDeviceTrusted = false,
+    hasMasterPassword = false,
+    hasAdminApproval = true,
+    hasLoginApprovingDevice = true,
+    hasResetPasswordPermission = false,
+)
+
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = USER_ID,
+    name = "Active User",
+    email = EMAIL,
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = TRUSTED_DEVICE,
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = USER_ID,
+    accounts = listOf(DEFAULT_ACCOUNT),
 )

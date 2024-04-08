@@ -54,6 +54,7 @@ class RootNavViewModel @Inject constructor(
         authRepository.updateLastActiveTime()
     }
 
+    @Suppress("CyclomaticComplexMethod")
     private fun handleUserStateUpdateReceive(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
@@ -63,6 +64,9 @@ class RootNavViewModel @Inject constructor(
             userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
 
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
+
+            userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
+                !userState.activeAccount.isVaultUnlocked -> RootNavState.TrustedDevice
 
             userState == null ||
                 !userState.activeAccount.isLoggedIn ||
@@ -130,6 +134,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object Splash : RootNavState()
+
+    /**
+     * App should show the trusted device destination.
+     */
+    @Parcelize
+    data object TrustedDevice : RootNavState()
 
     /**
      * App should show vault locked nav graph.
