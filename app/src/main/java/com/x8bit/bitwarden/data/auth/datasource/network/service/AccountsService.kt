@@ -14,6 +14,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequest
 interface AccountsService {
 
     /**
+     * Creates a new account's keys.
+     */
+    suspend fun createAccountKeys(publicKey: String, encryptedPrivateKey: String): Result<Unit>
+
+    /**
      * Make delete account request.
      */
     suspend fun deleteAccount(masterPasswordHash: String): Result<Unit>

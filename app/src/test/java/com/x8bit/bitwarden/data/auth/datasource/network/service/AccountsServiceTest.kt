@@ -33,6 +33,22 @@ class AccountsServiceTest : BaseServiceTest() {
     )
 
     @Test
+    fun `createAccountKeys with empty response is success`() = runTest {
+        val publicKey = "publicKey"
+        val encryptedPrivateKey = "encryptedPrivateKey"
+        val json = ""
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+
+        val result = service.createAccountKeys(
+            publicKey = publicKey,
+            encryptedPrivateKey = encryptedPrivateKey,
+        )
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
     fun `deleteAccount with empty response is success`() = runTest {
         val masterPasswordHash = "37y4d8r379r4789nt387r39k3dr87nr93"
         val json = ""
