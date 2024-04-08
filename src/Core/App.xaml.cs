@@ -330,6 +330,12 @@ namespace Bit.App
                     || message.Command == "unlocked"
                     || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                 {
+                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    {
+                        var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                        userVerificationMediatorService?.OnConfirmationException(new AccountSwitchedException());
+                    }
+                    
                     lock (_processingLoginRequestLock)
                     {
                         // lock doesn't allow for async execution

@@ -586,7 +586,7 @@ namespace Bit.Droid.Services
             appOptions.Fido2CredentialAction = null; //Clear CredentialAction Value
         }
 
-        public async Task ExecuteFido2GetCredentialAsync(AppOptions appOptions)
+        private async Task ExecuteFido2GetCredentialAsync(AppOptions appOptions)
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null) 
@@ -625,7 +625,7 @@ namespace Bit.Droid.Services
             }
         }
 
-        public async Task ExecuteFido2CreateCredentialAsync()
+        private async Task ExecuteFido2CreateCredentialAsync()
         {
             var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null) { return; }
