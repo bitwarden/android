@@ -9,19 +9,19 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 class SdkClientManagerImpl(
     private val featureFlagManager: BitwardenFeatureFlagManager,
     private val clientProvider: suspend () -> Client = {
-        Client(null)
-            .apply { platform().loadFlags(featureFlagManager.featureFlags) }
+        Client(settings = null).apply {
+            platform().loadFlags(featureFlagManager.featureFlags)
+        }
     },
 ) : SdkClientManager {
-    private val userIdToClientMap = mutableMapOf<String, Client>()
+    private val userIdToClientMap = mutableMapOf<String?, Client>()
 
     override suspend fun getOrCreateClient(
-        userId: String,
-    ): Client =
-        userIdToClientMap.getOrPut(key = userId) { clientProvider() }
+        userId: String?,
+    ): Client = userIdToClientMap.getOrPut(key = userId) { clientProvider() }
 
     override fun destroyClient(
-        userId: String,
+        userId: String?,
     ) {
         userIdToClientMap
             .remove(key = userId)

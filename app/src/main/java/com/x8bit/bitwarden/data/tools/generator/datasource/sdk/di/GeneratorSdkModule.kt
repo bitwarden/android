@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.sdk.di
 
-import com.bitwarden.sdk.Client
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.sdk.GeneratorSdkSourceImpl
 import dagger.Module
@@ -19,6 +19,6 @@ object GeneratorSdkModule {
     @Provides
     @Singleton
     fun provideGeneratorSdkSource(
-        client: Client,
-    ): GeneratorSdkSource = GeneratorSdkSourceImpl(clientGenerator = client.generators())
+        sdkClientManager: SdkClientManager,
+    ): GeneratorSdkSource = GeneratorSdkSourceImpl(sdkClientManager = sdkClientManager)
 }

@@ -5,10 +5,13 @@ import com.bitwarden.generators.ForwarderServiceType
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientGenerators
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -16,7 +19,13 @@ import org.junit.Test
 
 class GeneratorSdkSourceTest {
     private val clientGenerators = mockk<ClientGenerators>()
-    private val generatorSdkSource: GeneratorSdkSource = GeneratorSdkSourceImpl(clientGenerators)
+    private val client = mockk<Client> {
+        every { generators() } returns clientGenerators
+    }
+    private val sdkClientManager = mockk<SdkClientManager> {
+        coEvery { getOrCreateClient(userId = null) } returns client
+    }
+    private val generatorSdkSource: GeneratorSdkSource = GeneratorSdkSourceImpl(sdkClientManager)
 
     @Test
     fun `generatePassword should call SDK and return a Result with the generated password`() =
