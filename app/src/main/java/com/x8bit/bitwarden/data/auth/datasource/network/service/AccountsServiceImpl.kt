@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
@@ -21,6 +22,17 @@ class AccountsServiceImpl(
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
     private val json: Json,
 ) : AccountsService {
+
+    override suspend fun createAccountKeys(
+        publicKey: String,
+        encryptedPrivateKey: String,
+    ): Result<Unit> =
+        authenticatedAccountsApi.createAccountKeys(
+            body = CreateAccountKeysRequest(
+                publicKey = publicKey,
+                encryptedPrivateKey = encryptedPrivateKey,
+            ),
+        )
 
     override suspend fun deleteAccount(masterPasswordHash: String): Result<Unit> =
         authenticatedAccountsApi.deleteAccount(DeleteAccountRequestJson(masterPasswordHash))

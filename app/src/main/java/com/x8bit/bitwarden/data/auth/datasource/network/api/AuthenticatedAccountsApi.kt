@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
+import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
@@ -11,6 +12,12 @@ import retrofit2.http.POST
  * Defines raw calls under the /accounts API with authentication applied.
  */
 interface AuthenticatedAccountsApi {
+    /**
+     * Creates the keys for the current account.
+     */
+    @POST("/accounts/keys")
+    suspend fun createAccountKeys(@Body body: CreateAccountKeysRequest): Result<Unit>
+
     /**
      * Deletes the current account.
      */
