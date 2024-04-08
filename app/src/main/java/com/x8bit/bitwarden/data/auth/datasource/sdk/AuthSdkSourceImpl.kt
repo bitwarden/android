@@ -6,53 +6,43 @@ import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
-import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toPasswordStrengthOrNull
 import com.x8bit.bitwarden.data.auth.datasource.sdk.util.toUByte
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 
 /**
  * Primary implementation of [AuthSdkSource] that serves as a convenience wrapper around a
  * [ClientAuth].
  */
 class AuthSdkSourceImpl(
-    private val clientAuth: ClientAuth,
-    private val clientPlatform: ClientPlatform,
-    dispatcherManager: DispatcherManager,
-    featureFlagManager: BitwardenFeatureFlagManager,
+    private val sdkClientManager: SdkClientManager,
 ) : AuthSdkSource {
-
-    private val ioScope = CoroutineScope(dispatcherManager.io)
-
-    init {
-        ioScope.launch {
-            clientPlatform.loadFlags(featureFlagManager.featureFlags)
-        }
-    }
 
     override suspend fun getNewAuthRequest(
         email: String,
     ): Result<AuthRequestResponse> = runCatching {
-        clientAuth.newAuthRequest(
-            email = email,
-        )
+        getClient()
+            .auth()
+            .newAuthRequest(
+                email = email,
+            )
     }
 
     override suspend fun getUserFingerprint(
         email: String,
         publicKey: String,
     ): Result<String> = runCatching {
-        clientPlatform.fingerprint(
-            req = FingerprintRequest(
-                fingerprintMaterial = email,
-                publicKey = publicKey,
-            ),
-        )
+        getClient()
+            .platform()
+            .fingerprint(
+                req = FingerprintRequest(
+                    fingerprintMaterial = email,
+                    publicKey = publicKey,
+                ),
+            )
     }
 
     override suspend fun hashPassword(
@@ -61,12 +51,14 @@ class AuthSdkSourceImpl(
         kdf: Kdf,
         purpose: HashPurpose,
     ): Result<String> = runCatching {
-        clientAuth.hashPassword(
-            email = email,
-            password = password,
-            kdfParams = kdf,
-            purpose = purpose,
-        )
+        getClient()
+            .auth()
+            .hashPassword(
+                email = email,
+                password = password,
+                kdfParams = kdf,
+                purpose = purpose,
+            )
     }
 
     override suspend fun makeRegisterKeys(
@@ -74,11 +66,13 @@ class AuthSdkSourceImpl(
         password: String,
         kdf: Kdf,
     ): Result<RegisterKeyResponse> = runCatching {
-        clientAuth.makeRegisterKeys(
-            email = email,
-            password = password,
-            kdf = kdf,
-        )
+        getClient()
+            .auth()
+            .makeRegisterKeys(
+                email = email,
+                password = password,
+                kdf = kdf,
+            )
     }
 
     override suspend fun passwordStrength(
@@ -87,7 +81,8 @@ class AuthSdkSourceImpl(
         additionalInputs: List<String>,
     ): Result<PasswordStrength> = runCatching {
         @Suppress("UnsafeCallOnNullableType")
-        clientAuth
+        getClient()
+            .auth()
             .passwordStrength(
                 password = password,
                 email = email,
@@ -101,10 +96,16 @@ class AuthSdkSourceImpl(
         passwordStrength: PasswordStrength,
         policy: MasterPasswordPolicyOptions,
     ): Result<Boolean> = runCatching {
-        clientAuth.satisfiesPolicy(
-            password = password,
-            strength = passwordStrength.toUByte(),
-            policy = policy,
-        )
+        getClient()
+            .auth()
+            .satisfiesPolicy(
+                password = password,
+                strength = passwordStrength.toUByte(),
+                policy = policy,
+            )
     }
+
+    private suspend fun getClient(
+        userId: String? = null,
+    ): Client = sdkClientManager.getOrCreateClient(userId = userId)
 }

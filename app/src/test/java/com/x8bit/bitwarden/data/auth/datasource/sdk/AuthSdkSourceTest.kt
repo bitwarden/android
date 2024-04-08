@@ -6,20 +6,20 @@ import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientPlatform
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -28,25 +28,17 @@ class AuthSdkSourceTest {
     private val clientPlatform = mockk<ClientPlatform> {
         coEvery { loadFlags(any()) } just runs
     }
-    private val featureFlagManager = mockk<BitwardenFeatureFlagManager> {
-        coEvery { featureFlags } returns emptyMap()
+    private val client = mockk<Client> {
+        every { auth() } returns clientAuth
+        every { platform() } returns clientPlatform
     }
-    private val dispatcherManager = FakeDispatcherManager()
+    private val sdkClientManager = mockk<SdkClientManager> {
+        coEvery { getOrCreateClient(userId = null) } returns client
+    }
 
     private val authSkdSource: AuthSdkSource = AuthSdkSourceImpl(
-        clientAuth = clientAuth,
-        clientPlatform = clientPlatform,
-        featureFlagManager = featureFlagManager,
-        dispatcherManager = dispatcherManager,
+        sdkClientManager = sdkClientManager,
     )
-
-    @BeforeEach
-    fun setup() {
-        coVerify(exactly = 1) {
-            featureFlagManager.featureFlags
-            clientPlatform.loadFlags(any())
-        }
-    }
 
     @Test
     fun `getNewAuthRequest should call SDK and return a Result with correct data`() = runBlocking {
