@@ -29,6 +29,7 @@ class TrustedDeviceViewModel @Inject constructor(
             val trustedDevice = account?.trustedDevice
             if (trustedDevice == null) authRepository.logout()
             TrustedDeviceState(
+                dialogState = null,
                 emailAddress = account?.email.orEmpty(),
                 environmentLabel = environmentRepository.environment.label,
                 isRemembered = true,
@@ -44,6 +45,7 @@ class TrustedDeviceViewModel @Inject constructor(
     override fun handleAction(action: TrustedDeviceAction) {
         when (action) {
             TrustedDeviceAction.BackClick -> handleBackClick()
+            TrustedDeviceAction.DismissDialog -> handleDismissDialog()
             is TrustedDeviceAction.RememberToggle -> handleRememberToggle(action)
             TrustedDeviceAction.ContinueClick -> handleContinueClick()
             TrustedDeviceAction.ApproveWithAdminClick -> handleApproveWithAdminClick()
@@ -55,6 +57,10 @@ class TrustedDeviceViewModel @Inject constructor(
 
     private fun handleBackClick() {
         authRepository.logout()
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update { it.copy(dialogState = null) }
     }
 
     private fun handleRememberToggle(action: TrustedDeviceAction.RememberToggle) {
@@ -89,6 +95,7 @@ class TrustedDeviceViewModel @Inject constructor(
  */
 @Parcelize
 data class TrustedDeviceState(
+    val dialogState: DialogState?,
     val emailAddress: String,
     val environmentLabel: String,
     val isRemembered: Boolean,
@@ -96,7 +103,29 @@ data class TrustedDeviceState(
     val showOtherDeviceButton: Boolean,
     val showRequestAdminButton: Boolean,
     val showMasterPasswordButton: Boolean,
-) : Parcelable
+) : Parcelable {
+    /**
+     * Represents the current state of any dialogs on the screen.
+     */
+    sealed class DialogState : Parcelable {
+        /**
+         * Represents a dismissible dialog with the given error [message].
+         */
+        @Parcelize
+        data class Error(
+            val title: Text?,
+            val message: Text,
+        ) : DialogState()
+
+        /**
+         * Represents a loading dialog with the given [message].
+         */
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+    }
+}
 
 /**
  * Models events for the Trusted Device screen.
@@ -130,6 +159,11 @@ sealed class TrustedDeviceAction {
      * User clicked back button.
      */
     data object BackClick : TrustedDeviceAction()
+
+    /**
+     * User clicked to dismiss the dialog.
+     */
+    data object DismissDialog : TrustedDeviceAction()
 
     /**
      * User toggled the remember device switch.
