@@ -148,7 +148,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 initialPasscodeState.copy(
                     selectedType = GeneratorState.MainType.Passcode(
                         selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 14,
+                            rawLength = 14,
                             minLength = 10,
                             maxLength = 128,
                             useCapitals = true,
@@ -182,7 +182,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                 initialPasscodeState.copy(
                     selectedType = GeneratorState.MainType.Passcode(
                         selectedType = GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 14,
+                            rawLength = 14,
                             minLength = 5,
                             maxLength = 128,
                             useCapitals = true,
@@ -499,7 +499,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             initialPasscodeState.copy(
                 selectedType = GeneratorState.MainType.Passcode(
                     GeneratorState.MainType.Passcode.PasscodeType.Password(
-                        length = 14,
+                        rawLength = 14,
                         minLength = 10,
                         useCapitals = true,
                         capitalsEnabled = false,
@@ -821,7 +821,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = newLength,
+                            rawLength = newLength,
                         ),
                     ),
                 )
@@ -863,7 +863,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5,
+                            rawLength = 5,
                             useCapitals = false,
                         ),
                     ),
@@ -882,7 +882,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5, // 0 uppercase + 1 lowercase + 4 numbers + 0 special chars
+                            rawLength = 5, // 0 uppercase + 1 lowercase + 4 numbers + 0 special chars
                             minNumbers = 4,
                             useCapitals = false,
                             useNumbers = true,
@@ -908,7 +908,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
+                            rawLength = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
                             minNumbers = 4,
                             useCapitals = true,
                         ),
@@ -951,7 +951,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5,
+                            rawLength = 5,
                             useLowercase = false,
                         ),
                     ),
@@ -970,7 +970,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5, // 1 uppercase + 0 lowercase + 4 numbers + 0 special chars
+                            rawLength = 5, // 1 uppercase + 0 lowercase + 4 numbers + 0 special chars
                             minNumbers = 4,
                             useLowercase = false,
                             useNumbers = true,
@@ -996,7 +996,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
+                            rawLength = 6, // 1 uppercase + 1 lowercase + 4 numbers + 0 special chars
                             minNumbers = 4,
                             useLowercase = true,
                         ),
@@ -1105,7 +1105,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5, // the current slider value, which the min does not exceed
+                            rawLength = 5, // the current slider value, which the min doesn't exceed
                             minNumbers = minNumbers,
                             useNumbers = false,
                         ),
@@ -1129,7 +1129,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 7, // 1 uppercase + 1 lowercase + 5 numbers + 0 special chars
+                            rawLength = 7, // 1 uppercase + 1 lowercase + 5 numbers + 0 special
                             minNumbers = minNumbers,
                             useNumbers = true,
                         ),
@@ -1173,7 +1173,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 5,
+                            rawLength = 5,
                             minSpecial = minSpecial,
                             useSpecialChars = false,
                         ),
@@ -1197,7 +1197,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
                     generatedText = updatedGeneratedPassword,
                     selectedType = GeneratorState.MainType.Passcode(
                         GeneratorState.MainType.Passcode.PasscodeType.Password(
-                            length = 8, // 1 uppercase + 1 lowercase + 1 number + 5 special chars
+                            rawLength = 8, // 1 uppercase + 1 lowercase + 1 number + 5 special chars
                             minSpecial = minSpecial,
                             useSpecialChars = true,
                         ),
@@ -2098,7 +2098,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             generatedText = generatedText,
             selectedType = GeneratorState.MainType.Passcode(
                 GeneratorState.MainType.Passcode.PasscodeType.Password(
-                    length = length,
+                    rawLength = length,
                     useCapitals = useCapitals,
                     useLowercase = useLowercase,
                     useNumbers = useNumbers,
