@@ -272,7 +272,13 @@ class ExportVaultViewModel @Inject constructor(
 
                 viewModelScope.launch {
                     val result = vaultRepository.exportVaultDataToString(
-                        format = state.exportFormat.toExportFormat(state.passwordInput),
+                        format = state.exportFormat.toExportFormat(
+                            password = if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
+                                state.filePasswordInput
+                            } else {
+                                state.passwordInput
+                            },
+                        ),
                     )
 
                     sendAction(
@@ -308,8 +314,11 @@ class ExportVaultViewModel @Inject constructor(
 
                 mutableStateFlow.update {
                     it.copy(
+                        confirmFilePasswordInput = "",
                         dialogState = null,
+                        filePasswordInput = "",
                         passwordInput = "",
+                        passwordStrengthState = PasswordStrengthState.NONE,
                         exportData = result.vaultData,
                     )
                 }
