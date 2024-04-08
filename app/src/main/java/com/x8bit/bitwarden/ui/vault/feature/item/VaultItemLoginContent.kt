@@ -66,7 +66,7 @@ fun VaultItemLoginContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .semantics { testTag = "ItemRow" }
+                    .semantics { testTag = "LoginItemNameEntry" }
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -120,6 +120,7 @@ fun VaultItemLoginContent(
                     isPremiumUser = loginItemState.isPremiumUser,
                     onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
                     modifier = Modifier
+                        .semantics { testTag = "LoginTotpEntry" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -143,7 +144,6 @@ fun VaultItemLoginContent(
                     onCopyUriClick = vaultLoginItemTypeHandlers.onCopyUriClick,
                     onLaunchUriClick = vaultLoginItemTypeHandlers.onLaunchUriClick,
                     modifier = Modifier
-                        .semantics { testTag = "UriRow" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -163,6 +163,7 @@ fun VaultItemLoginContent(
                 NotesField(
                     notes = notes,
                     modifier = Modifier
+                        .semantics { testTag = "CipherNotesLabel" }
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -315,6 +316,7 @@ private fun PasswordField(
                         ),
                     ),
                     onClick = onCheckForBreachClick,
+                    modifier = Modifier.semantics { testTag = "LoginCheckPasswordButton" },
                 )
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
@@ -322,15 +324,19 @@ private fun PasswordField(
                         contentDescription = stringResource(id = R.string.copy_password),
                     ),
                     onClick = onCopyPasswordClick,
+                    modifier = Modifier.semantics { testTag = "LoginCopyPasswordButton" },
                 )
             },
             modifier = modifier,
+            showPasswordTestTag = "LoginViewPasswordButton",
+            passwordFieldTestTag = "LoginPasswordEntry",
         )
     } else {
         BitwardenHiddenPasswordField(
             label = stringResource(id = R.string.password),
             value = passwordData.password,
-            modifier = modifier,
+            modifier = modifier
+                .semantics { testTag = "LoginPasswordEntry" },
         )
     }
 }
@@ -386,6 +392,7 @@ private fun TotpField(
                             contentDescription = stringResource(id = R.string.copy_totp),
                         ),
                         onClick = onCopyTotpClick,
+                        modifier = Modifier.semantics { testTag = "LoginCopyTotpButton" },
                     )
                 },
                 modifier = modifier,
@@ -425,6 +432,7 @@ private fun UriField(
                         contentDescription = stringResource(id = R.string.launch),
                     ),
                     onClick = { onLaunchUriClick(uriData.uri) },
+                    modifier = Modifier.semantics { testTag = "LoginLaunchUriButton" },
                 )
             }
             if (uriData.isCopyable) {
@@ -434,10 +442,12 @@ private fun UriField(
                         contentDescription = stringResource(id = R.string.copy),
                     ),
                     onClick = { onCopyUriClick(uriData.uri) },
+                    modifier = Modifier.semantics { testTag = "LoginCopyUriButton" },
                 )
             }
         },
         modifier = modifier,
+        textFieldTestTag = "LoginUriEntry",
     )
 }
 
@@ -460,8 +470,10 @@ private fun UsernameField(
                     contentDescription = stringResource(id = R.string.copy_username),
                 ),
                 onClick = onCopyUsernameClick,
+                modifier = Modifier.semantics { testTag = "LoginCopyUsernameButton" },
             )
         },
         modifier = modifier,
+        textFieldTestTag = "LoginUsernameEntry",
     )
 }
