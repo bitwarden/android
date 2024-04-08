@@ -300,7 +300,7 @@ class GeneratorViewModel @Inject constructor(
             is Password -> {
                 val minLength = policy.minLength ?: Password.PASSWORD_LENGTH_SLIDER_MIN
                 val password = Password(
-                    length = max(options.length, minLength),
+                    rawLength = max(options.length, minLength),
                     minLength = minLength,
                     useCapitals = options.hasUppercase || policy.useUpper == true,
                     capitalsEnabled = policy.useUpper != true,
@@ -372,7 +372,7 @@ class GeneratorViewModel @Inject constructor(
         val options = generatorRepository
             .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
         val newOptions = options.copy(
-            length = password.minimumLength,
+            length = password.length,
             allowAmbiguousChar = password.avoidAmbiguousChars,
             hasNumbers = password.useNumbers,
             minNumber = password.minNumbers,
@@ -477,7 +477,7 @@ class GeneratorViewModel @Inject constructor(
         val defaultPassphrase = Passphrase()
 
         return PasscodeGenerationOptions(
-            length = defaultPassword.minimumLength,
+            length = defaultPassword.length,
             allowAmbiguousChar = defaultPassword.avoidAmbiguousChars,
             hasNumbers = defaultPassword.useNumbers,
             minNumber = defaultPassword.minNumbers,
@@ -518,7 +518,7 @@ class GeneratorViewModel @Inject constructor(
             uppercase = password.useCapitals,
             numbers = password.useNumbers,
             special = password.useSpecialChars,
-            length = password.minimumLength.toUByte(),
+            length = password.length.toUByte(),
             avoidAmbiguous = password.avoidAmbiguousChars,
             minLowercase = null,
             minUppercase = null,
@@ -764,10 +764,14 @@ class GeneratorViewModel @Inject constructor(
 
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
-                length = adjustedLength,
+                rawLength = adjustedLength.coerceIn(
+                    minimumValue = currentPasswordType.minLength,
+                    maximumValue = currentPasswordType.maxLength,
+                ),
                 isUserInteracting = action.isUserInteracting,
             )
         }
+        updatePasswordLength()
     }
 
     private fun handleToggleCapitalLetters(
@@ -1412,7 +1416,7 @@ class GeneratorViewModel @Inject constructor(
     private fun updatePasswordLength() {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
-                length = currentPasswordType.minimumLength,
+                rawLength = currentPasswordType.length,
             )
         }
     }
@@ -1737,7 +1741,7 @@ data class GeneratorState(
                  * Represents a standard PASSWORD type, with configurable options for
                  * length, character types, and requirements.
                  *
-                 * @property length The length of the generated password.
+                 * @property rawLength The length of the generated password.
                  * @property minLength The number available on the low end of the slider.
                  * @property maxLength The number available on the high end of the slider.
                  * @property useCapitals Whether to include capital letters.
@@ -1762,7 +1766,7 @@ data class GeneratorState(
                  */
                 @Parcelize
                 data class Password(
-                    val length: Int = DEFAULT_PASSWORD_LENGTH,
+                    private val rawLength: Int = DEFAULT_PASSWORD_LENGTH,
                     val minLength: Int = PASSWORD_LENGTH_SLIDER_MIN,
                     val maxLength: Int = PASSWORD_LENGTH_SLIDER_MAX,
                     val useCapitals: Boolean = true,
@@ -1785,6 +1789,13 @@ data class GeneratorState(
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSWORD.labelRes
+
+                    /**
+                     * The larger of the user-set length and the minimum length this password can be
+                     * (as determined by which characters are enabled, and how many).
+                     */
+                    val length: Int
+                        get() = max(rawLength, minimumLength)
 
                     companion object {
                         private const val DEFAULT_PASSWORD_LENGTH: Int = 14
@@ -2560,10 +2571,7 @@ private val Password.minimumLength: Int
         val minUppercase = if (useCapitals) 1 else 0
         val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
         val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
-        return max(
-            minLowercase + minUppercase + minimumNumbers + minimumSpecial,
-            length,
-        )
+        return minLowercase + minUppercase + minimumNumbers + minimumSpecial
     }
 
 private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(

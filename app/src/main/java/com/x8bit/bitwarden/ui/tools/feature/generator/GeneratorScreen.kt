@@ -28,9 +28,9 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -580,7 +580,7 @@ private fun PasswordLengthSliderItem(
     minValue: Int,
     maxValue: Int,
 ) {
-    var sliderValue by remember { mutableIntStateOf(length.coerceIn(minValue, maxValue)) }
+    val sliderValue by rememberUpdatedState(newValue = length.coerceIn(minValue, maxValue))
     var labelTextWidth by remember { mutableStateOf(Dp.Unspecified) }
 
     val density = LocalDensity.current
@@ -617,8 +617,7 @@ private fun PasswordLengthSliderItem(
         Slider(
             value = sliderValue.toFloat(),
             onValueChange = { newValue ->
-                sliderValue = newValue.toInt().coerceIn(minValue, maxValue)
-                onPasswordSliderLengthChange(sliderValue, true)
+                onPasswordSliderLengthChange(newValue.toInt(), true)
             },
             onValueChangeFinished = {
                 onPasswordSliderLengthChange(sliderValue, false)
