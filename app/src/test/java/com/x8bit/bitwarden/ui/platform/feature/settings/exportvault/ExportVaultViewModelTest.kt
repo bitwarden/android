@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.core.ExportFormat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -51,7 +52,7 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     )
 
     private val vaultRepository: VaultRepository = mockk {
-        coEvery { exportVaultDataToString(any()) } returns mockk()
+        coEvery { exportVaultDataToString(any()) } returns ExportVaultDataResult.Success("data")
     }
     private val fileManager: FileManager = mockk()
 
@@ -101,6 +102,53 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
 
         coVerify {
             vaultRepository.exportVaultDataToString(any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmExportVaultClicked should show success with valid input when export type is JSON_ENCRYPTED`() {
+        val filePassword = "filePassword"
+        val password = "password"
+        val initialState = DEFAULT_STATE.copy(
+            confirmFilePasswordInput = filePassword,
+            exportFormat = ExportVaultFormat.JSON_ENCRYPTED,
+            filePasswordInput = filePassword,
+            passwordInput = password,
+            passwordStrengthState = PasswordStrengthState.STRONG,
+        )
+        coEvery {
+            authRepository.getPasswordStrength(
+                email = EMAIL_ADDRESS,
+                password = password,
+            )
+        } returns PasswordStrengthResult.Success(
+            passwordStrength = PasswordStrength.LEVEL_4,
+        )
+        coEvery {
+            authRepository.validatePassword(
+                password = password,
+            )
+        } returns ValidatePasswordResult.Success(isValid = true)
+        val viewModel = createViewModel(
+            initialState = initialState,
+        )
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+        assertEquals(
+            initialState.copy(
+                confirmFilePasswordInput = "",
+                exportData = "data",
+                filePasswordInput = "",
+                passwordInput = "",
+                passwordStrengthState = PasswordStrengthState.NONE,
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            authRepository.validatePassword(password)
+            vaultRepository.exportVaultDataToString(
+                format = ExportFormat.EncryptedJson(filePassword),
+            )
         }
     }
 
