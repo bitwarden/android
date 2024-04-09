@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
+import com.bitwarden.crypto.TrustDeviceResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.manager.util.toUserStateJson
@@ -32,26 +33,31 @@ class TrustedDeviceManagerImpl(
         } else {
             vaultSdkSource
                 .getTrustDevice(userId = userId)
-                .flatMap { trustedDevice ->
-                    devicesService
-                        .trustDevice(
-                            appId = authDiskSource.uniqueAppId,
-                            encryptedDevicePrivateKey = trustedDevice.protectedDevicePrivateKey,
-                            encryptedDevicePublicKey = trustedDevice.protectedDevicePublicKey,
-                            encryptedUserKey = trustedDevice.protectedUserKey,
-                        )
-                        .onSuccess {
-                            authDiskSource.storeDeviceKey(
-                                userId = userId,
-                                deviceKey = trustedDevice.deviceKey,
-                            )
-                            authDiskSource.userState = trustedDevice.toUserStateJson(
-                                userId = userId,
-                                previousUserState = requireNotNull(authDiskSource.userState),
-                            )
-                        }
-                }
+                .flatMap { trustThisDevice(userId = userId, trustDeviceResponse = it) }
                 .also { authDiskSource.shouldTrustDevice = false }
                 .map { true }
         }
+
+    override suspend fun trustThisDevice(
+        userId: String,
+        trustDeviceResponse: TrustDeviceResponse,
+    ): Result<Unit> = devicesService
+        .trustDevice(
+            appId = authDiskSource.uniqueAppId,
+            encryptedDevicePrivateKey = trustDeviceResponse.protectedDevicePrivateKey,
+            encryptedDevicePublicKey = trustDeviceResponse.protectedDevicePublicKey,
+            encryptedUserKey = trustDeviceResponse.protectedUserKey,
+        )
+        .onSuccess {
+            authDiskSource.storeDeviceKey(
+                userId = userId,
+                deviceKey = trustDeviceResponse.deviceKey,
+            )
+            authDiskSource.userState = trustDeviceResponse.toUserStateJson(
+                userId = userId,
+                previousUserState = requireNotNull(authDiskSource.userState),
+            )
+        }
+        .also { authDiskSource.shouldTrustDevice = false }
+        .map { Unit }
 }

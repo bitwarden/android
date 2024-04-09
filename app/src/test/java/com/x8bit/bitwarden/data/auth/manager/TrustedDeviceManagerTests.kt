@@ -207,6 +207,61 @@ class TrustedDeviceManagerTests {
             )
         }
     }
+
+    @Test
+    fun `trustThisDevice when success should return success with true`() = runTest {
+        val deviceKey = "deviceKey"
+        val protectedUserKey = "protectedUserKey"
+        val protectedDevicePrivateKey = "protectedDevicePrivateKey"
+        val protectedDevicePublicKey = "protectedDevicePublicKey"
+        val trustDeviceResponse = TrustDeviceResponse(
+            deviceKey = deviceKey,
+            protectedUserKey = protectedUserKey,
+            protectedDevicePrivateKey = protectedDevicePrivateKey,
+            protectedDevicePublicKey = protectedDevicePublicKey,
+        )
+        val trustedDeviceKeysResponseJson = TrustedDeviceKeysResponseJson(
+            id = "id",
+            name = "name",
+            identifier = "identifier",
+            type = 0,
+            creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
+        )
+        fakeAuthDiskSource.userState = DEFAULT_USER_STATE
+        fakeAuthDiskSource.shouldTrustDevice = true
+        coEvery {
+            devicesService.trustDevice(
+                appId = "testUniqueAppId",
+                encryptedUserKey = protectedUserKey,
+                encryptedDevicePublicKey = protectedDevicePublicKey,
+                encryptedDevicePrivateKey = protectedDevicePrivateKey,
+            )
+        } returns trustedDeviceKeysResponseJson.asSuccess()
+        every {
+            trustDeviceResponse.toUserStateJson(
+                userId = USER_ID,
+                previousUserState = DEFAULT_USER_STATE,
+            )
+        } returns UPDATED_USER_STATE
+
+        val result = manager.trustThisDevice(
+            userId = USER_ID,
+            trustDeviceResponse = trustDeviceResponse,
+        )
+
+        assertEquals(Unit.asSuccess(), result)
+        fakeAuthDiskSource.assertDeviceKey(userId = USER_ID, deviceKey = deviceKey)
+        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+        fakeAuthDiskSource.assertUserState(UPDATED_USER_STATE)
+        coVerify(exactly = 1) {
+            devicesService.trustDevice(
+                appId = "testUniqueAppId",
+                encryptedUserKey = protectedUserKey,
+                encryptedDevicePublicKey = protectedDevicePublicKey,
+                encryptedDevicePrivateKey = protectedDevicePrivateKey,
+            )
+        }
+    }
 }
 
 private const val USER_ID: String = "userId"
