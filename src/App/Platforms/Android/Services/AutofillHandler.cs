@@ -63,7 +63,7 @@ namespace Bit.Droid.Services
             }
             catch (Java.Lang.NullPointerException) 
             {
-                //TODO: CredentialManager API is not working fully and may return a NullPointerException even if the CredentialProviderService is working and enabled
+                // CredentialManager API is not working fully and may return a NullPointerException even if the CredentialProviderService is working and enabled
                 // Info Here: https://developer.android.com/reference/android/credentials/CredentialManager#isEnabledCredentialProviderService(android.content.ComponentName)
                 return false;
             }
@@ -203,8 +203,8 @@ namespace Bit.Droid.Services
         {
             try
             {
-                // TODO - find a way to programmatically disable the provider service, or take the user to the settings page where they can do it
-                // For now we'll take the user to Credential Settings so they can manually change
+                // We should try to find a way to programmatically disable the provider service when the API allows for it.
+                // For now we'll take the user to Credential Settings so they can manually disable it
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
                 deviceActionService.OpenCredentialProviderSettings();
             }
