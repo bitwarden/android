@@ -300,7 +300,7 @@ class GeneratorViewModel @Inject constructor(
             is Password -> {
                 val minLength = policy.minLength ?: Password.PASSWORD_LENGTH_SLIDER_MIN
                 val password = Password(
-                    rawLength = max(options.length, minLength),
+                    length = max(options.length, minLength),
                     minLength = minLength,
                     useCapitals = options.hasUppercase || policy.useUpper == true,
                     capitalsEnabled = policy.useUpper != true,
@@ -764,14 +764,10 @@ class GeneratorViewModel @Inject constructor(
 
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
-                rawLength = adjustedLength.coerceIn(
-                    minimumValue = currentPasswordType.minLength,
-                    maximumValue = currentPasswordType.maxLength,
-                ),
+                length = max(adjustedLength, currentPasswordType.minimumLength),
                 isUserInteracting = action.isUserInteracting,
             )
         }
-        updatePasswordLength()
     }
 
     private fun handleToggleCapitalLetters(
@@ -1416,11 +1412,10 @@ class GeneratorViewModel @Inject constructor(
     private fun updatePasswordLength() {
         updatePasswordType { currentPasswordType ->
             currentPasswordType.copy(
-                rawLength = currentPasswordType.length,
+                length = max(currentPasswordType.length, currentPasswordType.minimumLength),
             )
         }
     }
-
     private inline fun updatePasswordType(
         crossinline block: (Password) -> Password,
     ) {
@@ -1741,7 +1736,7 @@ data class GeneratorState(
                  * Represents a standard PASSWORD type, with configurable options for
                  * length, character types, and requirements.
                  *
-                 * @property rawLength The length of the generated password.
+                 * @property length The length of the generated password.
                  * @property minLength The number available on the low end of the slider.
                  * @property maxLength The number available on the high end of the slider.
                  * @property useCapitals Whether to include capital letters.
@@ -1766,7 +1761,7 @@ data class GeneratorState(
                  */
                 @Parcelize
                 data class Password(
-                    private val rawLength: Int = DEFAULT_PASSWORD_LENGTH,
+                    val length: Int = DEFAULT_PASSWORD_LENGTH,
                     val minLength: Int = PASSWORD_LENGTH_SLIDER_MIN,
                     val maxLength: Int = PASSWORD_LENGTH_SLIDER_MAX,
                     val useCapitals: Boolean = true,
@@ -1789,13 +1784,6 @@ data class GeneratorState(
                 ) : PasscodeType(), Parcelable {
                     override val displayStringResId: Int
                         get() = PasscodeTypeOption.PASSWORD.labelRes
-
-                    /**
-                     * The larger of the user-set length and the minimum length this password can be
-                     * (as determined by which characters are enabled, and how many).
-                     */
-                    val length: Int
-                        get() = max(rawLength, minimumLength)
 
                     companion object {
                         private const val DEFAULT_PASSWORD_LENGTH: Int = 14
