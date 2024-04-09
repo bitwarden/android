@@ -2808,23 +2808,23 @@
     <value>附加选项</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>接下来前往网页应用吗？</value>
+    <value>前往网页 App 吗？</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
-    <value>接下来前往 {0} 吗？</value>
+    <value>前往 {0} 吗？</value>
     <comment>The parameter is an URL, like bitwarden.com.</comment>
   </data>
   <data name="ContinueToHelpCenter" xml:space="preserve">
-    <value>接下来前往帮助中心吗？</value>
+    <value>前往帮助中心吗？</value>
   </data>
   <data name="ContinueToContactSupport" xml:space="preserve">
-    <value>接下来要联系支持吗？</value>
+    <value>要联系支持吗？</value>
   </data>
   <data name="ContinueToPrivacyPolicy" xml:space="preserve">
-    <value>接下来查看隐私政策吗？</value>
+    <value>查看隐私政策吗？</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
-    <value>接下来前往 App Store 吗？</value>
+    <value>前往 App Store 吗？</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>通过在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。</value>
@@ -2874,7 +2874,7 @@
     <value>您的组织要求您设置主密码。</value> 
   </data>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
-    <value>设置解锁选项以更改您的密码库超时操作。</value>
+    <value>设置解锁选项以更改您的密码库超时动作。</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>您的账户要求使用 Duo 两步登录。 </value>

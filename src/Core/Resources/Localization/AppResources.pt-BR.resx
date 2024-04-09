@@ -2878,12 +2878,12 @@ Você deseja mudar para esta conta?</value>
     <value>Configure um método de desbloqueio para alterar o tempo limite do cofre.</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
-    <value>Duo two-step login is required for your account. </value>
+    <value>A autenticação em duas etapas do Duo é necessária para sua conta. </value>
   </data>
   <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
-    <value>Follow the steps from Duo to finish logging in.</value>
+    <value>Siga os passos no Duo para finalizar o login.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
-    <value>Launch Duo</value>
+    <value>Abrir o Duo</value>
   </data>
 </root>

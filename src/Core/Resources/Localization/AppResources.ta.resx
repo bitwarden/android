@@ -641,7 +641,7 @@
     <value>தற்போதைய கடவுச்சொல்லை மேலெழுத உறுதியா?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>push அறிவிப்புகள் பயன்படுத்தி Bitwarden உம் பெட்டகத்தை தானாக ஒத்திசைகிறது. சிறந்த சாத்தியமான அனுபவத்திற்கு, பின்வரும் தூண்டியில் push அறிவிப்புகளை இயக்கச்சொல்லி கேட்டால் "அனுமதி"ஐ தேர்ந்தெடுக்கவும்.</value>
+    <value>Push அறிவிப்புகள் பயன்படுத்தி Bitwarden உம் பெட்டகத்தை தானாக ஒத்திசைகிறது. சிறந்த சாத்தியமான அனுபவத்திற்கு, பின்வரும் தூண்டியில் push அறிவிப்புகளை இயக்கச்சொல்லி கேட்டால் "அனுமதி"ஐ தேர்ந்தெடுக்கவும்.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -923,7 +923,7 @@
     <value>இணைப்பு அழிக்கப்பட்டது</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>கோப்பை தேர்ந்தெடு</value>
+    <value>கோப்பைத் தேர்ந்தெடு</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>கோப்பு</value>
