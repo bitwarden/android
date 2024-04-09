@@ -87,11 +87,11 @@ namespace Bit.Core.Services
                 var cipher = await encrypted.DecryptAsync();
 
                 if (!userVerified
-                &&
-                await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(new Fido2UserVerificationOptions(
-                    cipher.Reprompt != CipherRepromptType.None,
-                    makeCredentialParams.UserVerificationPreference,
-                    userInterface.HasVaultBeenUnlockedInThisTransaction)))
+                    &&
+                    await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(new Fido2UserVerificationOptions(
+                        cipher.Reprompt != CipherRepromptType.None,
+                        makeCredentialParams.UserVerificationPreference,
+                        userInterface.HasVaultBeenUnlockedInThisTransaction)))
                 {
                     throw new NotAllowedError();
                 }
@@ -184,7 +184,7 @@ namespace Bit.Core.Services
             {
                 throw new NotAllowedError();
             }
-
+             
             if (!userVerified
                 &&
                 await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(new Fido2UserVerificationOptions(
@@ -249,7 +249,8 @@ namespace Bit.Core.Services
                 Id = cipher.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                 RpId = cipher.Login.MainFido2Credential.RpId,
                 UserHandle = cipher.Login.MainFido2Credential.UserHandleValue,
-                UserName = cipher.Login.MainFido2Credential.UserName
+                UserName = cipher.Login.MainFido2Credential.UserName,
+                CipherId = cipher.Id,
             }).ToArray();
 
             return credentials;

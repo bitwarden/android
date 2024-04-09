@@ -20,15 +20,6 @@
                 StyleClass="settings-header" />
 
             <controls:SwitchItemView
-                Title="{u:I18n CredentialProviderService}"
-                Subtitle="{u:I18n CredentialProviderServiceExplanationLong}"
-                IsVisible="{Binding SupportsCredentialProviderService}"
-                IsToggled="{Binding UseCredentialProviderService}"
-                AutomationId="CredentialProviderServiceSwitch"
-                StyleClass="settings-item-view"
-                HorizontalOptions="FillAndExpand" />
-
-            <controls:SwitchItemView
                 Title="{u:I18n AutofillServices}"
                 Subtitle="{u:I18n AutofillServicesExplanationLong}"
                 IsVisible="{Binding SupportsAndroidAutofillServices}"
@@ -44,6 +35,15 @@
                 IsVisible="{Binding ShowUseInlineAutofillToggle}"
                 IsEnabled="{Binding UseAutofillServices}"
                 AutomationId="InlineAutofillSwitch"
+                StyleClass="settings-item-view"
+                HorizontalOptions="FillAndExpand" />
+
+            <controls:ExternalLinkSubtitleItemView 
+                Title="{u:I18n PasskeyManagement}"
+                Subtitle="{u:I18n PasskeyManagementExplanationLong}"
+                IsVisible="{Binding SupportsCredentialProviderService}"
+                GoToLinkCommand="{Binding GoToCredentialProviderSettingsCommand}"
+                AutomationId="CredentialProviderServiceSwitch"
                 StyleClass="settings-item-view"
                 HorizontalOptions="FillAndExpand" />
 

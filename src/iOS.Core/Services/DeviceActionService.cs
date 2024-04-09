@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.Core.Resources.Localization;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
@@ -313,6 +314,12 @@ namespace Bit.iOS.Core.Services
             // Fall back to UnixTimeMilliseconds in case this approach stops working. We'll lose clock-change
             // protection but the lock functionality will continue to work.
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+        }
+
+        public Task ExecuteFido2CredentialActionAsync(AppOptions appOptions)
+        {
+            // only used by Android
+            throw new NotImplementedException();
         }
 
         public void CloseMainApp()

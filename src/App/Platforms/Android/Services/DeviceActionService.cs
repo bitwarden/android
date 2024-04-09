@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Nfc;
@@ -17,11 +15,14 @@ using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.App.Droid.Utilities;
+using Bit.App.Models;
+using Bit.Droid.Autofill;
 using Microsoft.Maui.Controls.Compatibility.Platform.Android;
 using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
+using Bit.Core.Services;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Droid.Services
 {
@@ -204,7 +205,7 @@ namespace Bit.Droid.Services
             string text = null, string okButtonText = null, string cancelButtonText = null,
             bool numericKeyboard = false, bool autofocus = true, bool password = false)
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return Task.FromResult<string>(null);
@@ -261,7 +262,7 @@ namespace Bit.Droid.Services
 
         public Task<ValidatablePromptResponse?> DisplayValidatablePromptAsync(ValidatablePromptConfig config)
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return Task.FromResult<ValidatablePromptResponse?>(null);
@@ -338,7 +339,7 @@ namespace Bit.Droid.Services
 
         public void RateApp()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
                 var rateIntent = RateIntentForUrl("market://details", activity);
@@ -371,14 +372,14 @@ namespace Bit.Droid.Services
 
         public bool SupportsNfc()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             var manager = activity.GetSystemService(Context.NfcService) as NfcManager;
             return manager.DefaultAdapter?.IsEnabled ?? false;
         }
 
         public bool SupportsCamera()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             return activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
         }
 
@@ -394,7 +395,7 @@ namespace Bit.Droid.Services
 
         public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return Task.FromResult<string>(null);
@@ -475,7 +476,7 @@ namespace Bit.Droid.Services
 
         public void OpenAccessibilityOverlayPermissionSettings()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
                 var intent = new Intent(Settings.ActionManageOverlayPermission);
@@ -504,10 +505,10 @@ namespace Bit.Droid.Services
 
         public void OpenCredentialProviderSettings()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
-                var pendingIntent = CredentialManager.Create(activity).CreateSettingsPendingIntent();
+                var pendingIntent = ICredentialManager.Create(activity).CreateSettingsPendingIntent();
                 pendingIntent.Send();
             }
             catch (ActivityNotFoundException)
@@ -527,7 +528,7 @@ namespace Bit.Droid.Services
         {
             try
             {
-                var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+                var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
                 var intent = new Intent(Settings.ActionAccessibilitySettings);
                 activity.StartActivity(intent);
             }
@@ -536,7 +537,7 @@ namespace Bit.Droid.Services
 
         public void OpenAutofillSettings()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             try
             {
                 var intent = new Intent(Settings.ActionRequestSetAutofillService);
@@ -564,10 +565,88 @@ namespace Bit.Droid.Services
             // ref: https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime()
             return SystemClock.ElapsedRealtime();
         }
+
+        public async Task ExecuteFido2CredentialActionAsync(AppOptions appOptions)
+        {
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            if (activity == null || string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
+            {
+                return;
+            }
+
+            if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialGet)
+            {
+                await ExecuteFido2GetCredentialAsync(appOptions);
+            }
+            else if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
+            {
+                await ExecuteFido2CreateCredentialAsync();
+            }
+
+            appOptions.Fido2CredentialAction = null; //Clear CredentialAction Value
+        }
+
+        private async Task ExecuteFido2GetCredentialAsync(AppOptions appOptions)
+        {
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            if (activity == null) 
+            {
+                return; 
+            }
+
+            try
+            {
+                var request = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveBeginGetCredentialRequest(activity.Intent);
+                var response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse();;
+                var credentialEntries = new List<AndroidX.Credentials.Provider.CredentialEntry>();
+                foreach (var option in request.BeginGetCredentialOptions.OfType<AndroidX.Credentials.Provider.BeginGetPublicKeyCredentialOption>())
+                {
+                    credentialEntries.AddRange(await Bit.App.Platforms.Android.Autofill.CredentialHelpers.PopulatePasskeyDataAsync(request.CallingAppInfo, option, activity, appOptions.HasUnlockedInThisTransaction));
+                }
+
+                if (credentialEntries.Any())
+                {
+                    response = new AndroidX.Credentials.Provider.BeginGetCredentialResponse.Builder()
+                        .SetCredentialEntries(credentialEntries)
+                        .Build();
+                }
+
+                var result = new Android.Content.Intent();
+                AndroidX.Credentials.Provider.PendingIntentHandler.SetBeginGetCredentialResponse(result, response);
+                activity.SetResult(Result.Ok, result);
+                activity.Finish();
+            }
+            catch (Exception ex)
+            {
+                Bit.Core.Services.LoggerHelper.LogEvenIfCantBeResolved(ex);
+
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
+            }
+        }
+
+        private async Task ExecuteFido2CreateCredentialAsync()
+        {
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            if (activity == null) { return; }
+
+            try
+            {
+                var getRequest = AndroidX.Credentials.Provider.PendingIntentHandler.RetrieveProviderCreateCredentialRequest(activity.Intent);
+                await Bit.App.Platforms.Android.Autofill.CredentialHelpers.CreateCipherPasskeyAsync(getRequest, activity);
+            }
+            catch (Exception ex)
+            {
+                Bit.Core.Services.LoggerHelper.LogEvenIfCantBeResolved(ex);
+
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
+            }
+        }
         
         public void CloseMainApp()
         {
-            var activity = (MainActivity)Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             if (activity == null)
             {
                 return;
@@ -608,7 +687,7 @@ namespace Bit.Droid.Services
 
         public float GetSystemFontSizeScale()
         {
-            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity as MainActivity;
+            var activity = Microsoft.Maui.ApplicationModel.Platform.CurrentActivity;
             return activity?.Resources?.Configuration?.FontScale ?? 1;
         }
         

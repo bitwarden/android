@@ -6,7 +6,6 @@ namespace Bit.App.Pages
 {
     public partial class AutofillSettingsPageViewModel
     {
-        private bool _useCredentialProviderService;
         private bool _useAutofillServices;
         private bool _useInlineAutofill;
         private bool _useAccessibility;
@@ -14,18 +13,6 @@ namespace Bit.App.Pages
         private bool _askToAddLogin;
 
         public bool SupportsCredentialProviderService => DeviceInfo.Platform == DevicePlatform.Android && _deviceActionService.SupportsCredentialProviderService();
-
-        public bool UseCredentialProviderService
-        {
-            get => _useCredentialProviderService;
-            set
-            {
-                if (SetProperty(ref _useCredentialProviderService, value))
-                {
-                    ((ICommand)ToggleUseCredentialProviderServiceCommand).Execute(null);
-                }
-            }
-        }
 
         public bool SupportsAndroidAutofillServices => DeviceInfo.Platform == DevicePlatform.Android && _deviceActionService.SupportsAutofillServices();
 
@@ -99,23 +86,23 @@ namespace Bit.App.Pages
             }
         }
 
-        public AsyncRelayCommand ToggleUseCredentialProviderServiceCommand { get; private set; }
         public AsyncRelayCommand ToggleUseAutofillServicesCommand { get; private set; }
         public AsyncRelayCommand ToggleUseInlineAutofillCommand { get; private set; }
         public AsyncRelayCommand ToggleUseAccessibilityCommand { get; private set; }
         public AsyncRelayCommand ToggleUseDrawOverCommand { get; private set; }
         public AsyncRelayCommand ToggleAskToAddLoginCommand { get; private set; }
         public ICommand GoToBlockAutofillUrisCommand { get; private set; }
+        public ICommand GoToCredentialProviderSettingsCommand { get; private set; }
 
         private void InitAndroidCommands()
         {
-            ToggleUseCredentialProviderServiceCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseCredentialProviderService()), () => _inited, allowsMultipleExecutions: false);
             ToggleUseAutofillServicesCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseAutofillServices()), () => _inited, allowsMultipleExecutions: false);
             ToggleUseInlineAutofillCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleUseInlineAutofillEnabledAsync()), () => _inited, allowsMultipleExecutions: false);
             ToggleUseAccessibilityCommand = CreateDefaultAsyncRelayCommand(ToggleUseAccessibilityAsync, () => _inited, allowsMultipleExecutions: false);
             ToggleUseDrawOverCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleDrawOver()), () => _inited, allowsMultipleExecutions: false);
             ToggleAskToAddLoginCommand = CreateDefaultAsyncRelayCommand(ToggleAskToAddLoginAsync, () => _inited, allowsMultipleExecutions: false);
             GoToBlockAutofillUrisCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushAsync(new BlockAutofillUrisPage()), allowsMultipleExecutions: false);
+            GoToCredentialProviderSettingsCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => GoToCredentialProviderSettings()), () => _inited, allowsMultipleExecutions: false);
         }
 
         private async Task InitAndroidAutofillSettingsAsync()
@@ -132,9 +119,6 @@ namespace Bit.App.Pages
 
         private async Task UpdateAndroidAutofillSettingsAsync()
         {
-            // TODO - uncomment once _autofillHandler.CredentialProviderServiceEnabled() returns a real value
-            // _useCredentialProviderService = 
-            //     SupportsCredentialProviderService && _autofillHandler.CredentialProviderServiceEnabled();
             _useAutofillServices =
                 _autofillHandler.SupportsAutofillService() && _autofillHandler.AutofillServiceEnabled();
             _useAccessibility = _autofillHandler.AutofillAccessibilityServiceRunning();
@@ -143,7 +127,6 @@ namespace Bit.App.Pages
 
             await MainThread.InvokeOnMainThreadAsync(() =>
             {
-                TriggerPropertyChanged(nameof(UseCredentialProviderService));
                 TriggerPropertyChanged(nameof(UseAutofillServices));
                 TriggerPropertyChanged(nameof(UseAccessibility));
                 TriggerPropertyChanged(nameof(UseDrawOver));
@@ -151,15 +134,14 @@ namespace Bit.App.Pages
             });
         }
 
-        private void ToggleUseCredentialProviderService()
+        private async Task GoToCredentialProviderSettings()
         {
-            if (UseCredentialProviderService)
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.SetBitwardenAsPasskeyManagerDescription, AppResources.ContinueToDeviceSettings,
+                AppResources.Continue,
+                AppResources.Cancel);
+            if (confirmed)
             {
                 _deviceActionService.OpenCredentialProviderSettings();
-            }
-            else
-            {
-                _autofillHandler.DisableCredentialProviderService();
             }
         }
 

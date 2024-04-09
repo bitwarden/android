@@ -82,7 +82,8 @@ namespace Bit.Core.Test.Services
                     Id = c.Login.MainFido2Credential.CredentialId.GuidToRawFormat(),
                     RpId = "bitwarden.com",
                     UserHandle = c.Login.MainFido2Credential.UserHandleValue,
-                    UserName = c.Login.MainFido2Credential.UserName
+                    UserName = c.Login.MainFido2Credential.UserName,
+                    CipherId = c.Id,
                 }), new MetadataComparer())
             );
         }

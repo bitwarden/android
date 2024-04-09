@@ -95,6 +95,9 @@
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
+		<Compile Update="Controls\Settings\ExternalLinkSubtitleItemView.xaml.cs">
+		  <DependentUpon>ExternalLinkSubtitleItemView.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="Pages\AndroidNavigationRedirectPage.xaml.cs">
 		  <DependentUpon>AndroidNavigationRedirectPage.xaml</DependentUpon>
 		</Compile>
@@ -105,6 +108,9 @@
     </Compile>
 	</ItemGroup>
 	<ItemGroup>
+	  <MauiXaml Update="Controls\Settings\ExternalLinkSubtitleItemView.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\AndroidNavigationRedirectPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

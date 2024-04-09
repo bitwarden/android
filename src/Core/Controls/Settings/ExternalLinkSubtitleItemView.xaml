@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<controls:BaseSettingItemView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Bit.App.Controls" 
+    xmlns:core="clr-namespace:Bit.Core"
+    x:Class="Bit.App.Controls.ExternalLinkSubtitleItemView"
+    x:Name="_contentView"
+    ControlTemplate="{StaticResource SettingControlTemplate}">
+    <controls:BaseSettingItemView.GestureRecognizers>
+        <TapGestureRecognizer Tapped="ContentView_Tapped" />
+    </controls:BaseSettingItemView.GestureRecognizers>
+
+    <controls:IconLabel
+        Text="{Binding Source={x:Static core:BitwardenIcons.ExternalLink}}"
+        TextColor="{DynamicResource TextColor}"
+        FontSize="25"
+        Margin="6,0,7,0"
+        HorizontalOptions="End"
+        VerticalOptions="Center"
+        SemanticProperties.Description="{Binding Title, Mode=OneWay, Source={x:Reference _contentView}}" />
+</controls:BaseSettingItemView>

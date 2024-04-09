@@ -20,7 +20,10 @@ using Bit.App.Utilities;
 using Bit.App.Pages;
 using Bit.App.Utilities.AccountManagement;
 using Bit.App.Controls;
+using Bit.App.Platforms.Android.Autofill;
 using Bit.Core.Enums;
+using Bit.Core.Services.UserVerification;
+
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -91,6 +94,43 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<ICryptoService>(),
                     ServiceContainer.Resolve<IVaultTimeoutService>());
                 ServiceContainer.Register<IUserPinService>(userPinService);
+
+                var userVerificationMediatorService = new UserVerificationMediatorService(
+                    ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                    ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
+                    userPinService,
+                    deviceActionService,
+                    ServiceContainer.Resolve<IUserVerificationService>());
+                ServiceContainer.Register<IUserVerificationMediatorService>(userVerificationMediatorService);
+
+                var fido2AuthenticatorService = new Fido2AuthenticatorService(
+                    ServiceContainer.Resolve<ICipherService>(),
+                    ServiceContainer.Resolve<ISyncService>(),
+                    ServiceContainer.Resolve<ICryptoFunctionService>(),
+                    userVerificationMediatorService);
+                ServiceContainer.Register<IFido2AuthenticatorService>(fido2AuthenticatorService);
+
+                var fido2MakeCredentialUserInterface = new Fido2MakeCredentialUserInterface(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<IVaultTimeoutService>(),
+                    ServiceContainer.Resolve<ICipherService>(),
+                    ServiceContainer.Resolve<IUserVerificationMediatorService>(),
+                    ServiceContainer.Resolve<IDeviceActionService>());
+                ServiceContainer.Register<IFido2MakeCredentialConfirmationUserInterface>(fido2MakeCredentialUserInterface);
+
+                var fido2ClientService = new Fido2ClientService(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<IEnvironmentService>(),
+                    ServiceContainer.Resolve<ICryptoFunctionService>(),
+                    ServiceContainer.Resolve<IFido2AuthenticatorService>(),
+                    new Fido2GetAssertionUserInterface(),
+                    fido2MakeCredentialUserInterface);
+                ServiceContainer.Register<IFido2ClientService>(fido2ClientService);
+
+                ServiceContainer.Register<IFido2MediatorService>(new Fido2MediatorService(
+                    fido2AuthenticatorService,
+                    fido2ClientService,
+                    ServiceContainer.Resolve<ICipherService>()));
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)

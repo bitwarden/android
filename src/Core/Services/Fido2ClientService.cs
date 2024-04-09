@@ -232,8 +232,6 @@ namespace Bit.Core.Services
             {
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.UnknownError, $"An unknown error occurred");
             }
-
-            throw new NotImplementedException();
         }
 
         private Fido2AuthenticatorMakeCredentialParams MapToMakeCredentialParams(

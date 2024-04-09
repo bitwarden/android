@@ -46,6 +46,9 @@ namespace Bit.App.Pages
             CipherOptionsCommand = CreateDefaultAsyncRelayCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+            AddFabCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
             AddCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -53,6 +56,7 @@ namespace Bit.App.Pages
 
         public ICommand CipherOptionsCommand { get; }
         public ICommand AddCipherCommand { get; }
+        public ICommand AddFabCipherCommand { get; }
         public ExtendedObservableCollection<CipherItemViewModel> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
