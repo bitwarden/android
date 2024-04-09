@@ -18,7 +18,7 @@ class OrganizationServiceImpl(
     override suspend fun organizationResetPasswordEnroll(
         organizationId: String,
         userId: String,
-        passwordHash: String,
+        passwordHash: String?,
         resetPasswordKey: String,
     ): Result<Unit> = authenticatedOrganizationApi
         .organizationResetPasswordEnroll(

@@ -14,7 +14,7 @@ interface OrganizationService {
     suspend fun organizationResetPasswordEnroll(
         organizationId: String,
         userId: String,
-        passwordHash: String,
+        passwordHash: String?,
         resetPasswordKey: String,
     ): Result<Unit>
 
