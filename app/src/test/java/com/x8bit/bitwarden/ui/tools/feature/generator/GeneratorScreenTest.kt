@@ -375,8 +375,8 @@ class GeneratorScreenTest : BaseComposeTest() {
         }
 
         // This value would be 128 in a real scenario, because length passed here depends on the
-        // `sliderValue` which is indirectly updated via the call verified above. However, because
-        // the view model is a mock, the `length` value that `sliderValue` depends on will not
+        // internal length which is indirectly updated via the call verified above. However, because
+        // the view model is a mock, the length value that internal value depends on will not
         // actually get updated from its original value, and thus will be its original value of 14.
         verify {
             viewModel.trySendAction(
