@@ -2,15 +2,27 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "3cc9605b629947b2b4148a40ff0d955d",
+    "identityHash": "8724b95439edde85bd15e0bd2e02195e",
     "entities": [
       {
         "tableName": "items",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `type` TEXT NOT NULL, `algorithm` TEXT NOT NULL, `period` INTEGER NOT NULL, `digits` INTEGER NOT NULL, `key` TEXT NOT NULL, `issuer` TEXT, `userId` TEXT, `username` TEXT, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `key` TEXT NOT NULL, `accountName` TEXT NOT NULL, `type` TEXT NOT NULL, `algorithm` TEXT NOT NULL, `period` INTEGER NOT NULL, `digits` INTEGER NOT NULL, `issuer` TEXT, `userId` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
             "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "key",
+            "columnName": "key",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "accountName",
+            "columnName": "accountName",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -39,12 +51,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "key",
-            "columnName": "key",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
             "fieldPath": "issuer",
             "columnName": "issuer",
             "affinity": "TEXT",
@@ -53,12 +59,6 @@
           {
             "fieldPath": "userId",
             "columnName": "userId",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "username",
-            "columnName": "username",
             "affinity": "TEXT",
             "notNull": false
           }
@@ -76,7 +76,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3cc9605b629947b2b4148a40ff0d955d')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8724b95439edde85bd15e0bd2e02195e')"
     ]
   }
 }

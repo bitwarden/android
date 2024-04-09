@@ -58,7 +58,7 @@ class ItemViewModel @Inject constructor(
 
                     TotpCodeItemData(
                         type = item.type,
-                        username = item.username?.asText(),
+                        username = item.accountName.asText(),
                         issuer = item.issuer.orEmpty().asText(),
                         periodSeconds = authCode.periodSeconds,
                         timeLeftSeconds = authCode.timeLeftSeconds,

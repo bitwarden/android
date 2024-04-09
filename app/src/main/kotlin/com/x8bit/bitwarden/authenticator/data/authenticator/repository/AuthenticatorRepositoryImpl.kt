@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.authenticator.data.authenticator.repository
 
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorData
@@ -31,7 +30,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -63,7 +61,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                 is DataState.Error -> {
                     DataState.Error(
                         cipherDataState.error,
-                        AuthenticatorData(cipherDataState.data.orEmpty())
+                        AuthenticatorData(cipherDataState.data.orEmpty()),
                     )
                 }
 
@@ -86,7 +84,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         }.stateIn(
             scope = unconfinedScope,
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = STOP_TIMEOUT_DELAY_MS),
-            initialValue = DataState.Loading
+            initialValue = DataState.Loading,
         )
 
     override val ciphersStateFlow: StateFlow<DataState<List<AuthenticatorItemEntity>>>
@@ -125,8 +123,8 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             .flatMapLatest { cipherDataState ->
                 val cipher = cipherDataState.data
                     ?: return@flatMapLatest flowOf(DataState.Loaded(null))
-                totpCodeManager
-                    .getTotpCodeStateFlow(item = cipher)
+
+                totpCodeManager.getTotpCodeStateFlow(item = cipher)
                     .map { totpCodeDataState ->
                         combineDataStates(
                             totpCodeDataState,
@@ -153,10 +151,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             }
             .flatMapLatest { cipherDataState ->
                 val cipherList = cipherDataState.data ?: emptyList()
-                totpCodeManager
-                    .getTotpCodesStateFlow(
-                        itemList = cipherList,
-                    )
+                totpCodeManager.getTotpCodesStateFlow(itemList = cipherList)
                     .map { verificationCodeDataStates ->
                         combineDataStates(
                             verificationCodeDataStates,
@@ -179,20 +174,9 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
-    override suspend fun createItem(code: String, issuer: String): CreateItemResult {
+    override suspend fun createItem(item: AuthenticatorItemEntity): CreateItemResult {
         return try {
-            authenticatorDiskSource.saveItem(
-                AuthenticatorItemEntity(
-                    id = UUID.randomUUID().toString(),
-                    type = AuthenticatorItemType.TOTP,
-                    period = 30,
-                    digits = 6,
-                    key = code,
-                    issuer = issuer,
-                    userId = null,
-                    username = null,
-                )
-            )
+            authenticatorDiskSource.saveItem(item)
             CreateItemResult.Success
         } catch (e: Exception) {
             CreateItemResult.Error
@@ -216,14 +200,14 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             authenticatorDiskSource.saveItem(
                 AuthenticatorItemEntity(
                     id = itemId,
+                    key = updateItemRequest.key,
+                    accountName = updateItemRequest.accountName,
                     type = updateItemRequest.type,
                     period = updateItemRequest.period,
                     digits = updateItemRequest.digits,
-                    key = updateItemRequest.key,
                     issuer = updateItemRequest.issuer,
                     userId = null,
-                    username = null,
-                )
+                ),
             )
             UpdateItemResult.Success
         } catch (e: Exception) {

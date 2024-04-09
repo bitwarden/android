@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
@@ -10,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -55,7 +57,14 @@ class ManualCodeEntryViewModel @Inject constructor(
 
     private fun handleCodeSubmit() {
         viewModelScope.launch {
-            authenticatorRepository.createItem(state.code, state.issuer)
+            authenticatorRepository.createItem(
+                AuthenticatorItemEntity(
+                    id = UUID.randomUUID().toString(),
+                    key = state.code,
+                    accountName = "",
+                    issuer = state.issuer,
+                )
+            )
         }
         sendEvent(ManualCodeEntryEvent.NavigateBack)
     }

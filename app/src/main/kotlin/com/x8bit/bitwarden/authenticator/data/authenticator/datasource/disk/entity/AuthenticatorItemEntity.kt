@@ -13,6 +13,12 @@ data class AuthenticatorItemEntity(
     @ColumnInfo(name = "id")
     val id: String,
 
+    @ColumnInfo(name = "key")
+    val key: String,
+
+    @ColumnInfo(name = "accountName")
+    val accountName: String,
+
     @ColumnInfo(name = "type")
     val type: AuthenticatorItemType = AuthenticatorItemType.TOTP,
 
@@ -25,15 +31,9 @@ data class AuthenticatorItemEntity(
     @ColumnInfo(name = "digits")
     val digits: Int = 6,
 
-    @ColumnInfo(name = "key")
-    val key: String,
-
     @ColumnInfo(name = "issuer")
-    val issuer: String?,
+    val issuer: String? = null,
 
     @ColumnInfo(name = "userId")
-    val userId: String?,
-
-    @ColumnInfo(name = "username")
-    val username: String?,
+    val userId: String? = null,
 )

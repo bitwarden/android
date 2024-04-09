@@ -64,7 +64,7 @@ interface AuthenticatorRepository {
     /**
      * Attempt to create a cipher.
      */
-    suspend fun createItem(code: String, issuer: String): CreateItemResult
+    suspend fun createItem(item: AuthenticatorItemEntity): CreateItemResult
 
     /**
      * Attempt to delete a cipher.

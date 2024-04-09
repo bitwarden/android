@@ -6,34 +6,32 @@ import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.enti
 /**
  * Models a request to modify an existing authenticator item.
  *
+ * @property key Key used to generate verification codes for the authenticator item.
+ * @property accountName Required account or username associated with the item.
  * @property type Type of authenticator item.
  * @property algorithm Hashing algorithm applied to the authenticator item verification code.
- * @property period Time, in seconds, the authenticator item verification code is valid. Default is
- * 30 seconds.
+ * @property period Time, in seconds, the authenticator item verification code is valid.
  * @property digits Number of digits contained in the verification code for this authenticator item.
- * Default is 6 digits.
- * @property key Key used to generate verification codes for the authenticator item.
  * @property issuer Entity that provided the authenticator item.
- * @property username Optional username associated with .
  */
 data class UpdateItemRequest(
-    val type: AuthenticatorItemType,
-    val algorithm: AuthenticatorItemAlgorithm = AuthenticatorItemAlgorithm.SHA1,
-    val period: Int = 30,
-    val digits: Int = 6,
     val key: String,
+    val accountName: String,
+    val type: AuthenticatorItemType,
+    val algorithm: AuthenticatorItemAlgorithm,
+    val period: Int,
+    val digits: Int,
     val issuer: String?,
-    val username: String?,
 ) {
     /**
-     * The composite label of the authenticator item.
+     * The composite label of the authenticator item. Derived from combining [issuer] and [accountName]
      *  ```
-     *  label = issuer (“:” / “%3A”) *”%20” username
+     *  label = accountName /issuer (“:” / “%3A”) *”%20” accountName
      *  ```
      */
     val label = if (issuer != null) {
-        issuer + username?.let { ":$it" }.orEmpty()
+        "$issuer:$accountName"
     } else {
-        username.orEmpty()
+        accountName
     }
 }
