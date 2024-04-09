@@ -194,7 +194,6 @@ namespace Bit.App
                 {
                     var details = message.Data as DialogDetails;
                     ArgumentNullException.ThrowIfNull(details);
-                    ArgumentNullException.ThrowIfNull(MainPage);
                     
                     var confirmed = true;
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
@@ -204,12 +203,14 @@ namespace Bit.App
                     {
                         if (!string.IsNullOrWhiteSpace(details.CancelText))
                         {
+                            ArgumentNullException.ThrowIfNull(MainPage);
+
                             confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
                                 details.CancelText);
                         }
                         else
                         {
-                            await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
+                            await _deviceActionService.DisplayAlertAsync(details.Title, details.Text, confirmText);
                         }
                         _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     }
