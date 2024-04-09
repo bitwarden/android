@@ -4,6 +4,7 @@ import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.Client
@@ -153,6 +154,36 @@ class AuthSdkSourceTest {
                     email = email,
                     password = password,
                     kdf = kdf,
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `makeRegisterTdeKeysAndUnlockVault should call SDK and return a Result with the correct data`() =
+        runBlocking {
+            val userId = "userId"
+            val orgPublicKey = "orgPublicKey"
+            val rememberDevice = true
+            val expectedResult = mockk<RegisterTdeKeyResponse>()
+            coEvery { sdkClientManager.getOrCreateClient(userId = userId) } returns client
+            coEvery {
+                clientAuth.makeRegisterTdeKeys(
+                    orgPublicKey = orgPublicKey,
+                    rememberDevice = rememberDevice,
+                )
+            } returns expectedResult
+
+            val result = authSkdSource.makeRegisterTdeKeysAndUnlockVault(
+                userId = userId,
+                orgPublicKey = orgPublicKey,
+                rememberDevice = rememberDevice,
+            )
+            assertEquals(expectedResult.asSuccess(), result)
+            coVerify(exactly = 1) {
+                clientAuth.makeRegisterTdeKeys(
+                    orgPublicKey = orgPublicKey,
+                    rememberDevice = rememberDevice,
                 )
             }
         }
