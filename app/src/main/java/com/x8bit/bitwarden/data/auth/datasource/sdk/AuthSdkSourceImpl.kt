@@ -4,6 +4,7 @@ import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.FingerprintRequest
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.Client
@@ -72,6 +73,19 @@ class AuthSdkSourceImpl(
                 email = email,
                 password = password,
                 kdf = kdf,
+            )
+    }
+
+    override suspend fun makeRegisterTdeKeysAndUnlockVault(
+        userId: String,
+        orgPublicKey: String,
+        rememberDevice: Boolean,
+    ): Result<RegisterTdeKeyResponse> = runCatching {
+        getClient(userId = userId)
+            .auth()
+            .makeRegisterTdeKeys(
+                orgPublicKey = orgPublicKey,
+                rememberDevice = rememberDevice,
             )
     }
 

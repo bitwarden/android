@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.datasource.sdk
 import com.bitwarden.core.AuthRequestResponse
 import com.bitwarden.core.MasterPasswordPolicyOptions
 import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
@@ -44,6 +45,16 @@ interface AuthSdkSource {
         password: String,
         kdf: Kdf,
     ): Result<RegisterKeyResponse>
+
+    /**
+     * Creates a set of encryption key information for registration of a trusted device and unlocks
+     * the vault for the user.
+     */
+    suspend fun makeRegisterTdeKeysAndUnlockVault(
+        userId: String,
+        orgPublicKey: String,
+        rememberDevice: Boolean,
+    ): Result<RegisterTdeKeyResponse>
 
     /**
      * Checks the password strength for the given [email] and [password] combination, along with
