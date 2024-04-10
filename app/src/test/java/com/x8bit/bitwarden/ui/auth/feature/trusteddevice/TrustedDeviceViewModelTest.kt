@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -25,12 +26,34 @@ import org.junit.jupiter.api.Test
 
 class TrustedDeviceViewModelTest : BaseViewModelTest() {
 
+    private val mutableAuthStateFlow = MutableStateFlow(DEFAULT_AUTH_STATE)
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
     private val authRepository: AuthRepository = mockk {
+        every { authStateFlow } returns mutableAuthStateFlow
         every { userStateFlow } returns mutableUserStateFlow
         every { logout() } just runs
     }
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
+
+    @Test
+    fun `on init should logout when Uninitialized`() {
+        mutableAuthStateFlow.value = AuthState.Uninitialized
+        createViewModel()
+
+        verify(exactly = 1) {
+            authRepository.logout()
+        }
+    }
+
+    @Test
+    fun `on init should logout when unauthenticated`() {
+        mutableAuthStateFlow.value = AuthState.Unauthenticated
+        createViewModel()
+
+        verify(exactly = 1) {
+            authRepository.logout()
+        }
+    }
 
     @Test
     fun `on init should logout when trusted device is not present`() {
@@ -221,6 +244,8 @@ private val DEFAULT_STATE: TrustedDeviceState = TrustedDeviceState(
     showRequestAdminButton = true,
     showMasterPasswordButton = false,
 )
+
+private val DEFAULT_AUTH_STATE: AuthState = AuthState.Authenticated(accessToken = "accessToken")
 
 private val TRUSTED_DEVICE = UserState.TrustedDevice(
     isDeviceTrusted = false,
