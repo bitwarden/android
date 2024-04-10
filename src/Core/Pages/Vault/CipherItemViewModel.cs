@@ -44,5 +44,7 @@ namespace Bit.App.Pages
         /// This is useful to check when the cell is being reused.
         /// </summary>
         public bool IconImageSuccesfullyLoaded { get; set; }
+
+        public bool UsePasskeyIconAsPlaceholderFallback { get; set; }
     }
 }

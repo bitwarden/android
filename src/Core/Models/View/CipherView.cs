@@ -51,7 +51,6 @@ namespace Bit.Core.Models.View
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
         public CipherKey Key { get; set; }
-        public bool CanShowPasskeyIcon { get; set; }
         
         public ItemView Item
         {
