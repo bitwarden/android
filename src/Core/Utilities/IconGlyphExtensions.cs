@@ -24,7 +24,7 @@ namespace Bit.App.Utilities
 
         static string GetLoginIconGlyph(CipherView cipher)
         {
-            var icon = BitwardenIcons.Globe;
+            var icon = cipher.HasFido2Credential ? BitwardenIcons.Passkey : BitwardenIcons.Globe;
             if (cipher.Login.Uri != null)
             {
                 var hostnameUri = cipher.Login.Uri;
