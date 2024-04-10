@@ -2,13 +2,17 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -17,6 +21,7 @@ private const val KEY_STATE = "state"
 /**
  * Manages application state for the Trusted Device screen.
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class TrustedDeviceViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -52,6 +57,37 @@ class TrustedDeviceViewModel @Inject constructor(
             TrustedDeviceAction.ApproveWithDeviceClick -> handleApproveWithDeviceClick()
             TrustedDeviceAction.ApproveWithPasswordClick -> handleApproveWithPasswordClick()
             TrustedDeviceAction.NotYouClick -> handleNotYouClick()
+            is TrustedDeviceAction.Internal -> handleInternalAction(action)
+        }
+    }
+
+    private fun handleInternalAction(action: TrustedDeviceAction.Internal) {
+        when (action) {
+            is TrustedDeviceAction.Internal.ReceiveNewSsoUserResult -> {
+                handleReceiveNewSsoUserResult(action)
+            }
+        }
+    }
+
+    private fun handleReceiveNewSsoUserResult(
+        action: TrustedDeviceAction.Internal.ReceiveNewSsoUserResult,
+    ) {
+        when (action.result) {
+            NewSsoUserResult.Failure -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TrustedDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            NewSsoUserResult.Success -> {
+                mutableStateFlow.update { it.copy(dialogState = null) }
+                // Should automatically navigate to a logged in state.
+            }
         }
     }
 
@@ -68,7 +104,16 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleContinueClick() {
-        sendEvent(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()))
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = TrustedDeviceState.DialogState.Loading(R.string.loading.asText()),
+            )
+        }
+        authRepository.shouldTrustDevice = state.isRemembered
+        viewModelScope.launch {
+            val result = authRepository.createNewSsoUser()
+            sendAction(TrustedDeviceAction.Internal.ReceiveNewSsoUserResult(result))
+        }
     }
 
     private fun handleApproveWithAdminClick() {
@@ -196,4 +241,16 @@ sealed class TrustedDeviceAction {
      * Indicates that the "Not you?" text was clicked.
      */
     data object NotYouClick : TrustedDeviceAction()
+
+    /**
+     * Actions for internal use by the ViewModel.
+     */
+    sealed class Internal : TrustedDeviceAction() {
+        /**
+         * Indicates a new SSO user result has been received.
+         */
+        data class ReceiveNewSsoUserResult(
+            val result: NewSsoUserResult,
+        ) : Internal()
+    }
 }

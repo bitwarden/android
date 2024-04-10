@@ -1285,6 +1285,46 @@ class VaultLockManagerTest {
         assertTrue(vaultLockManager.isVaultUnlocked(userId = USER_ID))
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncVaultState with getUserEncryptionKey failure should update the users vault state to locked`() =
+        runTest {
+            coEvery {
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
+            } returns Throwable().asFailure()
+
+            // Begin in a locked state
+            assertFalse(vaultLockManager.isVaultUnlocked(userId = USER_ID))
+
+            vaultLockManager.syncVaultState(userId = USER_ID)
+
+            // Confirm the vault is still locked
+            assertFalse(vaultLockManager.isVaultUnlocked(userId = USER_ID))
+            coVerify(exactly = 1) {
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `syncVaultState with getUserEncryptionKey success should update the users vault state to unlocked`() =
+        runTest {
+            coEvery {
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
+            } returns "UserEncryptionKey".asSuccess()
+
+            // Begin in a locked state
+            assertFalse(vaultLockManager.isVaultUnlocked(userId = USER_ID))
+
+            vaultLockManager.syncVaultState(userId = USER_ID)
+
+            // Confirm the vault is unlocked
+            assertTrue(vaultLockManager.isVaultUnlocked(userId = USER_ID))
+            coVerify(exactly = 1) {
+                vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
+            }
+        }
+
     /**
      * Resets the verification call count for the given [mock] while leaving all other mocked
      * behavior in place.

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.sdk.ClientAuth
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.flow.StateFlow
@@ -55,4 +56,14 @@ interface VaultLockManager {
      * Suspends until the vault for the given [userId] is unlocked.
      */
     suspend fun waitUntilUnlocked(userId: String)
+
+    /**
+     * This will check the vault lock state for the given user and ensure that the
+     * [vaultUnlockDataStateFlow] is up-to-date.
+     *
+     * This is only meant to be used when the SDK unlocks the vault as a side-effect of some other
+     * function, such as [ClientAuth.makeRegisterTdeKeys]. When using the regular [unlockVault]
+     * functions, this is not necessary.
+     */
+    suspend fun syncVaultState(userId: String)
 }

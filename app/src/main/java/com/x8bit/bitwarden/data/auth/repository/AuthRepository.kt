@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -122,6 +123,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Attempt to delete the current account and logout them out upon success.
      */
     suspend fun deleteAccount(password: String): DeleteAccountResult
+
+    /**
+     * Attempt to create a new user via SSO and log them into their account. Upon success the new
+     * user will also have the vault automatically unlocked for them.
+     */
+    suspend fun createNewSsoUser(): NewSsoUserResult
 
     /**
      * Attempt to complete the trusted device login with the given [requestPrivateKey] and

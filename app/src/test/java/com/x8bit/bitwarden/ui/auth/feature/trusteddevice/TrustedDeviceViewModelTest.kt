@@ -2,13 +2,17 @@ package com.x8bit.bitwarden.ui.auth.feature.trusteddevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -77,14 +81,68 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ContinueClick emits ShowToast`() = runTest {
-        val viewModel = createViewModel()
+    fun `on ContinueClick with createNewSsoUser failure should display the error dialog state`() =
+        runTest {
+            every { authRepository.shouldTrustDevice = true } just runs
+            coEvery { authRepository.createNewSsoUser() } returns NewSsoUserResult.Failure
+            val viewModel = createViewModel()
 
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(TrustedDeviceAction.ContinueClick)
-            assertEquals(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(TrustedDeviceAction.ContinueClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TrustedDeviceState.DialogState.Loading(
+                            message = R.string.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TrustedDeviceState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+            verify(exactly = 1) {
+                authRepository.shouldTrustDevice = true
+            }
+            coVerify(exactly = 1) {
+                authRepository.createNewSsoUser()
+            }
         }
-    }
+
+    @Test
+    fun `on ContinueClick with createNewSsoUser success should display the loading dialog state`() =
+        runTest {
+            every { authRepository.shouldTrustDevice = true } just runs
+            coEvery { authRepository.createNewSsoUser() } returns NewSsoUserResult.Success
+            val viewModel = createViewModel()
+
+            viewModel.stateFlow.test {
+                assertEquals(DEFAULT_STATE, awaitItem())
+                viewModel.trySendAction(TrustedDeviceAction.ContinueClick)
+                assertEquals(
+                    DEFAULT_STATE.copy(
+                        dialogState = TrustedDeviceState.DialogState.Loading(
+                            message = R.string.loading.asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+                assertEquals(DEFAULT_STATE, awaitItem())
+            }
+            verify(exactly = 1) {
+                authRepository.shouldTrustDevice = true
+            }
+            coVerify(exactly = 1) {
+                authRepository.createNewSsoUser()
+            }
+        }
 
     @Test
     fun `on ApproveWithAdminClick emits NavigateToApproveWithAdmin`() = runTest {
