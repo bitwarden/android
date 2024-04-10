@@ -53,6 +53,19 @@ namespace Bit.App.Pages
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
 
             var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)).ToList();
+
+            //Change CipherView to show Passkey icon only for scenarios of creating a new fido credential
+            if (_isAndroidFido2CredentialCreation && matching != null)
+            {
+                foreach (var cipher in matching)
+                {
+                    if (cipher?.Cipher != null && cipher.Cipher.HasFido2Credential)
+                    {
+                        cipher.Cipher.CanShowPasskeyIcon = true;
+                    }
+                }
+            }
+
             var hasMatching = matching?.Any() ?? false;
             if (matching?.Any() ?? false)
             {
