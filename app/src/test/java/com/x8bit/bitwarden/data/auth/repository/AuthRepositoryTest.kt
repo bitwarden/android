@@ -2910,25 +2910,64 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = true,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
     }
 
     @Test
-    fun `register check data breaches found should return DataBreachFound`() = runTest {
-        coEvery {
-            haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
-        } returns true.asSuccess()
+    fun `register check data breaches found and strong password should return DataBreachFound`() =
+        runTest {
+            coEvery {
+                haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
+            } returns true.asSuccess()
 
-        val result = repository.register(
-            email = EMAIL,
-            masterPassword = PASSWORD,
-            masterPasswordHint = null,
-            captchaToken = null,
-            shouldCheckDataBreaches = true,
-        )
-        assertEquals(RegisterResult.DataBreachFound, result)
-    }
+            val result = repository.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                captchaToken = null,
+                shouldCheckDataBreaches = true,
+                isMasterPasswordStrong = true,
+            )
+            assertEquals(RegisterResult.DataBreachFound, result)
+        }
+
+    @Test
+    fun `register check data breaches and weak password should return DataBreachAndWeakPassword`() =
+        runTest {
+            coEvery {
+                haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
+            } returns true.asSuccess()
+
+            val result = repository.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                captchaToken = null,
+                shouldCheckDataBreaches = true,
+                isMasterPasswordStrong = false,
+            )
+            assertEquals(RegisterResult.DataBreachAndWeakPassword, result)
+        }
+
+    @Test
+    fun `register check no data breaches found with weak password should return WeakPassword`() =
+        runTest {
+            coEvery {
+                haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD)
+            } returns false.asSuccess()
+
+            val result = repository.register(
+                email = EMAIL,
+                masterPassword = PASSWORD,
+                masterPasswordHint = null,
+                captchaToken = null,
+                shouldCheckDataBreaches = true,
+                isMasterPasswordStrong = false,
+            )
+            assertEquals(RegisterResult.WeakPassword, result)
+        }
 
     @Test
     fun `register check data breaches Success should return Success`() = runTest {
@@ -2959,6 +2998,7 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = true,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
         coVerify { haveIBeenPwnedService.hasPasswordBeenBreached(PASSWORD) }
@@ -2991,6 +3031,7 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
     }
@@ -3031,6 +3072,7 @@ class AuthRepositoryTest {
                 masterPasswordHint = null,
                 captchaToken = null,
                 shouldCheckDataBreaches = false,
+                isMasterPasswordStrong = true,
             )
             assertEquals(RegisterResult.Error(errorMessage = null), result)
         }
@@ -3071,6 +3113,7 @@ class AuthRepositoryTest {
                 masterPasswordHint = null,
                 captchaToken = null,
                 shouldCheckDataBreaches = false,
+                isMasterPasswordStrong = true,
             )
             assertEquals(RegisterResult.CaptchaRequired(captchaId = CAPTCHA_KEY), result)
         }
@@ -3102,6 +3145,7 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Error(errorMessage = null), result)
     }
@@ -3133,6 +3177,7 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Error(errorMessage = "message"), result)
     }
@@ -3169,6 +3214,7 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Error(errorMessage = "expected"), result)
     }
@@ -3200,6 +3246,7 @@ class AuthRepositoryTest {
             masterPasswordHint = null,
             captchaToken = null,
             shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
         )
         assertEquals(RegisterResult.Error(errorMessage = "message"), result)
     }
