@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.KnownDeviceResult
 import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
+import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.auth.repository.model.OrganizationDomainSsoDetailsResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
@@ -329,6 +330,61 @@ class AuthRepositoryImpl(
             .fold(
                 onFailure = { DeleteAccountResult.Error },
                 onSuccess = { DeleteAccountResult.Success },
+            )
+    }
+
+    @Suppress("ReturnCount")
+    override suspend fun createNewSsoUser(): NewSsoUserResult {
+        val account = authDiskSource.userState?.activeAccount ?: return NewSsoUserResult.Failure
+        val orgIdentifier = rememberedOrgIdentifier ?: return NewSsoUserResult.Failure
+        val userId = account.profile.userId
+        return organizationService
+            .getOrganizationAutoEnrollStatus(orgIdentifier)
+            .flatMap { orgAutoEnrollStatus ->
+                organizationService
+                    .getOrganizationKeys(orgAutoEnrollStatus.organizationId)
+                    .flatMap { organizationKeys ->
+                        authSdkSource.makeRegisterTdeKeysAndUnlockVault(
+                            userId = userId,
+                            orgPublicKey = organizationKeys.publicKey,
+                            rememberDevice = authDiskSource.shouldTrustDevice,
+                        )
+                    }
+                    .flatMap { keys ->
+                        accountsService
+                            .createAccountKeys(
+                                publicKey = keys.publicKey,
+                                encryptedPrivateKey = keys.privateKey,
+                            )
+                            .map { keys }
+                    }
+                    .flatMap { keys ->
+                        organizationService
+                            .organizationResetPasswordEnroll(
+                                organizationId = orgAutoEnrollStatus.organizationId,
+                                userId = userId,
+                                passwordHash = null,
+                                resetPasswordKey = keys.adminReset,
+                            )
+                            .map { keys }
+                    }
+                    .onSuccess { keys ->
+                        authDiskSource.storePrivateKey(
+                            userId = userId,
+                            privateKey = keys.privateKey,
+                        )
+                        keys.deviceKey?.let { trustDeviceResponse ->
+                            trustedDeviceManager.trustThisDevice(
+                                userId = userId,
+                                trustDeviceResponse = trustDeviceResponse,
+                            )
+                        }
+                        vaultRepository.syncVaultState(userId = userId)
+                    }
+            }
+            .fold(
+                onSuccess = { NewSsoUserResult.Success },
+                onFailure = { NewSsoUserResult.Failure },
             )
     }
 

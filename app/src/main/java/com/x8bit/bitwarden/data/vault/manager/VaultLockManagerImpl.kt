@@ -187,6 +187,18 @@ class VaultLockManagerImpl(
             .first { unlockedUserIds -> userId in unlockedUserIds }
     }
 
+    override suspend fun syncVaultState(userId: String) {
+        // There is no proper way to query if the vault is actually unlocked or not but we can
+        // attempt to retrieve the user encryption key. If it fails, then the vault is locked and
+        // if it succeeds, then the vault is unlocked.
+        vaultSdkSource
+            .getUserEncryptionKey(userId = userId)
+            .fold(
+                onFailure = { setVaultToLocked(userId = userId) },
+                onSuccess = { setVaultToUnlocked(userId = userId) },
+            )
+    }
+
     /**
      * Increments the stored invalid unlock count for the given [userId] and automatically logs out
      * if this new value is greater than [MAXIMUM_INVALID_UNLOCK_ATTEMPTS].
