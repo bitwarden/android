@@ -198,7 +198,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Test
     fun `clicking No on the HIBP dialog should send ErrorDialogDismiss action`() {
         mutableStateFlow.update {
-            it.copy(dialog = CreateAccountDialog.HaveIBeenPwned)
+            it.copy(dialog = createHaveIBeenPwned())
         }
         composeTestRule
             .onAllNodesWithText("No")
@@ -210,7 +210,7 @@ class CreateAccountScreenTest : BaseComposeTest() {
     @Test
     fun `clicking Yes on the HIBP dialog should send ContinueWithBreachedPasswordClick action`() {
         mutableStateFlow.update {
-            it.copy(dialog = CreateAccountDialog.HaveIBeenPwned)
+            it.copy(dialog = createHaveIBeenPwned())
         }
         composeTestRule
             .onAllNodesWithText("Yes")

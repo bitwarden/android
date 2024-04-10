@@ -29,4 +29,14 @@ sealed class RegisterResult {
      * Password hash was found in a data breach.
      */
     data object DataBreachFound : RegisterResult()
+
+    /**
+     * Password hash was found to be weak.
+     */
+    data object WeakPassword : RegisterResult()
+
+    /**
+     * Password hash was found in a data breach and found to be weak.
+     */
+    data object DataBreachAndWeakPassword : RegisterResult()
 }

@@ -137,10 +137,10 @@ fun CreateAccountScreen(
             )
         }
 
-        CreateAccountDialog.HaveIBeenPwned -> {
+        is CreateAccountDialog.HaveIBeenPwned -> {
             BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.weak_and_exposed_master_password),
-                message = haveIBeenPwnedMessage(),
+                title = dialog.title(),
+                message = dialog.message(),
                 confirmButtonText = stringResource(id = R.string.yes),
                 dismissButtonText = stringResource(id = R.string.no),
                 onConfirmClick = remember(viewModel) {

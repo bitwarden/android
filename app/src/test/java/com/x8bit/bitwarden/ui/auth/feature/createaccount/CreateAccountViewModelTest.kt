@@ -30,6 +30,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
@@ -37,6 +38,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class CreateAccountViewModelTest : BaseViewModelTest() {
 
     /**
@@ -232,6 +234,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPasswordHint = null,
                     captchaToken = null,
                     shouldCheckDataBreaches = false,
+                    isMasterPasswordStrong = true,
                 )
             } returns RegisterResult.Success(captchaToken = "mock_token")
         }
@@ -271,6 +274,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPasswordHint = null,
                     captchaToken = null,
                     shouldCheckDataBreaches = false,
+                    isMasterPasswordStrong = true,
                 )
             } returns RegisterResult.Error(errorMessage = "mock_error")
         }
@@ -314,6 +318,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPasswordHint = null,
                     captchaToken = null,
                     shouldCheckDataBreaches = false,
+                    isMasterPasswordStrong = true,
                 )
             } returns RegisterResult.CaptchaRequired(captchaId = "mock_captcha_id")
         }
@@ -345,6 +350,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPasswordHint = null,
                     captchaToken = null,
                     shouldCheckDataBreaches = false,
+                    isMasterPasswordStrong = true,
                 )
             } returns RegisterResult.Success(captchaToken = "mock_captcha_token")
         }
@@ -375,6 +381,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                     masterPasswordHint = null,
                     captchaToken = null,
                     shouldCheckDataBreaches = false,
+                    isMasterPasswordStrong = true,
                 )
             } returns RegisterResult.Error(null)
         }
@@ -390,6 +397,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                 masterPasswordHint = null,
                 captchaToken = null,
                 shouldCheckDataBreaches = false,
+                isMasterPasswordStrong = true,
             )
         }
     }
@@ -397,7 +405,7 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
     @Test
     fun `SubmitClick register returns ShowDataBreaches should show HaveIBeenPwned dialog`() =
         runTest {
-            val repo = mockk<AuthRepository> {
+            mockAuthRepository.apply {
                 every { captchaTokenResultFlow } returns flowOf()
                 coEvery {
                     register(
@@ -406,20 +414,92 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
                         masterPasswordHint = null,
                         captchaToken = null,
                         shouldCheckDataBreaches = true,
+                        isMasterPasswordStrong = true,
                     )
                 } returns RegisterResult.DataBreachFound
             }
-            val viewModel = CreateAccountViewModel(
-                savedStateHandle = validInputHandle,
-                authRepository = repo,
+            val initialState = VALID_INPUT_STATE.copy(
+                isCheckDataBreachesToggled = true,
             )
-            viewModel.trySendAction(CreateAccountAction.CheckDataBreachesToggle(true))
+            val viewModel = createCreateAccountViewModel(createAccountState = initialState)
             viewModel.trySendAction(CreateAccountAction.SubmitClick)
             viewModel.stateFlow.test {
                 assertEquals(
-                    VALID_INPUT_STATE.copy(
-                        isCheckDataBreachesToggled = true,
-                        dialog = CreateAccountDialog.HaveIBeenPwned,
+                    initialState.copy(
+                        dialog = createHaveIBeenPwned(
+                            title = R.string.exposed_master_password.asText(),
+                            message = R.string.password_found_in_a_data_breach_alert_description
+                                .asText(),
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SubmitClick register returns DataBreachAndWeakPassword should show HaveIBeenPwned dialog`() =
+        runTest {
+            mockAuthRepository.apply {
+                every { captchaTokenResultFlow } returns emptyFlow()
+                coEvery {
+                    register(
+                        email = EMAIL,
+                        masterPassword = PASSWORD,
+                        masterPasswordHint = null,
+                        captchaToken = null,
+                        shouldCheckDataBreaches = true,
+                        isMasterPasswordStrong = false,
+                    )
+                } returns RegisterResult.DataBreachAndWeakPassword
+            }
+            val initialState = VALID_INPUT_STATE.copy(
+                passwordStrengthState = PasswordStrengthState.WEAK_1,
+                isCheckDataBreachesToggled = true,
+            )
+
+            val viewModel = createCreateAccountViewModel(createAccountState = initialState)
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState.copy(dialog = createHaveIBeenPwned()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `SubmitClick register returns WeakPassword should show HaveIBeenPwned dialog`() =
+        runTest {
+            mockAuthRepository.apply {
+                every { captchaTokenResultFlow } returns flowOf()
+                coEvery {
+                    register(
+                        email = EMAIL,
+                        masterPassword = PASSWORD,
+                        masterPasswordHint = null,
+                        captchaToken = null,
+                        shouldCheckDataBreaches = true,
+                        isMasterPasswordStrong = false,
+                    )
+                } returns RegisterResult.WeakPassword
+            }
+            val initialState = VALID_INPUT_STATE
+                .copy(
+                    passwordStrengthState = PasswordStrengthState.WEAK_1,
+                    isCheckDataBreachesToggled = true,
+                )
+            val viewModel = createCreateAccountViewModel(createAccountState = initialState)
+            viewModel.trySendAction(CreateAccountAction.SubmitClick)
+            viewModel.stateFlow.test {
+                assertEquals(
+                    initialState.copy(
+                        dialog = createHaveIBeenPwned(
+                            title = R.string.weak_master_password.asText(),
+                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                        ),
                     ),
                     awaitItem(),
                 )
@@ -603,6 +683,15 @@ class CreateAccountViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    private fun createCreateAccountViewModel(
+        createAccountState: CreateAccountState? = null,
+        authRepository: AuthRepository = mockAuthRepository,
+    ): CreateAccountViewModel =
+        CreateAccountViewModel(
+            savedStateHandle = SavedStateHandle(mapOf("state" to createAccountState)),
+            authRepository = authRepository,
+        )
 
     companion object {
         private const val PASSWORD = "longenoughtpassword"

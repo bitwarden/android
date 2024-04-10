@@ -154,12 +154,14 @@ class CreateAccountViewModel @Inject constructor(
             is CaptchaCallbackTokenResult.Success -> {
                 submitRegisterAccountRequest(
                     shouldCheckForDataBreaches = false,
+                    shouldIgnorePasswordStrength = true,
                     captchaToken = result.token,
                 )
             }
         }
     }
 
+    @Suppress("LongMethod", "MaxLineLength")
     private fun handleReceiveRegisterAccountResult(
         action: CreateAccountAction.Internal.ReceiveRegisterResult,
     ) {
@@ -199,7 +201,34 @@ class CreateAccountViewModel @Inject constructor(
 
             RegisterResult.DataBreachFound -> {
                 mutableStateFlow.update {
-                    it.copy(dialog = CreateAccountDialog.HaveIBeenPwned)
+                    it.copy(
+                        dialog = CreateAccountDialog.HaveIBeenPwned(
+                            title = R.string.exposed_master_password.asText(),
+                            message = R.string.password_found_in_a_data_breach_alert_description.asText(),
+                        ),
+                    )
+                }
+            }
+
+            RegisterResult.DataBreachAndWeakPassword -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = CreateAccountDialog.HaveIBeenPwned(
+                            title = R.string.weak_and_exposed_master_password.asText(),
+                            message = R.string.weak_password_identified_and_found_in_a_data_breach_alert_description.asText(),
+                        ),
+                    )
+                }
+            }
+
+            RegisterResult.WeakPassword -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = CreateAccountDialog.HaveIBeenPwned(
+                            title = R.string.weak_master_password.asText(),
+                            message = R.string.weak_password_identified_use_a_strong_password_to_protect_your_account.asText(),
+                        ),
+                    )
                 }
             }
         }
@@ -308,17 +337,23 @@ class CreateAccountViewModel @Inject constructor(
         else -> {
             submitRegisterAccountRequest(
                 shouldCheckForDataBreaches = state.isCheckDataBreachesToggled,
+                shouldIgnorePasswordStrength = false,
                 captchaToken = null,
             )
         }
     }
 
     private fun handleContinueWithBreachedPasswordClick() {
-        submitRegisterAccountRequest(shouldCheckForDataBreaches = false, captchaToken = null)
+        submitRegisterAccountRequest(
+            shouldCheckForDataBreaches = false,
+            shouldIgnorePasswordStrength = true,
+            captchaToken = null,
+        )
     }
 
     private fun submitRegisterAccountRequest(
         shouldCheckForDataBreaches: Boolean,
+        shouldIgnorePasswordStrength: Boolean,
         captchaToken: String?,
     ) {
         mutableStateFlow.update {
@@ -327,6 +362,8 @@ class CreateAccountViewModel @Inject constructor(
         viewModelScope.launch {
             val result = authRepository.register(
                 shouldCheckDataBreaches = shouldCheckForDataBreaches,
+                isMasterPasswordStrong = shouldIgnorePasswordStrength ||
+                    state.isMasterPasswordStrong,
                 email = state.emailInput,
                 masterPassword = state.passwordInput,
                 masterPasswordHint = state.passwordHintInput.ifBlank { null },
@@ -367,6 +404,22 @@ data class CreateAccountState(
                 R.string.your_master_password_cannot_be_recovered_if_you_forget_it_x_characters_minimum
                     .asText(MIN_PASSWORD_LENGTH),
             )
+
+    /**
+     * Whether or not the provided master password is considered strong.
+     */
+    val isMasterPasswordStrong: Boolean
+        get() = when (passwordStrengthState) {
+            PasswordStrengthState.NONE,
+            PasswordStrengthState.WEAK_1,
+            PasswordStrengthState.WEAK_2,
+            PasswordStrengthState.WEAK_3,
+            -> false
+
+            PasswordStrengthState.GOOD,
+            PasswordStrengthState.STRONG,
+            -> true
+        }
 }
 
 /**
@@ -381,9 +434,15 @@ sealed class CreateAccountDialog : Parcelable {
 
     /**
      * Confirm the user wants to continue with potentially breached password.
+     *
+     * @param title The title for the HaveIBeenPwned dialog.
+     * @param message The message for the HaveIBeenPwned dialog.
      */
     @Parcelize
-    data object HaveIBeenPwned : CreateAccountDialog()
+    data class HaveIBeenPwned(
+        val title: Text,
+        val message: Text,
+    ) : CreateAccountDialog()
 
     /**
      * General error dialog with an OK button.

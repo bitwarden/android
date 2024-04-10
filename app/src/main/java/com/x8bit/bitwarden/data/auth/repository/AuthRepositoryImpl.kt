@@ -590,15 +590,23 @@ class AuthRepositoryImpl(
         masterPasswordHint: String?,
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
+        isMasterPasswordStrong: Boolean,
     ): RegisterResult {
         if (shouldCheckDataBreaches) {
             haveIBeenPwnedService
                 .hasPasswordBeenBreached(password = masterPassword)
                 .onSuccess { foundDataBreaches ->
                     if (foundDataBreaches) {
-                        return RegisterResult.DataBreachFound
+                        return if (isMasterPasswordStrong) {
+                            RegisterResult.DataBreachFound
+                        } else {
+                            RegisterResult.DataBreachAndWeakPassword
+                        }
                     }
                 }
+        }
+        if (!isMasterPasswordStrong) {
+            return RegisterResult.WeakPassword
         }
         val kdf = Kdf.Pbkdf2(iterations = DEFAULT_PBKDF2_ITERATIONS.toUInt())
         return authSdkSource

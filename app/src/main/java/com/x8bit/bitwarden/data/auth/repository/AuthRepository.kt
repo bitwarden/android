@@ -212,12 +212,14 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Attempt to register a new account with the given parameters.
      */
+    @Suppress("LongParameterList")
     suspend fun register(
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
+        isMasterPasswordStrong: Boolean,
     ): RegisterResult
 
     /**
