@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.auth.repository.model.NewSsoUserResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
@@ -30,9 +31,10 @@ class TrustedDeviceViewModel @Inject constructor(
 ) : BaseViewModel<TrustedDeviceState, TrustedDeviceEvent, TrustedDeviceAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
+            val isAuthenticated = authRepository.authStateFlow.value is AuthState.Authenticated
             val account = authRepository.userStateFlow.value?.activeAccount
             val trustedDevice = account?.trustedDevice
-            if (trustedDevice == null) authRepository.logout()
+            if (trustedDevice == null || !isAuthenticated) authRepository.logout()
             TrustedDeviceState(
                 dialogState = null,
                 emailAddress = account?.email.orEmpty(),
