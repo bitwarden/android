@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 
 class RootNavViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
-    private val authRepository = mockk<AuthRepository>() {
+    private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
         every { updateLastActiveTime() } just runs
     }
