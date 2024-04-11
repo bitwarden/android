@@ -55,6 +55,8 @@ namespace Bit.App.Pages
                 {
                     return;
                 }
+                
+                _appOptions.HasJustLoggedInOrUnlocked = true;
                 var previousPage = await AppHelpers.ClearPreviousPage();
                 App.MainPage = new TabsPage(_appOptions, previousPage);
             }

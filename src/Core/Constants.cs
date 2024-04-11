@@ -46,6 +46,7 @@ namespace Bit.Core
         public const string PreLoginEmailKey = "preLoginEmailKey";
         public const string ConfigsKey = "configsKey";
         public const string DisplayEuEnvironmentFlag = "display-eu-environment";
+        public const string UnassignedItemsBannerFlag = "unassigned-items-banner";
         public const string RegionEnvironment = "regionEnvironment";
         public const string DuoCallback = "bitwarden://duo-callback";
 
@@ -136,6 +137,7 @@ namespace Bit.Core
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
         public static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
         public static string PendingAdminAuthRequest(string userId) => $"pendingAdminAuthRequest_{userId}";
+        public static string ShouldCheckOrganizationUnassignedItemsKey(string userId) => $"shouldCheckOrganizationUnassignedItems_{userId}";
         [Obsolete]
         public static string KeyKey(string userId) => $"key_{userId}";
         [Obsolete]

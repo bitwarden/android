@@ -46,6 +46,7 @@ namespace Bit.Core.Utilities
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
             var configService = new ConfigService(apiService, stateService, logger);
+            var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,
                 fileUploadService, storageService, i18nService, () => searchService, configService, clearCipherCacheKey,
                 allClearCipherCacheKeys);
@@ -87,7 +88,6 @@ namespace Bit.Core.Utilities
                 keyConnectorService, passwordGenerationService, policyService, deviceTrustCryptoService, passwordResetEnrollmentService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
-            var environmentService = new EnvironmentService(apiService, stateService, conditionedRunner);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
 
