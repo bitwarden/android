@@ -50,6 +50,12 @@ class AccountSecurityViewModel @Inject constructor(
             fingerprintPhrase = "".asText(), // This will be filled in dynamically
             isApproveLoginRequestsEnabled = settingsRepository.isApprovePasswordlessLoginsEnabled,
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled,
+            isUnlockWithPasswordEnabled = authRepository
+                .userStateFlow
+                .value
+                ?.activeAccount
+                ?.trustedDevice
+                ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
@@ -357,6 +363,7 @@ data class AccountSecurityState(
     val fingerprintPhrase: Text,
     val isApproveLoginRequestsEnabled: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
+    val isUnlockWithPasswordEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
     val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,

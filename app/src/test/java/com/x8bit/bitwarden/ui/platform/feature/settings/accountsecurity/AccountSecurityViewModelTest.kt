@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -28,6 +29,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
@@ -40,7 +42,10 @@ import org.junit.jupiter.api.Test
 class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
-    private val authRepository: AuthRepository = mockk(relaxed = true)
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(DEFAULT_USER_STATE)
+    private val authRepository: AuthRepository = mockk(relaxed = true) {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
     private val settingsRepository: SettingsRepository = mockk {
         every { isUnlockWithBiometricsEnabled } returns false
@@ -559,9 +564,31 @@ private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     fingerprintPhrase = FINGERPRINT.asText(),
     isApproveLoginRequestsEnabled = false,
     isUnlockWithBiometricsEnabled = false,
+    isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
     vaultTimeoutPolicyMinutes = null,
     vaultTimeoutPolicyAction = null,
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "Active User",
+            email = "active@bitwarden.com",
+            avatarColorHex = "#aa00aa",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = null,
+        ),
+    ),
 )
