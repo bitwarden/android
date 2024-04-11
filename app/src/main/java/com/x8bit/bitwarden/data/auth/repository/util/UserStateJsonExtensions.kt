@@ -120,7 +120,7 @@ fun UserStateJson.toUserState(
                         .toEnvironmentUrlsOrDefault(),
                     isPremium = profile.hasPremium == true,
                     isLoggedIn = isLoggedInProvider(userId),
-                    isVaultUnlocked = vaultUnlocked && !needsPasswordReset,
+                    isVaultUnlocked = vaultUnlocked,
                     needsPasswordReset = needsPasswordReset,
                     organizations = userOrganizationsList
                         .find { it.userId == userId }
