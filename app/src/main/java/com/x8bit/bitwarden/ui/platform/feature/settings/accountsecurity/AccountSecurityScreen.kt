@@ -206,6 +206,7 @@ fun AccountSecurityScreen(
                     .padding(horizontal = 16.dp),
             )
             UnlockWithPinRow(
+                isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                 isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
                 onUnlockWithPinToggleAction = remember(viewModel) {
                     { viewModel.trySendAction(it) }
@@ -400,6 +401,7 @@ private fun UnlockWithBiometricsRow(
 @Suppress("LongMethod")
 @Composable
 private fun UnlockWithPinRow(
+    isUnlockWithPasswordEnabled: Boolean,
     isUnlockWithPinEnabled: Boolean,
     onUnlockWithPinToggleAction: (AccountSecurityAction.UnlockWithPinToggle) -> Unit,
     modifier: Modifier = Modifier,
@@ -440,10 +442,19 @@ private fun UnlockWithPinRow(
                 onSubmitClick = {
                     if (pin.isNotEmpty()) {
                         shouldShowPinInputDialog = false
-                        shouldShowPinConfirmationDialog = true
-                        onUnlockWithPinToggleAction(
-                            AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
-                        )
+                        if (isUnlockWithPasswordEnabled) {
+                            shouldShowPinConfirmationDialog = true
+                            onUnlockWithPinToggleAction(
+                                AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
+                            )
+                        } else {
+                            onUnlockWithPinToggleAction(
+                                AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                                    pin = pin,
+                                    shouldRequireMasterPasswordOnRestart = false,
+                                ),
+                            )
+                        }
                     } else {
                         shouldShowPinInputDialog = false
                         onUnlockWithPinToggleAction(

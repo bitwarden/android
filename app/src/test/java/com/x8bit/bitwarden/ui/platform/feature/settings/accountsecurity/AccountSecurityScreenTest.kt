@@ -517,7 +517,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `PIN input dialog Submit click with non-empty pin should show a confirmation dialog and send UnlockWithPinToggle PendingEnabled`() {
+    fun `PIN input dialog Submit click with non-empty pin and isUnlockWithPasswordEnabled true should show a confirmation dialog and send UnlockWithPinToggle PendingEnabled`() {
         mutableStateFlow.update {
             it.copy(isUnlockWithPinEnabled = false)
         }
@@ -556,6 +556,41 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
 
         verify { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle.PendingEnabled) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `PIN input dialog Submit click with non-empty pin and isUnlockWithPasswordEnabled false should show a confirmation dialog and send UnlockWithPinToggle Enabled`() {
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithPinEnabled = false,
+                isUnlockWithPasswordEnabled = false,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Unlock with PIN code")
+            .performScrollTo()
+            .performClick()
+
+        composeTestRule
+            .onAllNodesWithText("PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("1234")
+        composeTestRule
+            .onAllNodesWithText("Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        composeTestRule.assertNoDialogExists()
+
+        verify {
+            viewModel.trySendAction(
+                AccountSecurityAction.UnlockWithPinToggle.Enabled(
+                    pin = "1234",
+                    shouldRequireMasterPasswordOnRestart = false,
+                ),
+            )
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -1482,6 +1517,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             fingerprintPhrase = "fingerprint-placeholder".asText(),
             isApproveLoginRequestsEnabled = false,
             isUnlockWithBiometricsEnabled = false,
+            isUnlockWithPasswordEnabled = true,
             isUnlockWithPinEnabled = false,
             vaultTimeout = VaultTimeout.ThirtyMinutes,
             vaultTimeoutAction = VaultTimeoutAction.LOCK,

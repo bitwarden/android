@@ -42,7 +42,9 @@ data class UserState(
      * @property isVaultUnlocked Whether or not the user's vault is currently unlocked.
      * @property needsPasswordReset If the user needs to reset their password.
      * @property needsMasterPassword Indicates whether the user needs to create a password (e.g.
-     * they logged in using SSO and don't yet have one).
+     * they logged in using SSO and don't yet have one). NOTE: This should **not** be used to
+     * determine whether a user has a master password. There are cases in which a user can both
+     * not have a password but still not need one, such as TDE.
      * @property organizations List of [Organization]s the user is associated with, if any.
      * @property isBiometricsEnabled Indicates that the biometrics mechanism for unlocking the
      * user's vault is enabled.
