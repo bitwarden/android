@@ -25,12 +25,15 @@ namespace Bit.App.Platforms.Android.Autofill
             var authenticator = Bit.Core.Utilities.ServiceContainer.Resolve<IFido2AuthenticatorService>();
             var credentials = await authenticator.SilentCredentialDiscoveryAsync(requestOptions.RpId);
 
-            passkeyEntries = credentials.Select(credential => MapCredential(credential, option, context, hasVaultBeenUnlockedInThisTransaction) as CredentialEntry).ToList();
+            // We need to change the request code for every pending intent on mapping the credential so the extras are not overriten by the last
+            // credential entry created.
+            int requestCodeAddition = 0;
+            passkeyEntries = credentials.Select(credential => MapCredential(credential, option, context, hasVaultBeenUnlockedInThisTransaction, Bit.Droid.Autofill.CredentialProviderService.UniqueGetRequestCode + requestCodeAddition++) as CredentialEntry).ToList();
 
             return passkeyEntries;
         }
 
-        private static PublicKeyCredentialEntry MapCredential(Fido2AuthenticatorDiscoverableCredentialMetadata credential, BeginGetPublicKeyCredentialOption option, Context context, bool hasVaultBeenUnlockedInThisTransaction)
+        private static PublicKeyCredentialEntry MapCredential(Fido2AuthenticatorDiscoverableCredentialMetadata credential, BeginGetPublicKeyCredentialOption option, Context context, bool hasVaultBeenUnlockedInThisTransaction, int requestCode)
         {
             var credDataBundle = new Bundle();
             credDataBundle.PutByteArray(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialIdIntentExtra, credential.Id);
@@ -40,7 +43,7 @@ namespace Bit.App.Platforms.Android.Autofill
             intent.PutExtra(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialDataIntentExtra, credDataBundle);
             intent.PutExtra(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialProviderCipherId, credential.CipherId);
             intent.PutExtra(Bit.Core.Utilities.Fido2.CredentialProviderConstants.CredentialHasVaultBeenUnlockedInThisTransactionExtra, hasVaultBeenUnlockedInThisTransaction);
-            var pendingIntent = PendingIntent.GetActivity(context, Bit.Droid.Autofill.CredentialProviderService.UniqueGetRequestCode, intent,
+            var pendingIntent = PendingIntent.GetActivity(context, requestCode, intent,
                 PendingIntentFlags.Mutable | PendingIntentFlags.UpdateCurrent);
 
             return new PublicKeyCredentialEntry.Builder(
