@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentReposito
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -66,6 +67,60 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `on init should logout when has no master password, no pin, and no biometrics`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(
+                    vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                    isBiometricsEnabled = false,
+                    trustedDevice = TRUSTED_DEVICE,
+                ),
+            ),
+        )
+        createViewModel()
+
+        verify(exactly = 1) {
+            authRepository.logout()
+        }
+    }
+
+    @Test
+    fun `on init should not logout when has no master password and no pin, with biometrics`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(
+                    vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                    isBiometricsEnabled = true,
+                    trustedDevice = TRUSTED_DEVICE,
+                ),
+            ),
+        )
+        createViewModel()
+
+        verify(exactly = 0) {
+            authRepository.logout()
+        }
+    }
+
+    @Test
+    fun `on init should not logout when has no master password and no biometrics, with pin`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+            accounts = listOf(
+                DEFAULT_ACCOUNT.copy(
+                    vaultUnlockType = VaultUnlockType.PIN,
+                    isBiometricsEnabled = false,
+                    trustedDevice = TRUSTED_DEVICE,
+                ),
+            ),
+        )
+        createViewModel()
+
+        verify(exactly = 0) {
+            authRepository.logout()
+        }
     }
 
     @Test
@@ -714,12 +769,16 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     private fun createViewModel(
-        state: VaultUnlockState? = DEFAULT_STATE,
+        state: VaultUnlockState? = null,
+        unlockType: UnlockType = UnlockType.STANDARD,
         environmentRepo: EnvironmentRepository = environmentRepository,
         vaultRepo: VaultRepository = vaultRepository,
         biometricsEncryptionManager: BiometricsEncryptionManager = encryptionManager,
     ): VaultUnlockViewModel = VaultUnlockViewModel(
-        savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        savedStateHandle = SavedStateHandle().apply {
+            set("state", state)
+            set("unlock_type", unlockType)
+        },
         authRepository = authRepository,
         vaultRepo = vaultRepo,
         environmentRepo = environmentRepo,
@@ -742,13 +801,23 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     ),
     avatarColorString = "#aa00aa",
     email = "active@bitwarden.com",
+    hideInput = false,
     initials = "AU",
     dialog = null,
     environmentUrl = Environment.Us.label,
     input = "",
     isBiometricsValid = true,
     isBiometricEnabled = false,
+    showAccountMenu = true,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+)
+
+private val TRUSTED_DEVICE: UserState.TrustedDevice = UserState.TrustedDevice(
+    isDeviceTrusted = false,
+    hasMasterPassword = false,
+    hasAdminApproval = false,
+    hasLoginApprovingDevice = false,
+    hasResetPasswordPermission = false,
 )
 
 private val DEFAULT_ACCOUNT = UserState.Account(

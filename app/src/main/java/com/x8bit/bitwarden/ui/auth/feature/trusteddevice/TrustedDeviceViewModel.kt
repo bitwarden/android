@@ -129,7 +129,8 @@ class TrustedDeviceViewModel @Inject constructor(
     }
 
     private fun handleApproveWithPasswordClick() {
-        sendEvent(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()))
+        authRepository.shouldTrustDevice = state.isRemembered
+        sendEvent(TrustedDeviceEvent.NavigateToLockScreen(state.emailAddress))
     }
 
     private fun handleNotYouClick() {
@@ -189,6 +190,13 @@ sealed class TrustedDeviceEvent {
      * Navigates to the approve with device screen.
      */
     data class NavigateToApproveWithDevice(
+        val email: String,
+    ) : TrustedDeviceEvent()
+
+    /**
+     * Navigates to the lock screen.
+     */
+    data class NavigateToLockScreen(
         val email: String,
     ) : TrustedDeviceEvent()
 

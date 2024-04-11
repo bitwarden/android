@@ -77,7 +77,7 @@ class RootNavScreenTest : BaseComposeTest() {
         rootNavStateFlow.value = RootNavState.VaultLocked
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
-                route = "vault_unlock",
+                route = "vault_unlock/STANDARD",
                 navOptions = expectedNavOptions,
             )
         }

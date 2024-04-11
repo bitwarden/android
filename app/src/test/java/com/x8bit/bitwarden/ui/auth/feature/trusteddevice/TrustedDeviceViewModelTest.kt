@@ -31,6 +31,7 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     private val authRepository: AuthRepository = mockk {
         every { authStateFlow } returns mutableAuthStateFlow
         every { userStateFlow } returns mutableUserStateFlow
+        every { shouldTrustDevice = any() } just runs
         every { logout() } just runs
     }
     private val environmentRepo: FakeEnvironmentRepository = FakeEnvironmentRepository()
@@ -196,12 +197,15 @@ class TrustedDeviceViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on ApproveWithPasswordClick emits ShowToast`() = runTest {
+    fun `on ApproveWithPasswordClick emits NavigateToLockScreen`() = runTest {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(TrustedDeviceAction.ApproveWithPasswordClick)
-            assertEquals(TrustedDeviceEvent.ShowToast("Not yet implemented".asText()), awaitItem())
+            assertEquals(TrustedDeviceEvent.NavigateToLockScreen(email = EMAIL), awaitItem())
+        }
+        verify(exactly = 1) {
+            authRepository.shouldTrustDevice = true
         }
     }
 

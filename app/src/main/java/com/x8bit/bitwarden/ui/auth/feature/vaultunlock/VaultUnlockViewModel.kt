@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -45,22 +46,33 @@ class VaultUnlockViewModel @Inject constructor(
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
+        val trustedDevice = userState.activeAccount.trustedDevice
         val accountSummaries = userState.toAccountSummaries()
         val activeAccountSummary = userState.toActiveAccountSummary()
         val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
             userId = userState.activeUserId,
         )
+        val vaultUnlockType = userState.activeAccount.vaultUnlockType
+        val hasNoMasterPassword = trustedDevice?.hasMasterPassword == false
+        val hideInput = hasNoMasterPassword && vaultUnlockType == VaultUnlockType.MASTER_PASSWORD
+        val isBiometricsEnabled = userState.activeAccount.isBiometricsEnabled
+        if (hasNoMasterPassword && vaultUnlockType != VaultUnlockType.PIN && !isBiometricsEnabled) {
+            // There is no valid way to unlock this app.
+            authRepository.logout()
+        }
         VaultUnlockState(
             accountSummaries = accountSummaries,
             avatarColorString = activeAccountSummary.avatarColorHex,
+            hideInput = hideInput,
             initials = activeAccountSummary.initials,
             email = activeAccountSummary.email,
             dialog = null,
             environmentUrl = environmentRepo.environment.label,
             input = "",
-            isBiometricEnabled = userState.activeAccount.isBiometricsEnabled,
+            isBiometricEnabled = isBiometricsEnabled,
             isBiometricsValid = isBiometricsValid,
-            vaultUnlockType = userState.activeAccount.vaultUnlockType,
+            showAccountMenu = VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD,
+            vaultUnlockType = vaultUnlockType,
         )
     },
 ) {
@@ -272,6 +284,7 @@ class VaultUnlockViewModel @Inject constructor(
 data class VaultUnlockState(
     val accountSummaries: List<AccountSummary>,
     private val avatarColorString: String,
+    val hideInput: Boolean,
     val initials: String,
     val email: String,
     val environmentUrl: String,
@@ -279,6 +292,7 @@ data class VaultUnlockState(
     val input: String,
     val isBiometricsValid: Boolean,
     val isBiometricEnabled: Boolean,
+    val showAccountMenu: Boolean,
     val vaultUnlockType: VaultUnlockType,
 ) : Parcelable {
 
