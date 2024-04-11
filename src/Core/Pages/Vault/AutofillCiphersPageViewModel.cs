@@ -52,7 +52,11 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
 
-            var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)).ToList();
+            var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)
+            {
+                UsePasskeyIconAsPlaceholderFallback = _isAndroidFido2CredentialCreation
+            }).ToList();
+
             var hasMatching = matching?.Any() ?? false;
             if (matching?.Any() ?? false)
             {

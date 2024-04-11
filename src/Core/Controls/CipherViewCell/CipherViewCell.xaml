@@ -50,7 +50,7 @@
         HorizontalOptions="Center"
         VerticalOptions="Center"
         StyleClass="list-icon, list-icon-platform"
-        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        Text="{Binding ., Converter={StaticResource iconGlyphConverter}}"
         ShouldUpdateFontSizeDynamicallyForAccesibility="True"
         AutomationProperties.IsInAccessibleTree="False"
         AutomationId="CipherTypeIcon" />

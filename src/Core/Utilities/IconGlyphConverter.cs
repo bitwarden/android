@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Bit.App.Pages;
 using Bit.Core.Models.View;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
@@ -10,6 +11,11 @@ namespace Bit.App.Utilities
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is CipherItemViewModel cipherItemViewModel)
+            {
+                return cipherItemViewModel.Cipher?.GetIcon(cipherItemViewModel.UsePasskeyIconAsPlaceholderFallback);
+            }
+
             if (value is CipherView cipher)
             {
                 return cipher.GetIcon();
