@@ -48,6 +48,7 @@ abstract class BaseViewModel<S, E, A>(
     /**
      * A [SendChannel] for sending actions to the ViewModel for processing.
      */
+    @Suppress("MemberVisibilityCanBePrivate")
     val actionChannel: SendChannel<A> = internalActionChannel
 
     init {

@@ -60,7 +60,6 @@ fun ItemListingScreen(
     onNavigateBack: () -> Unit,
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
-    onNavigateToItemScreen: (id: String) -> Unit,
     onNavigateToEditItemScreen: (id: String) -> Unit,
     onNavigateToSyncWithBitwardenScreen: () -> Unit,
     onNavigateToImportScreen: () -> Unit,
@@ -76,7 +75,6 @@ fun ItemListingScreen(
             ItemListingEvent.DismissPullToRefresh -> pullToRefreshState.endRefresh()
             ItemListingEvent.NavigateToQrCodeScanner -> onNavigateToQrCodeScanner()
             ItemListingEvent.NavigateToManualAddItem -> onNavigateToManualKeyEntry()
-            is ItemListingEvent.NavigateToItem -> onNavigateToItemScreen(event.id)
             is ItemListingEvent.ShowToast -> {
                 Toast
                     .makeText(
@@ -167,7 +165,7 @@ fun ItemListingScreen(
                                 authCode = it.authCode,
                                 onCopyClick = { /*TODO*/ },
                                 onItemClick = {
-                                    onNavigateToItemScreen(it.id)
+                                    onNavigateToEditItemScreen(it.id)
                                 },
                             )
                         }

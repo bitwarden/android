@@ -6,8 +6,8 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.editItemDestination
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.navigateToEditItem
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.itemDestination
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.navigateToItem
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.editItemDestination
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.navigateToEditItem
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.manualCodeEntryDestination
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.navigateToQrCodeScanScreen
@@ -28,17 +28,12 @@ fun NavGraphBuilder.itemListingGraph(
         itemListingDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToQrCodeScanner = { navController.navigateToQrCodeScanScreen() },
-            onNavigateToItemScreen = { navController.navigateToItem(itemId = it) },
-            onNavigateToEditItemScreen = { navController.navigateToEditItem(itemId = it) },
             onNavigateToManualKeyEntry = { navController.navigateToManualCodeEntryScreen() },
+            onNavigateToEditItemScreen = { navController.navigateToEditItem(itemId = it) },
             onNavigateToSyncWithBitwardenScreen = {
                 /*navController.navigateToSyncWithBitwardenScreen()*/
             },
             onNavigateToImportScreen = { /*navController.navigateToImportScreen()*/ }
-        )
-        itemDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToEditItem = { navController.navigateToEditItem(itemId = it) }
         )
         editItemDestination(
             onNavigateBack = { navController.popBackStack() },

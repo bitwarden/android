@@ -80,7 +80,7 @@ class ItemListingViewModel @Inject constructor(
             }
 
             is ItemListingAction.ItemClick -> {
-                sendEvent(ItemListingEvent.NavigateToItem(action.id))
+                sendEvent(ItemListingEvent.NavigateToEditItem(action.id))
             }
 
             ItemListingAction.DialogDismiss -> {
@@ -328,7 +328,6 @@ private const val DIGITS = "digits"
 private const val PERIOD = "period"
 private const val SECRET = "secret"
 private const val ISSUER = "issuer"
-private const val TOTP_CODE_PREFIX = "otpauth://totp"
 
 /**
  * Represents the state for displaying the item listing.
@@ -424,13 +423,6 @@ sealed class ItemListingEvent {
      * Navigate to the Manual Add Item screen.
      */
     data object NavigateToManualAddItem : ItemListingEvent()
-
-    /**
-     * Navigate to the View Item screen.
-     */
-    data class NavigateToItem(
-        val id: String,
-    ) : ItemListingEvent()
 
     /**
      * Navigate to the Edit Item screen.
