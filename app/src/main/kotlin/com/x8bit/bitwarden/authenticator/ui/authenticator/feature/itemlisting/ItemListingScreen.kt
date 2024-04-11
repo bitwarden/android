@@ -97,7 +97,7 @@ fun ItemListingScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.bitwarden_authenticator),
+                title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
             )

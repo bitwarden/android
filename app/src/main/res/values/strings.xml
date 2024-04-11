@@ -59,4 +59,5 @@
     <string name="item_saved">Item saved</string>
     <string name="information">Information</string>
     <string name="otp_authentication">OTP Authentication</string>
+    <string name="verification_codes">Verification codes</string>
 </resources>
