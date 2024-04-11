@@ -382,6 +382,32 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
         }
     }
+
+    @Test
+    fun `account button should update according to state`() {
+        mutableStateFlow.update { it.copy(showAccountMenu = true) }
+        composeTestRule.onNodeWithText("AU").assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(showAccountMenu = false) }
+        composeTestRule.onNodeWithText("AU").assertDoesNotExist()
+    }
+
+    @Test
+    fun `input field and unlock button should update according to state`() {
+        mutableStateFlow.update { it.copy(hideInput = false) }
+        composeTestRule.onNodeWithText("Master password").assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText("Your vault is locked. Verify your master password to continue.")
+            .assertIsDisplayed()
+        composeTestRule.onNodeWithText("Unlock").assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(hideInput = true) }
+        composeTestRule.onNodeWithText("Master password").assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Your vault is locked. Verify your master password to continue.")
+            .assertDoesNotExist()
+        composeTestRule.onNodeWithText("Unlock").assertDoesNotExist()
+    }
 }
 
 private const val DEFAULT_ENVIRONMENT_URL: String = "vault.bitwarden.com"
@@ -419,9 +445,11 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     dialog = null,
     email = "bit@bitwarden.com",
     environmentUrl = DEFAULT_ENVIRONMENT_URL,
+    hideInput = false,
     initials = "AU",
     input = "",
     isBiometricsValid = true,
     isBiometricEnabled = true,
+    showAccountMenu = true,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )

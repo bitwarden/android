@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDevice
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToTdeVaultUnlock
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.tdeVaultUnlockDestination
 
 const val TRUSTED_DEVICE_GRAPH_ROUTE: String = "trusted_device_graph"
 
@@ -43,7 +45,11 @@ fun NavGraphBuilder.trustedDeviceGraph(navController: NavHostController) {
                     loginType = LoginWithDeviceType.SSO_OTHER_DEVICE,
                 )
             },
+            onNavigateToLock = {
+                navController.navigateToTdeVaultUnlock()
+            },
         )
+        tdeVaultUnlockDestination()
         twoFactorLoginDestination(
             onNavigateBack = { navController.popBackStack() },
         )

@@ -16,6 +16,7 @@ const val TRUSTED_DEVICE_ROUTE: String = "trusted_device"
 fun NavGraphBuilder.trustedDeviceDestination(
     onNavigateToAdminApproval: (emailAddress: String) -> Unit,
     onNavigateToLoginWithOtherDevice: (emailAddress: String) -> Unit,
+    onNavigateToLock: (emailAddress: String) -> Unit,
 ) {
     composableWithSlideTransitions(
         route = TRUSTED_DEVICE_ROUTE,
@@ -23,6 +24,7 @@ fun NavGraphBuilder.trustedDeviceDestination(
         TrustedDeviceScreen(
             onNavigateToAdminApproval = onNavigateToAdminApproval,
             onNavigateToLoginWithOtherDevice = onNavigateToLoginWithOtherDevice,
+            onNavigateToLock = onNavigateToLock,
         )
     }
 }

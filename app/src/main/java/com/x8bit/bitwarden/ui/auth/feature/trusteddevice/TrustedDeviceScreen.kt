@@ -52,6 +52,7 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 fun TrustedDeviceScreen(
     onNavigateToAdminApproval: (emailAddress: String) -> Unit,
     onNavigateToLoginWithOtherDevice: (emailAddress: String) -> Unit,
+    onNavigateToLock: (emailAddress: String) -> Unit,
     viewModel: TrustedDeviceViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -66,6 +67,10 @@ fun TrustedDeviceScreen(
 
             is TrustedDeviceEvent.NavigateToApproveWithDevice -> {
                 onNavigateToLoginWithOtherDevice(event.email)
+            }
+
+            is TrustedDeviceEvent.NavigateToLockScreen -> {
+                onNavigateToLock(event.email)
             }
 
             is TrustedDeviceEvent.ShowToast -> {

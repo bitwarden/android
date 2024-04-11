@@ -373,13 +373,15 @@ class AuthRepositoryImpl(
                             userId = userId,
                             privateKey = keys.privateKey,
                         )
+                        // Order matters here, we need to make sure that the vault is unlocked
+                        // before we trust the device, to avoid state-base navigation issues.
+                        vaultRepository.syncVaultState(userId = userId)
                         keys.deviceKey?.let { trustDeviceResponse ->
                             trustedDeviceManager.trustThisDevice(
                                 userId = userId,
                                 trustDeviceResponse = trustDeviceResponse,
                             )
                         }
-                        vaultRepository.syncVaultState(userId = userId)
                     }
             }
             .fold(

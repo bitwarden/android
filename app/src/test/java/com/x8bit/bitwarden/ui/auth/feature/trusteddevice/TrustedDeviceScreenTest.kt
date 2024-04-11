@@ -26,6 +26,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
 
     private var onNavigateToAdminApprovalEmail: String? = null
     private var onNavigateToLoginWithOtherDeviceEmail: String? = null
+    private var onNavigateToLockEmail: String? = null
 
     private val mutableEventFlow = bufferedMutableSharedFlow<TrustedDeviceEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -41,6 +42,7 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 onNavigateToAdminApproval = { onNavigateToAdminApprovalEmail = it },
                 onNavigateToLoginWithOtherDevice = { onNavigateToLoginWithOtherDeviceEmail = it },
+                onNavigateToLock = { onNavigateToLockEmail = it },
             )
         }
     }
@@ -57,6 +59,13 @@ class TrustedDeviceScreenTest : BaseComposeTest() {
         val email = "test@bitwarden.com"
         mutableEventFlow.tryEmit(TrustedDeviceEvent.NavigateToApproveWithDevice(email))
         assertEquals(onNavigateToLoginWithOtherDeviceEmail, email)
+    }
+
+    @Test
+    fun `on NavigateToLockScreen event should invoke NavigateToLockScreen`() {
+        val email = "test@bitwarden.com"
+        mutableEventFlow.tryEmit(TrustedDeviceEvent.NavigateToLockScreen(email))
+        assertEquals(onNavigateToLockEmail, email)
     }
 
     @Test
