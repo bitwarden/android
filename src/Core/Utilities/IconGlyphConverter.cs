@@ -13,7 +13,7 @@ namespace Bit.App.Utilities
         {
             if (value is CipherItemViewModel cipherItemViewModel)
             {
-                return cipherItemViewModel.Cipher.GetIcon(cipherItemViewModel.UsePasskeyIconAsPlaceholderFallback);
+                return cipherItemViewModel.Cipher?.GetIcon(cipherItemViewModel.UsePasskeyIconAsPlaceholderFallback);
             }
 
             if (value is CipherView cipher)
