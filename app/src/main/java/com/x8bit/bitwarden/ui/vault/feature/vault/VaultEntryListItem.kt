@@ -17,6 +17,8 @@ import kotlinx.collections.immutable.toImmutableList
 /**
  * A Composable function that displays a row item for different types of vault entries.
  *
+ * @param startIcon The [IconData] object used to draw the icon at the start of the item.
+ * @param startIconTestTag The test tag for the [startIcon].
  * @param label The primary text label to display for the item.
  * @param supportingLabel An optional secondary text label to display beneath the primary label.
  * @param onClick The lambda to be invoked when the item is clicked.
@@ -28,6 +30,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun VaultEntryListItem(
     startIcon: IconData,
+    startIconTestTag: String,
     label: String,
     onClick: () -> Unit,
     overflowOptions: List<ListingItemOverflowAction.VaultAction>,
@@ -41,6 +44,7 @@ fun VaultEntryListItem(
         label = label,
         supportingLabel = supportingLabel,
         startIcon = startIcon,
+        startIconTestTag = startIconTestTag,
         trailingLabelIcons = trailingLabelIcons,
         onClick = onClick,
         selectionDataList = overflowOptions
@@ -60,6 +64,7 @@ private fun VaultEntryListItem_preview() {
     BitwardenTheme {
         VaultEntryListItem(
             startIcon = IconData.Local(R.drawable.ic_login_item),
+            startIconTestTag = "Test Tag",
             label = "Example Login",
             supportingLabel = "Username",
             onClick = {},

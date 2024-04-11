@@ -881,6 +881,7 @@ data class VaultItemListingState(
      * @property subtitle subtitle of the item (nullable).
      * @property subtitleTestTag The test tag associated with the [subtitle].
      * @property iconData data for the icon to be displayed (nullable).
+     * @property iconTestTag The test tag for the icon (nullable).
      * @property overflowOptions list of options for the item's overflow menu.
      * @property optionsTestTag The test tag associated with the [overflowOptions].
      * @property isAutofill whether or not this screen is part of an autofill flow.
@@ -894,6 +895,7 @@ data class VaultItemListingState(
         val subtitle: String?,
         val subtitleTestTag: String,
         val iconData: IconData,
+        val iconTestTag: String?,
         val extraIconList: List<IconRes>,
         val overflowOptions: List<ListingItemOverflowAction>,
         val optionsTestTag: String,

@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -33,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param onClick A lambda function that is invoked when the group is clicked.
  * @param modifier The [Modifier] to be applied to the [Row] composable that holds the list item.
  * @param showDivider Indicates whether the divider should be shown or not.
+ * @param startIconTestTag The optional test tag for the [startIcon].
  */
 @Composable
 fun BitwardenGroupItem(
@@ -42,6 +45,7 @@ fun BitwardenGroupItem(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     showDivider: Boolean = true,
+    startIconTestTag: String? = null,
 ) {
     Row(
         modifier = Modifier
@@ -67,7 +71,9 @@ fun BitwardenGroupItem(
             painter = startIcon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .semantics { startIconTestTag?.let { testTag = it } }
+                .size(24.dp),
         )
 
         Text(
@@ -102,6 +108,7 @@ private fun BitwardenGroupItem_preview() {
             label = "Sample Label",
             supportingLabel = "5",
             startIcon = painterResource(id = R.drawable.ic_send_text),
+            startIconTestTag = "Test Tag",
             onClick = {},
         )
     }

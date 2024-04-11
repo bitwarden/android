@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
@@ -281,12 +283,21 @@ private fun CipherView.toDisplayItem(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
+        iconTestTag = toIconTestTag(),
         extraIconList = toLabelIcons(),
         overflowOptions = toOverflowActions(),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
+
+private fun CipherView.toIconTestTag(): String =
+    when (type) {
+        CipherType.LOGIN -> "LoginCipherIcon"
+        CipherType.SECURE_NOTE -> "SecureNoteCipherIcon"
+        CipherType.CARD -> "CardCipherIcon"
+        CipherType.IDENTITY -> "IdentityCipherIcon"
+    }
 
 private fun CipherView.toIconData(
     baseIconUrl: String,
@@ -322,6 +333,7 @@ private fun SendView.toDisplayItem(
                 SendType.FILE -> R.drawable.ic_send_file
             },
         ),
+        iconTestTag = null,
         extraIconList = toLabelIcons(clock = clock),
         overflowOptions = toOverflowActions(baseWebSendUrl = baseWebSendUrl),
         optionsTestTag = "SendOptionsButton",
