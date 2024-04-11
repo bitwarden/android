@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.model
 
 import android.os.Parcelable
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingAction
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
 import kotlinx.parcelize.Parcelize
 
@@ -24,7 +24,8 @@ data class TotpCodeItemData(
     val verificationCode: Text,
     val totpCode: Text,
     val type: AuthenticatorItemType,
-    val username: Text?,
-    val issuer: Text,
-    val alertThresholdSeconds: Int
+    val accountName: Text,
+    val issuer: Text?,
+    val alertThresholdSeconds: Int,
+    val algorithm: AuthenticatorItemAlgorithm,
 ) : Parcelable

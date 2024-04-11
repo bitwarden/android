@@ -1,10 +1,16 @@
 package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
+import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.authenticator.R
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toViewState
@@ -18,7 +24,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -26,7 +34,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ItemListingViewModel @Inject constructor(
-    authenticatorRepository: AuthenticatorRepository,
+    private val authenticatorRepository: AuthenticatorRepository,
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
@@ -47,6 +55,12 @@ class ItemListingViewModel @Inject constructor(
         authenticatorRepository
             .getAuthCodesFlow()
             .map { ItemListingAction.Internal.AuthCodesUpdated(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        authenticatorRepository
+            .totpCodeFlow
+            .map { ItemListingAction.Internal.TotpCodeReceive(totpResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -87,6 +101,73 @@ class ItemListingViewModel @Inject constructor(
 
             is ItemListingAction.Internal.AlertThresholdSecondsReceive -> {
                 handleAlertThresholdSecondsReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.TotpCodeReceive -> {
+                handleTotpCodeReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.CreateItemResultReceive -> {
+                handleCreateItemResultReceive(internalAction)
+            }
+        }
+    }
+
+    private fun handleCreateItemResultReceive(
+        action: ItemListingAction.Internal.CreateItemResultReceive,
+    ) {
+        mutableStateFlow.update { it.copy(dialog = null) }
+
+        when (action.result) {
+            CreateItemResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = ItemListingState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.authenticator_key_read_error.asText(),
+                        )
+                    )
+                }
+            }
+
+            CreateItemResult.Success -> {
+                sendEvent(
+                    event = ItemListingEvent.ShowToast(
+                        message = R.string.authenticator_key_added.asText(),
+                    ),
+                )
+            }
+        }
+    }
+
+    private fun handleTotpCodeReceive(action: ItemListingAction.Internal.TotpCodeReceive) {
+        mutableStateFlow.update { it.copy(viewState = ItemListingState.ViewState.Loading) }
+
+        viewModelScope.launch {
+            when (val totpResult = action.totpResult) {
+                TotpCodeResult.CodeScanningError -> {
+                    sendAction(
+                        action = ItemListingAction.Internal.CreateItemResultReceive(
+                            result = CreateItemResult.Error,
+                        ),
+                    )
+                }
+
+                is TotpCodeResult.Success -> {
+
+                    val item = totpResult.code.toAuthenticatorEntityOrNull()
+                        ?: run {
+                            sendAction(
+                                action = ItemListingAction.Internal.CreateItemResultReceive(
+                                    result = CreateItemResult.Error,
+                                ),
+                            )
+                            return@launch
+                        }
+
+                    val result = authenticatorRepository.createItem(item)
+                    sendAction(ItemListingAction.Internal.CreateItemResultReceive(result))
+                }
             }
         }
     }
@@ -200,7 +281,54 @@ class ItemListingViewModel @Inject constructor(
             )
         }
     }
+
+    private fun String.toAuthenticatorEntityOrNull(): AuthenticatorItemEntity? {
+        try {
+            val uri = Uri.parse(this)
+
+            val type = AuthenticatorItemType
+                .entries
+                .find { it.name.lowercase() == uri.host }
+                ?: return null
+
+            val label = uri.pathSegments.firstOrNull() ?: return null
+
+            val key = uri.getQueryParameter(SECRET) ?: return null
+
+            val algorithm = AuthenticatorItemAlgorithm
+                .entries
+                .find { it.name == uri.getQueryParameter(ALGORITHM) }
+                ?: AuthenticatorItemAlgorithm.SHA1
+
+            val digits = uri.getQueryParameter(DIGITS)?.toInt() ?: 6
+
+            val issuer = uri.getQueryParameter(ISSUER)
+
+            val period = uri.getQueryParameter(PERIOD)?.toInt() ?: 30
+
+            return AuthenticatorItemEntity(
+                id = UUID.randomUUID().toString(),
+                key = key,
+                accountName = label,
+                type = type,
+                algorithm = algorithm,
+                period = period,
+                digits = digits,
+                issuer = issuer,
+                userId = null,
+            )
+        } catch (e: Throwable) {
+            return null
+        }
+    }
 }
+
+private const val ALGORITHM = "algorithm"
+private const val DIGITS = "digits"
+private const val PERIOD = "period"
+private const val SECRET = "secret"
+private const val ISSUER = "issuer"
+private const val TOTP_CODE_PREFIX = "otpauth://totp"
 
 /**
  * Represents the state for displaying the item listing.
@@ -362,9 +490,22 @@ sealed class ItemListingAction {
             val itemListingDataState: DataState<List<VerificationCodeItem>>,
         ) : Internal()
 
+        /**
+         * Indicates authenticator item alert threshold seconds changes has been received.
+         */
         data class AlertThresholdSecondsReceive(
             val thresholdSeconds: Int,
         ) : Internal()
+
+        /**
+         * Indicates a new TOTP code scan result has been received.
+         */
+        data class TotpCodeReceive(val totpResult: TotpCodeResult) : Internal()
+
+        /**
+         * Indicates a result for creating and item has been received.
+         */
+        data class CreateItemResultReceive(val result: CreateItemResult) : Internal()
     }
 }
 

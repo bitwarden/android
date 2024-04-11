@@ -5,6 +5,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.authenticator.R
+import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
@@ -56,8 +58,8 @@ fun ItemScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
-    EventsEffect(viewModel = viewModel) {
-        when (it) {
+    EventsEffect(viewModel = viewModel) { event ->
+        when (event) {
             ItemEvent.NavigateBack -> onNavigateBack()
             is ItemEvent.NavigateToEdit -> onNavigateToEditItem(state.itemId)
         }
@@ -69,12 +71,16 @@ fun ItemScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.view_item),
+                title = stringResource(
+                    id = R.string.view_item,
+                ),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(ItemAction.CloseClick) }
+                    {
+                        viewModel.trySendAction(ItemAction.CloseClick)
+                    }
                 }
             )
         },
@@ -86,7 +92,9 @@ fun ItemScreen(
             ) {
                 ExtendedFloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    onClick = remember(viewModel) { { onNavigateToEditItem(state.itemId) } },
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(ItemAction.EditClick) }
+                    },
                     modifier = Modifier
                         .semantics { testTag = "EditItemButton" }
                         .padding(bottom = 16.dp),
@@ -98,7 +106,7 @@ fun ItemScreen(
                 }
             }
         },
-        floatingActionButtonPosition = FabPosition.EndOverlay
+        floatingActionButtonPosition = FabPosition.EndOverlay,
     ) { innerPadding ->
         when (val viewState = state.viewState) {
             is ItemState.ViewState.Content -> ItemContent(
@@ -107,8 +115,8 @@ fun ItemScreen(
                     .fillMaxSize()
                     .padding(innerPadding),
                 viewState = viewState,
+                readOnly = true,
                 onCopyTotpClick = { },
-                onTypeOptionClicked = { }
             )
 
             is ItemState.ViewState.Error -> {
@@ -124,20 +132,39 @@ fun ItemScreen(
 fun ItemContent(
     modifier: Modifier = Modifier,
     viewState: ItemState.ViewState.Content,
+    readOnly: Boolean,
     onCopyTotpClick: () -> Unit,
-    onTypeOptionClicked: (AuthenticatorItemType) -> Unit,
 ) {
-    LazyColumn(modifier = modifier) {
+    val isReadOnly: Boolean = remember(viewState) { readOnly }
 
+    LazyColumn(modifier = modifier) {
         item {
             BitwardenTextField(
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.name),
-                value = viewState.itemData.issuer(),
+                value = viewState.itemData.accountName(),
                 onValueChange = {},
-                readOnly = true,
+                readOnly = isReadOnly,
                 singleLine = true,
             )
+        }
+
+        viewState.itemData.issuer?.let { issuer ->
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    label = stringResource(id = R.string.account_info),
+                    value = issuer(),
+                    onValueChange = {},
+                    readOnly = isReadOnly,
+                    singleLine = true,
+                )
+            }
         }
 
         item {
@@ -152,15 +179,8 @@ fun ItemContent(
                 label = stringResource(id = R.string.type),
                 options = typeOptionsWithStrings.values.toImmutableList(),
                 selectedOption = viewState.itemData.type.name,
-                onOptionSelected = { selectedOption ->
-                    val selectedOptionName = typeOptionsWithStrings
-                        .entries
-                        .first { it.value == selectedOption }
-                        .key
-
-                    onTypeOptionClicked(selectedOptionName)
-                },
-                isEnabled = false,
+                onOptionSelected = {},
+                isEnabled = !isReadOnly,
             )
         }
 
@@ -171,7 +191,7 @@ fun ItemContent(
                 value = viewState.itemData.verificationCode()
                     .chunked(AUTH_CODE_SPACING_INTERVAL)
                     .joinToString(" "),
-                onValueChange = { },
+                onValueChange = {},
                 readOnly = true,
                 singleLine = true,
                 actions = {
@@ -202,28 +222,40 @@ fun ItemContent(
                     .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.totp_code),
                 value = viewState.itemData.totpCode(),
-                onValueChange = { },
-                readOnly = true,
+                onValueChange = {},
+                readOnly = isReadOnly,
                 singleLine = true,
             )
         }
 
-        viewState.itemData.username?.let { username ->
-            item {
-                if (username.invoke().isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BitwardenTextField(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 16.dp),
-                        label = stringResource(id = R.string.username),
-                        value = username(),
-                        onValueChange = {},
-                        readOnly = true,
-                        singleLine = true,
-                    )
-                }
-            }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.refresh_period),
+                value = viewState.itemData.periodSeconds.toString(),
+                onValueChange = {},
+                readOnly = isReadOnly,
+                singleLine = true
+            )
+        }
+
+        item {
+            val possibleAlgorithmOptions = AuthenticatorItemAlgorithm.entries
+            val algorithmOptionsWithStrings = possibleAlgorithmOptions.associateWith { it.name }
+            Spacer(Modifier.height(8.dp))
+            BitwardenMultiSelectButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                label = stringResource(id = R.string.algorithm),
+                options = algorithmOptionsWithStrings.values.toImmutableList(),
+                selectedOption = viewState.itemData.algorithm.name,
+                onOptionSelected = {},
+                isEnabled = !isReadOnly,
+            )
         }
     }
 }

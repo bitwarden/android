@@ -4,6 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.editItemDestination
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.navigateToEditItem
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.itemDestination
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.navigateToItem
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.manualCodeEntryDestination
@@ -27,7 +29,7 @@ fun NavGraphBuilder.itemListingGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToQrCodeScanner = { navController.navigateToQrCodeScanScreen() },
             onNavigateToItemScreen = { navController.navigateToItem(itemId = it) },
-            onNavigateToEditItemScreen = { /*navController.navigateToEditItem(itemId = it)*/ },
+            onNavigateToEditItemScreen = { navController.navigateToEditItem(itemId = it) },
             onNavigateToManualKeyEntry = { navController.navigateToManualCodeEntryScreen() },
             onNavigateToSyncWithBitwardenScreen = {
                 /*navController.navigateToSyncWithBitwardenScreen()*/
@@ -36,7 +38,10 @@ fun NavGraphBuilder.itemListingGraph(
         )
         itemDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToEditItem = { /*navController.navigateToEditItem(itemId = it)*/ }
+            onNavigateToEditItem = { navController.navigateToEditItem(itemId = it) }
+        )
+        editItemDestination(
+            onNavigateBack = { navController.popBackStack() },
         )
         qrCodeScanDestination(
             onNavigateBack = { navController.popBackStack() },

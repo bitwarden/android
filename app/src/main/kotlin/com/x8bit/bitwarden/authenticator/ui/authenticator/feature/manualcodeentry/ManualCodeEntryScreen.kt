@@ -96,7 +96,7 @@ fun ManualCodeEntryScreen(
 
     if (shouldShowPermissionDialog) {
         BitwardenTwoButtonDialog(
-            message = stringResource(id = R.string.enable_camer_permission_to_use_the_scanner),
+            message = stringResource(id = R.string.enable_camera_permission_to_use_the_scanner),
             confirmButtonText = stringResource(id = R.string.settings),
             dismissButtonText = stringResource(id = R.string.no_thanks),
             onConfirmClick = remember(viewModel) {
@@ -149,8 +149,8 @@ fun ManualCodeEntryScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
-                label = stringResource(id = R.string.issuer),
-                value = state.issuer,
+                label = stringResource(id = R.string.account_name),
+                value = state.accountName,
                 onValueChange = remember(viewModel) {
                     {
                         viewModel.trySendAction(

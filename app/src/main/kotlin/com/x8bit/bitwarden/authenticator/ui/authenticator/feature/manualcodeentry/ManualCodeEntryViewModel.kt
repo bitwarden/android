@@ -3,10 +3,13 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeent
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.x8bit.bitwarden.authenticator.R
 import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
+import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -26,7 +29,7 @@ class ManualCodeEntryViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
 ) : BaseViewModel<ManualCodeEntryState, ManualCodeEntryEvent, ManualCodeEntryAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: ManualCodeEntryState(code = "", issuer = ""),
+        ?: ManualCodeEntryState(code = "", accountName = "", dialog = null),
 ) {
     override fun handleAction(action: ManualCodeEntryAction) {
         when (action) {
@@ -36,12 +39,15 @@ class ManualCodeEntryViewModel @Inject constructor(
             is ManualCodeEntryAction.CodeSubmit -> handleCodeSubmit()
             is ManualCodeEntryAction.ScanQrCodeTextClick -> handleScanQrCodeTextClick()
             is ManualCodeEntryAction.SettingsClick -> handleSettingsClick()
+            is ManualCodeEntryAction.Internal.CreateItemResultReceive -> {
+                handleCreateItemReceive(action)
+            }
         }
     }
 
     private fun handleIssuerTextChange(action: ManualCodeEntryAction.IssuerTextChange) {
         mutableStateFlow.update {
-            it.copy(issuer = action.issuer)
+            it.copy(accountName = action.accountName)
         }
     }
 
@@ -57,16 +63,16 @@ class ManualCodeEntryViewModel @Inject constructor(
 
     private fun handleCodeSubmit() {
         viewModelScope.launch {
-            authenticatorRepository.createItem(
+            val result = authenticatorRepository.createItem(
                 AuthenticatorItemEntity(
                     id = UUID.randomUUID().toString(),
                     key = state.code,
-                    accountName = "",
-                    issuer = state.issuer,
+                    accountName = state.accountName,
+                    userId = null,
                 )
             )
+            sendAction(ManualCodeEntryAction.Internal.CreateItemResultReceive(result))
         }
-        sendEvent(ManualCodeEntryEvent.NavigateBack)
     }
 
     private fun handleScanQrCodeTextClick() {
@@ -76,6 +82,32 @@ class ManualCodeEntryViewModel @Inject constructor(
     private fun handleSettingsClick() {
         sendEvent(ManualCodeEntryEvent.NavigateToAppSettings)
     }
+
+    private fun handleCreateItemReceive(
+        action: ManualCodeEntryAction.Internal.CreateItemResultReceive,
+    ) {
+        when (action.result) {
+            CreateItemResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = ManualCodeEntryState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        )
+                    )
+                }
+            }
+
+            CreateItemResult.Success -> {
+                sendEvent(
+                    event = ManualCodeEntryEvent.ShowToast(R.string.item_added.asText()),
+                )
+                sendEvent(
+                    event = ManualCodeEntryEvent.NavigateBack,
+                )
+            }
+        }
+    }
 }
 
 /**
@@ -84,8 +116,25 @@ class ManualCodeEntryViewModel @Inject constructor(
 @Parcelize
 data class ManualCodeEntryState(
     val code: String,
-    val issuer: String,
-) : Parcelable
+    val accountName: String,
+    val dialog: DialogState?,
+) : Parcelable {
+
+    @Parcelize
+    sealed class DialogState : Parcelable {
+
+        @Parcelize
+        data class Error(
+            val title: Text? = null,
+            val message: Text,
+        ) : DialogState()
+
+        @Parcelize
+        data class Loading(
+            val message: Text,
+        ) : DialogState()
+    }
+}
 
 /**
  * Models events for the [ManualCodeEntryScreen].
@@ -136,7 +185,18 @@ sealed class ManualCodeEntryAction {
     /**
      * The use has changed the issuer text.
      */
-    data class IssuerTextChange(val issuer: String) : ManualCodeEntryAction()
+    data class IssuerTextChange(val accountName: String) : ManualCodeEntryAction()
+
+    /**
+     * Models actions that the [ManualCodeEntryViewModel] itself might send.
+     */
+    sealed class Internal : ManualCodeEntryAction() {
+
+        /**
+         * Indicates a result for creating an item has been received.
+         */
+        data class CreateItemResultReceive(val result: CreateItemResult) : Internal()
+    }
 
     /**
      * The text to switch to QR code scanning is clicked.

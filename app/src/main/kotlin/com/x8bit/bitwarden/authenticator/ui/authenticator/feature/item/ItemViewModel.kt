@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.Del
 import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.authenticator.data.platform.repository.util.combineDataStates
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
@@ -57,14 +58,15 @@ class ItemViewModel @Inject constructor(
                     authCode ?: return@combineDataStates null
 
                     TotpCodeItemData(
-                        type = item.type,
-                        username = item.accountName.asText(),
-                        issuer = item.issuer.orEmpty().asText(),
                         periodSeconds = authCode.periodSeconds,
-                        timeLeftSeconds = authCode.timeLeftSeconds,
                         totpCode = authCode.totpCode.asText(),
-                        verificationCode = authCode.code.asText(),
+                        type = item.type,
+                        accountName = item.accountName.asText(),
+                        issuer = item.issuer?.asText(),
+                        algorithm = item.algorithm,
                         alertThresholdSeconds = alertThresholdSeconds,
+                        timeLeftSeconds = authCode.timeLeftSeconds,
+                        verificationCode = authCode.code.asText()
                     )
                 }
             )
@@ -80,7 +82,7 @@ class ItemViewModel @Inject constructor(
             is ItemAction.CopyTotpClick -> handleTotpCopyClick(action)
             is ItemAction.DeleteClick -> handleDeleteClick(action)
             is ItemAction.DismissDialogClick -> handleDismissDialogClick()
-            is ItemAction.EditClick -> handleEditClick(action)
+            is ItemAction.EditClick -> handleEditClick()
             is ItemAction.Internal -> handleInternalAction(action)
         }
     }
@@ -105,8 +107,8 @@ class ItemViewModel @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    private fun handleEditClick(action: ItemAction.EditClick) {
-        TODO("Not yet implemented")
+    private fun handleEditClick() {
+        sendEvent(ItemEvent.NavigateToEdit(state.itemId))
     }
 
     private fun handleInternalAction(action: ItemAction.Internal) {
@@ -182,7 +184,8 @@ class ItemViewModel @Inject constructor(
     }
 }
 
-private fun TotpCodeItemData.toViewState() = ItemState.ViewState.Content(this)
+private fun TotpCodeItemData.toViewState() =
+    ItemState.ViewState.Content(this)
 
 /**
  * Represents the state for displaying an item in the authenticator.
@@ -201,6 +204,7 @@ data class ItemState(
     /**
      * Represents the different view states for the [ItemScreen].
      */
+    @Parcelize
     sealed class ViewState : Parcelable {
 
         /**
