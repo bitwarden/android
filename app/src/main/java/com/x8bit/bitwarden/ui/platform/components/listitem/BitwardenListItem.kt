@@ -55,6 +55,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param optionsTestTag The optional test tag for the options button.
  * @param supportingLabel An optional secondary text label to display beneath the label.
  * @param supportingLabelTestTag The optional test tag for the [supportingLabel].
+ * @param startIconTestTag The optional test tag for the [startIcon].
  * @param trailingLabelIcons An optional list of small icons to be displayed after the [label].
  */
 @Suppress("LongMethod")
@@ -69,6 +70,7 @@ fun BitwardenListItem(
     optionsTestTag: String? = null,
     supportingLabel: String? = null,
     supportingLabelTestTag: String? = null,
+    startIconTestTag: String? = null,
     trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
@@ -89,7 +91,9 @@ fun BitwardenListItem(
             iconData = startIcon,
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .semantics { startIconTestTag?.let { testTag = it } }
+                .size(24.dp),
         )
 
         Column(modifier = Modifier.weight(1f)) {

@@ -1508,6 +1508,7 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         optionsTestTag = "SendOptionsButton",
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
+        iconTestTag = null,
     )
 
 private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayItem =
@@ -1525,4 +1526,5 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         optionsTestTag = "CipherOptionsButton",
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
+        iconTestTag = null,
     )

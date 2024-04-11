@@ -761,6 +761,11 @@ data class VaultState(
             abstract val startIcon: IconData
 
             /**
+             * The test tag for the icon at the start of the item.
+             */
+            abstract val startIconTestTag: String
+
+            /**
              * The icons shown after the item name.
              */
             abstract val extraIconList: List<IconRes>
@@ -792,6 +797,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+                override val startIconTestTag: String = "LoginCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
@@ -811,6 +817,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_card_item),
+                override val startIconTestTag: String = "CardCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
@@ -840,6 +847,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_identity_item),
+                override val startIconTestTag: String = "IdentityCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,
@@ -857,6 +865,7 @@ data class VaultState(
                 override val id: String,
                 override val name: Text,
                 override val startIcon: IconData = IconData.Local(R.drawable.ic_secure_note_item),
+                override val startIconTestTag: String = "SecureNoteCipherIcon",
                 override val extraIconList: List<IconRes> = emptyList(),
                 override val overflowOptions: List<ListingItemOverflowAction.VaultAction>,
                 override val shouldShowMasterPasswordReprompt: Boolean,

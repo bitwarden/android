@@ -81,6 +81,7 @@ fun VaultContent(
             items(state.favoriteItems) { favoriteItem ->
                 VaultEntryListItem(
                     startIcon = favoriteItem.startIcon,
+                    startIconTestTag = favoriteItem.startIconTestTag,
                     trailingLabelIcons = favoriteItem
                         .extraIconList
                         .toIconResources()
@@ -138,6 +139,7 @@ fun VaultContent(
         item {
             BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_login_item),
+                startIconTestTag = "LoginCipherIcon",
                 label = stringResource(id = R.string.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
                 onClick = vaultHandlers.loginGroupClick,
@@ -152,6 +154,7 @@ fun VaultContent(
         item {
             BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_card_item),
+                startIconTestTag = "CardCipherIcon",
                 label = stringResource(id = R.string.type_card),
                 supportingLabel = state.cardItemsCount.toString(),
                 onClick = vaultHandlers.cardGroupClick,
@@ -166,6 +169,7 @@ fun VaultContent(
         item {
             BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_identity_item),
+                startIconTestTag = "IdentityCipherIcon",
                 label = stringResource(id = R.string.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
                 onClick = vaultHandlers.identityGroupClick,
@@ -180,6 +184,7 @@ fun VaultContent(
         item {
             BitwardenGroupItem(
                 startIcon = painterResource(id = R.drawable.ic_secure_note_item),
+                startIconTestTag = "SecureNoteCipherIcon",
                 label = stringResource(id = R.string.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
                 onClick = vaultHandlers.secureNoteGroupClick,
@@ -254,6 +259,7 @@ fun VaultContent(
             items(state.noFolderItems) { noFolderItem ->
                 VaultEntryListItem(
                     startIcon = noFolderItem.startIcon,
+                    startIconTestTag = noFolderItem.startIconTestTag,
                     trailingLabelIcons = noFolderItem
                         .extraIconList
                         .toIconResources()

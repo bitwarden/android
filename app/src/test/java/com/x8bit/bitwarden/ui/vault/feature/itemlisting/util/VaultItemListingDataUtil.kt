@@ -60,6 +60,7 @@ fun createMockDisplayItemForCipher(
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
+                iconTestTag = "LoginCipherIcon",
             )
         }
 
@@ -93,6 +94,7 @@ fun createMockDisplayItemForCipher(
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
+                iconTestTag = "SecureNoteCipherIcon",
             )
         }
 
@@ -129,6 +131,7 @@ fun createMockDisplayItemForCipher(
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
+                iconTestTag = "CardCipherIcon",
             )
         }
 
@@ -159,6 +162,7 @@ fun createMockDisplayItemForCipher(
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
+                iconTestTag = "IdentityCipherIcon",
             )
         }
     }
@@ -206,6 +210,7 @@ fun createMockDisplayItemForSend(
                 optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
+                iconTestTag = null,
             )
         }
 
@@ -243,6 +248,7 @@ fun createMockDisplayItemForSend(
                 optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
                 shouldShowMasterPasswordReprompt = false,
+                iconTestTag = null,
             )
         }
     }
