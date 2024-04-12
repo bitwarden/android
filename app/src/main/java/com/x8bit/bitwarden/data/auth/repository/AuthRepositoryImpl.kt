@@ -91,7 +91,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -127,7 +127,25 @@ class AuthRepositoryImpl(
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository,
     AuthRequestManager by authRequestManager {
+    /**
+     * A scope intended for use when simply collecting multiple flows in order to combine them. The
+     * use of [Dispatchers.Unconfined] allows for this to happen synchronously whenever any of
+     * these flows changes.
+     */
+    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    /**
+     * A scope intended for use when operating asynchronously.
+     */
+    private val ioScope = CoroutineScope(dispatcherManager.io)
+
     private val mutableHasPendingAccountAdditionStateFlow = MutableStateFlow(false)
+
+    /**
+     * If there is a pending account deletion, continue showing the original UserState until it
+     * is confirmed. This is accomplished by blocking the emissions of the [userStateFlow]
+     * whenever set to `true`.
+     */
     private val mutableHasPendingAccountDeletionStateFlow = MutableStateFlow(false)
 
     /**
@@ -154,15 +172,6 @@ class AuthRepositoryImpl(
      * the user can complete the login flow.
      */
     private var passwordToCheck: String? = null
-
-    /**
-     * A scope intended for use when simply collecting multiple flows in order to combine them. The
-     * use of [Dispatchers.Unconfined] allows for this to happen synchronously whenever any of
-     * these flows changes.
-     */
-    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
-
-    private val ioScope = CoroutineScope(dispatcherManager.io)
 
     override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
@@ -216,11 +225,7 @@ class AuthRepositoryImpl(
                 isDeviceTrustedProvider = ::isDeviceTrusted,
             )
     }
-        .filter {
-            // If there is a pending account deletion, continue showing
-            // the original UserState until it is confirmed.
-            !mutableHasPendingAccountDeletionStateFlow.value
-        }
+        .filterNot { mutableHasPendingAccountDeletionStateFlow.value }
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,
@@ -242,8 +247,7 @@ class AuthRepositoryImpl(
         captchaTokenChannel.receiveAsFlow()
 
     private val duoTokenChannel = Channel<DuoCallbackTokenResult>(capacity = Int.MAX_VALUE)
-    override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> =
-        duoTokenChannel.receiveAsFlow()
+    override val duoTokenResultFlow: Flow<DuoCallbackTokenResult> = duoTokenChannel.receiveAsFlow()
 
     private val yubiKeyResultChannel = Channel<YubiKeyResult>(capacity = Int.MAX_VALUE)
     override val yubiKeyResultFlow: Flow<YubiKeyResult> = yubiKeyResultChannel.receiveAsFlow()
@@ -279,6 +283,8 @@ class AuthRepositoryImpl(
                 refreshAccessTokenSynchronously(userId)
                 vaultRepository.sync()
             }
+            // This requires the ioScope to ensure that refreshAccessTokenSynchronously
+            // happens on a background thread
             .launchIn(ioScope)
 
         pushManager
@@ -638,9 +644,9 @@ class AuthRepositoryImpl(
                 onSuccess = {
                     when (it) {
                         is RegisterResponseJson.CaptchaRequired -> {
-                            it.validationErrors.captchaKeys.firstOrNull()?.let { key ->
-                                RegisterResult.CaptchaRequired(captchaId = key)
-                            } ?: RegisterResult.Error(errorMessage = null)
+                            it.validationErrors.captchaKeys.firstOrNull()
+                                ?.let { key -> RegisterResult.CaptchaRequired(captchaId = key) }
+                                ?: RegisterResult.Error(errorMessage = null)
                         }
 
                         is RegisterResponseJson.Success -> {
