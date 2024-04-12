@@ -127,14 +127,13 @@ class AuthDiskSourceImpl(
         storePrivateKey(userId = userId, privateKey = null)
         storeOrganizationKeys(userId = userId, organizationKeys = null)
         storeOrganizations(userId = userId, organizations = null)
-        storePendingAuthRequest(userId = userId, pendingAuthRequest = null)
         storeUserBiometricUnlockKey(userId = userId, biometricsKey = null)
         storeMasterPasswordHash(userId = userId, passwordHash = null)
         storePolicies(userId = userId, policies = null)
         storeAccountTokens(userId = userId, accountTokens = null)
 
-        // Do not remove the DeviceKey on logout, that is persisted indefinitely unless
-        // the server no longer trusts the device.
+        // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
+        // indefinitely unless the TDE flow explicitly removes them.
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
