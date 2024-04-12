@@ -829,6 +829,24 @@ namespace Bit.Core.Services
             await ClearCacheAsync();
         }
 
+        public async Task<bool> VerifyOrganizationHasUnassignedItemsAsync()
+        {
+            var organizations = await _stateService.GetOrganizationsAsync();
+            if (organizations?.Any() != true)
+            {
+                return false;
+            }
+
+            try
+            {
+                return await _apiService.HasUnassignedCiphersAsync();
+            }
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                return false;
+            }
+        }
+
         // Helpers
 
         private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId, Cipher cipher = null, CipherView cipherView = null)
