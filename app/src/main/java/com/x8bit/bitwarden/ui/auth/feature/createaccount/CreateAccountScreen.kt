@@ -122,10 +122,6 @@ fun CreateAccountScreen(
         }
     }
 
-    val haveIBeenPwnedMessage = remember {
-        R.string.weak_password_identified_and_found_in_a_data_breach_alert_description.asText()
-    }
-
     // Show dialog if needed:
     when (val dialog = state.dialog) {
         is CreateAccountDialog.Error -> {
