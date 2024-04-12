@@ -16,7 +16,8 @@ namespace Bit.App.Platforms.Android.Autofill
         private readonly IDeviceActionService _deviceActionService;
 
         private TaskCompletionSource<(string cipherId, bool? userVerified)> _confirmCredentialTcs;
-        Fido2UserVerificationOptions? _currentDefaultUserVerificationOptions;
+        private Fido2UserVerificationOptions? _currentDefaultUserVerificationOptions;
+        private Func<bool> _checkHasVaultBeenUnlockedInThisTransaction;
 
         public Fido2MakeCredentialUserInterface(IStateService stateService,
             IVaultTimeoutService vaultTimeoutService,
@@ -31,7 +32,7 @@ namespace Bit.App.Platforms.Android.Autofill
             _deviceActionService = deviceActionService;
         }
 
-        public bool HasVaultBeenUnlockedInThisTransaction => true;
+        public bool HasVaultBeenUnlockedInThisTransaction => _checkHasVaultBeenUnlockedInThisTransaction?.Invoke() == true;
 
         public async Task<(string CipherId, bool UserVerified)> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {
@@ -39,12 +40,12 @@ namespace Bit.App.Platforms.Android.Autofill
             _confirmCredentialTcs = null;
             _confirmCredentialTcs = new TaskCompletionSource<(string cipherId, bool? userVerified)>();
 
-            _currentDefaultUserVerificationOptions = new Fido2UserVerificationOptions(false, confirmNewCredentialParams.UserVerificationPreference, true, confirmNewCredentialParams.RpId);
+            _currentDefaultUserVerificationOptions = new Fido2UserVerificationOptions(false, confirmNewCredentialParams.UserVerificationPreference, HasVaultBeenUnlockedInThisTransaction, confirmNewCredentialParams.RpId);
 
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             messagingService?.Send("fidoNavigateToAutofillCipher", confirmNewCredentialParams);
-            var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
+            var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
             var verified = isUserVerified;
             if (verified is null)
@@ -108,6 +109,11 @@ namespace Bit.App.Platforms.Android.Autofill
             return Task.FromResult(true);
         }
 
+        public void SetCheckHasVaultBeenUnlockedInThisTransaction(Func<bool> checkHasVaultBeenUnlockedInThisTransaction)
+        {
+            _checkHasVaultBeenUnlockedInThisTransaction = checkHasVaultBeenUnlockedInThisTransaction;
+        }
+
         public void Confirm(string cipherId, bool? userVerified) => _confirmCredentialTcs?.TrySetResult((cipherId, userVerified));
 
         public void Cancel() => _confirmCredentialTcs?.TrySetCanceled();
@@ -135,7 +141,7 @@ namespace Bit.App.Platforms.Android.Autofill
                     new Fido2UserVerificationOptions(
                         shouldCheckMasterPasswordReprompt,
                         userVerificationPreference,
-                        true,
+                        HasVaultBeenUnlockedInThisTransaction,
                         rpId)
                     );
             }
