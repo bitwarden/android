@@ -37,5 +37,6 @@ namespace Bit.Core.Abstractions
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string cipherId, AttachmentView attachment, string organizationId);
         Task SoftDeleteWithServerAsync(string id);
         Task RestoreWithServerAsync(string id);
+        Task<bool> VerifyOrganizationHasUnassignedItemsAsync();
     }
 }

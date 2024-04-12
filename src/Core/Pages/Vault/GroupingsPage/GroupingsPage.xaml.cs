@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
+using Bit.App.Models;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
@@ -27,7 +28,7 @@ namespace Bit.App.Pages
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
             string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
-            PreviousPageInfo previousPage = null, bool deleted = false, bool showTotp = false)
+            PreviousPageInfo previousPage = null, bool deleted = false, bool showTotp = false, AppOptions appOptions = null)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -50,6 +51,7 @@ namespace Bit.App.Pages
             _vm.CollectionId = collectionId;
             _vm.Deleted = deleted;
             _vm.ShowTotp = showTotp;
+            _vm.AppOptions = appOptions;
             _previousPage = previousPage;
             if (pageTitle != null)
             {
@@ -159,6 +161,8 @@ namespace Bit.App.Pages
                 {
                     return;
                 }
+
+                await _vm.CheckOrganizationUnassignedItemsAsync();
 
                 // Push registration
                 var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
