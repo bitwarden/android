@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -209,10 +210,13 @@ private fun ResetPasswordScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
         }
 
+        var isPasswordVisible by rememberSaveable { mutableStateOf(false) }
         BitwardenPasswordField(
             label = stringResource(id = R.string.master_password),
             value = state.passwordInput,
             onValueChange = onPasswordInputChanged,
+            showPassword = isPasswordVisible,
+            showPasswordChange = { isPasswordVisible = it },
             modifier = Modifier
                 .semantics { testTag = "NewPasswordField" }
                 .padding(horizontal = 16.dp)
@@ -225,6 +229,8 @@ private fun ResetPasswordScreenContent(
             label = stringResource(id = R.string.retype_master_password),
             value = state.retypePasswordInput,
             onValueChange = onRetypePasswordInputChanged,
+            showPassword = isPasswordVisible,
+            showPasswordChange = { isPasswordVisible = it },
             modifier = Modifier
                 .semantics { testTag = "RetypePasswordField" }
                 .padding(horizontal = 16.dp)
