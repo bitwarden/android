@@ -14,7 +14,8 @@ namespace Bit.App.Platforms.Android.Autofill
         private readonly ICipherService _cipherService;
         private readonly IUserVerificationMediatorService _userVerificationMediatorService;
         private readonly IDeviceActionService _deviceActionService;
-
+        private readonly IPlatformUtilsService _platformUtilsService;
+        
         private TaskCompletionSource<(string cipherId, bool? userVerified)> _confirmCredentialTcs;
         Fido2UserVerificationOptions? _currentDefaultUserVerificationOptions;
 
@@ -22,13 +23,15 @@ namespace Bit.App.Platforms.Android.Autofill
             IVaultTimeoutService vaultTimeoutService,
             ICipherService cipherService,
             IUserVerificationMediatorService userVerificationMediatorService,
-            IDeviceActionService deviceActionService)
+            IDeviceActionService deviceActionService,
+            IPlatformUtilsService platformUtilsService)
         {
             _stateService = stateService;
             _vaultTimeoutService = vaultTimeoutService;
             _cipherService = cipherService;
             _userVerificationMediatorService = userVerificationMediatorService;
             _deviceActionService = deviceActionService;
+            _platformUtilsService = platformUtilsService;
         }
 
         public bool HasVaultBeenUnlockedInThisTransaction => true;
@@ -109,6 +112,22 @@ namespace Bit.App.Platforms.Android.Autofill
         }
 
         public void Confirm(string cipherId, bool? userVerified) => _confirmCredentialTcs?.TrySetResult((cipherId, userVerified));
+
+        public async Task ConfirmAsync(string cipherId, bool alreadyHasFido2Credential, bool? userVerified)
+        {
+            if (alreadyHasFido2Credential
+                &&
+                !await _platformUtilsService.ShowDialogAsync(
+                    AppResources.ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey,
+                    AppResources.OverwritePasskey,
+                    AppResources.Yes,
+                    AppResources.No))
+            {
+                return;
+            }
+
+            Confirm(cipherId, userVerified);
+        }
 
         public void Cancel() => _confirmCredentialTcs?.TrySetCanceled();
 

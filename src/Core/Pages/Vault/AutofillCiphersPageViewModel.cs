@@ -95,7 +95,7 @@ namespace Bit.App.Pages
             {
                 if (_appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
                 {
-                    await CreateFido2CredentialIntoAsync(cipher);
+                    await _fido2MakeCredentialConfirmationUserInterface.Value.ConfirmAsync(cipher.Id, cipher.Login.HasFido2Credentials, null);
                 }
                 return;
             }
@@ -150,22 +150,6 @@ namespace Bit.App.Pages
             {
                 _autofillHandler.Autofill(cipher);
             }
-        }
-
-        private async Task CreateFido2CredentialIntoAsync(CipherView cipher)
-        {
-            if (cipher.Login.HasFido2Credentials
-                &&
-                !await _platformUtilsService.ShowDialogAsync(
-                    AppResources.ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey,
-                    AppResources.OverwritePasskey,
-                    AppResources.Yes,
-                    AppResources.No))
-            {
-                return;
-            }
-
-            _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(cipher.Id, null);
         }
 
         protected override async Task AddFabCipherAsync()
