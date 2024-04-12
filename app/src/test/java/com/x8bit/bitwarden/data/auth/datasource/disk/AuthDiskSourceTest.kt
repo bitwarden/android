@@ -229,7 +229,6 @@ class AuthDiskSourceTest {
 
         authDiskSource.clearData(userId = userId)
 
-        assertNull(authDiskSource.getPendingAuthRequest(userId = userId))
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))

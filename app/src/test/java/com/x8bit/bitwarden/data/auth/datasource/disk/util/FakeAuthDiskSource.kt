@@ -67,7 +67,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizations.remove(userId)
         storedPolicies.remove(userId)
         storedAccountTokens.remove(userId)
-        storedPendingAuthRequests.remove(userId)
         storedBiometricKeys.remove(userId)
         storedOrganizationKeys.remove(userId)
 
