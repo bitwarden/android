@@ -47,6 +47,7 @@ namespace Bit.App.Pages
         private readonly IOrganizationService _organizationService;
         private readonly IPolicyService _policyService;
         private readonly IConfigService _configService;
+        private readonly IEnvironmentService _environmentService;
         private readonly ILogger _logger;
 
         public GroupingsPageViewModel()
@@ -64,6 +65,7 @@ namespace Bit.App.Pages
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _configService = ServiceContainer.Resolve<IConfigService>();
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Loading = true;
@@ -736,8 +738,12 @@ namespace Bit.App.Pages
                     return;
                 }
 
+                var message = _environmentService.SelectedRegion == Core.Enums.Region.SelfHosted
+                    ? AppResources.OrganizationUnassignedItemsMessageSelfHostDescriptionLong
+                    : AppResources.OrganizationUnassignedItemsMessageUSEUDescriptionLong;
+
                 var response = await _deviceActionService.DisplayAlertAsync(AppResources.Notice,
-                    AppResources.OrganizationUnassignedItemsMessageDescriptionLong,
+                    message,
                     null,
                     AppResources.RemindMeLater,
                     AppResources.Ok);
