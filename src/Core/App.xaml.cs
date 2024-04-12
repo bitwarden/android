@@ -331,17 +331,26 @@ namespace Bit.App
                     || message.Command == "unlocked"
                     || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                 {
-                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && Options.FromFido2Framework)
                     {
                         var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
                         userVerificationMediatorService?.OnConfirmationException(new AccountSwitchedException());
                     }
-                    
+
                     lock (_processingLoginRequestLock)
                     {
                         // lock doesn't allow for async execution
                         CheckPasswordlessLoginRequestsAsync().Wait();
                     }
+                }
+                else if (message.Command == "navigateTo" && message.Data is NavigationTarget navigationTarget)
+                {
+                    ArgumentNullException.ThrowIfNull(MainPage);
+
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        Navigate(navigationTarget, null);
+                    });
                 }
            }
            catch (Exception ex)
@@ -713,6 +722,16 @@ namespace Bit.App
             // If we are in background we add the Navigation Actions to a queue to execute when the app resumes.
             // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
 #if ANDROID
+            var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+            if (userVerificationMediatorService != null && userVerificationMediatorService.IsConfirmingNewCredential)
+            {
+                // if it's creating passkey
+                // and we have an active pending TaskCompletionSource
+                // then we let the Fido2 Authenticator flow manage the navigation to avoid issues
+                // like duplicated navigation.
+                return;
+            }
+
             if (!_isResumed)
             {
                 _onResumeActions.Enqueue(() => NavigateImpl(navTarget, navParams));

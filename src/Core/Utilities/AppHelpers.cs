@@ -439,6 +439,13 @@ namespace Bit.App.Utilities
                 }
                 if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
                 {
+                    var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                    if (userVerificationMediatorService != null && userVerificationMediatorService.IsConfirmingUnlockVault)
+                    {
+                       userVerificationMediatorService.ConfirmUnlockVault(true);
+                       return true;
+                    }
+
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
                     deviceActionService.ExecuteFido2CredentialActionAsync(appOptions).FireAndForget();
                     return true;

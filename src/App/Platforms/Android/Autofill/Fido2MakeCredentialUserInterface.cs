@@ -16,6 +16,7 @@ namespace Bit.App.Platforms.Android.Autofill
         private readonly IDeviceActionService _deviceActionService;
 
         private TaskCompletionSource<(string cipherId, bool? userVerified)> _confirmCredentialTcs;
+        private TaskCompletionSource<bool> _unlockVaultTcs;
         Fido2UserVerificationOptions? _currentDefaultUserVerificationOptions;
 
         public Fido2MakeCredentialUserInterface(IStateService stateService,
@@ -33,6 +34,9 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public bool HasVaultBeenUnlockedInThisTransaction => true;
 
+        public bool IsConfirmingNewCredential => _confirmCredentialTcs?.Task != null && !_confirmCredentialTcs.Task.IsCompleted;
+        public bool IsConfirmingUnlockVault => _unlockVaultTcs?.Task != null && !_unlockVaultTcs.Task.IsCompleted;
+
         public async Task<(string CipherId, bool UserVerified)> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {
             _confirmCredentialTcs?.TrySetCanceled();
@@ -44,7 +48,6 @@ namespace Bit.App.Platforms.Android.Autofill
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             messagingService?.Send("fidoNavigateToAutofillCipher", confirmNewCredentialParams);
             var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
-
 
             var verified = isUserVerified;
             if (verified is null)
@@ -95,11 +98,35 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public async Task EnsureUnlockedVaultAsync()
         {
-            if (!await _stateService.IsAuthenticatedAsync() || await _vaultTimeoutService.IsLockedAsync())
+            if (!await _stateService.IsAuthenticatedAsync()
+                ||
+                await _vaultTimeoutService.IsLoggedOutByTimeoutAsync()
+                ||
+                await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
             {
-                // this should never happen but just in case.
-                throw new InvalidOperationException("Not authed or vault locked");
+                await NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget.HomeLogin);
+                return;
             }
+
+            if (!await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
+
+            await NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget.Lock);
+        }
+
+        private async Task NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget navTarget)
+        {
+            _unlockVaultTcs?.TrySetCanceled();
+            _unlockVaultTcs = new TaskCompletionSource<bool>();
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            await MainThread.InvokeOnMainThreadAsync(() =>
+            {
+                messagingService?.Send("navigateTo", navTarget);
+            });
+
+            await _unlockVaultTcs.Task;
         }
 
         public Task InformExcludedCredentialAsync(string[] existingCipherIds)
@@ -109,6 +136,7 @@ namespace Bit.App.Platforms.Android.Autofill
         }
 
         public void Confirm(string cipherId, bool? userVerified) => _confirmCredentialTcs?.TrySetResult((cipherId, userVerified));
+        public void ConfirmUnlockVault(bool unlocked) => _unlockVaultTcs?.TrySetResult(unlocked);
 
         public void Cancel() => _confirmCredentialTcs?.TrySetCanceled();
 

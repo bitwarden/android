@@ -582,8 +582,6 @@ namespace Bit.Droid.Services
             {
                 await ExecuteFido2CreateCredentialAsync();
             }
-
-            appOptions.Fido2CredentialAction = null; //Clear CredentialAction Value
         }
 
         private async Task ExecuteFido2GetCredentialAsync(AppOptions appOptions)

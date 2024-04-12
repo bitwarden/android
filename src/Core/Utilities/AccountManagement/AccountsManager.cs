@@ -102,6 +102,14 @@ namespace Bit.App.Utilities.AccountManagement
                 }
                 else if (Options.FromFido2Framework)
                 {
+                    var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                    if (userVerificationMediatorService != null && userVerificationMediatorService.IsConfirmingNewCredential)
+                    {
+                        // If we are already confirming a credential we don't need to navigate again.
+                        // This could happen when switching accounts for example.
+                        return;
+                    }
+
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
                     deviceActionService.ExecuteFido2CredentialActionAsync(Options).FireAndForget();
                 }
