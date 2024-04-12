@@ -1,9 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.setpassword
 
 import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -116,6 +118,31 @@ class SetPasswordScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(SetPasswordAction.PasswordHintInputChanged("Test123"))
         }
+    }
+
+    @Test
+    fun `toggling one password field visibility should toggle the other`() {
+        // should start with 2 Show buttons:
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .assertCountEquals(2)[0]
+            .performClick()
+
+        // after clicking there should be no Show buttons:
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .assertCountEquals(0)
+
+        // and there should be 2 hide buttons now, and we'll click the second one:
+        composeTestRule
+            .onAllNodesWithContentDescription("Hide")
+            .assertCountEquals(2)[1]
+            .performClick()
+
+        // then there should be two show buttons again
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .assertCountEquals(2)
     }
 }
 
