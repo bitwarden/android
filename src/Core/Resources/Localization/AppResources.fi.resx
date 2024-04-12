@@ -560,7 +560,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Käytä salattua holviasi kirjautumalla sisään tai tai luo uusi tili.</value>
+    <value>Käytä salattua holviasi kirjautumalla sisään tai luo uusi tili.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Hallinta</value>

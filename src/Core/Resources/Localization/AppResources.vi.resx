@@ -1143,7 +1143,7 @@ Quá trình quét sẽ diễn ra tự động.</value>
     <value>Địa chỉ biểu tượng máy chủ</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Tự động điền với Bitwarden</value>
+    <value>Tự động điền bằng Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Kho đã khóa</value>
