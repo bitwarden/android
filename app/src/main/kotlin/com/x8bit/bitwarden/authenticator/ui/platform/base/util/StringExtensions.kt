@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.rememberTextMeasurer
+import java.text.Normalizer
 import kotlin.math.floor
 
 /**
@@ -41,3 +42,16 @@ fun String.withLineBreaksAtWidth(
  * Returns the [String] as an [AnnotatedString].
  */
 fun String.toAnnotatedString(): AnnotatedString = AnnotatedString(text = this)
+
+/**
+ * Normalizes the [String] by removing diacritics, such as an umlaut.
+ *
+ * Example: áéíóů --> aeiou
+ */
+fun String.removeDiacritics(): String =
+    "\\p{InCombiningDiacriticalMarks}+"
+        .toRegex()
+        .replace(
+            Normalizer.normalize(this, Normalizer.Form.NFKD),
+            "",
+        )

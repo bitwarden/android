@@ -79,11 +79,15 @@ class ItemListingViewModel @Inject constructor(
                 sendEvent(ItemListingEvent.NavigateBack)
             }
 
+            is ItemListingAction.SearchClick -> {
+                sendEvent(ItemListingEvent.NavigateToSearch)
+            }
+
             is ItemListingAction.ItemClick -> {
                 sendEvent(ItemListingEvent.NavigateToEditItem(action.id))
             }
 
-            ItemListingAction.DialogDismiss -> {
+            is ItemListingAction.DialogDismiss -> {
                 handleDialogDismiss()
             }
 
@@ -239,7 +243,9 @@ class ItemListingViewModel @Inject constructor(
         }
     }
 
-    private fun authenticatorNoNetworkReceive(state: DataState.NoNetwork<List<VerificationCodeItem>>) {
+    private fun authenticatorNoNetworkReceive(
+        state: DataState.NoNetwork<List<VerificationCodeItem>>,
+    ) {
         if (state.data != null) {
             updateStateWithVerificationCodeItems(
                 authenticatorData = state.data,
@@ -415,6 +421,11 @@ sealed class ItemListingEvent {
     data object NavigateBack : ItemListingEvent()
 
     /**
+     * Navigates to the Search screen.
+     */
+    data object NavigateToSearch : ItemListingEvent()
+
+    /**
      * Navigate to the QR Code Scanner screen.
      */
     data object NavigateToQrCodeScanner : ItemListingEvent()
@@ -449,6 +460,11 @@ sealed class ItemListingAction {
      * The user clicked the back button.
      */
     data object BackClick : ItemListingAction()
+
+    /**
+     * The user has clicked the search button.
+     */
+    data object SearchClick : ItemListingAction()
 
     /**
      * The user clicked the Scan QR Code button.

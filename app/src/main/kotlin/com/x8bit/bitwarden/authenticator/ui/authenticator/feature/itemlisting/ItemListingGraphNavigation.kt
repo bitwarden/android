@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeentr
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.navigateToManualCodeEntryScreen
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.navigateToQrCodeScanScreen
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.qrCodeScanDestination
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.search.itemSearchDestination
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.search.navigateToSearch
 
 const val ITEM_LISTING_GRAPH_ROUTE = "item_listing_graph"
 
@@ -27,6 +29,7 @@ fun NavGraphBuilder.itemListingGraph(
     ) {
         itemListingDestination(
             onNavigateBack = { navController.popBackStack() },
+            onNavigateToSearch = { navController.navigateToSearch() },
             onNavigateToQrCodeScanner = { navController.navigateToQrCodeScanScreen() },
             onNavigateToManualKeyEntry = { navController.navigateToManualCodeEntryScreen() },
             onNavigateToEditItemScreen = { navController.navigateToEditItem(itemId = it) },
@@ -37,6 +40,9 @@ fun NavGraphBuilder.itemListingGraph(
         )
         editItemDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+        itemSearchDestination(
+            onNavigateBack = { navController.popBackStack() }
         )
         qrCodeScanDestination(
             onNavigateBack = { navController.popBackStack() },

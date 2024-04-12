@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -46,6 +48,8 @@ import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.Bitwarden
 import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabIcon
 import com.x8bit.bitwarden.authenticator.ui.platform.components.fab.ExpandableFloatingActionButton
+import com.x8bit.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
+import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.Typography
@@ -58,6 +62,7 @@ import com.x8bit.bitwarden.authenticator.ui.platform.theme.Typography
 fun ItemListingScreen(
     viewModel: ItemListingViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onNavigateToSearch: () -> Unit,
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItemScreen: (id: String) -> Unit,
@@ -71,10 +76,11 @@ fun ItemListingScreen(
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
-            ItemListingEvent.NavigateBack -> onNavigateBack()
-            ItemListingEvent.DismissPullToRefresh -> pullToRefreshState.endRefresh()
-            ItemListingEvent.NavigateToQrCodeScanner -> onNavigateToQrCodeScanner()
-            ItemListingEvent.NavigateToManualAddItem -> onNavigateToManualKeyEntry()
+            is ItemListingEvent.NavigateBack -> onNavigateBack()
+            is ItemListingEvent.NavigateToSearch -> onNavigateToSearch()
+            is ItemListingEvent.DismissPullToRefresh -> pullToRefreshState.endRefresh()
+            is ItemListingEvent.NavigateToQrCodeScanner -> onNavigateToQrCodeScanner()
+            is ItemListingEvent.NavigateToManualAddItem -> onNavigateToManualKeyEntry()
             is ItemListingEvent.ShowToast -> {
                 Toast
                     .makeText(
@@ -98,6 +104,17 @@ fun ItemListingScreen(
                 title = stringResource(id = R.string.verification_codes),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = null,
+                actions = {
+                    if (state.viewState !is ItemListingState.ViewState.NoItems) {
+                        BitwardenIcon(
+                            modifier = Modifier.clickable {
+                                viewModel.trySendAction(ItemListingAction.SearchClick)
+                            },
+                            iconData = IconData.Local(R.drawable.ic_search_24px),
+                            tint = MaterialTheme.colorScheme.surfaceTint
+                        )
+                    }
+                }
             )
         },
         floatingActionButton = {
