@@ -28,7 +28,7 @@ class IdentityServiceImpl(
         twoFactorData: TwoFactorDataModel?,
     ): Result<GetTokenResponseJson> = api
         .getToken(
-            scope = "api+offline_access",
+            scope = "api offline_access",
             clientId = "mobile",
             authEmail = email.base64UrlEncode(),
             deviceIdentifier = uniqueAppId,

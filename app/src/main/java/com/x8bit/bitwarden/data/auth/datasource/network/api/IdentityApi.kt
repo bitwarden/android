@@ -23,7 +23,7 @@ interface IdentityApi {
         @Field(value = "scope", encoded = true) scope: String,
         @Field(value = "client_id") clientId: String,
         @Field(value = "username") email: String,
-        @Header(value = "auth-email") authEmail: String,
+        @Header(value = "Auth-Email") authEmail: String,
         @Field(value = "password") passwordHash: String?,
         @Field(value = "deviceIdentifier") deviceIdentifier: String,
         @Field(value = "deviceName") deviceName: String,
