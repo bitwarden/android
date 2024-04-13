@@ -159,7 +159,6 @@ fun ItemListingScreen(
         },
         floatingActionButtonPosition = FabPosition.EndOverlay,
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()

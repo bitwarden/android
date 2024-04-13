@@ -13,9 +13,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ITEM_LISTING_GRAPH_ROUTE
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.navigateToItemListGraph
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.authenticator.AUTHENTICATOR_GRAPH_ROUTE
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
@@ -26,6 +26,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
 
+/**
+ * Controls the root level [NavHost] for the app.
+ */
 @Composable
 fun RootNavScreen(
     viewModel: RootNavViewModel = hiltViewModel(),
@@ -59,12 +62,11 @@ fun RootNavScreen(
         popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
-
-        itemListingGraph(navController = navController)
+        authenticatorGraph(navController)
     }
 
     val targetRoute = when (state) {
-        RootNavState.ItemListing -> ITEM_LISTING_GRAPH_ROUTE
+        RootNavState.ItemListing -> AUTHENTICATOR_GRAPH_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
     }
 
@@ -92,7 +94,7 @@ fun RootNavScreen(
 
     LaunchedEffect(state) {
         when (state) {
-            RootNavState.ItemListing -> navController.navigateToItemListGraph(rootNavOptions)
+            RootNavState.ItemListing -> navController.navigateToAuthenticatorGraph(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
         }
     }

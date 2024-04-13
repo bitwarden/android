@@ -63,4 +63,5 @@
     <string name="search_codes">Search codes</string>
     <string name="options">Options</string>
     <string name="try_again">Try again</string>
+    <string name="not_yet_implemented">Not yet implemented</string>
 </resources>
