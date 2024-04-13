@@ -7,16 +7,13 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
-using Bit.Core.Utilities.Fido2;
 
 namespace Bit.App.Pages
 {
     public class AutofillCiphersPageViewModel : CipherSelectionPageViewModel
     {
         private CipherType? _fillType;
-        private bool _isAndroidFido2CredentialCreation;
         private AppOptions _appOptions;
-
         private readonly LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
 
         public string Uri { get; set; }
@@ -25,7 +22,6 @@ namespace Bit.App.Pages
         {
             Uri = appOptions?.Uri;
             _fillType = appOptions.FillType;
-            _isAndroidFido2CredentialCreation = appOptions.FromFido2Framework;
             _appOptions = appOptions;
 
             string name = null;
@@ -44,7 +40,7 @@ namespace Bit.App.Pages
             Name = name;
             PageTitle = string.Format(AppResources.ItemsForUri, Name ?? "--");
             NoDataText = string.Format(AppResources.NoItemsForUri, Name ?? "--");
-            AddNewItemText = appOptions.FromFido2Framework ? AppResources.SavePasskeyAsNewLogin : AppResources.AddAnItem;
+            AddNewItemText = _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential ? AppResources.SavePasskeyAsNewLogin : AppResources.AddAnItem;
         }
 
         protected override async Task<List<GroupingsPageListGroup>> LoadGroupedItemsAsync()
@@ -54,7 +50,7 @@ namespace Bit.App.Pages
 
             var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)
             {
-                UsePasskeyIconAsPlaceholderFallback = _isAndroidFido2CredentialCreation
+                UsePasskeyIconAsPlaceholderFallback = _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential
             }).ToList();
 
             var hasMatching = matching?.Any() ?? false;
@@ -91,12 +87,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (_appOptions.FromFido2Framework)
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
-                if (_appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
-                {
-                    await CreateFido2CredentialIntoAsync(cipher);
-                }
+                await CreateFido2CredentialIntoAsync(cipher);
                 return;
             }
 
@@ -171,7 +164,7 @@ namespace Bit.App.Pages
         protected override async Task AddFabCipherAsync()
         {
             //Scenario for creating a new Fido2 credential on Android but showing the Cipher Page
-            if (_isAndroidFido2CredentialCreation)
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
                 var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
                 await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
@@ -186,7 +179,7 @@ namespace Bit.App.Pages
         protected override async Task AddCipherAsync()
         {
             //Scenario for creating a new Fido2 credential on Android
-            if (_isAndroidFido2CredentialCreation)
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
                 _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(null, null);
                 return;
@@ -206,9 +199,7 @@ namespace Bit.App.Pages
 
         public void Cancel()
         {
-            if (_appOptions?.FromFido2Framework == true
-                &&
-                _appOptions?.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
                 _fido2MakeCredentialConfirmationUserInterface.Value.Cancel();
             }

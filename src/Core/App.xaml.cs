@@ -331,9 +331,9 @@ namespace Bit.App
                     || message.Command == "unlocked"
                     || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                 {
-                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && Options.FromFido2Framework)
+                    var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && userVerificationMediatorService.IsConfirmingNewCredential)
                     {
-                        var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
                         userVerificationMediatorService?.OnConfirmationException(new AccountSwitchedException());
                     }
 
@@ -728,7 +728,7 @@ namespace Bit.App
                 // if it's creating passkey
                 // and we have an active pending TaskCompletionSource
                 // then we let the Fido2 Authenticator flow manage the navigation to avoid issues
-                // like duplicated navigation.
+                // like duplicated navigation to lock page.
                 return;
             }
 

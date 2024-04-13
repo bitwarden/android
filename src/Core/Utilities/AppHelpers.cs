@@ -437,9 +437,10 @@ namespace Bit.App.Utilities
                     App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
-                if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
+
+                var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                if ((appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction) || userVerificationMediatorService.IsConfirmingUnlockVault))
                 {
-                    var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
                     if (userVerificationMediatorService != null && userVerificationMediatorService.IsConfirmingUnlockVault)
                     {
                        userVerificationMediatorService.ConfirmUnlockVault(true);

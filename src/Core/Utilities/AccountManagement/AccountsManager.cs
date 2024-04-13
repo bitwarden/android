@@ -81,6 +81,8 @@ namespace Bit.App.Utilities.AccountManagement
             var authed = isAuthed ?? await _stateService.IsAuthenticatedAsync();
             if (authed)
             {
+                var fido2MakeCredentialConfirmationUserInterface = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+
                 if (await _vaultTimeoutService.IsLoggedOutByTimeoutAsync() ||
                     await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
                 {
@@ -100,10 +102,9 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AddEditCipher);
                 }
-                else if (Options.FromFido2Framework)
+                else if (Options.FromFido2Framework || fido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential)
                 {
-                    var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
-                    if (userVerificationMediatorService != null && userVerificationMediatorService.IsConfirmingNewCredential)
+                    if (fido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential)
                     {
                         // If we are already confirming a credential we don't need to navigate again.
                         // This could happen when switching accounts for example.
