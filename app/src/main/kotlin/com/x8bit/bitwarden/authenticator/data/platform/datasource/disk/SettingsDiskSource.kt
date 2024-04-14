@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.authenticator.data.platform.datasource.disk
 
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
 
@@ -7,6 +8,11 @@ import kotlinx.coroutines.flow.Flow
  * Primary access point for general settings-related disk information.
  */
 interface SettingsDiskSource {
+
+    /**
+     * The currently persisted app language (or `null` if not set).
+     */
+    var appLanguage: AppLanguage?
 
     /**
      * The currently persisted app theme (or `null` if not set).
@@ -17,6 +23,16 @@ interface SettingsDiskSource {
      * Emits updates that track [appTheme].
      */
     val appThemeFlow: Flow<AppTheme>
+
+    /**
+     * The currently persisted setting for getting login item icons (or `null` if not set).
+     */
+    var isIconLoadingDisabled: Boolean?
+
+    /**
+     * Emits updates that track [isIconLoadingDisabled].
+     */
+    val isIconLoadingDisabledFlow: Flow<Boolean?>
 
     /**
      * Stores the threshold at which users are alerted that an items validity period is nearing

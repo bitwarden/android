@@ -1,30 +1,108 @@
 package com.x8bit.bitwarden.authenticator.ui.platform.feature.settings
 
-import androidx.compose.material3.Text
+import android.os.Parcelable
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.SavedStateHandle
+import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
-import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
+
+private const val KEY_STATE = "state"
 
 /**
  * View model for the settings screen.
  */
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-) : BaseViewModel<Unit, SettingsEvent, SettingsAction>(
-    initialState = Unit
+    savedStateHandle: SavedStateHandle,
+    val settingsRepository: SettingsRepository,
+) : BaseViewModel<SettingsState, SettingsEvent, SettingsAction>(
+    initialState = savedStateHandle[KEY_STATE]
+        ?: SettingsState(
+            appearance = SettingsState.Appearance(
+                language = settingsRepository.appLanguage,
+                theme = settingsRepository.appTheme,
+                showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
+            ),
+        ),
 ) {
     override fun handleAction(action: SettingsAction) {
         when (action) {
-            is SettingsAction.SettingsClick -> handleSettingClick(action)
+            is SettingsAction.AppearanceChange -> handleAppearanceChange(action)
         }
     }
 
-    private fun handleSettingClick(action: SettingsAction.SettingsClick) {
-        when (action.setting) {
-            else -> {}
+    private fun handleAppearanceChange(action: SettingsAction.AppearanceChange) {
+        when (action) {
+            is SettingsAction.AppearanceChange.LanguageChange -> {
+                handleLanguageChange(action.language)
+            }
+
+            is SettingsAction.AppearanceChange.ShowWebsiteIconsChange -> {
+                handleShowWebsiteIconsChange(action.showWebsiteIcons)
+            }
+
+            is SettingsAction.AppearanceChange.ThemeChange -> {
+                handleThemeChange(action.appTheme)
+            }
         }
     }
+
+    private fun handleLanguageChange(language: AppLanguage) {
+        mutableStateFlow.update {
+            it.copy(
+                appearance = it.appearance.copy(language = language)
+            )
+        }
+        settingsRepository.appLanguage = language
+        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags(
+            language.localeName,
+        )
+        AppCompatDelegate.setApplicationLocales(appLocale)
+    }
+
+    private fun handleShowWebsiteIconsChange(showWebsiteIcons: Boolean) {
+        mutableStateFlow.update {
+            it.copy(
+                appearance = it.appearance.copy(showWebsiteIcons = showWebsiteIcons)
+            )
+        }
+        // Negate the boolean to properly update the settings repository
+        settingsRepository.isIconLoadingDisabled = !showWebsiteIcons
+    }
+
+    private fun handleThemeChange(theme: AppTheme) {
+        mutableStateFlow.update {
+            it.copy(
+                appearance = it.appearance.copy(theme = theme)
+            )
+        }
+        settingsRepository.appTheme = theme
+    }
+}
+
+/**
+ * Models state of the Settings screen.
+ */
+@Parcelize
+data class SettingsState(
+    val appearance: Appearance,
+) : Parcelable {
+    /**
+     * Models state of the Appearance settings.
+     */
+    @Parcelize
+    data class Appearance(
+        val language: AppLanguage,
+        val theme: AppTheme,
+        val showWebsiteIcons: Boolean,
+    ) : Parcelable
 }
 
 /**
@@ -36,19 +114,27 @@ sealed class SettingsEvent
  * Models actions for the settings screen.
  */
 sealed class SettingsAction {
-    /**
-     * User clicked a settings row.
-     */
-    class SettingsClick(val setting: Settings) : SettingsAction()
-}
 
-/**
- * Enum representing the settings rows, such as "import" or "export".
- *
- * @property text The [Text] of the string that represents the label of each setting.
- * @property testTag The value that should be set for the test tag. This is used in Appium testing.
- */
-enum class Settings(
-    val text: Text,
-    val testTag: String,
-)
+    sealed class AppearanceChange : SettingsAction() {
+        /**
+         * Indicates the user changed the language.
+         */
+        data class LanguageChange(
+            val language: AppLanguage,
+        ) : AppearanceChange()
+
+        /**
+         * Indicates the user toggled the Show Website Icons switch to [showWebsiteIcons].
+         */
+        data class ShowWebsiteIconsChange(
+            val showWebsiteIcons: Boolean,
+        ) : AppearanceChange()
+
+        /**
+         * Indicates the user selected a new theme.
+         */
+        data class ThemeChange(
+            val appTheme: AppTheme,
+        ) : AppearanceChange()
+    }
+}

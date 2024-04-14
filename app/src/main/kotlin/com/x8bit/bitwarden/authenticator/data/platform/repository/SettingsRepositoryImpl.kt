@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.authenticator.data.platform.repository
 
 import com.x8bit.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -18,6 +20,12 @@ class SettingsRepositoryImpl(
 ) : SettingsRepository {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
+
+    override var appLanguage: AppLanguage
+        get() = settingsDiskSource.appLanguage ?: AppLanguage.DEFAULT
+        set(value) {
+            settingsDiskSource.appLanguage = value
+        }
 
     override var appTheme: AppTheme by settingsDiskSource::appTheme
 
@@ -41,5 +49,21 @@ class SettingsRepositoryImpl(
                 started = SharingStarted.Eagerly,
                 initialValue = settingsDiskSource.getAlertThresholdSeconds(),
             )
+    override var isIconLoadingDisabled: Boolean
+        get() = settingsDiskSource.isIconLoadingDisabled ?: false
+        set(value) {
+            settingsDiskSource.isIconLoadingDisabled = value
+        }
 
+    override val isIconLoadingDisabledFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .isIconLoadingDisabledFlow
+            .map { it ?: false }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = settingsDiskSource
+                    .isIconLoadingDisabled
+                    ?: false,
+            )
 }

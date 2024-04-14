@@ -64,4 +64,14 @@
     <string name="options">Options</string>
     <string name="try_again">Try again</string>
     <string name="not_yet_implemented">Not yet implemented</string>
+    <string name="appearance">Appearance</string>
+    <string name="default_system">Default (System)</string>
+    <string name="theme">Theme</string>
+    <string name="theme_description">Change the application\'s color theme.</string>
+    <string name="dark">Dark</string>
+    <string name="light">Light</string>
+    <string name="language">Language</string>
+    <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
+    <string name="show_website_icons">Show website icons</string>
+    <string name="show_website_icons_description">Show a recognizable image next to each login.</string>
 </resources>
