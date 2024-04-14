@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.nav
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.qrCodeScanDestination
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.search.itemSearchDestination
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.search.navigateToSearch
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.settingsGraph
 
 const val ITEM_LISTING_GRAPH_ROUTE = "item_listing_graph"
 
@@ -59,6 +60,7 @@ fun NavGraphBuilder.itemListingGraph(
                 navController.navigateToQrCodeScanScreen()
             }
         )
+        settingsGraph(navController)
     }
 }
 

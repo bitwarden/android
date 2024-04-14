@@ -45,6 +45,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.authenticator.R
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ITEM_LISTING_GRAPH_ROUTE
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ITEM_LIST_ROUTE
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.itemListingGraph
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.navigateToItemListGraph
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
@@ -52,6 +53,8 @@ import com.x8bit.bitwarden.authenticator.ui.platform.base.util.max
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.toDp
 import com.x8bit.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.authenticator.ui.platform.components.scrim.BitwardenAnimatedScrim
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.SETTINGS_GRAPH_ROUTE
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.settings.navigateToSettingsGraph
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.RootTransitionProviders
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -74,14 +77,7 @@ fun AuthenticatorNavBarScreen(
             val navOptions = navController.authenticatorNavBarScreenNavOptions()
             when (event) {
                 AuthenticatorNavBarEvent.NavigateToSettings -> {
-                    Toast
-                        .makeText(
-                            navController.context,
-                            R.string.not_yet_implemented,
-                            Toast.LENGTH_SHORT
-                        )
-                        .show()
-                    /* navigateToSettingGraph() */
+                    navigateToSettingsGraph(navOptions)
                 }
 
                 AuthenticatorNavBarEvent.NavigateToVerificationCodes -> {
@@ -297,7 +293,7 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_verification_codes
         override val labelRes get() = R.string.verification_codes
         override val contentDescriptionRes get() = R.string.verification_codes
-        override val route get() = ITEM_LISTING_GRAPH_ROUTE
+        override val route get() = ITEM_LIST_ROUTE
         override val testTag get() = "VerificationCodesTab"
     }
 
@@ -311,7 +307,7 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
         override val labelRes get() = R.string.settings
         override val contentDescriptionRes get() = R.string.settings
         // TODO: Replace with constant when settings screen is complete.
-        override val route get() = "settings_graph"
+        override val route get() = SETTINGS_GRAPH_ROUTE
         override val testTag get() = "SettingsTab"
     }
 }

@@ -58,49 +58,5 @@ fun NavGraphBuilder.authenticatorGraph(
                 navController.navigateToEditItem(itemId = it)
             }
         )
-        itemListingDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToQrCodeScanner = { navController.navigateToQrCodeScanScreen() },
-            onNavigateToManualKeyEntry = { navController.navigateToManualCodeEntryScreen() },
-            onNavigateToEditItemScreen = { navController.navigateToEditItem(itemId = it) },
-            onNavigateToSyncWithBitwardenScreen = {
-                Toast
-                    .makeText(
-                        navController.context,
-                        R.string.not_yet_implemented,
-                        Toast.LENGTH_SHORT,
-                    )
-                    .show()
-                /*navController.navigateToSyncWithBitwardenScreen()*/
-            },
-            onNavigateToImportScreen = {
-                Toast
-                    .makeText(
-                        navController.context,
-                        R.string.not_yet_implemented,
-                        Toast.LENGTH_SHORT,
-                    )
-                    .show()
-                /*navController.navigateToImportScreen()*/
-            },
-            onNavigateToSearch = { navController.navigateToSearch() },
-        )
-        editItemDestination(
-            onNavigateBack = { navController.popBackStack() },
-        )
-        qrCodeScanDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToManualCodeEntryScreen = {
-                navController.popBackStack()
-                navController.navigateToManualCodeEntryScreen()
-            },
-        )
-        manualCodeEntryDestination(
-            onNavigateBack = { navController.popBackStack() },
-            onNavigateToQrCodeScreen = {
-                navController.popBackStack()
-                navController.navigateToQrCodeScanScreen()
-            }
-        )
     }
 }
