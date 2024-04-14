@@ -35,7 +35,7 @@ namespace Bit.App.Platforms.Android.Autofill
         public bool HasVaultBeenUnlockedInThisTransaction => true;
 
         public bool IsConfirmingNewCredential => _confirmCredentialTcs?.Task != null && !_confirmCredentialTcs.Task.IsCompleted;
-        public bool IsConfirmingUnlockVault => _unlockVaultTcs?.Task != null && !_unlockVaultTcs.Task.IsCompleted;
+        public bool IsWaitingUnlockVault => _unlockVaultTcs?.Task != null && !_unlockVaultTcs.Task.IsCompleted;
 
         public async Task<(string CipherId, bool UserVerified)> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {

@@ -42,7 +42,7 @@ namespace Bit.Core.Abstractions
         /// <summary>
         /// True if we are waiting for the vault to be unlocked.
         /// </summary>
-        bool IsConfirmingUnlockVault { get; }
+        bool IsWaitingUnlockVault { get; }
 
         Fido2UserVerificationOptions? GetCurrentUserVerificationOptions();
     }
