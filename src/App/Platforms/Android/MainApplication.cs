@@ -115,7 +115,8 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IVaultTimeoutService>(),
                     ServiceContainer.Resolve<ICipherService>(),
                     ServiceContainer.Resolve<IUserVerificationMediatorService>(),
-                    ServiceContainer.Resolve<IDeviceActionService>());
+                    ServiceContainer.Resolve<IDeviceActionService>(),
+                    ServiceContainer.Resolve<IPlatformUtilsService>());
                 ServiceContainer.Register<IFido2MakeCredentialConfirmationUserInterface>(fido2MakeCredentialUserInterface);
 
                 var fido2ClientService = new Fido2ClientService(
