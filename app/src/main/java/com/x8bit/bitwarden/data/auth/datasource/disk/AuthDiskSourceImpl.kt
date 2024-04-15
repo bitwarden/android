@@ -56,7 +56,6 @@ class AuthDiskSourceImpl(
 ),
     AuthDiskSource {
 
-    private val inMemoryDeviceKeys = mutableMapOf<String, String?>()
     private val inMemoryPinProtectedUserKeys = mutableMapOf<String, String?>()
     private val mutableOrganizationsFlowMap =
         mutableMapOf<String, MutableSharedFlow<List<SyncResponseJson.Profile.Organization>?>>()
@@ -200,15 +199,12 @@ class AuthDiskSourceImpl(
 
     override fun getDeviceKey(
         userId: String,
-    ): String? = inMemoryDeviceKeys[userId] ?: getEncryptedString(key = "${DEVICE_KEY_KEY}_$userId")
+    ): String? = getEncryptedString(key = "${DEVICE_KEY_KEY}_$userId")
 
     override fun storeDeviceKey(
         userId: String,
         deviceKey: String?,
-        inMemoryOnly: Boolean,
     ) {
-        inMemoryDeviceKeys[userId] = deviceKey
-        if (inMemoryOnly) return
         putEncryptedString(key = "${DEVICE_KEY_KEY}_$userId", value = deviceKey)
     }
 

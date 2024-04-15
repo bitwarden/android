@@ -4,6 +4,7 @@ import com.bitwarden.crypto.TrustDeviceResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.network.service.DevicesService
 import com.x8bit.bitwarden.data.auth.manager.util.toUserStateJson
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 
@@ -17,19 +18,7 @@ class TrustedDeviceManagerImpl(
 ) : TrustedDeviceManager {
     override suspend fun trustThisDeviceIfNecessary(userId: String): Result<Boolean> =
         if (!authDiskSource.shouldTrustDevice) {
-            // Even though we are not trusting the device, we still store the device key in
-            // memory. This allows the user to be "trusted" for this session but on timeout
-            // or reboot, the "trust" will be gone.
-            vaultSdkSource
-                .getTrustDevice(userId = userId)
-                .onSuccess { trustedDevice ->
-                    authDiskSource.storeDeviceKey(
-                        userId = userId,
-                        deviceKey = trustedDevice.deviceKey,
-                        inMemoryOnly = true,
-                    )
-                }
-                .map { false }
+            false.asSuccess()
         } else {
             vaultSdkSource
                 .getTrustDevice(userId = userId)
