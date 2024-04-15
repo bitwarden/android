@@ -5111,11 +5111,11 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On May 2, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible..
+        ///   Looks up a localized string similar to On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible..
         /// </summary>
-        public static string OrganizationUnassignedItemsMessageSelfHostDescriptionLong {
+        public static string OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong {
             get {
-                return ResourceManager.GetString("OrganizationUnassignedItemsMessageSelfHostDescriptionLong", resourceCulture);
+                return ResourceManager.GetString("OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong", resourceCulture);
             }
         }
         
