@@ -78,6 +78,7 @@
                     Spacing="20"
                     IsVisible="{Binding ShowNoData}">
                     <Image
+                        x:Name="_emptyItemsPlaceholder"
                         Source="empty_items_state" />
                     <Label
                         Text="{Binding NoDataText}"
