@@ -115,6 +115,8 @@ namespace Bit.App.Pages
                     await _vm.LoadAsync();
                 }
             }, _mainContent);
+
+            UpdatePlaceholder();
         }
 
         protected override bool OnBackButtonPressed()
@@ -186,6 +188,21 @@ namespace Bit.App.Pages
                     autofillVM.Cancel();
                 }
             }
+        }
+
+        public override async Task UpdateOnThemeChanged()
+        {
+            await base.UpdateOnThemeChanged();
+
+            UpdatePlaceholder();
+        }
+
+        private void UpdatePlaceholder()
+        {
+#if ANDROID
+            MainThread.BeginInvokeOnMainThread(() =>
+                _emptyItemsPlaceholder.Source = ImageSource.FromFile(ThemeManager.UsingLightTheme ? "empty_items_state.png" : "empty_items_state_dark.png"));
+#endif
         }
     }
 }

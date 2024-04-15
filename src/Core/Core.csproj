@@ -82,11 +82,9 @@
     <Folder Include="Controls\Avatar\" />
     <Folder Include="Services\UserVerification\" />
     <Folder Include="Utilities\WebAuthenticatorMAUI\" />
+    <Folder Include="Resources\Images\" />
   </ItemGroup>
 	<ItemGroup>
-	  <MauiImage Include="Resources\Images\dotnet_bot.svg">
-	    <BaseSize>168,208</BaseSize>
-	  </MauiImage>
 	  <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 		<MauiFont Include="Resources\Fonts\*" />
 	</ItemGroup>
@@ -121,5 +119,12 @@
 	  <None Remove="Controls\Avatar\" />
 	  <None Remove="Services\UserVerification\" />
 	  <None Remove="Utilities\WebAuthenticatorMAUI\" />
+	  <None Remove="Resources\Images\" />
+	  <None Remove="Resources\Images\empty_items_state_dark.svg" />
+	  <None Remove="Resources\Images\empty_items_state.svg" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+	  <MauiImage Include="Resources\Images\empty_items_state.svg" />
+	  <MauiImage Include="Resources\Images\empty_items_state_dark.svg" />
 	</ItemGroup>
 </Project>

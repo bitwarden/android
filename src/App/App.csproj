@@ -117,6 +117,7 @@
 	  <Folder Include="Platforms\Android\Services\" />
 	  <Folder Include="Platforms\Android\Tiles\" />
 	  <Folder Include="Platforms\Android\Utilities\" />
+	  <Folder Include="Platforms\Android\Resources\drawable-xxxhdpi\" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
@@ -257,5 +258,6 @@
 	  <None Remove="Platforms\iOS\Resources\more_vert.png" />
 	  <None Remove="Platforms\iOS\Resources\logo_white.png" />
 	  <None Remove="Platforms\iOS\Resources\logo%402x.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xxxhdpi\" />
 	</ItemGroup>
 </Project>
