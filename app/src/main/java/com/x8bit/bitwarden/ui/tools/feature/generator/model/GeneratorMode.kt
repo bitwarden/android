@@ -27,8 +27,12 @@ sealed class GeneratorMode : Parcelable {
 
         /**
          * Represents the mode for generating usernames.
+         *
+         * @property website The website corresponding to this username generation, or empty.
          */
         @Parcelize
-        data object Username : Modal()
+        data class Username(
+            val website: String?,
+        ) : Modal()
     }
 }

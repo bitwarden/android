@@ -194,7 +194,9 @@ fun GeneratorScreen(
     BitwardenScaffold(
         topBar = {
             when (state.generatorMode) {
-                GeneratorMode.Modal.Username, GeneratorMode.Modal.Password ->
+                is GeneratorMode.Modal.Username,
+                GeneratorMode.Modal.Password,
+                -> {
                     ModalAppBar(
                         scrollBehavior = scrollBehavior,
                         onCloseClick = remember(viewModel) {
@@ -204,14 +206,16 @@ fun GeneratorScreen(
                             { viewModel.trySendAction(GeneratorAction.SelectClick) }
                         },
                     )
+                }
 
-                GeneratorMode.Default ->
+                GeneratorMode.Default -> {
                     DefaultAppBar(
                         scrollBehavior = scrollBehavior,
                         onPasswordHistoryClick = remember(viewModel) {
                             { viewModel.trySendAction(GeneratorAction.PasswordHistoryClick) }
                         },
                     )
+                }
             }
         },
         snackbarHost = {
