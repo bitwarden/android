@@ -2137,7 +2137,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     ): GeneratorState =
         GeneratorState(
             generatedText = generatedText,
-            generatorMode = GeneratorMode.Modal.Username,
+            generatorMode = GeneratorMode.Modal.Username(website = null),
             selectedType = GeneratorState.MainType.Username(
                 GeneratorState.MainType.Username.UsernameType.PlusAddressedEmail(
                     email = email,

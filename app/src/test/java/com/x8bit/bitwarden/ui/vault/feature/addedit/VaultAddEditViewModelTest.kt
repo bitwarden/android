@@ -1160,7 +1160,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         VaultAddEditAction.ItemType.LoginType.OpenUsernameGeneratorClick,
                     )
                     assertEquals(
-                        VaultAddEditEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Username),
+                        VaultAddEditEvent.NavigateToGeneratorModal(
+                            GeneratorMode.Modal.Username(website = ""),
+                        ),
                         awaitItem(),
                     )
                 }

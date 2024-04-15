@@ -660,7 +660,15 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleLoginOpenUsernameGeneratorClick() {
-        sendEvent(event = VaultAddEditEvent.NavigateToGeneratorModal(GeneratorMode.Modal.Username))
+        sendEvent(
+            event = VaultAddEditEvent.NavigateToGeneratorModal(
+                generatorMode = GeneratorMode.Modal.Username(
+                    website = (state.viewState as? VaultAddEditState.ViewState.Content)
+                        ?.website
+                        .orEmpty(),
+                ),
+            ),
+        )
     }
 
     private fun handleLoginPasswordCheckerClick() {
@@ -699,16 +707,6 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginClearTotpKey() {
         updateLoginContent { loginType ->
             loginType.copy(totp = null)
-        }
-    }
-
-    private fun handleLoginUriSettingsClick() {
-        viewModelScope.launch {
-            sendEvent(
-                event = VaultAddEditEvent.ShowToast(
-                    message = "URI Settings".asText(),
-                ),
-            )
         }
     }
 
@@ -1663,6 +1661,11 @@ data class VaultAddEditState(
                     override val itemTypeOption: ItemTypeOption get() = ItemTypeOption.SECURE_NOTES
                 }
             }
+
+            /**
+             * The first website associated with this item, or null if none exists.
+             */
+            val website: String? get() = (type as? ItemType.Login)?.uriList?.firstOrNull()?.uri
         }
     }
 

@@ -16,7 +16,7 @@ internal class ServiceTypeExtensionsTest {
             domainName = "test.com",
             baseUrl = "http://test.com",
         )
-        val request = addyIoServiceType.toUsernameGeneratorRequest()
+        val request = addyIoServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -28,7 +28,7 @@ internal class ServiceTypeExtensionsTest {
             domainName = "",
             baseUrl = "http://test.com",
         )
-        val request = addyIoServiceType.toUsernameGeneratorRequest()
+        val request = addyIoServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -40,7 +40,8 @@ internal class ServiceTypeExtensionsTest {
             domainName = "test.com",
             baseUrl = "http://test.com",
         )
-        val request = addyIoServiceType.toUsernameGeneratorRequest()
+        val website = "bitwarden.com"
+        val request = addyIoServiceType.toUsernameGeneratorRequest(website)
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
@@ -49,7 +50,7 @@ internal class ServiceTypeExtensionsTest {
                     domain = "test.com",
                     baseUrl = "http://test.com",
                 ),
-                website = null,
+                website = website,
             ),
             request,
         )
@@ -58,7 +59,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for DuckDuckGo returns null when apiKey is blank`() {
         val duckDuckGoServiceType = ServiceType.DuckDuckGo(apiKey = "")
-        val request = duckDuckGoServiceType.toUsernameGeneratorRequest()
+        val request = duckDuckGoServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -66,12 +67,13 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for DuckDuckGo returns correct request`() {
         val duckDuckGoServiceType = ServiceType.DuckDuckGo(apiKey = "testKey")
-        val request = duckDuckGoServiceType.toUsernameGeneratorRequest()
+        val website = "bitwarden.com"
+        val request = duckDuckGoServiceType.toUsernameGeneratorRequest(website)
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.DuckDuckGo(token = "testKey"),
-                website = null,
+                website = website,
             ),
             request,
         )
@@ -80,7 +82,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for FirefoxRelay returns null when apiAccessToken is blank`() {
         val firefoxRelayServiceType = ServiceType.FirefoxRelay(apiAccessToken = "")
-        val request = firefoxRelayServiceType.toUsernameGeneratorRequest()
+        val request = firefoxRelayServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -88,12 +90,13 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for FirefoxRelay returns correct request`() {
         val firefoxRelayServiceType = ServiceType.FirefoxRelay(apiAccessToken = "testToken")
-        val request = firefoxRelayServiceType.toUsernameGeneratorRequest()
+        val website = "bitwarden.com"
+        val request = firefoxRelayServiceType.toUsernameGeneratorRequest(website)
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.Firefox(apiToken = "testToken"),
-                website = null,
+                website = website,
             ),
             request,
         )
@@ -102,20 +105,23 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for FastMail returns null when apiKey is blank`() {
         val fastMailServiceType = ServiceType.FastMail(apiKey = "")
-        val request = fastMailServiceType.toUsernameGeneratorRequest()
+        val request = fastMailServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
 
     @Test
     fun `toUsernameGeneratorRequest for FastMail returns correct request`() {
-        val fastMailServiceType = ServiceType.FastMail(apiKey = "testKey")
-        val request = fastMailServiceType.toUsernameGeneratorRequest()
+        val fastMailServiceType = ServiceType.FastMail(
+            apiKey = "testKey",
+        )
+        val website = "bitwarden.com"
+        val request = fastMailServiceType.toUsernameGeneratorRequest(website)
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.Fastmail(apiToken = "testKey"),
-                website = null,
+                website = "bitwarden.com",
             ),
             request,
         )
@@ -127,7 +133,7 @@ internal class ServiceTypeExtensionsTest {
             apiKey = "",
             domainName = "domainName",
         )
-        val request = forwardMailServiceType.toUsernameGeneratorRequest()
+        val request = forwardMailServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -138,7 +144,7 @@ internal class ServiceTypeExtensionsTest {
             apiKey = "apiKey",
             domainName = "",
         )
-        val request = forwardMailServiceType.toUsernameGeneratorRequest()
+        val request = forwardMailServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -149,7 +155,8 @@ internal class ServiceTypeExtensionsTest {
             apiKey = "apiKey",
             domainName = "domainName",
         )
-        val request = forwardEmailServiceType.toUsernameGeneratorRequest()
+        val website = "bitwarden.com"
+        val request = forwardEmailServiceType.toUsernameGeneratorRequest(website)
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
@@ -157,7 +164,7 @@ internal class ServiceTypeExtensionsTest {
                     apiToken = "apiKey",
                     domain = "domainName",
                 ),
-                website = null,
+                website = website,
             ),
             request,
         )
@@ -166,7 +173,7 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for SimpleLogin returns null when apiKey is blank`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "")
-        val request = simpleLoginServiceType.toUsernameGeneratorRequest()
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(website = null)
 
         assertNull(request)
     }
@@ -174,12 +181,13 @@ internal class ServiceTypeExtensionsTest {
     @Test
     fun `toUsernameGeneratorRequest for SimpleLogin returns correct request`() {
         val simpleLoginServiceType = ServiceType.SimpleLogin(apiKey = "testKey")
-        val request = simpleLoginServiceType.toUsernameGeneratorRequest()
+        val website = "bitwarden.com"
+        val request = simpleLoginServiceType.toUsernameGeneratorRequest(website)
 
         assertEquals(
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.SimpleLogin(apiKey = "testKey"),
-                website = null,
+                website = website,
             ),
             request,
         )

@@ -80,20 +80,25 @@ class GeneratorViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val policyManager: PolicyManager,
 ) : BaseViewModel<GeneratorState, GeneratorEvent, GeneratorAction>(
-    initialState = savedStateHandle[KEY_STATE] ?: GeneratorState(
-        generatedText = NO_GENERATED_TEXT,
-        selectedType = when (GeneratorArgs(savedStateHandle).type) {
-            GeneratorMode.Modal.Username -> Username()
-            GeneratorMode.Modal.Password -> Passcode()
-            GeneratorMode.Default -> Passcode(selectedType = Password())
-        },
-        generatorMode = GeneratorArgs(savedStateHandle).type,
-        currentEmailAddress =
-        requireNotNull(authRepository.userStateFlow.value?.activeAccount?.email),
-        isUnderPolicy = policyManager
-            .getActivePolicies<PolicyInformation.PasswordGenerator>()
-            .any(),
-    ),
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val generatorMode = GeneratorArgs(savedStateHandle).type
+        GeneratorState(
+            generatedText = NO_GENERATED_TEXT,
+            selectedType = when (generatorMode) {
+                is GeneratorMode.Modal.Username -> Username()
+                GeneratorMode.Modal.Password -> Passcode()
+                GeneratorMode.Default -> Passcode(selectedType = Password())
+            },
+            generatorMode = generatorMode,
+            currentEmailAddress = requireNotNull(
+                authRepository.userStateFlow.value?.activeAccount?.email,
+            ),
+            isUnderPolicy = policyManager
+                .getActivePolicies<PolicyInformation.PasswordGenerator>()
+                .any(),
+            website = (generatorMode as? GeneratorMode.Modal.Username)?.website,
+        )
+    },
 ) {
 
     //region Initialization and Overrides
@@ -1356,7 +1361,7 @@ class GeneratorViewModel @Inject constructor(
     }
 
     private suspend fun generateForwardedEmailAlias(alias: ForwardedEmailAlias) {
-        val request = alias.selectedServiceType?.toUsernameGeneratorRequest() ?: run {
+        val request = alias.selectedServiceType?.toUsernameGeneratorRequest(state.website) ?: run {
             mutableStateFlow.update { it.copy(generatedText = NO_GENERATED_TEXT) }
             return
         }
@@ -1416,6 +1421,7 @@ class GeneratorViewModel @Inject constructor(
             )
         }
     }
+
     private inline fun updatePasswordType(
         crossinline block: (Password) -> Password,
     ) {
@@ -1661,6 +1667,7 @@ data class GeneratorState(
     val generatorMode: GeneratorMode = GeneratorMode.Default,
     val currentEmailAddress: String,
     val isUnderPolicy: Boolean = false,
+    val website: String? = null,
 ) : Parcelable {
 
     /**

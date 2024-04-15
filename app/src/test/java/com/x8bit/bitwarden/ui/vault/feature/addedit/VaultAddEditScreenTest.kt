@@ -176,12 +176,13 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Suppress("MaxLineLength")
     @Test
     fun `on NavigateToGeneratorModal event in username mode should invoke NavigateToGeneratorModal with Username Generator Mode `() {
+        val website = "bitwarden.com"
         mutableEventFlow.tryEmit(
             VaultAddEditEvent.NavigateToGeneratorModal(
-                generatorMode = GeneratorMode.Modal.Username,
+                generatorMode = GeneratorMode.Modal.Username(website),
             ),
         )
-        assertEquals(GeneratorMode.Modal.Username, onNavigateToGeneratorModalType)
+        assertEquals(GeneratorMode.Modal.Username(website), onNavigateToGeneratorModalType)
     }
 
     @Test

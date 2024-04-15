@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
  * Converts a [ServiceType] to a [UsernameGeneratorRequest.Forwarded].
  */
 @Suppress("ReturnCount", "LongMethod")
-fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded? {
+fun ServiceType.toUsernameGeneratorRequest(website: String?): UsernameGeneratorRequest.Forwarded? {
     return when (this) {
         is ServiceType.AddyIo -> {
             val accessToken = this.apiAccessToken.orNullIfBlank() ?: return null
@@ -20,7 +20,7 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                     domain = domain,
                     baseUrl = this.baseUrl,
                 ),
-                website = null,
+                website = website,
             )
         }
 
@@ -31,7 +31,7 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                 ?.let {
                     UsernameGeneratorRequest.Forwarded(
                         service = ForwarderServiceType.DuckDuckGo(token = it),
-                        website = null,
+                        website = website,
                     )
                 }
         }
@@ -43,7 +43,7 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                 ?.let {
                     UsernameGeneratorRequest.Forwarded(
                         service = ForwarderServiceType.Firefox(apiToken = it),
-                        website = null,
+                        website = website,
                     )
                 }
         }
@@ -55,7 +55,8 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                 ?.let {
                     UsernameGeneratorRequest.Forwarded(
                         service = ForwarderServiceType.Fastmail(apiToken = it),
-                        website = null,
+                        // A null `website` value here will cause an error.
+                        website = website.orEmpty(),
                     )
                 }
         }
@@ -65,7 +66,7 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
             val domainName = this.domainName.orNullIfBlank() ?: return null
             UsernameGeneratorRequest.Forwarded(
                 service = ForwarderServiceType.ForwardEmail(apiKey, domainName),
-                website = null,
+                website = website,
             )
         }
 
@@ -76,7 +77,7 @@ fun ServiceType.toUsernameGeneratorRequest(): UsernameGeneratorRequest.Forwarded
                 ?.let {
                     UsernameGeneratorRequest.Forwarded(
                         service = ForwarderServiceType.SimpleLogin(apiKey = it),
-                        website = null,
+                        website = website,
                     )
                 }
         }

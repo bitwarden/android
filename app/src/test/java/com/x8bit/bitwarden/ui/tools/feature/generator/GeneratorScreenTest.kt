@@ -84,7 +84,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `ModalAppBar should be displayed for Username Mode`() {
-        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+            ),
+        )
 
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
@@ -97,7 +101,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `on close click should send CloseClick`() {
-        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+            ),
+        )
 
         composeTestRule
             .onNodeWithContentDescription(label = "Close")
@@ -110,7 +118,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `on select click should send SelectClick`() {
-        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+            ),
+        )
 
         composeTestRule
             .onNodeWithText(text = "Select")
@@ -141,7 +153,11 @@ class GeneratorScreenTest : BaseComposeTest() {
 
     @Test
     fun `MainTypeOption select control should be hidden for username mode`() {
-        updateState(DEFAULT_STATE.copy(generatorMode = GeneratorMode.Modal.Username))
+        updateState(
+            DEFAULT_STATE.copy(
+                generatorMode = GeneratorMode.Modal.Username(website = null),
+            ),
+        )
 
         composeTestRule
             .onNodeWithContentDescription(label = "What would you like to generate?, Password")
