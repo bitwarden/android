@@ -367,6 +367,7 @@ class AuthRepositoryImpl(
                     .flatMap { organizationKeys ->
                         authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                             userId = userId,
+                            email = account.profile.email,
                             orgPublicKey = organizationKeys.publicKey,
                             rememberDevice = authDiskSource.shouldTrustDevice,
                         )

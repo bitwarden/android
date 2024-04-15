@@ -78,12 +78,14 @@ class AuthSdkSourceImpl(
 
     override suspend fun makeRegisterTdeKeysAndUnlockVault(
         userId: String,
+        email: String,
         orgPublicKey: String,
         rememberDevice: Boolean,
     ): Result<RegisterTdeKeyResponse> = runCatching {
         getClient(userId = userId)
             .auth()
             .makeRegisterTdeKeys(
+                email = email,
                 orgPublicKey = orgPublicKey,
                 rememberDevice = rememberDevice,
             )

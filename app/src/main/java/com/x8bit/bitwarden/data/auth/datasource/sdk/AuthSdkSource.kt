@@ -52,6 +52,7 @@ interface AuthSdkSource {
      */
     suspend fun makeRegisterTdeKeysAndUnlockVault(
         userId: String,
+        email: String,
         orgPublicKey: String,
         rememberDevice: Boolean,
     ): Result<RegisterTdeKeyResponse>
