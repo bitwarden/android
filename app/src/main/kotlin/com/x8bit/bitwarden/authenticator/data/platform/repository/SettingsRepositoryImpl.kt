@@ -66,4 +66,18 @@ class SettingsRepositoryImpl(
                     .isIconLoadingDisabled
                     ?: false,
             )
+    override var hasSeenWelcomeTutorial: Boolean
+        get() = settingsDiskSource.hasSeenWelcomeTutorial
+        set(value) {
+            settingsDiskSource.hasSeenWelcomeTutorial = value
+        }
+
+    override val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
+        get() = settingsDiskSource
+            .hasSeenWelcomeTutorialFlow
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = hasSeenWelcomeTutorial,
+            )
 }

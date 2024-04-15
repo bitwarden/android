@@ -44,4 +44,14 @@ interface SettingsRepository {
      * Emits updates that track the [isIconLoadingDisabled] value.
      */
     val isIconLoadingDisabledFlow: Flow<Boolean>
+
+    /**
+     * Whether the user has seen the Welcome tutorial.
+     */
+    var hasSeenWelcomeTutorial: Boolean
+
+    /**
+     * Tracks whether the user has seen the Welcome tutorial.
+     */
+    val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
 }

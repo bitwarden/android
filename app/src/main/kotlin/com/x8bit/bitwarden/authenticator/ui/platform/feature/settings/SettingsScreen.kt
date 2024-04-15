@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.authenticator.R
+import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
 import com.x8bit.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.x8bit.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
@@ -47,10 +48,17 @@ import com.x8bit.bitwarden.authenticator.ui.platform.util.displayLabel
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
+    onNavigateToTutorial: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior =
         TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+
+    EventsEffect(viewModel = viewModel) { event ->
+        when (event) {
+            SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
+        }
+    }
 
     BitwardenScaffold(
         topBar = {
@@ -75,21 +83,31 @@ fun SettingsScreen(
                     }
                 },
                 onThemeSelection = remember(viewModel) {
-                    { viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it)) }
+                    {
+                        viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
+                    }
                 },
                 onShowWebsiteIconsChange = remember(viewModel) {
                     {
                         viewModel.trySendAction(
-                            SettingsAction.AppearanceChange.ShowWebsiteIconsChange(
-                                it
-                            )
+                            SettingsAction.AppearanceChange.ShowWebsiteIconsChange(it)
                         )
                     }
                 },
             )
+
+            HelpSettings(
+                onTutorialClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(SettingsAction.HelpClick.ShowTutorialClick)
+                    }
+                }
+            )
         }
     }
 }
+
+//region Appearance settings
 
 @Composable
 private fun AppearanceSettings(
@@ -222,3 +240,25 @@ private fun ThemeSelectionRow(
         }
     }
 }
+
+//endregion Appearance settings
+
+//region Help settings
+
+@Composable
+private fun HelpSettings(
+    modifier: Modifier = Modifier,
+    onTutorialClick: () -> Unit,
+) {
+    BitwardenListHeaderText(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        label = stringResource(id = R.string.help)
+    )
+    BitwardenTextRow(
+        text = stringResource(id = R.string.tutorial),
+        onClick = onTutorialClick,
+        modifier = modifier,
+    )
+}
+
+//region Help settings

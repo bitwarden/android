@@ -35,6 +35,7 @@ class SettingsViewModel @Inject constructor(
     override fun handleAction(action: SettingsAction) {
         when (action) {
             is SettingsAction.AppearanceChange -> handleAppearanceChange(action)
+            is SettingsAction.HelpClick -> handleHelpClick(action)
         }
     }
 
@@ -85,6 +86,16 @@ class SettingsViewModel @Inject constructor(
         }
         settingsRepository.appTheme = theme
     }
+
+    private fun handleHelpClick(action: SettingsAction.HelpClick) {
+        when (action) {
+            SettingsAction.HelpClick.ShowTutorialClick -> handleShowTutorialCLick()
+        }
+    }
+
+    private fun handleShowTutorialCLick() {
+        sendEvent(SettingsEvent.NavigateToTutorial)
+    }
 }
 
 /**
@@ -108,12 +119,18 @@ data class SettingsState(
 /**
  * Models events for the settings screen.
  */
-sealed class SettingsEvent
+sealed class SettingsEvent {
+    data object NavigateToTutorial : SettingsEvent()
+}
 
 /**
  * Models actions for the settings screen.
  */
 sealed class SettingsAction {
+
+    sealed class HelpClick : SettingsAction() {
+        data object ShowTutorialClick : HelpClick()
+    }
 
     sealed class AppearanceChange : SettingsAction() {
         /**

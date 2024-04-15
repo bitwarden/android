@@ -14,17 +14,20 @@ private const val SETTINGS_ROUTE = "settings"
  */
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
+    onNavigateToTutorial: () -> Unit,
 ) {
-   navigation(
-       startDestination = SETTINGS_ROUTE,
-       route = SETTINGS_GRAPH_ROUTE
-   )  {
-       composableWithRootPushTransitions(
-           route = SETTINGS_ROUTE
-       ) {
-           SettingsScreen()
-       }
-   }
+    navigation(
+        startDestination = SETTINGS_ROUTE,
+        route = SETTINGS_GRAPH_ROUTE
+    ) {
+        composableWithRootPushTransitions(
+            route = SETTINGS_ROUTE
+        ) {
+            SettingsScreen(
+                onNavigateToTutorial = onNavigateToTutorial,
+            )
+        }
+    }
 }
 
 /**

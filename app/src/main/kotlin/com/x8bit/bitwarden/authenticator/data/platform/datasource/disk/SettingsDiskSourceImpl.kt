@@ -15,6 +15,7 @@ private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
 private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
+private const val FIRST_LAUNCH_KEY = "$BASE_KEY:hasSeenWelcomeTutorial"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -47,6 +48,9 @@ class SettingsDiskSourceImpl(
             )
         }
 
+    private val mutableFirstLaunchFlow =
+        bufferedMutableSharedFlow<Boolean>()
+
     override var appTheme: AppTheme
         get() = getString(key = APP_THEME_KEY)
             ?.let { storedValue ->
@@ -75,6 +79,16 @@ class SettingsDiskSourceImpl(
     override val isIconLoadingDisabledFlow: Flow<Boolean?>
         get() = mutableIsIconLoadingDisabledFlow
             .onSubscription { emit(getBoolean(DISABLE_ICON_LOADING_KEY)) }
+
+    override var hasSeenWelcomeTutorial: Boolean
+        get() = getBoolean(key = FIRST_LAUNCH_KEY) ?: false
+        set(value) {
+            putBoolean(key = FIRST_LAUNCH_KEY, value)
+            mutableFirstLaunchFlow.tryEmit(hasSeenWelcomeTutorial)
+        }
+
+    override val hasSeenWelcomeTutorialFlow: Flow<Boolean>
+        get() = mutableFirstLaunchFlow.onSubscription { emit(hasSeenWelcomeTutorial) }
 
     override fun storeAlertThresholdSeconds(thresholdSeconds: Int) {
         putInt(

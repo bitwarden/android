@@ -35,6 +35,16 @@ interface SettingsDiskSource {
     val isIconLoadingDisabledFlow: Flow<Boolean?>
 
     /**
+     * Tracks whether user has seen the Welcome tutorial.
+     */
+    var hasSeenWelcomeTutorial: Boolean
+
+    /**
+     * Emits update that track [hasSeenWelcomeTutorial]
+     */
+    val hasSeenWelcomeTutorialFlow: Flow<Boolean>
+
+    /**
      * Stores the threshold at which users are alerted that an items validity period is nearing
      * expiration.
      */

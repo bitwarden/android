@@ -19,6 +19,9 @@ import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.authenticator.
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.splash.SPLASH_ROUTE
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.splash.navigateToSplash
 import com.x8bit.bitwarden.authenticator.ui.platform.feature.splash.splashDestination
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.tutorial.TUTORIAL_ROUTE
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
+import com.x8bit.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.NonNullEnterTransitionProvider
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.NonNullExitTransitionProvider
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.RootTransitionProviders
@@ -62,12 +65,16 @@ fun RootNavScreen(
         popExitTransition = { toExitTransition()(this) },
     ) {
         splashDestination()
+        tutorialDestination(
+            onTutorialFinished = { navController.navigateToAuthenticatorGraph() }
+        )
         authenticatorGraph(navController)
     }
 
     val targetRoute = when (state) {
         RootNavState.ItemListing -> AUTHENTICATOR_GRAPH_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
+        RootNavState.Tutorial -> TUTORIAL_ROUTE
     }
 
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -94,8 +101,9 @@ fun RootNavScreen(
 
     LaunchedEffect(state) {
         when (state) {
-            RootNavState.ItemListing -> navController.navigateToAuthenticatorGraph(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)
+            RootNavState.Tutorial -> navController.navigateToTutorial(rootNavOptions)
+            RootNavState.ItemListing -> navController.navigateToAuthenticatorGraph(rootNavOptions)
         }
     }
 }
