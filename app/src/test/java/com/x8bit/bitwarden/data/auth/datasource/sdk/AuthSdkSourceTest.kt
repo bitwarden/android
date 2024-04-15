@@ -163,12 +163,14 @@ class AuthSdkSourceTest {
     fun `makeRegisterTdeKeysAndUnlockVault should call SDK and return a Result with the correct data`() =
         runBlocking {
             val userId = "userId"
+            val email = "email"
             val orgPublicKey = "orgPublicKey"
             val rememberDevice = true
             val expectedResult = mockk<RegisterTdeKeyResponse>()
             coEvery { sdkClientManager.getOrCreateClient(userId = userId) } returns client
             coEvery {
                 clientAuth.makeRegisterTdeKeys(
+                    email = email,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = rememberDevice,
                 )
@@ -176,12 +178,14 @@ class AuthSdkSourceTest {
 
             val result = authSkdSource.makeRegisterTdeKeysAndUnlockVault(
                 userId = userId,
+                email = email,
                 orgPublicKey = orgPublicKey,
                 rememberDevice = rememberDevice,
             )
             assertEquals(expectedResult.asSuccess(), result)
             coVerify(exactly = 1) {
                 clientAuth.makeRegisterTdeKeys(
+                    email = email,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = rememberDevice,
                 )

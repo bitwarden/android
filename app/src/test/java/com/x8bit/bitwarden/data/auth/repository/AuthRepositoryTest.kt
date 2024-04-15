@@ -823,6 +823,7 @@ class AuthRepositoryTest {
             coEvery {
                 authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                     userId = USER_ID_1,
+                    email = EMAIL,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
@@ -836,6 +837,7 @@ class AuthRepositoryTest {
                 organizationService.getOrganizationKeys(orgId)
                 authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                     userId = USER_ID_1,
+                    email = EMAIL,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
@@ -877,6 +879,7 @@ class AuthRepositoryTest {
         coEvery {
             authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                 userId = USER_ID_1,
+                email = EMAIL,
                 orgPublicKey = orgPublicKey,
                 rememberDevice = shouldTrustDevice,
             )
@@ -896,6 +899,7 @@ class AuthRepositoryTest {
             organizationService.getOrganizationKeys(orgId)
             authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                 userId = USER_ID_1,
+                email = EMAIL,
                 orgPublicKey = orgPublicKey,
                 rememberDevice = shouldTrustDevice,
             )
@@ -941,6 +945,7 @@ class AuthRepositoryTest {
         coEvery {
             authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                 userId = USER_ID_1,
+                email = EMAIL,
                 orgPublicKey = orgPublicKey,
                 rememberDevice = shouldTrustDevice,
             )
@@ -968,6 +973,7 @@ class AuthRepositoryTest {
             organizationService.getOrganizationKeys(orgId)
             authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                 userId = USER_ID_1,
+                email = EMAIL,
                 orgPublicKey = orgPublicKey,
                 rememberDevice = shouldTrustDevice,
             )
@@ -1021,6 +1027,7 @@ class AuthRepositoryTest {
             coEvery {
                 authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                     userId = USER_ID_1,
+                    email = EMAIL,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
@@ -1050,6 +1057,7 @@ class AuthRepositoryTest {
                 organizationService.getOrganizationKeys(orgId)
                 authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                     userId = USER_ID_1,
+                    email = EMAIL,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
@@ -1104,6 +1112,7 @@ class AuthRepositoryTest {
             coEvery {
                 authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                     userId = USER_ID_1,
+                    email = EMAIL,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
@@ -1139,6 +1148,7 @@ class AuthRepositoryTest {
                 organizationService.getOrganizationKeys(orgId)
                 authSdkSource.makeRegisterTdeKeysAndUnlockVault(
                     userId = USER_ID_1,
+                    email = EMAIL,
                     orgPublicKey = orgPublicKey,
                     rememberDevice = shouldTrustDevice,
                 )
