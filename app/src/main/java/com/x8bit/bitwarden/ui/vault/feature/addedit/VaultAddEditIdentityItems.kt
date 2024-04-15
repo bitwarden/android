@@ -315,28 +315,30 @@ fun LazyListScope.vaultAddEditIdentityItems(
         )
     }
 
-    item {
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenSwitchWithActions(
-            label = stringResource(id = R.string.password_prompt),
-            isChecked = commonState.masterPasswordReprompt,
-            onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
-            modifier = Modifier
-                .semantics { testTag = "MasterPasswordRepromptToggle" }
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            actions = {
-                IconButton(onClick = commonTypeHandlers.onTooltipClick) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_tooltip),
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = stringResource(
-                            id = R.string.master_password_re_prompt_help,
-                        ),
-                    )
-                }
-            },
-        )
+    if (commonState.isUnlockWithPasswordEnabled) {
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenSwitchWithActions(
+                label = stringResource(id = R.string.password_prompt),
+                isChecked = commonState.masterPasswordReprompt,
+                onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
+                modifier = Modifier
+                    .semantics { testTag = "MasterPasswordRepromptToggle" }
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                actions = {
+                    IconButton(onClick = commonTypeHandlers.onTooltipClick) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_tooltip),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                            contentDescription = stringResource(
+                                id = R.string.master_password_re_prompt_help,
+                            ),
+                        )
+                    }
+                },
+            )
+        }
     }
 
     item {
