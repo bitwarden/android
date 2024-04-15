@@ -96,9 +96,11 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import javax.inject.Singleton
 
 /**
@@ -147,6 +149,15 @@ class AuthRepositoryImpl(
      * whenever set to `true`.
      */
     private val mutableHasPendingAccountDeletionStateFlow = MutableStateFlow(false)
+
+    /**
+     * Whenever a function needs to update multiple underlying data-points that contribute to the
+     * [UserState], we update this [MutableStateFlow] and continue to show the original `UserState`
+     * until the transaction is complete. This is accomplished by blocking the emissions of the
+     * [userStateFlow] whenever this is set to a value above 0 (a count is used if more than one
+     * process is updating data simultaneously).
+     */
+    private val mutableUserStateTransactionCountStateFlow = MutableStateFlow(0)
 
     /**
      * The auth information to make the identity token request will need to be
@@ -206,7 +217,11 @@ class AuthRepositoryImpl(
         authDiskSource.userOrganizationsListFlow,
         vaultRepository.vaultUnlockDataStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
-        mutableHasPendingAccountDeletionStateFlow,
+        // Ignore the data in the merge, but trigger an update when they emit.
+        merge(
+            mutableHasPendingAccountDeletionStateFlow,
+            mutableUserStateTransactionCountStateFlow,
+        ),
     ) {
             userStateJson,
             userOrganizationsList,
@@ -214,18 +229,18 @@ class AuthRepositoryImpl(
             hasPendingAccountAddition,
             _,
         ->
-        userStateJson
-            ?.toUserState(
-                vaultState = vaultState,
-                userOrganizationsList = userOrganizationsList,
-                hasPendingAccountAddition = hasPendingAccountAddition,
-                isBiometricsEnabledProvider = ::isBiometricsEnabled,
-                vaultUnlockTypeProvider = ::getVaultUnlockType,
-                isLoggedInProvider = ::isUserLoggedIn,
-                isDeviceTrustedProvider = ::isDeviceTrusted,
-            )
+        userStateJson?.toUserState(
+            vaultState = vaultState,
+            userOrganizationsList = userOrganizationsList,
+            hasPendingAccountAddition = hasPendingAccountAddition,
+            isBiometricsEnabledProvider = ::isBiometricsEnabled,
+            vaultUnlockTypeProvider = ::getVaultUnlockType,
+            isLoggedInProvider = ::isUserLoggedIn,
+            isDeviceTrustedProvider = ::isDeviceTrusted,
+        )
     }
         .filterNot { mutableHasPendingAccountDeletionStateFlow.value }
+        .filterNot { mutableUserStateTransactionCountStateFlow.value > 0 }
         .stateIn(
             scope = unconfinedScope,
             started = SharingStarted.Eagerly,
@@ -1188,12 +1203,26 @@ class AuthRepositoryImpl(
         password: String?,
         deviceData: DeviceDataModel?,
         orgIdentifier: String?,
-    ): LoginResult {
+    ): LoginResult = userStateTransaction {
         val userStateJson = loginResponse.toUserState(
             previousUserState = authDiskSource.userState,
             environmentUrlData = environmentRepository.environment.environmentUrlData,
         )
         val userId = userStateJson.activeUserId
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = AccountTokensJson(
+                accessToken = loginResponse.accessToken,
+                refreshToken = loginResponse.refreshToken,
+            ),
+        )
+        authDiskSource.userState = userStateJson
+        loginResponse.key?.let {
+            // Only set the value if it's present, since we may have set it already
+            // when we completed the pending admin auth request.
+            authDiskSource.storeUserKey(userId = userId, userKey = it)
+        }
+        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
 
         // If the user just authenticated with a two-factor code and selected the option to
         // remember it, then the API response will return a token that will be used in place
@@ -1290,24 +1319,10 @@ class AuthRepositoryImpl(
             }
         }
 
-        authDiskSource.storeAccountTokens(
-            userId = userId,
-            accountTokens = AccountTokensJson(
-                accessToken = loginResponse.accessToken,
-                refreshToken = loginResponse.refreshToken,
-            ),
-        )
-        authDiskSource.userState = userStateJson
-        loginResponse.key?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the pending admin auth request.
-            authDiskSource.storeUserKey(userId = userId, userKey = it)
-        }
-        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         vaultRepository.syncIfNecessary()
         hasPendingAccountAddition = false
-        return LoginResult.Success
+        LoginResult.Success
     }
 
     /**
@@ -1404,4 +1419,20 @@ class AuthRepositoryImpl(
     }
 
     //endregion LoginCommon
+
+    /**
+     * Run the given [block] while preventing any updates to [UserState]. This is useful in cases
+     * where many individual changes might occur that would normally affect the [UserState] but we
+     * only want a single final emission. In the rare case that multiple threads are running
+     * transactions simultaneously, there will be no [UserState] updates until the last
+     * transaction completes.
+     */
+    private inline fun <T> userStateTransaction(block: () -> T): T {
+        mutableUserStateTransactionCountStateFlow.update { it.inc() }
+        return try {
+            block()
+        } finally {
+            mutableUserStateTransactionCountStateFlow.update { it.dec() }
+        }
+    }
 }
