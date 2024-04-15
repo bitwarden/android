@@ -2889,7 +2889,7 @@ Do you want to switch to this account?</value>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
   </data>
-  <data name="OrganizationUnassignedItemsMessageSelfHostDescriptionLong" xml:space="preserve">
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
     <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
   </data>
   <data name="RemindMeLater" xml:space="preserve">
@@ -2897,5 +2897,5 @@ Do you want to switch to this account?</value>
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Notice</value>
-  </data>
+  </data>s
 </root>
