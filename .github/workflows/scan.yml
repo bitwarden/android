@@ -31,7 +31,7 @@ jobs:
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Scan with Checkmarx
-        uses: checkmarx/ast-github-action@749fec53e0db0f6404a97e2e0807c3e80e3583a7 #2.0.23
+        uses: checkmarx/ast-github-action@8a59a15b86b4e2f35b974222d1f516eedfe2d585 # 2.0.24
         env:
           INCREMENTAL: "${{ contains(github.event_name, 'pull_request') && '--sast-incremental' || '' }}"
         with:
