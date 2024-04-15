@@ -1517,6 +1517,7 @@ data class VaultAddEditState(
                 @IgnoredOnParcel
                 val originalCipher: CipherView? = null,
                 val name: String = "",
+                val isUnlockWithPasswordEnabled: Boolean = true,
                 val masterPasswordReprompt: Boolean = false,
                 val favorite: Boolean = false,
                 val customFieldData: List<Custom> = emptyList(),

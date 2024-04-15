@@ -128,6 +128,8 @@ fun VaultAddEditState.ViewState.appendFolderAndOwnerData(
                     cipherView = currentContentState.common.originalCipher,
                     isIndividualVaultDisabled = isIndividualVaultDisabled,
                 ),
+                isUnlockWithPasswordEnabled =
+                activeAccount.trustedDevice?.hasMasterPassword != false,
             ),
         )
     } ?: this

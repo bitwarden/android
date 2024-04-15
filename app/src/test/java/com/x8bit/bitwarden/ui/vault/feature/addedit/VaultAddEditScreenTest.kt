@@ -2108,6 +2108,22 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `re-prompt toggle should display according to state`() {
+        mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Master password re-prompt")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { currentState ->
+            updateCommonContent(currentState) { copy(isUnlockWithPasswordEnabled = false) }
+        }
+        composeTestRule
+            .onNodeWithText("Master password re-prompt")
+            .assertDoesNotExist()
+    }
+
+    @Test
     fun `the master password re-prompt toggle should be enabled or disabled according to state`() {
         mutableStateFlow.value = DEFAULT_STATE_SECURE_NOTES
 
