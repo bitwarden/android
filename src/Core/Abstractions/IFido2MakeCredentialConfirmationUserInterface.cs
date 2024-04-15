@@ -5,7 +5,7 @@ namespace Bit.Core.Abstractions
     public interface IFido2MakeCredentialConfirmationUserInterface : IFido2MakeCredentialUserInterface
     {
         /// <summary>
-        /// Call this method after the use chose where to save the new Fido2 credential.
+        /// Call this method after the user chose where to save the new Fido2 credential.
         /// </summary>
         /// <param name="cipherId">
         /// Cipher ID where to save the new credential.
@@ -18,7 +18,7 @@ namespace Bit.Core.Abstractions
         void Confirm(string cipherId, bool? userVerified);
 
         /// <summary>
-        /// Call this method after the use chose where to save the new Fido2 credential.
+        /// Call this method after the user chose where to save the new Fido2 credential.
         /// </summary>
         /// <param name="cipherId">
         /// Cipher ID where to save the new credential.
