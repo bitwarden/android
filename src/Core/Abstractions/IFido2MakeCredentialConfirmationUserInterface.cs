@@ -28,5 +28,7 @@ namespace Bit.Core.Abstractions
         void OnConfirmationException(Exception ex);
 
         Fido2UserVerificationOptions? GetCurrentUserVerificationOptions();
+
+        void SetCheckHasVaultBeenUnlockedInThisTransaction(Func<bool> checkHasVaultBeenUnlockedInThisTransaction);
     }
 }
