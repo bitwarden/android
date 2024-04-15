@@ -53,30 +53,13 @@ class TrustedDeviceManagerTests {
     @Test
     fun `trustThisDeviceIfNecessary when shouldTrustDevice false should return success with false`() =
         runTest {
-            val deviceKey = "deviceKey"
-            val trustedDeviceResponse = TrustDeviceResponse(
-                deviceKey = deviceKey,
-                protectedUserKey = "protectedUserKey",
-                protectedDevicePrivateKey = "protectedDevicePrivateKey",
-                protectedDevicePublicKey = "protectedDevicePublicKey",
-            )
             fakeAuthDiskSource.shouldTrustDevice = false
-            coEvery {
-                vaultSdkSource.getTrustDevice(userId = USER_ID)
-            } returns trustedDeviceResponse.asSuccess()
 
             val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
             assertEquals(false.asSuccess(), result)
-            fakeAuthDiskSource.assertDeviceKey(
-                userId = USER_ID,
-                deviceKey = deviceKey,
-                inMemoryOnly = true,
-            )
-            coVerify(exactly = 1) {
-                vaultSdkSource.getTrustDevice(userId = USER_ID)
-            }
             coVerify(exactly = 0) {
+                vaultSdkSource.getTrustDevice(userId = USER_ID)
                 devicesService.trustDevice(
                     appId = any(),
                     encryptedUserKey = any(),
