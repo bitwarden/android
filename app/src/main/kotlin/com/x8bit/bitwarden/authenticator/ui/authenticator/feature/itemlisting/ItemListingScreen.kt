@@ -198,14 +198,14 @@ fun ItemListingScreen(
                                 onItemClick = remember(viewModel) {
                                     {
                                         viewModel.trySendAction(
-                                            ItemListingAction.ItemClick(it.id)
+                                            ItemListingAction.ItemClick(it.authCode)
                                         )
                                     }
                                 },
                                 onEditItemClick = remember(viewModel) {
                                     {
                                         viewModel.trySendAction(
-                                            ItemListingAction.ItemClick(it.id)
+                                            ItemListingAction.EditItemClick(it.id)
                                         )
                                     }
                                 },

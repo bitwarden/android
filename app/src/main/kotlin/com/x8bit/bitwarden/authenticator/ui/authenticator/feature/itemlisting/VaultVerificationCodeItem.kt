@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
@@ -63,103 +64,105 @@ fun VaultVerificationCodeItem(
     supportingLabel: String? = null,
 ) {
     var shouldShowDropdownMenu by remember { mutableStateOf(value = false) }
-    Row(
-        modifier = Modifier
-            .combinedClickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
-                onClick = onItemClick,
-                onLongClick = {
-                    shouldShowDropdownMenu = true
-                }
-            )
-            .defaultMinSize(minHeight = 72.dp)
-            .padding(vertical = 8.dp)
-            .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        BitwardenIcon(
-            iconData = startIcon,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.size(24.dp),
-        )
-
-        Column(
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.SpaceEvenly,
-            modifier = Modifier.weight(1f),
+    Box(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .combinedClickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                    onClick = onItemClick,
+                    onLongClick = {
+                        shouldShowDropdownMenu = true
+                    }
+                )
+                .defaultMinSize(minHeight = 72.dp)
+                .padding(vertical = 8.dp)
+                .then(modifier),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            issuer?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
+            BitwardenIcon(
+                iconData = startIcon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.size(24.dp),
+            )
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.SpaceEvenly,
+                modifier = Modifier.weight(1f),
+            ) {
+                issuer?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+
+                supportingLabel?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
 
-            supportingLabel?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+            BitwardenCircularCountdownIndicator(
+                timeLeftSeconds = timeLeftSeconds,
+                periodSeconds = periodSeconds,
+                alertThresholdSeconds = alertThresholdSeconds
+            )
+
+            Text(
+                text = authCode.chunked(3).joinToString(" "),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
 
-        BitwardenCircularCountdownIndicator(
-            timeLeftSeconds = timeLeftSeconds,
-            periodSeconds = periodSeconds,
-            alertThresholdSeconds = alertThresholdSeconds
-        )
-
-        Text(
-            text = authCode.chunked(3).joinToString(" "),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-
-    DropdownMenu(
-        expanded = shouldShowDropdownMenu,
-        onDismissRequest = { shouldShowDropdownMenu = false },
-    ) {
-        DropdownMenuItem(
-            text = {
-                Text(text = stringResource(id = R.string.edit_item))
-            },
-            onClick = {
-                shouldShowDropdownMenu = false
-                onEditItemClick()
-            },
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_edit_item),
-                    contentDescription = stringResource(R.string.edit_item)
-                )
-            }
-        )
-        HorizontalDivider()
-        DropdownMenuItem(
-            text = {
-                Text(text = stringResource(id = R.string.delete_item))
-            },
-            onClick = {
-                shouldShowDropdownMenu = false
-                onDeleteItemClick()
-            },
-            leadingIcon = {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_delete_item),
-                    contentDescription = stringResource(id = R.string.delete_item),
-                )
-            }
-        )
+        DropdownMenu(
+            expanded = shouldShowDropdownMenu,
+            onDismissRequest = { shouldShowDropdownMenu = false },
+        ) {
+            DropdownMenuItem(
+                text = {
+                    Text(text = stringResource(id = R.string.edit_item))
+                },
+                onClick = {
+                    shouldShowDropdownMenu = false
+                    onEditItemClick()
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit_item),
+                        contentDescription = stringResource(R.string.edit_item)
+                    )
+                }
+            )
+            HorizontalDivider()
+            DropdownMenuItem(
+                text = {
+                    Text(text = stringResource(id = R.string.delete_item))
+                },
+                onClick = {
+                    shouldShowDropdownMenu = false
+                    onDeleteItemClick()
+                },
+                leadingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_delete_item),
+                        contentDescription = stringResource(id = R.string.delete_item),
+                    )
+                }
+            )
+        }
     }
 }
 

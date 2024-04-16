@@ -98,6 +98,10 @@ class ItemListingViewModel @Inject constructor(
                 handleItemClick(action)
             }
 
+            is ItemListingAction.EditItemClick -> {
+                handleEditItemClick(action)
+            }
+
             is ItemListingAction.DialogDismiss -> {
                 handleDialogDismiss()
             }
@@ -115,6 +119,10 @@ class ItemListingViewModel @Inject constructor(
                 message = R.string.value_has_been_copied.asText(action.authCode)
             )
         )
+    }
+
+    private fun handleEditItemClick(action: ItemListingAction.EditItemClick) {
+        sendEvent(ItemListingEvent.NavigateToEditItem(action.itemId))
     }
 
     private fun handleDeleteItemClick(action: ItemListingAction.DeleteItemClick) {
@@ -560,9 +568,14 @@ sealed class ItemListingAction {
     data object EnterSetupKeyClick : ItemListingAction()
 
     /**
-     * The user clicked a list item.
+     * The user clicked a list item to copy its auth code.
      */
     data class ItemClick(val authCode: String) : ItemListingAction()
+
+    /**
+     * The user clicked edit item.
+     */
+    data class EditItemClick(val itemId: String) : ItemListingAction()
 
     /**
      * The user dismissed the dialog.
