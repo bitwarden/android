@@ -18,13 +18,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.util.orNow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
@@ -46,7 +51,7 @@ import java.time.ZonedDateTime
  * @param modifier A [Modifier] that you can use to apply custom modifications to the composable.
  */
 @Suppress("LongMethod")
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenDateSelectButton(
     label: String,
@@ -122,7 +127,7 @@ fun BitwardenDateSelectButton(
                         )
                         shouldShowDialog = false
                     },
-                    modifier = modifier,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
                 ) {
                     Text(
                         text = stringResource(id = R.string.ok),
@@ -133,13 +138,17 @@ fun BitwardenDateSelectButton(
             dismissButton = {
                 TextButton(
                     onClick = { shouldShowDialog = false },
-                    modifier = modifier,
+                    modifier = Modifier.testTag("DismissAlertButton"),
                 ) {
                     Text(
                         text = stringResource(id = R.string.cancel),
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }
+            },
+            modifier = Modifier.semantics {
+                testTagsAsResourceId = true
+                testTag = "AlertPopup"
             },
         ) {
             DatePicker(state = datePickerState)

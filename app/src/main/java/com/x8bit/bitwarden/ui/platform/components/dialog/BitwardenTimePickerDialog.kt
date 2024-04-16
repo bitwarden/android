@@ -27,9 +27,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -70,12 +75,14 @@ fun BitwardenTimePickerDialog(
                 Text(
                     text = stringResource(id = R.string.ok),
                     style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
                 )
             }
         },
         dismissButton = {
             TextButton(
                 onClick = onDismissRequest,
+                modifier = Modifier.testTag("DismissAlertButton"),
             ) {
                 Text(
                     text = stringResource(id = R.string.cancel),
@@ -116,6 +123,7 @@ fun BitwardenTimePickerDialog(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun TimePickerDialog(
     onDismissRequest: () -> Unit,
@@ -132,6 +140,10 @@ private fun TimePickerDialog(
             shape = MaterialTheme.shapes.extraLarge,
             tonalElevation = 6.dp,
             modifier = Modifier
+                .semantics {
+                    testTagsAsResourceId = true
+                    testTag = "AlertPopup"
+                }
                 .width(IntrinsicSize.Min)
                 .height(IntrinsicSize.Min)
                 .background(
@@ -145,6 +157,7 @@ private fun TimePickerDialog(
             ) {
                 Text(
                     modifier = Modifier
+                        .testTag("AlertTitleText")
                         .fillMaxWidth()
                         .padding(bottom = 20.dp),
                     // TODO: This should be "Select time" but we don't have that string (BIT-1405)

@@ -5,7 +5,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.Text
@@ -21,6 +27,7 @@ import kotlinx.parcelize.Parcelize
  * @param onDismissRequest called when the user has requested to dismiss the dialog, whether by
  * tapping "OK", tapping outside the dialog, or pressing the back button.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenBasicDialog(
     visibilityState: BasicDialogState,
@@ -34,6 +41,7 @@ fun BitwardenBasicDialog(
                 BitwardenTextButton(
                     label = stringResource(id = R.string.ok),
                     onClick = onDismissRequest,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
                 )
             },
             title = visibilityState.title?.let {
@@ -41,6 +49,7 @@ fun BitwardenBasicDialog(
                     Text(
                         text = it(),
                         style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.testTag("AlertTitleText"),
                     )
                 }
             },
@@ -48,9 +57,14 @@ fun BitwardenBasicDialog(
                 Text(
                     text = visibilityState.message(),
                     style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.testTag("AlertContentText"),
                 )
             },
             containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            modifier = Modifier.semantics {
+                testTagsAsResourceId = true
+                testTag = "AlertPopup"
+            },
         )
     }
 }

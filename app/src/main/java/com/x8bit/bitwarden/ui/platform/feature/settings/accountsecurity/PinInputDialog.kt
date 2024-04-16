@@ -15,9 +15,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -36,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
  * @param onSubmitClick A callback for when the "Submit" button is clicked.
  * @param onDismissRequest A callback for when the dialog is requesting to be dismissed.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Suppress("LongMethod")
 @Composable
 fun PinInputDialog(
@@ -52,6 +58,10 @@ fun PinInputDialog(
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
+                .semantics {
+                    testTagsAsResourceId = true
+                    testTag = "AlertPopup"
+                }
                 .requiredHeightIn(
                     max = configuration.maxDialogHeight,
                 )
@@ -64,6 +74,7 @@ fun PinInputDialog(
         ) {
             Text(
                 modifier = Modifier
+                    .testTag("AlertTitleText")
                     .padding(24.dp)
                     .fillMaxWidth(),
                 text = stringResource(id = R.string.enter_pin),
@@ -85,6 +96,7 @@ fun PinInputDialog(
             ) {
                 Text(
                     modifier = Modifier
+                        .testTag("AlertContentText")
                         .padding(24.dp)
                         .fillMaxWidth(),
                     text = stringResource(id = R.string.set_pin_description),
@@ -98,6 +110,7 @@ fun PinInputDialog(
                     onValueChange = onPinChange,
                     keyboardType = KeyboardType.Number,
                     modifier = Modifier
+                        .testTag("AlertInputField")
                         .padding(16.dp)
                         .fillMaxWidth(),
                 )
@@ -117,11 +130,13 @@ fun PinInputDialog(
                 BitwardenTextButton(
                     label = stringResource(id = R.string.cancel),
                     onClick = onCancelClick,
+                    modifier = Modifier.testTag("DismissAlertButton"),
                 )
 
                 BitwardenFilledButton(
                     label = stringResource(id = R.string.submit),
                     onClick = onSubmitClick,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
                 )
             }
         }
