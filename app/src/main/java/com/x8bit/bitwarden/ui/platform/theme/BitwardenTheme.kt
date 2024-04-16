@@ -23,16 +23,6 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
-import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
-import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
-import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManagerImpl
-import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
-import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImpl
 
 /**
  * The overall application theme. This can be configured to support a [theme] and [dynamicColor].
@@ -51,7 +41,6 @@ fun BitwardenTheme(
 
     // Get the current scheme
     val context = LocalContext.current
-    val activity = context as Activity
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
@@ -83,11 +72,6 @@ fun BitwardenTheme(
     CompositionLocalProvider(
         LocalNonMaterialColors provides nonMaterialColors,
         LocalNonMaterialTypography provides nonMaterialTypography,
-        LocalPermissionsManager provides PermissionsManagerImpl(activity),
-        LocalIntentManager provides IntentManagerImpl(context),
-        LocalExitManager provides ExitManagerImpl(activity),
-        LocalBiometricsManager provides BiometricsManagerImpl(activity),
-        LocalNfcManager provides NfcManagerImpl(activity),
     ) {
         // Set overall theme based on color scheme and typography settings
         MaterialTheme(
@@ -173,43 +157,7 @@ private fun lightColorScheme(context: Context): ColorScheme =
     )
 
 @ColorRes
-private fun Int.toColor(context: Context): Color =
-    Color(context.getColor(this))
-
-/**
- * Provides access to the biometrics manager throughout the app.
- */
-val LocalBiometricsManager: ProvidableCompositionLocal<BiometricsManager> = compositionLocalOf {
-    error("CompositionLocal BiometricsManager not present")
-}
-
-/**
- * Provides access to the exit manager throughout the app.
- */
-val LocalExitManager: ProvidableCompositionLocal<ExitManager> = compositionLocalOf {
-    error("CompositionLocal ExitManager not present")
-}
-
-/**
- * Provides access to the intent manager throughout the app.
- */
-val LocalIntentManager: ProvidableCompositionLocal<IntentManager> = compositionLocalOf {
-    error("CompositionLocal LocalIntentManager not present")
-}
-
-/**
- * Provides access to the permission manager throughout the app.
- */
-val LocalPermissionsManager: ProvidableCompositionLocal<PermissionsManager> = compositionLocalOf {
-    error("CompositionLocal LocalPermissionsManager not present")
-}
-
-/**
- * Provides access to the NFC manager throughout the app.
- */
-val LocalNfcManager: ProvidableCompositionLocal<NfcManager> = compositionLocalOf {
-    error("CompositionLocal NfcManager not present")
-}
+private fun Int.toColor(context: Context): Color = Color(context.getColor(this))
 
 /**
  * Provides access to non material theme typography throughout the app.

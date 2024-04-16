@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillCompletionManager
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.ui.platform.composition.LocalManagerProvider
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.RootNavScreen
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,12 +66,12 @@ class MainActivity : AppCompatActivity() {
         }
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
-            BitwardenTheme(
-                theme = state.theme,
-            ) {
-                RootNavScreen(
-                    onSplashScreenRemoved = { shouldShowSplashScreen = false },
-                )
+            LocalManagerProvider {
+                BitwardenTheme(theme = state.theme) {
+                    RootNavScreen(
+                        onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                    )
+                }
             }
         }
     }
