@@ -281,7 +281,7 @@ namespace Bit.App
                         }
                     }
                 }
-                else if (message.Command == Constants.CredentialNavigateToAutofillCipher && message.Data is Fido2ConfirmNewCredentialParams createParams)
+                else if (message.Command == Constants.CredentialNavigateToAutofillCipherMessageCommand && message.Data is Fido2ConfirmNewCredentialParams createParams)
                 {
                     ArgumentNullException.ThrowIfNull(MainPage);
                     ArgumentNullException.ThrowIfNull(Options);
@@ -334,7 +334,7 @@ namespace Bit.App
                 {
                     if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && _userVerificationMediatorService.Value.IsConfirmingNewCredential)
                     {
-                        _userVerificationMediatorService?.Value.OnConfirmationException(new AccountSwitchedException());
+                        _userVerificationMediatorService.Value.OnConfirmationException(new AccountSwitchedException());
                     }
 
                     lock (_processingLoginRequestLock)
@@ -343,13 +343,12 @@ namespace Bit.App
                         CheckPasswordlessLoginRequestsAsync().Wait();
                     }
                 }
-                else if (message.Command == Constants.NavigateTo && message.Data is NavigationTarget navigationTarget)
+                else if (message.Command == Constants.NavigateToMessageCommand && message.Data is NavigationTarget navigationTarget)
                 {
-                    await MainThread.InvokeOnMainThreadAsync(NavigateToAction);
-                    void NavigateToAction()
+                    await MainThread.InvokeOnMainThreadAsync(() =>
                     {
                         Navigate(navigationTarget, null);
-                    }
+                    });
                 }
            }
            catch (Exception ex)

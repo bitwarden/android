@@ -50,7 +50,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
             _currentDefaultUserVerificationOptions = new Fido2UserVerificationOptions(false, confirmNewCredentialParams.UserVerificationPreference, HasVaultBeenUnlockedInThisTransaction, confirmNewCredentialParams.RpId);
             
-            _messagingService?.Value.Send(Bit.Core.Constants.CredentialNavigateToAutofillCipher, confirmNewCredentialParams);
+            _messagingService.Value.Send(Bit.Core.Constants.CredentialNavigateToAutofillCipherMessageCommand, confirmNewCredentialParams);
 
             var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
@@ -126,7 +126,7 @@ namespace Bit.App.Platforms.Android.Autofill
             _unlockVaultTcs?.TrySetCanceled();
             _unlockVaultTcs = new TaskCompletionSource<bool>();
 
-            _messagingService?.Value.Send(Bit.Core.Constants.NavigateTo, navTarget);
+            _messagingService.Value.Send(Bit.Core.Constants.NavigateToMessageCommand, navTarget);
 
             await _unlockVaultTcs.Task;
         }

@@ -431,21 +431,13 @@ namespace Bit.App.Utilities
             {
                 // this is called after login in or unlocking so we can assume the vault has been unlocked in this transaction here.
                 appOptions.HasUnlockedInThisTransaction = true;
-
-                ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>()
-                    .SetCheckHasVaultBeenUnlockedInThisTransaction(() => appOptions?.HasUnlockedInThisTransaction == true);
+                
+                var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                userVerificationMediatorService.SetCheckHasVaultBeenUnlockedInThisTransaction(() => appOptions?.HasUnlockedInThisTransaction == true);
 
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
                     App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
-                    return true;
-                }
-
-                var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
-                if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
-                {
-                    var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
-                    deviceActionService.ExecuteFido2CredentialActionAsync(appOptions).FireAndForget();
                     return true;
                 }
 
@@ -454,6 +446,13 @@ namespace Bit.App.Utilities
                 if (userVerificationMediatorService.IsWaitingUnlockVault)
                 {
                     userVerificationMediatorService.ConfirmVaultUnlocked();
+                    return true;
+                }
+
+                if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
+                {
+                    var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
+                    deviceActionService.ExecuteFido2CredentialActionAsync(appOptions).FireAndForget();
                     return true;
                 }
 
