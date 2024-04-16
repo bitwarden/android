@@ -14,6 +14,7 @@ namespace Bit.App.Platforms.Android.Autofill
         private readonly ICipherService _cipherService;
         private readonly IUserVerificationMediatorService _userVerificationMediatorService;
         private readonly IDeviceActionService _deviceActionService;
+        private LazyResolve<IMessagingService> _messagingService = new LazyResolve<IMessagingService>();
 
         private TaskCompletionSource<(string cipherId, bool? userVerified)> _confirmCredentialTcs;
         private TaskCompletionSource<bool> _unlockVaultTcs;
@@ -44,9 +45,8 @@ namespace Bit.App.Platforms.Android.Autofill
             _confirmCredentialTcs = new TaskCompletionSource<(string cipherId, bool? userVerified)>();
 
             _currentDefaultUserVerificationOptions = new Fido2UserVerificationOptions(false, confirmNewCredentialParams.UserVerificationPreference, true, confirmNewCredentialParams.RpId);
-
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            messagingService?.Send("fidoNavigateToAutofillCipher", confirmNewCredentialParams);
+            
+            _messagingService?.Value.Send(Bit.Core.Constants.CredentialNavigateToAutofillCipher, confirmNewCredentialParams);
             var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
             var verified = isUserVerified;
@@ -120,11 +120,8 @@ namespace Bit.App.Platforms.Android.Autofill
         {
             _unlockVaultTcs?.TrySetCanceled();
             _unlockVaultTcs = new TaskCompletionSource<bool>();
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            await MainThread.InvokeOnMainThreadAsync(() =>
-            {
-                messagingService?.Send("navigateTo", navTarget);
-            });
+
+            _messagingService?.Value.Send(Bit.Core.Constants.NavigateTo, navTarget);
 
             await _unlockVaultTcs.Task;
         }
@@ -136,7 +133,7 @@ namespace Bit.App.Platforms.Android.Autofill
         }
 
         public void Confirm(string cipherId, bool? userVerified) => _confirmCredentialTcs?.TrySetResult((cipherId, userVerified));
-        public void ConfirmUnlockVault(bool unlocked) => _unlockVaultTcs?.TrySetResult(unlocked);
+        public void ConfirmVaultUnlocked() => _unlockVaultTcs?.TrySetResult(true);
 
         public void Cancel() => _confirmCredentialTcs?.TrySetCanceled();
 

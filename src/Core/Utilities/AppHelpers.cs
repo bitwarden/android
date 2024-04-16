@@ -439,20 +439,21 @@ namespace Bit.App.Utilities
                 }
 
                 var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
-                if ((appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction) || userVerificationMediatorService.IsWaitingUnlockVault))
+                if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
                 {
-                    // If we are waiting for an unlock vault we don't want to trigger 'ExecuteFido2CredentialActionAsync' again,
-                    // as it's already running. We just need to 'ConfirmUnlockVault' on the 'userVerificationMediatorService'.
-                    if (userVerificationMediatorService.IsWaitingUnlockVault)
-                    {
-                       userVerificationMediatorService.ConfirmUnlockVault(true);
-                       return true;
-                    }
-
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
                     deviceActionService.ExecuteFido2CredentialActionAsync(appOptions).FireAndForget();
                     return true;
                 }
+
+                // If we are waiting for an unlock vault we don't want to trigger 'ExecuteFido2CredentialActionAsync' again,
+                // as it's already running. We just need to 'ConfirmUnlockVault' on the 'userVerificationMediatorService'.
+                if (userVerificationMediatorService.IsWaitingUnlockVault)
+                {
+                    userVerificationMediatorService.ConfirmVaultUnlocked();
+                    return true;
+                }
+
                 if (appOptions.Uri != null
                     ||
                     appOptions.OtpData != null)

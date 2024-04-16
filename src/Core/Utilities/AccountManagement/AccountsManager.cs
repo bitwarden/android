@@ -20,6 +20,7 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly IMessagingService _messagingService;
         private readonly IWatchDeviceService _watchDeviceService;
         private readonly IConditionedAwaiterManager _conditionedAwaiterManager;
+        private LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _userVerificationMediatorService = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
 
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
@@ -81,10 +82,8 @@ namespace Bit.App.Utilities.AccountManagement
             var authed = isAuthed ?? await _stateService.IsAuthenticatedAsync();
             if (authed)
             {
-                var fido2MakeCredentialConfirmationUserInterface = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
-
                 if (await _vaultTimeoutService.IsLoggedOutByTimeoutAsync() ||
-                    await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
+                  await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
                 {
                     // TODO implement orgIdentifier flow to SSO Login page, same as email flow below
                     // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
@@ -102,15 +101,14 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AddEditCipher);
                 }
-                else if (Options.FromFido2Framework || fido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential)
+                else if (_userVerificationMediatorService.Value.IsConfirmingNewCredential)
                 {
-                    if (fido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential)
-                    {
-                        // If we are already confirming a credential we don't need to navigate again.
-                        // This could happen when switching accounts for example.
-                        return;
-                    }
-
+                    // If we are already confirming a credential we don't need to navigate again.
+                    // This could happen when switching accounts for example.
+                    return;
+                }
+                else if (Options.FromFido2Framework)
+                {
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();
                     deviceActionService.ExecuteFido2CredentialActionAsync(Options).FireAndForget();
                 }
