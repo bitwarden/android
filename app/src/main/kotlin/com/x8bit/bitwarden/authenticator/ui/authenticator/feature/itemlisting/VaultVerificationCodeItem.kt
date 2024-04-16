@@ -9,16 +9,12 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,7 +32,6 @@ import com.x8bit.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
  * @param periodSeconds The times span where the code is valid.
  * @param timeLeftSeconds The seconds remaining until a new code is needed.
  * @param startIcon The leading icon for the item.
- * @param onCopyClick The lambda function to be invoked when the copy button is clicked.
  * @param onItemClick The lambda function to be invoked when the item is clicked.
  * @param modifier The modifier for the item.
  * @param supportingLabel The supporting label for the item.
@@ -50,7 +45,6 @@ fun VaultVerificationCodeItem(
     timeLeftSeconds: Int,
     alertThresholdSeconds: Int,
     startIcon: IconData,
-    onCopyClick: () -> Unit,
     onItemClick: () -> Unit,
     modifier: Modifier = Modifier,
     supportingLabel: String? = null,
@@ -112,17 +106,6 @@ fun VaultVerificationCodeItem(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-
-        IconButton(
-            onClick = onCopyClick,
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
-                contentDescription = stringResource(id = R.string.copy),
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp),
-            )
-        }
     }
 }
 
@@ -132,16 +115,15 @@ fun VaultVerificationCodeItem(
 private fun VerificationCodeItem_preview() {
     AuthenticatorTheme {
         VaultVerificationCodeItem(
-            startIcon = IconData.Local(R.drawable.ic_login_item),
-            issuer = "Sample Label",
-            supportingLabel = "Supporting Label",
             authCode = "1234567890".chunked(3).joinToString(" "),
-            timeLeftSeconds = 15,
+            issuer = "Sample Label",
             periodSeconds = 30,
-            onCopyClick = {},
+            timeLeftSeconds = 15,
+            alertThresholdSeconds = 7,
+            startIcon = IconData.Local(R.drawable.ic_login_item),
             onItemClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),
-            alertThresholdSeconds = 7
+            supportingLabel = "Supporting Label"
         )
     }
 }
