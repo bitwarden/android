@@ -432,6 +432,9 @@ namespace Bit.App.Utilities
                 // this is called after login in or unlocking so we can assume the vault has been unlocked in this transaction here.
                 appOptions.HasUnlockedInThisTransaction = true;
 
+                ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>()
+                    .SetCheckHasVaultBeenUnlockedInThisTransaction(() => appOptions?.HasUnlockedInThisTransaction == true);
+
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
                     App.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));

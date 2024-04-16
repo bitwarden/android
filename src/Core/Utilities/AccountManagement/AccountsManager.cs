@@ -261,6 +261,10 @@ namespace Bit.App.Utilities.AccountManagement
                 await _accountsManagerHost.UpdateThemeAsync();
                 _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
                 _messagingService.Send(AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED);
+                if (Options != null)
+                {
+                    Options.HasUnlockedInThisTransaction = false;
+                }
             });
         }
 
