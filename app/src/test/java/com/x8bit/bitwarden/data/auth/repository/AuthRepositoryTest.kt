@@ -3463,6 +3463,45 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `setPassword with vaultSdkSource updatePassword failure should return Error`() = runTest {
+        val password = "password"
+        val passwordHash = "passwordHash"
+        val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
+                    ),
+                ),
+            ),
+        )
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns passwordHash.asSuccess()
+        coEvery {
+            vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
+        } returns Throwable("Fail").asFailure()
+
+        val result = repository.setPassword(
+            organizationIdentifier = "organizationId",
+            password = password,
+            passwordHint = "passwordHint",
+        )
+
+        assertEquals(SetPasswordResult.Error, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(userId = USER_ID_1, passwordHash = null)
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = null)
+    }
+
+    @Test
     fun `setPassword with accountsService setPassword failure should return Error`() = runTest {
         val password = "password"
         val passwordHash = "passwordHash"
@@ -3619,6 +3658,129 @@ class AuthRepositoryTest {
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
             authSdkSource.makeRegisterKeys(email = EMAIL, password = password, kdf = kdf)
+            accountsService.setPassword(body = setPasswordRequestJson)
+            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+            organizationService.getOrganizationKeys(organizationId)
+            organizationService.organizationResetPasswordEnroll(
+                organizationId = organizationId,
+                userId = profile.userId,
+                passwordHash = passwordHash,
+                resetPasswordKey = resetPasswordKey,
+            )
+            vaultRepository.unlockVaultWithMasterPassword(password)
+            vaultSdkSource.getResetPasswordKey(
+                orgPublicKey = publicOrgKey,
+                userId = profile.userId,
+            )
+        }
+    }
+
+    @Test
+    fun `setPassword with updatePassword success should return Success`() = runTest {
+        val password = "password"
+        val passwordHash = "passwordHash"
+        val passwordHint = "passwordHint"
+        val organizationIdentifier = ORGANIZATION_IDENTIFIER
+        val organizationId = "orgId"
+        val encryptedUserKey = "encryptedUserKey"
+        val publicOrgKey = "publicOrgKey"
+        val resetPasswordKey = "resetPasswordKey"
+        val userState = SINGLE_USER_STATE_1.copy(
+            accounts = mapOf(
+                USER_ID_1 to ACCOUNT_1.copy(
+                    profile = PROFILE_1.copy(
+                        forcePasswordResetReason = ForcePasswordResetReason
+                            .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
+                    ),
+                ),
+            ),
+        )
+        val profile = userState.activeAccount.profile
+        val kdf = profile.toSdkParams()
+        val updatePasswordResponse = UpdatePasswordResponse(
+            passwordHash = passwordHash,
+            newKey = encryptedUserKey,
+        )
+        val setPasswordRequestJson = SetPasswordRequestJson(
+            passwordHash = passwordHash,
+            passwordHint = passwordHint,
+            organizationIdentifier = organizationIdentifier,
+            kdfIterations = profile.kdfIterations,
+            kdfMemory = profile.kdfMemory,
+            kdfParallelism = profile.kdfParallelism,
+            kdfType = profile.kdfType,
+            key = encryptedUserKey,
+            keys = null,
+        )
+        fakeAuthDiskSource.userState = userState
+        coEvery {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+        } returns passwordHash.asSuccess()
+        coEvery {
+            vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
+        } returns updatePasswordResponse.asSuccess()
+        coEvery {
+            accountsService.setPassword(body = setPasswordRequestJson)
+        } returns Unit.asSuccess()
+        coEvery {
+            organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
+        } returns OrganizationAutoEnrollStatusResponseJson(
+            organizationId = organizationId,
+            isResetPasswordEnabled = true,
+        )
+            .asSuccess()
+        coEvery {
+            organizationService.getOrganizationKeys(organizationId)
+        } returns OrganizationKeysResponseJson(
+            privateKey = "",
+            publicKey = publicOrgKey,
+        )
+            .asSuccess()
+        coEvery {
+            organizationService.organizationResetPasswordEnroll(
+                organizationId = organizationId,
+                userId = profile.userId,
+                passwordHash = passwordHash,
+                resetPasswordKey = resetPasswordKey,
+            )
+        } returns Unit.asSuccess()
+        coEvery {
+            vaultSdkSource.getResetPasswordKey(
+                orgPublicKey = publicOrgKey,
+                userId = profile.userId,
+            )
+        } returns resetPasswordKey.asSuccess()
+        coEvery {
+            vaultRepository.unlockVaultWithMasterPassword(password)
+        } returns VaultUnlockResult.Success
+
+        val result = repository.setPassword(
+            organizationIdentifier = organizationIdentifier,
+            password = password,
+            passwordHint = passwordHint,
+        )
+
+        assertEquals(SetPasswordResult.Success, result)
+        fakeAuthDiskSource.assertMasterPasswordHash(
+            userId = USER_ID_1,
+            passwordHash = passwordHash,
+        )
+        fakeAuthDiskSource.assertPrivateKey(userId = USER_ID_1, privateKey = null)
+        fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = encryptedUserKey)
+        fakeAuthDiskSource.assertUserState(SINGLE_USER_STATE_1_WITH_PASS)
+        coVerify(exactly = 1) {
+            authSdkSource.hashPassword(
+                email = EMAIL,
+                password = password,
+                kdf = kdf,
+                purpose = HashPurpose.SERVER_AUTHORIZATION,
+            )
+            vaultSdkSource.updatePassword(userId = USER_ID_1, newPassword = password)
             accountsService.setPassword(body = setPasswordRequestJson)
             organizationService.getOrganizationAutoEnrollStatus(organizationIdentifier)
             organizationService.getOrganizationKeys(organizationId)
@@ -4515,23 +4677,24 @@ class AuthRepositoryTest {
             masterPasswordPolicyOptions = null,
             userDecryptionOptions = null,
         )
+        private val PROFILE_1 = AccountJson.Profile(
+            userId = USER_ID_1,
+            email = EMAIL,
+            isEmailVerified = true,
+            name = "Bitwarden Tester",
+            hasPremium = false,
+            stamp = null,
+            organizationId = null,
+            avatarColorHex = null,
+            forcePasswordResetReason = null,
+            kdfType = KdfTypeJson.ARGON2_ID,
+            kdfIterations = 600000,
+            kdfMemory = 16,
+            kdfParallelism = 4,
+            userDecryptionOptions = null,
+        )
         private val ACCOUNT_1 = AccountJson(
-            profile = AccountJson.Profile(
-                userId = USER_ID_1,
-                email = EMAIL,
-                isEmailVerified = true,
-                name = "Bitwarden Tester",
-                hasPremium = false,
-                stamp = null,
-                organizationId = null,
-                avatarColorHex = null,
-                forcePasswordResetReason = null,
-                kdfType = KdfTypeJson.ARGON2_ID,
-                kdfIterations = 600000,
-                kdfMemory = 16,
-                kdfParallelism = 4,
-                userDecryptionOptions = null,
-            ),
+            profile = PROFILE_1,
             settings = AccountJson.Settings(
                 environmentUrlData = null,
             ),

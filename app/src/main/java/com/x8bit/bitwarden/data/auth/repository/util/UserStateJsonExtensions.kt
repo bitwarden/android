@@ -46,10 +46,11 @@ fun UserStateJson.toUpdatedUserStateJson(
  * their password.
  */
 fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
-    val account = this.accounts[activeUserId] ?: return this
+    val account = this.activeAccount
     val profile = account.profile
     val updatedProfile = profile
         .copy(
+            forcePasswordResetReason = null,
             userDecryptionOptions = profile
                 .userDecryptionOptions
                 ?.copy(hasMasterPassword = true)
