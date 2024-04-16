@@ -18,8 +18,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -51,7 +53,10 @@ fun BitwardenSelectionDialog(
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
-                .semantics { testTagsAsResourceId = true }
+                .semantics {
+                    testTagsAsResourceId = true
+                    testTag = "AlertPopup"
+                }
                 .requiredHeightIn(
                     max = configuration.maxDialogHeight,
                 )
@@ -64,6 +69,7 @@ fun BitwardenSelectionDialog(
         ) {
             Text(
                 modifier = Modifier
+                    .testTag("AlertTitleText")
                     .padding(24.dp)
                     .fillMaxWidth(),
                 text = title,
@@ -93,7 +99,9 @@ fun BitwardenSelectionDialog(
                 )
             }
             BitwardenTextButton(
-                modifier = Modifier.padding(24.dp),
+                modifier = Modifier
+                    .testTag("DismissAlertButton")
+                    .padding(24.dp),
                 label = stringResource(id = R.string.cancel),
                 onClick = onDismissRequest,
             )

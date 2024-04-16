@@ -19,9 +19,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -43,7 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.maxDialogWidth
  * @param confirmTextColor The color of the confirm text.
  * @param dismissTextColor The color of the dismiss text.
  */
-@OptIn(ExperimentalLayoutApi::class)
+@OptIn(ExperimentalLayoutApi::class, ExperimentalComposeUiApi::class)
 @Composable
 @Suppress("LongMethod")
 fun BitwardenTwoButtonDialog(
@@ -65,6 +70,10 @@ fun BitwardenTwoButtonDialog(
         val scrollState = rememberScrollState()
         Column(
             modifier = Modifier
+                .semantics {
+                    testTagsAsResourceId = true
+                    testTag = "AlertPopup"
+                }
                 .requiredHeightIn(
                     max = configuration.maxDialogHeight,
                 )
@@ -82,6 +91,7 @@ fun BitwardenTwoButtonDialog(
             title?.let {
                 Text(
                     modifier = Modifier
+                        .testTag("AlertTitleText")
                         .padding(horizontal = 24.dp)
                         .fillMaxWidth(),
                     text = title,
@@ -100,6 +110,7 @@ fun BitwardenTwoButtonDialog(
             }
             Text(
                 modifier = Modifier
+                    .testTag("AlertContentText")
                     .weight(1f, fill = false)
                     .verticalScroll(scrollState)
                     .padding(horizontal = 24.dp)
@@ -122,13 +133,17 @@ fun BitwardenTwoButtonDialog(
                 modifier = Modifier.padding(horizontal = 8.dp),
             ) {
                 BitwardenTextButton(
-                    modifier = Modifier.padding(horizontal = 4.dp),
+                    modifier = Modifier
+                        .testTag("AcceptAlertButton")
+                        .padding(horizontal = 4.dp),
                     label = confirmButtonText,
                     labelTextColor = confirmTextColor,
                     onClick = onConfirmClick,
                 )
                 BitwardenTextButton(
-                    modifier = Modifier.padding(horizontal = 4.dp),
+                    modifier = Modifier
+                        .testTag("DismissAlertButton")
+                        .padding(horizontal = 4.dp),
                     label = dismissButtonText,
                     labelTextColor = dismissTextColor,
                     onClick = onDismissClick,

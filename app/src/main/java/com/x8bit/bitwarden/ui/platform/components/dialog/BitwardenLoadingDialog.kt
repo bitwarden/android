@@ -14,7 +14,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -29,6 +34,7 @@ import kotlinx.parcelize.Parcelize
  *
  * @param visibilityState the [LoadingDialogState] used to populate the dialog.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenLoadingDialog(
     visibilityState: LoadingDialogState,
@@ -49,6 +55,10 @@ fun BitwardenLoadingDialog(
                         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                     ),
                     modifier = Modifier
+                        .semantics {
+                            testTagsAsResourceId = true
+                            testTag = "AlertPopup"
+                        }
                         .fillMaxWidth()
                         .wrapContentHeight(),
                 ) {
@@ -59,16 +69,20 @@ fun BitwardenLoadingDialog(
                     ) {
                         Text(
                             text = visibilityState.text(),
-                            modifier = Modifier.padding(
-                                top = 24.dp,
-                                bottom = 8.dp,
-                            ),
+                            modifier = Modifier
+                                .testTag("AlertTitleText")
+                                .padding(
+                                    top = 24.dp,
+                                    bottom = 8.dp,
+                                ),
                         )
                         CircularProgressIndicator(
-                            modifier = Modifier.padding(
-                                top = 8.dp,
-                                bottom = 24.dp,
-                            ),
+                            modifier = Modifier
+                                .testTag("AlertProgressIndicator")
+                                .padding(
+                                    top = 8.dp,
+                                    bottom = 24.dp,
+                                ),
                         )
                     }
                 }
