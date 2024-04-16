@@ -16,12 +16,14 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -193,6 +195,18 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Log out the current user.
      */
     fun logout()
+
+    /**
+     * Requests that a one-time passcode be sent to the user's email.
+     */
+    suspend fun requestOneTimePasscode(): RequestOtpResult
+
+    /**
+     * Verifies that the given one-time passcode is correct. A successful result will correspond to
+     * [VerifyOtpResult.Verified], while an error or failure to verify will return
+     * [VerifyOtpResult.NotVerified].
+     */
+    suspend fun verifyOneTimePasscode(oneTimePasscode: String): VerifyOtpResult
 
     /**
      * Resend the email with the two-factor verification code.

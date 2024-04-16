@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import kotlinx.serialization.json.Json
@@ -57,6 +58,16 @@ class AccountsServiceImpl(
                     json = json,
                 ) ?: throw throwable
             }
+
+    override suspend fun requestOneTimePasscode(): Result<Unit> =
+        authenticatedAccountsApi.requestOtp()
+
+    override suspend fun verifyOneTimePasscode(passcode: String): Result<Unit> =
+        authenticatedAccountsApi.verifyOtp(
+            VerifyOtpRequestJson(
+                oneTimePasscode = passcode,
+            ),
+        )
 
     override suspend fun requestPasswordHint(
         email: String,

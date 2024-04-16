@@ -34,6 +34,16 @@ interface AccountsService {
     suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson>
 
     /**
+     * Request a one-time passcode that is sent to the user's email.
+     */
+    suspend fun requestOneTimePasscode(): Result<Unit>
+
+    /**
+     * Verify that the provided [passcode] is correct.
+     */
+    suspend fun verifyOneTimePasscode(passcode: String): Result<Unit>
+
+    /**
      * Request a password hint.
      */
     suspend fun requestPasswordHint(email: String): Result<PasswordHintResponseJson>
