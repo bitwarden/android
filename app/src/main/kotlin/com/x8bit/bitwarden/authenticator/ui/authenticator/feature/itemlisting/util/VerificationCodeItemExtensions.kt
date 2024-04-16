@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.u
 
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.ItemListingState
-import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.VerificationCodeDisplayItem
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 
 fun List<VerificationCodeItem>.toViewState(
     alertThresholdSeconds: Int,

@@ -87,4 +87,8 @@
     <string name="help">Help</string>
     <string name="tutorial">Tutorial</string>
     <string name="value_has_been_copied">%1$s copied</string>
+    <string name="delete_item">Delete item</string>
+    <string name="item_deleted">Item deleted</string>
+    <string name="delete">Delete</string>
+    <string name="do_you_really_want_to_permanently_delete_cipher">Do you really want to permanently delete? This cannot be undone.</string>
 </resources>

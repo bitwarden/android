@@ -10,16 +10,17 @@ import com.x8bit.bitwarden.authenticator.data.authenticator.datasource.disk.enti
 import com.x8bit.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
+import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.x8bit.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.util.toViewState
 import com.x8bit.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.Text
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.concat
-import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -81,6 +82,14 @@ class ItemListingViewModel @Inject constructor(
                 sendEvent(ItemListingEvent.NavigateBack)
             }
 
+            is ItemListingAction.DeleteItemClick -> {
+                handleDeleteItemClick(action)
+            }
+
+            is ItemListingAction.ConfirmDeleteClick -> {
+                handleConfirmDeleteClick(action)
+            }
+
             is ItemListingAction.SearchClick -> {
                 sendEvent(ItemListingEvent.NavigateToSearch)
             }
@@ -108,6 +117,33 @@ class ItemListingViewModel @Inject constructor(
         )
     }
 
+    private fun handleDeleteItemClick(action: ItemListingAction.DeleteItemClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ItemListingState.DialogState.DeleteConfirmationPrompt(
+                    message = R.string.do_you_really_want_to_permanently_delete_cipher.asText(),
+                    itemId = action.itemId,
+                )
+            )
+        }
+    }
+
+    private fun handleConfirmDeleteClick(action: ItemListingAction.ConfirmDeleteClick) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = ItemListingState.DialogState.Loading,
+            )
+        }
+
+        viewModelScope.launch {
+            trySendAction(
+                ItemListingAction.Internal.DeleteItemReceive(
+                    authenticatorRepository.hardDeleteItem(action.itemId)
+                )
+            )
+        }
+    }
+
     private fun handleInternalAction(internalAction: ItemListingAction.Internal) {
         when (internalAction) {
             is ItemListingAction.Internal.AuthCodesUpdated -> {
@@ -124,6 +160,36 @@ class ItemListingViewModel @Inject constructor(
 
             is ItemListingAction.Internal.CreateItemResultReceive -> {
                 handleCreateItemResultReceive(internalAction)
+            }
+
+            is ItemListingAction.Internal.DeleteItemReceive -> {
+                handleDeleteItemReceive(internalAction.result)
+            }
+        }
+    }
+
+    private fun handleDeleteItemReceive(result: DeleteItemResult) {
+        when (result) {
+            DeleteItemResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = ItemListingState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        )
+                    )
+                }
+            }
+
+            DeleteItemResult.Success -> {
+                mutableStateFlow.update {
+                    it.copy(dialog = null)
+                }
+                sendEvent(
+                    ItemListingEvent.ShowToast(
+                        message = R.string.item_deleted.asText(),
+                    ),
+                )
             }
         }
     }
@@ -242,7 +308,7 @@ class ItemListingViewModel @Inject constructor(
     ) {
         updateStateWithVerificationCodeItems(
             authenticatorData = authenticatorData.data,
-            clearDialogState = true
+            clearDialogState = false
         )
     }
 
@@ -401,10 +467,10 @@ data class ItemListingState(
     sealed class DialogState : Parcelable {
 
         /**
-         * Displays the syncing dialog to the user.
+         * Displays the loading dialog to the user.
          */
         @Parcelize
-        data object Syncing : DialogState()
+        data object Loading : DialogState()
 
         /**
          * Displays a generic error dialog to the user.
@@ -413,6 +479,12 @@ data class ItemListingState(
         data class Error(
             val title: Text,
             val message: Text,
+        ) : DialogState()
+
+        @Parcelize
+        data class DeleteConfirmationPrompt(
+            val message: Text,
+            val itemId: String,
         ) : DialogState()
     }
 }
@@ -525,21 +597,20 @@ sealed class ItemListingAction {
          * Indicates a result for creating and item has been received.
          */
         data class CreateItemResultReceive(val result: CreateItemResult) : Internal()
-    }
-}
 
-/**
- * The data for the verification code item to display.
- */
-@Parcelize
-data class VerificationCodeDisplayItem(
-    val id: String,
-    val label: String,
-    val issuer: String?,
-    val supportingLabel: String?,
-    val timeLeftSeconds: Int,
-    val periodSeconds: Int,
-    val alertThresholdSeconds: Int,
-    val authCode: String,
-    val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
-) : Parcelable
+        /**
+         * Indicates a result for deleting an item has been received.
+         */
+        data class DeleteItemReceive(val result: DeleteItemResult) : Internal()
+    }
+
+    /**
+     * The user clicked Delete.
+     */
+    data class DeleteItemClick(val itemId: String) : ItemListingAction()
+
+    /**
+     * The user clicked confirm when prompted to delete an item.
+     */
+    data class ConfirmDeleteClick(val itemId: String) : ItemListingAction()
+}
