@@ -28,6 +28,8 @@ import androidx.compose.ui.unit.dp
  * @param onClick The callback when the row is clicked.
  * @param modifier The modifier to be applied to the layout.
  * @param description An optional description label to be displayed below the [text].
+ * @param isEnabled Indicates if the row is enabled or not, a disabled row will not be clickable
+ * and it's contents will be dimmed.
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `false`.
  * @param content The content of the [BitwardenTextRow].
@@ -38,6 +40,7 @@ fun BitwardenTextRow(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     description: String? = null,
+    isEnabled: Boolean = true,
     withDivider: Boolean = false,
     content: (@Composable () -> Unit)? = null,
 ) {
@@ -45,6 +48,7 @@ fun BitwardenTextRow(
         contentAlignment = Alignment.BottomCenter,
         modifier = modifier
             .clickable(
+                enabled = isEnabled,
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
                 onClick = onClick,
@@ -67,13 +71,17 @@ fun BitwardenTextRow(
                 Text(
                     text = text,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = if (isEnabled) 1.0f else 0.38f,
+                    ),
                 )
                 description?.let {
                     Text(
                         text = it,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                            alpha = if (isEnabled) 1.0f else 0.38f,
+                        ),
                     )
                 }
             }

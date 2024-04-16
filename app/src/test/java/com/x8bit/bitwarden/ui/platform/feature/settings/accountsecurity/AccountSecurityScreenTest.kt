@@ -1511,6 +1511,62 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .assert(hasAnyAncestor(isDialog()))
     }
 
+    @Test
+    fun `change master password row should be displayed according to state`() {
+        val rowText = "Change master password"
+        composeTestRule.onNodeWithText(rowText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(isUnlockWithPasswordEnabled = false) }
+
+        composeTestRule.onNodeWithText(rowText).assertDoesNotExist()
+    }
+
+    @Test
+    fun `lock now row should be displayed according to state`() {
+        val rowText = "Lock now"
+        composeTestRule.onNodeWithText(rowText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = true,
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithPinEnabled = false,
+            )
+        }
+
+        composeTestRule.onNodeWithText(rowText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = false,
+                isUnlockWithPasswordEnabled = true,
+                isUnlockWithPinEnabled = false,
+            )
+        }
+
+        composeTestRule.onNodeWithText(rowText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = false,
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithPinEnabled = true,
+            )
+        }
+
+        composeTestRule.onNodeWithText(rowText).performScrollTo().assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                isUnlockWithBiometricsEnabled = false,
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithPinEnabled = false,
+            )
+        }
+
+        composeTestRule.onNodeWithText(rowText).assertDoesNotExist()
+    }
+
     companion object {
         private val DEFAULT_STATE = AccountSecurityState(
             dialog = null,
