@@ -19,7 +19,9 @@ namespace Bit.App.Pages
         private readonly IAutofillHandler _autofillHandler;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IUserVerificationService _userVerificationService;
+#if ANDROID
         private readonly LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#endif
 
         private CipherAddEditPageViewModel _vm;
         private bool _fromAutofill;
@@ -46,7 +48,9 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
             _fromAutofill = fromAutofill;
             FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
+#if ANDROID
             FromAndroidFido2Framework = _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential;
+#endif
             InitializeComponent();
             _vm = BindingContext as CipherAddEditPageViewModel;
             _vm.Page = this;

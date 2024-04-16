@@ -38,7 +38,9 @@ namespace Bit.App
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IConfigService _configService;
         private readonly ILogger _logger;
-        private LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _userVerificationMediatorService = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#if ANDROID
+        private LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#endif
 
         private static bool _isResumed;
         // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
@@ -332,10 +334,12 @@ namespace Bit.App
                     || message.Command == "unlocked"
                     || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                 {
-                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && _userVerificationMediatorService.Value.IsConfirmingNewCredential)
+#if ANDROID
+                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
                     {
-                        _userVerificationMediatorService.Value.OnConfirmationException(new AccountSwitchedException());
+                        _fido2MakeCredentialConfirmationUserInterface.Value.OnConfirmationException(new AccountSwitchedException());
                     }
+#endif
 
                     lock (_processingLoginRequestLock)
                     {
@@ -720,7 +724,7 @@ namespace Bit.App
             // If we are in background we add the Navigation Actions to a queue to execute when the app resumes.
             // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
 #if ANDROID
-            if (_userVerificationMediatorService != null && _userVerificationMediatorService.Value.IsConfirmingNewCredential)
+            if (_fido2MakeCredentialConfirmationUserInterface != null && _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
                 // if it's creating passkey
                 // and we have an active pending TaskCompletionSource

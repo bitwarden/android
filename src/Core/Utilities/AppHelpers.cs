@@ -432,8 +432,10 @@ namespace Bit.App.Utilities
                 // this is called after login in or unlocking so we can assume the vault has been unlocked in this transaction here.
                 appOptions.HasUnlockedInThisTransaction = true;
                 
-                var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
-                userVerificationMediatorService.SetCheckHasVaultBeenUnlockedInThisTransaction(() => appOptions?.HasUnlockedInThisTransaction == true);
+#if ANDROID
+                var fido2MakeCredentialConfirmationUserInterface = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+                fido2MakeCredentialConfirmationUserInterface.SetCheckHasVaultBeenUnlockedInThisTransaction(() => appOptions?.HasUnlockedInThisTransaction == true);
+#endif
 
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
@@ -441,13 +443,15 @@ namespace Bit.App.Utilities
                     return true;
                 }
 
+#if ANDROID
                 // If we are waiting for an unlock vault we don't want to trigger 'ExecuteFido2CredentialActionAsync' again,
                 // as it's already running. We just need to 'ConfirmUnlockVault' on the 'userVerificationMediatorService'.
-                if (userVerificationMediatorService.IsWaitingUnlockVault)
+                if (fido2MakeCredentialConfirmationUserInterface.IsWaitingUnlockVault)
                 {
-                    userVerificationMediatorService.ConfirmVaultUnlocked();
+                    fido2MakeCredentialConfirmationUserInterface.ConfirmVaultUnlocked();
                     return true;
                 }
+#endif
 
                 if (appOptions.FromFido2Framework && !string.IsNullOrWhiteSpace(appOptions.Fido2CredentialAction))
                 {
