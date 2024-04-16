@@ -38,10 +38,10 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalBut
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
-import com.x8bit.bitwarden.ui.platform.theme.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.theme.LocalPermissionsManager
 
 /**
  * The screen to manually add a totp code.
