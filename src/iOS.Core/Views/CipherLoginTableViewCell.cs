@@ -48,7 +48,7 @@ namespace Bit.iOS.Core.Views
                 _mainIcon.Font = UIFont.FromName("bwi-font", 24);
                 _mainIcon.AdjustsFontSizeToFitWidth = true;
                 _mainIcon.Text = BitwardenIcons.Globe;
-                _mainIcon.TextColor = ThemeHelpers.PrimaryColor;
+                _mainIcon.TextColor = ThemeHelpers.MutedColor;
 
                 _orgIcon.Font = UIFont.FromName("bwi-font", 15);
                 _orgIcon.TextColor = ThemeHelpers.MutedColor;
