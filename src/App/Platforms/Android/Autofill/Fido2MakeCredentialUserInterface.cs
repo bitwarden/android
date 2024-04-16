@@ -15,8 +15,10 @@ namespace Bit.App.Platforms.Android.Autofill
         private readonly IUserVerificationMediatorService _userVerificationMediatorService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        
+        private LazyResolve<IMessagingService> _messagingService = new LazyResolve<IMessagingService>();
+
         private TaskCompletionSource<(string cipherId, bool? userVerified)> _confirmCredentialTcs;
+        private TaskCompletionSource<bool> _unlockVaultTcs;
         private Fido2UserVerificationOptions? _currentDefaultUserVerificationOptions;
         private Func<bool> _checkHasVaultBeenUnlockedInThisTransaction;
 
@@ -37,6 +39,9 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public bool HasVaultBeenUnlockedInThisTransaction => _checkHasVaultBeenUnlockedInThisTransaction?.Invoke() == true;
 
+        public bool IsConfirmingNewCredential => _confirmCredentialTcs?.Task != null && !_confirmCredentialTcs.Task.IsCompleted;
+        public bool IsWaitingUnlockVault => _unlockVaultTcs?.Task != null && !_unlockVaultTcs.Task.IsCompleted;
+
         public async Task<(string CipherId, bool UserVerified)> ConfirmNewCredentialAsync(Fido2ConfirmNewCredentialParams confirmNewCredentialParams)
         {
             _confirmCredentialTcs?.TrySetCanceled();
@@ -44,9 +49,8 @@ namespace Bit.App.Platforms.Android.Autofill
             _confirmCredentialTcs = new TaskCompletionSource<(string cipherId, bool? userVerified)>();
 
             _currentDefaultUserVerificationOptions = new Fido2UserVerificationOptions(false, confirmNewCredentialParams.UserVerificationPreference, HasVaultBeenUnlockedInThisTransaction, confirmNewCredentialParams.RpId);
-
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            messagingService?.Send("fidoNavigateToAutofillCipher", confirmNewCredentialParams);
+            
+            _messagingService.Value.Send(Bit.Core.Constants.CredentialNavigateToAutofillCipherMessageCommand, confirmNewCredentialParams);
 
             var (cipherId, isUserVerified) = await _confirmCredentialTcs.Task;
 
@@ -99,11 +103,32 @@ namespace Bit.App.Platforms.Android.Autofill
 
         public async Task EnsureUnlockedVaultAsync()
         {
-            if (!await _stateService.IsAuthenticatedAsync() || await _vaultTimeoutService.IsLockedAsync())
+            if (!await _stateService.IsAuthenticatedAsync()
+                ||
+                await _vaultTimeoutService.IsLoggedOutByTimeoutAsync()
+                ||
+                await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
             {
-                // this should never happen but just in case.
-                throw new InvalidOperationException("Not authed or vault locked");
+                await NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget.HomeLogin);
+                return;
             }
+
+            if (!await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
+
+            await NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget.Lock);
+        }
+
+        private async Task NavigateAndWaitForUnlockAsync(Bit.Core.Enums.NavigationTarget navTarget)
+        {
+            _unlockVaultTcs?.TrySetCanceled();
+            _unlockVaultTcs = new TaskCompletionSource<bool>();
+
+            _messagingService.Value.Send(Bit.Core.Constants.NavigateToMessageCommand, navTarget);
+
+            await _unlockVaultTcs.Task;
         }
 
         public Task InformExcludedCredentialAsync(string[] existingCipherIds)
@@ -118,6 +143,7 @@ namespace Bit.App.Platforms.Android.Autofill
         }
 
         public void Confirm(string cipherId, bool? userVerified) => _confirmCredentialTcs?.TrySetResult((cipherId, userVerified));
+        public void ConfirmVaultUnlocked() => _unlockVaultTcs?.TrySetResult(true);
 
         public async Task ConfirmAsync(string cipherId, bool alreadyHasFido2Credential, bool? userVerified)
         {

@@ -43,6 +43,22 @@ namespace Bit.Core.Abstractions
         /// </summary>
         void OnConfirmationException(Exception ex);
 
+        
+        /// <summary>
+        /// True if we are already confirming a new credential.
+        /// </summary>
+        bool IsConfirmingNewCredential { get; }
+
+        /// <summary>
+        /// Call this after the vault was unlocked so that Fido2 credential creation can proceed.
+        /// </summary>
+        void ConfirmVaultUnlocked();
+
+        /// <summary>
+        /// True if we are waiting for the vault to be unlocked.
+        /// </summary>
+        bool IsWaitingUnlockVault { get; }
+
         Fido2UserVerificationOptions? GetCurrentUserVerificationOptions();
 
         void SetCheckHasVaultBeenUnlockedInThisTransaction(Func<bool> checkHasVaultBeenUnlockedInThisTransaction);

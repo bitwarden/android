@@ -332,7 +332,7 @@ namespace Bit.App.Pages
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
             _fromOtp = appOptions?.OtpData != null;
-            IsFromFido2Framework = appOptions?.FromFido2Framework ?? false;
+            IsFromFido2Framework = _fido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential;
 
             var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));

@@ -38,6 +38,7 @@ namespace Bit.App
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IConfigService _configService;
         private readonly ILogger _logger;
+        private LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _userVerificationMediatorService = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
 
         private static bool _isResumed;
         // these variables are static because the app is launching new activities on notification click, creating new instances of App. 
@@ -280,7 +281,7 @@ namespace Bit.App
                         }
                     }
                 }
-                else if (message.Command == "fidoNavigateToAutofillCipher" && message.Data is Fido2ConfirmNewCredentialParams createParams)
+                else if (message.Command == Constants.CredentialNavigateToAutofillCipherMessageCommand && message.Data is Fido2ConfirmNewCredentialParams createParams)
                 {
                     ArgumentNullException.ThrowIfNull(MainPage);
                     ArgumentNullException.ThrowIfNull(Options);
@@ -331,17 +332,23 @@ namespace Bit.App
                     || message.Command == "unlocked"
                     || message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
                 {
-                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED)
+                    if (message.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED && _userVerificationMediatorService.Value.IsConfirmingNewCredential)
                     {
-                        var userVerificationMediatorService = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
-                        userVerificationMediatorService?.OnConfirmationException(new AccountSwitchedException());
+                        _userVerificationMediatorService.Value.OnConfirmationException(new AccountSwitchedException());
                     }
-                    
+
                     lock (_processingLoginRequestLock)
                     {
                         // lock doesn't allow for async execution
                         CheckPasswordlessLoginRequestsAsync().Wait();
                     }
+                }
+                else if (message.Command == Constants.NavigateToMessageCommand && message.Data is NavigationTarget navigationTarget)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        Navigate(navigationTarget, null);
+                    });
                 }
            }
            catch (Exception ex)
@@ -713,6 +720,15 @@ namespace Bit.App
             // If we are in background we add the Navigation Actions to a queue to execute when the app resumes.
             // Links: https://github.com/dotnet/maui/issues/11501 and https://bitwarden.atlassian.net/wiki/spaces/NMME/pages/664862722/MainPage+Assignments+not+working+on+Android+on+Background+or+App+resume
 #if ANDROID
+            if (_userVerificationMediatorService != null && _userVerificationMediatorService.Value.IsConfirmingNewCredential)
+            {
+                // if it's creating passkey
+                // and we have an active pending TaskCompletionSource
+                // then we let the Fido2 Authenticator flow manage the navigation to avoid issues
+                // like duplicated navigation to lock page.
+                return;
+            }
+
             if (!_isResumed)
             {
                 _onResumeActions.Enqueue(() => NavigateImpl(navTarget, navParams));

@@ -583,7 +583,11 @@ namespace Bit.Droid.Services
                 await ExecuteFido2CreateCredentialAsync();
             }
 
-            appOptions.Fido2CredentialAction = null; //Clear CredentialAction Value
+            // Clear CredentialAction and FromFido2Framework values to avoid erratic behaviors in subsequent navigation/flows
+            // For Fido2CredentialGet these are no longer needed as a new Activity will be initiated.
+            // For Fido2CredentialCreate the app will rely on IFido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential
+            appOptions.Fido2CredentialAction = null;
+            appOptions.FromFido2Framework = false;
         }
 
         private async Task ExecuteFido2GetCredentialAsync(AppOptions appOptions)

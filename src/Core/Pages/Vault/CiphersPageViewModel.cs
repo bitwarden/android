@@ -175,12 +175,9 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher)
         {
-            if (_appOptions.FromFido2Framework)
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
-                if (_appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
-                {
-                    await _fido2MakeCredentialConfirmationUserInterface.Value.ConfirmAsync(cipher.Id, cipher.Login.HasFido2Credentials, null);
-                }
+                await _fido2MakeCredentialConfirmationUserInterface.Value.ConfirmAsync(cipher.Id, cipher.Login.HasFido2Credentials, null);
                 return;
             }
 
