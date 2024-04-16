@@ -331,6 +331,35 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on UnlockWithBiometricToggle false should call clearBiometricsKey, reset the vaultTimeoutAction, and update the state`() =
+        runTest {
+            val initialState = DEFAULT_STATE.copy(
+                isUnlockWithPasswordEnabled = false,
+                isUnlockWithBiometricsEnabled = true,
+            )
+            every { settingsRepository.isUnlockWithBiometricsEnabled } returns true
+            every { settingsRepository.clearBiometricsKey() } just runs
+            every { settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT } just runs
+            val viewModel = createViewModel(initialState)
+            assertEquals(initialState, viewModel.stateFlow.value)
+
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(false))
+
+            assertEquals(
+                initialState.copy(
+                    isUnlockWithBiometricsEnabled = false,
+                    vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
+                ),
+                viewModel.stateFlow.value,
+            )
+            verify(exactly = 1) {
+                settingsRepository.clearBiometricsKey()
+                settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on UnlockWithBiometricToggle true and setupBiometricsKey error should call update the state accordingly`() =
         runTest {
             coEvery { settingsRepository.setupBiometricsKey() } returns BiometricsKeyResult.Error
@@ -408,6 +437,31 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
 
     @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithPinToggle Disabled should set pin unlock to false, reset the vaultTimeoutAction, and clear the PIN in settings`() {
+        val initialState = DEFAULT_STATE.copy(
+            isUnlockWithPasswordEnabled = false,
+            isUnlockWithPinEnabled = true,
+        )
+        every { settingsRepository.clearUnlockPin() } just runs
+        every { settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT } just runs
+        val viewModel = createViewModel(initialState = initialState)
+        viewModel.trySendAction(
+            AccountSecurityAction.UnlockWithPinToggle.Disabled,
+        )
+        assertEquals(
+            initialState.copy(
+                vaultTimeoutAction = VaultTimeoutAction.LOGOUT,
+                isUnlockWithPinEnabled = false,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify {
+            settingsRepository.clearUnlockPin()
+            settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+        }
+    }
+
     @Test
     fun `on UnlockWithPinToggle PendingEnabled should set pin unlock to true`() {
         val initialState = DEFAULT_STATE.copy(

@@ -255,6 +255,7 @@ fun AccountSecurityScreen(
                 )
             }
             SessionTimeoutActionRow(
+                isEnabled = state.hasUnlockMechanism,
                 vaultTimeoutPolicyAction = state.vaultTimeoutPolicyAction,
                 selectedVaultTimeoutAction = state.vaultTimeoutAction,
                 onVaultTimeoutActionSelect = remember(viewModel) {
@@ -293,27 +294,31 @@ fun AccountSecurityScreen(
                     .semantics { testTag = "TwoStepLoginLinkItemView" }
                     .fillMaxWidth(),
             )
-            BitwardenExternalLinkRow(
-                text = stringResource(id = R.string.change_master_password),
-                onConfirmClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
-                },
-                withDivider = false,
-                dialogTitle = stringResource(id = R.string.continue_to_web_app),
-                dialogMessage = stringResource(
-                    id = R.string.change_master_password_description_long,
-                ),
-                modifier = Modifier.fillMaxWidth(),
-            )
-            BitwardenTextRow(
-                text = stringResource(id = R.string.lock_now),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
-                },
-                modifier = Modifier
-                    .semantics { testTag = "LockNowLabel" }
-                    .fillMaxWidth(),
-            )
+            if (state.isUnlockWithPasswordEnabled) {
+                BitwardenExternalLinkRow(
+                    text = stringResource(id = R.string.change_master_password),
+                    onConfirmClick = remember(viewModel) {
+                        { viewModel.trySendAction(AccountSecurityAction.ChangeMasterPasswordClick) }
+                    },
+                    withDivider = false,
+                    dialogTitle = stringResource(id = R.string.continue_to_web_app),
+                    dialogMessage = stringResource(
+                        id = R.string.change_master_password_description_long,
+                    ),
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+            if (state.hasUnlockMechanism) {
+                BitwardenTextRow(
+                    text = stringResource(id = R.string.lock_now),
+                    onClick = remember(viewModel) {
+                        { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
+                    },
+                    modifier = Modifier
+                        .semantics { testTag = "LockNowLabel" }
+                        .fillMaxWidth(),
+                )
+            }
             BitwardenTextRow(
                 text = stringResource(id = R.string.log_out),
                 onClick = remember(viewModel) {
@@ -695,6 +700,7 @@ private fun SessionCustomTimeoutRow(
 @Suppress("LongMethod")
 @Composable
 private fun SessionTimeoutActionRow(
+    isEnabled: Boolean,
     vaultTimeoutPolicyAction: String?,
     selectedVaultTimeoutAction: VaultTimeoutAction,
     onVaultTimeoutActionSelect: (VaultTimeoutAction) -> Unit,
@@ -703,7 +709,12 @@ private fun SessionTimeoutActionRow(
     var shouldShowSelectionDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowLogoutActionConfirmationDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
+        isEnabled = isEnabled,
         text = stringResource(id = R.string.session_timeout_action),
+        description = stringResource(
+            id = R.string.set_up_an_unlock_option_to_change_your_vault_timeout_action,
+        )
+            .takeUnless { isEnabled },
         onClick = {
             // The option is not selectable if there's a policy in place.
             if (vaultTimeoutPolicyAction != null) return@BitwardenTextRow
@@ -714,7 +725,9 @@ private fun SessionTimeoutActionRow(
         Text(
             text = selectedVaultTimeoutAction.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                alpha = if (isEnabled) 1.0f else 0.38f,
+            ),
             modifier = Modifier.semantics { testTag = "SessionTimeoutActionStatusLabel" },
         )
     }
@@ -731,11 +744,11 @@ private fun SessionTimeoutActionRow(
                         isSelected = option == selectedVaultTimeoutAction,
                         onClick = {
                             shouldShowSelectionDialog = false
-                            val seletedAction = vaultTimeoutActionOptions.first { it == option }
-                            if (seletedAction == VaultTimeoutAction.LOGOUT) {
+                            val selectedAction = vaultTimeoutActionOptions.first { it == option }
+                            if (selectedAction == VaultTimeoutAction.LOGOUT) {
                                 shouldShowLogoutActionConfirmationDialog = true
                             } else {
-                                onVaultTimeoutActionSelect(seletedAction)
+                                onVaultTimeoutActionSelect(selectedAction)
                             }
                         },
                     )

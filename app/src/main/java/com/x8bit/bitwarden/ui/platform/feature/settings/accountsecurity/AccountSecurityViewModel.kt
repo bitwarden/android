@@ -231,13 +231,7 @@ class AccountSecurityViewModel @Inject constructor(
     private fun handleVaultTimeoutActionSelect(
         action: AccountSecurityAction.VaultTimeoutActionSelect,
     ) {
-        val vaultTimeoutAction = action.vaultTimeoutAction
-        mutableStateFlow.update {
-            it.copy(
-                vaultTimeoutAction = action.vaultTimeoutAction,
-            )
-        }
-        settingsRepository.vaultTimeoutAction = vaultTimeoutAction
+        setVaultTimeoutAction(action.vaultTimeoutAction)
     }
 
     private fun handleTwoStepLoginClick() {
@@ -261,6 +255,7 @@ class AccountSecurityViewModel @Inject constructor(
         } else {
             settingsRepository.clearBiometricsKey()
             mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = false) }
+            validateVaultTimeoutAction()
         }
     }
 
@@ -273,6 +268,7 @@ class AccountSecurityViewModel @Inject constructor(
             AccountSecurityAction.UnlockWithPinToggle.PendingEnabled -> Unit
             AccountSecurityAction.UnlockWithPinToggle.Disabled -> {
                 settingsRepository.clearUnlockPin()
+                validateVaultTimeoutAction()
             }
 
             is AccountSecurityAction.UnlockWithPinToggle.Enabled -> {
@@ -352,6 +348,17 @@ class AccountSecurityViewModel @Inject constructor(
             )
         }
     }
+
+    private fun validateVaultTimeoutAction() {
+        if (!state.hasUnlockMechanism) {
+            setVaultTimeoutAction(VaultTimeoutAction.LOGOUT)
+        }
+    }
+
+    private fun setVaultTimeoutAction(vaultTimeoutAction: VaultTimeoutAction) {
+        mutableStateFlow.update { it.copy(vaultTimeoutAction = vaultTimeoutAction) }
+        settingsRepository.vaultTimeoutAction = vaultTimeoutAction
+    }
 }
 
 /**
@@ -369,7 +376,15 @@ data class AccountSecurityState(
     val vaultTimeoutAction: VaultTimeoutAction,
     val vaultTimeoutPolicyMinutes: Int?,
     val vaultTimeoutPolicyAction: String?,
-) : Parcelable
+) : Parcelable {
+    /**
+     * Indicates that there is a mechanism for unlocking your vault in place.
+     */
+    val hasUnlockMechanism: Boolean
+        get() = isUnlockWithPasswordEnabled ||
+            isUnlockWithPinEnabled ||
+            isUnlockWithBiometricsEnabled
+}
 
 /**
  * Representation of the dialogs that can be displayed on account security screen.
