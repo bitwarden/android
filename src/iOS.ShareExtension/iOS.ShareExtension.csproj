@@ -110,4 +110,7 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\iOS.Core\iOS.Core.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<BundleResource Include="..\App\Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 </Project>
