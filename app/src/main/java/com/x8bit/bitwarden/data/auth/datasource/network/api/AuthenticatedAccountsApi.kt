@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysR
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
 import retrofit2.http.Body
 import retrofit2.http.HTTP
 import retrofit2.http.POST
@@ -23,6 +24,14 @@ interface AuthenticatedAccountsApi {
      */
     @HTTP(method = "DELETE", path = "/accounts", hasBody = true)
     suspend fun deleteAccount(@Body body: DeleteAccountRequestJson): Result<Unit>
+
+    @POST("/accounts/request-otp")
+    suspend fun requestOtp(): Result<Unit>
+
+    @POST("/accounts/verify-otp")
+    suspend fun verifyOtp(
+        @Body body: VerifyOtpRequestJson,
+    ): Result<Unit>
 
     /**
      * Resets the temporary password.

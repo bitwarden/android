@@ -220,6 +220,46 @@ class AccountsServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `requestOtp success should return Success`() = runTest {
+        val response = MockResponse().setResponseCode(200)
+        server.enqueue(response)
+
+        val result = service.requestOneTimePasscode()
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `requestOtp failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+
+        val result = service.requestOneTimePasscode()
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `verifyOtp success should return Success`() = runTest {
+        val response = MockResponse().setResponseCode(200)
+        server.enqueue(response)
+
+        val result = service.verifyOneTimePasscode("passcode")
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `verifyOtp failure should return Failure`() = runTest {
+        val response = MockResponse().setResponseCode(400)
+        server.enqueue(response)
+
+        val result = service.verifyOneTimePasscode("passcode")
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
     fun `requestPasswordHint success should return Success`() = runTest {
         val email = "test@example.com"
         val response = MockResponse().setResponseCode(200).setBody("{}")

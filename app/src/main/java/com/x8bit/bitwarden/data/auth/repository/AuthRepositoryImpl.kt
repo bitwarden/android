@@ -45,6 +45,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
@@ -52,6 +53,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -563,6 +565,23 @@ class AuthRepositoryImpl(
     override fun logout(userId: String) {
         userLogoutManager.logout(userId = userId)
     }
+
+    override suspend fun requestOneTimePasscode(): RequestOtpResult =
+        accountsService.requestOneTimePasscode()
+            .fold(
+                onFailure = { RequestOtpResult.Error(it.message) },
+                onSuccess = { RequestOtpResult.Success },
+            )
+
+    override suspend fun verifyOneTimePasscode(oneTimePasscode: String): VerifyOtpResult =
+        accountsService
+            .verifyOneTimePasscode(
+                passcode = oneTimePasscode,
+            )
+            .fold(
+                onFailure = { VerifyOtpResult.NotVerified(it.message) },
+                onSuccess = { VerifyOtpResult.Verified },
+            )
 
     override suspend fun resendVerificationCodeEmail(): ResendEmailResult =
         resendEmailRequestJson

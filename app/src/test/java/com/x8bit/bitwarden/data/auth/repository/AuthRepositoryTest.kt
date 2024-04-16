@@ -63,6 +63,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordHintResult
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.PrevalidateSsoResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
@@ -70,6 +71,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -4043,6 +4045,54 @@ class AuthRepositoryTest {
         repository.logout(userId = userId)
 
         verify { userLogoutManager.logout(userId = userId) }
+    }
+
+    @Test
+    fun `requestOneTimePasscode with success response should return Success`() = runTest {
+        coEvery {
+            accountsService.requestOneTimePasscode()
+        } returns Unit.asSuccess()
+
+        val result = repository.requestOneTimePasscode()
+
+        assertEquals(RequestOtpResult.Success, result)
+    }
+
+    @Test
+    fun `requestOneTimePasscode with error response should return Error`() = runTest {
+        val errorMessage = "Error message"
+        coEvery {
+            accountsService.requestOneTimePasscode()
+        } returns Throwable(errorMessage).asFailure()
+
+        val result = repository.requestOneTimePasscode()
+
+        assertEquals(RequestOtpResult.Error(errorMessage), result)
+    }
+
+    @Test
+    fun `verifyOneTimePasscode with success response should return Verified result`() = runTest {
+        val passcode = "passcode"
+        coEvery {
+            accountsService.verifyOneTimePasscode(passcode)
+        } returns Unit.asSuccess()
+
+        val result = repository.verifyOneTimePasscode(passcode)
+
+        assertEquals(VerifyOtpResult.Verified, result)
+    }
+
+    @Test
+    fun `verifyOneTimePasscode with error response should return NotVerified result`() = runTest {
+        val errorMessage = "Error message"
+        val passcode = "passcode"
+        coEvery {
+            accountsService.verifyOneTimePasscode(passcode)
+        } returns Throwable(errorMessage).asFailure()
+
+        val result = repository.verifyOneTimePasscode(passcode)
+
+        assertEquals(VerifyOtpResult.NotVerified(errorMessage), result)
     }
 
     @Test
