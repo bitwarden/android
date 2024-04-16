@@ -35,7 +35,7 @@ data class SetPasswordRequestJson(
     val key: String,
 
     @SerialName("keys")
-    val keys: Keys,
+    val keys: Keys?,
 
     @SerialName("orgIdentifier")
     val organizationIdentifier: String,

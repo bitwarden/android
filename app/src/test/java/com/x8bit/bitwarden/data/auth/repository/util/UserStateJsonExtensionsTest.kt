@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
@@ -96,8 +97,9 @@ class UserStateJsonExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `toUserStateJsonWithPassword should update correct account to set needsMasterPassword`() {
+    fun `toUserStateJsonWithPassword should update active account to set hasMasterPassword and clear forcePasswordResetReason`() {
         val originalProfile = AccountJson.Profile(
             userId = "activeUserId",
             email = "email",
@@ -107,7 +109,8 @@ class UserStateJsonExtensionsTest {
             organizationId = null,
             avatarColorHex = null,
             hasPremium = true,
-            forcePasswordResetReason = null,
+            forcePasswordResetReason = ForcePasswordResetReason
+                .TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION,
             kdfType = KdfTypeJson.ARGON2_ID,
             kdfIterations = 600000,
             kdfMemory = 16,
@@ -125,6 +128,7 @@ class UserStateJsonExtensionsTest {
                 accounts = mapOf(
                     "activeUserId" to originalAccount.copy(
                         profile = originalProfile.copy(
+                            forcePasswordResetReason = null,
                             userDecryptionOptions = UserDecryptionOptionsJson(
                                 hasMasterPassword = true,
                                 keyConnectorUserDecryptionOptions = null,

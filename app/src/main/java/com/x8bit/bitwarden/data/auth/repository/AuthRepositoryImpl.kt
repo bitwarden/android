@@ -780,6 +780,7 @@ class AuthRepositoryImpl(
             .userState
             ?.activeAccount
             ?: return SetPasswordResult.Error
+        val userId = activeAccount.profile.userId
 
         // Update the saved master password hash.
         val passwordHash = authSdkSource
@@ -791,13 +792,27 @@ class AuthRepositoryImpl(
             )
             .getOrElse { return@setPassword SetPasswordResult.Error }
 
-        return authSdkSource
-            .makeRegisterKeys(
-                email = activeAccount.profile.email,
-                password = password,
-                kdf = activeAccount.profile.toSdkParams(),
-            )
-            .flatMap { keyResponse ->
+        return when (activeAccount.profile.forcePasswordResetReason) {
+            ForcePasswordResetReason.TDE_USER_WITHOUT_PASSWORD_HAS_PASSWORD_RESET_PERMISSION -> {
+                vaultSdkSource
+                    .updatePassword(userId = userId, newPassword = password)
+                    .map { it.newKey to null }
+            }
+
+            ForcePasswordResetReason.ADMIN_FORCE_PASSWORD_RESET,
+            ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN,
+            null,
+            -> {
+                authSdkSource
+                    .makeRegisterKeys(
+                        email = activeAccount.profile.email,
+                        password = password,
+                        kdf = activeAccount.profile.toSdkParams(),
+                    )
+                    .map { it.encryptedUserKey to it.keys }
+            }
+        }
+            .flatMap { (encryptedUserKey, rsaKeys) ->
                 accountsService
                     .setPassword(
                         body = SetPasswordRequestJson(
@@ -808,28 +823,27 @@ class AuthRepositoryImpl(
                             kdfMemory = activeAccount.profile.kdfMemory,
                             kdfParallelism = activeAccount.profile.kdfParallelism,
                             kdfType = activeAccount.profile.kdfType,
-                            key = keyResponse.encryptedUserKey,
-                            keys = RegisterRequestJson.Keys(
-                                publicKey = keyResponse.keys.public,
-                                encryptedPrivateKey = keyResponse.keys.private,
-                            ),
+                            key = encryptedUserKey,
+                            keys = rsaKeys?.let {
+                                RegisterRequestJson.Keys(
+                                    publicKey = it.public,
+                                    encryptedPrivateKey = it.private,
+                                )
+                            },
                         ),
                     )
                     .onSuccess {
-                        authDiskSource.storePrivateKey(
-                            userId = activeAccount.profile.userId,
-                            privateKey = keyResponse.keys.private,
-                        )
-                        authDiskSource.storeUserKey(
-                            userId = activeAccount.profile.userId,
-                            userKey = keyResponse.encryptedUserKey,
-                        )
+                        rsaKeys?.private?.let {
+                            authDiskSource.storePrivateKey(userId = userId, privateKey = it)
+                        }
+                        authDiskSource.storeUserKey(userId = userId, userKey = encryptedUserKey)
                     }
             }
             .flatMap {
                 when (vaultRepository.unlockVaultWithMasterPassword(password)) {
                     is VaultUnlockResult.Success -> {
                         enrollUserInPasswordReset(
+                            userId = userId,
                             organizationIdentifier = organizationIdentifier,
                             passwordHash = passwordHash,
                         )
@@ -844,13 +858,8 @@ class AuthRepositoryImpl(
                 }
             }
             .onSuccess {
-                authDiskSource.storeMasterPasswordHash(
-                    userId = activeAccount.profile.userId,
-                    passwordHash = passwordHash,
-                )
-
+                authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = passwordHash)
                 authDiskSource.userState = authDiskSource.userState?.toUserStateJsonWithPassword()
-
                 this.organizationIdentifier = null
             }
             .fold(
@@ -1054,14 +1063,12 @@ class AuthRepositoryImpl(
      * Enrolls the active user in password reset if their organization requires it.
      */
     private suspend fun enrollUserInPasswordReset(
+        userId: String,
         organizationIdentifier: String,
         passwordHash: String,
-    ): Result<Unit> {
-        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
-        return organizationService
-            .getOrganizationAutoEnrollStatus(
-                organizationIdentifier = organizationIdentifier,
-            )
+    ): Result<Unit> =
+        organizationService
+            .getOrganizationAutoEnrollStatus(organizationIdentifier = organizationIdentifier)
             .flatMap { statusResponse ->
                 if (statusResponse.isResetPasswordEnabled) {
                     organizationService
@@ -1084,7 +1091,6 @@ class AuthRepositoryImpl(
                     Unit.asSuccess()
                 }
             }
-    }
 
     /**
      * Get the remembered two-factor token associated with the user's email, if applicable.
