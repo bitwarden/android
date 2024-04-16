@@ -1,18 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<full-backup-content>
-    <exclude
+<full-backup-content xmlns:tools="http://schemas.android.com/tools">
+    <include
         domain="sharedpref"
-        path="." />
-    <exclude
-        domain="file"
-        path="." />
+        path="com.x8bit.bitwarden.authenticator_preferences.xml" />
     <exclude
         domain="database"
-        path="." />
-    <exclude
-        domain="external"
-        path="." />
-    <exclude
-        domain="root"
-        path="." />
+        path="."
+        tools:ignore="FullBackupContent" />
 </full-backup-content>

@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample data extraction rules file; uncomment and customize as necessary.
-   See https://developer.android.com/about/versions/12/backup-restore#xml-changes
-   for details.
--->
+<?xml version="1.0" encoding="utf-8"?>
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <include
+            domain="sharedpref"
+            path="com.x8bit.bitwarden.authenticator_preferences.xml" />
+        <include
+            domain="database"
+            path="." />
     </cloud-backup>
-    <!--
     <device-transfer>
-        <include .../>
-        <exclude .../>
+        <include
+            domain="sharedpref"
+            path="com.x8bit.bitwarden.authenticator_preferences.xml" />
+        <include
+            domain="database"
+            path="." />
     </device-transfer>
-    -->
 </data-extraction-rules>
