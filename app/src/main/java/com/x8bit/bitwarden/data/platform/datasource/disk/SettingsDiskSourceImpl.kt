@@ -148,9 +148,12 @@ class SettingsDiskSourceImpl(
             isApprovePasswordlessLoginsEnabled = null,
         )
         storeLastSyncTime(userId = userId, lastSyncTime = null)
-        storeScreenCaptureAllowed(userId = userId, isScreenCaptureAllowed = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_$userId")
+
+        // The following are intentionally not cleared so they can be
+        // restored after logging out and back in:
+        // - screen capture allowed
     }
 
     override fun getAccountBiometricIntegrityValidity(
