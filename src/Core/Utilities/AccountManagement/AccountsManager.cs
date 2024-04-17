@@ -20,7 +20,9 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly IMessagingService _messagingService;
         private readonly IWatchDeviceService _watchDeviceService;
         private readonly IConditionedAwaiterManager _conditionedAwaiterManager;
-        private LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _userVerificationMediatorService = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#if ANDROID
+        private LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#endif
 
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
@@ -101,12 +103,14 @@ namespace Bit.App.Utilities.AccountManagement
                 {
                     _accountsManagerHost.Navigate(NavigationTarget.AddEditCipher);
                 }
-                else if (_userVerificationMediatorService.Value.IsConfirmingNewCredential)
+#if ANDROID
+                else if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
                 {
                     // If we are already confirming a credential we don't need to navigate again.
                     // This could happen when switching accounts for example.
                     return;
                 }
+#endif
                 else if (Options.FromFido2Framework)
                 {
                     var deviceActionService = Bit.Core.Utilities.ServiceContainer.Resolve<IDeviceActionService>();

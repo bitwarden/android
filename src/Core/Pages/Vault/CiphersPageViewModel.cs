@@ -22,7 +22,9 @@ namespace Bit.App.Pages
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
         private readonly IPolicyService _policyService;
+#if ANDROID
         private readonly LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#endif
 
         private CancellationTokenSource _searchCancellationTokenSource;
         private readonly ILogger _logger;
@@ -175,11 +177,13 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher)
         {
+#if ANDROID
             if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
             {
                 await _fido2MakeCredentialConfirmationUserInterface.Value.ConfirmAsync(cipher.Id, cipher.Login.HasFido2Credentials, null);
                 return;
             }
+#endif
 
             string selection = null;
 

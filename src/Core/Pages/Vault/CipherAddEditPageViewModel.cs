@@ -96,7 +96,10 @@ namespace Bit.App.Pages
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
-            _fido2MakeCredentialConfirmationUserInterface = ServiceContainer.Resolve<IFido2MakeCredentialConfirmationUserInterface>();
+            if (ServiceContainer.TryResolve<IFido2MakeCredentialConfirmationUserInterface>(out var fido2MakeService))
+            {
+                _fido2MakeCredentialConfirmationUserInterface = fido2MakeService;
+            }
             _userVerificationMediatorService = ServiceContainer.Resolve<IUserVerificationMediatorService>(); 
 
             GeneratePasswordCommand = new Command(GeneratePassword);
@@ -332,7 +335,7 @@ namespace Bit.App.Pages
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
             _fromOtp = appOptions?.OtpData != null;
-            IsFromFido2Framework = _fido2MakeCredentialConfirmationUserInterface.IsConfirmingNewCredential;
+            IsFromFido2Framework = _fido2MakeCredentialConfirmationUserInterface?.IsConfirmingNewCredential == true;
 
             var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
