@@ -147,7 +147,7 @@ namespace Bit.iOS.Autofill
                         CPViewController.VerifyUserAsync,
                         Source.ReloadWithAllowedFido2Credentials);
 
-                    DoFido2GetAssertionAsync(fido2UserInterface).FireAndForget();
+                    DoFido2GetAssertionAsync(fido2UserInterface).FireAndForget(ex => ex is not Fido2AuthenticatorException);
                 }
                 else
                 {
