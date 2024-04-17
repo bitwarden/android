@@ -1,5 +1,9 @@
 package com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting
 
+import android.Manifest
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -21,7 +25,10 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -38,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.authenticator.R
 import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.ItemListingExpandableFabAction
+import com.x8bit.bitwarden.authenticator.ui.authenticator.feature.manualcodeentry.ManualCodeEntryAction
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.authenticator.ui.platform.base.util.asText
 import com.x8bit.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
@@ -54,6 +62,10 @@ import com.x8bit.bitwarden.authenticator.ui.platform.components.icon.BitwardenIc
 import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
+import com.x8bit.bitwarden.authenticator.ui.platform.theme.LocalPermissionsManager
 import com.x8bit.bitwarden.authenticator.ui.platform.theme.Typography
 
 /**
@@ -63,6 +75,8 @@ import com.x8bit.bitwarden.authenticator.ui.platform.theme.Typography
 @Composable
 fun ItemListingScreen(
     viewModel: ItemListingViewModel = hiltViewModel(),
+    intentManager: IntentManager = LocalIntentManager.current,
+    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
     onNavigateBack: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToQrCodeScanner: () -> Unit,
@@ -75,6 +89,14 @@ fun ItemListingScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val pullToRefreshState = rememberPullToRefreshState()
     val context = LocalContext.current
+    var shouldShowPermissionDialog by rememberSaveable { mutableStateOf(false) }
+    val launcher = permissionsManager.getLauncher { isGranted ->
+        if (isGranted) {
+            viewModel.trySendAction(ItemListingAction.ScanQrCodeClick)
+        } else {
+            shouldShowPermissionDialog = true
+        }
+    }
 
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
@@ -94,7 +116,27 @@ fun ItemListingScreen(
             }
 
             is ItemListingEvent.NavigateToEditItem -> onNavigateToEditItemScreen(event.id)
+            is ItemListingEvent.NavigateToAppSettings -> {
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                intent.data = Uri.parse("package:" + context.packageName)
+
+                intentManager.startActivity(intent = intent)
+            }
         }
+    }
+
+    if (shouldShowPermissionDialog) {
+        BitwardenTwoButtonDialog(
+            message = stringResource(id = R.string.enable_camera_permission_to_use_the_scanner),
+            confirmButtonText = stringResource(id = R.string.settings),
+            dismissButtonText = stringResource(id = R.string.no_thanks),
+            onConfirmClick = remember(viewModel) {
+                { viewModel.trySendAction(ItemListingAction.SettingsClick) }
+            },
+            onDismissClick = { shouldShowPermissionDialog = false },
+            onDismissRequest = { shouldShowPermissionDialog = false },
+            title = null,
+        )
     }
 
     ItemListingDialogs(
@@ -152,7 +194,7 @@ fun ItemListingScreen(
                             testTag = "ScanQRCodeButton",
                         ),
                         onScanQrCodeClick = {
-                            viewModel.trySendAction(ItemListingAction.ScanQrCodeClick)
+                            launcher.launch(Manifest.permission.CAMERA)
                         }
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(

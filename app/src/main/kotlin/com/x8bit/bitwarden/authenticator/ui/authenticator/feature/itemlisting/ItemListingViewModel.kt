@@ -106,10 +106,18 @@ class ItemListingViewModel @Inject constructor(
                 handleDialogDismiss()
             }
 
+            is ItemListingAction.SettingsClick -> {
+                handleSettingsClick()
+            }
+
             is ItemListingAction.Internal -> {
                 handleInternalAction(action)
             }
         }
+    }
+
+    private fun handleSettingsClick() {
+        sendEvent(ItemListingEvent.NavigateToAppSettings)
     }
 
     private fun handleItemClick(action: ItemListingAction.ItemClick) {
@@ -534,6 +542,11 @@ sealed class ItemListingEvent {
     ) : ItemListingEvent()
 
     /**
+     * Navigate to the app settings.
+     */
+    data object NavigateToAppSettings : ItemListingEvent()
+
+    /**
      * Show a Toast with [message].
      */
     data class ShowToast(
@@ -581,6 +594,11 @@ sealed class ItemListingAction {
      * The user dismissed the dialog.
      */
     data object DialogDismiss : ItemListingAction()
+
+    /**
+     * The user has clicked the settings button
+     */
+    data object SettingsClick : ItemListingAction()
 
     /**
      * Models actions that [ItemListingScreen] itself may send.
