@@ -23,7 +23,7 @@
         android:theme="@style/LaunchTheme"
         tools:targetApi="31">
         <activity
-            android:name="com.x8bit.bitwarden.authenticator.MainActivity"
+            android:name="com.bitwarden.authenticator.MainActivity"
             android:exported="true"
             android:launchMode="@integer/launchModeAPILevel"
             android:theme="@style/LaunchTheme"

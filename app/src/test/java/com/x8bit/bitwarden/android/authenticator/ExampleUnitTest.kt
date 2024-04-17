@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.android.authenticator
+package com.bitwarden.android.authenticator
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

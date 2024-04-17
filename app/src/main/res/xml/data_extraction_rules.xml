@@ -3,7 +3,7 @@
     <cloud-backup>
         <include
             domain="sharedpref"
-            path="com.x8bit.bitwarden.authenticator_preferences.xml" />
+            path="com.bitwarden.authenticator_preferences.xml" />
         <include
             domain="database"
             path="." />
@@ -11,7 +11,7 @@
     <device-transfer>
         <include
             domain="sharedpref"
-            path="com.x8bit.bitwarden.authenticator_preferences.xml" />
+            path="com.bitwarden.authenticator_preferences.xml" />
         <include
             domain="database"
             path="." />
