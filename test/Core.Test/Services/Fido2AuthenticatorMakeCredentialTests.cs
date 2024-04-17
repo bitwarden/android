@@ -268,6 +268,7 @@ namespace Bit.Core.Test.Services
             // Arrange
             _params.UserVerificationPreference = Fido2UserVerificationPreference.Required;
             _userInterface.ConfirmNewCredentialAsync(Arg.Any<Fido2ConfirmNewCredentialParams>()).Returns((_encryptedSelectedCipher.Id, false));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().ShouldEnforceFido2RequiredUserVerificationAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(true));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
@@ -283,6 +284,7 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<IUserVerificationMediatorService>()
                 .ShouldPerformMasterPasswordRepromptAsync(Arg.Is<Fido2UserVerificationOptions>(opt => opt.ShouldCheckMasterPasswordReprompt))
                 .Returns(Task.FromResult(true));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().ShouldEnforceFido2RequiredUserVerificationAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(true));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
@@ -298,6 +300,7 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<IUserVerificationMediatorService>()
                 .CanPerformUserVerificationPreferredAsync(Arg.Any<Fido2UserVerificationOptions>())
                 .Returns(Task.FromResult(true));
+            _sutProvider.GetDependency<IUserVerificationMediatorService>().ShouldEnforceFido2RequiredUserVerificationAsync(Arg.Any<Fido2UserVerificationOptions>()).Returns(Task.FromResult(true));
 
             // Act & Assert
             await Assert.ThrowsAsync<NotAllowedError>(() => _sutProvider.Sut.MakeCredentialAsync(_params, _userInterface));
