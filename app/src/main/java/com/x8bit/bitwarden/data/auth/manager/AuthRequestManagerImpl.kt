@@ -35,6 +35,7 @@ private const val PASSWORDLESS_APPROVER_INTERVAL_MILLIS: Long = 5L * 60L * 1_000
 /**
  * Default implementation of [AuthRequestManager].
  */
+@Suppress("TooManyFunctions")
 @Singleton
 class AuthRequestManagerImpl(
     private val clock: Clock,
@@ -106,6 +107,7 @@ class AuthRequestManagerImpl(
                     onSuccess = { updateAuthRequest ->
                         when {
                             updateAuthRequest.requestApproved -> {
+                                clearPendingAuthRequest()
                                 isComplete = true
                                 emit(
                                     CreateAuthRequestResult.Success(
@@ -117,6 +119,7 @@ class AuthRequestManagerImpl(
 
                             !updateAuthRequest.requestApproved &&
                                 updateAuthRequest.responseDate != null -> {
+                                clearPendingAuthRequest()
                                 isComplete = true
                                 emit(CreateAuthRequestResult.Declined)
                             }
@@ -126,6 +129,7 @@ class AuthRequestManagerImpl(
                                 .toInstant()
                                 .plusMillis(PASSWORDLESS_NOTIFICATION_TIMEOUT_MILLIS)
                                 .isBefore(clock.instant()) -> {
+                                clearPendingAuthRequest()
                                 isComplete = true
                                 emit(CreateAuthRequestResult.Expired)
                             }
@@ -137,6 +141,15 @@ class AuthRequestManagerImpl(
                         }
                     },
                 )
+        }
+    }
+
+    private fun clearPendingAuthRequest() {
+        activeUserId?.let {
+            authDiskSource.storePendingAuthRequest(
+                userId = it,
+                pendingAuthRequest = null,
+            )
         }
     }
 

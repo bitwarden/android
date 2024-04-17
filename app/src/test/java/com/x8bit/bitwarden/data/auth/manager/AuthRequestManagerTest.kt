@@ -300,16 +300,20 @@ class AuthRequestManagerTest {
                 )
                 .test {
                     assertEquals(CreateAuthRequestResult.Update(authRequest), awaitItem())
+                    fakeAuthDiskSource.assertPendingAuthRequest(
+                        userId = USER_ID,
+                        pendingAuthRequest = PendingAuthRequestJson(
+                            requestId = authRequestResponseJson.id,
+                            requestPrivateKey = authRequestResponse.privateKey,
+                        ),
+                    )
                     assertEquals(CreateAuthRequestResult.Expired, awaitItem())
+                    fakeAuthDiskSource.assertPendingAuthRequest(
+                        userId = USER_ID,
+                        pendingAuthRequest = null,
+                    )
                     awaitComplete()
                 }
-            fakeAuthDiskSource.assertPendingAuthRequest(
-                userId = USER_ID,
-                pendingAuthRequest = PendingAuthRequestJson(
-                    requestId = authRequestResponseJson.id,
-                    requestPrivateKey = authRequestResponse.privateKey,
-                ),
-            )
         }
 
     @Suppress("MaxLineLength")
