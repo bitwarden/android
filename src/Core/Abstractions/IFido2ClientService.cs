@@ -21,7 +21,7 @@ namespace Bit.Core.Abstractions
         /// </summary>
         /// <param name="createCredentialParams">The parameters for the credential creation operation</param>
         /// <returns>The new credential</returns>
-        Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams);
+        Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, byte[] clientDataHash);
 
         /// <summary>
         /// Allows WebAuthn Relying Party scripts to discover and use an existing public key credential, with the user’s consent.
@@ -30,6 +30,6 @@ namespace Bit.Core.Abstractions
         /// </summary>
         /// <param name="assertCredentialParams">The parameters for the credential assertion operation</param>
         /// <returns>The asserted credential</returns>
-        Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams);
+        Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, byte[] clientDataHash);
     }
 }

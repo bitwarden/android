@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
@@ -318,6 +319,49 @@ namespace Bit.Core.Test.Services
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.NotAllowedError, exception.Code);
+        }
+
+        [Fact]
+        public async Task AssertCredentialAsync_ConstructsClientDataHash_WhenHashIsNotProvided()
+        {
+            // Arrange
+            var mockHash = RandomBytes(32);
+            _sutProvider.GetDependency<ICryptoFunctionService>()
+                .HashAsync(Arg.Any<byte[]>(), Arg.Is(CryptoHashAlgorithm.Sha256))
+                .Returns(Task.FromResult(mockHash));
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            await _sutProvider.Sut.CreateCredentialAsync(_params);
+
+            // Assert
+            await _sutProvider.GetDependency<IFido2AuthenticatorService>().Received()
+                .GetAssertionAsync(
+                    Arg.Is((Fido2AuthenticatorGetAssertionParams x) => x.Hash == mockHash),
+                    Arg.Any<IFido2GetAssertionUserInterface>()
+                );
+        }
+
+        [Fact]
+        public async Task AssertCredentialAsync_UsesProvidedClientDataHash_WhenHashIsProvided()
+        {
+            // Arrange
+            var mockHash = RandomBytes(32);
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .MakeCredentialAsync(Arg.Any<Fido2AuthenticatorMakeCredentialParams>(), _sutProvider.GetDependency<IFido2MakeCredentialUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            await _sutProvider.Sut.CreateCredentialAsync(_params, mockHash);
+
+            // Assert
+            await _sutProvider.GetDependency<IFido2AuthenticatorService>().Received()
+                .GetAssertionAsync(
+                    Arg.Is((Fido2AuthenticatorGetAssertionParams x) => x.Hash == mockHash),
+                    Arg.Any<IFido2GetAssertionUserInterface>()
+                );
         }
 
         [Fact]
