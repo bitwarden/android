@@ -168,6 +168,13 @@ namespace Bit.Droid
             base.OnNewIntent(intent);
             try
             {
+                if (intent?.GetStringExtra(CredentialProviderConstants.Fido2CredentialAction) == CredentialProviderConstants.Fido2CredentialCreate
+                    &&
+                    _appOptions != null)
+                {
+                    _appOptions.HasUnlockedInThisTransaction = false;
+                }
+
                 if (intent?.GetStringExtra("uri") is string uri)
                 {
                     _messagingService.Send(App.App.POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE);
