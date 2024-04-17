@@ -442,7 +442,7 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on createAuthRequestWithUpdates Declined received should show content with error dialog`() {
+    fun `on createAuthRequestWithUpdates with OTHER_DEVICE, Declined received should show error dialog`() {
         val viewModel = createViewModel()
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
         mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
@@ -459,6 +459,21 @@ class LoginWithDeviceViewModelTest : BaseViewModelTest() {
             ),
             viewModel.stateFlow.value,
         )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on createAuthRequestWithUpdates with SSO_ADMIN_APPROVAL, Declined received should show unchanged content`() {
+        val initialState = DEFAULT_STATE.copy(
+            loginWithDeviceType = LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+            viewState = DEFAULT_CONTENT_VIEW_STATE.copy(
+                loginWithDeviceType = LoginWithDeviceType.SSO_ADMIN_APPROVAL,
+            ),
+        )
+        val viewModel = createViewModel(initialState)
+        assertEquals(initialState, viewModel.stateFlow.value)
+        mutableCreateAuthRequestWithUpdatesFlow.tryEmit(CreateAuthRequestResult.Declined)
+        assertEquals(initialState, viewModel.stateFlow.value)
     }
 
     @Test
