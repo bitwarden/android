@@ -85,7 +85,7 @@
     <string name="get_started">Get started</string>
     <string name="unique_codes">Uniqe codes</string>
     <string name="help">Help</string>
-    <string name="tutorial">Tutorial</string>
+    <string name="launch_tutorial">Launch tutorial</string>
     <string name="value_has_been_copied">%1$s copied</string>
     <string name="delete_item">Delete item</string>
     <string name="item_deleted">Item deleted</string>

@@ -255,7 +255,7 @@ private fun HelpSettings(
         label = stringResource(id = R.string.help)
     )
     BitwardenTextRow(
-        text = stringResource(id = R.string.tutorial),
+        text = stringResource(id = R.string.launch_tutorial),
         onClick = onTutorialClick,
         modifier = modifier,
     )
