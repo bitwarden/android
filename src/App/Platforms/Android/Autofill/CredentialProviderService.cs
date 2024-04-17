@@ -25,20 +25,26 @@ namespace Bit.Droid.Autofill
         public const int UniqueCreateRequestCode = 94556024;
 
         private readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
+        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>();
 
-        public override void OnBeginCreateCredentialRequest(BeginCreateCredentialRequest request,
+        public override async void OnBeginCreateCredentialRequest(BeginCreateCredentialRequest request,
             CancellationSignal cancellationSignal, IOutcomeReceiver callback)
         {
-            var response = ProcessCreateCredentialsRequestAsync(request);
-            if (response != null)
+            try
             {
-                callback.OnResult(response);
-            } 
-            else
-            {
-                callback.OnError("Error creating credential");
+                var response = await ProcessCreateCredentialsRequestAsync(request);
+                if (response != null)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => callback.OnResult(response));
+                    return;
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+            }
+            MainThread.BeginInvokeOnMainThread(() => callback.OnError(AppResources.ErrorCreatingPasskey));
         }
 
         public override async void OnBeginGetCredentialRequest(BeginGetCredentialRequest request,
@@ -70,16 +76,16 @@ namespace Bit.Droid.Autofill
             catch (GetCredentialException e)
             {
                 _logger.Value.Exception(e);
-                callback.OnError(e.ErrorMessage ?? "Error getting credentials");
+                callback.OnError(e.ErrorMessage ?? AppResources.ErrorReadingPasskey);
             }
             catch (Exception e)
             {
-                _logger.Value.Exception(e); 
-                throw;
+                _logger.Value.Exception(e);
+                callback.OnError(AppResources.ErrorReadingPasskey);
             }
         }
 
-        private BeginCreateCredentialResponse ProcessCreateCredentialsRequestAsync(
+        private async Task<BeginCreateCredentialResponse> ProcessCreateCredentialsRequestAsync(
             BeginCreateCredentialRequest request)
         {
             if (request == null) { return null; }
@@ -92,22 +98,25 @@ namespace Bit.Droid.Autofill
             }
             else if (request is BeginCreatePublicKeyCredentialRequest beginCreatePublicKeyCredentialRequest)
             {
-                return HandleCreatePasskeyQuery(beginCreatePublicKeyCredentialRequest);
+                return await HandleCreatePasskeyQueryAsync(beginCreatePublicKeyCredentialRequest);
             }
 
             return null;
         }
 
-        private BeginCreateCredentialResponse HandleCreatePasskeyQuery(BeginCreatePublicKeyCredentialRequest optionRequest)
+        private async Task<BeginCreateCredentialResponse> HandleCreatePasskeyQueryAsync(BeginCreatePublicKeyCredentialRequest optionRequest)
         {
             var intent = new Intent(ApplicationContext, typeof(MainActivity));
             intent.PutExtra(CredentialProviderConstants.Fido2CredentialAction, CredentialProviderConstants.Fido2CredentialCreate);
             var pendingIntent = PendingIntent.GetActivity(ApplicationContext, UniqueCreateRequestCode, intent,
                 AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, true));
 
-            //TODO: i81n needs to be done
-            var createEntryBuilder = new CreateEntry.Builder("Bitwarden Vault", pendingIntent)
-                .SetDescription("Your passkey will be saved securely to the Bitwarden Vault. You can use it from any other device for sign-in in the future.")
+            var userEmail = await GetSafeActiveAccountEmailAsync();
+
+            var createEntryBuilder = new CreateEntry.Builder(userEmail ?? AppResources.Bitwarden, pendingIntent)
+                .SetDescription(userEmail != null
+                                    ? string.Format(AppResources.YourPasskeyWillBeSavedToYourBitwardenVaultForX, userEmail)
+                                    : AppResources.YourPasskeyWillBeSavedToYourBitwardenVault)
                 .Build();
 
             var createCredentialResponse = new BeginCreateCredentialResponse.Builder()
@@ -140,6 +149,20 @@ namespace Bit.Droid.Autofill
             CancellationSignal cancellationSignal, IOutcomeReceiver callback)
         {
             callback.OnResult(null);
+        }
+
+        private async Task<string> GetSafeActiveAccountEmailAsync()
+        {
+            try
+            {
+                return await _stateService.Value.GetEmailAsync();
+            }
+            catch (Exception ex)
+            {
+                // if it throws to get the user's email then we log and continue showing a more generic message
+                _logger.Value.Exception(ex);
+                return null;
+            }
         }
     }
 }
