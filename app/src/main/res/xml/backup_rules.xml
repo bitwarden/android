@@ -3,7 +3,7 @@
     <include
         domain="sharedpref"
         path="com.x8bit.bitwarden.authenticator_preferences.xml" />
-    <exclude
+    <include
         domain="database"
         path="."
         tools:ignore="FullBackupContent" />
