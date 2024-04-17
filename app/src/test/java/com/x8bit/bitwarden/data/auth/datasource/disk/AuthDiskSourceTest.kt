@@ -182,16 +182,23 @@ class AuthDiskSourceTest {
     fun `clearData should clear all necessary data for the given user`() {
         val userId = "userId"
 
+        val pendingAuthRequestJson = PendingAuthRequestJson(
+            requestId = "12345",
+            requestPrivateKey = "67890",
+        )
         authDiskSource.storePendingAuthRequest(
             userId = userId,
-            pendingAuthRequest = PendingAuthRequestJson(
-                requestId = "12345",
-                requestPrivateKey = "67890",
-            ),
+            pendingAuthRequest = pendingAuthRequestJson,
         )
+        val deviceKey = "deviceKey"
+        authDiskSource.storeDeviceKey(userId = userId, deviceKey = deviceKey)
         authDiskSource.storeUserBiometricUnlockKey(
             userId = userId,
             biometricsKey = "1234-9876-0192",
+        )
+        authDiskSource.storePinProtectedUserKey(
+            userId = userId,
+            pinProtectedUserKey = "pinProtectedUserKey",
         )
         authDiskSource.storeLastActiveTimeMillis(
             userId = userId,
@@ -226,10 +233,18 @@ class AuthDiskSourceTest {
                 refreshToken = "refreshToken",
             ),
         )
+        authDiskSource.storeEncryptedPin(userId = userId, encryptedPin = "encryptedPin")
+        authDiskSource.storeMasterPasswordHash(userId = userId, passwordHash = "passwordHash")
 
         authDiskSource.clearData(userId = userId)
 
+        // We do not clear these even when you call clear storage
+        assertEquals(pendingAuthRequestJson, authDiskSource.getPendingAuthRequest(userId = userId))
+        assertEquals(deviceKey, authDiskSource.getDeviceKey(userId = userId))
+
+        // These should be cleared
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
+        assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
         assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
@@ -239,6 +254,8 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getOrganizations(userId = userId))
         assertNull(authDiskSource.getPolicies(userId = userId))
         assertNull(authDiskSource.getAccountTokens(userId = userId))
+        assertNull(authDiskSource.getEncryptedPin(userId = userId))
+        assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
     }
 
     @Test

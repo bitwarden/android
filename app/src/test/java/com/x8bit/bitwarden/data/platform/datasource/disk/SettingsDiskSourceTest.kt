@@ -139,6 +139,7 @@ class SettingsDiskSourceTest {
             userId = userId,
             isScreenCaptureAllowed = true,
         )
+        settingsDiskSource.storeClearClipboardFrequencySeconds(userId = userId, frequency = 5)
         val systemBioIntegrityState = "system_biometrics_integrity_state"
         settingsDiskSource.storeAccountBiometricIntegrityValidity(
             userId = userId,
@@ -148,6 +149,10 @@ class SettingsDiskSourceTest {
 
         settingsDiskSource.clearData(userId = userId)
 
+        // We do not clear these even when you call clear storage
+        assertEquals(true, settingsDiskSource.getScreenCaptureAllowed(userId = userId))
+
+        // These should be cleared
         assertNull(settingsDiskSource.getVaultTimeoutInMinutes(userId = userId))
         assertNull(settingsDiskSource.getVaultTimeoutAction(userId = userId))
         assertNull(settingsDiskSource.getDefaultUriMatchType(userId = userId))
@@ -158,8 +163,7 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
         assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId))
         assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
-        // We don't actually clear this setting, so it's still here
-        assertEquals(true, settingsDiskSource.getScreenCaptureAllowed(userId = userId))
+        assertNull(settingsDiskSource.getClearClipboardFrequencySeconds(userId = userId))
         assertNull(
             settingsDiskSource.getAccountBiometricIntegrityValidity(
                 userId = userId,
