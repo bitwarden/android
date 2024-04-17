@@ -262,9 +262,9 @@ class SettingsRepositoryImpl(
         autofillEnabledManager.isAutofillEnabledStateFlow
 
     override var isScreenCaptureAllowed: Boolean
-        get() = activeUserId?.let {
-            settingsDiskSource.getScreenCaptureAllowed(it)
-        } ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
+        get() = activeUserId
+            ?.let { settingsDiskSource.getScreenCaptureAllowed(it) }
+            ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
         set(value) {
             val userId = activeUserId ?: return
             settingsDiskSource.storeScreenCaptureAllowed(

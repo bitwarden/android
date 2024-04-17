@@ -130,7 +130,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedPullToRefreshEnabled.remove(userId)
         storedInlineAutofillEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
-        storedScreenCaptureAllowed.remove(userId)
         storedClearClipboardFrequency.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)

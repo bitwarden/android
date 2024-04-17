@@ -158,7 +158,8 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
         assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId))
         assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
-        assertNull(settingsDiskSource.getScreenCaptureAllowed(userId = userId))
+        // We don't actually clear this setting, so it's still here
+        assertEquals(true, settingsDiskSource.getScreenCaptureAllowed(userId = userId))
         assertNull(
             settingsDiskSource.getAccountBiometricIntegrityValidity(
                 userId = userId,
