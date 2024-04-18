@@ -8,6 +8,7 @@ import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
@@ -62,7 +63,8 @@ class VaultLockManagerImpl(
     private val settingsRepository: SettingsRepository,
     private val appForegroundManager: AppForegroundManager,
     private val userLogoutManager: UserLogoutManager,
-    private val dispatcherManager: DispatcherManager,
+    private val trustedDeviceManager: TrustedDeviceManager,
+    dispatcherManager: DispatcherManager,
     private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -165,6 +167,9 @@ class VaultLockManagerImpl(
                                     if (it is VaultUnlockResult.Success) {
                                         clearInvalidUnlockCount(userId = userId)
                                         setVaultToUnlocked(userId = userId)
+                                        trustedDeviceManager.trustThisDeviceIfNecessary(
+                                            userId = userId,
+                                        )
                                     } else {
                                         incrementInvalidUnlockCount(userId = userId)
                                     }

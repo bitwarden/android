@@ -1215,9 +1215,6 @@ class AuthRepositoryTest {
                 organizationKeys = null,
             )
         } returns VaultUnlockResult.Success
-        coEvery {
-            trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID_1)
-        } returns true.asSuccess()
         coEvery { vaultRepository.syncIfNecessary() } just runs
 
         val result = repository.completeTdeLogin(
@@ -1237,7 +1234,6 @@ class AuthRepositoryTest {
                 ),
                 organizationKeys = null,
             )
-            trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID_1)
             vaultRepository.syncIfNecessary()
         }
         fakeAuthDiskSource.assertUserKey(userId = USER_ID_1, userKey = asymmetricalKey)
@@ -2531,9 +2527,6 @@ class AuthRepositoryTest {
                 )
             } returns successResponse.asSuccess()
             coEvery { vaultRepository.syncIfNecessary() } just runs
-            coEvery {
-                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID_1)
-            } returns true.asSuccess()
             every {
                 successResponse.toUserState(
                     previousUserState = null,
@@ -2577,7 +2570,6 @@ class AuthRepositoryTest {
                     ),
                     organizationKeys = null,
                 )
-                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID_1)
                 vaultRepository.syncIfNecessary()
             }
             verify(exactly = 1) {

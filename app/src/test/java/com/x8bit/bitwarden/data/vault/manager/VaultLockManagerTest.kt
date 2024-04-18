@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
+import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -62,6 +63,7 @@ class VaultLockManagerTest {
         every { logout(any()) } just runs
         every { softLogout(any()) } just runs
     }
+    private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val mutableVaultTimeoutStateFlow =
         MutableStateFlow<VaultTimeout>(VaultTimeout.ThirtyMinutes)
     private val mutableVaultTimeoutActionStateFlow = MutableStateFlow(VaultTimeoutAction.LOCK)
@@ -79,6 +81,7 @@ class VaultLockManagerTest {
         settingsRepository = settingsRepository,
         appForegroundManager = fakeAppForegroundManager,
         userLogoutManager = userLogoutManager,
+        trustedDeviceManager = trustedDeviceManager,
         dispatcherManager = FakeDispatcherManager(),
         elapsedRealtimeMillisProvider = { elapsedRealtimeMillis },
     )
@@ -545,6 +548,9 @@ class VaultLockManagerTest {
                 ),
             )
         } returns InitializeCryptoResult.Success.asSuccess()
+        coEvery {
+            trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+        } returns true.asSuccess()
 
         assertFalse(vaultLockManager.isVaultUnlocked(userId = USER_ID))
 
@@ -564,6 +570,7 @@ class VaultLockManagerTest {
                     ),
                 ),
             )
+            trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
         }
     }
 
@@ -702,6 +709,9 @@ class VaultLockManagerTest {
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
+            coEvery {
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            } returns false.asSuccess()
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -756,12 +766,11 @@ class VaultLockManagerTest {
                         ),
                     ),
                 )
-            }
-            coVerify(exactly = 1) {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
             }
         }
 
@@ -799,6 +808,9 @@ class VaultLockManagerTest {
             coEvery {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             } returns userAutoUnlockKey.asSuccess()
+            coEvery {
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
+            } returns true.asSuccess()
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -861,15 +873,12 @@ class VaultLockManagerTest {
                         ),
                     ),
                 )
-            }
-            coVerify(exactly = 1) {
                 vaultSdkSource.initializeOrganizationCrypto(
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
-            }
-            coVerify {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
+                trustedDeviceManager.trustThisDeviceIfNecessary(userId = USER_ID)
             }
         }
 
@@ -1410,6 +1419,9 @@ class VaultLockManagerTest {
         coEvery {
             vaultSdkSource.getUserEncryptionKey(userId = userId)
         } returns userAutoUnlockKey.asSuccess()
+        coEvery {
+            trustedDeviceManager.trustThisDeviceIfNecessary(userId = userId)
+        } returns true.asSuccess()
 
         val result = vaultLockManager.unlockVault(
             userId = userId,
