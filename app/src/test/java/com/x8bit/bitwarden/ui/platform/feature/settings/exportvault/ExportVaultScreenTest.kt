@@ -248,11 +248,54 @@ class ExportVaultScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `send code click should send SendCodeClick action`() {
+        mutableStateFlow.update {
+            it.copy(showSendCodeButton = true)
+        }
+        composeTestRule.onNodeWithText("Send code").performClick()
+        verify {
+            viewModel.trySendAction(ExportVaultAction.SendCodeClick)
+        }
+    }
+
+    @Test
+    fun `verification code input change should send PasswordInputChange action`() {
+        val input = "123"
+        mutableStateFlow.update {
+            it.copy(showSendCodeButton = true)
+        }
+        composeTestRule.onNodeWithText("Verification code").performTextInput(input)
+        verify {
+            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(input))
+        }
+    }
+
+    @Test
+    fun `send code button and verification input field should appear based on state`() {
+        composeTestRule.onNodeWithText("Send code").assertIsNotDisplayed()
+        composeTestRule.onNodeWithText("Verification code").assertIsNotDisplayed()
+        mutableStateFlow.update {
+            it.copy(showSendCodeButton = true)
+        }
+        composeTestRule.onNodeWithText("Send code").assertIsDisplayed()
+        composeTestRule.onNodeWithText("Verification code").assertIsDisplayed()
+    }
+
+    @Test
+    fun `master password field should appear based on state`() {
+        composeTestRule.onNodeWithText("Master password").assertIsDisplayed()
+        mutableStateFlow.update {
+            it.copy(showSendCodeButton = true)
+        }
+        composeTestRule.onNodeWithText("Master password").assertIsNotDisplayed()
+    }
+
+    @Test
     fun `password input change should send PasswordInputChange action`() {
         val input = "Test123"
         composeTestRule.onNodeWithText("Master password").performTextInput(input)
         verify {
-            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged("Test123"))
+            viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(input))
         }
     }
 }
@@ -267,4 +310,5 @@ private val DEFAULT_STATE = ExportVaultState(
     exportData = "",
     passwordStrengthState = PasswordStrengthState.NONE,
     policyPreventsExport = false,
+    showSendCodeButton = false,
 )

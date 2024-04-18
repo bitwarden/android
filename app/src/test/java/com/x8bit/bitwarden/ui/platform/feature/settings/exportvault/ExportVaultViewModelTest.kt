@@ -8,8 +8,10 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
+import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -101,6 +103,66 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
 
         coVerify {
+            vaultRepository.exportVaultDataToString(any())
+        }
+    }
+
+    @Test
+    fun `ConfirmExportVaultClicked with verified code should call exportVaultDataToString`() {
+        val passcode = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            passwordInput = passcode,
+            showSendCodeButton = true,
+        )
+        coEvery {
+            authRepository.verifyOneTimePasscode(
+                oneTimePasscode = passcode,
+            )
+        } returns VerifyOtpResult.Verified
+
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        assertEquals(
+            initialState.copy(
+                exportData = "data",
+                passwordInput = "",
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify {
+            vaultRepository.exportVaultDataToString(any())
+        }
+    }
+
+    @Test
+    fun `ConfirmExportVaultClicked with invalid code should call exportVaultDataToString`() {
+        val passcode = "1234"
+        val initialState = DEFAULT_STATE.copy(
+            passwordInput = passcode,
+            showSendCodeButton = true,
+        )
+        coEvery {
+            authRepository.verifyOneTimePasscode(
+                oneTimePasscode = passcode,
+            )
+        } returns VerifyOtpResult.NotVerified("Wrong")
+
+        val viewModel = createViewModel(initialState)
+
+        viewModel.trySendAction(ExportVaultAction.ConfirmExportVaultClicked)
+
+        assertEquals(
+            initialState.copy(
+                dialogState = ExportVaultState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+        coVerify(exactly = 0) {
             vaultRepository.exportVaultDataToString(any())
         }
     }
@@ -416,6 +478,19 @@ class ExportVaultViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `SendCodeClick should call requestOneTimePasscode`() {
+        val viewModel = createViewModel()
+        coEvery { authRepository.requestOneTimePasscode() } returns RequestOtpResult.Success
+        viewModel.trySendAction(ExportVaultAction.SendCodeClick)
+
+        assertEquals(
+            DEFAULT_STATE,
+            viewModel.stateFlow.value,
+        )
+        coVerify { authRepository.requestOneTimePasscode() }
+    }
+
+    @Test
     fun `ReceiveExportVaultDataToStringResult should update state to error if result is error`() {
         val viewModel = createViewModel()
 
@@ -659,4 +734,5 @@ private val DEFAULT_STATE = ExportVaultState(
     exportData = null,
     passwordStrengthState = PasswordStrengthState.NONE,
     policyPreventsExport = false,
+    showSendCodeButton = false,
 )
