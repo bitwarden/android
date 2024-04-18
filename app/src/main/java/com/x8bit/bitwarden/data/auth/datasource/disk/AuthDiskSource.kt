@@ -29,11 +29,6 @@ interface AuthDiskSource {
     var rememberedOrgIdentifier: String?
 
     /**
-     * The currently persisted state indicating that the user has trusted this device.
-     */
-    var shouldTrustDevice: Boolean
-
-    /**
      * The currently persisted user state information (or `null` if not set).
      */
     var userState: UserStateJson?
@@ -49,6 +44,21 @@ interface AuthDiskSource {
      * Note that this does not include any data saved in the [userState].
      */
     fun clearData(userId: String)
+
+    /**
+     * Retrieves the state indicating that the user has chosen to trust this device.
+     *
+     * Note: This indicates intent to trust the device, the device may not be trusted yet.
+     */
+    fun getShouldTrustDevice(userId: String): Boolean
+
+    /**
+     * Stores the boolean indicating that the user has chosen to trust this device for the given
+     * [userId].
+     *
+     * Note: This indicates intent to trust the device, the device may not be trusted yet.
+     */
+    fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?)
 
     /**
      * Retrieves the "last active time" for the given [userId], in milliseconds.

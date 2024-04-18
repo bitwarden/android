@@ -53,7 +53,7 @@ class TrustedDeviceManagerTests {
     @Test
     fun `trustThisDeviceIfNecessary when shouldTrustDevice false should return success with false`() =
         runTest {
-            fakeAuthDiskSource.shouldTrustDevice = false
+            fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = false)
 
             val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
@@ -71,7 +71,7 @@ class TrustedDeviceManagerTests {
 
     @Test
     fun `trustThisDeviceIfNecessary when getTrustDevice fails should return failure`() = runTest {
-        fakeAuthDiskSource.shouldTrustDevice = true
+        fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = true)
         val error = Throwable("Fail")
         coEvery {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
@@ -80,7 +80,7 @@ class TrustedDeviceManagerTests {
         val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
         assertEquals(error.asFailure(), result)
-        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
         coVerify(exactly = 1) {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
         }
@@ -107,7 +107,7 @@ class TrustedDeviceManagerTests {
             protectedDevicePublicKey = protectedDevicePublicKey,
         )
         val error = Throwable("Fail")
-        fakeAuthDiskSource.shouldTrustDevice = true
+        fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = true)
         coEvery {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
         } returns trustedDeviceResponse.asSuccess()
@@ -123,7 +123,7 @@ class TrustedDeviceManagerTests {
         val result = manager.trustThisDeviceIfNecessary(userId = USER_ID)
 
         assertEquals(error.asFailure(), result)
-        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
         coVerify(exactly = 1) {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
             devicesService.trustDevice(
@@ -155,7 +155,7 @@ class TrustedDeviceManagerTests {
             creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         fakeAuthDiskSource.userState = DEFAULT_USER_STATE
-        fakeAuthDiskSource.shouldTrustDevice = true
+        fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = true)
         coEvery {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
         } returns trustedDeviceResponse.asSuccess()
@@ -178,7 +178,7 @@ class TrustedDeviceManagerTests {
 
         assertEquals(true.asSuccess(), result)
         fakeAuthDiskSource.assertDeviceKey(userId = USER_ID, deviceKey = deviceKey)
-        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
         fakeAuthDiskSource.assertUserState(UPDATED_USER_STATE)
         coVerify(exactly = 1) {
             vaultSdkSource.getTrustDevice(userId = USER_ID)
@@ -211,7 +211,7 @@ class TrustedDeviceManagerTests {
             creationDate = ZonedDateTime.parse("2024-09-13T01:00:00.00Z"),
         )
         fakeAuthDiskSource.userState = DEFAULT_USER_STATE
-        fakeAuthDiskSource.shouldTrustDevice = true
+        fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID, shouldTrustDevice = true)
         coEvery {
             devicesService.trustDevice(
                 appId = "testUniqueAppId",
@@ -234,7 +234,7 @@ class TrustedDeviceManagerTests {
 
         assertEquals(Unit.asSuccess(), result)
         fakeAuthDiskSource.assertDeviceKey(userId = USER_ID, deviceKey = deviceKey)
-        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID))
         fakeAuthDiskSource.assertUserState(UPDATED_USER_STATE)
         coVerify(exactly = 1) {
             devicesService.trustDevice(

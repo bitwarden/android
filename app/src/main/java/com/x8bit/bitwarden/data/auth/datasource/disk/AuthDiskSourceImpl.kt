@@ -106,12 +106,6 @@ class AuthDiskSourceImpl(
             )
         }
 
-    override var shouldTrustDevice: Boolean
-        get() = requireNotNull(getBoolean(key = SHOULD_TRUST_DEVICE_KEY, default = false))
-        set(value) {
-            putBoolean(key = SHOULD_TRUST_DEVICE_KEY, value = value)
-        }
-
     override val userStateFlow: Flow<UserStateJson?>
         get() = mutableUserStateFlow
             .onSubscription { emit(userState) }
@@ -133,6 +127,13 @@ class AuthDiskSourceImpl(
 
         // Do not remove the DeviceKey or PendingAuthRequest on logout, these are persisted
         // indefinitely unless the TDE flow explicitly removes them.
+    }
+
+    override fun getShouldTrustDevice(userId: String): Boolean =
+        requireNotNull(getBoolean(key = "${SHOULD_TRUST_DEVICE_KEY}_$userId", default = false))
+
+    override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
+        putBoolean("${SHOULD_TRUST_DEVICE_KEY}_$userId", shouldTrustDevice)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =

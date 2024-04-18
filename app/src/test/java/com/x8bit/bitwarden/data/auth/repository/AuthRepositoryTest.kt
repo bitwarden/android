@@ -535,16 +535,17 @@ class AuthRepositoryTest {
 
     @Test
     fun `shouldTrustDevice should directly access the authDiskSource`() {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         // AuthDiskSource and the repository start with the same default value.
         assertFalse(repository.shouldTrustDevice)
-        assertFalse(fakeAuthDiskSource.shouldTrustDevice)
+        assertFalse(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID_1))
 
         // Updating the repository updates AuthDiskSource
         repository.shouldTrustDevice = true
-        assertTrue(fakeAuthDiskSource.shouldTrustDevice)
+        assertTrue(fakeAuthDiskSource.getShouldTrustDevice(userId = USER_ID_1))
 
         // Updating AuthDiskSource updates the repository
-        fakeAuthDiskSource.shouldTrustDevice = false
+        fakeAuthDiskSource.storeShouldTrustDevice(userId = USER_ID_1, shouldTrustDevice = false)
         assertFalse(repository.shouldTrustDevice)
     }
 
@@ -815,7 +816,11 @@ class AuthRepositoryTest {
             )
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-            fakeAuthDiskSource.shouldTrustDevice = shouldTrustDevice
+
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
             coEvery {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             } returns orgAutoEnrollStatusResponse.asSuccess()
@@ -871,7 +876,10 @@ class AuthRepositoryTest {
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-        fakeAuthDiskSource.shouldTrustDevice = shouldTrustDevice
+        fakeAuthDiskSource.storeShouldTrustDevice(
+            userId = USER_ID_1,
+            shouldTrustDevice = shouldTrustDevice,
+        )
         coEvery {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
         } returns orgAutoEnrollStatusResponse.asSuccess()
@@ -937,7 +945,10 @@ class AuthRepositoryTest {
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-        fakeAuthDiskSource.shouldTrustDevice = shouldTrustDevice
+        fakeAuthDiskSource.storeShouldTrustDevice(
+            userId = USER_ID_1,
+            shouldTrustDevice = shouldTrustDevice,
+        )
         coEvery {
             organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
         } returns orgAutoEnrollStatusResponse.asSuccess()
@@ -1019,7 +1030,10 @@ class AuthRepositoryTest {
             )
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-            fakeAuthDiskSource.shouldTrustDevice = shouldTrustDevice
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
             coEvery {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             } returns orgAutoEnrollStatusResponse.asSuccess()
@@ -1104,7 +1118,10 @@ class AuthRepositoryTest {
             )
             fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
             fakeAuthDiskSource.rememberedOrgIdentifier = orgIdentifier
-            fakeAuthDiskSource.shouldTrustDevice = shouldTrustDevice
+            fakeAuthDiskSource.storeShouldTrustDevice(
+                userId = USER_ID_1,
+                shouldTrustDevice = shouldTrustDevice,
+            )
             coEvery {
                 organizationService.getOrganizationAutoEnrollStatus(orgIdentifier)
             } returns orgAutoEnrollStatusResponse.asSuccess()

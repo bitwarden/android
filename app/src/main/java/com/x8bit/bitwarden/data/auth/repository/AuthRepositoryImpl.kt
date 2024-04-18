@@ -277,7 +277,13 @@ class AuthRepositoryImpl(
 
     override var rememberedOrgIdentifier: String? by authDiskSource::rememberedOrgIdentifier
 
-    override var shouldTrustDevice: Boolean by authDiskSource::shouldTrustDevice
+    override var shouldTrustDevice: Boolean
+        get() = activeUserId?.let { authDiskSource.getShouldTrustDevice(userId = it) } ?: false
+        set(value) {
+            activeUserId?.let {
+                authDiskSource.storeShouldTrustDevice(userId = it, shouldTrustDevice = value)
+            }
+        }
 
     override var hasPendingAccountAddition: Boolean
         by mutableHasPendingAccountAdditionStateFlow::value
@@ -371,7 +377,7 @@ class AuthRepositoryImpl(
                             userId = userId,
                             email = account.profile.email,
                             orgPublicKey = organizationKeys.publicKey,
-                            rememberDevice = authDiskSource.shouldTrustDevice,
+                            rememberDevice = authDiskSource.getShouldTrustDevice(userId = userId),
                         )
                     }
                     .flatMap { keys ->
