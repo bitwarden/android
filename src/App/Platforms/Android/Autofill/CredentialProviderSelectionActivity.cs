@@ -68,6 +68,7 @@ namespace Bit.Droid.Autofill
 
                 var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
                 var packageName = getRequest?.CallingAppInfo.PackageName;
+                var appInfoOrigin = getRequest?.CallingAppInfo.Origin;
 
                 var userInterface = new Fido2GetAssertionUserInterface(
                     cipherId: cipherId,
@@ -81,7 +82,7 @@ namespace Bit.Droid.Autofill
                     Challenge = requestOptions.GetChallenge(),
                     RpId = RpId,
                     AllowCredentials = new Core.Utilities.Fido2.PublicKeyCredentialDescriptor[] { new Core.Utilities.Fido2.PublicKeyCredentialDescriptor { Id = credentialId } },
-                    Origin = androidOrigin,
+                    Origin = appInfoOrigin,
                     SameOriginWithAncestors = true,
                     UserVerification = requestOptions.UserVerification
                 };
