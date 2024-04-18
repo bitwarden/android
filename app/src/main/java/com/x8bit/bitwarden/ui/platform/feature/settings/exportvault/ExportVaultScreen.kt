@@ -26,10 +26,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -177,6 +178,9 @@ fun ExportVaultScreen(
             onPasswordInputChanged = remember(viewModel) {
                 { viewModel.trySendAction(ExportVaultAction.PasswordInputChanged(it)) }
             },
+            onSendCodeClicked = remember(viewModel) {
+                { viewModel.trySendAction(ExportVaultAction.SendCodeClick) }
+            },
             onExportVaultClick = { shouldShowConfirmationDialog = true },
             modifier = Modifier
                 .padding(innerPadding)
@@ -193,6 +197,7 @@ private fun ExportVaultScreenContent(
     onExportFormatOptionSelected: (ExportVaultFormat) -> Unit,
     onFilePasswordInputChanged: (String) -> Unit,
     onPasswordInputChanged: (String) -> Unit,
+    onSendCodeClicked: () -> Unit,
     onExportVaultClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -207,7 +212,7 @@ private fun ExportVaultScreenContent(
             BitwardenPolicyWarningText(
                 text = stringResource(id = R.string.disable_personal_vault_export_policy_in_effect),
                 modifier = Modifier
-                    .semantics { testTag = "DisablePrivateVaultPolicyLabel" }
+                    .testTag("DisablePrivateVaultPolicyLabel")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -228,7 +233,7 @@ private fun ExportVaultScreenContent(
             },
             isEnabled = !state.policyPreventsExport,
             modifier = Modifier
-                .semantics { testTag = "FileFormatPicker" }
+                .testTag("FileFormatPicker")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -245,7 +250,7 @@ private fun ExportVaultScreenContent(
                 showPasswordChange = { showPassword = it },
                 hint = stringResource(id = R.string.password_used_to_export),
                 modifier = Modifier
-                    .semantics { testTag = "FilePasswordEntry" }
+                    .testTag("FilePasswordEntry")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -264,44 +269,87 @@ private fun ExportVaultScreenContent(
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = it },
                 modifier = Modifier
-                    .semantics { testTag = "ConfirmFilePasswordEntry" }
+                    .testTag("ConfirmFilePasswordEntry")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        BitwardenPasswordField(
-            label = stringResource(id = R.string.master_password),
-            value = state.passwordInput,
-            readOnly = state.policyPreventsExport,
-            onValueChange = onPasswordInputChanged,
-            modifier = Modifier
-                .semantics { testTag = "MasterPasswordEntry" }
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
+        if (state.showSendCodeButton) {
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = stringResource(id = R.string.export_vault_master_password_description),
-            textAlign = TextAlign.Start,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-        )
+            Text(
+                text = stringResource(id = R.string.send_verification_code_to_email),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            BitwardenFilledTonalButton(
+                label = stringResource(R.string.send_code),
+                onClick = onSendCodeClicked,
+                isEnabled = !state.policyPreventsExport,
+                modifier = Modifier
+                    .testTag("SendTOTPCodeButton")
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.verification_code),
+                value = state.passwordInput,
+                readOnly = state.policyPreventsExport,
+                hint = stringResource(id = R.string.confirm_your_identity),
+                onValueChange = onPasswordInputChanged,
+                keyboardType = KeyboardType.Number,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+        } else {
+            BitwardenPasswordField(
+                label = stringResource(id = R.string.master_password),
+                value = state.passwordInput,
+                readOnly = state.policyPreventsExport,
+                onValueChange = onPasswordInputChanged,
+                modifier = Modifier
+                    .testTag("MasterPasswordEntry")
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = stringResource(id = R.string.export_vault_master_password_description),
+                textAlign = TextAlign.Start,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         BitwardenFilledTonalButton(
             label = stringResource(id = R.string.export_vault),
             onClick = onExportVaultClick,
             isEnabled = !state.policyPreventsExport,
             modifier = Modifier
-                .semantics { testTag = "ExportVaultButton" }
+                .testTag("ExportVaultButton")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
