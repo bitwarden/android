@@ -26,6 +26,11 @@ namespace Bit.Core.Utilities.Fido2
         public required byte[] ClientDataJSON { get; set; }
 
         /// <summary>
+        /// The hash of the serialized client data used to generate the assertion.
+        /// </summary>
+        public required byte[] ClientDataHash { get; set; }
+
+        /// <summary>
         /// The authenticator data returned by the authenticator.
         /// </summary>
         public required byte[] AuthenticatorData { get; set; }
@@ -36,14 +41,8 @@ namespace Bit.Core.Utilities.Fido2
         public required byte[] Signature { get; set; }
 
         /// <summary>
-        /// The user handle returned from the authenticator, or null if the authenticator did not
-        /// return a user handle.
+        /// The selected credential that was used to generate the assertion.
         /// </summary>
-        public byte[]? UserHandle { get; set; }
-
-        /// <summary>
-        /// The selected cipher login item that has the credential
-        /// </summary>
-        public CipherView? Cipher { get; set; }
+        public Fido2SelectedCredential SelectedCredential { get; set; }
     }
 }

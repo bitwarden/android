@@ -228,8 +228,8 @@ namespace Bit.Core.Services
                     Id = CoreHelpers.Base64UrlEncode(getAssertionResult.SelectedCredential.Id),
                     RawId = getAssertionResult.SelectedCredential.Id,
                     Signature = getAssertionResult.Signature,
-                    UserHandle = getAssertionResult.SelectedCredential.UserHandle,
-                    Cipher = getAssertionResult.SelectedCredential.Cipher
+                    SelectedCredential = getAssertionResult.SelectedCredential,
+                    ClientDataHash = clientDataHash
                 };
             }
             catch (InvalidStateError)

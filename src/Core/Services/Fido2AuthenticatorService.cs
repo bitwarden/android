@@ -184,7 +184,7 @@ namespace Bit.Core.Services
             {
                 throw new NotAllowedError();
             }
-             
+
             if (!userVerified
                 &&
                 await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(new Fido2UserVerificationOptions(
@@ -224,7 +224,7 @@ namespace Bit.Core.Services
 
                 return new Fido2AuthenticatorGetAssertionResult
                 {
-                    SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
+                    SelectedCredential = new Fido2SelectedCredential
                     {
                         Id = selectedCredentialId.GuidToRawFormat(),
                         UserHandle = selectedFido2Credential.UserHandleValue,

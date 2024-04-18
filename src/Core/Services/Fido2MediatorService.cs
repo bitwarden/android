@@ -22,9 +22,9 @@ namespace Bit.Core.Services
         {
             var result = await _fido2ClientService.AssertCredentialAsync(assertCredentialParams, clientDataHash);
 
-            if (result?.Cipher != null)
+            if (result?.SelectedCredential?.Cipher != null)
             {
-                await _cipherService.CopyTotpCodeIfNeededAsync(result.Cipher);
+                await _cipherService.CopyTotpCodeIfNeededAsync(result.SelectedCredential.Cipher);
             }
 
             return result;
