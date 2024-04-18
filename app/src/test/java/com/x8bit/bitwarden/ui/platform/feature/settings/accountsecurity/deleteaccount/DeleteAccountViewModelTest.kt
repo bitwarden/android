@@ -5,6 +5,8 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import io.mockk.coEvery
@@ -14,18 +16,36 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class DeleteAccountViewModelTest : BaseViewModelTest() {
-
-    private val authRepo: AuthRepository = mockk(relaxed = true)
+    private val mutableUserStateFlow = MutableStateFlow(DEFAULT_USER_STATE)
+    private val authRepo: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
 
     @Test
     fun `initial state should be correct when not set`() {
+        mutableUserStateFlow.update { currentState ->
+            currentState.copy(
+                accounts = currentState.accounts.map { account ->
+                    account.copy(
+                        trustedDevice = account.trustedDevice?.copy(
+                            hasMasterPassword = false,
+                        ),
+                    )
+                },
+            )
+        }
         val viewModel = createViewModel(state = null)
-        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        assertEquals(
+            DEFAULT_STATE.copy(isUnlockWithPasswordEnabled = false),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -56,13 +76,18 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on DeleteAccountClick should update dialog state when delete account succeeds`() =
+    @Suppress("MaxLineLength")
+    fun `on DeleteAccountConfirmDialogClick should update dialog state when delete account succeeds`() =
         runTest {
             val viewModel = createViewModel()
             val masterPassword = "ckasb kcs ja"
             coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Success
 
-            viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(masterPassword))
+            viewModel.trySendAction(
+                DeleteAccountAction.DeleteAccountConfirmDialogClick(
+                    masterPassword,
+                ),
+            )
 
             assertEquals(
                 DEFAULT_STATE.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess),
@@ -75,12 +100,31 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `on DeleteAccountClick should emit NavigateToDeleteAccountConfirmationScreen`() =
+        runTest {
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    isUnlockWithPasswordEnabled = false,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick)
+                assertEquals(
+                    DeleteAccountEvent.NavigateToDeleteAccountConfirmationScreen,
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
     fun `on DeleteAccountClick should update dialog state when deleteAccount fails`() = runTest {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
         coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Error
 
-        viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(masterPassword))
+        viewModel.trySendAction(DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword))
 
         assertEquals(
             DEFAULT_STATE.copy(
@@ -135,6 +179,34 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     )
 }
 
+private val DEFAULT_USER_STATE: UserState = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(
+        UserState.Account(
+            userId = "activeUserId",
+            name = "name",
+            email = "email",
+            avatarColorHex = "avatarColorHex",
+            environment = Environment.Us,
+            isPremium = true,
+            isLoggedIn = true,
+            isVaultUnlocked = true,
+            needsPasswordReset = false,
+            isBiometricsEnabled = false,
+            organizations = emptyList(),
+            needsMasterPassword = false,
+            trustedDevice = UserState.TrustedDevice(
+                isDeviceTrusted = true,
+                hasMasterPassword = true,
+                hasAdminApproval = true,
+                hasLoginApprovingDevice = true,
+                hasResetPasswordPermission = true,
+            ),
+        ),
+    ),
+)
+
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
+    isUnlockWithPasswordEnabled = true,
 )

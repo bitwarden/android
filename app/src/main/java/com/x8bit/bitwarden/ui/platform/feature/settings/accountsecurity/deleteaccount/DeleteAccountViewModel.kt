@@ -20,7 +20,7 @@ import javax.inject.Inject
 private const val KEY_STATE = "state"
 
 /**
- * View model for the account security screen.
+ * View model for the [DeleteAccountScreen].
  */
 @HiltViewModel
 class DeleteAccountViewModel @Inject constructor(
@@ -29,6 +29,10 @@ class DeleteAccountViewModel @Inject constructor(
 ) : BaseViewModel<DeleteAccountState, DeleteAccountEvent, DeleteAccountAction>(
     initialState = savedStateHandle[KEY_STATE] ?: DeleteAccountState(
         dialog = null,
+        isUnlockWithPasswordEnabled = requireNotNull(authRepository.userStateFlow.value)
+            .activeAccount
+            .trustedDevice
+            ?.hasMasterPassword != false,
     ),
 ) {
 
@@ -42,13 +46,21 @@ class DeleteAccountViewModel @Inject constructor(
         when (action) {
             DeleteAccountAction.CancelClick -> handleCancelClick()
             DeleteAccountAction.CloseClick -> handleCloseClick()
-            is DeleteAccountAction.DeleteAccountClick -> handleDeleteAccountClick(action)
+            is DeleteAccountAction.DeleteAccountClick -> handleDeleteAccountClick()
             DeleteAccountAction.AccountDeletionConfirm -> handleAccountDeletionConfirm()
             DeleteAccountAction.DismissDialog -> handleDismissDialog()
             is DeleteAccountAction.Internal.DeleteAccountComplete -> {
                 handleDeleteAccountComplete(action)
             }
+
+            is DeleteAccountAction.DeleteAccountConfirmDialogClick -> {
+                handleDeleteAccountConfirmDialogClick(action)
+            }
         }
+    }
+
+    private fun handleDeleteAccountClick() {
+        sendEvent(DeleteAccountEvent.NavigateToDeleteAccountConfirmationScreen)
     }
 
     private fun handleCancelClick() {
@@ -59,7 +71,9 @@ class DeleteAccountViewModel @Inject constructor(
         sendEvent(DeleteAccountEvent.NavigateBack)
     }
 
-    private fun handleDeleteAccountClick(action: DeleteAccountAction.DeleteAccountClick) {
+    private fun handleDeleteAccountConfirmDialogClick(
+        action: DeleteAccountAction.DeleteAccountConfirmDialogClick,
+    ) {
         mutableStateFlow.update {
             it.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading)
         }
@@ -103,10 +117,15 @@ class DeleteAccountViewModel @Inject constructor(
 
 /**
  * Models state for the Delete Account screen.
+ *
+ * @param dialog The dialog for the [DeleteAccountScreen].
+ * @param isUnlockWithPasswordEnabled Whether or not the user is able to unlock the vault with
+ * their master password.
  */
 @Parcelize
 data class DeleteAccountState(
     val dialog: DeleteAccountDialog?,
+    val isUnlockWithPasswordEnabled: Boolean,
 ) : Parcelable {
 
     /**
@@ -145,6 +164,11 @@ sealed class DeleteAccountEvent {
     data object NavigateBack : DeleteAccountEvent()
 
     /**
+     * Navigates to the [DeleteAccountConfirmationScreen].
+     */
+    data object NavigateToDeleteAccountConfirmationScreen : DeleteAccountEvent()
+
+    /**
      * Displays the [message] in a toast.
      */
     data class ShowToast(
@@ -169,7 +193,14 @@ sealed class DeleteAccountAction {
     /**
      * The user has clicked the delete account button.
      */
-    data class DeleteAccountClick(
+    data object DeleteAccountClick : DeleteAccountAction()
+
+    /**
+     * The user has clicked the delete account confirmation dialog button.
+     *
+     * @param masterPassword The master password of the user.
+     */
+    data class DeleteAccountConfirmDialogClick(
         val masterPassword: String,
     ) : DeleteAccountAction()
 

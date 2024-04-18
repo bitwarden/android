@@ -54,6 +54,7 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 fun DeleteAccountScreen(
     viewModel: DeleteAccountViewModel = hiltViewModel(),
     onNavigateBack: () -> Unit,
+    onNavigateToDeleteAccountConfirmation: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -64,6 +65,10 @@ fun DeleteAccountScreen(
 
             is DeleteAccountEvent.ShowToast -> {
                 Toast.makeText(context, event.message(resources), Toast.LENGTH_SHORT).show()
+            }
+
+            DeleteAccountEvent.NavigateToDeleteAccountConfirmationScreen -> {
+                onNavigateToDeleteAccountConfirmation()
             }
         }
     }
@@ -149,9 +154,17 @@ fun DeleteAccountScreen(
             )
             Spacer(modifier = Modifier.height(24.dp))
             DeleteAccountButton(
-                onConfirmationClick = remember(viewModel) {
-                    { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(it)) }
+                onDeleteAccountConfirmDialogClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            DeleteAccountAction.DeleteAccountConfirmDialogClick(it),
+                        )
+                    }
                 },
+                onDeleteAccountClick = remember(viewModel) {
+                    { viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick) }
+                },
+                isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                 modifier = Modifier
                     .semantics { testTag = "DELETE ACCOUNT" }
                     .fillMaxWidth()
@@ -175,7 +188,9 @@ fun DeleteAccountScreen(
 
 @Composable
 private fun DeleteAccountButton(
-    onConfirmationClick: (masterPassword: String) -> Unit,
+    onDeleteAccountConfirmDialogClick: (masterPassword: String) -> Unit,
+    onDeleteAccountClick: () -> Unit,
+    isUnlockWithPasswordEnabled: Boolean,
     modifier: Modifier = Modifier,
 ) {
     var showPasswordDialog by remember { mutableStateOf(false) }
@@ -183,7 +198,7 @@ private fun DeleteAccountButton(
         BitwardenMasterPasswordDialog(
             onConfirmClick = {
                 showPasswordDialog = false
-                onConfirmationClick(it)
+                onDeleteAccountConfirmDialogClick(it)
             },
             onDismissRequest = { showPasswordDialog = false },
         )
@@ -191,7 +206,13 @@ private fun DeleteAccountButton(
 
     BitwardenErrorButton(
         label = stringResource(id = R.string.delete_account),
-        onClick = { showPasswordDialog = true },
+        onClick = {
+            if (isUnlockWithPasswordEnabled) {
+                showPasswordDialog = true
+            } else {
+                onDeleteAccountClick()
+            }
+        },
         modifier = modifier,
     )
 }
