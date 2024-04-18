@@ -195,4 +195,7 @@
   <ItemGroup>
     <Folder Include="ListItems\" />
   </ItemGroup>
+	<ItemGroup>
+		<BundleResource Include="..\App\Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 </Project>

@@ -260,4 +260,7 @@
 	  <None Remove="Platforms\iOS\Resources\logo%402x.png" />
 	  <None Remove="Platforms\Android\Resources\drawable-xxxhdpi\" />
 	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
+		<BundleResource Include="Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 </Project>

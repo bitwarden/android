@@ -4930,6 +4930,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notice.
+        /// </summary>
+        public static string Notice {
+            get {
+                return ResourceManager.GetString("Notice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This account has two-step login set up, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app)..
         /// </summary>
         public static string NoTwoStepAvailable {
@@ -5161,6 +5170,24 @@ namespace Bit.Core.Resources.Localization {
         public static string OrganizationSsoIdentifierRequired {
             get {
                 return ResourceManager.GetString("OrganizationSsoIdentifierRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible..
+        /// </summary>
+        public static string OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong {
+            get {
+                return ResourceManager.GetString("OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible..
+        /// </summary>
+        public static string OrganizationUnassignedItemsMessageUSEUDescriptionLong {
+            get {
+                return ResourceManager.GetString("OrganizationUnassignedItemsMessageUSEUDescriptionLong", resourceCulture);
             }
         }
         
@@ -5792,6 +5819,15 @@ namespace Bit.Core.Resources.Localization {
         public static string RememberThisDevice {
             get {
                 return ResourceManager.GetString("RememberThisDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remind me later.
+        /// </summary>
+        public static string RemindMeLater {
+            get {
+                return ResourceManager.GetString("RemindMeLater", resourceCulture);
             }
         }
         
