@@ -123,19 +123,20 @@ class AuthDiskSourceTest {
 
     @Test
     fun `shouldTrustDevice should pull from and update SharedPreferences`() {
-        val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice"
+        val userId = "userId"
+        val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice_$userId"
 
         // Shared preferences and the disk source start with the same value.
-        assertFalse(authDiskSource.shouldTrustDevice)
+        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId))
         assertFalse(fakeSharedPreferences.getBoolean(shouldTrustDeviceKey, false))
 
         // Updating the disk source updates shared preferences
-        authDiskSource.shouldTrustDevice = true
+        authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = true)
         assertTrue(fakeSharedPreferences.getBoolean(shouldTrustDeviceKey, false))
 
         // Update SharedPreferences updates the disk source
         fakeSharedPreferences.edit { putBoolean(shouldTrustDeviceKey, false) }
-        assertFalse(authDiskSource.shouldTrustDevice)
+        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId))
     }
 
     @Test
@@ -190,6 +191,11 @@ class AuthDiskSourceTest {
             userId = userId,
             pendingAuthRequest = pendingAuthRequestJson,
         )
+        val shouldTrustDevice = true
+        authDiskSource.storeShouldTrustDevice(
+            userId = userId,
+            shouldTrustDevice = shouldTrustDevice,
+        )
         val deviceKey = "deviceKey"
         authDiskSource.storeDeviceKey(userId = userId, deviceKey = deviceKey)
         authDiskSource.storeUserBiometricUnlockKey(
@@ -241,6 +247,7 @@ class AuthDiskSourceTest {
         // We do not clear these even when you call clear storage
         assertEquals(pendingAuthRequestJson, authDiskSource.getPendingAuthRequest(userId = userId))
         assertEquals(deviceKey, authDiskSource.getDeviceKey(userId = userId))
+        assertEquals(shouldTrustDevice, authDiskSource.getShouldTrustDevice(userId = userId))
 
         // These should be cleared
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))

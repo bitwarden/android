@@ -17,13 +17,18 @@ class TrustedDeviceManagerImpl(
     private val devicesService: DevicesService,
 ) : TrustedDeviceManager {
     override suspend fun trustThisDeviceIfNecessary(userId: String): Result<Boolean> =
-        if (!authDiskSource.shouldTrustDevice) {
+        if (!authDiskSource.getShouldTrustDevice(userId = userId)) {
             false.asSuccess()
         } else {
             vaultSdkSource
                 .getTrustDevice(userId = userId)
                 .flatMap { trustThisDevice(userId = userId, trustDeviceResponse = it) }
-                .also { authDiskSource.shouldTrustDevice = false }
+                .also {
+                    authDiskSource.storeShouldTrustDevice(
+                        userId = userId,
+                        shouldTrustDevice = null,
+                    )
+                }
                 .map { true }
         }
 
@@ -47,6 +52,6 @@ class TrustedDeviceManagerImpl(
                 previousUserState = requireNotNull(authDiskSource.userState),
             )
         }
-        .also { authDiskSource.shouldTrustDevice = false }
+        .also { authDiskSource.storeShouldTrustDevice(userId = userId, shouldTrustDevice = null) }
         .map { Unit }
 }

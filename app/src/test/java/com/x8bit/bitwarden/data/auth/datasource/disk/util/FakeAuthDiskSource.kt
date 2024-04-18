@@ -26,6 +26,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
+    private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedLastActiveTimeMillis = mutableMapOf<String, Long?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
@@ -43,8 +44,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
-
-    override var shouldTrustDevice: Boolean = false
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -73,6 +72,13 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
+    }
+
+    override fun getShouldTrustDevice(userId: String): Boolean =
+        storedShouldTrustDevice[userId] ?: false
+
+    override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
+        storedShouldTrustDevice[userId] = shouldTrustDevice
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
