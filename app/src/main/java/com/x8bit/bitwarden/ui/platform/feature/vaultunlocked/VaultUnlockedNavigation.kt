@@ -8,6 +8,8 @@ import com.x8bit.bitwarden.ui.platform.feature.search.navigateToSearch
 import com.x8bit.bitwarden.ui.platform.feature.search.searchDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.deleteAccountDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.navigateToDeleteAccount
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccountconfirmation.deleteAccountConfirmationDestination
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccountconfirmation.navigateToDeleteAccountConfirmation
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.loginApprovalDestination
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.pendingrequests.navigateToPendingRequests
@@ -97,7 +99,15 @@ fun NavGraphBuilder.vaultUnlockedGraph(
                 )
             },
         )
-        deleteAccountDestination(onNavigateBack = { navController.popBackStack() })
+        deleteAccountDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToDeleteAccountConfirmation = {
+                navController.navigateToDeleteAccountConfirmation()
+            },
+        )
+        deleteAccountConfirmationDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
         loginApprovalDestination(onNavigateBack = { navController.popBackStack() })
         pendingRequestsDestination(
             onNavigateBack = { navController.popBackStack() },

@@ -12,11 +12,15 @@ private const val DELETE_ACCOUNT_ROUTE = "delete_account"
  */
 fun NavGraphBuilder.deleteAccountDestination(
     onNavigateBack: () -> Unit,
+    onNavigateToDeleteAccountConfirmation: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = DELETE_ACCOUNT_ROUTE,
     ) {
-        DeleteAccountScreen(onNavigateBack = onNavigateBack)
+        DeleteAccountScreen(
+            onNavigateBack = onNavigateBack,
+            onNavigateToDeleteAccountConfirmation = onNavigateToDeleteAccountConfirmation,
+        )
     }
 }
 

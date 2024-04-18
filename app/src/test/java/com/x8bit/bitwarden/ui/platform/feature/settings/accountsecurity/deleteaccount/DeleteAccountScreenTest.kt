@@ -26,6 +26,7 @@ import org.junit.Test
 class DeleteAccountScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
+    private var onNavigateToDeleteAccountConfirmationScreenCalled = false
 
     private val mutableEventFlow = bufferedMutableSharedFlow<DeleteAccountEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -39,6 +40,9 @@ class DeleteAccountScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             DeleteAccountScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
+                onNavigateToDeleteAccountConfirmation = {
+                    onNavigateToDeleteAccountConfirmationScreenCalled = true
+                },
                 viewModel = viewModel,
             )
         }
@@ -48,6 +52,13 @@ class DeleteAccountScreenTest : BaseComposeTest() {
     fun `on NavigateBack should call onNavigateBack`() {
         mutableEventFlow.tryEmit(DeleteAccountEvent.NavigateBack)
         assertTrue(onNavigateBackCalled)
+    }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `NavigateToDeleteAccountConfirmationScreen should call onNavigateToDeleteAccountConfirmationScreenCalled`() {
+        mutableEventFlow.tryEmit(DeleteAccountEvent.NavigateToDeleteAccountConfirmationScreen)
+        assertTrue(onNavigateToDeleteAccountConfirmationScreenCalled)
     }
 
     @Test
@@ -195,11 +206,16 @@ class DeleteAccountScreenTest : BaseComposeTest() {
             .assertDoesNotExist()
 
         verify {
-            viewModel.trySendAction(DeleteAccountAction.DeleteAccountClick(password))
+            viewModel.trySendAction(
+                DeleteAccountAction.DeleteAccountConfirmDialogClick(
+                    password,
+                ),
+            )
         }
     }
 }
 
 private val DEFAULT_STATE: DeleteAccountState = DeleteAccountState(
     dialog = null,
+    isUnlockWithPasswordEnabled = true,
 )
