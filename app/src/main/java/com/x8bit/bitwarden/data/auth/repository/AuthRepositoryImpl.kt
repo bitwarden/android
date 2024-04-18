@@ -439,7 +439,6 @@ class AuthRepositoryImpl(
         )
 
         authDiskSource.storeUserKey(userId = userId, userKey = asymmetricalKey)
-        trustedDeviceManager.trustThisDeviceIfNecessary(userId = userId)
         vaultRepository.syncIfNecessary()
         return LoginResult.Success
     }
@@ -1385,7 +1384,6 @@ class AuthRepositoryImpl(
                         organizationKeys = null,
                     )
                     authDiskSource.storeUserKey(userId = userId, userKey = userKey)
-                    trustedDeviceManager.trustThisDeviceIfNecessary(userId = userId)
                 }
             authDiskSource.storePendingAuthRequest(
                 userId = userId,
