@@ -6,7 +6,9 @@ using AndroidX.Credentials;
 using AndroidX.Credentials.Exceptions;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
+using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2.Extensions;
 using Bit.Droid;
@@ -77,6 +79,13 @@ namespace Bit.App.Platforms.Android.Autofill
             var callingRequest = getRequest?.CallingRequest as CreatePublicKeyCredentialRequest;
             var origin = callingRequest.Origin;
             var credentialCreationOptions = GetPublicKeyCredentialCreationOptionsFromJson(callingRequest.RequestJson);
+
+            if (origin is null
+                &&
+                ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
+            {
+                await deviceActionService.DisplayAlertAsync(AppResources.ErrorCreatingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
+            }
 
             var rp = new Core.Utilities.Fido2.PublicKeyCredentialRpEntity()
             {

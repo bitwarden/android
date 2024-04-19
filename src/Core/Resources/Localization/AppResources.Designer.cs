@@ -5282,6 +5282,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passkeys not supported for this app.
+        /// </summary>
+        public static string PasskeysNotSupportedForThisApp {
+            get {
+                return ResourceManager.GetString("PasskeysNotSupportedForThisApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passkey will not be copied.
         /// </summary>
         public static string PasskeyWillNotBeCopied {
