@@ -2987,4 +2987,7 @@ Do you want to switch to this account?</value>
   <data name="Notice" xml:space="preserve">
     <value>Notice</value>
   </data>
+  <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
+    <value>Passkeys not supported for this app</value>
+  </data>
 </root>
