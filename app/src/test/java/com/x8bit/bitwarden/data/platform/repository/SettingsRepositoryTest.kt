@@ -115,7 +115,53 @@ class SettingsRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `setDefaultsIfNecessary should set LOGOUT default values for the given user if necessary`() {
+    fun `setDefaultsIfNecessary should set LOCK default values for the given user with a password if necessary`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE.copy(
+            accounts = mapOf(
+                USER_ID to MOCK_ACCOUNT.copy(
+                    profile = MOCK_PROFILE.copy(
+                        userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS.copy(
+                            hasMasterPassword = true,
+                        ),
+                    ),
+                ),
+            ),
+        )
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID))
+
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
+
+        // Calling once sets values
+        assertEquals(15, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertEquals(
+            VaultTimeoutAction.LOCK,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
+        )
+
+        // Updating the Vault settings values and calling setDefaultsIfNecessary again has no
+        // effect on the currently stored values.
+        fakeSettingsDiskSource.apply {
+            storeVaultTimeoutInMinutes(
+                userId = USER_ID,
+                vaultTimeoutInMinutes = 240,
+            )
+            storeVaultTimeoutAction(
+                userId = USER_ID,
+                vaultTimeoutAction = VaultTimeoutAction.LOCK,
+            )
+        }
+        settingsRepository.setDefaultsIfNecessary(userId = USER_ID)
+        assertEquals(240, fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
+        assertEquals(
+            VaultTimeoutAction.LOCK,
+            fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `setDefaultsIfNecessary should set LOGOUT default values for the given user without a password if necessary`() {
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         assertNull(fakeSettingsDiskSource.getVaultTimeoutInMinutes(userId = USER_ID))
         assertNull(fakeSettingsDiskSource.getVaultTimeoutAction(userId = USER_ID))
@@ -956,23 +1002,25 @@ private val MOCK_USER_DECRYPTION_OPTIONS: UserDecryptionOptionsJson = UserDecryp
     keyConnectorUserDecryptionOptions = null,
 )
 
+private val MOCK_PROFILE = AccountJson.Profile(
+    userId = USER_ID,
+    email = "test@bitwarden.com",
+    isEmailVerified = true,
+    name = "Bitwarden Tester",
+    hasPremium = false,
+    stamp = null,
+    organizationId = null,
+    avatarColorHex = null,
+    forcePasswordResetReason = null,
+    kdfType = KdfTypeJson.ARGON2_ID,
+    kdfIterations = 600000,
+    kdfMemory = 16,
+    kdfParallelism = 4,
+    userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
+)
+
 private val MOCK_ACCOUNT = AccountJson(
-    profile = AccountJson.Profile(
-        userId = USER_ID,
-        email = "test@bitwarden.com",
-        isEmailVerified = true,
-        name = "Bitwarden Tester",
-        hasPremium = false,
-        stamp = null,
-        organizationId = null,
-        avatarColorHex = null,
-        forcePasswordResetReason = null,
-        kdfType = KdfTypeJson.ARGON2_ID,
-        kdfIterations = 600000,
-        kdfMemory = 16,
-        kdfParallelism = 4,
-        userDecryptionOptions = MOCK_USER_DECRYPTION_OPTIONS,
-    ),
+    profile = MOCK_PROFILE,
     settings = AccountJson.Settings(
         environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
     ),
