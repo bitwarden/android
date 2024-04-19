@@ -453,7 +453,7 @@ class AuthRepositoryImpl(
         email: String,
         password: String,
         captchaToken: String?,
-    ): LoginResult = accountsService
+    ): LoginResult = identityService
         .preLogin(email = email)
         .flatMap {
             authSdkSource.hashPassword(
@@ -664,7 +664,7 @@ class AuthRepositoryImpl(
                 kdf = kdf,
             )
             .flatMap { registerKeyResponse ->
-                accountsService.register(
+                identityService.register(
                     body = RegisterRequestJson(
                         email = email,
                         masterPasswordHash = registerKeyResponse.masterPasswordHash,
