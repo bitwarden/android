@@ -27,9 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -171,7 +171,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ApproveLoginRequestsSwitch" }
+                    .testTag("ApproveLoginRequestsSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -182,7 +182,7 @@ fun AccountSecurityScreen(
                         { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
                     },
                     modifier = Modifier
-                        .semantics { testTag = "PendingLogInRequestsLabel" }
+                        .testTag("PendingLogInRequestsLabel")
                         .fillMaxWidth(),
                 )
             }
@@ -201,7 +201,7 @@ fun AccountSecurityScreen(
                 },
                 biometricsManager = biometricsManager,
                 modifier = Modifier
-                    .semantics { testTag = "UnlockWithBiometricsSwitch" }
+                    .testTag("UnlockWithBiometricsSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -212,7 +212,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(it) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "UnlockWithPinSwitch" }
+                    .testTag("UnlockWithPinSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -237,7 +237,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutTypeSelect(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "VaultTimeoutChooser" }
+                    .testTag("VaultTimeoutChooser")
                     .fillMaxWidth(),
             )
             (state.vaultTimeout as? VaultTimeout.Custom)?.let { customTimeout ->
@@ -262,7 +262,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.VaultTimeoutActionSelect(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "VaultTimeoutActionChooser" }
+                    .testTag("VaultTimeoutActionChooser")
                     .fillMaxWidth(),
             )
 
@@ -279,7 +279,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.AccountFingerprintPhraseClick) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "AccountFingerprintPhraseLabel" }
+                    .testTag("AccountFingerprintPhraseLabel")
                     .fillMaxWidth(),
             )
             BitwardenExternalLinkRow(
@@ -291,7 +291,7 @@ fun AccountSecurityScreen(
                 dialogTitle = stringResource(id = R.string.continue_to_web_app),
                 dialogMessage = stringResource(id = R.string.two_step_login_description_long),
                 modifier = Modifier
-                    .semantics { testTag = "TwoStepLoginLinkItemView" }
+                    .testTag("TwoStepLoginLinkItemView")
                     .fillMaxWidth(),
             )
             if (state.isUnlockWithPasswordEnabled) {
@@ -315,7 +315,7 @@ fun AccountSecurityScreen(
                         { viewModel.trySendAction(AccountSecurityAction.LockNowClick) }
                     },
                     modifier = Modifier
-                        .semantics { testTag = "LockNowLabel" }
+                        .testTag("LockNowLabel")
                         .fillMaxWidth(),
                 )
             }
@@ -325,7 +325,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "LogOutLabel" }
+                    .testTag("LogOutLabel")
                     .fillMaxWidth(),
             )
             BitwardenTextRow(
@@ -334,7 +334,7 @@ fun AccountSecurityScreen(
                     { viewModel.trySendAction(AccountSecurityAction.DeleteAccountClick) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "DeleteAccountLabel" }
+                    .testTag("DeleteAccountLabel")
                     .fillMaxWidth(),
             )
         }
@@ -573,7 +573,7 @@ private fun SessionTimeoutRow(
             text = selectedVaultTimeoutType.displayLabel(),
             style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.semantics { testTag = "SessionTimeoutStatusLabel" },
+            modifier = Modifier.testTag("SessionTimeoutStatusLabel"),
         )
     }
 
@@ -728,7 +728,7 @@ private fun SessionTimeoutActionRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
                 alpha = if (isEnabled) 1.0f else 0.38f,
             ),
-            modifier = Modifier.semantics { testTag = "SessionTimeoutActionStatusLabel" },
+            modifier = Modifier.testTag("SessionTimeoutActionStatusLabel"),
         )
     }
     when {

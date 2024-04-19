@@ -14,9 +14,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -107,7 +107,7 @@ fun MasterPasswordHintScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(MasterPasswordHintAction.SubmitClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "SubmitButton" },
+                        modifier = Modifier.testTag("SubmitButton"),
                     )
                 },
             )

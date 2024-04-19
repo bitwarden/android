@@ -28,9 +28,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -198,7 +198,7 @@ private fun LoginWithDeviceScreenContent(
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             minLines = 2,
             modifier = Modifier
-                .semantics { testTag = "FingerprintPhraseValue" }
+                .testTag("FingerprintPhraseValue")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -218,7 +218,7 @@ private fun LoginWithDeviceScreenContent(
                     )
                 } else {
                     BitwardenClickableText(
-                        modifier = Modifier.semantics { testTag = "ResendNotificationButton" },
+                        modifier = Modifier.testTag("ResendNotificationButton"),
                         label = stringResource(id = R.string.resend_notification),
                         style = MaterialTheme.typography.labelLarge,
                         innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
@@ -241,7 +241,7 @@ private fun LoginWithDeviceScreenContent(
         )
 
         BitwardenClickableText(
-            modifier = Modifier.semantics { testTag = "ViewAllLoginOptionsButton" },
+            modifier = Modifier.testTag("ViewAllLoginOptionsButton"),
             label = stringResource(id = R.string.view_all_login_options),
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
             style = MaterialTheme.typography.labelLarge,

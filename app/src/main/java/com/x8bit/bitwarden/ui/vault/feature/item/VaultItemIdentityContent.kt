@@ -9,8 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -47,7 +47,7 @@ fun VaultItemIdentityContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .semantics { testTag = "ItemNameEntry" }
+                    .testTag("ItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -62,7 +62,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityNameEntry" }
+                        .testTag("IdentityNameEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -78,7 +78,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityUsernameEntry" }
+                        .testTag("IdentityUsernameEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -94,7 +94,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityCompanyEntry" }
+                        .testTag("IdentityCompanyEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -110,7 +110,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentitySsnEntry" }
+                        .testTag("IdentitySsnEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -126,7 +126,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityPassportNumberEntry" }
+                        .testTag("IdentityPassportNumberEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -142,7 +142,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityLicenseNumberEntry" }
+                        .testTag("IdentityLicenseNumberEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -158,7 +158,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityEmailEntry" }
+                        .testTag("IdentityEmailEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -174,7 +174,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityPhoneEntry" }
+                        .testTag("IdentityPhoneEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -190,7 +190,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "IdentityAddressEntry" }
+                        .testTag("IdentityAddressEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -214,7 +214,7 @@ fun VaultItemIdentityContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "CipherNotesLabel" }
+                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -258,7 +258,7 @@ fun VaultItemIdentityContent(
             items(attachments) { attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
-                        .semantics { testTag = "CipherAttachment" }
+                        .testTag("CipherAttachment")
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,

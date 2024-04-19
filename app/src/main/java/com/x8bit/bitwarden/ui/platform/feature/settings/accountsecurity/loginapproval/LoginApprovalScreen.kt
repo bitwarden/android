@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -176,7 +177,7 @@ private fun LoginApprovalContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .semantics { testTag = "LogInAttemptByLabel" },
+                .testTag("LogInAttemptByLabel"),
         )
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -196,7 +197,7 @@ private fun LoginApprovalContent(
             color = LocalNonMaterialColors.current.fingerprint,
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             modifier = Modifier
-                .semantics { testTag = "FingerprintValueLabel" }
+                .testTag("FingerprintValueLabel")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -227,7 +228,7 @@ private fun LoginApprovalContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .semantics { testTag = "ConfirmLoginButton" },
+                .testTag("ConfirmLoginButton"),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -238,7 +239,7 @@ private fun LoginApprovalContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .semantics { testTag = "DenyLoginButton" },
+                .testTag("DenyLoginButton"),
         )
 
         Spacer(modifier = Modifier.navigationBarsPadding())

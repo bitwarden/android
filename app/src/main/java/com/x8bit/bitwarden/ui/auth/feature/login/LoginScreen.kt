@@ -28,9 +28,9 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -240,7 +240,7 @@ private fun LoginScreenContent(
     ) {
         BitwardenPasswordField(
             modifier = Modifier
-                .semantics { testTag = "MasterPasswordEntry" }
+                .testTag("MasterPasswordEntry")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
             value = state.passwordInput,
@@ -255,7 +255,7 @@ private fun LoginScreenContent(
             style = MaterialTheme.typography.bodySmall,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
-                .semantics { testTag = "GetMasterPasswordHintLabel" },
+                .testTag("GetMasterPasswordHintLabel"),
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -265,7 +265,7 @@ private fun LoginScreenContent(
             onClick = onLoginButtonClick,
             isEnabled = state.isLoginButtonEnabled,
             modifier = Modifier
-                .semantics { testTag = "LogInWithMasterPasswordButton" }
+                .testTag("LogInWithMasterPasswordButton")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -278,7 +278,7 @@ private fun LoginScreenContent(
                 icon = painterResource(id = R.drawable.ic_device),
                 onClick = onLoginWithDeviceClick,
                 modifier = Modifier
-                    .semantics { testTag = "LogInWithAnotherDeviceButton" }
+                    .testTag("LogInWithAnotherDeviceButton")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -291,7 +291,7 @@ private fun LoginScreenContent(
             icon = painterResource(id = R.drawable.ic_briefcase),
             onClick = onSingleSignOnClick,
             modifier = Modifier
-                .semantics { testTag = "LogInWithSsoButton" }
+                .testTag("LogInWithSsoButton")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -308,7 +308,7 @@ private fun LoginScreenContent(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
-                .semantics { testTag = "LoggingInAsLabel" }
+                .testTag("LoggingInAsLabel")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -318,7 +318,7 @@ private fun LoginScreenContent(
             onClick = onNotYouButtonClick,
             style = MaterialTheme.typography.labelLarge,
             innerPadding = PaddingValues(vertical = 8.dp, horizontal = 16.dp),
-            modifier = Modifier.semantics { testTag = "NotYouLabel" },
+            modifier = Modifier.testTag("NotYouLabel"),
         )
         Spacer(modifier = Modifier.navigationBarsPadding())
     }

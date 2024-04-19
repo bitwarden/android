@@ -25,8 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -176,7 +176,7 @@ fun VaultUnlockScreen(
                             .vaultUnlockType
                             .inputFieldVisibilityToggleTestTag,
                         modifier = Modifier
-                            .semantics { testTag = state.vaultUnlockType.unlockScreenInputTestTag }
+                            .testTag(state.vaultUnlockType.unlockScreenInputTestTag)
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                     )
@@ -200,7 +200,7 @@ fun VaultUnlockScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier
-                        .semantics { testTag = "UserAndEnvironmentDataLabel" }
+                        .testTag("UserAndEnvironmentDataLabel")
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
@@ -234,7 +234,7 @@ fun VaultUnlockScreen(
                         },
                         isEnabled = state.input.isNotEmpty(),
                         modifier = Modifier
-                            .semantics { testTag = "UnlockVaultButton" }
+                            .testTag("UnlockVaultButton")
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
                     )

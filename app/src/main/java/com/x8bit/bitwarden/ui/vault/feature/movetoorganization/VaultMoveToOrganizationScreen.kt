@@ -13,9 +13,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -122,7 +122,7 @@ private fun VaultMoveToOrganizationScaffold(
                         onClick = moveClick,
                         isEnabled = state.viewState is
                             VaultMoveToOrganizationState.ViewState.Content,
-                        modifier = Modifier.semantics { testTag = "MoveButton" },
+                        modifier = Modifier.testTag("MoveButton"),
                     )
                 },
             )

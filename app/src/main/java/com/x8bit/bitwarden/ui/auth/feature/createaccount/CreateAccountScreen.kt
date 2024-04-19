@@ -35,6 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
@@ -180,7 +181,7 @@ fun CreateAccountScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(SubmitClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "SubmitButton" },
+                        modifier = Modifier.testTag("SubmitButton"),
                     )
                 },
             )
@@ -201,7 +202,7 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(EmailInputChange(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "EmailAddressEntry" }
+                    .testTag("EmailAddressEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 keyboardType = KeyboardType.Email,
@@ -218,7 +219,7 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(PasswordInputChange(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "MasterPasswordEntry" }
+                    .testTag("MasterPasswordEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 showPasswordTestTag = "PasswordVisibilityToggle",
@@ -238,7 +239,7 @@ fun CreateAccountScreen(
                     { viewModel.trySendAction(ConfirmPasswordInputChange(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ConfirmMasterPasswordEntry" }
+                    .testTag("ConfirmMasterPasswordEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 showPasswordTestTag = "ConfirmPasswordVisibilityToggle",
@@ -252,7 +253,7 @@ fun CreateAccountScreen(
                 },
                 hint = stringResource(id = R.string.master_password_hint_description),
                 modifier = Modifier
-                    .semantics { testTag = "MasterPasswordHintLabel" }
+                    .testTag("MasterPasswordHintLabel")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -266,7 +267,7 @@ fun CreateAccountScreen(
                     }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "CheckExposedMasterPasswordToggle" }
+                    .testTag("CheckExposedMasterPasswordToggle")
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))

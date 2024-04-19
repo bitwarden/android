@@ -37,9 +37,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -257,7 +257,7 @@ private fun LandingScreenContent(
 
         BitwardenTextField(
             modifier = Modifier
-                .semantics { testTag = "EmailAddressEntry" }
+                .testTag("EmailAddressEntry")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
             value = state.emailInput,
@@ -272,7 +272,7 @@ private fun LandingScreenContent(
             selectedOption = state.selectedEnvironmentType,
             onOptionSelected = onEnvironmentTypeSelect,
             modifier = Modifier
-                .semantics { testTag = "RegionSelectorDropdown" }
+                .testTag("RegionSelectorDropdown")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -282,7 +282,7 @@ private fun LandingScreenContent(
             isChecked = state.isRememberMeEnabled,
             onCheckedChange = onRememberMeToggle,
             modifier = Modifier
-                .semantics { testTag = "RememberMeSwitch" }
+                .testTag("RememberMeSwitch")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -294,7 +294,7 @@ private fun LandingScreenContent(
             onClick = onContinueClick,
             isEnabled = state.isContinueButtonEnabled,
             modifier = Modifier
-                .semantics { testTag = "ContinueButton" }
+                .testTag("ContinueButton")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -319,7 +319,7 @@ private fun LandingScreenContent(
                 label = stringResource(id = R.string.create_account),
                 onClick = onCreateAccountClick,
                 modifier = Modifier
-                    .semantics { testTag = "CreateAccountLabel" },
+                    .testTag("CreateAccountLabel"),
             )
         }
 

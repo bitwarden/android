@@ -26,9 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -170,7 +170,7 @@ private fun PasswordHistoryContent(
                 supportingLabel = password.date,
                 onCopyClick = { onPasswordCopyClick(password) },
                 modifier = Modifier
-                    .semantics { testTag = "GeneratedPasswordRow" }
+                    .testTag("GeneratedPasswordRow")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -210,7 +210,7 @@ private fun PasswordHistoryEmpty(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            modifier = Modifier.semantics { testTag = "NoPasswordsDisplayedLabel" },
+            modifier = Modifier.testTag("NoPasswordsDisplayedLabel"),
             text = stringResource(id = R.string.no_passwords_to_list),
             style = MaterialTheme.typography.bodyMedium,
         )

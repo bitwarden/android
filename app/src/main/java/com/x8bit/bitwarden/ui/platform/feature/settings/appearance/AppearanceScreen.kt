@@ -19,9 +19,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -87,7 +87,7 @@ fun AppearanceScreen(
                     { viewModel.trySendAction(AppearanceAction.LanguageChange(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "LanguageChooser" }
+                    .testTag("LanguageChooser")
                     .fillMaxWidth(),
             )
 
@@ -97,7 +97,7 @@ fun AppearanceScreen(
                     { viewModel.trySendAction(AppearanceAction.ThemeChange(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ThemeChooser" }
+                    .testTag("ThemeChooser")
                     .fillMaxWidth(),
             )
 
@@ -109,7 +109,7 @@ fun AppearanceScreen(
                     { viewModel.trySendAction(AppearanceAction.ShowWebsiteIconsToggle(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ShowWebsiteIconsSwitch" }
+                    .testTag("ShowWebsiteIconsSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )

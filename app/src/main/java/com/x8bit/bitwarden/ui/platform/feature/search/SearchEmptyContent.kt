@@ -14,8 +14,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -49,7 +49,7 @@ fun SearchEmptyContent(
             Text(
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .semantics { testTag = "NoSearchResultsLabel" }
+                    .testTag("NoSearchResultsLabel")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 text = it(),

@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -66,7 +67,7 @@ fun VaultItemLoginContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .semantics { testTag = "LoginItemNameEntry" }
+                    .testTag("LoginItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -120,7 +121,7 @@ fun VaultItemLoginContent(
                     isPremiumUser = loginItemState.isPremiumUser,
                     onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
                     modifier = Modifier
-                        .semantics { testTag = "LoginTotpEntry" }
+                        .testTag("LoginTotpEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -163,7 +164,7 @@ fun VaultItemLoginContent(
                 NotesField(
                     notes = notes,
                     modifier = Modifier
-                        .semantics { testTag = "CipherNotesLabel" }
+                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -207,7 +208,7 @@ fun VaultItemLoginContent(
             items(attachments) { attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
-                        .semantics { testTag = "CipherAttachment" }
+                        .testTag("CipherAttachment")
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,
@@ -316,7 +317,7 @@ private fun PasswordField(
                         ),
                     ),
                     onClick = onCheckForBreachClick,
-                    modifier = Modifier.semantics { testTag = "LoginCheckPasswordButton" },
+                    modifier = Modifier.testTag("LoginCheckPasswordButton"),
                 )
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
@@ -324,7 +325,7 @@ private fun PasswordField(
                         contentDescription = stringResource(id = R.string.copy_password),
                     ),
                     onClick = onCopyPasswordClick,
-                    modifier = Modifier.semantics { testTag = "LoginCopyPasswordButton" },
+                    modifier = Modifier.testTag("LoginCopyPasswordButton"),
                 )
             },
             modifier = modifier,
@@ -336,7 +337,7 @@ private fun PasswordField(
             label = stringResource(id = R.string.password),
             value = passwordData.password,
             modifier = modifier
-                .semantics { testTag = "LoginPasswordEntry" },
+                .testTag("LoginPasswordEntry"),
         )
     }
 }
@@ -392,7 +393,7 @@ private fun TotpField(
                             contentDescription = stringResource(id = R.string.copy_totp),
                         ),
                         onClick = onCopyTotpClick,
-                        modifier = Modifier.semantics { testTag = "LoginCopyTotpButton" },
+                        modifier = Modifier.testTag("LoginCopyTotpButton"),
                     )
                 },
                 modifier = modifier,
@@ -432,7 +433,7 @@ private fun UriField(
                         contentDescription = stringResource(id = R.string.launch),
                     ),
                     onClick = { onLaunchUriClick(uriData.uri) },
-                    modifier = Modifier.semantics { testTag = "LoginLaunchUriButton" },
+                    modifier = Modifier.testTag("LoginLaunchUriButton"),
                 )
             }
             if (uriData.isCopyable) {
@@ -442,7 +443,7 @@ private fun UriField(
                         contentDescription = stringResource(id = R.string.copy),
                     ),
                     onClick = { onCopyUriClick(uriData.uri) },
-                    modifier = Modifier.semantics { testTag = "LoginCopyUriButton" },
+                    modifier = Modifier.testTag("LoginCopyUriButton"),
                 )
             }
         },
@@ -470,7 +471,7 @@ private fun UsernameField(
                     contentDescription = stringResource(id = R.string.copy_username),
                 ),
                 onClick = onCopyUsernameClick,
-                modifier = Modifier.semantics { testTag = "LoginCopyUsernameButton" },
+                modifier = Modifier.testTag("LoginCopyUsernameButton"),
             )
         },
         modifier = modifier,

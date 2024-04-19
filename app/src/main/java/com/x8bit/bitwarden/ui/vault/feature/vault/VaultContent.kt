@@ -10,9 +10,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -57,7 +57,7 @@ fun VaultContent(
                     showDivider = true,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { testTag = "FolderFilter" }
+                        .testTag("FolderFilter")
                         .padding(16.dp),
                 )
             }
@@ -101,7 +101,7 @@ fun VaultContent(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { testTag = "CipherCell" }
+                        .testTag("CipherCell")
                         .padding(
                             start = 16.dp,
                             // There is some built-in padding to the menu button that makes up
@@ -146,7 +146,7 @@ fun VaultContent(
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "LoginFilter" }
+                    .testTag("LoginFilter")
                     .padding(horizontal = 16.dp),
             )
         }
@@ -161,7 +161,7 @@ fun VaultContent(
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "CardFilter" }
+                    .testTag("CardFilter")
                     .padding(horizontal = 16.dp),
             )
         }
@@ -176,7 +176,7 @@ fun VaultContent(
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "IdentityFilter" }
+                    .testTag("IdentityFilter")
                     .padding(horizontal = 16.dp),
             )
         }
@@ -191,7 +191,7 @@ fun VaultContent(
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "SecureNoteFilter" }
+                    .testTag("SecureNoteFilter")
                     .padding(horizontal = 16.dp),
             )
         }
@@ -230,7 +230,7 @@ fun VaultContent(
                     showDivider = false,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { testTag = "FolderFilter" }
+                        .testTag("FolderFilter")
                         .padding(horizontal = 16.dp),
                 )
             }
@@ -279,7 +279,7 @@ fun VaultContent(
                     },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { testTag = "CipherCell" }
+                        .testTag("CipherCell")
                         .padding(horizontal = 16.dp),
                 )
             }
@@ -315,7 +315,7 @@ fun VaultContent(
                     showDivider = false,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .semantics { testTag = "CollectionFilter" }
+                        .testTag("CollectionFilter")
                         .padding(horizontal = 16.dp),
                 )
             }
@@ -354,7 +354,7 @@ fun VaultContent(
                 showDivider = false,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "TrashFilter" }
+                    .testTag("TrashFilter")
                     .padding(horizontal = 16.dp),
             )
         }

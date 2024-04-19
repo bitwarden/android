@@ -35,10 +35,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -203,7 +203,7 @@ private fun AnimatedAccountSwitcher(
     ) {
         LazyColumn(
             modifier = modifier
-                .semantics { testTag = "AccountListView" }
+                .testTag("AccountListView")
                 // To prevent going all the way up to the bottom of the screen, we'll add some small
                 // bottom padding.
                 .padding(bottom = 24.dp)
@@ -230,7 +230,7 @@ private fun AnimatedAccountSwitcher(
                         onClick = onAddAccountClick,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .semantics { testTag = "AddAccountButton" }
+                            .testTag("AddAccountButton")
                             .padding(horizontal = 16.dp),
                     )
                 }
@@ -252,7 +252,7 @@ private fun AccountSummaryItem(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .semantics { testTag = "AccountCell" }
+            .testTag("AccountCell")
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
@@ -290,14 +290,14 @@ private fun AccountSummaryItem(
             Text(
                 text = accountSummary.email,
                 style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.semantics { testTag = "AccountEmailLabel" },
+                modifier = Modifier.testTag("AccountEmailLabel"),
             )
 
             Text(
                 text = accountSummary.environmentLabel,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.semantics { testTag = "AccountEnvironmentLabel" },
+                modifier = Modifier.testTag("AccountEnvironmentLabel"),
             )
 
             accountSummary.supportingTextResOrNull?.let { supportingTextResId ->
@@ -305,7 +305,7 @@ private fun AccountSummaryItem(
                     text = stringResource(id = supportingTextResId).lowercaseWithCurrentLocal(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.semantics { testTag = "AccountStatusLabel" },
+                    modifier = Modifier.testTag("AccountStatusLabel"),
                 )
             }
         }
@@ -317,7 +317,7 @@ private fun AccountSummaryItem(
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .semantics { testTag = accountSummary.iconTestTag }
+                .testTag(accountSummary.iconTestTag)
                 .size(24.dp),
         )
 

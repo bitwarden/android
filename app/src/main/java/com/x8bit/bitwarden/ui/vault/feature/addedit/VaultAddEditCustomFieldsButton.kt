@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButton
@@ -76,6 +76,6 @@ fun VaultAddEditCustomFieldsButton(
     BitwardenFilledTonalButton(
         label = stringResource(id = R.string.new_custom_field),
         onClick = { shouldShowChooserDialog = true },
-        modifier = modifier.semantics { testTag = "NewCustomFieldButton" },
+        modifier = modifier.testTag("NewCustomFieldButton"),
     )
 }

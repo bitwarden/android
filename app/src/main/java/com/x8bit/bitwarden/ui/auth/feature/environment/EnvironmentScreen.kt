@@ -20,9 +20,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -94,7 +94,7 @@ fun EnvironmentScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(EnvironmentAction.SaveClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "SaveButton" },
+                        modifier = Modifier.testTag("SaveButton"),
                     )
                 },
             )
@@ -127,7 +127,7 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "ServerUrlEntry" }
+                    .testTag("ServerUrlEntry")
                     .padding(horizontal = 16.dp),
             )
 
@@ -151,7 +151,7 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "WebVaultUrlEntry" }
+                    .testTag("WebVaultUrlEntry")
                     .padding(horizontal = 16.dp),
             )
 
@@ -166,7 +166,7 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "ApiUrlEntry" }
+                    .testTag("ApiUrlEntry")
                     .padding(horizontal = 16.dp),
             )
 
@@ -181,7 +181,7 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "IdentityUrlEntry" }
+                    .testTag("IdentityUrlEntry")
                     .padding(horizontal = 16.dp),
             )
 
@@ -197,7 +197,7 @@ fun EnvironmentScreen(
                 keyboardType = KeyboardType.Uri,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "IconsUrlEntry" }
+                    .testTag("IconsUrlEntry")
                     .padding(horizontal = 16.dp),
             )
 

@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -86,7 +87,7 @@ fun AddSendContent(
             BitwardenPolicyWarningText(
                 text = stringResource(id = R.string.send_options_policy_in_effect),
                 modifier = Modifier
-                    .semantics { testTag = "SendOptionsPolicyInEffectLabel" }
+                    .testTag("SendOptionsPolicyInEffectLabel")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -96,7 +97,7 @@ fun AddSendContent(
 
         BitwardenTextField(
             modifier = Modifier
-                .semantics { testTag = "SendNameEntry" }
+                .testTag("SendNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             label = stringResource(id = R.string.name),
@@ -168,7 +169,7 @@ fun AddSendContent(
                 } else if (isAddMode) {
                     Text(
                         modifier = Modifier
-                            .semantics { testTag = "SendCurrentFileNameLabel" }
+                            .testTag("SendCurrentFileNameLabel")
                             .align(Alignment.CenterHorizontally),
                         text = type.name ?: stringResource(id = R.string.no_file_chosen),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -187,7 +188,7 @@ fun AddSendContent(
                             }
                         },
                         modifier = Modifier
-                            .semantics { testTag = "SendChooseFileButton" }
+                            .testTag("SendChooseFileButton")
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
                     )
@@ -234,7 +235,7 @@ fun AddSendContent(
             is AddSendState.ViewState.Content.SendType.Text -> {
                 BitwardenTextField(
                     modifier = Modifier
-                        .semantics { testTag = "SendTextContentEntry" }
+                        .testTag("SendTextContentEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.text),
@@ -247,7 +248,7 @@ fun AddSendContent(
                 Spacer(modifier = Modifier.height(16.dp))
                 BitwardenWideSwitch(
                     modifier = Modifier
-                        .semantics { testTag = "SendHideTextByDefaultToggle" }
+                        .testTag("SendHideTextByDefaultToggle")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.hide_text_by_default),
@@ -292,7 +293,7 @@ private fun AddSendOptions(
     var isExpanded by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = Modifier
-            .semantics { testTag = "SendShowHideOptionsButton" }
+            .testTag("SendShowHideOptionsButton")
             .fillMaxWidth()
             .clickable(
                 onClickLabel = if (isExpanded) {
@@ -333,7 +334,7 @@ private fun AddSendOptions(
             if (isAddMode) {
                 SendDeletionDateChooser(
                     modifier = Modifier
-                        .semantics { testTag = "SendDeletionOptionsPicker" }
+                        .testTag("SendDeletionOptionsPicker")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateFormatPattern = state.common.dateFormatPattern,
@@ -345,7 +346,7 @@ private fun AddSendOptions(
                 Spacer(modifier = Modifier.height(8.dp))
                 SendExpirationDateChooser(
                     modifier = Modifier
-                        .semantics { testTag = "SendExpirationOptionsPicker" }
+                        .testTag("SendExpirationOptionsPicker")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateFormatPattern = state.common.dateFormatPattern,
@@ -364,7 +365,7 @@ private fun AddSendOptions(
                 Spacer(modifier = Modifier.height(8.dp))
                 AddSendCustomDateChooser(
                     modifier = Modifier
-                        .semantics { testTag = "SendCustomDeletionDatePicker" }
+                        .testTag("SendCustomDeletionDatePicker")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateLabel = stringResource(id = R.string.deletion_date),
@@ -395,7 +396,7 @@ private fun AddSendOptions(
                 Spacer(modifier = Modifier.height(8.dp))
                 AddSendCustomDateChooser(
                     modifier = Modifier
-                        .semantics { testTag = "SendCustomExpirationDatePicker" }
+                        .testTag("SendCustomExpirationDatePicker")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     dateLabel = stringResource(id = R.string.expiration_date),
@@ -425,7 +426,7 @@ private fun AddSendOptions(
                         onClick = addSendHandlers.onClearExpirationDateClick,
                         isEnabled = state.common.expirationDate != null && !sendRestrictionPolicy,
                         modifier = Modifier
-                            .semantics { testTag = "SendClearExpirationDateButton" }
+                            .testTag("SendClearExpirationDateButton")
                             .wrapContentWidth(),
                     )
                 }
@@ -440,7 +441,7 @@ private fun AddSendOptions(
                 range = 0..Int.MAX_VALUE,
                 textFieldReadOnly = sendRestrictionPolicy,
                 modifier = Modifier
-                    .semantics { testTag = "SendMaxAccessCountEntry" }
+                    .testTag("SendMaxAccessCountEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -485,7 +486,7 @@ private fun AddSendOptions(
                 value = state.common.passwordInput,
                 onValueChange = addSendHandlers.onPasswordChange,
                 modifier = Modifier
-                    .semantics { testTag = "SendNewPasswordEntry" }
+                    .testTag("SendNewPasswordEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -504,7 +505,7 @@ private fun AddSendOptions(
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
                 modifier = Modifier
-                    .semantics { testTag = "SendHideEmailSwitch" }
+                    .testTag("SendHideEmailSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.hide_email),
@@ -516,7 +517,7 @@ private fun AddSendOptions(
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenWideSwitch(
                 modifier = Modifier
-                    .semantics { testTag = "SendDeactivateSwitch" }
+                    .testTag("SendDeactivateSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.disable_send),
