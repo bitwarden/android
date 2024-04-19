@@ -6,10 +6,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysR
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
@@ -37,27 +33,6 @@ class AccountsServiceImpl(
 
     override suspend fun deleteAccount(masterPasswordHash: String): Result<Unit> =
         authenticatedAccountsApi.deleteAccount(DeleteAccountRequestJson(masterPasswordHash))
-
-    override suspend fun preLogin(email: String): Result<PreLoginResponseJson> =
-        accountsApi.preLogin(PreLoginRequestJson(email = email))
-
-    @Suppress("MagicNumber")
-    override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
-        accountsApi
-            .register(body)
-            .recoverCatching { throwable ->
-                val bitwardenError = throwable.toBitwardenError()
-                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                    code = 400,
-                    json = json,
-                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                    codes = listOf(400, 429),
-                    json = json,
-                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                    code = 429,
-                    json = json,
-                ) ?: throw throwable
-            }
 
     override suspend fun requestOneTimePasscode(): Result<Unit> =
         authenticatedAccountsApi.requestOtp()

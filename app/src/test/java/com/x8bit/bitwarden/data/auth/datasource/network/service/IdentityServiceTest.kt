@@ -6,8 +6,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthM
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.MasterPasswordPolicyOptionsJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
@@ -36,9 +39,185 @@ class IdentityServiceTest : BaseServiceTest() {
 
     private val identityService = IdentityServiceImpl(
         api = identityApi,
-        json = Json,
+        json = Json {
+            ignoreUnknownKeys = true
+        },
         deviceModelProvider = deviceModelProvider,
     )
+
+    @Test
+    fun `preLogin with unknown kdf type be failure`() = runTest {
+        val json = """
+            {
+              "kdf": 2,
+              "kdfIterations": 1,
+            }
+            """
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertTrue(identityService.preLogin(EMAIL).isFailure)
+    }
+
+    @Test
+    fun `preLogin Argon2 without memory property should be failure`() = runTest {
+        val json = """
+            {
+              "kdf": 1,
+              "kdfIterations": 1,
+              "kdfParallelism": 1
+            }
+            """
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertTrue(identityService.preLogin(EMAIL).isFailure)
+    }
+
+    @Test
+    fun `preLogin Argon2 without parallelism property should be failure`() = runTest {
+        val json = """
+            {
+              "kdf": 1,
+              "kdfIterations": 1,
+              "kdfMemory": 1
+            }
+            """
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertTrue(identityService.preLogin(EMAIL).isFailure)
+    }
+
+    @Test
+    fun `preLogin Argon2 should be success`() = runTest {
+        val json = """
+            {
+              "kdf": 1,
+              "kdfIterations": 1,
+              "kdfMemory": 1,
+              "kdfParallelism": 1
+            }
+            """
+        val expectedResponse = PreLoginResponseJson(
+            kdfParams = PreLoginResponseJson.KdfParams.Argon2ID(
+                iterations = 1u,
+                memory = 1u,
+                parallelism = 1u,
+            ),
+        )
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertEquals(
+            expectedResponse.asSuccess(),
+            identityService.preLogin(EMAIL),
+        )
+    }
+
+    @Test
+    fun `preLogin Pbkdf2 should be success`() = runTest {
+        val json = """
+            {
+              "kdf": 0,
+              "kdfIterations": 1
+            }
+            """
+        val expectedResponse = PreLoginResponseJson(
+            kdfParams = PreLoginResponseJson.KdfParams.Pbkdf2(1u),
+        )
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertEquals(
+            expectedResponse.asSuccess(),
+            identityService.preLogin(EMAIL),
+        )
+    }
+
+    @Test
+    fun `register success json should be Success`() = runTest {
+        val json = """
+            {
+              "captchaBypassToken": "mock_token"
+            }
+            """
+        val expectedResponse = RegisterResponseJson.Success(
+            captchaBypassToken = "mock_token",
+        )
+        val response = MockResponse().setBody(json)
+        server.enqueue(response)
+        assertEquals(
+            expectedResponse.asSuccess(),
+            identityService.register(registerRequestBody),
+        )
+    }
+
+    @Test
+    fun `register failure with Invalid json should be Invalid`() = runTest {
+        val json = """
+            {
+              "message": "The model state is invalid.",
+              "validationErrors": {
+                "": [
+                  "Email '' is already taken."
+                ]
+              },
+              "exceptionMessage": null,
+              "exceptionStackTrace": null,
+              "innerExceptionMessage": null,
+              "object": "error"
+            }
+            """
+        val response = MockResponse().setResponseCode(400).setBody(json)
+        server.enqueue(response)
+        val result = identityService.register(registerRequestBody)
+        assertEquals(
+            RegisterResponseJson.Invalid(
+                message = "The model state is invalid.",
+                validationErrors = mapOf("" to listOf("Email '' is already taken.")),
+            ),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `register failure with Error json should return Error`() = runTest {
+        val json = """
+            {
+              "Object": "error",
+              "Message": "Slow down! Too many requests. Try again soon."
+            }
+        """.trimIndent()
+        val response = MockResponse().setResponseCode(429).setBody(json)
+        server.enqueue(response)
+        val result = identityService.register(registerRequestBody)
+        assertEquals(
+            RegisterResponseJson.Error(
+                message = "Slow down! Too many requests. Try again soon.",
+            ),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `register captcha json should be CaptchaRequired`() = runTest {
+        val json = """
+            {
+              "validationErrors": {
+                "HCaptcha_SiteKey": [
+                  "mock_token"
+                ]
+              }
+            }
+            """
+        val expectedResponse = RegisterResponseJson.CaptchaRequired(
+            validationErrors = RegisterResponseJson.CaptchaRequired.ValidationErrors(
+                captchaKeys = listOf("mock_token"),
+            ),
+        )
+        val response = MockResponse().setResponseCode(400).setBody(json)
+        server.enqueue(response)
+        assertEquals(
+            expectedResponse.asSuccess(),
+            identityService.register(registerRequestBody),
+        )
+    }
 
     @Test
     fun `getToken when request response is Success should return Success`() = runTest {
@@ -153,6 +332,19 @@ class IdentityServiceTest : BaseServiceTest() {
         private const val REFRESH_TOKEN = "refreshToken"
         private const val EMAIL = "email"
         private const val PASSWORD_HASH = "passwordHash"
+        private val registerRequestBody = RegisterRequestJson(
+            email = EMAIL,
+            masterPasswordHash = "mockk_masterPasswordHash",
+            masterPasswordHint = "mockk_masterPasswordHint",
+            captchaResponse = "mockk_captchaResponse",
+            key = "mockk_key",
+            keys = RegisterRequestJson.Keys(
+                publicKey = "mockk_publicKey",
+                encryptedPrivateKey = "mockk_encryptedPrivateKey",
+            ),
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            kdfIterations = 600000U,
+        )
     }
 }
 

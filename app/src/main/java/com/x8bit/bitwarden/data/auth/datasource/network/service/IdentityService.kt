@@ -2,14 +2,27 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 
 /**
  * Provides an API for querying identity endpoints.
  */
 interface IdentityService {
+
+    /**
+     * Make pre login request to get KDF params.
+     */
+    suspend fun preLogin(email: String): Result<PreLoginResponseJson>
+
+    /**
+     * Register a new account to Bitwarden.
+     */
+    suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson>
 
     /**
      * Make request to get an access token.

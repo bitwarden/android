@@ -3,8 +3,12 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
@@ -18,6 +22,27 @@ class IdentityServiceImpl(
     private val json: Json,
     private val deviceModelProvider: DeviceModelProvider = DeviceModelProvider(),
 ) : IdentityService {
+
+    override suspend fun preLogin(email: String): Result<PreLoginResponseJson> =
+        api.preLogin(PreLoginRequestJson(email = email))
+
+    @Suppress("MagicNumber")
+    override suspend fun register(body: RegisterRequestJson): Result<RegisterResponseJson> =
+        api
+            .register(body)
+            .recoverCatching { throwable ->
+                val bitwardenError = throwable.toBitwardenError()
+                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
+                    code = 400,
+                    json = json,
+                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                    codes = listOf(400, 429),
+                    json = json,
+                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
+                    code = 429,
+                    json = json,
+                ) ?: throw throwable
+            }
 
     @Suppress("MagicNumber")
     override suspend fun getToken(

@@ -1,9 +1,14 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -55,4 +60,10 @@ interface IdentityApi {
         @Field(value = "refresh_token") refreshToken: String,
         @Field(value = "grant_type") grantType: String,
     ): Call<RefreshTokenResponseJson>
+
+    @POST("/accounts/prelogin")
+    suspend fun preLogin(@Body body: PreLoginRequestJson): Result<PreLoginResponseJson>
+
+    @POST("/accounts/register")
+    suspend fun register(@Body body: RegisterRequestJson): Result<RegisterResponseJson.Success>
 }
