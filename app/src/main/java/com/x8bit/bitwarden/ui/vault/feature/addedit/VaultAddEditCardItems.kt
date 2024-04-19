@@ -11,9 +11,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -52,7 +52,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = commonState.name,
             onValueChange = commonHandlers.onNameTextChange,
             modifier = Modifier
-                .semantics { testTag = "ItemNameEntry" }
+                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -64,7 +64,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = cardState.cardHolderName,
             onValueChange = cardHandlers.onCardHolderNameTextChange,
             modifier = Modifier
-                .semantics { testTag = "CardholderNameEntry" }
+                .testTag("CardholderNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -76,7 +76,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = cardState.number,
             onValueChange = cardHandlers.onNumberTextChange,
             modifier = Modifier
-                .semantics { testTag = "CardNumberEntry" }
+                .testTag("CardNumberEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             showPasswordTestTag = "ShowCardNumberButton",
@@ -100,7 +100,7 @@ fun LazyListScope.vaultAddEditCardItems(
                 )
             },
             modifier = Modifier
-                .semantics { testTag = "CardBrandPicker" }
+                .testTag("CardBrandPicker")
                 .padding(horizontal = 16.dp),
         )
     }
@@ -122,7 +122,7 @@ fun LazyListScope.vaultAddEditCardItems(
                 )
             },
             modifier = Modifier
-                .semantics { testTag = "CardExpirationMonthPicker" }
+                .testTag("CardExpirationMonthPicker")
                 .padding(horizontal = 16.dp),
         )
     }
@@ -134,7 +134,7 @@ fun LazyListScope.vaultAddEditCardItems(
             onValueChange = cardHandlers.onExpirationYearTextChange,
             keyboardType = KeyboardType.Number,
             modifier = Modifier
-                .semantics { testTag = "CardExpirationYearEntry" }
+                .testTag("CardExpirationYearEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -147,7 +147,7 @@ fun LazyListScope.vaultAddEditCardItems(
             onValueChange = cardHandlers.onSecurityCodeTextChange,
             keyboardType = KeyboardType.NumberPassword,
             modifier = Modifier
-                .semantics { testTag = "CardSecurityCodeEntry" }
+                .testTag("CardSecurityCodeEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             showPasswordTestTag = "CardShowSecurityCodeButton",
@@ -179,7 +179,7 @@ fun LazyListScope.vaultAddEditCardItems(
                 )
             },
             modifier = Modifier
-                .semantics { testTag = "FolderPicker" }
+                .testTag("FolderPicker")
                 .padding(horizontal = 16.dp),
         )
     }
@@ -193,7 +193,7 @@ fun LazyListScope.vaultAddEditCardItems(
             isChecked = commonState.favorite,
             onCheckedChange = commonHandlers.onToggleFavorite,
             modifier = Modifier
-                .semantics { testTag = "ItemFavoriteToggle" }
+                .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -206,7 +206,7 @@ fun LazyListScope.vaultAddEditCardItems(
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonHandlers.onToggleMasterPasswordReprompt,
                 modifier = Modifier
-                    .semantics { testTag = "MasterPasswordRepromptToggle" }
+                    .testTag("MasterPasswordRepromptToggle")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 actions = {
@@ -242,7 +242,7 @@ fun LazyListScope.vaultAddEditCardItems(
             value = commonState.notes,
             onValueChange = commonHandlers.onNotesTextChange,
             modifier = Modifier
-                .semantics { testTag = "ItemNotesEntry" }
+                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -315,7 +315,7 @@ fun LazyListScope.vaultAddEditCardItems(
                     )
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ItemOwnershipPicker" }
+                    .testTag("ItemOwnershipPicker")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )

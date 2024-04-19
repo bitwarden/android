@@ -39,6 +39,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -283,7 +284,7 @@ private fun ModalAppBar(
             BitwardenTextButton(
                 label = stringResource(id = R.string.select),
                 onClick = onSelectClick,
-                modifier = Modifier.semantics { testTag = "SelectButton" },
+                modifier = Modifier.testTag("SelectButton"),
             )
         },
     )
@@ -321,7 +322,7 @@ private fun ScrollContent(
             BitwardenPolicyWarningText(
                 text = stringResource(id = R.string.password_generator_policy_in_effect),
                 modifier = Modifier
-                    .semantics { testTag = "PasswordGeneratorPolicyInEffectLabel" }
+                    .testTag("PasswordGeneratorPolicyInEffectLabel")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -398,7 +399,7 @@ private fun GeneratedStringItem(
                     contentDescription = stringResource(id = R.string.copy),
                 ),
                 onClick = onCopyClick,
-                modifier = Modifier.semantics { testTag = "CopyValueButton" },
+                modifier = Modifier.testTag("CopyValueButton"),
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -406,7 +407,7 @@ private fun GeneratedStringItem(
                     contentDescription = stringResource(id = R.string.generate_password),
                 ),
                 onClick = onRegenerateClick,
-                modifier = Modifier.semantics { testTag = "RegenerateValueButton" },
+                modifier = Modifier.testTag("RegenerateValueButton"),
             )
         },
         onValueChange = {},
@@ -438,7 +439,7 @@ private fun MainStateOptionsItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .semantics { testTag = "GeneratorTypePicker" },
+            .testTag("GeneratorTypePicker"),
     )
 }
 
@@ -492,7 +493,7 @@ private fun PasscodeOptionsItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .semantics { testTag = "PasswordTypePicker" },
+            .testTag("PasswordTypePicker"),
     )
 }
 
@@ -613,7 +614,7 @@ private fun PasswordLengthSliderItem(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
-                .semantics { testTag = "PasswordLengthLabel" }
+                .testTag("PasswordLengthLabel")
                 .wrapContentWidth()
                 .width(labelTextWidth + 16.dp + 16.dp),
         )
@@ -635,7 +636,7 @@ private fun PasswordLengthSliderItem(
                 disabledInactiveTickColor = Color.Transparent,
             ),
             modifier = Modifier
-                .semantics { testTag = "PasswordLengthSlider" }
+                .testTag("PasswordLengthSlider")
                 .weight(1f),
         )
     }
@@ -654,7 +655,7 @@ private fun PasswordCapitalLettersToggleItem(
         enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "UppercaseAtoZToggle" }
+            .testTag("UppercaseAtoZToggle")
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.uppercase_ato_z),
     )
@@ -673,7 +674,7 @@ private fun PasswordLowercaseLettersToggleItem(
         enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "LowercaseAtoZToggle" }
+            .testTag("LowercaseAtoZToggle")
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.lowercase_ato_z),
     )
@@ -692,7 +693,7 @@ private fun PasswordNumbersToggleItem(
         enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "NumbersZeroToNineToggle" }
+            .testTag("NumbersZeroToNineToggle")
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.numbers_zero_to_nine),
     )
@@ -711,7 +712,7 @@ private fun PasswordSpecialCharactersToggleItem(
         enabled = enabled,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "SpecialCharactersToggle" }
+            .testTag("SpecialCharactersToggle")
             .padding(horizontal = 16.dp),
         contentDescription = stringResource(id = R.string.special_characters),
     )
@@ -732,7 +733,7 @@ private fun PasswordMinNumbersCounterItem(
         increaseButtonTestTag = "MinNumberIncreaseButton",
         decreaseButtonTestTag = "MinNumberDecreaseButton",
         modifier = Modifier
-            .semantics { testTag = "MinNumberValueLabel" }
+            .testTag("MinNumberValueLabel")
             .padding(horizontal = 16.dp),
     )
 }
@@ -752,7 +753,7 @@ private fun PasswordMinSpecialCharactersCounterItem(
         increaseButtonTestTag = "MinSpecialIncreaseButton",
         decreaseButtonTestTag = "MinSpecialDecreaseButton",
         modifier = Modifier
-            .semantics { testTag = "MinSpecialValueLabel" }
+            .testTag("MinSpecialValueLabel")
             .padding(horizontal = 16.dp),
     )
 }
@@ -770,7 +771,7 @@ private fun PasswordAvoidAmbiguousCharsToggleItem(
         onCheckedChange = onPasswordToggleAvoidAmbiguousCharsChange,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "AvoidAmbiguousCharsToggle" }
+            .testTag("AvoidAmbiguousCharsToggle")
             .padding(horizontal = 16.dp),
     )
 }
@@ -839,7 +840,7 @@ private fun PassphraseNumWordsCounterItem(
         increaseButtonTestTag = "NumberOfWordsIncreaseButton",
         decreaseButtonTestTag = "NumberOfWordsDecreaseButton",
         modifier = Modifier
-            .semantics { testTag = "NumberOfWordsLabel" }
+            .testTag("NumberOfWordsLabel")
             .padding(horizontal = 16.dp),
     )
 }
@@ -862,7 +863,7 @@ private fun PassphraseWordSeparatorInputItem(
             }
         },
         modifier = Modifier
-            .semantics { testTag = "WordSeparatorEntry" }
+            .testTag("WordSeparatorEntry")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )
@@ -880,7 +881,7 @@ private fun PassphraseCapitalizeToggleItem(
         onCheckedChange = onPassphraseCapitalizeToggleChange,
         enabled = enabled,
         modifier = Modifier
-            .semantics { testTag = "CapitalizePassphraseToggle" }
+            .testTag("CapitalizePassphraseToggle")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )
@@ -898,7 +899,7 @@ private fun PassphraseIncludeNumberToggleItem(
         enabled = enabled,
         onCheckedChange = onPassphraseIncludeNumberToggleChange,
         modifier = Modifier
-            .semantics { testTag = "IncludeNumbersToggle" }
+            .testTag("IncludeNumbersToggle")
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
     )
@@ -972,7 +973,7 @@ private fun UsernameOptionsItem(
         modifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-            .semantics { testTag = "UsernameTypePicker" },
+            .testTag("UsernameTypePicker"),
         supportingText = currentSubState.selectedType.supportingStringResId?.let {
             stringResource(id = it)
         },
@@ -1012,7 +1013,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
 
@@ -1024,7 +1025,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onAddyIoDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "AnonAddyDomainNameEntry" }
+                    .testTag("AnonAddyDomainNameEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1037,7 +1038,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1050,7 +1051,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1063,7 +1064,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1076,7 +1077,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
 
@@ -1088,7 +1089,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 onValueChange = forwardedEmailAliasHandlers.onForwardEmailDomainNameTextChange,
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailDomainNameEntry" }
+                    .testTag("ForwardedEmailDomainNameEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1101,7 +1102,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1115,7 +1116,7 @@ private fun ColumnScope.ForwardedEmailAliasTypeContent(
                 showPasswordTestTag = "ShowForwardedEmailApiSecretButton",
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "ForwardedEmailApiSecretEntry" }
+                    .testTag("ForwardedEmailApiSecretEntry")
                     .fillMaxWidth(),
             )
         }
@@ -1143,7 +1144,7 @@ private fun ServiceTypeOptionsItem(
         },
         modifier = Modifier
             .padding(horizontal = 16.dp)
-            .semantics { testTag = "ServiceTypePicker" }
+            .testTag("ServiceTypePicker")
             .fillMaxWidth(),
     )
 }
@@ -1176,7 +1177,7 @@ private fun PlusAddressedEmailTextInputItem(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "PlusAddressedEmailEntry" }
+            .testTag("PlusAddressedEmailEntry")
             .padding(horizontal = 16.dp),
     )
 }
@@ -1211,7 +1212,7 @@ private fun CatchAllEmailTextInputItem(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "CatchAllEmailDomainEntry" }
+            .testTag("CatchAllEmailDomainEntry")
             .padding(horizontal = 16.dp),
     )
 }
@@ -1249,7 +1250,7 @@ private fun RandomWordCapitalizeToggleItem(
         onCheckedChange = onRandomWordCapitalizeToggleChange,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "CapitalizeRandomWordUsernameToggle" }
+            .testTag("CapitalizeRandomWordUsernameToggle")
             .padding(horizontal = 16.dp),
     )
 }
@@ -1265,7 +1266,7 @@ private fun RandomWordIncludeNumberToggleItem(
         onCheckedChange = onRandomWordIncludeNumberToggleChange,
         modifier = Modifier
             .fillMaxWidth()
-            .semantics { testTag = "IncludeNumberRandomWordUsernameToggle" }
+            .testTag("IncludeNumberRandomWordUsernameToggle")
             .padding(horizontal = 16.dp),
     )
 }

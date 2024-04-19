@@ -9,9 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -39,7 +39,7 @@ fun SendContent(
                 BitwardenPolicyWarningText(
                     text = stringResource(id = R.string.send_disabled_warning),
                     modifier = Modifier
-                        .semantics { testTag = "SendOptionsPolicyInEffectLabel" }
+                        .testTag("SendOptionsPolicyInEffectLabel")
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                 )
@@ -63,7 +63,7 @@ fun SendContent(
                 onClick = sendHandlers.onTextTypeClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "SendTextFilter" }
+                    .testTag("SendTextFilter")
                     .padding(horizontal = 16.dp),
             )
         }
@@ -76,7 +76,7 @@ fun SendContent(
                 onClick = sendHandlers.onFileTypeClick,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "SendFileFilter" }
+                    .testTag("SendFileFilter")
                     .padding(horizontal = 16.dp),
             )
         }
@@ -110,7 +110,7 @@ fun SendContent(
                     null
                 },
                 modifier = Modifier
-                    .semantics { testTag = "SendCell" }
+                    .testTag("SendCell")
                     .padding(
                         start = 16.dp,
                         // There is some built-in padding to the menu button that makes up

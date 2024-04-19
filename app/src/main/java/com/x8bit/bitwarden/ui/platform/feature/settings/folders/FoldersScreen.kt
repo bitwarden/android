@@ -26,9 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -93,7 +93,7 @@ fun FoldersScreen(
                     { viewModel.trySendAction(FoldersAction.AddFolderButtonClick) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "AddItemButton" }
+                    .testTag("AddItemButton")
                     .navigationBarsPadding(),
             ) {
                 Icon(
@@ -154,7 +154,7 @@ private fun FoldersContent(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.semantics { testTag = "NoFoldersLabel" },
+                modifier = Modifier.testTag("NoFoldersLabel"),
             )
         }
     } else {
@@ -164,7 +164,7 @@ private fun FoldersContent(
             items(foldersList) {
                 Row(
                     modifier = Modifier
-                        .semantics { testTag = "FolderCell" }
+                        .testTag("FolderCell")
                         .clickable(
                             interactionSource = remember { MutableInteractionSource() },
                             indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
@@ -178,7 +178,7 @@ private fun FoldersContent(
                 ) {
                     Text(
                         modifier = Modifier
-                            .semantics { testTag = "FolderName" }
+                            .testTag("FolderName")
                             .padding(start = 16.dp)
                             .weight(1f),
                         text = it.name,

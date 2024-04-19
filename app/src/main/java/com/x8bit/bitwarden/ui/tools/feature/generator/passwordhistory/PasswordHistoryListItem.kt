@@ -17,9 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -65,7 +65,7 @@ fun PasswordHistoryListItem(
                 style = textStyle,
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
-                    .semantics { testTag = "GeneratedPasswordValue" }
+                    .testTag("GeneratedPasswordValue")
                     .fillMaxWidth()
                     .onGloballyPositioned { widthPx = it.size.width },
             )
@@ -74,7 +74,7 @@ fun PasswordHistoryListItem(
                 text = supportingLabel,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.semantics { testTag = "GeneratedPasswordDateLabel" },
+                modifier = Modifier.testTag("GeneratedPasswordDateLabel"),
             )
         }
 
@@ -83,7 +83,7 @@ fun PasswordHistoryListItem(
             colors = IconButtonDefaults.iconButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary,
             ),
-            modifier = Modifier.semantics { testTag = "CopyPasswordValueButton" },
+            modifier = Modifier.testTag("CopyPasswordValueButton"),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_copy),

@@ -12,8 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -158,7 +158,7 @@ fun SearchContent(
                     }
                     .toPersistentList(),
                 modifier = Modifier
-                    .semantics { testTag = searchType.searchItemTestTag }
+                    .testTag(searchType.searchItemTestTag)
                     .fillMaxWidth()
                     .padding(
                         start = 16.dp,

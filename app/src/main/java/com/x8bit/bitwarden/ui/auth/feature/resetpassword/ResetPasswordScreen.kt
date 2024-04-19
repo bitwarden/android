@@ -23,8 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -112,14 +112,14 @@ fun ResetPasswordScreen(
                     BitwardenTextButton(
                         label = stringResource(id = R.string.log_out),
                         onClick = { shouldShowLogoutConfirmationDialog = true },
-                        modifier = Modifier.semantics { testTag = "LogoutButton" },
+                        modifier = Modifier.testTag("LogoutButton"),
                     )
                     BitwardenTextButton(
                         label = stringResource(id = R.string.submit),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(ResetPasswordAction.SubmitClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "SubmitButton" },
+                        modifier = Modifier.testTag("SubmitButton"),
                     )
                 },
             )
@@ -202,7 +202,7 @@ private fun ResetPasswordScreenContent(
                 value = state.currentPasswordInput,
                 onValueChange = onCurrentPasswordInputChanged,
                 modifier = Modifier
-                    .semantics { testTag = "MasterPasswordField" }
+                    .testTag("MasterPasswordField")
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
@@ -218,7 +218,7 @@ private fun ResetPasswordScreenContent(
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
             modifier = Modifier
-                .semantics { testTag = "NewPasswordField" }
+                .testTag("NewPasswordField")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -232,7 +232,7 @@ private fun ResetPasswordScreenContent(
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
             modifier = Modifier
-                .semantics { testTag = "RetypePasswordField" }
+                .testTag("RetypePasswordField")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -245,7 +245,7 @@ private fun ResetPasswordScreenContent(
             onValueChange = onPasswordHintInputChanged,
             hint = stringResource(id = R.string.master_password_hint_description),
             modifier = Modifier
-                .semantics { testTag = "MasterPasswordHintLabel" }
+                .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )

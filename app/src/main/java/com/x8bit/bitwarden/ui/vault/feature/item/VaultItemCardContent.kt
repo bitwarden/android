@@ -9,9 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -55,7 +55,7 @@ fun VaultItemCardContent(
                 readOnly = true,
                 singleLine = false,
                 modifier = Modifier
-                    .semantics { testTag = "CardItemNameEntry" }
+                    .testTag("CardItemNameEntry")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -70,7 +70,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "CardholderNameEntry" }
+                        .testTag("CardholderNameEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -92,7 +92,7 @@ fun VaultItemCardContent(
                                 contentDescription = stringResource(id = R.string.copy_number),
                             ),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
-                            modifier = Modifier.semantics { testTag = "CardCopyNumberButton" },
+                            modifier = Modifier.testTag("CardCopyNumberButton"),
                         )
                     },
                     passwordFieldTestTag = "CardNumberEntry",
@@ -114,7 +114,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "CardBrandEntry" }
+                        .testTag("CardBrandEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -131,7 +131,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "CardExpirationEntry" }
+                        .testTag("CardExpirationEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -157,7 +157,7 @@ fun VaultItemCardContent(
                             ),
                             onClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick,
                             modifier = Modifier
-                                .semantics { testTag = "CardCopySecurityCodeButton" },
+                                .testTag("CardCopySecurityCodeButton"),
                         )
                     },
                     modifier = Modifier
@@ -186,7 +186,7 @@ fun VaultItemCardContent(
                     readOnly = true,
                     singleLine = false,
                     modifier = Modifier
-                        .semantics { testTag = "CipherNotesLabel" }
+                        .testTag("CipherNotesLabel")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -230,7 +230,7 @@ fun VaultItemCardContent(
             items(attachments) { attachmentItem ->
                 AttachmentItemContent(
                     modifier = Modifier
-                        .semantics { testTag = "CipherAttachment" }
+                        .testTag("CipherAttachment")
                         .fillMaxWidth()
                         .padding(start = 16.dp),
                     attachmentItem = attachmentItem,

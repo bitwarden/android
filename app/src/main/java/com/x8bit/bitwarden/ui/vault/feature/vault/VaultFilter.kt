@@ -17,9 +17,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -75,7 +75,7 @@ fun VaultFilter(
             .scrolledContainerBackground(topAppBarScrollBehavior)
             .bottomDivider(color = MaterialTheme.colorScheme.outlineVariant)
             .padding(vertical = 8.dp)
-            .semantics { testTag = "ActiveFilterRow" }
+            .testTag("ActiveFilterRow")
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -87,7 +87,7 @@ fun VaultFilter(
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .semantics { testTag = "ActiveFilterLabel" }
+                .testTag("ActiveFilterLabel")
                 .weight(1f),
         )
 
@@ -95,7 +95,7 @@ fun VaultFilter(
 
         IconButton(
             onClick = { shouldShowSelectionDialog = true },
-            modifier = Modifier.semantics { testTag = "OpenOrgFilter" },
+            modifier = Modifier.testTag("OpenOrgFilter"),
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_more_horizontal),

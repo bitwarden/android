@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -171,7 +172,7 @@ private fun ContentColumn(
                 isChecked = state.isSubmitCrashLogsEnabled,
                 onCheckedChange = onSubmitCrashLogsCheckedChange,
                 modifier = Modifier
-                    .semantics { testTag = "SubmitCrashLogsSwitch" }
+                    .testTag("SubmitCrashLogsSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 contentDescription = stringResource(id = R.string.submit_crash_logs),

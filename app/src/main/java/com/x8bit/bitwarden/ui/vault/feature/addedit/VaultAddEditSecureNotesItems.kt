@@ -10,9 +10,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -43,7 +43,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             value = commonState.name,
             onValueChange = commonTypeHandlers.onNameTextChange,
             modifier = Modifier
-                .semantics { testTag = "ItemNameEntry" }
+                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -76,7 +76,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                 )
             },
             modifier = Modifier
-                .semantics { testTag = "FolderPicker" }
+                .testTag("FolderPicker")
                 .padding(horizontal = 16.dp),
         )
     }
@@ -88,7 +88,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             isChecked = commonState.favorite,
             onCheckedChange = commonTypeHandlers.onToggleFavorite,
             modifier = Modifier
-                .semantics { testTag = "ItemFavoriteToggle" }
+                .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -102,7 +102,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonTypeHandlers.onToggleMasterPasswordReprompt,
                 modifier = Modifier
-                    .semantics { testTag = "MasterPasswordRepromptToggle" }
+                    .testTag("MasterPasswordRepromptToggle")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 actions = {
@@ -138,7 +138,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
             value = commonState.notes,
             onValueChange = commonTypeHandlers.onNotesTextChange,
             modifier = Modifier
-                .semantics { testTag = "ItemNotesEntry" }
+                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -207,7 +207,7 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
                     )
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ItemOwnershipPicker" }
+                    .testTag("ItemOwnershipPicker")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )

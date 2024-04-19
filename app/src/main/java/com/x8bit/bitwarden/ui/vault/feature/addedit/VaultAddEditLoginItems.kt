@@ -15,9 +15,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -61,7 +61,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             value = commonState.name,
             onValueChange = commonActionHandler.onNameTextChange,
             modifier = Modifier
-                .semantics { testTag = "ItemNameEntry" }
+                .testTag("ItemNameEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -111,7 +111,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .semantics { testTag = "LoginTotpEntry" },
+                    .testTag("LoginTotpEntry"),
                 label = stringResource(id = R.string.totp),
                 value = loginState.totp,
                 trailingIconContent = {
@@ -155,7 +155,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 icon = painterResource(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
                 modifier = Modifier
-                    .semantics { testTag = "SetupTotpButton" }
+                    .testTag("SetupTotpButton")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -187,7 +187,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             label = stringResource(id = R.string.new_uri),
             onClick = loginItemTypeHandlers.onAddNewUriClick,
             modifier = Modifier
-                .semantics { testTag = "LoginAddNewUriButton" }
+                .testTag("LoginAddNewUriButton")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -220,7 +220,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 )
             },
             modifier = Modifier
-                .semantics { testTag = "FolderPicker" }
+                .testTag("FolderPicker")
                 .padding(horizontal = 16.dp),
         )
     }
@@ -234,7 +234,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             isChecked = commonState.favorite,
             onCheckedChange = commonActionHandler.onToggleFavorite,
             modifier = Modifier
-                .semantics { testTag = "ItemFavoriteToggle" }
+                .testTag("ItemFavoriteToggle")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -247,7 +247,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 isChecked = commonState.masterPasswordReprompt,
                 onCheckedChange = commonActionHandler.onToggleMasterPasswordReprompt,
                 modifier = Modifier
-                    .semantics { testTag = "MasterPasswordRepromptToggle" }
+                    .testTag("MasterPasswordRepromptToggle")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
                 actions = {
@@ -283,7 +283,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             value = commonState.notes,
             onValueChange = commonActionHandler.onNotesTextChange,
             modifier = Modifier
-                .semantics { testTag = "ItemNotesEntry" }
+                .testTag("ItemNotesEntry")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )
@@ -352,7 +352,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                     )
                 },
                 modifier = Modifier
-                    .semantics { testTag = "ItemOwnershipPicker" }
+                    .testTag("ItemOwnershipPicker")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
@@ -395,11 +395,11 @@ private fun UsernameRow(
                         shouldShowDialog = true
                     }
                 },
-                modifier = Modifier.semantics { testTag = "GenerateUsernameButton" },
+                modifier = Modifier.testTag("GenerateUsernameButton"),
             )
         },
         modifier = Modifier
-            .semantics { testTag = "LoginUsernameEntry" }
+            .testTag("LoginUsernameEntry")
             .padding(horizontal = 16.dp),
     )
 
@@ -452,7 +452,7 @@ private fun PasswordRow(
                 ),
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
                 modifier = Modifier
-                    .semantics { testTag = "CheckPasswordButton" },
+                    .testTag("CheckPasswordButton"),
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
@@ -467,7 +467,7 @@ private fun PasswordRow(
                     }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "RegeneratePasswordButton" },
+                    .testTag("RegeneratePasswordButton"),
             )
 
             if (shouldShowDialog) {
@@ -499,7 +499,7 @@ private fun PasswordRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .semantics { testTag = "LoginPasswordEntry" },
+                .testTag("LoginPasswordEntry"),
         )
     }
 }

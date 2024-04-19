@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -75,7 +76,7 @@ fun BitwardenTextFieldWithActions(
             visualTransformation = visualTransformation,
         )
         BitwardenRowOfActions(
-            modifier = Modifier.run { actionsTestTag?.let { semantics { testTag = it } } ?: this },
+            modifier = Modifier.run { actionsTestTag?.let { testTag(it) } ?: this },
             actions = actions,
         )
     }

@@ -7,9 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -48,11 +48,11 @@ fun VaultAddEditUriItem(
                     contentDescription = stringResource(id = R.string.options),
                 ),
                 onClick = { shouldShowOptionsDialog = true },
-                modifier = Modifier.semantics { testTag = "LoginUriOptionsButton" },
+                modifier = Modifier.testTag("LoginUriOptionsButton"),
             )
         },
         modifier = Modifier
-            .semantics { testTag = "LoginUriEntry" }
+            .testTag("LoginUriEntry")
             .padding(horizontal = 16.dp),
     )
 

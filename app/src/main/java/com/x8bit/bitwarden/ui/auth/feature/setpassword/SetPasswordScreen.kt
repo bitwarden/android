@@ -23,8 +23,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -72,14 +72,14 @@ fun SetPasswordScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(SetPasswordAction.CancelClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "CancelButton" },
+                        modifier = Modifier.testTag("CancelButton"),
                     )
                     BitwardenTextButton(
                         label = stringResource(id = R.string.submit),
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(SetPasswordAction.SubmitClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "SubmitButton" },
+                        modifier = Modifier.testTag("SubmitButton"),
                     )
                 },
             )
@@ -149,7 +149,7 @@ private fun SetPasswordScreenContent(
             showPasswordChange = { isPasswordVisible = it },
             hint = stringResource(id = R.string.master_password_description),
             modifier = Modifier
-                .semantics { testTag = "NewPasswordField" }
+                .testTag("NewPasswordField")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -163,7 +163,7 @@ private fun SetPasswordScreenContent(
             showPassword = isPasswordVisible,
             showPasswordChange = { isPasswordVisible = it },
             modifier = Modifier
-                .semantics { testTag = "RetypePasswordField" }
+                .testTag("RetypePasswordField")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -176,7 +176,7 @@ private fun SetPasswordScreenContent(
             onValueChange = onPasswordHintInputChanged,
             hint = stringResource(id = R.string.master_password_hint_description),
             modifier = Modifier
-                .semantics { testTag = "MasterPasswordHintLabel" }
+                .testTag("MasterPasswordHintLabel")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )

@@ -22,9 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -191,7 +191,7 @@ fun VaultItemScreen(
                         BitwardenTextButton(
                             label = stringResource(id = R.string.restore),
                             onClick = { pendingRestoreCipher = true },
-                            modifier = Modifier.semantics { testTag = "RestoreButton" },
+                            modifier = Modifier.testTag("RestoreButton"),
                         )
                     }
                     BitwardenOverflowActionItem(
@@ -262,7 +262,7 @@ fun VaultItemScreen(
                         { viewModel.trySendAction(VaultItemAction.Common.EditClick) }
                     },
                     modifier = Modifier
-                        .semantics { testTag = "EditItemButton" }
+                        .testTag("EditItemButton")
                         .padding(bottom = 16.dp),
                 ) {
                     Icon(

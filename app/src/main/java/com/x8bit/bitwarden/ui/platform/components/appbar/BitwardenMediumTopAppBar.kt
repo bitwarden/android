@@ -12,8 +12,8 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
@@ -54,10 +54,10 @@ fun BitwardenMediumTopAppBar(
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.semantics { testTag = "PageTitleLabel" },
+                modifier = Modifier.testTag("PageTitleLabel"),
             )
         },
-        modifier = modifier.semantics { testTag = "HeaderBarComponent" },
+        modifier = modifier.testTag("HeaderBarComponent"),
         actions = actions,
     )
 }

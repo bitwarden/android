@@ -37,9 +37,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -209,7 +209,7 @@ private fun PendingRequestsContent(
                     timestamp = request.timestamp,
                     onNavigateToLoginApproval = onNavigateToLoginApproval,
                     modifier = Modifier
-                        .semantics { testTag = "LoginRequestCell" }
+                        .testTag("LoginRequestCell")
                         .fillMaxWidth(),
                 )
                 HorizontalDivider(
@@ -224,7 +224,7 @@ private fun PendingRequestsContent(
             icon = painterResource(id = R.drawable.ic_trash),
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
-                .semantics { testTag = "DeclineAllRequestsButton" }
+                .testTag("DeclineAllRequestsButton")
                 .padding(horizontal = 16.dp)
                 .fillMaxWidth(),
         )
@@ -272,7 +272,7 @@ private fun PendingRequestItem(
             style = LocalNonMaterialTypography.current.sensitiveInfoSmall,
             textAlign = TextAlign.Start,
             modifier = Modifier
-                .semantics { testTag = "FingerprintValueLabel" }
+                .testTag("FingerprintValueLabel")
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
         )

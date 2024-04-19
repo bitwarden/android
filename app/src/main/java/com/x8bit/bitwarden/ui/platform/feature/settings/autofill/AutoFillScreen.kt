@@ -24,9 +24,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -131,7 +131,7 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "AutofillServicesSwitch" }
+                    .testTag("AutofillServicesSwitch")
                     .padding(horizontal = 16.dp),
             )
             BitwardenWideSwitch(
@@ -144,7 +144,7 @@ fun AutoFillScreen(
                 enabled = state.canInteractWithInlineAutofillToggle,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "InlineAutofillSwitch" }
+                    .testTag("InlineAutofillSwitch")
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
@@ -163,7 +163,7 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "CopyTotpAutomaticallySwitch" }
+                    .testTag("CopyTotpAutomaticallySwitch")
                     .padding(horizontal = 16.dp),
             )
             BitwardenWideSwitch(
@@ -175,7 +175,7 @@ fun AutoFillScreen(
                 },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .semantics { testTag = "AskToAddLoginSwitch" }
+                    .testTag("AskToAddLoginSwitch")
                     .padding(horizontal = 16.dp),
             )
             DefaultUriMatchTypeRow(
@@ -184,7 +184,7 @@ fun AutoFillScreen(
                     { viewModel.trySendAction(AutoFillAction.DefaultUriMatchTypeSelect(it)) }
                 },
                 modifier = Modifier
-                    .semantics { testTag = "DefaultUriMatchDetectionChooser" }
+                    .testTag("DefaultUriMatchDetectionChooser")
                     .fillMaxWidth(),
             )
             BitwardenTextRow(

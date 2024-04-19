@@ -16,9 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -182,7 +182,7 @@ fun VaultAddEditScreen(
                         onClick = remember(viewModel) {
                             { viewModel.trySendAction(VaultAddEditAction.Common.SaveClick) }
                         },
-                        modifier = Modifier.semantics { testTag = "SaveButton" },
+                        modifier = Modifier.testTag("SaveButton"),
                     )
                     BitwardenOverflowActionItem(
                         menuItemDataList = persistentListOfNotNull(
