@@ -111,6 +111,7 @@ namespace Bit.App
                 Options.FromFido2Framework = appOptions.FromFido2Framework;
                 Options.Fido2CredentialAction = appOptions.Fido2CredentialAction;
                 Options.CreateSend = appOptions.CreateSend;
+                Options.HasUnlockedInThisTransaction = appOptions.HasUnlockedInThisTransaction;
             }
         }
 
