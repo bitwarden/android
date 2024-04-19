@@ -1,8 +1,9 @@
-#if !FDROID
+﻿#if !FDROID
 using System;
 using Android.App;
 using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Firebase.Messaging;
@@ -38,13 +39,35 @@ namespace Bit.Droid.Push
                 {
                     return;
                 }
-                var data = message.Data.ContainsKey("data") ? message.Data["data"] : null;
-                if (data == null)
+
+                JObject obj = null;
+                if (message.Data.ContainsKey("data"))
+                {
+                    // GCM
+                    var data = message.Data.ContainsKey("data") ? message.Data["data"] : null;
+                    if (data != null)
+                    {
+                        obj = JObject.Parse(data);
+                    }
+                }
+                else if (message.Data.ContainsKey("type"))
+                {
+                    // FCMv1
+                    if (Enum.TryParse(message.Data["type"], out NotificationType type))
+                    {
+                        obj = new JObject
+                        {
+                            { "type", (int)type },
+                            { "payload", message.Data["payload"] }
+                        };
+                    }
+                }
+
+                if(obj == null)
                 {
                     return;
                 }
 
-                var obj = JObject.Parse(data);
                 var listener = ServiceContainer.Resolve<IPushNotificationListenerService>(
                     "pushNotificationListenerService");
                 await listener.OnMessageAsync(obj, Device.Android);
