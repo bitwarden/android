@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using System.Text.Json.Nodes;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using AndroidX.Credentials;
@@ -57,11 +58,25 @@ namespace Bit.App.Platforms.Android.Autofill
                     .Build();
         }
 
+        private static PublicKeyCredentialCreationOptions GetPublicKeyCredentialCreationOptionsFromJson(string json)
+        {
+            var request = new PublicKeyCredentialCreationOptions(json);
+            var jsonObj = new JSONObject(json);
+            var authenticatorSelection = jsonObj.GetJSONObject("authenticatorSelection");
+            request.AuthenticatorSelection = new AuthenticatorSelectionCriteria(
+                authenticatorSelection.OptString("authenticatorAttachment", "platform"),
+                authenticatorSelection.OptString("residentKey", null),
+                authenticatorSelection.OptBoolean("requireResidentKey", false),
+                authenticatorSelection.OptString("userVerification", "preferred"));
+
+            return request;
+        }
+
         public static async Task CreateCipherPasskeyAsync(ProviderCreateCredentialRequest getRequest, Activity activity)
         {
             var callingRequest = getRequest?.CallingRequest as CreatePublicKeyCredentialRequest;
             var origin = callingRequest.Origin;
-            var credentialCreationOptions = new PublicKeyCredentialCreationOptions(callingRequest.RequestJson);
+            var credentialCreationOptions = GetPublicKeyCredentialCreationOptionsFromJson(callingRequest.RequestJson);
 
             var rp = new Core.Utilities.Fido2.PublicKeyCredentialRpEntity()
             {
