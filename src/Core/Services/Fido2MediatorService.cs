@@ -18,21 +18,21 @@ namespace Bit.Core.Services
             _cipherService = cipherService;
         }
 
-        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams)
+        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, byte[] clientDataHash = null)
         {
-            var result = await _fido2ClientService.AssertCredentialAsync(assertCredentialParams);
+            var result = await _fido2ClientService.AssertCredentialAsync(assertCredentialParams, clientDataHash);
 
-            if (result?.Cipher != null)
+            if (result?.SelectedCredential?.Cipher != null)
             {
-                await _cipherService.CopyTotpCodeIfNeededAsync(result.Cipher);
+                await _cipherService.CopyTotpCodeIfNeededAsync(result.SelectedCredential.Cipher);
             }
 
             return result;
         }
 
-        public Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams)
+        public Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, byte[] clientDataHash = null)
         {
-            return _fido2ClientService.CreateCredentialAsync(createCredentialParams);
+            return _fido2ClientService.CreateCredentialAsync(createCredentialParams, clientDataHash);
         }
 
         public async Task<Fido2AuthenticatorGetAssertionResult> GetAssertionAsync(Fido2AuthenticatorGetAssertionParams assertionParams, IFido2GetAssertionUserInterface userInterface)

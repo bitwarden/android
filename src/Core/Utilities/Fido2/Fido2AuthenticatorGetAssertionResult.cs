@@ -8,16 +8,7 @@ namespace Bit.Core.Utilities.Fido2
 
         public byte[] Signature { get; set; }
 
-        public Fido2AuthenticatorGetAssertionSelectedCredential SelectedCredential { get; set; }
-    }
-
-    public class Fido2AuthenticatorGetAssertionSelectedCredential {
-        public byte[] Id { get; set; }
-
-        #nullable enable
-        public byte[]? UserHandle { get; set; }
-
-        public CipherView? Cipher { get; set; }
+        public Fido2SelectedCredential SelectedCredential { get; set; }
     }
 }
 

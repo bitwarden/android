@@ -33,7 +33,7 @@ namespace Bit.Core.Services
             _makeCredentialUserInterface = makeCredentialUserInterface;
         }
 
-        public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams)
+        public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, byte[] clientDataHash = null)
         {
             var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
             var domain = CoreHelpers.GetHostname(createCredentialParams.Origin);
@@ -109,16 +109,20 @@ namespace Bit.Core.Services
                 throw new Fido2ClientException(Fido2ClientException.ErrorCode.NotSupportedError, "No supported algorithms found");
             }
 
-            var clientDataJSON = JsonSerializer.Serialize(new
+            byte[] clientDataJSONBytes = null;
+            if (clientDataHash == null)
             {
-                type = "webauthn.create",
-                challenge = CoreHelpers.Base64UrlEncode(createCredentialParams.Challenge),
-                origin = createCredentialParams.Origin,
-                crossOrigin = !createCredentialParams.SameOriginWithAncestors,
-                // tokenBinding: {} // Not supported
-            });
-            var clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
-            var clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
+                var clientDataJSON = JsonSerializer.Serialize(new
+                {
+                    type = "webauthn.create",
+                    challenge = CoreHelpers.Base64UrlEncode(createCredentialParams.Challenge),
+                    origin = createCredentialParams.Origin,
+                    crossOrigin = !createCredentialParams.SameOriginWithAncestors,
+                    // tokenBinding: {} // Not supported
+                });
+                clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
+                clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
+            }
             var makeCredentialParams = MapToMakeCredentialParams(createCredentialParams, credTypesAndPubKeyAlgs, clientDataHash);
 
             try
@@ -159,7 +163,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams)
+        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, byte[] clientDataHash = null)
         {
             var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
             var domain = CoreHelpers.GetHostname(assertCredentialParams.Origin);
@@ -198,15 +202,19 @@ namespace Bit.Core.Services
                     "RP ID cannot be used with this origin");
             }
 
-            var clientDataJSON = JsonSerializer.Serialize(new
+            byte[] clientDataJSONBytes = null;
+            if (clientDataHash == null)
             {
-                type = "webauthn.get",
-                challenge = CoreHelpers.Base64UrlEncode(assertCredentialParams.Challenge),
-                origin = assertCredentialParams.Origin,
-                crossOrigin = !assertCredentialParams.SameOriginWithAncestors,
-            });
-            var clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
-            var clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
+                var clientDataJSON = JsonSerializer.Serialize(new
+                {
+                    type = "webauthn.get",
+                    challenge = CoreHelpers.Base64UrlEncode(assertCredentialParams.Challenge),
+                    origin = assertCredentialParams.Origin,
+                    crossOrigin = !assertCredentialParams.SameOriginWithAncestors,
+                });
+                clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
+                clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
+            }
             var getAssertionParams = MapToGetAssertionParams(assertCredentialParams, clientDataHash);
 
             try
@@ -220,8 +228,8 @@ namespace Bit.Core.Services
                     Id = CoreHelpers.Base64UrlEncode(getAssertionResult.SelectedCredential.Id),
                     RawId = getAssertionResult.SelectedCredential.Id,
                     Signature = getAssertionResult.Signature,
-                    UserHandle = getAssertionResult.SelectedCredential.UserHandle,
-                    Cipher = getAssertionResult.SelectedCredential.Cipher
+                    SelectedCredential = getAssertionResult.SelectedCredential,
+                    ClientDataHash = clientDataHash
                 };
             }
             catch (InvalidStateError)
