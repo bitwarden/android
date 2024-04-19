@@ -68,6 +68,7 @@ namespace Bit.Droid.Autofill
 
                 var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
                 var packageName = getRequest?.CallingAppInfo.PackageName;
+                var appInfoOrigin = getRequest?.CallingAppInfo.Origin;
 
                 var userInterface = new Fido2GetAssertionUserInterface(
                     cipherId: cipherId,
@@ -76,17 +77,17 @@ namespace Bit.Droid.Autofill
                     hasVaultBeenUnlockedInThisTransaction: () => hasVaultBeenUnlockedInThisTransaction,
                     verifyUserCallback: (cipherId, uvPreference) => VerifyUserAsync(cipherId, uvPreference, RpId, hasVaultBeenUnlockedInThisTransaction));
 
-                var assertParams = new Fido2AuthenticatorGetAssertionParams
+                var clientAssertParams = new Fido2ClientAssertCredentialParams
                 {
                     Challenge = requestOptions.GetChallenge(),
                     RpId = RpId,
-                    UserVerificationPreference = Fido2UserVerificationPreferenceExtensions.ToFido2UserVerificationPreference(requestOptions.UserVerification),
-                    Hash = credentialPublic.GetClientDataHash(),
-                    AllowCredentialDescriptorList = new Core.Utilities.Fido2.PublicKeyCredentialDescriptor[] { new Core.Utilities.Fido2.PublicKeyCredentialDescriptor { Id = credentialId } },
-                    Extensions = new object()
+                    AllowCredentials = new Core.Utilities.Fido2.PublicKeyCredentialDescriptor[] { new Core.Utilities.Fido2.PublicKeyCredentialDescriptor { Id = credentialId } },
+                    Origin = appInfoOrigin,
+                    SameOriginWithAncestors = true,
+                    UserVerification = requestOptions.UserVerification
                 };
 
-                var assertResult = await _fido2MediatorService.Value.GetAssertionAsync(assertParams, userInterface);
+                var assertResult = await _fido2MediatorService.Value.AssertCredentialAsync(clientAssertParams, credentialPublic.GetClientDataHash());
 
                 var response = new AuthenticatorAssertionResponse(
                     requestOptions,
@@ -98,7 +99,7 @@ namespace Bit.Droid.Autofill
                     false,
                     assertResult.SelectedCredential.UserHandle,
                     packageName,
-                    credentialPublic.GetClientDataHash() //clientDataHash
+                    assertResult.ClientDataHash
                 );
                 response.SetAuthenticatorData(assertResult.AuthenticatorData);
                 response.SetSignature(assertResult.Signature);
@@ -117,7 +118,7 @@ namespace Bit.Droid.Autofill
             }
             catch (NotAllowedError)
             {
-                await MainThread.InvokeOnMainThreadAsync(async() =>
+                await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
                     Finish();
@@ -126,7 +127,7 @@ namespace Bit.Droid.Autofill
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
-                await MainThread.InvokeOnMainThreadAsync(async() =>
+                await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
                     Finish();

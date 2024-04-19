@@ -7,6 +7,7 @@ using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2.Extensions;
 using Bit.Droid;
 using Org.Json;
 using Activity = Android.App.Activity;
@@ -84,7 +85,7 @@ namespace Bit.App.Platforms.Android.Autofill
             var excludeCredentials = new List<Core.Utilities.Fido2.PublicKeyCredentialDescriptor>();
             foreach (var excludeCred in credentialCreationOptions.ExcludeCredentials)
             {
-                excludeCredentials.Add(new Core.Utilities.Fido2.PublicKeyCredentialDescriptor(){ Id = excludeCred.GetId(), Type = excludeCred.Type, Transports = excludeCred.Transports.ToArray() });
+                excludeCredentials.Add(new Core.Utilities.Fido2.PublicKeyCredentialDescriptor() { Id = excludeCred.GetId(), Type = excludeCred.Type, Transports = excludeCred.Transports.ToArray() });
             }
 
             var authenticatorSelection = new Core.Utilities.Fido2.AuthenticatorSelectionCriteria()
@@ -95,7 +96,7 @@ namespace Bit.App.Platforms.Android.Autofill
             };
 
             var timeout = Convert.ToInt32(credentialCreationOptions.Timeout);
-            
+
             var credentialCreateParams = new Bit.Core.Utilities.Fido2.Fido2ClientCreateCredentialParams()
             {
                 Challenge = credentialCreationOptions.GetChallenge(),
@@ -107,7 +108,7 @@ namespace Bit.App.Platforms.Android.Autofill
                 Attestation = credentialCreationOptions.Attestation,
                 AuthenticatorSelection = authenticatorSelection,
                 ExcludeCredentials = excludeCredentials.ToArray(),
-                //Extensions = // Can be improved later to add support for 'credProps'
+                Extensions = MapExtensionsFromJson(credentialCreationOptions),
                 SameOriginWithAncestors = true
             };
 
@@ -121,7 +122,7 @@ namespace Bit.App.Platforms.Android.Autofill
                 activity.Finish();
                 return;
             }
-            
+
             var transportsArray = new JSONArray();
             if (clientCreateCredentialResult.Transports != null)
             {
@@ -130,7 +131,7 @@ namespace Bit.App.Platforms.Android.Autofill
                     transportsArray.Put(transport);
                 }
             }
-            
+
             var responseInnerAndroidJson = new JSONObject();
             responseInnerAndroidJson.Put("clientDataJSON", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.ClientDataJSON));
             responseInnerAndroidJson.Put("authenticatorData", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.AuthData));
@@ -144,7 +145,7 @@ namespace Bit.App.Platforms.Android.Autofill
             rootAndroidJson.Put("rawId", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.CredentialId));
             rootAndroidJson.Put("authenticatorAttachment", "platform");
             rootAndroidJson.Put("type", "public-key");
-            rootAndroidJson.Put("clientExtensionResults", new JSONObject());
+            rootAndroidJson.Put("clientExtensionResults", MapExtensionsToJson(clientCreateCredentialResult.Extensions));
             rootAndroidJson.Put("response", responseInnerAndroidJson);
 
             var responseAndroidJson = rootAndroidJson.ToString();
@@ -157,6 +158,38 @@ namespace Bit.App.Platforms.Android.Autofill
 
             activity.SetResult(Result.Ok, result);
             activity.Finish();
+        }
+
+        private static Fido2CreateCredentialExtensionsParams MapExtensionsFromJson(PublicKeyCredentialCreationOptions options)
+        {
+            if (options == null || !options.Json.Has("extensions"))
+            {
+                return null;
+            }
+
+            var extensions = options.Json.GetJSONObject("extensions");
+            return new Fido2CreateCredentialExtensionsParams
+            {
+                CredProps = extensions.Has("credProps") && extensions.GetBoolean("credProps")
+            };
+        }
+
+        private static JSONObject MapExtensionsToJson(Fido2CreateCredentialExtensionsResult extensions)
+        {
+            if (extensions == null)
+            {
+                return null;
+            }
+
+            var extensionsJson = new JSONObject();
+            if (extensions.CredProps != null)
+            {
+                var credPropsJson = new JSONObject();
+                credPropsJson.Put("rk", extensions.CredProps.Rk);
+                extensionsJson.Put("credProps", credPropsJson);
+            }
+
+            return extensionsJson;
         }
     }
 }

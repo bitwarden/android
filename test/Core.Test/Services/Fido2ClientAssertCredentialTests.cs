@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
@@ -20,10 +21,12 @@ namespace Bit.Core.Test.Services
         private readonly SutProvider<Fido2ClientService> _sutProvider = new SutProvider<Fido2ClientService>().Create();
 
         private Fido2ClientAssertCredentialParams _params;
+        private Fido2AuthenticatorGetAssertionResult _authenticatorResult;
 
         public Fido2ClientAssertCredentialTests()
         {
-            _params = new Fido2ClientAssertCredentialParams {
+            _params = new Fido2ClientAssertCredentialParams
+            {
                 Origin = "https://bitwarden.com",
                 Challenge = RandomBytes(32),
                 RpId = "bitwarden.com",
@@ -39,11 +42,22 @@ namespace Bit.Core.Test.Services
                 Timeout = 60000,
             };
 
+            _authenticatorResult = new Fido2AuthenticatorGetAssertionResult
+            {
+                AuthenticatorData = RandomBytes(32),
+                SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
+                {
+                    Id = RandomBytes(16),
+                    UserHandle = RandomBytes(32)
+                },
+                Signature = RandomBytes(32)
+            };
+
             _sutProvider.GetDependency<IStateService>().GetAutofillBlacklistedUrisAsync().Returns(Task.FromResult(new List<string>()));
             _sutProvider.GetDependency<IStateService>().IsAuthenticatedAsync().Returns(true);
         }
 
-        public void Dispose() 
+        public void Dispose()
         {
         }
 
@@ -175,21 +189,56 @@ namespace Bit.Core.Test.Services
         }
 
         [Fact]
+        public async Task AssertCredentialAsync_ConstructsClientDataHash_WhenHashIsNotProvided()
+        {
+            // Arrange
+            var mockHash = RandomBytes(32);
+            _sutProvider.GetDependency<ICryptoFunctionService>()
+                .HashAsync(Arg.Any<byte[]>(), Arg.Is(CryptoHashAlgorithm.Sha256))
+                .Returns(Task.FromResult(mockHash));
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            await _sutProvider.Sut.AssertCredentialAsync(_params);
+
+            // Assert
+            await _sutProvider.GetDependency<IFido2AuthenticatorService>().Received()
+                .GetAssertionAsync(
+                    Arg.Is((Fido2AuthenticatorGetAssertionParams x) => x.Hash == mockHash),
+                    Arg.Any<IFido2GetAssertionUserInterface>()
+                );
+        }
+
+        [Fact]
+        public async Task AssertCredentialAsync_UsesProvidedClientDataHash_WhenHashIsProvided()
+        {
+            // Arrange
+            var mockHash = RandomBytes(32);
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            await _sutProvider.Sut.AssertCredentialAsync(_params, mockHash);
+
+            // Assert
+            await _sutProvider.GetDependency<IFido2AuthenticatorService>().Received()
+                .GetAssertionAsync(
+                    Arg.Is((Fido2AuthenticatorGetAssertionParams x) => x.Hash == mockHash),
+                    Arg.Any<IFido2GetAssertionUserInterface>()
+                );
+        }
+
+        [Fact]
         public async Task AssertCredentialAsync_ReturnsAssertion()
         {
             // Arrange
             _params.UserVerification = "required";
-            var authenticatorResult = new Fido2AuthenticatorGetAssertionResult {
-                AuthenticatorData = RandomBytes(32),
-                SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential {
-                    Id = RandomBytes(16),
-                    UserHandle = RandomBytes(32)
-                },
-                Signature = RandomBytes(32)
-            };
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
                 .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
-                .Returns(authenticatorResult);
+                .Returns(_authenticatorResult);
 
             // Act
             var result = await _sutProvider.Sut.AssertCredentialAsync(_params);
@@ -203,14 +252,14 @@ namespace Bit.Core.Test.Services
                         x.UserVerificationPreference == Fido2UserVerificationPreference.Required &&
                         x.AllowCredentialDescriptorList.Length == 1 &&
                         x.AllowCredentialDescriptorList[0].Id == _params.AllowCredentials[0].Id
-                    ), 
+                    ),
                     _sutProvider.GetDependency<IFido2GetAssertionUserInterface>()
                 );
 
-            Assert.Equal(authenticatorResult.SelectedCredential.Id, result.RawId);
-            Assert.Equal(CoreHelpers.Base64UrlEncode(authenticatorResult.SelectedCredential.Id), result.Id);
-            Assert.Equal(authenticatorResult.AuthenticatorData, result.AuthenticatorData);
-            Assert.Equal(authenticatorResult.Signature, result.Signature);
+            Assert.Equal(_authenticatorResult.SelectedCredential.Id, result.RawId);
+            Assert.Equal(CoreHelpers.Base64UrlEncode(_authenticatorResult.SelectedCredential.Id), result.Id);
+            Assert.Equal(_authenticatorResult.AuthenticatorData, result.AuthenticatorData);
+            Assert.Equal(_authenticatorResult.Signature, result.Signature);
 
             var clientDataJSON = JsonSerializer.Deserialize<JsonObject>(Encoding.UTF8.GetString(result.ClientDataJSON));
             Assert.Equal("webauthn.get", clientDataJSON["type"].GetValue<string>());
