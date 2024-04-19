@@ -2884,4 +2884,16 @@ Szeretnénk átváltani erre a fiókra?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Duo indítása</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Megjegyzés: A nem hozzá nem rendelt szervezeti elemek már nem láthatók az Összes széf nézetben és csak az Adminisztrátori konzolon keresztül érhetők el. Rendeljük ezeket az elemeket egy gyűjteményhez az Adminisztrátor konzolból, hogy láthatóvá tegyük azokat.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>2024. május 16-tól a nem hozzá rendelt szervezeti elemek többé nem lesznek láthatók az Összes széf nézetben és csak az Adminisztrátori konzolon keresztül érhetők el. Rendeljük ezeket az elemeket egy gyűjteményhez az Adminisztrátori konzolból, hogy láthatóvá tegyük azokat.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Emlékeztetés később</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Megjegyzés</value>
+  </data>
 </root>

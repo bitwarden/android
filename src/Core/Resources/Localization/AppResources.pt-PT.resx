@@ -2884,4 +2884,16 @@ Deseja mudar para esta conta?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Iniciar o Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Os itens da organização não atribuídos já não são visíveis na vista Todos os cofres e só são acessíveis através da consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>A 16 de maio de 2024, os itens da organização não atribuídos deixarão de estar visíveis na vista Todos os cofres e só estarão acessíveis através da Consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Lembrar-me mais tarde</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
 </root>

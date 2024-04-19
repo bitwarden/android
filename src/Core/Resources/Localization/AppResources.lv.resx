@@ -2886,4 +2886,16 @@ Vai pārslēgties uz šo kontu?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Palaist Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Nepiešķirti apvienības vienumi vairs nav redzami skatā "Visas glabātavas" un ir sasniedzami tikai no pārvaldības konsoles, kur šie vienumi jāpiešķir krājumam, lai padarītu tos redzamus.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>No 2024. gada 16. maija nepiešķirti apvienības vienumi vairs nebūs redzami skatā "Visas glabātavas" un būs sasniedzami tikai no pārvaldības konsoles, kur šie vienumi jāpiešķir krājumam, lai padarītu tos redzamus.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Atgādināt man vēlāk</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Jāņem vērā</value>
+  </data>
 </root>

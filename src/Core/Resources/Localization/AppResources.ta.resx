@@ -1030,7 +1030,7 @@
     <value>ஆகஸ்ட்</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>சூட்டுக்குறி</value>
+    <value>வணிகக்குறி</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>அட்டைதாரரின் பெயர்</value>
@@ -1280,7 +1280,7 @@
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>புதுப்பிக்கப்பட்டது</value>
+    <value>புதுப்பித்த நேரம்</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1618,7 +1618,7 @@
     <value>உயிரியளவுகள்</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>உயிரியளவுகளைப் பயன்படுத்திப் பூட்டவிழ்</value>
+    <value>உயிரியளவுகளால் பூட்டவிழ்</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwardenக்கு கவனம் தேவை - Bitwarden அமைப்புகளிலிருந்து "தன்னிரப்பி அணுகல்தன்மை சேவை" ஐப் பார்</value>
@@ -2376,7 +2376,7 @@
     <value>கடவுச்சொல் வகை</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>என்ன உருவாக்க விரும்புகிறீர்?</value>
+    <value>எதை உருவாக்க விரும்புகிறீர்?</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
     <value>பயனர்பெயர் வகை</value>
@@ -2885,5 +2885,17 @@
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Launch Duo</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Remind me later</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Notice</value>
   </data>
 </root>

@@ -2884,4 +2884,16 @@ Chcete se přepnout na tento účet?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Spustit DUO</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Nepřiřazené položky organizace již nejsou viditelné ve Vašem zobrazení všech trezorů a jsou nyní přístupné jen v konzoli správce. Přiřaďte tyto položky do kolekce z konzole pro správce, aby byly viditelné.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Dne 16. května 2024 již nebudou nepřiřazené položky organizace viditelné v zobrazení Všechny trezory a budou přístupné jen prostřednictvím konzoly správce. Přiřaďte tyto položky do kolekce z konzoly pro správce, aby byly viditelné.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Připomenout později</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Upozornění</value>
+  </data>
 </root>

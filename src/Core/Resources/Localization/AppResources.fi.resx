@@ -2886,4 +2886,16 @@ Haluatko vaihtaa tähän tiliin?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Avaa Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Organisaatioiden kokoelmiin määrittämättömät kohteet eivät enää näy laitteiden "Kaikki holvit" -näkymissä, vaan ne ovat nähtävissä vain Hallintapaneelista. Määritä kohteet kokoelmiin Hallintapaneelista, jotta ne ovat jatkossakin käytettävissä kaikilta laitteilta.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>16.5.2024 alkaen kokoelmiin määrittämättömät organisaatioiden kohteet eivät enää näy laitteiden "Kaikki holvit" -näkymissä, vaan ne ovat nähtävissä vain Hallintapaneelista. Määritä kohteet kokoelmiin Hallintapaneelista, jotta ne ovat jatkossakin käytettävissä kaikilta laitteilta.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Muistuta myöhemmin</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Huomautus</value>
+  </data>
 </root>

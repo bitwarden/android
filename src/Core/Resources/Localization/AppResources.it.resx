@@ -2885,4 +2885,16 @@ Vuoi passare a questo account?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Avvia Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Gli elementi dell'organizzazione non assegnati non sono più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e sono ora accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Dal 16 maggio 2024, gli elementi dell'organizzazione non assegnati non saranno più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e saranno accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Ricordamelo più tardi</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Avviso</value>
+  </data>
 </root>

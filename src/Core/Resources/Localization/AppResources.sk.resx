@@ -2885,4 +2885,16 @@ Chcete prepnúť na toto konto?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Spustiť Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Nepriradené položky organizácie už nie sú viditeľné v zobrazení Všetky Trezory a sú prístupné len cez administrátorskú konzolu. Aby boli viditeľné, priraďte tieto položky do kolekcie z konzoly administrátora.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>16. mája nepriradené položky organizácie už nebudú viditeľné v zobrazení Všetky Trezory a budú prístupné len cez administrátorskú konzolu. Aby boli viditeľné, priraďte tieto položky do kolekcie z konzoly administrátora.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Pripomenúť neskôr</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Upozornenie</value>
+  </data>
 </root>

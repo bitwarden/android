@@ -2885,4 +2885,16 @@ Vil du skifte til denne konto?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Start Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Utildelte organisationsemner er ikke længere synlige i Alle Bokse-visningen og er kun tilgængelige via Admin-konsollen. Føj disse emner til en samling fra Admin-konsollen for at gøre dem synlige.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Pr. 16. maj 2024 vil utildelte organisationsemner ikke længere være synlige i Alle Bokse-visningen og vil kun være tilgængelige via Admin-konsollen. Tildel disse emner til en samling via Admin-konsollen for at gøre dem synlige.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Påmind senere</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Varsling</value>
+  </data>
 </root>
