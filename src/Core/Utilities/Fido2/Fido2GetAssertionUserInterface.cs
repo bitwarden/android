@@ -12,15 +12,28 @@ namespace Bit.Core.Utilities.Fido2
     /// </summary>
     public class Fido2GetAssertionUserInterface : IFido2GetAssertionUserInterface
     {
-        private readonly string _cipherId;
-        private readonly bool _userVerified = false;
-        private readonly Func<Task> _ensureUnlockedVaultCallback;
-        private readonly Func<bool> _hasVaultBeenUnlockedInThisTransaction;
-        private readonly Func<string, Fido2UserVerificationPreference, Task<bool>> _verifyUserCallback;
+        protected string _cipherId;
+        protected bool _userVerified = false;
+        protected Func<Task> _ensureUnlockedVaultCallback;
+        protected Func<bool> _hasVaultBeenUnlockedInThisTransaction;
+        protected Func<string, Fido2UserVerificationPreference, Task<bool>> _verifyUserCallback;
+
+        public Fido2GetAssertionUserInterface()
+        {
+        }
 
         /// <param name="cipherId">The cipherId for the credential that the user has already picker</param>
         /// <param name="userVerified">True if the user has already been verified by the operating system</param>
         public Fido2GetAssertionUserInterface(string cipherId,
+            bool userVerified,
+            Func<Task> ensureUnlockedVaultCallback,
+            Func<bool> hasVaultBeenUnlockedInThisTransaction,
+            Func<string, Fido2UserVerificationPreference, Task<bool>> verifyUserCallback)
+        {
+            Init(cipherId, userVerified, ensureUnlockedVaultCallback, hasVaultBeenUnlockedInThisTransaction, verifyUserCallback);
+        }
+
+        protected void Init(string cipherId,
             bool userVerified,
             Func<Task> ensureUnlockedVaultCallback,
             Func<bool> hasVaultBeenUnlockedInThisTransaction,
