@@ -18,7 +18,7 @@ namespace Bit.Droid.Push
     {
         public async override void OnNewToken(string token)
         {
-            try {
+            try { 
                 var stateService = ServiceContainer.Resolve<IStateService>("stateService");
                 var pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
 
