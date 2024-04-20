@@ -12,7 +12,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Bit.Droid.Push
 {
-    [Service(Exported = false)]
+    [Service(Exported=false)]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class FirebaseMessagingService : Firebase.Messaging.FirebaseMessagingService
     {
@@ -31,11 +31,10 @@ namespace Bit.Droid.Push
                 Logger.Instance.Exception(ex);
             }
         }
-
+        
         public async override void OnMessageReceived(RemoteMessage message)
         {
-            try
-            {
+            try {
                 if (message?.Data == null)
                 {
                     return;
