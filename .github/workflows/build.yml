@@ -83,7 +83,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
 
       # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
@@ -310,7 +310,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
 
       # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
