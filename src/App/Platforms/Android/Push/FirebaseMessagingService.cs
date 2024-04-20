@@ -18,8 +18,7 @@ namespace Bit.Droid.Push
     {
         public async override void OnNewToken(string token)
         {
-            try
-            {
+            try {
                 var stateService = ServiceContainer.Resolve<IStateService>("stateService");
                 var pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
 
@@ -34,7 +33,8 @@ namespace Bit.Droid.Push
         
         public async override void OnMessageReceived(RemoteMessage message)
         {
-            try {
+            try
+            {
                 if (message?.Data == null)
                 {
                     return;
