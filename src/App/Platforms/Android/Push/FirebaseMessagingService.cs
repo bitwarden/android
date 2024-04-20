@@ -12,16 +12,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Bit.Droid.Push
 {
-    [Service(Exported=false)]
+    [Service(Exported = false)]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class FirebaseMessagingService : Firebase.Messaging.FirebaseMessagingService
     {
         public async override void OnNewToken(string token)
         {
-            try { 
+            try
+            {
                 var stateService = ServiceContainer.Resolve<IStateService>("stateService");
                 var pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
-            
+
                 await stateService.SetPushRegisteredTokenAsync(token);
                 await pushNotificationService.RegisterAsync();
             }
@@ -30,7 +31,7 @@ namespace Bit.Droid.Push
                 Logger.Instance.Exception(ex);
             }
         }
-        
+
         public async override void OnMessageReceived(RemoteMessage message)
         {
             try
@@ -41,29 +42,27 @@ namespace Bit.Droid.Push
                 }
 
                 JObject obj = null;
-                if (message.Data.ContainsKey("data"))
+                if (message.Data.TryGetValue("data", out var data))
                 {
-                    // GCM
-                    var data = message.Data.ContainsKey("data") ? message.Data["data"] : null;
-                    if (data != null)
-                    {
-                        obj = JObject.Parse(data);
-                    }
+                    // Legacy GCM format
+                    obj = JObject.Parse(data);
                 }
-                else if (message.Data.ContainsKey("type"))
+                else if (message.Data.TryGetValue("type", out var typeData) &&
+                    Enum.TryParse(typeData, out NotificationType type))
                 {
-                    // FCMv1
-                    if (Enum.TryParse(message.Data["type"], out NotificationType type))
+                    // New FCMv1 format
+                    obj = new JObject
                     {
-                        obj = new JObject
-                        {
-                            { "type", (int)type },
-                            { "payload", message.Data["payload"] }
-                        };
+                        { "type", (int)type }
+                    };
+
+                    if (message.Data.TryGetValue("payload", out var payloadData))
+                    {
+                        obj.Add("payload", payloadData);
                     }
                 }
 
-                if(obj == null)
+                if (obj == null)
                 {
                     return;
                 }
