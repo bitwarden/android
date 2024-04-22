@@ -62,14 +62,11 @@
     <string name="appearance">Appearance</string>
     <string name="default_system">Default (System)</string>
     <string name="theme">Theme</string>
-    <string name="theme_description">Change the application\'s color theme.</string>
     <string name="dark">Dark</string>
     <string name="light">Light</string>
     <string name="language">Language</string>
     <string name="language_change_x_description">The language has been changed to %1$s. Please restart the app to see the change</string>
-    <string name="show_website_icons">Show website icons</string>
-    <string name="show_website_icons_description">Show a recognizable image next to each login.</string>
-    <string name="secure_your_accounts_with_bitwarden_authenticator">Secure your accounts with Bitwarden Authneticator</string>
+    <string name="secure_your_accounts_with_bitwarden_authenticator">Secure your accounts with Bitwarden Authenticator</string>
     <string name="get_verification_codes_for_all_your_accounts">Get verification codes for all your accounts that support 2-step verification.</string>
     <string name="use_your_device_camera_to_scan_codes">Use your device camera to scan codes</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
@@ -78,7 +75,7 @@
     <string name="continue_button">Continue</string>
     <string name="skip">Skip</string>
     <string name="get_started">Get started</string>
-    <string name="unique_codes">Uniqe codes</string>
+    <string name="unique_codes">Unique codes</string>
     <string name="help">Help</string>
     <string name="launch_tutorial">Launch tutorial</string>
     <string name="value_has_been_copied">%1$s copied</string>
@@ -86,4 +83,12 @@
     <string name="item_deleted">Item deleted</string>
     <string name="delete">Delete</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Do you really want to permanently delete? This cannot be undone.</string>
+    <string name="vault">Vault</string>
+    <string name="export">Export</string>
+    <string name="loading">Loading</string>
+    <string name="export_confirmation_title">Confirm export</string>
+    <string name="export_vault_warning">This export contains your data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
+    <string name="file_format">File format</string>
+    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\\\'ll need to export from the web vault.</string>
+    <string name="export_success">Data exported successfully</string>
 </resources>

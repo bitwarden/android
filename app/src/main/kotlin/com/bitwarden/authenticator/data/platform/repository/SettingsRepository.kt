@@ -2,7 +2,6 @@ package com.bitwarden.authenticator.data.platform.repository
 
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
 /**
@@ -34,16 +33,6 @@ interface SettingsRepository {
      * Tracks changes to the expiration alert threshold.
      */
     val authenticatorAlertThresholdSecondsFlow: StateFlow<Int>
-
-    /**
-     * The current setting for getting login item icons.
-     */
-    var isIconLoadingDisabled: Boolean
-
-    /**
-     * Emits updates that track the [isIconLoadingDisabled] value.
-     */
-    val isIconLoadingDisabledFlow: Flow<Boolean>
 
     /**
      * Whether the user has seen the Welcome tutorial.

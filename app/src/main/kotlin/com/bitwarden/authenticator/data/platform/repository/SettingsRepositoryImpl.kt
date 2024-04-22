@@ -5,7 +5,6 @@ import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -49,23 +48,7 @@ class SettingsRepositoryImpl(
                 started = SharingStarted.Eagerly,
                 initialValue = settingsDiskSource.getAlertThresholdSeconds(),
             )
-    override var isIconLoadingDisabled: Boolean
-        get() = settingsDiskSource.isIconLoadingDisabled ?: false
-        set(value) {
-            settingsDiskSource.isIconLoadingDisabled = value
-        }
 
-    override val isIconLoadingDisabledFlow: StateFlow<Boolean>
-        get() = settingsDiskSource
-            .isIconLoadingDisabledFlow
-            .map { it ?: false }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = settingsDiskSource
-                    .isIconLoadingDisabled
-                    ?: false,
-            )
     override var hasSeenWelcomeTutorial: Boolean
         get() = settingsDiskSource.hasSeenWelcomeTutorial
         set(value) {

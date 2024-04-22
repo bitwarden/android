@@ -72,6 +72,7 @@ fun AuthenticatorNavBarScreen(
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItem: (itemId: String) -> Unit,
     onNavigateToTutorial: () -> Unit,
+    onNavigateToExport: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
@@ -110,6 +111,7 @@ fun AuthenticatorNavBarScreen(
         navigateToManualKeyEntry = onNavigateToManualKeyEntry,
         navigateToEditItem = onNavigateToEditItem,
         navigateToTutorial = onNavigateToTutorial,
+        navigateToExport = onNavigateToExport,
     )
 }
 
@@ -124,6 +126,7 @@ private fun AuthenticatorNavBarScaffold(
     navigateToManualKeyEntry: () -> Unit,
     navigateToEditItem: (itemId: String) -> Unit,
     navigateToTutorial: () -> Unit,
+    navigateToExport: () -> Unit,
 ) {
     BitwardenScaffold(
         contentWindowInsets = ScaffoldDefaults.contentWindowInsets.exclude(WindowInsets.statusBars),
@@ -170,6 +173,7 @@ private fun AuthenticatorNavBarScaffold(
                 navigateToManualKeyEntry = navigateToManualKeyEntry,
                 navigateToEditItem = navigateToEditItem,
                 navigateToTutorial = navigateToTutorial,
+                navigateToExport = navigateToExport,
             )
         }
     }

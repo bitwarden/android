@@ -25,16 +25,6 @@ interface SettingsDiskSource {
     val appThemeFlow: Flow<AppTheme>
 
     /**
-     * The currently persisted setting for getting login item icons (or `null` if not set).
-     */
-    var isIconLoadingDisabled: Boolean?
-
-    /**
-     * Emits updates that track [isIconLoadingDisabled].
-     */
-    val isIconLoadingDisabledFlow: Flow<Boolean?>
-
-    /**
      * Tracks whether user has seen the Welcome tutorial.
      */
     var hasSeenWelcomeTutorial: Boolean

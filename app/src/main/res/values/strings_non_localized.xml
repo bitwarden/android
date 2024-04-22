@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="json_extension" translatable="false">.json</string>
+    <string name="csv_extension" translatable="false">.csv</string>
+</resources>

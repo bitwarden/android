@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.repository.di
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
+import com.bitwarden.authenticator.data.authenticator.manager.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepositoryImpl
@@ -24,9 +25,11 @@ object AuthenticatorRepositoryModule {
         authenticatorDiskSource: AuthenticatorDiskSource,
         dispatcherManager: DispatcherManager,
         totpCodeManager: TotpCodeManager,
+        fileManager: FileManager,
     ): AuthenticatorRepository = AuthenticatorRepositoryImpl(
         authenticatorDiskSource,
         totpCodeManager,
+        fileManager,
         dispatcherManager,
     )
 

@@ -151,7 +151,7 @@ fun ItemListingScreen(
                     ItemListingAction.ConfirmDeleteClick(itemId = itemId),
                 )
             }
-        }
+        },
     )
 
     BitwardenScaffold(

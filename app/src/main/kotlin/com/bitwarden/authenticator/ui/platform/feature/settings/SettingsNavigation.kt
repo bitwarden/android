@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.bitwarden.authenticator.ui.platform.base.util.composableWithRootPushTransitions
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.exportDestination
 
 const val SETTINGS_GRAPH_ROUTE = "settings_graph"
 private const val SETTINGS_ROUTE = "settings"
@@ -15,6 +16,7 @@ private const val SETTINGS_ROUTE = "settings"
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToTutorial: () -> Unit,
+    onNavigateToExport: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -25,8 +27,12 @@ fun NavGraphBuilder.settingsGraph(
         ) {
             SettingsScreen(
                 onNavigateToTutorial = onNavigateToTutorial,
+                onNavigateToExport = onNavigateToExport,
             )
         }
+        exportDestination(
+            onNavigateBack = { navController.popBackStack() }
+        )
     }
 }
 

@@ -28,25 +28,31 @@ class SettingsViewModel @Inject constructor(
             appearance = SettingsState.Appearance(
                 language = settingsRepository.appLanguage,
                 theme = settingsRepository.appTheme,
-                showWebsiteIcons = !settingsRepository.isIconLoadingDisabled,
             ),
         ),
 ) {
     override fun handleAction(action: SettingsAction) {
         when (action) {
+            is SettingsAction.VaultClick -> handleVaultClick(action)
             is SettingsAction.AppearanceChange -> handleAppearanceChange(action)
             is SettingsAction.HelpClick -> handleHelpClick(action)
         }
+    }
+
+    private fun handleVaultClick(action: SettingsAction.VaultClick) {
+        when(action) {
+            SettingsAction.VaultClick.ExportClick -> handleExportClick()
+        }
+    }
+
+    private fun handleExportClick() {
+        sendEvent(SettingsEvent.NavigateToExport)
     }
 
     private fun handleAppearanceChange(action: SettingsAction.AppearanceChange) {
         when (action) {
             is SettingsAction.AppearanceChange.LanguageChange -> {
                 handleLanguageChange(action.language)
-            }
-
-            is SettingsAction.AppearanceChange.ShowWebsiteIconsChange -> {
-                handleShowWebsiteIconsChange(action.showWebsiteIcons)
             }
 
             is SettingsAction.AppearanceChange.ThemeChange -> {
@@ -66,16 +72,6 @@ class SettingsViewModel @Inject constructor(
             language.localeName,
         )
         AppCompatDelegate.setApplicationLocales(appLocale)
-    }
-
-    private fun handleShowWebsiteIconsChange(showWebsiteIcons: Boolean) {
-        mutableStateFlow.update {
-            it.copy(
-                appearance = it.appearance.copy(showWebsiteIcons = showWebsiteIcons)
-            )
-        }
-        // Negate the boolean to properly update the settings repository
-        settingsRepository.isIconLoadingDisabled = !showWebsiteIcons
     }
 
     private fun handleThemeChange(theme: AppTheme) {
@@ -112,7 +108,6 @@ data class SettingsState(
     data class Appearance(
         val language: AppLanguage,
         val theme: AppTheme,
-        val showWebsiteIcons: Boolean,
     ) : Parcelable
 }
 
@@ -121,6 +116,8 @@ data class SettingsState(
  */
 sealed class SettingsEvent {
     data object NavigateToTutorial : SettingsEvent()
+
+    data object NavigateToExport : SettingsEvent()
 }
 
 /**
@@ -128,23 +125,37 @@ sealed class SettingsEvent {
  */
 sealed class SettingsAction {
 
+    /**
+     * Models actions for the Vault section of settings.
+     */
+    sealed class VaultClick : SettingsAction() {
+
+        /**
+         * Indicates the user clicked export.
+         */
+        data object ExportClick : VaultClick()
+    }
+
+    /**
+     * Models actions for the Help section of settings.
+     */
     sealed class HelpClick : SettingsAction() {
+
+        /**
+         * Indicates the user clicked launch tutorial.
+         */
         data object ShowTutorialClick : HelpClick()
     }
 
+    /**
+     * Models actions for the Appearance section of settings.
+     */
     sealed class AppearanceChange : SettingsAction() {
         /**
          * Indicates the user changed the language.
          */
         data class LanguageChange(
             val language: AppLanguage,
-        ) : AppearanceChange()
-
-        /**
-         * Indicates the user toggled the Show Website Icons switch to [showWebsiteIcons].
-         */
-        data class ShowWebsiteIconsChange(
-            val showWebsiteIcons: Boolean,
         ) : AppearanceChange()
 
         /**

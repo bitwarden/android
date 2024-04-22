@@ -14,7 +14,6 @@ private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
-private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
 private const val FIRST_LAUNCH_KEY = "$BASE_KEY:hasSeenWelcomeTutorial"
 
 /**
@@ -68,17 +67,6 @@ class SettingsDiskSourceImpl(
     override val appThemeFlow: Flow<AppTheme>
         get() = mutableAppThemeFlow
             .onSubscription { emit(appTheme) }
-
-    override var isIconLoadingDisabled: Boolean?
-        get() = getBoolean(key = DISABLE_ICON_LOADING_KEY)
-        set(value) {
-            putBoolean(key = DISABLE_ICON_LOADING_KEY, value = value)
-            mutableIsIconLoadingDisabledFlow.tryEmit(value)
-        }
-
-    override val isIconLoadingDisabledFlow: Flow<Boolean?>
-        get() = mutableIsIconLoadingDisabledFlow
-            .onSubscription { emit(getBoolean(DISABLE_ICON_LOADING_KEY)) }
 
     override var hasSeenWelcomeTutorial: Boolean
         get() = getBoolean(key = FIRST_LAUNCH_KEY) ?: false

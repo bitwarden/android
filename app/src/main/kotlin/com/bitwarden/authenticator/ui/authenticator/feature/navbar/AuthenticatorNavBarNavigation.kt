@@ -14,6 +14,7 @@ fun NavGraphBuilder.authenticatorNavBarDestination(
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItem: (itemId: String) -> Unit,
     onNavigateToTutorial: () -> Unit,
+    onNavigateToExport: () -> Unit,
 ) {
     composableWithStayTransitions(
         route = AUTHENTICATOR_NAV_BAR_ROUTE,
@@ -24,6 +25,7 @@ fun NavGraphBuilder.authenticatorNavBarDestination(
             onNavigateToEditItem = onNavigateToEditItem,
             onNavigateToSearch = onNavigateToSearch,
             onNavigateToTutorial = onNavigateToTutorial,
+            onNavigateToExport = onNavigateToExport,
         )
     }
 }

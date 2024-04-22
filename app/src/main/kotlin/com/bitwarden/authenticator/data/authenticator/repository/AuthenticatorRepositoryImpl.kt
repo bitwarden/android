@@ -1,12 +1,16 @@
 package com.bitwarden.authenticator.data.authenticator.repository
 
+import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.bitwarden.authenticator.data.authenticator.manager.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
+import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorData
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
+import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
@@ -15,6 +19,7 @@ import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.repository.util.combineDataStates
 import com.bitwarden.authenticator.data.platform.repository.util.map
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -23,6 +28,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
@@ -30,6 +36,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 /**
@@ -41,6 +49,7 @@ private const val STOP_TIMEOUT_DELAY_MS: Long = 5_000L
 class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorDiskSource: AuthenticatorDiskSource,
     private val totpCodeManager: TotpCodeManager,
+    private val fileManager: FileManager,
     dispatcherManager: DispatcherManager,
 ) : AuthenticatorRepository {
 
@@ -214,4 +223,73 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             UpdateItemResult.Error(e.message)
         }
     }
+
+    override suspend fun exportVaultData(format: ExportFormat, fileUri: Uri): ExportDataResult {
+        return when (format) {
+            ExportFormat.JSON -> encodeVaultDataToJson(fileUri)
+            ExportFormat.CSV -> encodeVaultDataToCsv(fileUri)
+        }
+    }
+
+    private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
+        val headerLine =
+            "folder,favorite,type,name,login_uri,login_totp,issuer,period,digits"
+        val dataLines = authenticatorDiskSource
+            .getItems()
+            .firstOrNull()
+            .orEmpty()
+            .joinToString("\n") { it.toCsvFormat() }
+
+        val csvString = "$headerLine\n$dataLines"
+
+        return if (fileManager.stringToUri(fileUri = fileUri, dataString = csvString)) {
+            ExportDataResult.Success
+        } else {
+            ExportDataResult.Error
+        }
+    }
+
+    private fun AuthenticatorItemEntity.toCsvFormat() =
+        ",,1,$accountName,,$key,$issuer,$period,$digits"
+
+    private suspend fun encodeVaultDataToJson(fileUri: Uri): ExportDataResult {
+        val dataString: String = Json.encodeToString(
+            ExportJsonData(
+                encrypted = false,
+                items = authenticatorDiskSource
+                    .getItems()
+                    .firstOrNull()
+                    .orEmpty()
+                    .map { it.toExportJsonItem() },
+            )
+        )
+
+        return if (
+            fileManager.stringToUri(
+                fileUri = fileUri,
+                dataString = dataString,
+            )
+        ) {
+            ExportDataResult.Success
+        } else {
+            ExportDataResult.Error
+        }
+    }
+
+    private fun AuthenticatorItemEntity.toExportJsonItem() = ExportJsonData.ExportItem(
+        id = id,
+        folderId = null,
+        organizationId = null,
+        collectionIds = null,
+        name = accountName,
+        notes = null,
+        type = 1,
+        login = ExportJsonData.ExportItem.ItemLoginData(
+            totp = key,
+            issuer = issuer,
+            period = period,
+            digits = digits,
+        ),
+        favorite = false,
+    )
 }

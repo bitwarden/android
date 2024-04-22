@@ -1,14 +1,17 @@
 package com.bitwarden.authenticator.data.authenticator.repository
 
+import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.model.AuthenticatorData
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
+import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -78,4 +81,9 @@ interface AuthenticatorRepository {
         itemId: String,
         updateItemRequest: UpdateItemRequest,
     ): UpdateItemResult
+
+    /**
+     *  Attempt to get the user's data for export.
+     */
+    suspend fun exportVaultData(format: ExportFormat, fileUri: Uri): ExportDataResult
 }

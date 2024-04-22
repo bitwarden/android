@@ -1,14 +1,17 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -28,6 +32,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
@@ -36,7 +41,6 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelect
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
@@ -49,6 +53,7 @@ import com.bitwarden.authenticator.ui.platform.util.displayLabel
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onNavigateToTutorial: () -> Unit,
+    onNavigateToExport: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior =
@@ -57,6 +62,7 @@ fun SettingsScreen(
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
+            SettingsEvent.NavigateToExport -> onNavigateToExport()
         }
     }
 
@@ -75,6 +81,14 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(state = rememberScrollState())
         ) {
+            VaultSettings(
+                onExportClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(SettingsAction.VaultClick.ExportClick)
+                    }
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
                 state = state,
                 onLanguageSelection = remember(viewModel) {
@@ -85,13 +99,6 @@ fun SettingsScreen(
                 onThemeSelection = remember(viewModel) {
                     {
                         viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
-                    }
-                },
-                onShowWebsiteIconsChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            SettingsAction.AppearanceChange.ShowWebsiteIconsChange(it)
-                        )
                     }
                 },
             )
@@ -107,6 +114,39 @@ fun SettingsScreen(
     }
 }
 
+//region Vault settings
+
+@Composable
+fun VaultSettings(
+    modifier: Modifier = Modifier,
+
+    onExportClick: () -> Unit,
+) {
+    BitwardenListHeaderText(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        label = stringResource(id = R.string.vault)
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenTextRow(
+        text = stringResource(id = R.string.export),
+        onClick = onExportClick,
+        modifier = modifier,
+        withDivider = true,
+        content = {
+            Icon(
+                modifier = Modifier
+                    .mirrorIfRtl()
+                    .size(24.dp),
+                painter = painterResource(id = R.drawable.ic_navigate_next),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+    )
+}
+
+//endregion Vault settings
+
 //region Appearance settings
 
 @Composable
@@ -114,20 +154,11 @@ private fun AppearanceSettings(
     state: SettingsState,
     onLanguageSelection: (language: AppLanguage) -> Unit,
     onThemeSelection: (theme: AppTheme) -> Unit,
-    onShowWebsiteIconsChange: (showWebsiteIcons: Boolean) -> Unit,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
         label = stringResource(id = R.string.appearance)
     )
-    LanguageSelectionRow(
-        currentSelection = state.appearance.language,
-        onLanguageSelection = onLanguageSelection,
-        modifier = Modifier
-            .semantics { testTag = "LanguageChooser" }
-            .fillMaxWidth(),
-    )
-
     ThemeSelectionRow(
         currentSelection = state.appearance.theme,
         onThemeSelection = onThemeSelection,
@@ -136,15 +167,12 @@ private fun AppearanceSettings(
             .fillMaxWidth(),
     )
 
-    BitwardenWideSwitch(
-        label = stringResource(id = R.string.show_website_icons),
-        description = stringResource(id = R.string.show_website_icons_description),
-        isChecked = state.appearance.showWebsiteIcons,
-        onCheckedChange = onShowWebsiteIconsChange,
+    LanguageSelectionRow(
+        currentSelection = state.appearance.language,
+        onLanguageSelection = onLanguageSelection,
         modifier = Modifier
-            .semantics { testTag = "ShowWebsiteIconsSwitch" }
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .semantics { testTag = "LanguageChooser" }
+            .fillMaxWidth(),
     )
 }
 
@@ -168,11 +196,15 @@ private fun LanguageSelectionRow(
         text = stringResource(id = R.string.language),
         onClick = { shouldShowLanguageSelectionDialog = true },
         modifier = modifier,
+        withDivider = true,
     ) {
-        Text(
-            text = currentSelection.text(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        Icon(
+            modifier = Modifier
+                .mirrorIfRtl()
+                .size(24.dp),
+            painter = painterResource(id = R.drawable.ic_navigate_next),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface,
         )
     }
 
@@ -209,14 +241,19 @@ private fun ThemeSelectionRow(
 
     BitwardenTextRow(
         text = stringResource(id = R.string.theme),
-        description = stringResource(id = R.string.theme_description),
         onClick = { shouldShowThemeSelectionDialog = true },
         modifier = modifier,
+        withDivider = true,
     ) {
-        Text(
-            text = currentSelection.displayLabel(),
-            style = MaterialTheme.typography.labelSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        Icon(
+            modifier = Modifier
+                .mirrorIfRtl()
+                .size(24.dp),
+            painter = painterResource(
+                id = R.drawable.ic_navigate_next
+            ),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurface,
         )
     }
 
@@ -258,7 +295,8 @@ private fun HelpSettings(
         text = stringResource(id = R.string.launch_tutorial),
         onClick = onTutorialClick,
         modifier = modifier,
+        withDivider = true,
     )
 }
 
-//region Help settings
+//endregion Help settings
