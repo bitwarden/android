@@ -380,7 +380,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.U2F,
             TwoFactorAuthMethod.REMEMBER,
             TwoFactorAuthMethod.DUO_ORGANIZATION,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP,
+            TwoFactorAuthMethod.WEB_AUTH,
             -> {
                 mutableStateFlow.update { it.copy(authMethod = action.authMethod) }
             }
@@ -410,7 +410,7 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.YUBI_KEY,
             TwoFactorAuthMethod.U2F,
             TwoFactorAuthMethod.REMEMBER,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP,
+            TwoFactorAuthMethod.WEB_AUTH,
             TwoFactorAuthMethod.RECOVERY_CODE,
             -> state.codeInput
         }

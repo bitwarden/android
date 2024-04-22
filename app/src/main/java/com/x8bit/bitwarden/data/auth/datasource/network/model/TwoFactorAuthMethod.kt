@@ -32,7 +32,7 @@ enum class TwoFactorAuthMethod(val value: UInt) {
     DUO_ORGANIZATION(value = 6U),
 
     @SerialName("7")
-    FIDO_2_WEB_APP(value = 7U),
+    WEB_AUTH(value = 7U),
 
     @SerialName("-1")
     RECOVERY_CODE(value = 100U),
