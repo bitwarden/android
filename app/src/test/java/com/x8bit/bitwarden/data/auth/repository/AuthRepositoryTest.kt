@@ -1632,13 +1632,19 @@ class AuthRepositoryTest {
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 captchaToken = null,
                 ssoToken = null,
+                twoFactorProviders = null,
             )
             .asSuccess()
         val result = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
         assertEquals(LoginResult.TwoFactorRequired, result)
         assertEquals(
             repository.twoFactorResponse,
-            GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+            GetTokenResponseJson.TwoFactorRequired(
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                twoFactorProviders = null,
+                captchaToken = null,
+                ssoToken = null,
+            ),
         )
         assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
         coVerify { identityService.preLogin(email = EMAIL) }
@@ -1675,6 +1681,7 @@ class AuthRepositoryTest {
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 captchaToken = null,
                 ssoToken = null,
+                twoFactorProviders = null,
             )
             .asSuccess()
         val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)
@@ -2068,7 +2075,12 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
             } returns GetTokenResponseJson
-                .TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null)
+                .TwoFactorRequired(
+                    authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                    twoFactorProviders = null,
+                    captchaToken = null,
+                    ssoToken = null,
+                )
                 .asSuccess()
             val result = repository.login(
                 email = EMAIL,
@@ -2082,7 +2094,12 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.TwoFactorRequired, result)
             assertEquals(
                 repository.twoFactorResponse,
-                GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+                GetTokenResponseJson.TwoFactorRequired(
+                    authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                    twoFactorProviders = null,
+                    captchaToken = null,
+                    ssoToken = null,
+                ),
             )
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify {
@@ -2115,7 +2132,12 @@ class AuthRepositoryTest {
                 uniqueAppId = UNIQUE_APP_ID,
             )
         } returns GetTokenResponseJson
-            .TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null)
+            .TwoFactorRequired(
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                twoFactorProviders = null,
+                captchaToken = null,
+                ssoToken = null,
+            )
             .asSuccess()
         val firstResult = repository.login(
             email = EMAIL,
@@ -2721,6 +2743,7 @@ class AuthRepositoryTest {
                     authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                     captchaToken = null,
                     ssoToken = null,
+                    twoFactorProviders = null,
                 )
                 .asSuccess()
             val result = repository.login(
@@ -2734,7 +2757,12 @@ class AuthRepositoryTest {
             assertEquals(LoginResult.TwoFactorRequired, result)
             assertEquals(
                 repository.twoFactorResponse,
-                GetTokenResponseJson.TwoFactorRequired(TWO_FACTOR_AUTH_METHODS_DATA, null, null),
+                GetTokenResponseJson.TwoFactorRequired(
+                    authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                    captchaToken = null,
+                    ssoToken = null,
+                    twoFactorProviders = null,
+                ),
             )
             assertEquals(AuthState.Unauthenticated, repository.authStateFlow.value)
             coVerify {
@@ -2771,6 +2799,7 @@ class AuthRepositoryTest {
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 captchaToken = null,
                 ssoToken = null,
+                twoFactorProviders = null,
             )
             .asSuccess()
 
@@ -4124,6 +4153,7 @@ class AuthRepositoryTest {
                 authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
                 captchaToken = null,
                 ssoToken = null,
+                twoFactorProviders = null,
             )
             .asSuccess()
         val firstResult = repository.login(email = EMAIL, password = PASSWORD, captchaToken = null)

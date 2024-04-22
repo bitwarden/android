@@ -124,6 +124,9 @@ sealed class GetTokenResponseJson {
         @SerialName("TwoFactorProviders2")
         val authMethodsData: Map<TwoFactorAuthMethod, JsonObject?>,
 
+        @SerialName("TwoFactorProviders")
+        val twoFactorProviders: List<String>?,
+
         @SerialName("CaptchaBypassToken")
         val captchaToken: String?,
 
