@@ -48,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.handlers.AddSendHandlers
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Content view for the [AddSendScreen].
@@ -120,7 +121,7 @@ fun AddSendContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                options = listOf(
+                options = persistentListOf(
                     SegmentedButtonState(
                         text = stringResource(id = R.string.file),
                         onClick = addSendHandlers.onFileTypeSelect,
