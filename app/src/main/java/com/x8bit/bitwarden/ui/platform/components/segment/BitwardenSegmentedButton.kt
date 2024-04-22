@@ -8,7 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.semantics.testTag
+import kotlinx.collections.immutable.ImmutableList
 
 /**
  * Displays a Bitwarden styled row of segmented buttons.
@@ -20,7 +20,7 @@ import androidx.compose.ui.semantics.testTag
 @Composable
 fun BitwardenSegmentedButton(
     modifier: Modifier = Modifier,
-    options: List<SegmentedButtonState>,
+    options: ImmutableList<SegmentedButtonState>,
 ) {
     MultiChoiceSegmentedButtonRow(
         modifier = modifier,
