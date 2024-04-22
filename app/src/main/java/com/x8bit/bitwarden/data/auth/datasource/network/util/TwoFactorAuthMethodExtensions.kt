@@ -14,6 +14,6 @@ val TwoFactorAuthMethod.priority: Int
         TwoFactorAuthMethod.DUO -> 2
         TwoFactorAuthMethod.YUBI_KEY -> 3
         TwoFactorAuthMethod.DUO_ORGANIZATION -> 20
-        TwoFactorAuthMethod.FIDO_2_WEB_APP -> 4
+        TwoFactorAuthMethod.WEB_AUTH -> 4
         else -> -1
     }

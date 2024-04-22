@@ -14,7 +14,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.U2F to -1,
             TwoFactorAuthMethod.REMEMBER to -1,
             TwoFactorAuthMethod.DUO_ORGANIZATION to 20,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP to 4,
+            TwoFactorAuthMethod.WEB_AUTH to 4,
             TwoFactorAuthMethod.RECOVERY_CODE to -1,
         )
             .forEach { (type, priority) ->

@@ -20,7 +20,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.DUO_ORGANIZATION to R.string.duo_org_title.asText(
                 R.string.organization.asText(),
             ),
-            TwoFactorAuthMethod.FIDO_2_WEB_APP to "".asText(),
+            TwoFactorAuthMethod.WEB_AUTH to "".asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to R.string.recovery_code_title.asText(),
         )
             .forEach { (type, title) ->
@@ -48,7 +48,7 @@ class TwoFactorAuthMethodExtensionTest {
                     .asText()
                     .concat(" ".asText())
                     .concat(R.string.follow_the_steps_from_duo_to_finish_logging_in.asText()),
-            TwoFactorAuthMethod.FIDO_2_WEB_APP to "".asText(),
+            TwoFactorAuthMethod.WEB_AUTH to "".asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to "".asText(),
         )
             .forEach { (type, title) ->
@@ -69,7 +69,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.U2F to false,
             TwoFactorAuthMethod.REMEMBER to false,
             TwoFactorAuthMethod.DUO_ORGANIZATION to true,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP to false,
+            TwoFactorAuthMethod.WEB_AUTH to false,
             TwoFactorAuthMethod.RECOVERY_CODE to false,
         )
             .forEach { (type, isDuo) ->
@@ -87,7 +87,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.U2F to false,
             TwoFactorAuthMethod.REMEMBER to false,
             TwoFactorAuthMethod.DUO_ORGANIZATION to false,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP to false,
+            TwoFactorAuthMethod.WEB_AUTH to false,
             TwoFactorAuthMethod.RECOVERY_CODE to false,
         )
             .forEach { (type, shouldUseNfc) ->
@@ -105,7 +105,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.U2F to null,
             TwoFactorAuthMethod.REMEMBER to null,
             TwoFactorAuthMethod.DUO_ORGANIZATION to null,
-            TwoFactorAuthMethod.FIDO_2_WEB_APP to null,
+            TwoFactorAuthMethod.WEB_AUTH to null,
             TwoFactorAuthMethod.RECOVERY_CODE to null,
         )
             .forEach { (type, imageRes) ->
