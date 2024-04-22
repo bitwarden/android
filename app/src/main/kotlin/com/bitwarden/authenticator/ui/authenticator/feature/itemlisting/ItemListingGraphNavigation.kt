@@ -35,7 +35,7 @@ fun NavGraphBuilder.itemListingGraph(
             onNavigateToQrCodeScanner = navigateToQrCodeScanner,
             onNavigateToManualKeyEntry = navigateToManualKeyEntry,
             onNavigateToEditItemScreen = navigateToEditItem,
-        ) { /*navController.navigateToImportScreen()*/ }
+        )
         editItemDestination(
             onNavigateBack = { navController.popBackStack() },
         )

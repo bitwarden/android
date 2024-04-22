@@ -81,7 +81,6 @@ fun ItemListingScreen(
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItemScreen: (id: String) -> Unit,
-    onNavigateToImportScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -277,7 +276,6 @@ fun ItemListingScreen(
                 -> {
                     EmptyItemListingContent(
                         onAddCodeClick = onNavigateToQrCodeScanner,
-                        onImportItemsClick = onNavigateToImportScreen,
                     )
                 }
             }
@@ -335,7 +333,6 @@ private fun ItemListingDialogs(
 fun EmptyItemListingContent(
     modifier: Modifier = Modifier,
     onAddCodeClick: () -> Unit = {},
-    onImportItemsClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -370,12 +367,6 @@ fun EmptyItemListingContent(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.add_code),
             onClick = onAddCodeClick,
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-        BitwardenTextButton(
-            label = stringResource(id = R.string.import_items),
-            onClick = onImportItemsClick,
         )
     }
 }

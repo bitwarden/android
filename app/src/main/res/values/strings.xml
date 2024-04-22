@@ -32,7 +32,6 @@
     <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
     <string name="empty_item_list_instruction">Add a new code, sync an existing account, or import codes to secure your accounts.</string>
     <string name="add_code">Add code</string>
-    <string name="import_items">Import items</string>
     <string name="account_name">Account Name</string>
     <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
     <string name="authenticator_key_added">Authenticator key added.</string>
