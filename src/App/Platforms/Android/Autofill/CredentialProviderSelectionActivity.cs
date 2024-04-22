@@ -71,6 +71,13 @@ namespace Bit.Droid.Autofill
                 var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
                 var packageName = getRequest?.CallingAppInfo.PackageName;
                 var appInfoOrigin = getRequest?.CallingAppInfo.Origin;
+                
+                if (appInfoOrigin is null)
+                {
+                    await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
+                    Finish();
+                    return;
+                }
 
                 _fido2GetAssertionUserInterface.Value.Init(
                     cipherId,
