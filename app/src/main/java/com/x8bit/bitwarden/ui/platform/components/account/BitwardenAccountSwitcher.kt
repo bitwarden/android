@@ -27,7 +27,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,7 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.lowercaseWithCurrentLocal
@@ -56,6 +59,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.supportingTextResOrNull
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * The maximum number of accounts before the "Add account" button will be hidden to prevent the user
@@ -290,6 +294,8 @@ private fun AccountSummaryItem(
             Text(
                 text = accountSummary.email,
                 style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.testTag("AccountEmailLabel"),
             )
 
@@ -387,4 +393,36 @@ private fun AddAccountItem(
             style = MaterialTheme.typography.bodyLarge,
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(showBackground = true)
+@Composable
+private fun BitwardenAccountSwitcher_preview() {
+    BitwardenAccountSwitcher(
+        isVisible = true,
+        accountSummaries = listOf(
+            AccountSummary(
+                userId = "123",
+                name = "Cool Guy",
+                email = "coolestguyeverthatlikestosurfandbeachvibes@gmail.com",
+                avatarColorHex = "#EEEEEE",
+                environmentLabel = "label",
+                isActive = true,
+                isLoggedIn = true,
+                isVaultUnlocked = true,
+            ),
+        )
+            .toImmutableList(),
+        onSwitchAccountClick = {},
+        onLockAccountClick = {},
+        onLogoutAccountClick = {},
+        onAddAccountClick = {},
+        onDismissRequest = {},
+        topAppBarScrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+            state = rememberTopAppBarState(),
+            canScroll = { false },
+        ),
+    )
 }
