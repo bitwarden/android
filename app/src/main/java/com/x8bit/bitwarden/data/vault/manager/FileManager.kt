@@ -12,6 +12,11 @@ import java.io.File
 interface FileManager {
 
     /**
+     * Absolute path to the private file storage directory.
+     */
+    val filesDirectory: String
+
+    /**
      * Deletes a [file] from the system.
      */
     suspend fun deleteFile(file: File)
@@ -38,4 +43,10 @@ interface FileManager {
      * Reads the [fileUri] into memory. A successful result will contain the raw [ByteArray].
      */
     suspend fun uriToByteArray(fileUri: Uri): Result<ByteArray>
+
+    /**
+     * Reads the [fileUri] into a file on disk. A successful result will contain the [File]
+     * reference.
+     */
+    suspend fun writeUriToCache(fileUri: Uri): Result<File>
 }

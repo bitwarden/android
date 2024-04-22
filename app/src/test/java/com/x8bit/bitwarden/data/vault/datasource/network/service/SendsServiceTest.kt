@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.create
+import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -117,7 +118,7 @@ class SendsServiceTest : BaseServiceTest() {
         val url = "www.test.com"
         setupMockUri(url = url, queryParams = mapOf("sv" to "2024-04-03"))
         val sendFileResponse = createMockFileSendResponseJson(number = 1)
-        val encryptedFile = byteArrayOf()
+        val encryptedFile = File.createTempFile("mockFile", "temp")
 
         server.enqueue(MockResponse().setResponseCode(201))
 
@@ -134,7 +135,7 @@ class SendsServiceTest : BaseServiceTest() {
         val url = "www.test.com"
         setupMockUri(url = url, queryParams = mapOf("sv" to "2024-04-03"))
         val sendFileResponse = createMockFileSendResponseJson(number = 1)
-        val encryptedFile = byteArrayOf()
+        val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = sendsService.uploadFile(

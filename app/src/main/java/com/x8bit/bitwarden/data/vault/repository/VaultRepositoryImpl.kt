@@ -1589,19 +1589,20 @@ class VaultRepositoryImpl(
             .asFailure()
 
         return fileManager
-            .uriToByteArray(fileUri = uri)
-            .flatMap {
-                vaultSdkSource.encryptBuffer(
+            .writeUriToCache(uri)
+            .flatMap { file ->
+                vaultSdkSource.encryptFile(
                     userId = userId,
                     send = send,
-                    fileBuffer = it,
+                    path = file.absolutePath,
+                    destinationFilePath = file.absolutePath,
                 )
             }
             .flatMap { encryptedFile ->
                 sendsService
                     .createFileSend(
                         body = send.toEncryptedNetworkSend(
-                            fileLength = encryptedFile.size,
+                            fileLength = encryptedFile.length(),
                         ),
                     )
                     .flatMap { sendFileResponse ->
@@ -1621,6 +1622,10 @@ class VaultRepositoryImpl(
                                         sendFileResponse = sendFileResponse.createFileJsonResponse,
                                         encryptedFile = encryptedFile,
                                     )
+                                    .also {
+                                        // Delete encrypted file once it has been uploaded.
+                                        fileManager.deleteFile(encryptedFile)
+                                    }
                                     .map { CreateSendJsonResponse.Success(it) }
                             }
                         }

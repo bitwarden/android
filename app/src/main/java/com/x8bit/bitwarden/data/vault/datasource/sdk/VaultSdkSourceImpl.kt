@@ -27,6 +27,7 @@ import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import java.io.File
 
 /**
  * Primary implementation of [VaultSdkSource] that serves as a convenience wrapper around a
@@ -161,6 +162,24 @@ class VaultSdkSourceImpl(
                     send = send,
                     buffer = fileBuffer,
                 )
+        }
+
+    override suspend fun encryptFile(
+        userId: String,
+        send: Send,
+        path: String,
+        destinationFilePath: String,
+    ): Result<File> =
+        runCatching {
+            getClient(userId = userId)
+                .vault()
+                .sends()
+                .encryptFile(
+                    send = send,
+                    decryptedFilePath = path,
+                    encryptedFilePath = destinationFilePath,
+                )
+            File(destinationFilePath)
         }
 
     override suspend fun encryptAttachment(

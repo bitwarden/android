@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonRes
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
+import java.io.File
 
 /**
  * Provides an API for querying sends endpoints.
@@ -30,7 +31,7 @@ interface SendsService {
      */
     suspend fun uploadFile(
         sendFileResponse: CreateFileSendResponseJson,
-        encryptedFile: ByteArray,
+        encryptedFile: File,
     ): Result<SyncResponseJson.Send>
 
     /**
