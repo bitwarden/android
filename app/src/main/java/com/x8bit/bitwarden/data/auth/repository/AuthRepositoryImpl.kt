@@ -50,6 +50,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
+import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -63,6 +65,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
+import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
+import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokensFlow
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
@@ -82,6 +86,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -214,8 +219,10 @@ class AuthRepositoryImpl(
             initialValue = AuthState.Uninitialized,
         )
 
+    @Suppress("UNCHECKED_CAST", "MagicNumber")
     override val userStateFlow: StateFlow<UserState?> = combine(
         authDiskSource.userStateFlow,
+        authDiskSource.userAccountTokensFlow,
         authDiskSource.userOrganizationsListFlow,
         vaultRepository.vaultUnlockDataStateFlow,
         mutableHasPendingAccountAdditionStateFlow,
@@ -224,20 +231,19 @@ class AuthRepositoryImpl(
             mutableHasPendingAccountDeletionStateFlow,
             mutableUserStateTransactionCountStateFlow,
         ),
-    ) {
-            userStateJson,
-            userOrganizationsList,
-            vaultState,
-            hasPendingAccountAddition,
-            _,
-        ->
+    ) { array ->
+        val userStateJson = array[0] as UserStateJson?
+        val userAccountTokens = array[1] as List<UserAccountTokens>
+        val userOrganizationsList = array[2] as List<UserOrganizations>
+        val vaultState = array[3] as List<VaultUnlockData>
+        val hasPendingAccountAddition = array[4] as Boolean
         userStateJson?.toUserState(
             vaultState = vaultState,
+            userAccountTokens = userAccountTokens,
             userOrganizationsList = userOrganizationsList,
             hasPendingAccountAddition = hasPendingAccountAddition,
             isBiometricsEnabledProvider = ::isBiometricsEnabled,
             vaultUnlockTypeProvider = ::getVaultUnlockType,
-            isLoggedInProvider = ::isUserLoggedIn,
             isDeviceTrustedProvider = ::isDeviceTrusted,
         )
     }
@@ -250,11 +256,11 @@ class AuthRepositoryImpl(
                 .userState
                 ?.toUserState(
                     vaultState = vaultRepository.vaultUnlockDataStateFlow.value,
+                    userAccountTokens = authDiskSource.userAccountTokens,
                     userOrganizationsList = authDiskSource.userOrganizationsList,
                     hasPendingAccountAddition = mutableHasPendingAccountAdditionStateFlow.value,
                     isBiometricsEnabledProvider = ::isBiometricsEnabled,
                     vaultUnlockTypeProvider = ::getVaultUnlockType,
-                    isLoggedInProvider = ::isUserLoggedIn,
                     isDeviceTrustedProvider = ::isDeviceTrusted,
                 ),
         )
@@ -1135,10 +1141,6 @@ class AuthRepositoryImpl(
     private fun isDeviceTrusted(
         userId: String,
     ): Boolean = authDiskSource.getDeviceKey(userId = userId) != null
-
-    private fun isUserLoggedIn(
-        userId: String,
-    ): Boolean = authDiskSource.getAccountTokens(userId = userId)?.isLoggedIn == true
 
     private fun getVaultUnlockType(
         userId: String,

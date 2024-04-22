@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorUserDe
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -271,6 +272,13 @@ class UserStateJsonExtensionsTest {
                             status = VaultUnlockData.Status.UNLOCKED,
                         ),
                     ),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = "accessToken",
+                            refreshToken = "refreshToken",
+                        ),
+                    ),
                     userOrganizationsList = listOf(
                         UserOrganizations(
                             userId = "activeUserId",
@@ -285,7 +293,6 @@ class UserStateJsonExtensionsTest {
                     hasPendingAccountAddition = false,
                     isBiometricsEnabledProvider = { false },
                     vaultUnlockTypeProvider = { VaultUnlockType.PIN },
-                    isLoggedInProvider = { true },
                     isDeviceTrustedProvider = { false },
                 ),
         )
@@ -351,6 +358,13 @@ class UserStateJsonExtensionsTest {
             )
                 .toUserState(
                     vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
                     userOrganizationsList = listOf(
                         UserOrganizations(
                             userId = "activeUserId",
@@ -365,7 +379,6 @@ class UserStateJsonExtensionsTest {
                     hasPendingAccountAddition = true,
                     isBiometricsEnabledProvider = { true },
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                    isLoggedInProvider = { false },
                     isDeviceTrustedProvider = { false },
                 ),
         )
@@ -441,6 +454,13 @@ class UserStateJsonExtensionsTest {
             )
                 .toUserState(
                     vaultState = emptyList(),
+                    userAccountTokens = listOf(
+                        UserAccountTokens(
+                            userId = "activeUserId",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
                     userOrganizationsList = listOf(
                         UserOrganizations(
                             userId = "activeUserId",
@@ -455,7 +475,6 @@ class UserStateJsonExtensionsTest {
                     hasPendingAccountAddition = true,
                     isBiometricsEnabledProvider = { false },
                     vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                    isLoggedInProvider = { false },
                     isDeviceTrustedProvider = { true },
                 ),
         )

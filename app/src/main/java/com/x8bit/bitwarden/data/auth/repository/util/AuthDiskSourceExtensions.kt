@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,6 +55,50 @@ val AuthDiskSource.userOrganizationsListFlow: Flow<List<UserOrganizations>>
                 ) { values -> values.toList() }
             }
             .distinctUntilChanged()
+
+/**
+ * Returns the current list of [UserAccountTokens].
+ */
+val AuthDiskSource.userAccountTokens: List<UserAccountTokens>
+    get() = this
+        .userState
+        ?.accounts
+        .orEmpty()
+        .map { (userId, _) ->
+            val accountTokens = this.getAccountTokens(userId = userId)
+            UserAccountTokens(
+                userId = userId,
+                accessToken = accountTokens?.accessToken,
+                refreshToken = accountTokens?.refreshToken,
+            )
+        }
+
+/**
+ * Returns a [Flow] that emits distinct updates to [UserAccountTokens].
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+val AuthDiskSource.userAccountTokensFlow: Flow<List<UserAccountTokens>>
+    get() = this
+        .userStateFlow
+        .flatMapLatest { userStateJson ->
+            combine(
+                userStateJson
+                    ?.accounts
+                    .orEmpty()
+                    .map { (userId, _) ->
+                        this
+                            .getAccountTokensFlow(userId = userId)
+                            .map {
+                                UserAccountTokens(
+                                    userId = userId,
+                                    accessToken = it?.accessToken,
+                                    refreshToken = it?.refreshToken,
+                                )
+                            }
+                    },
+            ) { it.toList() }
+        }
+        .distinctUntilChanged()
 
 /**
  * Returns a [Flow] that emits every time the active user is changed.
