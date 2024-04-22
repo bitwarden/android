@@ -2512,19 +2512,26 @@ class VaultRepositoryTest {
             val uri = setupMockUri(url = "www.test.com")
             val mockSendView = createMockSendView(number = 1)
             val mockSdkSend = createMockSdkSend(number = 1)
-            val byteArray = byteArrayOf(1)
-            val encryptedByteArray = byteArrayOf(2)
+            val decryptedFile = mockk<File> {
+                every { length() } returns 1
+                every { absolutePath } returns "mockAbsolutePath"
+            }
+            val encryptedFile = mockk<File> {
+                every { length() } returns 1
+                every { absolutePath } returns "mockAbsolutePath"
+            }
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
+            coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
             coEvery {
-                vaultSdkSource.encryptBuffer(
+                vaultSdkSource.encryptFile(
                     userId = userId,
                     send = mockSdkSend,
-                    fileBuffer = byteArray,
+                    path = "mockAbsolutePath",
+                    destinationFilePath = "mockAbsolutePath",
                 )
-            } returns encryptedByteArray.asSuccess()
+            } returns encryptedFile.asSuccess()
             coEvery {
                 sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
             } returns IllegalStateException().asFailure()
@@ -2544,8 +2551,16 @@ class VaultRepositoryTest {
             val uri = setupMockUri(url = url)
             val mockSendView = createMockSendView(number = 1)
             val mockSdkSend = createMockSdkSend(number = 1)
-            val byteArray = byteArrayOf(1)
-            val encryptedByteArray = byteArrayOf(2)
+            val decryptedFile = mockk<File> {
+                every { name } returns "mockFileName"
+                every { absolutePath } returns "mockAbsolutePath"
+                every { length() } returns 1
+            }
+            val encryptedFile = mockk<File> {
+                every { name } returns "mockFileName"
+                every { absolutePath } returns "mockAbsolutePath"
+                every { length() } returns 1
+            }
             val sendFileResponse = CreateFileSendResponse.Success(
                 createMockFileSendResponseJson(
                     number = 1,
@@ -2558,14 +2573,17 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.decryptSend(userId, mockSdkSend)
             } returns mockSendView.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
+            every { fileManager.filesDirectory } returns "mockFilesDirectory"
+            coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
+            coEvery { fileManager.deleteFile(any()) } returns Unit
             coEvery {
-                vaultSdkSource.encryptBuffer(
+                vaultSdkSource.encryptFile(
                     userId = userId,
                     send = mockSdkSend,
-                    fileBuffer = byteArray,
+                    path = "mockAbsolutePath",
+                    destinationFilePath = "mockAbsolutePath",
                 )
-            } returns encryptedByteArray.asSuccess()
+            } returns encryptedFile.asSuccess()
             coEvery {
                 vaultDiskSource.saveSend(
                     userId,
@@ -2578,7 +2596,7 @@ class VaultRepositoryTest {
             coEvery {
                 sendsService.uploadFile(
                     sendFileResponse = sendFileResponse.createFileJsonResponse,
-                    encryptedFile = encryptedByteArray,
+                    encryptedFile = encryptedFile,
                 )
             } returns Throwable().asFailure()
 
@@ -2600,7 +2618,7 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns Throwable().asFailure()
+            coEvery { fileManager.writeUriToCache(any()) } returns Throwable().asFailure()
 
             val result = vaultRepository.createSend(sendView = mockSendView, fileUri = uri)
 
@@ -2617,8 +2635,13 @@ class VaultRepositoryTest {
             val uri = setupMockUri(url = url)
             val mockSendView = createMockSendView(number = 1)
             val mockSdkSend = createMockSdkSend(number = 1)
-            val byteArray = byteArrayOf(1)
-            val encryptedByteArray = byteArrayOf(2)
+            val decryptedFile = mockk<File> {
+                every { name } returns "mockFileName"
+                every { absolutePath } returns "mockAbsolutePath"
+            }
+            val encryptedFile = mockk<File> {
+                every { length() } returns 1
+            }
             val sendFileResponse = CreateFileSendResponse.Success(
                 createMockFileSendResponseJson(number = 1),
             )
@@ -2626,21 +2649,25 @@ class VaultRepositoryTest {
             coEvery {
                 vaultSdkSource.encryptSend(userId = userId, sendView = mockSendView)
             } returns mockSdkSend.asSuccess()
-            coEvery { fileManager.uriToByteArray(any()) } returns byteArray.asSuccess()
+
+            every { fileManager.filesDirectory } returns "mockFilesDirectory"
+            coEvery { fileManager.deleteFile(any()) } returns Unit
+            coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
             coEvery {
-                vaultSdkSource.encryptBuffer(
+                vaultSdkSource.encryptFile(
                     userId = userId,
                     send = mockSdkSend,
-                    fileBuffer = byteArray,
+                    path = "mockAbsolutePath",
+                    destinationFilePath = "mockAbsolutePath",
                 )
-            } returns encryptedByteArray.asSuccess()
+            } returns encryptedFile.asSuccess()
             coEvery {
                 sendsService.createFileSend(body = createMockSendJsonRequest(number = 1))
             } returns sendFileResponse.asSuccess()
             coEvery {
                 sendsService.uploadFile(
                     sendFileResponse = sendFileResponse.createFileJsonResponse,
-                    encryptedFile = encryptedByteArray,
+                    encryptedFile = encryptedFile,
                 )
             } returns sendFileResponse.createFileJsonResponse.sendResponse.asSuccess()
             coEvery {

@@ -15,7 +15,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendRespons
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -80,7 +81,7 @@ class SendsServiceImpl(
 
     override suspend fun uploadFile(
         sendFileResponse: CreateFileSendResponseJson,
-        encryptedFile: ByteArray,
+        encryptedFile: File,
     ): Result<SyncResponseJson.Send> {
         val send = sendFileResponse.sendResponse
         return when (sendFileResponse.fileUploadType) {
@@ -94,7 +95,7 @@ class SendsServiceImpl(
                         )
                         .addPart(
                             part = MultipartBody.Part.createFormData(
-                                body = encryptedFile.toRequestBody(
+                                body = encryptedFile.asRequestBody(
                                     contentType = "application/octet-stream".toMediaType(),
                                 ),
                                 name = "data",
@@ -112,7 +113,7 @@ class SendsServiceImpl(
                         .RFC_1123_DATE_TIME
                         .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
                     version = sendFileResponse.url.toUri().getQueryParameter("sv"),
-                    body = encryptedFile.toRequestBody(),
+                    body = encryptedFile.asRequestBody(),
                 )
             }
         }

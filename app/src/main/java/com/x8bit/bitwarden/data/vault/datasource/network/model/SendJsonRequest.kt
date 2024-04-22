@@ -48,7 +48,7 @@ data class SendJsonRequest(
     val deletionDate: ZonedDateTime,
 
     @SerialName("fileLength")
-    val fileLength: Int?,
+    val fileLength: Long?,
 
     @SerialName("file")
     val file: SyncResponseJson.Send.File?,

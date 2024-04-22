@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.util.sdkAgnosticTransferTo
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import kotlinx.coroutines.withContext
@@ -27,6 +28,9 @@ class FileManagerImpl(
     private val downloadService: DownloadService,
     private val dispatcherManager: DispatcherManager,
 ) : FileManager {
+
+    override val filesDirectory: String
+        get() = context.filesDir.absolutePath
 
     override suspend fun deleteFile(file: File) {
         withContext(dispatcherManager.io) {
@@ -129,6 +133,25 @@ class FileManagerImpl(
                         }
                     }
                     ?: throw IllegalStateException("Stream has crashed")
+            }
+        }
+
+    override suspend fun writeUriToCache(fileUri: Uri): Result<File> =
+        runCatching {
+            withContext(dispatcherManager.io) {
+                val tempFileName = "temp_send_file.bw"
+                context
+                    .contentResolver
+                    .openInputStream(fileUri)
+                    ?.use { inputStream ->
+                        context.openFileOutput(tempFileName, Context.MODE_PRIVATE)
+                            .use { outputStream ->
+                                inputStream.sdkAgnosticTransferTo(outputStream)
+                            }
+                    }
+                    ?: throw IllegalStateException("Stream has crashed")
+
+                File(context.filesDir, tempFileName)
             }
         }
 }

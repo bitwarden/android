@@ -24,6 +24,7 @@ import com.bitwarden.core.TotpResponse
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import java.io.File
 
 /**
  * Source of vault information and functionality from the Bitwarden SDK.
@@ -235,6 +236,20 @@ interface VaultSdkSource {
         send: Send,
         fileBuffer: ByteArray,
     ): Result<ByteArray>
+
+    /**
+     * Encrypts a file at [path] for the user with the given [userId], returning the
+     * encrypted [File] as a [Result].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun encryptFile(
+        userId: String,
+        send: Send,
+        path: String,
+        destinationFilePath: String,
+    ): Result<File>
 
     /**
      * Decrypts a [Send] for the user with the given [userId], returning a [SendView] wrapped in a

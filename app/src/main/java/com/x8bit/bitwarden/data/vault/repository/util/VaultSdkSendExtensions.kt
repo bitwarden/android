@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 /**
  * Converts a Bitwarden SDK [Send] object to a corresponding [SyncResponseJson.Send] object.
  */
-fun Send.toEncryptedNetworkSend(fileLength: Int? = null): SendJsonRequest =
+fun Send.toEncryptedNetworkSend(fileLength: Long? = null): SendJsonRequest =
     SendJsonRequest(
         type = type.toNetworkSendType(),
         name = name,
