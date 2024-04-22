@@ -8,7 +8,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -19,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionR
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDisplayMatchType
@@ -44,7 +44,7 @@ fun VaultAddEditUriItem(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_settings),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_settings),
                     contentDescription = stringResource(id = R.string.options),
                 ),
                 onClick = { shouldShowOptionsDialog = true },

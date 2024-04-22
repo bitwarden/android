@@ -11,7 +11,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -19,6 +18,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import kotlinx.collections.immutable.toPersistentList
@@ -50,7 +50,7 @@ fun VaultContent(
 
             item {
                 BitwardenGroupItem(
-                    startIcon = painterResource(id = R.drawable.access_time),
+                    startIcon = rememberVectorPainter(id = R.drawable.access_time),
                     label = stringResource(id = R.string.verification_codes),
                     supportingLabel = state.totpItemsCount.toString(),
                     onClick = vaultHandlers.verificationCodesClick,
@@ -138,7 +138,7 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = painterResource(id = R.drawable.ic_login_item),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_login_item),
                 startIconTestTag = "LoginCipherIcon",
                 label = stringResource(id = R.string.type_login),
                 supportingLabel = state.loginItemsCount.toString(),
@@ -153,7 +153,7 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = painterResource(id = R.drawable.ic_card_item),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_card_item),
                 startIconTestTag = "CardCipherIcon",
                 label = stringResource(id = R.string.type_card),
                 supportingLabel = state.cardItemsCount.toString(),
@@ -168,7 +168,7 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = painterResource(id = R.drawable.ic_identity_item),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_identity_item),
                 startIconTestTag = "IdentityCipherIcon",
                 label = stringResource(id = R.string.type_identity),
                 supportingLabel = state.identityItemsCount.toString(),
@@ -183,7 +183,7 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = painterResource(id = R.drawable.ic_secure_note_item),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_secure_note_item),
                 startIconTestTag = "SecureNoteCipherIcon",
                 label = stringResource(id = R.string.type_secure_note),
                 supportingLabel = state.secureNoteItemsCount.toString(),
@@ -223,7 +223,7 @@ fun VaultContent(
 
             items(state.folderItems) { folder ->
                 BitwardenGroupItem(
-                    startIcon = painterResource(id = R.drawable.ic_folder),
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_folder),
                     label = folder.name(),
                     supportingLabel = folder.itemCount.toString(),
                     onClick = { vaultHandlers.folderClick(folder) },
@@ -308,7 +308,7 @@ fun VaultContent(
 
             items(state.collectionItems) { collection ->
                 BitwardenGroupItem(
-                    startIcon = painterResource(id = R.drawable.ic_collection),
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_collection),
                     label = collection.name,
                     supportingLabel = collection.itemCount.toString(),
                     onClick = { vaultHandlers.collectionClick(collection) },
@@ -347,7 +347,7 @@ fun VaultContent(
 
         item {
             BitwardenGroupItem(
-                startIcon = painterResource(id = R.drawable.ic_trash),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_trash),
                 label = stringResource(id = R.string.trash),
                 supportingLabel = state.trashItemsCount.toString(),
                 onClick = vaultHandlers.trashClick,

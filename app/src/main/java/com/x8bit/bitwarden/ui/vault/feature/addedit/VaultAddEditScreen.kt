@@ -17,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.core.net.toUri
@@ -39,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
@@ -168,7 +168,7 @@ fun VaultAddEditScreen(
             BitwardenTopAppBar(
                 title = state.screenDisplayName(),
                 navigationIcon = NavigationIcon(
-                    navigationIcon = painterResource(id = R.drawable.ic_close),
+                    navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                     navigationIconContentDescription = stringResource(id = R.string.close),
                     onNavigationIconClick = remember(viewModel) {
                         { viewModel.trySendAction(VaultAddEditAction.Common.CloseClick) }

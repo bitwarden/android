@@ -13,10 +13,10 @@ import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * A custom Bitwarden-themed medium top app bar with support for actions.
@@ -76,7 +76,7 @@ private fun BitwardenMediumTopAppBar_preview() {
             actions = {
                 IconButton(onClick = { }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_more),
+                        painter = rememberVectorPainter(id = R.drawable.ic_more),
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.onSurface,
                     )

@@ -38,7 +38,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -54,6 +53,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
@@ -112,7 +112,7 @@ fun PendingRequestsScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.pending_log_in_requests),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(PendingRequestsAction.CloseClick) }
@@ -221,7 +221,7 @@ private fun PendingRequestsContent(
 
         BitwardenFilledTonalButtonWithIcon(
             label = stringResource(id = R.string.decline_all_requests),
-            icon = painterResource(id = R.drawable.ic_trash),
+            icon = rememberVectorPainter(id = R.drawable.ic_trash),
             onClick = { shouldShowDeclineAllRequestsConfirm = true },
             modifier = Modifier
                 .testTag("DeclineAllRequestsButton")
@@ -318,7 +318,7 @@ private fun PendingRequestsEmpty(
         Spacer(modifier = Modifier.height(16.dp))
         Spacer(modifier = Modifier.weight(1f))
         Image(
-            painter = painterResource(id = R.drawable.ic_pending_requests),
+            painter = rememberVectorPainter(id = R.drawable.ic_pending_requests),
             contentDescription = null,
             modifier = Modifier
                 .padding(vertical = 16.dp)

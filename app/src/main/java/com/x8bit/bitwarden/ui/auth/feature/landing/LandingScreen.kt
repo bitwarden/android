@@ -38,7 +38,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,6 +62,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionR
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
 import kotlinx.collections.immutable.toImmutableList
 
@@ -227,7 +227,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(topPadding))
 
         Image(
-            painter = painterResource(id = R.drawable.logo),
+            painter = rememberVectorPainter(id = R.drawable.logo),
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
             contentDescription = null,
             modifier = Modifier
@@ -381,7 +381,7 @@ private fun EnvironmentSelector(
                 modifier = Modifier.padding(end = 8.dp),
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_region_select_dropdown),
+                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
                 contentDescription = stringResource(id = R.string.region),
                 tint = MaterialTheme.colorScheme.primary,
             )

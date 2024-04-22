@@ -9,10 +9,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -44,12 +44,12 @@ private fun BitwardenRowOfIconButtons_preview() {
     BitwardenTheme {
         BitwardenRowOfActions {
             Icon(
-                painter = painterResource(id = R.drawable.ic_tooltip),
+                painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
                 contentDescription = "Icon 1",
                 modifier = Modifier.size(24.dp),
             )
             Icon(
-                painter = painterResource(id = R.drawable.ic_tooltip),
+                painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
                 contentDescription = "Icon 2",
                 modifier = Modifier.size(24.dp),
             )

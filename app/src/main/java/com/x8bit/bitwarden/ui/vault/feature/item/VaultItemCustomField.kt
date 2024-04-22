@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.item
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordFieldWithActions
@@ -11,6 +10,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithAc
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Custom Field UI common for all item types.
@@ -49,7 +49,7 @@ fun CustomField(
                     if (customField.isCopyable) {
                         BitwardenIconButtonWithResource(
                             iconRes = IconResource(
-                                iconPainter = painterResource(id = R.drawable.ic_copy),
+                                iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                                 contentDescription = stringResource(id = R.string.copy),
                             ),
                             onClick = {
@@ -66,7 +66,7 @@ fun CustomField(
                 label = customField.name,
                 value = customField.vaultLinkedFieldType.label.invoke(),
                 leadingIconResource = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_linked),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_linked),
                     contentDescription = stringResource(id = R.string.field_type_linked),
                 ),
                 onValueChange = { },
@@ -88,7 +88,7 @@ fun CustomField(
                     if (customField.isCopyable) {
                         BitwardenIconButtonWithResource(
                             iconRes = IconResource(
-                                iconPainter = painterResource(id = R.drawable.ic_copy),
+                                iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                                 contentDescription = stringResource(id = R.string.copy),
                             ),
                             onClick = { onCopyCustomTextField(customField.value) },

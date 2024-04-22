@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -36,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.model.TooltipData
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -118,7 +118,7 @@ fun BitwardenMultiSelectButton(
                         modifier = Modifier.size(16.dp),
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_tooltip_small),
+                            painter = rememberVectorPainter(id = R.drawable.ic_tooltip_small),
                             contentDescription = it.contentDescription,
                         )
                     }
@@ -130,7 +130,7 @@ fun BitwardenMultiSelectButton(
         enabled = shouldShowDialog,
         trailingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_region_select_dropdown),
+                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )

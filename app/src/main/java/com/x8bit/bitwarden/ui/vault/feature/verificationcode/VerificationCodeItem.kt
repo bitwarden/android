@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +25,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -113,7 +113,7 @@ fun VaultVerificationCodeItem(
             onClick = onCopyClick,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
+                painter = rememberVectorPainter(id = R.drawable.ic_copy),
                 contentDescription = stringResource(id = R.string.copy),
                 tint = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.size(24.dp),

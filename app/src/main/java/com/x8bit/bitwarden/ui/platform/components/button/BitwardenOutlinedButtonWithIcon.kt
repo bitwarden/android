@@ -10,11 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Represents a Bitwarden-styled filled [OutlinedButton] with an icon.
@@ -63,7 +63,7 @@ fun BitwardenOutlinedButtonWithIcon(
 private fun BitwardenOutlinedButtonWithIcon_preview_isEnabled() {
     BitwardenOutlinedButtonWithIcon(
         label = "Label",
-        icon = painterResource(id = R.drawable.ic_light_bulb),
+        icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
         onClick = {},
         isEnabled = true,
     )
@@ -74,7 +74,7 @@ private fun BitwardenOutlinedButtonWithIcon_preview_isEnabled() {
 private fun BitwardenOutlinedButtonWithIcon_preview_isNotEnabled() {
     BitwardenOutlinedButtonWithIcon(
         label = "Label",
-        icon = painterResource(id = R.drawable.ic_light_bulb),
+        icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
         onClick = {},
         isEnabled = false,
     )

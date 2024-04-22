@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,6 +26,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.withLineBreaksAtWidth
 import com.x8bit.bitwarden.ui.platform.base.util.withVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 
@@ -86,7 +86,7 @@ fun PasswordHistoryListItem(
             modifier = Modifier.testTag("CopyPasswordValueButton"),
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_copy),
+                painter = rememberVectorPainter(id = R.drawable.ic_copy),
                 contentDescription = stringResource(id = R.string.copy),
             )
         }

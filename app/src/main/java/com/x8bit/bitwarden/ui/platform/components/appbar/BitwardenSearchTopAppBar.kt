@@ -20,12 +20,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Represents a Bitwarden styled [TopAppBar] that assumes the following components:
@@ -85,7 +85,7 @@ fun BitwardenSearchTopAppBar(
                         onClick = { onSearchTermChange("") },
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_close),
+                            painter = rememberVectorPainter(id = R.drawable.ic_close),
                             contentDescription = stringResource(id = R.string.clear),
                         )
                     }

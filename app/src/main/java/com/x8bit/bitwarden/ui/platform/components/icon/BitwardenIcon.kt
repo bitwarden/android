@@ -4,11 +4,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Represents a Bitwarden icon that is either locally loaded or loaded using glide.
@@ -40,7 +40,7 @@ fun BitwardenIcon(
 
         is IconData.Local -> {
             Icon(
-                painter = painterResource(id = iconData.iconRes),
+                painter = rememberVectorPainter(id = iconData.iconRes),
                 contentDescription = contentDescription,
                 tint = tint,
                 modifier = modifier,

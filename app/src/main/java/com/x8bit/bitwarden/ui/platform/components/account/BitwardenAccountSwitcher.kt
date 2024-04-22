@@ -36,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.testTag
@@ -51,6 +50,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialo
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.scrim.BitwardenAnimatedScrim
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconRes
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.iconTestTag
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
@@ -266,7 +266,7 @@ private fun AccountSummaryItem(
             contentAlignment = Alignment.Center,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_account_initials_container),
+                painter = rememberVectorPainter(id = R.drawable.ic_account_initials_container),
                 contentDescription = null,
                 tint = accountSummary.avatarColor,
                 modifier = Modifier.size(40.dp),
@@ -313,7 +313,7 @@ private fun AccountSummaryItem(
         Spacer(modifier = Modifier.width(16.dp))
 
         Icon(
-            painter = painterResource(id = accountSummary.iconRes),
+            painter = rememberVectorPainter(id = accountSummary.iconRes),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
@@ -372,7 +372,7 @@ private fun AddAccountItem(
             .then(modifier),
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_plus),
+            painter = rememberVectorPainter(id = R.drawable.ic_plus),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier

@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.toggleableState
@@ -22,6 +21,7 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -79,7 +79,7 @@ private fun BitwardenSwitchWithActions_preview() {
             actions = {
                 IconButton(onClick = {}) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_tooltip),
+                        painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
                         tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = stringResource(
                             id = R.string.master_password_re_prompt_help,

@@ -8,12 +8,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -52,7 +52,7 @@ fun BitwardenExternalLinkRow(
     ) {
         Icon(
             modifier = Modifier.mirrorIfRtl(),
-            painter = painterResource(id = R.drawable.ic_external_link),
+            painter = rememberVectorPainter(id = R.drawable.ic_external_link),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
         )

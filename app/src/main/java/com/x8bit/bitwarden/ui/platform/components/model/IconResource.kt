@@ -4,8 +4,8 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import com.x8bit.bitwarden.ui.platform.base.util.Text
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -48,7 +48,7 @@ fun List<IconRes>.toIconResources(): List<IconResource> = this.map { it.toIconRe
 @Composable
 fun IconRes.toIconResource(): IconResource =
     IconResource(
-        iconPainter = painterResource(id = iconRes),
+        iconPainter = rememberVectorPainter(id = iconRes),
         contentDescription = contentDescription(),
         testTag = testTag,
     )
