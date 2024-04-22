@@ -81,7 +81,6 @@ fun ItemListingScreen(
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItemScreen: (id: String) -> Unit,
-    onNavigateToSyncWithBitwardenScreen: () -> Unit,
     onNavigateToImportScreen: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -278,7 +277,6 @@ fun ItemListingScreen(
                 -> {
                     EmptyItemListingContent(
                         onAddCodeClick = onNavigateToQrCodeScanner,
-                        onSyncWithBitwardenClick = onNavigateToSyncWithBitwardenScreen,
                         onImportItemsClick = onNavigateToImportScreen,
                     )
                 }
@@ -337,7 +335,6 @@ private fun ItemListingDialogs(
 fun EmptyItemListingContent(
     modifier: Modifier = Modifier,
     onAddCodeClick: () -> Unit = {},
-    onSyncWithBitwardenClick: () -> Unit = {},
     onImportItemsClick: () -> Unit = {},
 ) {
     Column(
@@ -373,12 +370,6 @@ fun EmptyItemListingContent(
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(R.string.add_code),
             onClick = onAddCodeClick,
-        )
-
-        Spacer(modifier = Modifier.height(8.dp))
-        BitwardenTextButton(
-            label = stringResource(id = R.string.sync_items_with_bitwarden),
-            onClick = onSyncWithBitwardenClick,
         )
 
         Spacer(modifier = Modifier.height(16.dp))

@@ -32,11 +32,8 @@
     <string name="you_dont_have_items_to_display">You don\'t have any items to display.</string>
     <string name="empty_item_list_instruction">Add a new code, sync an existing account, or import codes to secure your accounts.</string>
     <string name="add_code">Add code</string>
-    <string name="sync_items_with_bitwarden">Sync items from Bitwarden</string>
     <string name="import_items">Import items</string>
     <string name="account_name">Account Name</string>
-    <string name="totp_code">TOTP Code</string>
-    <string name="type">Type</string>
     <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
     <string name="authenticator_key_added">Authenticator key added.</string>
     <string name="item_added">Item added</string>
@@ -63,7 +60,6 @@
     <string name="search_codes">Search codes</string>
     <string name="options">Options</string>
     <string name="try_again">Try again</string>
-    <string name="not_yet_implemented">Not yet implemented</string>
     <string name="appearance">Appearance</string>
     <string name="default_system">Default (System)</string>
     <string name="theme">Theme</string>

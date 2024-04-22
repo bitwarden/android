@@ -14,7 +14,6 @@ fun NavGraphBuilder.itemListingDestination(
     onNavigateToQrCodeScanner: () -> Unit = { },
     onNavigateToManualKeyEntry: () -> Unit = { },
     onNavigateToEditItemScreen: (id: String) -> Unit = { },
-    onNavigateToSyncWithBitwardenScreen: () -> Unit = { },
     onNavigateToImportScreen: () -> Unit = { },
 ) {
     composableWithPushTransitions(
@@ -26,7 +25,6 @@ fun NavGraphBuilder.itemListingDestination(
             onNavigateToQrCodeScanner = onNavigateToQrCodeScanner,
             onNavigateToManualKeyEntry = onNavigateToManualKeyEntry,
             onNavigateToEditItemScreen = onNavigateToEditItemScreen,
-            onNavigateToSyncWithBitwardenScreen = onNavigateToSyncWithBitwardenScreen,
             onNavigateToImportScreen = onNavigateToImportScreen
         )
     }
