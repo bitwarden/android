@@ -312,11 +312,11 @@ class AuthRepositoryTest {
         assertEquals(
             SINGLE_USER_STATE_1.toUserState(
                 vaultState = VAULT_UNLOCK_DATA,
+                userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                isLoggedInProvider = { false },
                 isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
@@ -336,11 +336,11 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = VAULT_UNLOCK_DATA,
+                userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
-                isLoggedInProvider = { false },
                 isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
@@ -351,11 +351,11 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
+                userAccountTokens = emptyList(),
                 userOrganizationsList = emptyList(),
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.PIN },
-                isLoggedInProvider = { false },
                 isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
@@ -378,11 +378,11 @@ class AuthRepositoryTest {
         assertEquals(
             MULTI_USER_STATE.toUserState(
                 vaultState = emptyVaultState,
+                userAccountTokens = emptyList(),
                 userOrganizationsList = USER_ORGANIZATIONS,
                 hasPendingAccountAddition = false,
                 isBiometricsEnabledProvider = { false },
                 vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-                isLoggedInProvider = { false },
                 isDeviceTrustedProvider = { false },
             ),
             repository.userStateFlow.value,
@@ -574,20 +574,20 @@ class AuthRepositoryTest {
         val hashedMasterPassword = "dlrow olleh"
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
+            userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isLoggedInProvider = { false },
             isDeviceTrustedProvider = { false },
         )
         val finalUserState = SINGLE_USER_STATE_2.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
+            userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isLoggedInProvider = { false },
             isDeviceTrustedProvider = { false },
         )
         val kdf = SINGLE_USER_STATE_1.activeAccount.profile.toSdkParams()
@@ -4193,11 +4193,11 @@ class AuthRepositoryTest {
         val originalUserId = USER_ID_1
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
+            userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isLoggedInProvider = { false },
             isDeviceTrustedProvider = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -4225,11 +4225,11 @@ class AuthRepositoryTest {
         val invalidId = "invalidId"
         val originalUserState = SINGLE_USER_STATE_1.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
+            userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isLoggedInProvider = { false },
             isDeviceTrustedProvider = { false },
         )
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -4255,11 +4255,11 @@ class AuthRepositoryTest {
         val updatedUserId = USER_ID_2
         val originalUserState = MULTI_USER_STATE.toUserState(
             vaultState = VAULT_UNLOCK_DATA,
+            userAccountTokens = emptyList(),
             userOrganizationsList = emptyList(),
             hasPendingAccountAddition = false,
             isBiometricsEnabledProvider = { false },
             vaultUnlockTypeProvider = { VaultUnlockType.MASTER_PASSWORD },
-            isLoggedInProvider = { false },
             isDeviceTrustedProvider = { false },
         )
         fakeAuthDiskSource.userState = MULTI_USER_STATE

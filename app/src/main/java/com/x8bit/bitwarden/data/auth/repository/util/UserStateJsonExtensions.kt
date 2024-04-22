@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
+import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
@@ -77,11 +78,11 @@ fun UserStateJson.toUserStateJsonWithPassword(): UserStateJson {
 @Suppress("LongParameterList")
 fun UserStateJson.toUserState(
     vaultState: List<VaultUnlockData>,
+    userAccountTokens: List<UserAccountTokens>,
     userOrganizationsList: List<UserOrganizations>,
     hasPendingAccountAddition: Boolean,
     isBiometricsEnabledProvider: (userId: String) -> Boolean,
     vaultUnlockTypeProvider: (userId: String) -> VaultUnlockType,
-    isLoggedInProvider: (userId: String) -> Boolean,
     isDeviceTrustedProvider: (userId: String) -> Boolean,
 ): UserState =
     UserState(
@@ -120,7 +121,9 @@ fun UserStateJson.toUserState(
                         .environmentUrlData
                         .toEnvironmentUrlsOrDefault(),
                     isPremium = profile.hasPremium == true,
-                    isLoggedIn = isLoggedInProvider(userId),
+                    isLoggedIn = userAccountTokens
+                        .find { it.userId == userId }
+                        ?.isLoggedIn == true,
                     isVaultUnlocked = vaultUnlocked,
                     needsPasswordReset = needsPasswordReset,
                     organizations = userOrganizationsList

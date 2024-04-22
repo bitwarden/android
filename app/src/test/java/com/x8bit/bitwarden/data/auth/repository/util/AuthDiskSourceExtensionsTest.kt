@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
+import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserSwitchingData
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
@@ -19,6 +20,138 @@ import org.junit.jupiter.api.Test
 
 class AuthDiskSourceExtensionsTest {
     private val authDiskSource: AuthDiskSource = FakeAuthDiskSource()
+
+    @Test
+    fun `userAccountTokens should return data for all available users`() {
+        val mockAccounts = mapOf(
+            "userId1" to mockk<AccountJson>(),
+            "userId2" to mockk<AccountJson>(),
+            "userId3" to mockk<AccountJson>(),
+        )
+        val userStateJson = mockk<UserStateJson> {
+            every { accounts } returns mockAccounts
+        }
+        authDiskSource.apply {
+            userState = userStateJson
+            storeAccountTokens(
+                userId = "userId1",
+                accountTokens = AccountTokensJson(
+                    accessToken = "accessToken1",
+                    refreshToken = "refreshToken1",
+                ),
+            )
+            storeAccountTokens(
+                userId = "userId2",
+                accountTokens = AccountTokensJson(
+                    accessToken = "accessToken2",
+                    refreshToken = "refreshToken2",
+                ),
+            )
+            storeAccountTokens(
+                userId = "userId3",
+                accountTokens = AccountTokensJson(
+                    accessToken = null,
+                    refreshToken = null,
+                ),
+            )
+        }
+
+        assertEquals(
+            listOf(
+                UserAccountTokens(
+                    userId = "userId1",
+                    accessToken = "accessToken1",
+                    refreshToken = "refreshToken1",
+                ),
+                UserAccountTokens(
+                    userId = "userId2",
+                    accessToken = "accessToken2",
+                    refreshToken = "refreshToken2",
+                ),
+                UserAccountTokens(
+                    userId = "userId3",
+                    accessToken = null,
+                    refreshToken = null,
+                ),
+            ),
+            authDiskSource.userAccountTokens,
+        )
+    }
+
+    @Test
+    fun `userAccountTokensFlow should emit whenever there are changes to the token data`() =
+        runTest {
+            val mockAccounts = mapOf(
+                "userId1" to mockk<AccountJson>(),
+                "userId2" to mockk<AccountJson>(),
+                "userId3" to mockk<AccountJson>(),
+            )
+            val userStateJson = mockk<UserStateJson> {
+                every { accounts } returns mockAccounts
+            }
+            authDiskSource.apply {
+                userState = userStateJson
+                storeAccountTokens(
+                    userId = "userId1",
+                    accountTokens = AccountTokensJson(
+                        accessToken = "accessToken1",
+                        refreshToken = "refreshToken1",
+                    ),
+                )
+            }
+
+            authDiskSource.userAccountTokensFlow.test {
+                assertEquals(
+                    listOf(
+                        UserAccountTokens(
+                            userId = "userId1",
+                            accessToken = "accessToken1",
+                            refreshToken = "refreshToken1",
+                        ),
+                        UserAccountTokens(
+                            userId = "userId2",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                        UserAccountTokens(
+                            userId = "userId3",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+
+                authDiskSource.storeAccountTokens(
+                    userId = "userId2",
+                    accountTokens = AccountTokensJson(
+                        accessToken = "accessToken2",
+                        refreshToken = "refreshToken2",
+                    ),
+                )
+
+                assertEquals(
+                    listOf(
+                        UserAccountTokens(
+                            userId = "userId1",
+                            accessToken = "accessToken1",
+                            refreshToken = "refreshToken1",
+                        ),
+                        UserAccountTokens(
+                            userId = "userId2",
+                            accessToken = "accessToken2",
+                            refreshToken = "refreshToken2",
+                        ),
+                        UserAccountTokens(
+                            userId = "userId3",
+                            accessToken = null,
+                            refreshToken = null,
+                        ),
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `userOrganizationsList should return data for all available users`() {
