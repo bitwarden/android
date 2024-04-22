@@ -110,6 +110,13 @@ namespace Bit.Droid
                     userVerificationMediatorService);
                 ServiceContainer.Register<IFido2AuthenticatorService>(fido2AuthenticatorService);
 
+                var fido2GetAssertionUserInterface = new Fido2GetAssertionUserInterface(
+                    ServiceContainer.Resolve<IStateService>(),
+                    ServiceContainer.Resolve<IVaultTimeoutService>(),
+                    ServiceContainer.Resolve<ICipherService>(),
+                    ServiceContainer.Resolve<IUserVerificationMediatorService>());
+                ServiceContainer.Register<IFido2AndroidGetAssertionUserInterface>(fido2GetAssertionUserInterface);                
+
                 var fido2MakeCredentialUserInterface = new Fido2MakeCredentialUserInterface(
                     ServiceContainer.Resolve<IStateService>(),
                     ServiceContainer.Resolve<IVaultTimeoutService>(),
@@ -124,7 +131,7 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IEnvironmentService>(),
                     ServiceContainer.Resolve<ICryptoFunctionService>(),
                     ServiceContainer.Resolve<IFido2AuthenticatorService>(),
-                    new Fido2GetAssertionUserInterface(),
+                    fido2GetAssertionUserInterface,
                     fido2MakeCredentialUserInterface);
                 ServiceContainer.Register<IFido2ClientService>(fido2ClientService);
 

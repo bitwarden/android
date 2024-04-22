@@ -13,6 +13,7 @@ using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities.Fido2;
 using Java.Security;
 using Bit.Core.Services;
+using Bit.App.Platforms.Android.Autofill;
 
 namespace Bit.Droid.Autofill
 {
@@ -22,6 +23,7 @@ namespace Bit.Droid.Autofill
     public class CredentialProviderSelectionActivity : MauiAppCompatActivity
     {
         private LazyResolve<IFido2MediatorService> _fido2MediatorService = new LazyResolve<IFido2MediatorService>();
+        private LazyResolve<IFido2AndroidGetAssertionUserInterface> _fido2GetAssertionUserInterface = new LazyResolve<IFido2AndroidGetAssertionUserInterface>();
         private LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
         private LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
         private LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
@@ -69,7 +71,7 @@ namespace Bit.Droid.Autofill
                 var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
                 var packageName = getRequest?.CallingAppInfo.PackageName;
                 var appInfoOrigin = getRequest?.CallingAppInfo.Origin;
-
+                
                 if (appInfoOrigin is null)
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
@@ -77,12 +79,12 @@ namespace Bit.Droid.Autofill
                     return;
                 }
 
-                var userInterface = new Fido2GetAssertionUserInterface(
-                    cipherId: cipherId,
-                    userVerified: false,
-                    ensureUnlockedVaultCallback: EnsureUnlockedVaultAsync,
-                    hasVaultBeenUnlockedInThisTransaction: () => hasVaultBeenUnlockedInThisTransaction,
-                    verifyUserCallback: (cipherId, uvPreference) => VerifyUserAsync(cipherId, uvPreference, RpId, hasVaultBeenUnlockedInThisTransaction));
+                _fido2GetAssertionUserInterface.Value.Init(
+                    cipherId,
+                    false,
+                    () => hasVaultBeenUnlockedInThisTransaction,
+                    RpId
+                );
 
                 var clientAssertParams = new Fido2ClientAssertCredentialParams
                 {
@@ -139,38 +141,6 @@ namespace Bit.Droid.Autofill
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
                     Finish();
                 });
-            }
-        }
-
-        private async Task EnsureUnlockedVaultAsync()
-        {
-            if (!await _stateService.Value.IsAuthenticatedAsync() || await _vaultTimeoutService.Value.IsLockedAsync())
-            {
-                // this should never happen but just in case.
-                throw new InvalidOperationException("Not authed or vault locked");
-            }
-        }
-
-        internal async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference, string rpId, bool vaultUnlockedDuringThisTransaction)
-        {
-            try
-            {
-                var encrypted = await _cipherService.Value.GetAsync(selectedCipherId);
-                var cipher = await encrypted.DecryptAsync();
-
-                var userVerification = await _userVerificationMediatorService.Value.VerifyUserForFido2Async(
-                    new Fido2UserVerificationOptions(
-                        cipher?.Reprompt == Bit.Core.Enums.CipherRepromptType.Password,
-                        userVerificationPreference,
-                        vaultUnlockedDuringThisTransaction,
-                        rpId)
-                    );
-                return !userVerification.IsCancelled && userVerification.Result;
-            }
-            catch (Exception ex)
-            {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                return false;
             }
         }
 
