@@ -16,8 +16,100 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
+
+  desc "Runs tests"
   lane :check do
     gradle(task: "check")
   end
+
+  desc "Apply build version information"
+  fastlane_require "time"
+  lane :setBuildVersionInfo do |options|
+
+    latestRelease = firebase_app_distribution_get_latest_release(
+      app: "1:867301491091:android:50b626dba42a361651e866",
+      service_credentials_file:options[:serviceCredentialsFile]
+    )
+
+    currentVersionName = latestRelease[:displayVersion]
+
+    # Gather current version information
+    versionParts = currentVersionName.split(".")
+    currentMajor = versionParts[0]
+    currentMinor = versionParts[1]
+    currentRevision = versionParts[2]
+
+    # Current date used to derive next version name.
+    currentDate = Time.new
+    major = currentDate.year.to_s
+    minor = currentDate.strftime "%m"
+
+    # Determine the next revision number to apply.
+    revision = 0
+    if currentMajor == major and currentMinor == minor
+        revision = currentRevision.to_i + 1
+    end
+
+    # Cache next version information
+    nextVersionName = major.to_s + "." + minor.to_s + "." + revision.to_s
+    nextVersionCode = latestRelease[:buildVersion].to_i + 1
+
+    # Read in app build config file.
+    buildConfigPath = "../app/build.gradle.kts"
+    buildConfigFile = File.open(buildConfigPath)
+    buildConfigText = buildConfigFile.read
+    buildConfigFile.close
+
+    # Replace version information.
+    puts "Setting version code to #{nextVersionCode}."
+    buildConfigText.gsub!("versionCode = 1", "versionCode = #{nextVersionCode}")
+    puts "Setting version name to #{nextVersionName}."
+    buildConfigText.gsub!("versionName = \"1.0\"", "versionName = \"#{nextVersionName}\"")
+
+    # Save changes
+    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+  end
+
+  desc "Assemble debug variants"
+  lane :buildDebug do
+    gradle(
+      task: "assemble",
+      build_type: "Debug",
+      print_command: false,
+    )
+  end
+
+  desc "Assemble and sign release APK"
+  lane :buildRelease do |options|
+    gradle(
+      task: "assemble",
+      build_type: "Release",
+      properties: {
+        "android.injected.signing.store.file" => options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
+    )
+  end
+
+  desc "Publish release to Firebase"
+    lane :distributeReleaseToFirebase do |options|
+      release_notes = changelog_from_git_commits(
+        commits_count: 1,
+        pretty: "- %s"
+      )
+
+      puts "Release notes #{release_notes}"
+
+      firebase_app_distribution(
+        app: "1:867301491091:android:50b626dba42a361651e866",
+        android_artifact_type: "APK",
+        android_artifact_path: "app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk",
+        service_credentials_file: options[:serviceCredentialsFile],
+        groups: "internal-prod-group",
+        release_notes: release_notes,
+      )
+    end
 end
