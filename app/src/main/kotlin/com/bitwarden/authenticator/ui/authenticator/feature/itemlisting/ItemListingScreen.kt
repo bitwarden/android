@@ -49,7 +49,6 @@ import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
-import com.bitwarden.authenticator.ui.platform.components.button.BitwardenTextButton
 import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
@@ -275,7 +274,11 @@ fun ItemListingScreen(
                 ItemListingState.ViewState.Loading,
                 -> {
                     EmptyItemListingContent(
-                        onAddCodeClick = onNavigateToQrCodeScanner,
+                        onAddCodeClick = remember(viewModel) {
+                            {
+                                launcher.launch(Manifest.permission.CAMERA)
+                            }
+                        },
                     )
                 }
             }
