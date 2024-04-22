@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -20,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenGroupItem
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
 
 /**
@@ -59,7 +59,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = R.string.type_text),
                 supportingLabel = state.textTypeCount.toString(),
-                startIcon = painterResource(id = R.drawable.ic_send_text),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_send_text),
                 onClick = sendHandlers.onTextTypeClick,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -72,7 +72,7 @@ fun SendContent(
             BitwardenGroupItem(
                 label = stringResource(id = R.string.type_file),
                 supportingLabel = state.fileTypeCount.toString(),
-                startIcon = painterResource(id = R.drawable.ic_send_file),
+                startIcon = rememberVectorPainter(id = R.drawable.ic_send_file),
                 onClick = sendHandlers.onFileTypeClick,
                 modifier = Modifier
                     .fillMaxWidth()

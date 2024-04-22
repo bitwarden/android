@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
@@ -28,6 +27,7 @@ import com.x8bit.bitwarden.ui.platform.components.listitem.BitwardenListItem
 import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import kotlinx.collections.immutable.toPersistentList
 
@@ -129,7 +129,7 @@ fun VaultItemListingContent(
 
             items(state.displayCollectionList) { collection ->
                 BitwardenGroupItem(
-                    startIcon = painterResource(id = R.drawable.ic_collection),
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_collection),
                     label = collection.name,
                     supportingLabel = collection.count.toString(),
                     onClick = { collectionClick(collection.id) },
@@ -158,7 +158,7 @@ fun VaultItemListingContent(
 
             items(state.displayFolderList) { folder ->
                 BitwardenGroupItem(
-                    startIcon = painterResource(id = R.drawable.ic_folder),
+                    startIcon = rememberVectorPainter(id = R.drawable.ic_folder),
                     label = folder.name,
                     supportingLabel = folder.count.toString(),
                     onClick = { folderClick(folder.id) },

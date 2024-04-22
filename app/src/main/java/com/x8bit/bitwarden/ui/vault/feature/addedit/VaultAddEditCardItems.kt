@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
@@ -24,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitchWithActions
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
@@ -212,7 +212,7 @@ fun LazyListScope.vaultAddEditCardItems(
                 actions = {
                     IconButton(onClick = commonHandlers.onTooltipClick) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_tooltip),
+                            painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
                             tint = MaterialTheme.colorScheme.onSurface,
                             contentDescription = stringResource(
                                 id = R.string.master_password_re_prompt_help,

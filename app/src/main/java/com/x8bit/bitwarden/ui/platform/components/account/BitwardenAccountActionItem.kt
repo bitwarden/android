@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.TextStyle
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Displays an icon representing a Bitwarden account with the user's initials superimposed.
@@ -35,7 +35,7 @@ fun BitwardenAccountActionItem(
     color: Color,
     onClick: () -> Unit,
 ) {
-    val iconPainter = painterResource(id = R.drawable.ic_account_initials_container)
+    val iconPainter = rememberVectorPainter(id = R.drawable.ic_account_initials_container)
     val contentDescription = stringResource(id = R.string.account)
 
     IconButton(

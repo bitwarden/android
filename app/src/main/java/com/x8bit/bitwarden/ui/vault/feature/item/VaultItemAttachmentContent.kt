@@ -18,7 +18,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -26,6 +25,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Attachment UI common for all item types.
@@ -85,7 +85,7 @@ fun AttachmentItemContent(
             modifier = Modifier,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_download),
+                painter = rememberVectorPainter(id = R.drawable.ic_download),
                 contentDescription = stringResource(id = R.string.download),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(24.dp),

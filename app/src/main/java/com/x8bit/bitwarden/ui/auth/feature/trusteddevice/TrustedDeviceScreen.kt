@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * The top level composable for the Reset Password screen.
@@ -109,7 +109,7 @@ private fun TrustedDeviceScaffold(
                 title = stringResource(id = R.string.log_in_initiated),
                 scrollBehavior = scrollBehavior,
                 navigationIcon = NavigationIcon(
-                    navigationIcon = painterResource(id = R.drawable.ic_close),
+                    navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                     navigationIconContentDescription = stringResource(id = R.string.close),
                     onNavigationIconClick = handlers.onBackClick,
                 ),

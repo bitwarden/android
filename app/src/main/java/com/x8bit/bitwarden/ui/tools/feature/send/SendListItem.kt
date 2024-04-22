@@ -7,7 +7,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
@@ -17,6 +16,7 @@ import com.x8bit.bitwarden.ui.platform.components.listitem.SelectionItemData
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import kotlinx.collections.immutable.toPersistentList
@@ -62,7 +62,7 @@ fun SendListItem(
         trailingLabelIcons = trailingLabelIcons
             .map {
                 IconResource(
-                    iconPainter = painterResource(it.iconRes),
+                    iconPainter = rememberVectorPainter(it.iconRes),
                     contentDescription = it.contentDescription(),
                 )
             }

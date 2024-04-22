@@ -24,7 +24,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -37,6 +36,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialo
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIcon
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -140,7 +140,7 @@ fun BitwardenListItem(
                 modifier = Modifier.semantics { optionsTestTag?.let { testTag = it } },
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_more_horizontal),
+                    painter = rememberVectorPainter(id = R.drawable.ic_more_horizontal),
                     contentDescription = stringResource(id = R.string.options),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.size(24.dp),

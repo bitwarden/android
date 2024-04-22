@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * The top level composable for the Login screen.
@@ -96,7 +96,7 @@ fun MasterPasswordHintScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.password_hint),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(MasterPasswordHintAction.CloseClick) }

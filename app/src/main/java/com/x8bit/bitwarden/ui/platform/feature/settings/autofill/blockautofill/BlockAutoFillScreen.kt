@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -47,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Displays the block auto-fill screen.
@@ -120,7 +120,7 @@ fun BlockAutoFillScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.block_auto_fill),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_back),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
                 navigationIconContentDescription = stringResource(id = R.string.back),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(BlockAutoFillAction.BackClick) }
@@ -141,7 +141,7 @@ fun BlockAutoFillScreen(
                     modifier = Modifier.testTag("AddItemButton"),
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_plus),
+                        painter = rememberVectorPainter(id = R.drawable.ic_plus),
                         contentDescription = stringResource(id = R.string.add_item),
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
@@ -224,7 +224,7 @@ private fun BlockAutoFillNoItems(
     ) {
         Box(contentAlignment = Alignment.Center) {
             Icon(
-                painter = painterResource(
+                painter = rememberVectorPainter(
                     id = R.drawable.ic_blocked_uri_background,
                 ),
                 contentDescription = null,
@@ -232,7 +232,7 @@ private fun BlockAutoFillNoItems(
             )
 
             Icon(
-                painter = painterResource(
+                painter = rememberVectorPainter(
                     id = R.drawable.ic_blocked_uri_foreground,
                 ),
                 contentDescription = null,
@@ -300,7 +300,7 @@ private fun BlockAutoFillListItem(
             color = MaterialTheme.colorScheme.onSurface,
         )
         Icon(
-            painter = painterResource(id = R.drawable.ic_edit_alt),
+            painter = rememberVectorPainter(id = R.drawable.ic_edit_alt),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.size(24.dp),

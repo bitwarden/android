@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.platform.components.stepper
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.KeyboardType
@@ -12,6 +11,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextFieldWithActions
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Displays a stepper that allows the user to increment and decrement an int value.
@@ -58,7 +58,7 @@ fun BitwardenStepper(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_minus),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),
                     contentDescription = "\u2212",
                 ),
                 onClick = {
@@ -76,7 +76,7 @@ fun BitwardenStepper(
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_plus),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_plus),
                     contentDescription = "+",
                 ),
                 onClick = {

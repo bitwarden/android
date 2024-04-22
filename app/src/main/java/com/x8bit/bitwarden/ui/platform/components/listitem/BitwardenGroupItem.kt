@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -90,7 +90,7 @@ fun BitwardenGroupItem(
         )
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_navigate_next),
+            painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
             contentDescription = null,
             tint = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier
@@ -107,7 +107,7 @@ private fun BitwardenGroupItem_preview() {
         BitwardenGroupItem(
             label = "Sample Label",
             supportingLabel = "5",
-            startIcon = painterResource(id = R.drawable.ic_send_text),
+            startIcon = rememberVectorPainter(id = R.drawable.ic_send_text),
             startIconTestTag = "Test Tag",
             onClick = {},
         )

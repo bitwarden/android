@@ -9,7 +9,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import com.x8bit.bitwarden.R
@@ -23,6 +22,7 @@ import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithRe
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenRowOfActions
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.model.VaultLinkedFieldType
 import kotlinx.collections.immutable.ImmutableList
@@ -156,7 +156,7 @@ private fun CustomFieldBoolean(
             actions = {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_settings),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_settings),
                         contentDescription = stringResource(id = R.string.edit),
                     ),
                     onClick = onEditValue,
@@ -186,7 +186,7 @@ private fun CustomFieldHiddenField(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_settings),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_settings),
                     contentDescription = stringResource(id = R.string.edit),
                 ),
                 onClick = onEditValue,
@@ -215,7 +215,7 @@ private fun CustomFieldTextField(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_settings),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_settings),
                     contentDescription = stringResource(id = R.string.edit),
                 ),
                 onClick = onEditValue,
@@ -262,7 +262,7 @@ private fun CustomFieldLinkedField(
             actions = {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_settings),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_settings),
                         contentDescription = stringResource(id = R.string.edit),
                     ),
                     onClick = onEditValue,

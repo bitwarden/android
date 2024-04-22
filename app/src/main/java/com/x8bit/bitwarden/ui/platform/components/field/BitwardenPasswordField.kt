@@ -18,7 +18,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -29,6 +28,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * Represents a Bitwarden-styled password field that hoists show/hide password state to the caller.
@@ -109,7 +109,7 @@ fun BitwardenPasswordField(
                 val contentDescriptionRes = if (showPassword) R.string.hide else R.string.show
                 Icon(
                     modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
-                    painter = painterResource(id = painterRes),
+                    painter = rememberVectorPainter(id = painterRes),
                     contentDescription = stringResource(id = contentDescriptionRes),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

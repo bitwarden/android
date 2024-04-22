@@ -16,7 +16,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -35,6 +34,7 @@ import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithRe
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitchWithActions
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.components.collectionItemsSelector
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
@@ -119,7 +119,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                         onClick = loginItemTypeHandlers.onClearTotpKeyClick,
                     ) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_close),
+                            painter = rememberVectorPainter(id = R.drawable.ic_close),
                             contentDescription = stringResource(id = R.string.delete),
                         )
                     }
@@ -130,7 +130,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 actions = {
                     BitwardenIconButtonWithResource(
                         iconRes = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_copy),
+                            iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                             contentDescription = stringResource(id = R.string.copy_totp),
                         ),
                         onClick = {
@@ -139,7 +139,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                     )
                     BitwardenIconButtonWithResource(
                         iconRes = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_camera),
+                            iconPainter = rememberVectorPainter(id = R.drawable.ic_camera),
                             contentDescription = stringResource(id = R.string.camera),
                         ),
                         onClick = onTotpSetupClick,
@@ -152,7 +152,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenFilledTonalButtonWithIcon(
                 label = stringResource(id = R.string.setup_totp),
-                icon = painterResource(id = R.drawable.ic_light_bulb),
+                icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
                 onClick = onTotpSetupClick,
                 modifier = Modifier
                     .testTag("SetupTotpButton")
@@ -253,7 +253,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 actions = {
                     IconButton(onClick = commonActionHandler.onTooltipClick) {
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_tooltip),
+                            painter = rememberVectorPainter(id = R.drawable.ic_tooltip),
                             tint = MaterialTheme.colorScheme.onSurface,
                             contentDescription = stringResource(
                                 id = R.string.master_password_re_prompt_help,
@@ -385,7 +385,7 @@ private fun UsernameRow(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_generator),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_generator),
                     contentDescription = stringResource(id = R.string.generate_username),
                 ),
                 onClick = {
@@ -447,7 +447,7 @@ private fun PasswordRow(
         ) {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_check_mark),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_check_mark),
                     contentDescription = stringResource(id = R.string.check_password),
                 ),
                 onClick = loginItemTypeHandlers.onPasswordCheckerClick,
@@ -456,7 +456,7 @@ private fun PasswordRow(
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_generator),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_generator),
                     contentDescription = stringResource(id = R.string.generate_password),
                 ),
                 onClick = {

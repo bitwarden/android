@@ -10,7 +10,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -134,7 +134,7 @@ private fun BitwardenPasswordFieldWithActions_preview() {
             actions = {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_check_mark),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_check_mark),
                         contentDescription = "",
                     ),
                     onClick = {},

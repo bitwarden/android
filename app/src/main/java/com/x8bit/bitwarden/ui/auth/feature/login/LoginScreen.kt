@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -52,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.collections.immutable.persistentListOf
@@ -122,7 +122,7 @@ fun LoginScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.app_name),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(LoginAction.CloseButtonClick) }
@@ -275,7 +275,7 @@ private fun LoginScreenContent(
         if (state.shouldShowLoginWithDevice) {
             BitwardenOutlinedButtonWithIcon(
                 label = stringResource(id = R.string.log_in_with_device),
-                icon = painterResource(id = R.drawable.ic_device),
+                icon = rememberVectorPainter(id = R.drawable.ic_device),
                 onClick = onLoginWithDeviceClick,
                 modifier = Modifier
                     .testTag("LogInWithAnotherDeviceButton")
@@ -288,7 +288,7 @@ private fun LoginScreenContent(
 
         BitwardenOutlinedButtonWithIcon(
             label = stringResource(id = R.string.log_in_sso),
-            icon = painterResource(id = R.drawable.ic_briefcase),
+            icon = rememberVectorPainter(id = R.drawable.ic_briefcase),
             onClick = onSingleSignOnClick,
             modifier = Modifier
                 .testTag("LogInWithSsoButton")

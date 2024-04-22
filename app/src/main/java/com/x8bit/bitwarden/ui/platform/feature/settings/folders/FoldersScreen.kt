@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.style.TextAlign
@@ -41,6 +40,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingContent
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
 
 /**
@@ -79,7 +79,7 @@ fun FoldersScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.folders),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(FoldersAction.CloseButtonClick) }
@@ -97,7 +97,7 @@ fun FoldersScreen(
                     .navigationBarsPadding(),
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_plus),
+                    painter = rememberVectorPainter(id = R.drawable.ic_plus),
                     contentDescription = stringResource(id = R.string.add_item),
                     tint = MaterialTheme.colorScheme.onPrimaryContainer,
                 )

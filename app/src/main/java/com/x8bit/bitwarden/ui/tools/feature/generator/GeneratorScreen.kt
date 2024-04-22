@@ -40,7 +40,6 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -72,6 +71,7 @@ import com.x8bit.bitwarden.ui.platform.components.stepper.BitwardenStepper
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -276,7 +276,7 @@ private fun ModalAppBar(
 ) {
     BitwardenTopAppBar(
         title = stringResource(id = R.string.generator),
-        navigationIcon = painterResource(id = R.drawable.ic_close),
+        navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
         navigationIconContentDescription = stringResource(id = R.string.close),
         onNavigationIconClick = onCloseClick,
         scrollBehavior = scrollBehavior,
@@ -395,7 +395,7 @@ private fun GeneratedStringItem(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_copy),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                     contentDescription = stringResource(id = R.string.copy),
                 ),
                 onClick = onCopyClick,
@@ -403,7 +403,7 @@ private fun GeneratedStringItem(
             )
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_generator),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_generator),
                     contentDescription = stringResource(id = R.string.generate_password),
                 ),
                 onClick = onRegenerateClick,

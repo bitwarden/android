@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -39,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
  * A custom composable representing a dialog that displays the time picker dialog.
@@ -98,7 +98,7 @@ fun BitwardenTimePickerDialog(
                 @Suppress("MaxLineLength")
                 Icon(
                     modifier = Modifier.size(24.dp),
-                    painter = painterResource(id = R.drawable.ic_keyboard),
+                    painter = rememberVectorPainter(id = R.drawable.ic_keyboard),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     contentDescription = stringResource(
                         // TODO: Get our own string for this (BIT-1405)

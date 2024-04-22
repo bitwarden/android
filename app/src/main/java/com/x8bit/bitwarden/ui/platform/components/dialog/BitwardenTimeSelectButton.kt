@@ -14,12 +14,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.util.orNow
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.time.ZonedDateTime
@@ -77,7 +77,7 @@ fun BitwardenTimeSelectButton(
         enabled = shouldShowDialog,
         trailingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_region_select_dropdown),
+                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )

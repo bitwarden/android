@@ -10,10 +10,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
@@ -66,7 +66,7 @@ private fun BitwardenFilledTonalButtonWithIcon_preview() {
     BitwardenTheme {
         BitwardenFilledTonalButtonWithIcon(
             label = "Sample Text",
-            icon = painterResource(id = R.drawable.ic_tooltip),
+            icon = rememberVectorPainter(id = R.drawable.ic_tooltip),
             onClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),
         )

@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -28,6 +27,7 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.indicator.BitwardenCircularCountdownIndicator
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultLoginItemTypeHandlers
@@ -311,7 +311,7 @@ private fun PasswordField(
             actions = {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_check_mark),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_check_mark),
                         contentDescription = stringResource(
                             id = R.string.check_known_data_breaches_for_this_password,
                         ),
@@ -321,7 +321,7 @@ private fun PasswordField(
                 )
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_copy),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                         contentDescription = stringResource(id = R.string.copy_password),
                     ),
                     onClick = onCopyPasswordClick,
@@ -389,7 +389,7 @@ private fun TotpField(
                     )
                     BitwardenIconButtonWithResource(
                         iconRes = IconResource(
-                            iconPainter = painterResource(id = R.drawable.ic_copy),
+                            iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                             contentDescription = stringResource(id = R.string.copy_totp),
                         ),
                         onClick = onCopyTotpClick,
@@ -429,7 +429,7 @@ private fun UriField(
             if (uriData.isLaunchable) {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_launch),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_launch),
                         contentDescription = stringResource(id = R.string.launch),
                     ),
                     onClick = { onLaunchUriClick(uriData.uri) },
@@ -439,7 +439,7 @@ private fun UriField(
             if (uriData.isCopyable) {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
-                        iconPainter = painterResource(id = R.drawable.ic_copy),
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                         contentDescription = stringResource(id = R.string.copy),
                     ),
                     onClick = { onCopyUriClick(uriData.uri) },
@@ -467,7 +467,7 @@ private fun UsernameField(
         actions = {
             BitwardenIconButtonWithResource(
                 iconRes = IconResource(
-                    iconPainter = painterResource(id = R.drawable.ic_copy),
+                    iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                     contentDescription = stringResource(id = R.string.copy_username),
                 ),
                 onClick = onCopyUsernameClick,

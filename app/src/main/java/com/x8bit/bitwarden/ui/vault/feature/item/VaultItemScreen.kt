@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -45,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPassword
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
@@ -181,7 +181,7 @@ fun VaultItemScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.view_item),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = painterResource(id = R.drawable.ic_close),
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(VaultItemAction.Common.CloseClick) }
@@ -266,7 +266,7 @@ fun VaultItemScreen(
                         .padding(bottom = 16.dp),
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_edit),
+                        painter = rememberVectorPainter(id = R.drawable.ic_edit),
                         contentDescription = stringResource(id = R.string.edit_item),
                     )
                 }

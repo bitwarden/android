@@ -10,7 +10,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
@@ -20,6 +19,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
+import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -88,7 +88,7 @@ fun VaultItemCardContent(
                     actions = {
                         BitwardenIconButtonWithResource(
                             iconRes = IconResource(
-                                iconPainter = painterResource(id = R.drawable.ic_copy),
+                                iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                                 contentDescription = stringResource(id = R.string.copy_number),
                             ),
                             onClick = vaultCardItemTypeHandlers.onCopyNumberClick,
@@ -150,7 +150,7 @@ fun VaultItemCardContent(
                     actions = {
                         BitwardenIconButtonWithResource(
                             iconRes = IconResource(
-                                iconPainter = painterResource(id = R.drawable.ic_copy),
+                                iconPainter = rememberVectorPainter(id = R.drawable.ic_copy),
                                 contentDescription = stringResource(
                                     id = R.string.copy_security_code,
                                 ),
