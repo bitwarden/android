@@ -15,4 +15,6 @@
     <string name="password_protected" translatable="false">Password Protected</string>
     <string name="password_used_to_export" translatable="false">This password will be used to export and import this file</string>
     <string name="autofill_suggestion" translatable="false">Autofill suggestion</string>
+    <string name="continue_to_complete_web_authn_verfication" translatable="false">Continue to complete WebAuthn verification.</string>
+    <string name="launch_web_authn" translatable="false">Launch WebAuthn</string>
 </resources>

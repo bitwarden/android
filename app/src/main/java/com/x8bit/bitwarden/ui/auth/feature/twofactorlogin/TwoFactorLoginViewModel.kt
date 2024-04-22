@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isDuo
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
@@ -456,12 +457,7 @@ data class TwoFactorLoginState(
     /**
      * The text to display for the button given the [authMethod].
      */
-    val buttonText: Text
-        get() = if (authMethod.isDuo) {
-            R.string.launch_duo.asText()
-        } else {
-            R.string.continue_text.asText()
-        }
+    val buttonText: Text get() = authMethod.button
 
     /**
      * Indicates if the screen should be listening for NFC events from the operating system.

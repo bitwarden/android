@@ -385,7 +385,8 @@ private const val TWO_FACTOR_BODY_JSON = """
 {
   "TwoFactorProviders2": {"1": {"Email": "ex***@email.com"}, "0": {"Email": null}},
   "SsoEmail2faSessionToken": "exampleToken",
-  "CaptchaBypassToken": "BWCaptchaBypass_ABCXYZ"
+  "CaptchaBypassToken": "BWCaptchaBypass_ABCXYZ",
+  "TwoFactorProviders": ["1", "3", "0"]
 }
 """
 private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
@@ -395,6 +396,7 @@ private val TWO_FACTOR_BODY = GetTokenResponseJson.TwoFactorRequired(
     ),
     ssoToken = "exampleToken",
     captchaToken = "BWCaptchaBypass_ABCXYZ",
+    twoFactorProviders = listOf("1", "3", "0"),
 )
 
 private const val LOGIN_SUCCESS_JSON = """

@@ -257,6 +257,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 authMethodsData = authMethodsData,
                 captchaToken = null,
                 ssoToken = null,
+                twoFactorProviders = null,
             )
             every { authRepository.twoFactorResponse } returns response
             val mockkUri = mockk<Uri>()
@@ -291,6 +292,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 authMethodsData = authMethodsData,
                 captchaToken = null,
                 ssoToken = null,
+                twoFactorProviders = null,
             )
             every { authRepository.twoFactorResponse } returns response
             val viewModel = createViewModel(
@@ -625,9 +627,10 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         )
         private val TWO_FACTOR_RESPONSE =
             GetTokenResponseJson.TwoFactorRequired(
-                TWO_FACTOR_AUTH_METHODS_DATA,
-                null,
-                null,
+                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+                captchaToken = null,
+                ssoToken = null,
+                twoFactorProviders = null,
             )
 
         private val DEFAULT_STATE = TwoFactorLoginState(

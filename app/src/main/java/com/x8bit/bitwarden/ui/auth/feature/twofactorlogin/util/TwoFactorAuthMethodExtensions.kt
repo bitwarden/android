@@ -20,6 +20,7 @@ val TwoFactorAuthMethod.title: Text
 
         TwoFactorAuthMethod.EMAIL -> R.string.email.asText()
         TwoFactorAuthMethod.RECOVERY_CODE -> R.string.recovery_code_title.asText()
+        TwoFactorAuthMethod.WEB_AUTH -> R.string.fido2_authenticate_web_authn.asText()
         TwoFactorAuthMethod.YUBI_KEY -> R.string.yubi_key_title.asText()
         else -> "".asText()
     }
@@ -38,9 +39,30 @@ fun TwoFactorAuthMethod.description(email: String): Text = when (this) {
     }
 
     TwoFactorAuthMethod.EMAIL -> R.string.enter_verification_code_email.asText(email)
+    TwoFactorAuthMethod.WEB_AUTH -> R.string.continue_to_complete_web_authn_verfication.asText()
     TwoFactorAuthMethod.YUBI_KEY -> R.string.yubi_key_instruction.asText()
     else -> "".asText()
 }
+
+/**
+ * Get the button label for the given auth method.
+ */
+val TwoFactorAuthMethod.button: Text
+    get() = when (this) {
+        TwoFactorAuthMethod.DUO,
+        TwoFactorAuthMethod.DUO_ORGANIZATION,
+        -> R.string.launch_duo.asText()
+
+        TwoFactorAuthMethod.AUTHENTICATOR_APP,
+        TwoFactorAuthMethod.EMAIL,
+        TwoFactorAuthMethod.YUBI_KEY,
+        TwoFactorAuthMethod.U2F,
+        TwoFactorAuthMethod.REMEMBER,
+        TwoFactorAuthMethod.RECOVERY_CODE,
+        -> R.string.continue_text.asText()
+
+        TwoFactorAuthMethod.WEB_AUTH -> R.string.launch_web_authn.asText()
+    }
 
 /**
  * Gets a boolean indicating if the given auth method uses Duo.

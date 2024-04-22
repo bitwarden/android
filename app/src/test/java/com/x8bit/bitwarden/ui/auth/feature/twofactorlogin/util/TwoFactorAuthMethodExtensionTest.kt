@@ -20,7 +20,7 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.DUO_ORGANIZATION to R.string.duo_org_title.asText(
                 R.string.organization.asText(),
             ),
-            TwoFactorAuthMethod.WEB_AUTH to "".asText(),
+            TwoFactorAuthMethod.WEB_AUTH to R.string.fido2_authenticate_web_authn.asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to R.string.recovery_code_title.asText(),
         )
             .forEach { (type, title) ->
@@ -48,7 +48,8 @@ class TwoFactorAuthMethodExtensionTest {
                     .asText()
                     .concat(" ".asText())
                     .concat(R.string.follow_the_steps_from_duo_to_finish_logging_in.asText()),
-            TwoFactorAuthMethod.WEB_AUTH to "".asText(),
+            TwoFactorAuthMethod.WEB_AUTH to
+                R.string.continue_to_complete_web_authn_verfication.asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to "".asText(),
         )
             .forEach { (type, title) ->
@@ -56,6 +57,24 @@ class TwoFactorAuthMethodExtensionTest {
                     title,
                     type.description("ex***@email.com"),
                 )
+            }
+    }
+
+    @Test
+    fun `button returns the expected value`() {
+        mapOf(
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to R.string.continue_text.asText(),
+            TwoFactorAuthMethod.EMAIL to R.string.continue_text.asText(),
+            TwoFactorAuthMethod.DUO to R.string.launch_duo.asText(),
+            TwoFactorAuthMethod.YUBI_KEY to R.string.continue_text.asText(),
+            TwoFactorAuthMethod.U2F to R.string.continue_text.asText(),
+            TwoFactorAuthMethod.REMEMBER to R.string.continue_text.asText(),
+            TwoFactorAuthMethod.DUO_ORGANIZATION to R.string.launch_duo.asText(),
+            TwoFactorAuthMethod.WEB_AUTH to R.string.launch_web_authn.asText(),
+            TwoFactorAuthMethod.RECOVERY_CODE to R.string.continue_text.asText(),
+        )
+            .forEach { (type, buttonLabel) ->
+                assertEquals(buttonLabel, type.button)
             }
     }
 
