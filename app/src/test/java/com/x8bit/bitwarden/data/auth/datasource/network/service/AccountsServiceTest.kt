@@ -47,10 +47,11 @@ class AccountsServiceTest : BaseServiceTest() {
     @Test
     fun `deleteAccount with empty response is success`() = runTest {
         val masterPasswordHash = "37y4d8r379r4789nt387r39k3dr87nr93"
+        val oneTimePassword = null
         val json = ""
         val response = MockResponse().setBody(json)
         server.enqueue(response)
-        assertTrue(service.deleteAccount(masterPasswordHash).isSuccess)
+        assertTrue(service.deleteAccount(masterPasswordHash, oneTimePassword).isSuccess)
     }
 
     @Test

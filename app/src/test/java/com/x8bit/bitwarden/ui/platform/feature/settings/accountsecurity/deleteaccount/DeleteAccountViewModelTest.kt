@@ -81,7 +81,9 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         runTest {
             val viewModel = createViewModel()
             val masterPassword = "ckasb kcs ja"
-            coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Success
+            coEvery {
+                authRepo.deleteAccountWithMasterPassword(masterPassword)
+            } returns DeleteAccountResult.Success
 
             viewModel.trySendAction(
                 DeleteAccountAction.DeleteAccountConfirmDialogClick(
@@ -95,7 +97,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             )
 
             coVerify {
-                authRepo.deleteAccount(masterPassword)
+                authRepo.deleteAccountWithMasterPassword(masterPassword)
             }
         }
 
@@ -122,7 +124,9 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
     fun `on DeleteAccountClick should update dialog state when deleteAccount fails`() = runTest {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
-        coEvery { authRepo.deleteAccount(masterPassword) } returns DeleteAccountResult.Error
+        coEvery {
+            authRepo.deleteAccountWithMasterPassword(masterPassword)
+        } returns DeleteAccountResult.Error
 
         viewModel.trySendAction(DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword))
 
@@ -136,7 +140,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         )
 
         coVerify {
-            authRepo.deleteAccount(masterPassword)
+            authRepo.deleteAccountWithMasterPassword(masterPassword)
         }
     }
 

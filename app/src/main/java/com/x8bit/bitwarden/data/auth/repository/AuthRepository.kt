@@ -122,9 +122,16 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     fun clearPendingAccountDeletion()
 
     /**
-     * Attempt to delete the current account and logout them out upon success.
+     * Attempt to delete the current account using the [masterPassword] and log them out
+     * upon success.
      */
-    suspend fun deleteAccount(password: String): DeleteAccountResult
+    suspend fun deleteAccountWithMasterPassword(masterPassword: String): DeleteAccountResult
+
+    /**
+     * Attempt to delete the current account using a [oneTimePassword] and log them out
+     * upon success.
+     */
+    suspend fun deleteAccountWithOneTimePassword(oneTimePassword: String): DeleteAccountResult
 
     /**
      * Attempt to create a new user via SSO and log them into their account. Upon success the new

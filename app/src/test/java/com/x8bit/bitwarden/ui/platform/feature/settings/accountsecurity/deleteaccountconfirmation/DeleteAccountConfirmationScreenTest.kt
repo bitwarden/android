@@ -4,7 +4,10 @@ import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -123,7 +126,52 @@ class DeleteAccountConfirmationScreenTest : BaseComposeTest() {
             viewModel.trySendAction(DeleteAccountConfirmationAction.DeleteAccountAcknowledge)
         }
     }
+
+    @Test
+    fun `Delete account button click should emit DeleteAccountClick`() {
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                verificationCode = "123456",
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText("Delete account")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.DeleteAccountClick)
+        }
+    }
+
+    @Test
+    fun `Resend code button click should emit ResendCodeClick`() {
+        composeTestRule
+            .onNodeWithText("Resend code")
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(DeleteAccountConfirmationAction.ResendCodeClick)
+        }
+    }
+
+    @Test
+    fun `Verification code text input should emit VerificationCodeTextChange`() {
+        composeTestRule
+            .onAllNodesWithText("Verification code")
+            .onFirst()
+            .performTextInput("123456")
+
+        verify {
+            viewModel.trySendAction(
+                DeleteAccountConfirmationAction.VerificationCodeTextChange("123456"),
+            )
+        }
+    }
 }
 
 private val DEFAULT_STATE: DeleteAccountConfirmationState =
-    DeleteAccountConfirmationState(dialog = null)
+    DeleteAccountConfirmationState(
+        dialog = null,
+        verificationCode = "",
+    )

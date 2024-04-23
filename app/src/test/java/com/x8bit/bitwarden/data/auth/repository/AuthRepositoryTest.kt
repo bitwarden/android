@@ -595,7 +595,10 @@ class AuthRepositoryTest {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
         coEvery {
-            accountsService.deleteAccount(hashedMasterPassword)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
         } returns Unit.asSuccess()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
@@ -603,7 +606,7 @@ class AuthRepositoryTest {
             assertEquals(originalUserState, awaitItem())
 
             // Deleting the account sets the pending deletion flag
-            repository.deleteAccount(password = masterPassword)
+            repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
             // Update the account. No changes are emitted because
             // the pending deletion blocks the update.
@@ -619,7 +622,7 @@ class AuthRepositoryTest {
     @Test
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
-        val result = repository.deleteAccount(password = masterPassword)
+        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
         assertEquals(DeleteAccountResult.Error, result)
     }
 
@@ -632,7 +635,7 @@ class AuthRepositoryTest {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns Throwable("Fail").asFailure()
 
-        val result = repository.deleteAccount(password = masterPassword)
+        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Error, result)
         coVerify {
@@ -650,20 +653,26 @@ class AuthRepositoryTest {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
         coEvery {
-            accountsService.deleteAccount(hashedMasterPassword)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
         } returns Throwable("Fail").asFailure()
 
-        val result = repository.deleteAccount(password = masterPassword)
+        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Error, result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-            accountsService.deleteAccount(hashedMasterPassword)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
         }
     }
 
     @Test
-    fun `delete account succeeds`() = runTest {
+    fun `deleteAccountWithMasterPassword succeeds`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
@@ -672,15 +681,45 @@ class AuthRepositoryTest {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         } returns hashedMasterPassword.asSuccess()
         coEvery {
-            accountsService.deleteAccount(hashedMasterPassword)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
         } returns Unit.asSuccess()
 
-        val result = repository.deleteAccount(password = masterPassword)
+        val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
         assertEquals(DeleteAccountResult.Success, result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
-            accountsService.deleteAccount(hashedMasterPassword)
+            accountsService.deleteAccount(
+                masterPasswordHash = hashedMasterPassword,
+                oneTimePassword = null,
+            )
+        }
+    }
+
+    @Test
+    fun `deleteAccountWithOneTimePassword succeeds`() = runTest {
+        val oneTimePassword = "123456"
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        coEvery {
+            accountsService.deleteAccount(
+                masterPasswordHash = null,
+                oneTimePassword = oneTimePassword,
+            )
+        } returns Unit.asSuccess()
+
+        val result = repository.deleteAccountWithOneTimePassword(
+            oneTimePassword = oneTimePassword,
+        )
+
+        assertEquals(DeleteAccountResult.Success, result)
+        coVerify {
+            accountsService.deleteAccount(
+                masterPasswordHash = null,
+                oneTimePassword = oneTimePassword,
+            )
         }
     }
 

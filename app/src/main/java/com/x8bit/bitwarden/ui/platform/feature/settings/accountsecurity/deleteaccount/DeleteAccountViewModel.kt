@@ -78,7 +78,7 @@ class DeleteAccountViewModel @Inject constructor(
             it.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading)
         }
         viewModelScope.launch {
-            val result = authRepository.deleteAccount(action.masterPassword)
+            val result = authRepository.deleteAccountWithMasterPassword(action.masterPassword)
             sendAction(DeleteAccountAction.Internal.DeleteAccountComplete(result))
         }
     }

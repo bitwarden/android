@@ -348,18 +348,42 @@ class AuthRepositoryImpl(
         mutableHasPendingAccountDeletionStateFlow.value = false
     }
 
-    override suspend fun deleteAccount(password: String): DeleteAccountResult {
+    override suspend fun deleteAccountWithMasterPassword(
+        masterPassword: String,
+    ): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
             ?: return DeleteAccountResult.Error
         mutableHasPendingAccountDeletionStateFlow.value = true
         return authSdkSource
             .hashPassword(
                 email = profile.email,
-                password = password,
+                password = masterPassword,
                 kdf = profile.toSdkParams(),
                 purpose = HashPurpose.SERVER_AUTHORIZATION,
             )
-            .flatMap { hashedPassword -> accountsService.deleteAccount(hashedPassword) }
+            .flatMap { hashedPassword ->
+                accountsService.deleteAccount(
+                    masterPasswordHash = hashedPassword,
+                    oneTimePassword = null,
+                )
+            }
+            .onSuccess { logout() }
+            .onFailure { clearPendingAccountDeletion() }
+            .fold(
+                onFailure = { DeleteAccountResult.Error },
+                onSuccess = { DeleteAccountResult.Success },
+            )
+    }
+
+    override suspend fun deleteAccountWithOneTimePassword(
+        oneTimePassword: String,
+    ): DeleteAccountResult {
+        mutableHasPendingAccountDeletionStateFlow.value = true
+        return accountsService
+            .deleteAccount(
+                masterPasswordHash = null,
+                oneTimePassword = oneTimePassword,
+            )
             .onSuccess { logout() }
             .onFailure { clearPendingAccountDeletion() }
             .fold(

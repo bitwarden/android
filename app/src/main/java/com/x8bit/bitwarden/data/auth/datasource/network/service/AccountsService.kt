@@ -18,7 +18,7 @@ interface AccountsService {
     /**
      * Make delete account request.
      */
-    suspend fun deleteAccount(masterPasswordHash: String): Result<Unit>
+    suspend fun deleteAccount(masterPasswordHash: String?, oneTimePassword: String?): Result<Unit>
 
     /**
      * Request a one-time passcode that is sent to the user's email.
