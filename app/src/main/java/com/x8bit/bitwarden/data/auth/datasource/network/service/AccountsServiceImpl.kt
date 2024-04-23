@@ -31,8 +31,16 @@ class AccountsServiceImpl(
             ),
         )
 
-    override suspend fun deleteAccount(masterPasswordHash: String): Result<Unit> =
-        authenticatedAccountsApi.deleteAccount(DeleteAccountRequestJson(masterPasswordHash))
+    override suspend fun deleteAccount(
+        masterPasswordHash: String?,
+        oneTimePassword: String?,
+    ): Result<Unit> =
+        authenticatedAccountsApi.deleteAccount(
+            DeleteAccountRequestJson(
+                masterPasswordHash = masterPasswordHash,
+                oneTimePassword = oneTimePassword,
+            ),
+        )
 
     override suspend fun requestOneTimePasscode(): Result<Unit> =
         authenticatedAccountsApi.requestOtp()

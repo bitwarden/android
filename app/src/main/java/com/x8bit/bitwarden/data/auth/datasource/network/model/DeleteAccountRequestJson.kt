@@ -6,10 +6,13 @@ import kotlinx.serialization.Serializable
 /**
  * Request body for deleting an account.
  *
- * @param masterPasswordHash the master password (encrypted).
+ * @param masterPasswordHash The master password (encrypted).
+ * @param oneTimePassword The one time password.
  */
 @Serializable
 data class DeleteAccountRequestJson(
     @SerialName("MasterPasswordHash")
-    val masterPasswordHash: String,
+    val masterPasswordHash: String?,
+    @SerialName("otp")
+    val oneTimePassword: String?,
 )
