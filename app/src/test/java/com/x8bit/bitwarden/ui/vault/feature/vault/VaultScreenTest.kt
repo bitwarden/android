@@ -28,6 +28,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
+import com.x8bit.bitwarden.ui.util.assertRemovalConfirmationDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertScrollableNodeDoesNotExist
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertSwitcherIsNotDisplayed
@@ -38,7 +39,8 @@ import com.x8bit.bitwarden.ui.util.performAccountLongClick
 import com.x8bit.bitwarden.ui.util.performAddAccountClick
 import com.x8bit.bitwarden.ui.util.performLockAccountClick
 import com.x8bit.bitwarden.ui.util.performLogoutAccountClick
-import com.x8bit.bitwarden.ui.util.performLogoutAccountConfirmationClick
+import com.x8bit.bitwarden.ui.util.performRemoveAccountClick
+import com.x8bit.bitwarden.ui.util.performYesDialogButtonClick
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -334,9 +336,43 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule.performAccountLongClick(ACTIVE_ACCOUNT_SUMMARY)
         composeTestRule.performLogoutAccountClick()
 
-        composeTestRule.performLogoutAccountConfirmationClick()
+        composeTestRule.performYesDialogButtonClick()
 
         verify { viewModel.trySendAction(VaultAction.LogoutAccountClick(ACTIVE_ACCOUNT_SUMMARY)) }
+        composeTestRule.assertNoDialogExists()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `remove account button click in the lock-or-logout dialog should show the remove account confirmation dialog and hide the lock-or-logout dialog`() {
+        // Show the lock-or-logout dialog
+        val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
+        mutableStateFlow.update {
+            it.copy(accountSummaries = listOf(activeAccountSummary))
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(activeAccountSummary)
+
+        composeTestRule.performRemoveAccountClick()
+
+        composeTestRule.assertRemovalConfirmationDialogIsDisplayed(activeAccountSummary)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `remove account button click in the remove account confirmation dialog should send LogoutAccountClick action and close the dialog`() {
+        // Show the remove account confirmation dialog
+        val activeAccountSummary = ACTIVE_ACCOUNT_SUMMARY.copy(isLoggedIn = false)
+        mutableStateFlow.update {
+            it.copy(accountSummaries = listOf(activeAccountSummary))
+        }
+        composeTestRule.performAccountIconClick()
+        composeTestRule.performAccountLongClick(activeAccountSummary)
+        composeTestRule.performRemoveAccountClick()
+
+        composeTestRule.performYesDialogButtonClick()
+
+        verify { viewModel.trySendAction(VaultAction.LogoutAccountClick(activeAccountSummary)) }
         composeTestRule.assertNoDialogExists()
     }
 

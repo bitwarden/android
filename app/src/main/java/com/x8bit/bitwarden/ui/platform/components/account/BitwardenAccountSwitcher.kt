@@ -49,6 +49,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.scrolledContainerBackground
 import com.x8bit.bitwarden.ui.platform.base.util.toSafeOverlayColor
 import com.x8bit.bitwarden.ui.platform.base.util.toUnscaledTextUnit
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLogoutConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenRemovalConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenBasicDialogRow
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
@@ -116,6 +117,7 @@ fun BitwardenAccountSwitcher(
 
     var lockOrLogoutAccount by remember { mutableStateOf<AccountSummary?>(null) }
     var logoutConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
+    var removeConfirmationAccount by remember { mutableStateOf<AccountSummary?>(null) }
     when {
         isVisibleActual -> {
             // Can not show dialogs when the switcher itself is visible
@@ -133,6 +135,10 @@ fun BitwardenAccountSwitcher(
                     lockOrLogoutAccount = null
                     logoutConfirmationAccount = it
                 },
+                onRemoveAccountClick = {
+                    lockOrLogoutAccount = null
+                    removeConfirmationAccount = it
+                },
             )
         }
 
@@ -143,6 +149,17 @@ fun BitwardenAccountSwitcher(
                 onConfirmClick = {
                     onLogoutAccountClick(requireNotNull(logoutConfirmationAccount))
                     logoutConfirmationAccount = null
+                },
+            )
+        }
+
+        removeConfirmationAccount != null -> {
+            BitwardenRemovalConfirmationDialog(
+                accountSummary = requireNotNull(removeConfirmationAccount),
+                onDismissRequest = { removeConfirmationAccount = null },
+                onConfirmClick = {
+                    onLogoutAccountClick(requireNotNull(removeConfirmationAccount))
+                    removeConfirmationAccount = null
                 },
             )
         }
@@ -337,6 +354,7 @@ private fun LockOrLogoutDialog(
     onDismissRequest: () -> Unit,
     onLockAccountClick: (AccountSummary) -> Unit,
     onLogoutAccountClick: (AccountSummary) -> Unit,
+    onRemoveAccountClick: (AccountSummary) -> Unit,
 ) {
     BitwardenSelectionDialog(
         title = "${accountSummary.email}\n${accountSummary.environmentLabel}",
@@ -350,12 +368,21 @@ private fun LockOrLogoutDialog(
                     },
                 )
             }
-            BitwardenBasicDialogRow(
-                text = stringResource(id = R.string.log_out),
-                onClick = {
-                    onLogoutAccountClick(accountSummary)
-                },
-            )
+            if (accountSummary.isLoggedIn) {
+                BitwardenBasicDialogRow(
+                    text = stringResource(id = R.string.log_out),
+                    onClick = {
+                        onLogoutAccountClick(accountSummary)
+                    },
+                )
+            } else {
+                BitwardenBasicDialogRow(
+                    text = stringResource(id = R.string.remove_account),
+                    onClick = {
+                        onRemoveAccountClick(accountSummary)
+                    },
+                )
+            }
         },
     )
 }

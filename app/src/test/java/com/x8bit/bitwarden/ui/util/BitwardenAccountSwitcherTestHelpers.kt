@@ -89,7 +89,7 @@ fun ComposeContentTestRule.assertLockOrLogoutDialogIsDisplayed(
 }
 
 /**
- * Asserts the logoung confirmation dialog is currently displayed with information from the given
+ * Asserts the logout confirmation dialog is currently displayed with information from the given
  * [accountSummary].
  */
 fun ComposeContentTestRule.assertLogoutConfirmationDialogIsDisplayed(
@@ -104,6 +104,34 @@ fun ComposeContentTestRule.assertLogoutConfirmationDialogIsDisplayed(
         .assertIsDisplayed()
     this
         .onAllNodesWithText("Are you sure you want to log out?", substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(accountSummary.email, substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText(accountSummary.environmentLabel, substring = true)
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+}
+
+/**
+ * Asserts the account removal confirmation dialog is currently displayed with information from
+ * the given [accountSummary].
+ */
+fun ComposeContentTestRule.assertRemovalConfirmationDialogIsDisplayed(
+    accountSummary: AccountSummary,
+) {
+    this
+        .onNode(isDialog())
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText("Remove account")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .assertIsDisplayed()
+    this
+        .onAllNodesWithText("Are you sure you want to remove this account?", substring = true)
         .filterToOne(hasAnyAncestor(isDialog()))
         .assertIsDisplayed()
     this
@@ -147,7 +175,7 @@ fun ComposeContentTestRule.performLockAccountClick() {
 }
 
 /**
- * Clicks the "Lock" button in the "lock or logout" dialog.
+ * Clicks the "log out" button in the "lock or logout" dialog.
  */
 fun ComposeContentTestRule.performLogoutAccountClick() {
     this
@@ -157,9 +185,19 @@ fun ComposeContentTestRule.performLogoutAccountClick() {
 }
 
 /**
- * Clicks the "Yes" button in the logout confirmation dialog to confirm the logout.
+ * Clicks the "Remove account" button in the "lock or logout" dialog.
  */
-fun ComposeContentTestRule.performLogoutAccountConfirmationClick() {
+fun ComposeContentTestRule.performRemoveAccountClick() {
+    this
+        .onAllNodesWithText("Remove account")
+        .filterToOne(hasAnyAncestor(isDialog()))
+        .performClick()
+}
+
+/**
+ * Clicks the "Yes" button in the account confirmation dialog to confirm the action.
+ */
+fun ComposeContentTestRule.performYesDialogButtonClick() {
     this
         .onAllNodesWithText("Yes")
         .filterToOne(hasAnyAncestor(isDialog()))
