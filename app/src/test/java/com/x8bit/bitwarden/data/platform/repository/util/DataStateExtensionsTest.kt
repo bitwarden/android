@@ -10,6 +10,184 @@ import org.junit.jupiter.api.Test
 class DataStateExtensionsTest {
 
     @Test
+    fun `map on Loaded should call transform and return appropriate value for Loaded`() {
+        val mapValue = 5
+        val expected = DataState.Loaded(mapValue)
+        val dataState = DataState.Loaded("Loaded")
+
+        val result = dataState.map {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `map on Loading should not call transform and return Loading`() {
+        val dataState = DataState.Loading
+
+        val result = dataState.map {
+            5
+        }
+
+        assertEquals(dataState, result)
+    }
+
+    @Test
+    fun `map on Pending should call transform and return Pending`() {
+        val mapValue = 5
+        val expected = DataState.Pending(mapValue)
+        val dataState = DataState.Pending("Pending")
+
+        val result = dataState.map {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `map on Error should not call transform with null data and return Error`() {
+        val error = Throwable()
+        val dataState = DataState.Error(error, null)
+
+        val result = dataState.map {
+            5
+        }
+
+        assertEquals(dataState, result)
+    }
+
+    @Test
+    fun `map on Error should call transform with nonnull data and return Error`() {
+        val error = Throwable()
+        val mapValue = 5
+        val expected = DataState.Error(error, mapValue)
+        val dataState = DataState.Error(error, "Error")
+
+        val result = dataState.map {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `map on NoNetwork should not call transform with null data and return NoNetwork`() {
+        val dataState = DataState.NoNetwork(null)
+
+        val result = dataState.map {
+            5
+        }
+
+        assertEquals(dataState, result)
+    }
+
+    @Test
+    fun `map on NoNetwork should call transform with nonnull data and return NoNetwork`() {
+        val mapValue = 5
+        val expected = DataState.NoNetwork(mapValue)
+        val dataState = DataState.NoNetwork("NoNetwork")
+
+        val result = dataState.map {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `mapNullable on Loaded should call transform and return appropriate value for Loaded`() {
+        val mapValue = 5
+        val expected = DataState.Loaded(mapValue)
+        val dataState = DataState.Loaded("Loaded")
+
+        val result = dataState.mapNullable {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `mapNullable on Loading should not call transform and return Loading`() {
+        val dataState = DataState.Loading
+
+        val result = dataState.mapNullable {
+            5
+        }
+
+        assertEquals(dataState, result)
+    }
+
+    @Test
+    fun `mapNullable on Pending should call transform and return Pending`() {
+        val mapValue = 5
+        val expected = DataState.Pending(mapValue)
+        val dataState = DataState.Pending("Pending")
+
+        val result = dataState.mapNullable {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `mapNullable on Error should call transform with null data and return Error`() {
+        val error = Throwable()
+        val mapValue = 5
+        val expected = DataState.Error(error, mapValue)
+        val dataState = DataState.Error(error, null)
+
+        val result = dataState.mapNullable {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `mapNullable on Error should call transform with nonnull data and return Error`() {
+        val error = Throwable()
+        val mapValue = 5
+        val expected = DataState.Error(error, mapValue)
+        val dataState = DataState.Error(error, "Error")
+
+        val result = dataState.mapNullable {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `mapNullable on NoNetwork should call transform with null data and return NoNetwork`() {
+        val mapValue = 5
+        val expected = DataState.NoNetwork(mapValue)
+        val dataState = DataState.NoNetwork(null)
+
+        val result = dataState.mapNullable {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `mapNullable on NoNetwork should call transform with nonnull data and return NoNetwork`() {
+        val mapValue = 5
+        val expected = DataState.NoNetwork(5)
+        val dataState = DataState.NoNetwork("NoNetwork")
+
+        val result = dataState.mapNullable {
+            mapValue
+        }
+
+        assertEquals(expected, result)
+    }
+
+    @Test
     fun `takeUtilLoaded should complete after a Loaded state is emitted`() = runTest {
         val mutableStateFlow = MutableStateFlow<DataState<Unit>>(DataState.Loading)
         mutableStateFlow
