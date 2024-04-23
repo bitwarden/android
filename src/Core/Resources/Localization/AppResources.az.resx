@@ -480,7 +480,7 @@
     <value>Tətbiq uzantısını aktivləşdir</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Safari-də paylaş nişanını istifadə edərək Bitwarden-i tapın (məsləhət: Menyunun ən alt sətrinin sağ hissəsinə baxın).</value>
+    <value>Safari-də paylaş ikonunu istifadə edərək Bitwarden-i tapın (ipucu: menyunun alt sətrində sağa sürüşdürün).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -493,13 +493,13 @@
     <value>Giriş məlumatlarınıza artıq Safari, Chrome və digər dəstəklənən tətbiqlərdən asanlıqla müraciət edə bilərsiniz.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>Safari və Chrome-da paylaş nişanını istifadə edərək Bitwarden-i tapın (məsləhət: Paylaş menyusunun ən alt sətrinin sağ hissəsinə baxın).</value>
+    <value>Safari və Chrome-da paylaş ikonunu istifadə edərək Bitwarden-i tapın (ipucu: paylaşma menyusunun alt sətrində sağa sürüşdürün).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Uzantını başlatmaq üçün menyudakı Bitwarden nişanına toxunun.</value>
+    <value>Uzantını başlatmaq üçün menyudakı Bitwarden ikonuna toxunun.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Safari və digər tətbiqlərdə Bitwarden-i işə salmaq üçün menyunun ən alt sətrindəki "daha çox" nişanına toxunun.</value>
+    <value>Safari və digər tətbiqlərdə Bitwarden-i işə salmaq üçün menyunun alt sətrindəki "daha çox" ikonuna toxunun.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Sevimli</value>
@@ -731,7 +731,7 @@
     <value>Uzantı aktivləşdirildi!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Nişanlar</value>
+    <value>İkonlar</value>
   </data>
   <data name="Translations" xml:space="preserve">
     <value>Tərcümələr</value>
@@ -1134,13 +1134,13 @@ Skan prosesi avtomatik baş tutacaq.</value>
     <value>Bitmə vaxtı</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Veb sayt nişanlarını göstər</value>
+    <value>Veb sayt ikonlarını göstər</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Hər girişin yanında tanına bilən təsvir göstər.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Nişan server URL-si</value>
+    <value>İkon server URL-si</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Bitwarden ilə avto-doldurma</value>
@@ -2883,5 +2883,17 @@ Bu hesaba keçmək istəyirsiniz?</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Duo-nu başlat</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Təyin edilməmiş təşkilat elementləri artıq Bütün Anbarlar görünüşündə görünməyəndir və yalnız Admin Konsolu vasitəsilə əlçatandır. Bu elementləri görünən etmək üçün Admin Konsolundan bir kolleksiyaya təyin edin.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>16 May 2024-cü ildən etibarən təyin edilməmiş təşkilat elementləri artıq Bütün Anbarlar görünüşündə görünməyən və yalnız Admin Konsolu vasitəsilə əlçatan olacaq. Bu elementləri görünən etmək üçün Admin Konsolundan bir kolleksiyaya təyin edin.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Daha sonra xatırlat</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Xəbərdarlıq</value>
   </data>
 </root>

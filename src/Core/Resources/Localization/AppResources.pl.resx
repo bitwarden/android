@@ -2808,7 +2808,7 @@ Czy chcesz przełączyć się na to konto?</value>
     <value>Dodatkowe opcje</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>Kontynuować przez aplikację internetową?</value>
+    <value>Kontynuować do aplikacji internetowej?</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
     <value>Kontynuować przez {0}?</value>
@@ -2884,5 +2884,17 @@ Czy chcesz przełączyć się na to konto?</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Uruchom Duo</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Nieprzypisane elementy w organizacji nie są już widoczne w widoku Wszystkie sejfy i są dostępne tylko przez Konsolę Administracyjną. Przypisz te elementy do kolekcji z konsoli administracyjnej, aby były one widoczne.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>16 maja 2024 r. nieprzypisane elementy w organizacji nie będą już widoczne w widoku Wszystkie sejfy i będą dostępne tylko przez Konsolę Administracyjną. Przypisz te elementy do kolekcji z konsoli administracyjnej, aby były one widoczne.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Przypomnij mi później</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Zawiadomienie</value>
   </data>
 </root>

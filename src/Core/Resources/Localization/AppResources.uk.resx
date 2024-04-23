@@ -2885,4 +2885,16 @@
   <data name="LaunchDuo" xml:space="preserve">
     <value>Запустити Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Непризначені елементи організації більше не видимі у поданні "Усі сховища" і доступні лише в консолі адміністратора. Щоб зробити їх видимими, призначте ці елементи збірці в консолі адміністратора.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>16 травня 2024 року, непризначені елементи організації більше не будуть видимі в поданні "Усі сховища", і доступні лише через консоль адміністратора. Щоб зробити їх видимими, призначте ці елементи збірці в консолі адміністратора.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Нагадати пізніше</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Сповіщення</value>
+  </data>
 </root>

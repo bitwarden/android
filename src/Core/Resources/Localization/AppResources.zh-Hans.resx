@@ -2885,4 +2885,16 @@
   <data name="LaunchDuo" xml:space="preserve">
     <value>启动 Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>未分配的组织项目在「所有密码库」视图中不再可见，只能通过管理控制台访问。通过管理控制台将这些项目分配给集合以使其可见。</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>注意：从 2024 年 5 月 16 日起，未分配的组织项目在「所有密码库」视图中将不再可见，只能通过管理控制台访问。通过管理控制台将这些项目分配给集合以使其可见。</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>稍后提醒我</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>注意</value>
+  </data>
 </root>

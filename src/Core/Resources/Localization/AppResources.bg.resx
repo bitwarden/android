@@ -2885,4 +2885,16 @@
   <data name="LaunchDuo" xml:space="preserve">
     <value>Стартиране на Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Неразпределените елементи на организацията вече не се виждат в изгледа с „Всички трезори“, а са достъпни само през Административната конзола. Добавете тези елементи към някоя колекция в Административната конзола, за да станат видими.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>От 16 май 2024г. неразпределените елементи на организациите вече няма се виждат в изгледа с „Всички трезори“, а ще бъдат достъпни само през Административната конзола. Добавете тези елементи към някоя колекция в Административната конзола, за да станат видими.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Напомнете ми по-късно</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Известие</value>
+  </data>
 </root>

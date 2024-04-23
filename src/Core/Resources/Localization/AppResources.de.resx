@@ -2884,4 +2884,16 @@ Möchtest du zu diesem Konto wechseln?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Duo starten</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Hinweis: Nicht zugeordnete Organisationseinträge sind nicht mehr in der Ansicht aller Tresore sichtbar und nur über die Administrator-Konsole zugänglich. Weise diese Einträge einer Sammlung aus der Administrator-Konsole zu, um sie sichtbar zu machen.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Ab dem 16. Mai 2024 werden nicht zugeordnete Organisationseinträge nicht mehr in der Ansicht aller Tresore sichtbar und nur über die Administrator-Konsole zugänglich sein. Weise diese Einträge einer Sammlung aus der Administrator-Konsole zu, um sie sichtbar zu machen.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Später erinnern</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Hinweis</value>
+  </data>
 </root>

@@ -2885,4 +2885,16 @@
   <data name="LaunchDuo" xml:space="preserve">
     <value>Duo を起動</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>割り当てられていない組織アイテムはすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。 管理コンソールからコレクションにこれらのアイテムを割り当てると、表示できるようになります。</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>2024年5月16日に、 割り当てられていない組織アイテムはすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。 管理コンソールからコレクションにこれらのアイテムを割り当てると、表示できるようになります。</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>後で再通知</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>お知らせ</value>
+  </data>
 </root>

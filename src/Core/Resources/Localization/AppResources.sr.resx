@@ -2887,4 +2887,16 @@
   <data name="LaunchDuo" xml:space="preserve">
     <value>Покренути Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Недодељене ставке организације више нису видљиве у приказу Сви сефови и доступне су само преко Админ конзоле. Доделите ове ставке колекцији са Админ конзолом да бисте их учинили видљивим.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Подсети ме касније</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Напомена</value>
+  </data>
 </root>

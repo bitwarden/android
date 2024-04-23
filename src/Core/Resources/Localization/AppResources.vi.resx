@@ -2886,4 +2886,16 @@ Bạn có muốn chuyển sang tài khoản này không?</value>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Khởi động Dou</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Các mục tổ chức chưa được chỉ định sẽ không còn hiển thị trong chế độ xem Toàn Bộ, mà chỉ có thể truy cập qua Bảng điều khiển dành cho quản trị viên. Để hiện thị, chỉ định các mục này cho một thư mục từ Bảng điều khiển dành cho quản trị viên.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Vào ngày 16 tháng 5 năm 2024, các mục tổ chức chưa được chỉ định sẽ không còn hiển thị trong chế độ xem Toàn Bộ, mà chỉ có thể truy cập qua Bảng điều khiển dành cho quản trị viên. Để hiện thị, chỉ định các mục này cho một thư mục từ Bảng điều khiển dành cho quản trị viên.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Nhắc sau</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Lưu ý</value>
+  </data>
 </root>

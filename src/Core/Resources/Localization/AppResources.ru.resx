@@ -2887,4 +2887,16 @@
   <data name="LaunchDuo" xml:space="preserve">
     <value>Запустить Duo</value>
   </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Уведомление: неприсвоенные элементы организации больше не видны в представлении "Все хранилища" и доступны только через консоль администратора. Назначьте эти элементы коллекции в консоли администратора, чтобы сделать их видимыми.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>16 мая 2024 года неприсвоенные элементы организации больше не будут видны в представлении "Все хранилища" и будут доступны только через консоль администратора. Назначьте эти элементы коллекции в консоли администратора, чтобы сделать их видимыми.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Напомнить позже</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Уведомление</value>
+  </data>
 </root>
