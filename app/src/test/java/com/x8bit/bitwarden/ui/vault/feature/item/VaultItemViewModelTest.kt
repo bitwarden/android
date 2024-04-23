@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createCommonContent
 import com.x8bit.bitwarden.ui.vault.feature.item.util.createLoginContent
@@ -1946,6 +1947,158 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     totpCodeItemData = null,
                 )
             }
+        }
+    }
+
+    @Nested
+    inner class VaultItemFlow {
+        @BeforeEach
+        fun setup() {
+            mutableUserStateFlow.value = DEFAULT_USER_STATE
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+        }
+
+        @Test
+        fun `on VaultDataReceive with Loading should update the dialog state to loading`() {
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Loading
+
+            assertEquals(
+                DEFAULT_STATE.copy(viewState = VaultItemState.ViewState.Loading),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `on VaultDataReceive with Loaded and nonnull data should update the ViewState`() {
+            val viewState = mockk<VaultItemState.ViewState>()
+            val cipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                } returns viewState
+            }
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = cipherView)
+
+            assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `on VaultDataReceive with Loaded and null data should update the ViewState to Error`() {
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Loaded(data = null)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = VaultItemState.ViewState.Error(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `on VaultDataReceive with Pending and nonnull data should update the ViewState`() {
+            val viewState = mockk<VaultItemState.ViewState>()
+            val cipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                } returns viewState
+            }
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Pending(data = cipherView)
+
+            assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on VaultDataReceive with Pending and null data should update the ViewState to Error`() {
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Pending(data = null)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = VaultItemState.ViewState.Error(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `on VaultDataReceive with Error and nonnull data should update the ViewState`() {
+            val viewState = mockk<VaultItemState.ViewState>()
+            val cipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                } returns viewState
+            }
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Error(error = Throwable(), data = cipherView)
+
+            assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
+        }
+
+        @Test
+        fun `on VaultDataReceive with Error and null data should update the ViewState to Error`() {
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.Error(error = Throwable(), data = null)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = VaultItemState.ViewState.Error(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Test
+        fun `on VaultDataReceive with NoNetwork and nonnull data should update the ViewState`() {
+            val viewState = mockk<VaultItemState.ViewState>()
+            val cipherView = mockk<CipherView> {
+                every {
+                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                } returns viewState
+            }
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.NoNetwork(data = cipherView)
+
+            assertEquals(DEFAULT_STATE.copy(viewState = viewState), viewModel.stateFlow.value)
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on VaultDataReceive with NoNetwork and null data should update the ViewState to Error`() {
+            val viewModel = createViewModel(state = null)
+
+            mutableVaultItemFlow.value = DataState.NoNetwork(data = null)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = VaultItemState.ViewState.Error(
+                        message = R.string.internet_connection_required_title
+                            .asText()
+                            .concat(
+                                " ".asText(),
+                                R.string.internet_connection_required_message.asText(),
+                            ),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
         }
     }
 

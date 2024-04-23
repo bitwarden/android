@@ -33,6 +33,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.map
+import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.platform.repository.util.observeWhenSubscribedAndLoggedIn
 import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoading
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -508,11 +509,11 @@ class VaultRepositoryImpl(
                         combineDataStates(
                             totpCodeDataState,
                             cipherDataState,
-                        ) { totpCodeData, _ ->
-                            // Just return the verification items; we are only combining the
-                            // DataStates to know the overall state.
-                            totpCodeData
+                        ) { _, _ ->
+                            // We are only combining the DataStates to know the overall state,
+                            // we map it to the appropriate value below.
                         }
+                            .mapNullable { totpCodeDataState.data }
                     }
             }
             .stateIn(

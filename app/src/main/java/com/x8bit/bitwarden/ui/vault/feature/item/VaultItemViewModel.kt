@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
+import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -89,12 +90,16 @@ class VaultItemViewModel @Inject constructor(
                 vaultDataState = combineDataStates(
                     cipherViewState,
                     authCodeState,
-                ) { vaultData, _ ->
-                    VaultItemStateData(
-                        cipher = vaultData,
-                        totpCodeItemData = totpCodeData,
-                    )
-                },
+                ) { _, _ ->
+                    // We are only combining the DataStates to know the overall state,
+                    // we map it to the appropriate value below.
+                }
+                    .mapNullable {
+                        VaultItemStateData(
+                            cipher = cipherViewState.data,
+                            totpCodeItemData = totpCodeData,
+                        )
+                    },
             )
         }
             .onEach(::sendAction)
@@ -743,8 +748,10 @@ class VaultItemViewModel @Inject constructor(
             is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = VaultItemState.ViewState.Error(
-                            message = R.string.generic_error_message.asText(),
+                        viewState = vaultDataState.toViewStateOrError(
+                            isPremiumUser = userState.activeAccount.isPremium,
+                            totpCodeItemData = vaultDataState.data?.totpCodeItemData,
+                            errorText = R.string.generic_error_message.asText(),
                         ),
                     )
                 }
@@ -753,16 +760,11 @@ class VaultItemViewModel @Inject constructor(
             is DataState.Loaded -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = vaultDataState
-                            .data
-                            .cipher
-                            ?.toViewState(
-                                isPremiumUser = userState.activeAccount.isPremium,
-                                totpCodeItemData = vaultDataState.data.totpCodeItemData,
-                            )
-                            ?: VaultItemState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
-                            ),
+                        viewState = vaultDataState.toViewStateOrError(
+                            isPremiumUser = userState.activeAccount.isPremium,
+                            totpCodeItemData = vaultDataState.data.totpCodeItemData,
+                            errorText = R.string.generic_error_message.asText(),
+                        ),
                     )
                 }
             }
@@ -776,10 +778,15 @@ class VaultItemViewModel @Inject constructor(
             is DataState.NoNetwork -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = VaultItemState.ViewState.Error(
-                            message = R.string.internet_connection_required_title
+                        viewState = vaultDataState.toViewStateOrError(
+                            isPremiumUser = userState.activeAccount.isPremium,
+                            totpCodeItemData = vaultDataState.data?.totpCodeItemData,
+                            errorText = R.string.internet_connection_required_title
                                 .asText()
-                                .concat(R.string.internet_connection_required_message.asText()),
+                                .concat(
+                                    " ".asText(),
+                                    R.string.internet_connection_required_message.asText(),
+                                ),
                         ),
                     )
                 }
@@ -788,21 +795,26 @@ class VaultItemViewModel @Inject constructor(
             is DataState.Pending -> {
                 mutableStateFlow.update {
                     it.copy(
-                        viewState = vaultDataState
-                            .data
-                            .cipher
-                            ?.toViewState(
-                                isPremiumUser = userState.activeAccount.isPremium,
-                                totpCodeItemData = vaultDataState.data.totpCodeItemData,
-                            )
-                            ?: VaultItemState.ViewState.Error(
-                                message = R.string.generic_error_message.asText(),
-                            ),
+                        viewState = vaultDataState.toViewStateOrError(
+                            isPremiumUser = userState.activeAccount.isPremium,
+                            totpCodeItemData = vaultDataState.data.totpCodeItemData,
+                            errorText = R.string.generic_error_message.asText(),
+                        ),
                     )
                 }
             }
         }
     }
+
+    private fun DataState<VaultItemStateData>.toViewStateOrError(
+        isPremiumUser: Boolean,
+        totpCodeItemData: TotpCodeItemData?,
+        errorText: Text,
+    ): VaultItemState.ViewState = this
+        .data
+        ?.cipher
+        ?.toViewState(isPremiumUser = isPremiumUser, totpCodeItemData = totpCodeItemData)
+        ?: VaultItemState.ViewState.Error(message = errorText)
 
     private fun handleValidatePasswordReceive(
         action: VaultItemAction.Internal.ValidatePasswordReceive,

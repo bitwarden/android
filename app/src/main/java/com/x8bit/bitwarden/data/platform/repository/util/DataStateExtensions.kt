@@ -21,6 +21,20 @@ inline fun <T : Any?, R : Any?> DataState<T>.map(
 }
 
 /**
+ * Maps the data inside a [DataState] with the given [transform] regardless of the data's
+ * nullability.
+ */
+inline fun <T : Any?, R : Any?> DataState<T>.mapNullable(
+    transform: (T?) -> R,
+): DataState<R> = when (this) {
+    is DataState.Loaded -> DataState.Loaded(data = transform(data))
+    is DataState.Loading -> DataState.Loading
+    is DataState.Pending -> DataState.Pending(data = transform(data))
+    is DataState.Error -> DataState.Error(error = error, data = transform(data))
+    is DataState.NoNetwork -> DataState.NoNetwork(data = transform(data))
+}
+
+/**
  * Emits all values of a [DataState] [Flow] until it emits a [DataState.Loaded].
  */
 fun <T : Any?> Flow<DataState<T>>.takeUntilLoaded(): Flow<DataState<T>> = transformWhile {
