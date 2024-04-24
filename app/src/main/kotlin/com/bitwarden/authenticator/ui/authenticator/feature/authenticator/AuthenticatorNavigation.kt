@@ -13,6 +13,7 @@ import com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan.navigateT
 import com.bitwarden.authenticator.ui.authenticator.feature.search.navigateToSearch
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.navigateToExport
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToTutorial
+import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialDestination
 
 const val AUTHENTICATOR_GRAPH_ROUTE = "authenticator_graph"
 
@@ -57,6 +58,9 @@ fun NavGraphBuilder.authenticatorGraph(
             },
             navigateToTutorial = { navController.navigateToTutorial() },
             navigateToExport = { navController.navigateToExport() },
+        )
+        tutorialDestination(
+            onTutorialFinished = { navController.popBackStack() }
         )
     }
 }

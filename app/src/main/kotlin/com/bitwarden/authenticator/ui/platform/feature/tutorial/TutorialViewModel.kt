@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.platform.feature.tutorial
 
 import android.os.Parcelable
+import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
@@ -11,15 +12,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+private const val KEY_STATE = "state"
+
 /**
  * View model for the [TutorialScreen].
  */
 @HiltViewModel
 class TutorialViewModel @Inject constructor(
     private val settingsRepository: SettingsRepository,
+    savedStateHandle: SavedStateHandle,
 ) :
     BaseViewModel<TutorialState, TutorialEvent, TutorialAction>(
-        initialState = TutorialState.IntroSlide
+        initialState = savedStateHandle[KEY_STATE] ?: TutorialState.IntroSlide
     ) {
 
     override fun handleAction(action: TutorialAction) {

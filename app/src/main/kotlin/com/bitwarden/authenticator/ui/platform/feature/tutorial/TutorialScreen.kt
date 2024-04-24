@@ -88,6 +88,7 @@ fun TutorialScreen(
                     TutorialAction.TutorialPageChange(pagerState.targetPage)
                 )
                 Column(
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
