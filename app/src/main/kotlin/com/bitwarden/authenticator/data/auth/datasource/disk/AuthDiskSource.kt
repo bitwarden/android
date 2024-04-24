@@ -20,4 +20,14 @@ interface AuthDiskSource {
      * [SystemClock.elapsedRealtime()](https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime())
      */
     fun storeLastActiveTimeMillis(lastActiveTimeMillis: Long?)
+
+    /**
+     * Gets the biometrics key.
+     */
+    fun getUserBiometricUnlockKey(): String?
+
+    /**
+     * Stores the biometrics key.
+     */
+    fun storeUserBiometricUnlockKey(biometricsKey: String?)
 }

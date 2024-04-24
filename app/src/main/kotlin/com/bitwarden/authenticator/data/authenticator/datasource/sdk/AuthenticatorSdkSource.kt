@@ -15,4 +15,6 @@ interface AuthenticatorSdkSource {
         totp: String,
         time: DateTime,
     ): Result<TotpResponse>
+
+    suspend fun generateBiometricsKey(): Result<String>
 }

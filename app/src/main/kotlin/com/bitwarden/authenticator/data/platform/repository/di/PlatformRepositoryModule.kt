@@ -1,6 +1,9 @@
 package com.bitwarden.authenticator.data.platform.repository.di
 
+import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
+import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
+import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepositoryImpl
@@ -21,10 +24,16 @@ object PlatformRepositoryModule {
     @Singleton
     fun provideSettingsRepository(
         settingsDiskSource: SettingsDiskSource,
+        authDiskSource: AuthDiskSource,
         dispatcherManager: DispatcherManager,
+        biometricsEncryptionManager: BiometricsEncryptionManager,
+        authenticatorSdkSource: AuthenticatorSdkSource,
     ): SettingsRepository =
         SettingsRepositoryImpl(
             settingsDiskSource = settingsDiskSource,
+            authDiskSource = authDiskSource,
             dispatcherManager = dispatcherManager,
+            biometricsEncryptionManager = biometricsEncryptionManager,
+            authenticatorSdkSource = authenticatorSdkSource,
         )
 }

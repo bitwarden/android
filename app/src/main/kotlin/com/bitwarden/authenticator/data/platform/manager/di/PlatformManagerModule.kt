@@ -1,6 +1,9 @@
 package com.bitwarden.authenticator.data.platform.manager.di
 
 import android.content.Context
+import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
+import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
+import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
@@ -39,4 +42,10 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideClock(): Clock = Clock.systemDefaultZone()
+
+    @Provides
+    @Singleton
+    fun provideBiometricsEncryptionManager(
+        settingsDiskSource: SettingsDiskSource,
+    ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(settingsDiskSource)
 }

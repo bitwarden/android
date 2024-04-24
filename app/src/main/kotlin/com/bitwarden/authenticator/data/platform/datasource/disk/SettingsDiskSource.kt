@@ -25,6 +25,11 @@ interface SettingsDiskSource {
     val appThemeFlow: Flow<AppTheme>
 
     /**
+     * The currently persisted biometric integrity source for the system.
+     */
+    var systemBiometricIntegritySource: String?
+
+    /**
      * Tracks whether user has seen the Welcome tutorial.
      */
     var hasSeenWelcomeTutorial: Boolean
@@ -53,22 +58,17 @@ interface SettingsDiskSource {
     fun getAlertThresholdSecondsFlow(): Flow<Int>
 
     /**
-     * Clears all the settings data for the given user.
+     * Retrieves the biometric integrity validity for the given [systemBioIntegrityState].
      */
-    fun clearData(userId: String)
+    fun getAccountBiometricIntegrityValidity(
+        systemBioIntegrityState: String,
+    ): Boolean?
 
     /**
-     * Gets whether or not the given [userId] has enabled screen capture.
+     * Stores the biometric integrity validity for the given [systemBioIntegrityState].
      */
-    fun getScreenCaptureAllowed(userId: String): Boolean?
-
-    /**
-     * Emits updates that track [getScreenCaptureAllowed] for the given [userId].
-     */
-    fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?>
-
-    /**
-     * Stores whether or not [isScreenCaptureAllowed] for the given [userId].
-     */
-    fun storeScreenCaptureAllowed(userId: String, isScreenCaptureAllowed: Boolean?)
+    fun storeAccountBiometricIntegrityValidity(
+        systemBioIntegrityState: String,
+        value: Boolean?,
+    )
 }
