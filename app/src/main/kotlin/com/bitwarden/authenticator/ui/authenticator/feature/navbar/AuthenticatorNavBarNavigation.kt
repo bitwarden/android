@@ -14,7 +14,6 @@ fun NavGraphBuilder.authenticatorNavBarDestination(
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItem: (itemId: String) -> Unit,
-    onNavigateToTutorial: () -> Unit,
     onNavigateToExport: () -> Unit,
 ) {
     composableWithStayTransitions(
@@ -22,11 +21,10 @@ fun NavGraphBuilder.authenticatorNavBarDestination(
     ) {
         AuthenticatorNavBarScreen(
             onNavigateBack = onNavigateBack,
+            onNavigateToSearch = onNavigateToSearch,
             onNavigateToQrCodeScanner = onNavigateToQrCodeScanner,
             onNavigateToManualKeyEntry = onNavigateToManualKeyEntry,
             onNavigateToEditItem = onNavigateToEditItem,
-            onNavigateToSearch = onNavigateToSearch,
-            onNavigateToTutorial = onNavigateToTutorial,
             onNavigateToExport = onNavigateToExport,
         )
     }

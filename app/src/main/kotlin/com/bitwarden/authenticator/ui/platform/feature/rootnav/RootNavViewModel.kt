@@ -54,6 +54,7 @@ class RootNavViewModel @Inject constructor(
 
     private fun handleTutorialFinished() {
         settingsRepository.hasSeenWelcomeTutorial = true
+        mutableStateFlow.update { it.copy(navState = RootNavState.NavState.ItemListing) }
     }
 
     private fun handleSplashScreenDismissed() {

@@ -1,7 +1,6 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.navbar
 
 import android.os.Parcelable
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -72,7 +71,6 @@ fun AuthenticatorNavBarScreen(
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItem: (itemId: String) -> Unit,
-    onNavigateToTutorial: () -> Unit,
     onNavigateToExport: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
@@ -112,7 +110,6 @@ fun AuthenticatorNavBarScreen(
         navigateToQrCodeScanner = onNavigateToQrCodeScanner,
         navigateToManualKeyEntry = onNavigateToManualKeyEntry,
         navigateToEditItem = onNavigateToEditItem,
-        navigateToTutorial = onNavigateToTutorial,
         navigateToExport = onNavigateToExport,
     )
 }
@@ -128,7 +125,6 @@ private fun AuthenticatorNavBarScaffold(
     navigateToQrCodeScanner: () -> Unit,
     navigateToManualKeyEntry: () -> Unit,
     navigateToEditItem: (itemId: String) -> Unit,
-    navigateToTutorial: () -> Unit,
     navigateToExport: () -> Unit,
 ) {
     BitwardenScaffold(
@@ -176,7 +172,6 @@ private fun AuthenticatorNavBarScaffold(
                 navigateToQrCodeScanner = navigateToQrCodeScanner,
                 navigateToManualKeyEntry = navigateToManualKeyEntry,
                 navigateToEditItem = navigateToEditItem,
-                navigateToTutorial = navigateToTutorial,
                 navigateToExport = navigateToExport,
             )
         }
@@ -318,6 +313,7 @@ private sealed class AuthenticatorNavBarTab : Parcelable {
         override val iconRes get() = R.drawable.ic_settings
         override val labelRes get() = R.string.settings
         override val contentDescriptionRes get() = R.string.settings
+
         // TODO: Replace with constant when settings screen is complete.
         override val route get() = SETTINGS_GRAPH_ROUTE
         override val testTag get() = "SettingsTab"

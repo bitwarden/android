@@ -24,7 +24,6 @@ fun NavGraphBuilder.itemListingGraph(
     navigateToQrCodeScanner: () -> Unit,
     navigateToManualKeyEntry: () -> Unit,
     navigateToEditItem: (String) -> Unit,
-    navigateToTutorial: () -> Unit,
     navigateToExport: () -> Unit,
 ) {
     navigation(
@@ -60,7 +59,6 @@ fun NavGraphBuilder.itemListingGraph(
         )
         settingsGraph(
             navController = navController,
-            onNavigateToTutorial = navigateToTutorial,
             onNavigateToExport = navigateToExport,
         )
     }
