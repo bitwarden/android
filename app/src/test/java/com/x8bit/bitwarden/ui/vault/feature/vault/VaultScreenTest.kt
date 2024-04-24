@@ -1177,6 +1177,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     isPullToRefreshSettingEnabled = false,
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     isIconLoadingDisabled = false,
+    hasMasterPassword = true,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(

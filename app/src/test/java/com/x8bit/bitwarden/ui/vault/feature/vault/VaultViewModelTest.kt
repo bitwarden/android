@@ -476,6 +476,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 vaultFilterType = VaultFilterType.AllVaults,
                 isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                 baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
+                hasMasterPassword = true,
             ),
         )
             .copy(
@@ -499,6 +500,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     vaultFilterType = VaultFilterType.MyVault,
                     isIconLoadingDisabled = viewModel.stateFlow.value.isIconLoadingDisabled,
                     baseIconUrl = viewModel.stateFlow.value.baseIconUrl,
+                    hasMasterPassword = true,
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1186,7 +1188,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        number = number,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -1202,7 +1207,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = password,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -1265,6 +1273,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -1298,7 +1307,10 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             assertEquals(VaultEvent.NavigateToEditVaultItem(cipherId), awaitItem())
@@ -1352,6 +1364,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultAction.MasterPasswordRepromptSubmit(
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                             password = password,
+                            requiresPasswordReprompt = true,
                         ),
                         password = password,
                     ),
@@ -1389,6 +1402,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     VaultAction.MasterPasswordRepromptSubmit(
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                             password = password,
+                            requiresPasswordReprompt = true,
                         ),
                         password = password,
                     ),
@@ -1421,6 +1435,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                 VaultAction.MasterPasswordRepromptSubmit(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = password,
+                        requiresPasswordReprompt = true,
                     ),
                     password = password,
                 ),
@@ -1532,4 +1547,5 @@ private fun createMockVaultState(
         isPullToRefreshSettingEnabled = false,
         baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
         isIconLoadingDisabled = false,
+        hasMasterPassword = true,
     )

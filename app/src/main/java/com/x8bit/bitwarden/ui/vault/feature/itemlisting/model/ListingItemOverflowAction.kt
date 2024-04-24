@@ -84,9 +84,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the edit cipher overflow option.
          */
         @Parcelize
-        data class EditClick(val cipherId: String) : VaultAction() {
+        data class EditClick(
+            val cipherId: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
             override val title: Text get() = R.string.edit.asText()
-            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -102,9 +104,11 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the copy password overflow option.
          */
         @Parcelize
-        data class CopyPasswordClick(val password: String) : VaultAction() {
+        data class CopyPasswordClick(
+            val password: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
             override val title: Text get() = R.string.copy_password.asText()
-            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
@@ -120,18 +124,22 @@ sealed class ListingItemOverflowAction : Parcelable {
          * Click on the copy number overflow option.
          */
         @Parcelize
-        data class CopyNumberClick(val number: String) : VaultAction() {
+        data class CopyNumberClick(
+            val number: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
             override val title: Text get() = R.string.copy_number.asText()
-            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**
          * Click on the copy security code overflow option.
          */
         @Parcelize
-        data class CopySecurityCodeClick(val securityCode: String) : VaultAction() {
+        data class CopySecurityCodeClick(
+            val securityCode: String,
+            override val requiresPasswordReprompt: Boolean,
+        ) : VaultAction() {
             override val title: Text get() = R.string.copy_security_code.asText()
-            override val requiresPasswordReprompt: Boolean get() = true
         }
 
         /**

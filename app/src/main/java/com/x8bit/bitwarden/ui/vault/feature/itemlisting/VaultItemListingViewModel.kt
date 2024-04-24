@@ -99,6 +99,7 @@ class VaultItemListingViewModel @Inject constructor(
                 .any(),
             autofillSelectionData = specialCircumstance?.autofillSelectionData,
             shouldFinishOnComplete = specialCircumstance?.shouldFinishWhenComplete ?: false,
+            hasMasterPassword = userState.activeAccount.hasMasterPassword,
         )
     },
 ) {
@@ -686,6 +687,7 @@ class VaultItemListingViewModel @Inject constructor(
                         vaultData.toViewState(
                             vaultFilterType = state.vaultFilterType,
                             itemListingType = listingType,
+                            hasMasterPassword = state.hasMasterPassword,
                             baseIconUrl = state.baseIconUrl,
                             isIconLoadingDisabled = state.isIconLoadingDisabled,
                             autofillSelectionData = state.autofillSelectionData,
@@ -754,6 +756,7 @@ data class VaultItemListingState(
     private val isPullToRefreshSettingEnabled: Boolean,
     val autofillSelectionData: AutofillSelectionData? = null,
     val shouldFinishOnComplete: Boolean = false,
+    val hasMasterPassword: Boolean,
 ) {
     /**
      * Whether or not this represents a listing screen for autofill.

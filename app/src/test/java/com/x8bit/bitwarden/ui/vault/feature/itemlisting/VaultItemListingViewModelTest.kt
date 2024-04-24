@@ -448,6 +448,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                             action = ListingItemOverflowAction.VaultAction.EditClick(
                                 cipherId = cipherId,
+                                requiresPasswordReprompt = true,
                             ),
                         ),
                     ),
@@ -688,7 +689,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        number = number,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -704,7 +708,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = password,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -722,6 +729,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -800,7 +808,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             assertEquals(VaultItemListingEvent.NavigateToEditCipher(cipherId), awaitItem())
@@ -1443,6 +1454,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             autofillSelectionData = null,
             shouldFinishOnComplete = false,
             policyDisablesSend = false,
+            hasMasterPassword = true,
         )
 }
 

@@ -142,6 +142,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -163,6 +164,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -180,6 +182,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginState
@@ -221,6 +224,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginState
@@ -251,6 +255,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns loginViewState
@@ -292,6 +297,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -336,6 +342,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns loginViewState
@@ -374,6 +381,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -412,6 +420,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -459,6 +468,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 } returns DEFAULT_VIEW_STATE
@@ -489,6 +499,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -521,6 +532,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -582,6 +594,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -633,6 +646,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -695,6 +709,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -716,6 +731,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -729,6 +745,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
@@ -744,6 +761,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 clipboardManager.setText(text = field)
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = null,
                 )
             }
@@ -776,6 +794,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -805,6 +824,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -835,6 +855,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -864,6 +885,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -877,6 +899,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -898,6 +921,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -915,6 +939,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -947,6 +972,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -970,6 +996,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = null,
                 )
             }
@@ -991,6 +1018,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns loginViewState
@@ -1037,6 +1065,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns DEFAULT_VIEW_STATE
@@ -1058,6 +1087,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = null,
                 )
             }
@@ -1075,6 +1105,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -1104,6 +1135,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -1125,6 +1157,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -1142,6 +1175,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -1182,6 +1216,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -1236,6 +1271,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -1299,6 +1335,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns loginViewState
@@ -1475,6 +1512,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 } returns DEFAULT_VIEW_STATE
@@ -1513,6 +1551,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1529,6 +1568,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -1553,6 +1593,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1565,6 +1606,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
@@ -1581,6 +1623,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD)
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1619,6 +1662,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 } returns createViewState(common = DEFAULT_COMMON.copy(requiresReprompt = false))
@@ -1633,6 +1677,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME)
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
                 )
             }
@@ -1655,6 +1700,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -1677,6 +1723,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1690,6 +1737,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     }
@@ -1714,6 +1762,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1728,6 +1777,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns DEFAULT_VIEW_STATE
@@ -1754,6 +1804,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1771,6 +1822,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
                         )
                     } returns loginViewState
@@ -1800,6 +1852,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
                 }
@@ -1827,6 +1880,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns CARD_VIEW_STATE
@@ -1850,6 +1904,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -1862,6 +1917,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns createViewState(
@@ -1879,6 +1935,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 clipboardManager.setText(text = "12345436")
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = null,
                 )
             }
@@ -1892,6 +1949,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     every {
                         toViewState(
                             isPremiumUser = true,
+                            hasMasterPassword = true,
                             totpCodeItemData = null,
                         )
                     } returns CARD_VIEW_STATE
@@ -1915,6 +1973,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 }
@@ -1927,6 +1986,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 every {
                     toViewState(
                         isPremiumUser = true,
+                        hasMasterPassword = true,
                         totpCodeItemData = null,
                     )
                 } returns createViewState(
@@ -1944,6 +2004,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 clipboardManager.setText(text = "987")
                 mockCipherView.toViewState(
                     isPremiumUser = true,
+                    hasMasterPassword = true,
                     totpCodeItemData = null,
                 )
             }
@@ -1975,7 +2036,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewState = mockk<VaultItemState.ViewState>()
             val cipherView = mockk<CipherView> {
                 every {
-                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
                 } returns viewState
             }
             val viewModel = createViewModel(state = null)
@@ -2006,7 +2071,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewState = mockk<VaultItemState.ViewState>()
             val cipherView = mockk<CipherView> {
                 every {
-                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
                 } returns viewState
             }
             val viewModel = createViewModel(state = null)
@@ -2038,7 +2107,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewState = mockk<VaultItemState.ViewState>()
             val cipherView = mockk<CipherView> {
                 every {
-                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
                 } returns viewState
             }
             val viewModel = createViewModel(state = null)
@@ -2069,7 +2142,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewState = mockk<VaultItemState.ViewState>()
             val cipherView = mockk<CipherView> {
                 every {
-                    toViewState(isPremiumUser = true, totpCodeItemData = null)
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
                 } returns viewState
             }
             val viewModel = createViewModel(state = null)

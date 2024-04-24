@@ -55,6 +55,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -115,6 +116,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.MyVault,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -167,6 +169,7 @@ class VaultDataExtensionsTest {
                 organizationId = "mockOrganizationId-1",
                 organizationName = "Mock Organization 1",
             ),
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -212,6 +215,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -234,6 +238,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -257,6 +262,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -291,6 +297,7 @@ class VaultDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -439,6 +446,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -479,6 +487,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -531,6 +540,7 @@ class VaultDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(

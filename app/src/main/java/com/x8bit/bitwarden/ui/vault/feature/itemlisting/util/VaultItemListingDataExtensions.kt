@@ -91,10 +91,11 @@ fun SendView.determineListingPredicate(
 /**
  * Transforms a list of [CipherView] into [VaultItemListingState.ViewState].
  */
-@Suppress("CyclomaticComplexMethod", "LongMethod")
+@Suppress("CyclomaticComplexMethod", "LongMethod", "LongParameterList")
 fun VaultData.toViewState(
     itemListingType: VaultItemListingState.ItemListingType.Vault,
     vaultFilterType: VaultFilterType,
+    hasMasterPassword: Boolean,
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
@@ -122,6 +123,7 @@ fun VaultData.toViewState(
         VaultItemListingState.ViewState.Content(
             displayItemList = filteredCipherViewList.toDisplayItemList(
                 baseIconUrl = baseIconUrl,
+                hasMasterPassword = hasMasterPassword,
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = autofillSelectionData != null,
             ),
@@ -246,12 +248,14 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
 
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
+    hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
+            hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
         )
@@ -270,6 +274,7 @@ private fun List<SendView>.toDisplayItemList(
 
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
+    hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
 ): VaultItemListingState.DisplayItem =
@@ -285,7 +290,7 @@ private fun CipherView.toDisplayItem(
         ),
         iconTestTag = toIconTestTag(),
         extraIconList = toLabelIcons(),
-        overflowOptions = toOverflowActions(),
+        overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,

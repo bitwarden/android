@@ -477,6 +477,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                         masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                             action = ListingItemOverflowAction.VaultAction.EditClick(
                                 cipherId = cipherId,
+                                requiresPasswordReprompt = true,
                             ),
                         ),
                     ),
@@ -665,7 +666,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        number = number,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -726,7 +730,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                    ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                        password = password,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             verify(exactly = 1) {
@@ -744,6 +751,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 SearchAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -777,7 +785,10 @@ class SearchViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(
                 SearchAction.OverflowOptionClick(
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = cipherId,
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
             )
             assertEquals(SearchEvent.NavigateToEditCipher(cipherId), awaitItem())
@@ -834,6 +845,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
+                hasMasterPassword = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -934,6 +946,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
+                hasMasterPassword = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1044,6 +1057,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
+                hasMasterPassword = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1154,6 +1168,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
                 isAutofill = false,
+                hasMasterPassword = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1320,6 +1335,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 baseIconUrl = "https://vault.bitwarden.com/icons",
                 isIconLoadingDisabled = false,
                 isAutofill = true,
+                hasMasterPassword = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1351,6 +1367,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseWebSendUrl = "https://vault.bitwarden.com/#/send/",
     baseIconUrl = "https://vault.bitwarden.com/icons",
     isIconLoadingDisabled = false,
+    hasMasterPassword = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(

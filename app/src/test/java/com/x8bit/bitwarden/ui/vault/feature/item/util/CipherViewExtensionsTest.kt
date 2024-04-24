@@ -16,12 +16,41 @@ class CipherViewExtensionsTest {
         ZoneOffset.UTC,
     )
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform full CipherView into ViewState Login Content without master password reprompt`() {
+        val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
+        val viewState = cipherView.toViewState(
+            isPremiumUser = true,
+            hasMasterPassword = false,
+            totpCodeItemData = TotpCodeItemData(
+                periodSeconds = 30,
+                timeLeftSeconds = 15,
+                verificationCode = "123456",
+                totpCode = "testCode",
+            ),
+            clock = fixedClock,
+        )
+
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(isEmpty = false, isPremiumUser = true).copy(
+                    currentCipher = cipherView,
+                    requiresReprompt = false,
+                ),
+                type = createLoginContent(isEmpty = false),
+            ),
+            viewState,
+        )
+    }
+
     @Test
     fun `toViewState should transform full CipherView into ViewState Login Content with premium`() {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
-            TotpCodeItemData(
+            hasMasterPassword = true,
+            totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
                 verificationCode = "123456",
@@ -47,6 +76,7 @@ class CipherViewExtensionsTest {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = false)
         val viewState = cipherView.toViewState(
             isPremiumUser = isPremiumUser,
+            hasMasterPassword = true,
             totpCodeItemData = TotpCodeItemData(
                 periodSeconds = 30,
                 timeLeftSeconds = 15,
@@ -71,6 +101,7 @@ class CipherViewExtensionsTest {
         val cipherView = createCipherView(type = CipherType.LOGIN, isEmpty = true)
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )
@@ -91,6 +122,7 @@ class CipherViewExtensionsTest {
         val cipherView = createCipherView(type = CipherType.IDENTITY, isEmpty = false)
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )
@@ -110,6 +142,7 @@ class CipherViewExtensionsTest {
         val cipherView = createCipherView(type = CipherType.IDENTITY, isEmpty = true)
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )
@@ -139,6 +172,7 @@ class CipherViewExtensionsTest {
             )
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )
@@ -173,6 +207,7 @@ class CipherViewExtensionsTest {
         )
         val result = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )
@@ -209,6 +244,7 @@ class CipherViewExtensionsTest {
         val cipherView = createCipherView(type = CipherType.SECURE_NOTE, isEmpty = false)
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )
@@ -229,6 +265,7 @@ class CipherViewExtensionsTest {
         val cipherView = createCipherView(type = CipherType.SECURE_NOTE, isEmpty = true)
         val viewState = cipherView.toViewState(
             isPremiumUser = true,
+            hasMasterPassword = true,
             totpCodeItemData = null,
             clock = fixedClock,
         )

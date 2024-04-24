@@ -393,6 +393,7 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             autofillSelectionData = null,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -466,6 +467,7 @@ class VaultItemListingDataExtensionsTest {
                 type = AutofillSelectionData.Type.LOGIN,
                 uri = null,
             ),
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -516,6 +518,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                hasMasterPassword = true,
             ),
         )
 
@@ -533,6 +536,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                hasMasterPassword = true,
             ),
         )
 
@@ -548,6 +552,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                hasMasterPassword = true,
             ),
         )
 
@@ -566,6 +571,7 @@ class VaultItemListingDataExtensionsTest {
                     type = AutofillSelectionData.Type.LOGIN,
                     uri = "https://www.test.com",
                 ),
+                hasMasterPassword = true,
             ),
         )
     }
@@ -704,6 +710,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("1"),
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -743,6 +750,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
         )
 
         assertEquals(

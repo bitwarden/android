@@ -1196,6 +1196,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 VaultItemListingsAction.OverflowOptionClick(
                     action = ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -1508,6 +1509,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     isPullToRefreshSettingEnabled = false,
     dialogState = null,
     policyDisablesSend = false,
+    hasMasterPassword = true,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
@@ -1567,7 +1569,10 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         iconData = IconData.Local(R.drawable.ic_vault),
         extraIconList = emptyList(),
         overflowOptions = listOf(
-            ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+            ListingItemOverflowAction.VaultAction.EditClick(
+                cipherId = "mockId-$number",
+                requiresPasswordReprompt = true,
+            ),
         ),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = false,

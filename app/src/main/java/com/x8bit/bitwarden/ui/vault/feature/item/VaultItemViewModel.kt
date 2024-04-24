@@ -749,8 +749,7 @@ class VaultItemViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
-                            isPremiumUser = userState.activeAccount.isPremium,
-                            totpCodeItemData = vaultDataState.data?.totpCodeItemData,
+                            account = userState.activeAccount,
                             errorText = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -761,8 +760,7 @@ class VaultItemViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
-                            isPremiumUser = userState.activeAccount.isPremium,
-                            totpCodeItemData = vaultDataState.data.totpCodeItemData,
+                            account = userState.activeAccount,
                             errorText = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -779,8 +777,7 @@ class VaultItemViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
-                            isPremiumUser = userState.activeAccount.isPremium,
-                            totpCodeItemData = vaultDataState.data?.totpCodeItemData,
+                            account = userState.activeAccount,
                             errorText = R.string.internet_connection_required_title
                                 .asText()
                                 .concat(
@@ -796,8 +793,7 @@ class VaultItemViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         viewState = vaultDataState.toViewStateOrError(
-                            isPremiumUser = userState.activeAccount.isPremium,
-                            totpCodeItemData = vaultDataState.data.totpCodeItemData,
+                            account = userState.activeAccount,
                             errorText = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -807,13 +803,16 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun DataState<VaultItemStateData>.toViewStateOrError(
-        isPremiumUser: Boolean,
-        totpCodeItemData: TotpCodeItemData?,
+        account: UserState.Account,
         errorText: Text,
     ): VaultItemState.ViewState = this
         .data
         ?.cipher
-        ?.toViewState(isPremiumUser = isPremiumUser, totpCodeItemData = totpCodeItemData)
+        ?.toViewState(
+            isPremiumUser = account.isPremium,
+            hasMasterPassword = account.hasMasterPassword,
+            totpCodeItemData = this.data?.totpCodeItemData,
+        )
         ?: VaultItemState.ViewState.Error(message = errorText)
 
     private fun handleValidatePasswordReceive(

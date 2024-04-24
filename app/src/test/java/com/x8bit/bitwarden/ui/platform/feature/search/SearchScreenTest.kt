@@ -541,6 +541,7 @@ class SearchScreenTest : BaseComposeTest() {
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-1",
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -579,6 +580,7 @@ class SearchScreenTest : BaseComposeTest() {
                 SearchAction.OverflowOptionClick(
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = "mockPassword-1",
+                        requiresPasswordReprompt = true,
                     ),
                 ),
             )
@@ -675,6 +677,7 @@ class SearchScreenTest : BaseComposeTest() {
                     masterPasswordRepromptData = MasterPasswordRepromptData.OverflowItem(
                         action = ListingItemOverflowAction.VaultAction.EditClick(
                             cipherId = "mockId-1",
+                            requiresPasswordReprompt = true,
                         ),
                     ),
                 ),
@@ -882,6 +885,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseWebSendUrl = "www.test.com",
     baseIconUrl = "www.test.com",
     isIconLoadingDisabled = false,
+    hasMasterPassword = true,
 )
 
 private fun createStateForAutofill(

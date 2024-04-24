@@ -271,6 +271,7 @@ class SearchTypeDataExtensionsTest {
             baseIconUrl = "www.test.com",
             isIconLoadingDisabled = false,
             isAutofill = false,
+            hasMasterPassword = true,
         )
 
         assertEquals(SearchState.ViewState.Empty(message = null), result)
@@ -294,6 +295,7 @@ class SearchTypeDataExtensionsTest {
             baseIconUrl = "https://vault.bitwarden.com/icons",
             isIconLoadingDisabled = false,
             isAutofill = false,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -332,6 +334,7 @@ class SearchTypeDataExtensionsTest {
             baseIconUrl = "https://vault.bitwarden.com/icons",
             isIconLoadingDisabled = false,
             isAutofill = true,
+            hasMasterPassword = true,
         )
 
         assertEquals(
@@ -380,6 +383,7 @@ class SearchTypeDataExtensionsTest {
             baseIconUrl = "www.test.com",
             isIconLoadingDisabled = false,
             isAutofill = false,
+            hasMasterPassword = true,
         )
 
         assertEquals(
