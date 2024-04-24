@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 import android.net.Uri
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -19,6 +20,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isDuo
@@ -44,6 +47,7 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions")
 class TwoFactorLoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val environmentRepository: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -60,6 +64,16 @@ class TwoFactorLoginViewModel @Inject constructor(
             password = TwoFactorLoginArgs(savedStateHandle).password,
         ),
 ) {
+
+    private val recover2faUri: Uri
+        get() {
+            val baseUrl = environmentRepository
+                .environment
+                .environmentUrlData
+                .baseWebVaultUrlOrDefault
+            return "$baseUrl/#/recover-2fa".toUri()
+        }
+
     init {
         // As state updates, write to saved state handle.
         stateFlow
@@ -357,7 +371,7 @@ class TwoFactorLoginViewModel @Inject constructor(
     private fun handleSelectAuthMethod(action: TwoFactorLoginAction.SelectAuthMethod) {
         when (action.authMethod) {
             TwoFactorAuthMethod.RECOVERY_CODE -> {
-                sendEvent(TwoFactorLoginEvent.NavigateToRecoveryCode)
+                sendEvent(TwoFactorLoginEvent.NavigateToRecoveryCode(recover2faUri))
             }
 
             TwoFactorAuthMethod.EMAIL -> {
@@ -520,8 +534,10 @@ sealed class TwoFactorLoginEvent {
 
     /**
      * Navigates to the recovery code help page.
+     *
+     * @param uri The recovery uri.
      */
-    data object NavigateToRecoveryCode : TwoFactorLoginEvent()
+    data class NavigateToRecoveryCode(val uri: Uri) : TwoFactorLoginEvent()
 
     /**
      * Shows a toast with the given [message].

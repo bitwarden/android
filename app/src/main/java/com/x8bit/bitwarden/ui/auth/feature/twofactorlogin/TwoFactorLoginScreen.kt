@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -97,8 +96,8 @@ fun TwoFactorLoginScreen(
         when (event) {
             TwoFactorLoginEvent.NavigateBack -> onNavigateBack()
 
-            TwoFactorLoginEvent.NavigateToRecoveryCode -> {
-                intentManager.launchUri("https://bitwarden.com/help/lost-two-step-device".toUri())
+            is TwoFactorLoginEvent.NavigateToRecoveryCode -> {
+                intentManager.launchUri(uri = event.uri)
             }
 
             is TwoFactorLoginEvent.NavigateToCaptcha -> {

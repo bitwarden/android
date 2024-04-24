@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.twofactorlogin
 
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.R
@@ -14,6 +15,8 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -44,6 +47,11 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
+    }
+    private val environmentRepository: EnvironmentRepository = mockk(relaxed = true) {
+        every {
+            environment.environmentUrlData.baseWebVaultUrlOrDefault
+        } returns "https://vault.bitwarden.com"
     }
 
     @BeforeEach
@@ -515,6 +523,11 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `SelectAuthMethod with RECOVERY_CODE should launch the NavigateToRecoveryCode event`() =
         runTest {
+            val mockkUri = mockk<Uri>()
+            every {
+                Uri.parse("https://vault.bitwarden.com/#/recover-2fa")
+            } returns mockkUri
+
             val viewModel = createViewModel()
             viewModel.eventFlow.test {
                 viewModel.trySendAction(
@@ -523,7 +536,9 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 assertEquals(
-                    TwoFactorLoginEvent.NavigateToRecoveryCode,
+                    TwoFactorLoginEvent.NavigateToRecoveryCode(
+                        uri = "https://vault.bitwarden.com/#/recover-2fa".toUri(),
+                    ),
                     awaitItem(),
                 )
             }
@@ -611,6 +626,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     ): TwoFactorLoginViewModel =
         TwoFactorLoginViewModel(
             authRepository = authRepository,
+            environmentRepository = environmentRepository,
             savedStateHandle = SavedStateHandle().also {
                 it["state"] = state
                 it["email_address"] = "example@email.com"
