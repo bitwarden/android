@@ -7,9 +7,11 @@ using AndroidX.Credentials.Exceptions;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
 using Bit.App.Abstractions;
+using Bit.App.Droid.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Bit.Core.Utilities.Fido2.Extensions;
 using Bit.Droid;
 using Org.Json;
@@ -65,7 +67,7 @@ namespace Bit.App.Platforms.Android.Autofill
             var request = new PublicKeyCredentialCreationOptions(json);
             var jsonObj = new JSONObject(json);
             var authenticatorSelection = jsonObj.GetJSONObject("authenticatorSelection");
-            request.AuthenticatorSelection = new AuthenticatorSelectionCriteria(
+            request.AuthenticatorSelection = new AndroidX.Credentials.WebAuthn.AuthenticatorSelectionCriteria(
                 authenticatorSelection.OptString("authenticatorAttachment", "platform"),
                 authenticatorSelection.OptString("residentKey", null),
                 authenticatorSelection.OptBoolean("requireResidentKey", false),
@@ -77,14 +79,23 @@ namespace Bit.App.Platforms.Android.Autofill
         public static async Task CreateCipherPasskeyAsync(ProviderCreateCredentialRequest getRequest, Activity activity)
         {
             var callingRequest = getRequest?.CallingRequest as CreatePublicKeyCredentialRequest;
+
+            if (callingRequest is null)
+            {
+                if (ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
+                {
+                    await deviceActionService.DisplayAlertAsync(AppResources.ErrorCreatingPasskey, string.Empty, AppResources.Ok);
+                }
+                FailAndFinish();
+                return;
+            }
+
             var origin = callingRequest.Origin;
             var credentialCreationOptions = GetPublicKeyCredentialCreationOptionsFromJson(callingRequest.RequestJson);
 
-            if (origin is null
-                &&
-                ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
+            if (origin is null)
             {
-                await deviceActionService.DisplayAlertAsync(AppResources.ErrorCreatingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
+                origin = getRequest.CallingAppInfo?.GetAndroidOrigin();
             }
 
             var rp = new Core.Utilities.Fido2.PublicKeyCredentialRpEntity()
@@ -121,7 +132,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
             var timeout = Convert.ToInt32(credentialCreationOptions.Timeout);
 
-            var credentialCreateParams = new Bit.Core.Utilities.Fido2.Fido2ClientCreateCredentialParams()
+            var credentialCreateParams = new Fido2ClientCreateCredentialParams()
             {
                 Challenge = credentialCreationOptions.GetChallenge(),
                 Origin = origin,
@@ -136,14 +147,17 @@ namespace Bit.App.Platforms.Android.Autofill
                 SameOriginWithAncestors = true
             };
 
+            var credentialExtraCreateParams = new Fido2ExtraCreateCredentialParams
+            (
+                callingRequest.GetClientDataHash(),
+                getRequest.CallingAppInfo?.PackageName
+            );
+
             var fido2MediatorService = ServiceContainer.Resolve<IFido2MediatorService>();
-            var clientCreateCredentialResult = await fido2MediatorService.CreateCredentialAsync(credentialCreateParams);
+            var clientCreateCredentialResult = await fido2MediatorService.CreateCredentialAsync(credentialCreateParams, credentialExtraCreateParams);
             if (clientCreateCredentialResult == null)
             {
-                var resultErrorIntent = new Intent();
-                PendingIntentHandler.SetCreateCredentialException(resultErrorIntent, new CreateCredentialUnknownException());
-                activity.SetResult(Result.Ok, resultErrorIntent);
-                activity.Finish();
+                FailAndFinish();
                 return;
             }
 
@@ -157,7 +171,10 @@ namespace Bit.App.Platforms.Android.Autofill
             }
 
             var responseInnerAndroidJson = new JSONObject();
-            responseInnerAndroidJson.Put("clientDataJSON", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.ClientDataJSON));
+            if (clientCreateCredentialResult.ClientDataJSON != null)
+            {
+                responseInnerAndroidJson.Put("clientDataJSON", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.ClientDataJSON));
+            }
             responseInnerAndroidJson.Put("authenticatorData", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.AuthData));
             responseInnerAndroidJson.Put("attestationObject", CoreHelpers.Base64UrlEncode(clientCreateCredentialResult.AttestationObject));
             responseInnerAndroidJson.Put("transports", transportsArray);
@@ -172,16 +189,21 @@ namespace Bit.App.Platforms.Android.Autofill
             rootAndroidJson.Put("clientExtensionResults", MapExtensionsToJson(clientCreateCredentialResult.Extensions));
             rootAndroidJson.Put("response", responseInnerAndroidJson);
 
-            var responseAndroidJson = rootAndroidJson.ToString();
-
-            System.Diagnostics.Debug.WriteLine(responseAndroidJson);
-
             var result = new Intent();
-            var publicKeyResponse = new CreatePublicKeyCredentialResponse(responseAndroidJson);
+            var publicKeyResponse = new CreatePublicKeyCredentialResponse(rootAndroidJson.ToString());
             PendingIntentHandler.SetCreateCredentialResponse(result, publicKeyResponse);
 
             activity.SetResult(Result.Ok, result);
             activity.Finish();
+
+            void FailAndFinish()
+            {
+                var result = new Intent();
+                PendingIntentHandler.SetCreateCredentialException(result, new CreateCredentialUnknownException());
+
+                activity.SetResult(Result.Ok, result);
+                activity.Finish();
+            }
         }
 
         private static Fido2CreateCredentialExtensionsParams MapExtensionsFromJson(PublicKeyCredentialCreationOptions options)

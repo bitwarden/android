@@ -20,8 +20,9 @@ namespace Bit.Core.Abstractions
         /// For more information please see: https://www.w3.org/TR/webauthn-3/#sctn-createCredential
         /// </summary>
         /// <param name="createCredentialParams">The parameters for the credential creation operation</param>
+        /// <param name="extraParams">Extra parameters for the credential creation operation</param>
         /// <returns>The new credential</returns>
-        Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, byte[] clientDataHash);
+        Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, Fido2ExtraCreateCredentialParams extraParams);
 
         /// <summary>
         /// Allows WebAuthn Relying Party scripts to discover and use an existing public key credential, with the user’s consent.
@@ -29,7 +30,8 @@ namespace Bit.Core.Abstractions
         /// For more information please see: https://www.w3.org/TR/webauthn-3/#sctn-getAssertion
         /// </summary>
         /// <param name="assertCredentialParams">The parameters for the credential assertion operation</param>
+        /// <param name="extraParams">Extra parameters for the credential assertion operation</param>
         /// <returns>The asserted credential</returns>
-        Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, byte[] clientDataHash);
+        Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, Fido2ExtraAssertCredentialParams extraParams);
     }
 }

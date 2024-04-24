@@ -5,15 +5,16 @@ using Android.OS;
 using AndroidX.Credentials;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
+using Bit.App.Droid.Utilities;
 using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Bit.App.Droid.Utilities;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities.Fido2;
-using Java.Security;
 using Bit.Core.Services;
 using Bit.App.Platforms.Android.Autofill;
+using AndroidX.Credentials.Exceptions;
+using Org.Json;
 
 namespace Bit.Droid.Autofill
 {
@@ -58,7 +59,13 @@ namespace Bit.Droid.Autofill
             {
                 var getRequest = PendingIntentHandler.RetrieveProviderGetCredentialRequest(Intent);
 
-                var credentialOption = getRequest?.CredentialOptions.FirstOrDefault();
+                if (getRequest is null)
+                {
+                    FailAndFinish();
+                    return;
+                }
+
+                var credentialOption = getRequest.CredentialOptions.FirstOrDefault();
                 var credentialPublic = credentialOption as GetPublicKeyCredentialOption;
 
                 var requestOptions = new PublicKeyCredentialRequestOptions(credentialPublic.RequestJson);
@@ -68,14 +75,14 @@ namespace Bit.Droid.Autofill
                 var credentialId = requestInfo?.GetByteArray(CredentialProviderConstants.CredentialIdIntentExtra);
                 var hasVaultBeenUnlockedInThisTransaction = Intent.GetBooleanExtra(CredentialProviderConstants.CredentialHasVaultBeenUnlockedInThisTransactionExtra, false);
 
-                var androidOrigin = AppInfoToOrigin(getRequest?.CallingAppInfo);
-                var packageName = getRequest?.CallingAppInfo.PackageName;
-                var appInfoOrigin = getRequest?.CallingAppInfo.Origin;
+                var androidOrigin = getRequest.CallingAppInfo.GetAndroidOrigin();
+                var packageName = getRequest.CallingAppInfo.PackageName;
+                var origin = getRequest.CallingAppInfo.Origin ?? androidOrigin;
                 
-                if (appInfoOrigin is null)
+                if (origin is null)
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
-                    Finish();
+                    FailAndFinish();
                     return;
                 }
 
@@ -91,31 +98,41 @@ namespace Bit.Droid.Autofill
                     Challenge = requestOptions.GetChallenge(),
                     RpId = RpId,
                     AllowCredentials = new Core.Utilities.Fido2.PublicKeyCredentialDescriptor[] { new Core.Utilities.Fido2.PublicKeyCredentialDescriptor { Id = credentialId } },
-                    Origin = appInfoOrigin,
+                    Origin = origin,
                     SameOriginWithAncestors = true,
                     UserVerification = requestOptions.UserVerification
                 };
 
-                var assertResult = await _fido2MediatorService.Value.AssertCredentialAsync(clientAssertParams, credentialPublic.GetClientDataHash());
-
-                var response = new AuthenticatorAssertionResponse(
-                    requestOptions,
-                    assertResult.SelectedCredential.Id,
-                    androidOrigin,
-                    false, // These flags have no effect, we set our own within `SetAuthenticatorData`
-                    false,
-                    false,
-                    false,
-                    assertResult.SelectedCredential.UserHandle,
-                    packageName,
-                    assertResult.ClientDataHash
+                var extraAssertParams = new Fido2ExtraAssertCredentialParams
+                (
+                    getRequest.CallingAppInfo.Origin != null ? credentialPublic.GetClientDataHash() : null,
+                    packageName
                 );
-                response.SetAuthenticatorData(assertResult.AuthenticatorData);
-                response.SetSignature(assertResult.Signature);
+
+                var assertResult = await _fido2MediatorService.Value.AssertCredentialAsync(clientAssertParams, extraAssertParams);
 
                 var result = new Intent();
-                var fidoCredential = new FidoPublicKeyCredential(assertResult.SelectedCredential.Id, response, "platform");
-                var cred = new PublicKeyCredential(fidoCredential.Json());
+
+                var responseInnerAndroidJson = new JSONObject();
+                if (assertResult.ClientDataJSON != null)
+                {
+                    responseInnerAndroidJson.Put("clientDataJSON", CoreHelpers.Base64UrlEncode(assertResult.ClientDataJSON));
+                }
+                responseInnerAndroidJson.Put("authenticatorData", CoreHelpers.Base64UrlEncode(assertResult.AuthenticatorData));
+                responseInnerAndroidJson.Put("signature", CoreHelpers.Base64UrlEncode(assertResult.Signature));
+                responseInnerAndroidJson.Put("userHandle", CoreHelpers.Base64UrlEncode(assertResult.SelectedCredential.UserHandle));
+
+                var rootAndroidJson = new JSONObject();
+                rootAndroidJson.Put("id", CoreHelpers.Base64UrlEncode(assertResult.SelectedCredential.Id));
+                rootAndroidJson.Put("rawId", CoreHelpers.Base64UrlEncode(assertResult.SelectedCredential.Id));
+                rootAndroidJson.Put("authenticatorAttachment", "platform");
+                rootAndroidJson.Put("type", "public-key");
+                rootAndroidJson.Put("clientExtensionResults", new JSONObject());
+                rootAndroidJson.Put("response", responseInnerAndroidJson);
+
+                var json = rootAndroidJson.ToString();
+
+                var cred = new PublicKeyCredential(json);
                 var credResponse = new GetCredentialResponse(cred);
                 PendingIntentHandler.SetGetCredentialResponse(result, credResponse);
 
@@ -130,7 +147,7 @@ namespace Bit.Droid.Autofill
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
-                    Finish();
+                    FailAndFinish();
                 });
             }
             catch (Exception ex)
@@ -139,17 +156,18 @@ namespace Bit.Droid.Autofill
                 await MainThread.InvokeOnMainThreadAsync(async () =>
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, string.Format(AppResources.ThereWasAProblemReadingAPasskeyForXTryAgainLater, RpId), AppResources.Ok);
-                    Finish();
+                    FailAndFinish();
                 });
             }
         }
 
-        private string AppInfoToOrigin(CallingAppInfo info)
+        private void FailAndFinish()
         {
-            var cert = info.SigningInfo.GetApkContentsSigners()[0].ToByteArray();
-            var md = MessageDigest.GetInstance("SHA-256");
-            var certHash = md.Digest(cert);
-            return $"android:apk-key-hash:${CoreHelpers.Base64UrlEncode(certHash)}";
+            var result = new Intent();
+            PendingIntentHandler.SetGetCredentialException(result, new GetCredentialUnknownException());
+
+            SetResult(Result.Ok, result);
+            Finish();
         }
     }
 }
