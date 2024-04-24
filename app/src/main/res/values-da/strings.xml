@@ -874,4 +874,8 @@ Vil du skifte til denne konto?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Duo-totrinsindlogning kræves for kontoen.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Følg trinnene fra Duo for at færdiggøre indlogningen.</string>
   <string name="launch_duo">Start Duo</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Utildelte organisationsemner er ikke længere synlige i Alle Bokse-visningen og er kun tilgængelige via Admin-konsollen. Føj disse emner til en samling fra Admin-konsollen for at gøre dem synlige.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">Pr. 16. maj 2024 vil utildelte organisationsemner ikke længere være synlige i Alle Bokse-visningen og vil kun være tilgængelige via Admin-konsollen. Tildel disse emner til en samling via Admin-konsollen for at gøre dem synlige.</string>
+  <string name="remind_me_later">Påmind senere</string>
+  <string name="notice">Varsling</string>
 </resources>

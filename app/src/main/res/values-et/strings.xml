@@ -874,4 +874,8 @@ Soovid selle konto peale lülituda?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
   <string name="launch_duo">Launch Duo</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
+  <string name="remind_me_later">Remind me later</string>
+  <string name="notice">Notice</string>
 </resources>

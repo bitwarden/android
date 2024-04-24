@@ -131,7 +131,7 @@
   <string name="vault_timeout_action">Holvin aikakatkaisutoiminto</string>
   <string name="vault_timeout_log_out_confirmation">Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</string>
   <string name="logging_in">Kirjaudutaan sisään…</string>
-  <string name="login_or_create_new_account">Käytä salattua holviasi kirjautumalla sisään tai tai luo uusi tili.</string>
+  <string name="login_or_create_new_account">Käytä salattua holviasi kirjautumalla sisään tai luo uusi tili.</string>
   <string name="manage">Hallinta</string>
   <string name="master_password_confirmation_val_message">Salasanan vahvistus ei täsmää.</string>
   <string name="master_password_description">Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen.</string>
@@ -874,4 +874,8 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Tilillesi kirjautuminen vaatii Duo-vahvistuksen.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Viimeistele kirjautuminen seuraamalla Duon ohjeita.</string>
   <string name="launch_duo">Avaa Duo</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Organisaatioiden kokoelmiin määrittämättömät kohteet eivät enää näy laitteiden \"Kaikki holvit\" -näkymissä, vaan ne ovat nähtävissä vain Hallintapaneelista. Määritä kohteet kokoelmiin Hallintapaneelista, jotta ne ovat jatkossakin käytettävissä kaikilta laitteilta.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">16.5.2024 alkaen kokoelmiin määrittämättömät organisaatioiden kohteet eivät enää näy laitteiden \"Kaikki holvit\" -näkymissä, vaan ne ovat nähtävissä vain Hallintapaneelista. Määritä kohteet kokoelmiin Hallintapaneelista, jotta ne ovat jatkossakin käytettävissä kaikilta laitteilta.</string>
+  <string name="remind_me_later">Muistuta myöhemmin</string>
+  <string name="notice">Huomautus</string>
 </resources>
