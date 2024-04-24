@@ -870,7 +870,11 @@ Vuoi passare a questo account?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Le autorizzazioni della tua organizzazione sono state aggiornate, obbligandoti a impostare una password principale.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">La tua organizzazione ti obbliga di impostare di una password principale.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Imposta un metodo di sblocco per modificare l\'azione timeout cassaforte.</string>
-  <string name="duo_two_step_login_is_required_for_your_account">Duo two-step login is required for your account.</string>
-  <string name="follow_the_steps_from_duo_to_finish_logging_in">Follow the steps from Duo to finish logging in.</string>
-  <string name="launch_duo">Launch Duo</string>
+  <string name="duo_two_step_login_is_required_for_your_account">Per il tuo account è richiesta la verifica in due passaggi di Duo.</string>
+  <string name="follow_the_steps_from_duo_to_finish_logging_in">Segui i passaggi da Duo per completare l\'accesso.</string>
+  <string name="launch_duo">Avvia Duo</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Gli elementi dell\'organizzazione non assegnati non sono più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e sono ora accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">Dal 16 maggio 2024, gli elementi dell\'organizzazione non assegnati non saranno più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e saranno accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</string>
+  <string name="remind_me_later">Ricordamelo più tardi</string>
+  <string name="notice">Avviso</string>
 </resources>

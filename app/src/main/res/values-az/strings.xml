@@ -105,13 +105,13 @@
   <string name="exntesion_reenable">Tətbiq uzantısını təkrar aktivləşdir</string>
   <string name="extension_almost_done">Demək olar ki, hazırdır!</string>
   <string name="extension_enable">Tətbiq uzantısını aktivləşdir</string>
-  <string name="extension_in_safari">Safari-də paylaş nişanını istifadə edərək Bitwarden-i tapın (məsləhət: Menyunun ən alt sətrinin sağ hissəsinə baxın).</string>
+  <string name="extension_in_safari">Safari-də paylaş ikonunu istifadə edərək Bitwarden-i tapın (ipucu: menyunun alt sətrində sağa sürüşdürün).</string>
   <string name="extension_instant_access">Parollarınıza dərhal müraciət edin!</string>
   <string name="extension_ready">Giriş etmək üçün hazırsınız!</string>
   <string name="extension_setup">Giriş məlumatlarınıza artıq Safari, Chrome və digər dəstəklənən tətbiqlərdən asanlıqla müraciət edə bilərsiniz.</string>
-  <string name="extension_setup2">Safari və Chrome-da paylaş nişanını istifadə edərək Bitwarden-i tapın (məsləhət: Paylaş menyusunun ən alt sətrinin sağ hissəsinə baxın).</string>
-  <string name="extension_tap_icon">Uzantını başlatmaq üçün menyudakı Bitwarden nişanına toxunun.</string>
-  <string name="extension_turn_on">Safari və digər tətbiqlərdə Bitwarden-i işə salmaq üçün menyunun ən alt sətrindəki \"daha çox\" nişanına toxunun.</string>
+  <string name="extension_setup2">Safari və Chrome-da paylaş ikonunu istifadə edərək Bitwarden-i tapın (ipucu: paylaşma menyusunun alt sətrində sağa sürüşdürün).</string>
+  <string name="extension_tap_icon">Uzantını başlatmaq üçün menyudakı Bitwarden ikonuna toxunun.</string>
+  <string name="extension_turn_on">Safari və digər tətbiqlərdə Bitwarden-i işə salmaq üçün menyunun alt sətrindəki \"daha çox\" ikonuna toxunun.</string>
   <string name="favorite">Sevimli</string>
   <string name="fingerprint">Barmaq izi</string>
   <string name="generate_password">Parol yarat</string>
@@ -185,7 +185,7 @@
   <string name="lost_2fa_app">Kimlik doğrulayıcı tətbiqini itirmisiniz?</string>
   <string name="items">Elementlər</string>
   <string name="extension_activated">Uzantı aktivləşdirildi!</string>
-  <string name="icons">Nişanlar</string>
+  <string name="icons">İkonlar</string>
   <string name="translations">Tərcümələr</string>
   <string name="items_for_uri">%1$s üçün elementlər</string>
   <string name="no_items_for_uri">Anbarınızda %1$s üçün heç bir element yoxdur.</string>
@@ -314,9 +314,9 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="zip_postal_code">Zip/ Poçt kodu</string>
   <string name="address">Ünvan</string>
   <string name="expiration">Bitmə vaxtı</string>
-  <string name="show_website_icons">Veb sayt nişanlarını göstər</string>
+  <string name="show_website_icons">Veb sayt ikonlarını göstər</string>
   <string name="show_website_icons_description">Hər girişin yanında tanına bilən təsvir göstər.</string>
-  <string name="icons_url">Nişan server URL-si</string>
+  <string name="icons_url">İkon server URL-si</string>
   <string name="autofill_with_bitwarden">Bitwarden ilə avto-doldurma</string>
   <string name="vault_is_locked">Anbar kilidlənib</string>
   <string name="go_to_my_vault">Anbarıma get</string>
@@ -873,4 +873,8 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Hesabınız üçün Duo iki addımlı giriş tələb olunur.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Giriş etməni tamamlamaq üçün Duo-dakı addımları izləyin.</string>
   <string name="launch_duo">Duo-nu başlat</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Təyin edilməmiş təşkilat elementləri artıq Bütün Anbarlar görünüşündə görünməyəndir və yalnız Admin Konsolu vasitəsilə əlçatandır. Bu elementləri görünən etmək üçün Admin Konsolundan bir kolleksiyaya təyin edin.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">16 May 2024-cü ildən etibarən təyin edilməmiş təşkilat elementləri artıq Bütün Anbarlar görünüşündə görünməyən və yalnız Admin Konsolu vasitəsilə əlçatan olacaq. Bu elementləri görünən etmək üçün Admin Konsolundan bir kolleksiyaya təyin edin.</string>
+  <string name="remind_me_later">Daha sonra xatırlat</string>
+  <string name="notice">Xəbərdarlıq</string>
 </resources>

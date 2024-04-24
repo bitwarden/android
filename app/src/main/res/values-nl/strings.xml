@@ -70,7 +70,7 @@
   <string name="uri">URI</string>
   <string name="use_fingerprint_to_unlock">Vingerafdruk gebruiken om te ontgrendelen</string>
   <string name="username">Gebruikersnaam</string>
-  <string name="validation_field_required">Het %1$s-veld is vereist.</string>
+  <string name="validation_field_required">Vul het veld %1$s in.</string>
   <string name="value_has_been_copied">%1$s is gekopieerd.</string>
   <string name="verify_fingerprint">Vingerafdruk verifiëren</string>
   <string name="verify_master_password">Hoofdwachtwoord invoeren</string>
@@ -268,7 +268,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="custom_fields">Aangepaste velden</string>
   <string name="copy_number">Nummer kopiëren</string>
   <string name="copy_security_code">Beveiligingscode kopiëren</string>
-  <string name="number">Kaartummer</string>
+  <string name="number">Kaartnummer</string>
   <string name="security_code">Beveiligingscode</string>
   <string name="type_card">Kaart</string>
   <string name="type_identity">Identiteit</string>
@@ -874,4 +874,8 @@ Wilt u naar dit account wisselen?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Jouw account vereist Duo-tweestapsaanmelding.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Volg de stappen van Duo om in te loggen.</string>
   <string name="launch_duo">Duo starten</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Niet-toegewezen organisatie-items zijn niet meer zichtbaar in de weergave van alle kluisjes en alleen toegankelijk via de Admin Console. Je kunt deze items in het Admin Console aan een collectie toewijzen om ze zichtbaar te maken.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">Vanaf 2 mei 2024 zijn niet-toegewezen organisatie-items niet meer zichtbaar in de weergave van alle kluisjes en alleen toegankelijk via de Admin Console. Je kunt deze items in het Admin Console aan een collectie toewijzen om ze zichtbaar te maken.</string>
+  <string name="remind_me_later">Herinner me later</string>
+  <string name="notice">Kennisgeving</string>
 </resources>
