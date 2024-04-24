@@ -75,10 +75,9 @@ namespace Bit.Droid.Autofill
                 var credentialId = requestInfo?.GetByteArray(CredentialProviderConstants.CredentialIdIntentExtra);
                 var hasVaultBeenUnlockedInThisTransaction = Intent.GetBooleanExtra(CredentialProviderConstants.CredentialHasVaultBeenUnlockedInThisTransactionExtra, false);
 
-                var androidOrigin = getRequest.CallingAppInfo.GetAndroidOrigin();
                 var packageName = getRequest.CallingAppInfo.PackageName;
-                var origin = getRequest.CallingAppInfo.Origin ?? androidOrigin;
-                
+
+                var origin = await CredentialHelpers.ValidateCallingAppInfoAndGetOriginAsync(getRequest.CallingAppInfo, RpId);
                 if (origin is null)
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
