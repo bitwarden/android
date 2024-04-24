@@ -1,21 +1,79 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+################################################################################
+# Bitwarden SDK
+################################################################################
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# We need to access the SDK using JNA and this makes it very easy to obfuscate away the SDK unless
+# we keep it here.
+-keep class com.bitwarden.** { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+################################################################################
+# Bitwarden Models
+################################################################################
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Keep all enums
+-keepclassmembers enum * { *; }
+
+################################################################################
+# Credential Manager
+################################################################################
+
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+    *;
+}
+
+################################################################################
+# Firebase Crashlytics
+################################################################################
+
+# Keep file names and line numbers.
+-keepattributes SourceFile,LineNumberTable
+
+# Keep custom exceptions.
+-keep public class * extends java.lang.Exception
+
+################################################################################
+# kotlinx.serialization
+################################################################################
+
+-keepattributes *Annotation*, InnerClasses
+
+# kotlinx-serialization-json specific.
+-keepclassmembers class kotlinx.serialization.json.** {
+    *** Companion;
+}
+-keepclasseswithmembers class kotlinx.serialization.json.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+################################################################################
+# Glide
+################################################################################
+
+-keep public class * implements com.bumptech.glide.module.GlideModule
+-keep public class * extends com.bumptech.glide.module.AppGlideModule
+
+################################################################################
+# JNA
+################################################################################
+
+# See https://github.com/java-native-access/jna/blob/fdb8695fb9b05fba467dadfe5735282f8bcc053d/www/FrequentlyAskedQuestions.md#jna-on-android
+-dontwarn java.awt.*
+-keep class com.sun.jna.* { *; }
+-keepclassmembers class * extends com.sun.jna.* { public *; }
+
+# Keep annotated classes
+-keep @com.sun.jna.* class *
+-keepclassmembers class * {
+    @com.sun.jna.* *;
+}
+
+################################################################################
+# ZXing
+################################################################################
+
+# Suppress zxing missing class error due to circular references
+-dontwarn com.google.zxing.BarcodeFormat
+-dontwarn com.google.zxing.EncodeHintType
+-dontwarn com.google.zxing.MultiFormatWriter
+-dontwarn com.google.zxing.common.BitMatrix
