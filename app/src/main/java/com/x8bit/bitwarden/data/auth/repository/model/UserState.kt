@@ -65,7 +65,12 @@ data class UserState(
         val organizations: List<Organization>,
         val isBiometricsEnabled: Boolean,
         val vaultUnlockType: VaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
-    )
+    ) {
+        /**
+         * Indicates that the user does or does not have a master password.
+         */
+        val hasMasterPassword: Boolean get() = trustedDevice?.hasMasterPassword != false
+    }
 
     /**
      * Models the data related to trusted device encryption (TDE).

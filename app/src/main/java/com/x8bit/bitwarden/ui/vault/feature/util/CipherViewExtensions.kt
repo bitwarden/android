@@ -9,28 +9,44 @@ import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
 /**
  * Creates the list of overflow actions to be displayed for a [CipherView].
  */
-fun CipherView.toOverflowActions(): List<ListingItemOverflowAction.VaultAction> =
+fun CipherView.toOverflowActions(
+    hasMasterPassword: Boolean,
+): List<ListingItemOverflowAction.VaultAction> =
     this
         .id
         ?.let { cipherId ->
             listOfNotNull(
                 ListingItemOverflowAction.VaultAction.ViewClick(cipherId = cipherId),
-                ListingItemOverflowAction.VaultAction.EditClick(cipherId = cipherId)
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = cipherId,
+                    requiresPasswordReprompt = hasMasterPassword,
+                )
                     .takeUnless { this.deletedDate != null },
                 this.login?.username?.let {
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = it)
                 },
                 this.login?.password
-                    ?.let { ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = it) }
+                    ?.let {
+                        ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            password = it,
+                            requiresPasswordReprompt = hasMasterPassword,
+                        )
+                    }
                     .takeIf { this.viewPassword },
                 this.login?.totp
                     ?.let { ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = it) }
                     .takeIf { this.type == CipherType.LOGIN },
                 this.card?.number?.let {
-                    ListingItemOverflowAction.VaultAction.CopyNumberClick(number = it)
+                    ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                        number = it,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
                 },
                 this.card?.code?.let {
-                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(securityCode = it)
+                    ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
+                        securityCode = it,
+                        requiresPasswordReprompt = hasMasterPassword,
+                    )
                 },
                 this.notes
                     ?.let { ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = it) }

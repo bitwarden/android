@@ -31,14 +31,20 @@ class CipherViewExtensionsTest {
             ),
         )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = false)
 
         assertEquals(
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
-                ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = false,
+                ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
-                ListingItemOverflowAction.VaultAction.CopyPasswordClick(password = password),
+                ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                    password = password,
+                    requiresPasswordReprompt = false,
+                ),
                 ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
@@ -63,12 +69,15 @@ class CipherViewExtensionsTest {
             ),
             viewPassword = false,
         )
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = true)
 
         assertEquals(
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
-                ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
                 ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
@@ -95,7 +104,7 @@ class CipherViewExtensionsTest {
                 ),
             )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = true)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -116,15 +125,22 @@ class CipherViewExtensionsTest {
             ),
         )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = true)
 
         assertEquals(
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
-                ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
-                ListingItemOverflowAction.VaultAction.CopyNumberClick(number = number),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
+                ListingItemOverflowAction.VaultAction.CopyNumberClick(
+                    number = number,
+                    requiresPasswordReprompt = true,
+                ),
                 ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                     securityCode = securityCode,
+                    requiresPasswordReprompt = true,
                 ),
             ),
             result,
@@ -147,7 +163,7 @@ class CipherViewExtensionsTest {
                 ),
             )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = false)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -163,12 +179,15 @@ class CipherViewExtensionsTest {
             identity = createMockIdentityView(number = 1),
         )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = false)
 
         assertEquals(
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
-                ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = false,
+                ),
             ),
             result,
         )
@@ -187,7 +206,7 @@ class CipherViewExtensionsTest {
                 identity = createMockIdentityView(number = 1),
             )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = true)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -205,12 +224,15 @@ class CipherViewExtensionsTest {
             notes = notes,
         )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = true)
 
         assertEquals(
             listOf(
                 ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
-                ListingItemOverflowAction.VaultAction.EditClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = true,
+                ),
                 ListingItemOverflowAction.VaultAction.CopyNoteClick(notes = notes),
             ),
             result,
@@ -231,7 +253,7 @@ class CipherViewExtensionsTest {
                 notes = null,
             )
 
-        val result = cipher.toOverflowActions()
+        val result = cipher.toOverflowActions(hasMasterPassword = false)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),

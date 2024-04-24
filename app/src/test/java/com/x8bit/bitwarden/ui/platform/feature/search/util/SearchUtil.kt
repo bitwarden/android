@@ -42,12 +42,16 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        requiresPasswordReprompt = true,
+                    ),
                     ListingItemOverflowAction.VaultAction.CopyUsernameClick(
                         username = "mockUsername-$number",
                     ),
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = "mockPassword-$number",
+                        requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.CopyTotpClick(
                         totpCode = "mockTotp-$number",
@@ -85,7 +89,10 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        requiresPasswordReprompt = true,
+                    ),
                     ListingItemOverflowAction.VaultAction.CopyNoteClick(
                         notes = "mockNotes-$number",
                     ),
@@ -119,12 +126,17 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        requiresPasswordReprompt = true,
+                    ),
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
                         number = "mockNumber-$number",
+                        requiresPasswordReprompt = true,
                     ),
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = "mockCode-$number",
+                        requiresPasswordReprompt = true,
                     ),
                 ),
                 overflowTestTag = "CipherOptionsButton",
@@ -156,7 +168,10 @@ fun createMockDisplayItemForCipher(
                 ),
                 overflowOptions = listOf(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
-                    ListingItemOverflowAction.VaultAction.EditClick(cipherId = "mockId-$number"),
+                    ListingItemOverflowAction.VaultAction.EditClick(
+                        cipherId = "mockId-$number",
+                        requiresPasswordReprompt = true,
+                    ),
                 ),
                 overflowTestTag = "CipherOptionsButton",
                 totpCode = null,

@@ -140,6 +140,7 @@ private fun CipherView.matchedSearch(searchTerm: String): SortPriority? {
 fun List<CipherView>.toViewState(
     searchTerm: String,
     baseIconUrl: String,
+    hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
 ): SearchState.ViewState =
@@ -149,6 +150,7 @@ fun List<CipherView>.toViewState(
             SearchState.ViewState.Content(
                 displayItems = toDisplayItemList(
                     baseIconUrl = baseIconUrl,
+                    hasMasterPassword = hasMasterPassword,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                 ),
@@ -164,12 +166,14 @@ fun List<CipherView>.toViewState(
 
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
+    hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
         it.toDisplayItem(
             baseIconUrl = baseIconUrl,
+            hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
         )
@@ -177,6 +181,7 @@ private fun List<CipherView>.toDisplayItemList(
 
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
+    hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
 ): SearchState.DisplayItem =
@@ -191,7 +196,7 @@ private fun CipherView.toDisplayItem(
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
         extraIconList = toLabelIcons(),
-        overflowOptions = toOverflowActions(),
+        overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
         overflowTestTag = "CipherOptionsButton",
         totpCode = login?.totp,
         autofillSelectionOptions = AutofillSelectionOption

@@ -83,6 +83,7 @@ class VaultViewModel @Inject constructor(
             isPremium = userState.activeAccount.isPremium,
             isPullToRefreshSettingEnabled = settingsRepository.getPullToRefreshEnabledFlow().value,
             baseIconUrl = userState.activeAccount.environment.environmentUrlData.baseIconUrl,
+            hasMasterPassword = userState.activeAccount.hasMasterPassword,
         )
     },
 ) {
@@ -493,6 +494,7 @@ class VaultViewModel @Inject constructor(
             vaultFilterType = vaultFilterTypeOrDefault,
             isIconLoadingDisabled = state.isIconLoadingDisabled,
             isPremium = state.isPremium,
+            hasMasterPassword = state.hasMasterPassword,
             errorTitle = R.string.an_error_has_occurred.asText(),
             errorMessage = R.string.generic_error_message.asText(),
         )
@@ -513,6 +515,7 @@ class VaultViewModel @Inject constructor(
                     baseIconUrl = state.baseIconUrl,
                     isIconLoadingDisabled = state.isIconLoadingDisabled,
                     isPremium = state.isPremium,
+                    hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
                 dialog = null,
@@ -533,6 +536,7 @@ class VaultViewModel @Inject constructor(
             isPremium = state.isPremium,
             errorTitle = R.string.internet_connection_required_title.asText(),
             isIconLoadingDisabled = state.isIconLoadingDisabled,
+            hasMasterPassword = state.hasMasterPassword,
             errorMessage = R.string.internet_connection_required_message.asText(),
         )
         sendEvent(VaultEvent.DismissPullToRefresh)
@@ -545,6 +549,7 @@ class VaultViewModel @Inject constructor(
                     baseIconUrl = state.baseIconUrl,
                     isIconLoadingDisabled = state.isIconLoadingDisabled,
                     isPremium = state.isPremium,
+                    hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
             )
@@ -610,6 +615,7 @@ data class VaultState(
     // Internal-use properties
     val isSwitchingAccounts: Boolean = false,
     val isPremium: Boolean,
+    val hasMasterPassword: Boolean,
     private val isPullToRefreshSettingEnabled: Boolean,
     val baseIconUrl: String,
     val isIconLoadingDisabled: Boolean,
@@ -1163,6 +1169,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
     vaultFilterType: VaultFilterType,
     isIconLoadingDisabled: Boolean,
     isPremium: Boolean,
+    hasMasterPassword: Boolean,
     errorTitle: Text,
     errorMessage: Text,
 ) {
@@ -1172,6 +1179,7 @@ private fun MutableStateFlow<VaultState>.updateToErrorStateOrDialog(
                 viewState = vaultData.toViewState(
                     baseIconUrl = baseIconUrl,
                     isPremium = isPremium,
+                    hasMasterPassword = hasMasterPassword,
                     vaultFilterType = vaultFilterType,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                 ),
