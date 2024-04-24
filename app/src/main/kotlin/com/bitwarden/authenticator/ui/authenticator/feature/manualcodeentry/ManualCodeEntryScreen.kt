@@ -132,6 +132,21 @@ fun ManualCodeEntryScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
+                label = stringResource(id = R.string.name),
+            value = state.accountName,
+            onValueChange = remember(viewModel) {
+                {
+                    viewModel.trySendAction(
+                        ManualCodeEntryAction.IssuerTextChange(it),
+                    )
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            BitwardenTextField(
                 singleLine = false,
                 label = stringResource(id = R.string.authenticator_key_scanner),
                 value = state.code,
@@ -139,22 +154,6 @@ fun ManualCodeEntryScreen(
                     {
                         viewModel.trySendAction(
                             ManualCodeEntryAction.CodeTextChange(it),
-                        )
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextField(
-                label = stringResource(id = R.string.account_name),
-                value = state.accountName,
-                onValueChange = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(
-                            ManualCodeEntryAction.IssuerTextChange(it),
                         )
                     }
                 },
