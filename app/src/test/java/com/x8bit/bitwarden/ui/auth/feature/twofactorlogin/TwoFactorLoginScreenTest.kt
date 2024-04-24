@@ -255,9 +255,10 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToRecoveryCode should launch the recovery code uri`() {
-        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToRecoveryCode)
+        val mockUri = mockk<Uri>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToRecoveryCode(mockUri))
         verify {
-            intentManager.launchUri(any())
+            intentManager.launchUri(mockUri)
         }
     }
 }
