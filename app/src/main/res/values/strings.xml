@@ -90,4 +90,7 @@
     <string name="file_format">File format</string>
     <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\\\'ll need to export from the web vault.</string>
     <string name="export_success">Data exported successfully</string>
+    <string name="unlock_with">Unlock with %1$s</string>
+    <string name="biometrics">Biometrics</string>
+    <string name="security">Security</string>
 </resources>

@@ -67,6 +67,7 @@ import kotlinx.parcelize.Parcelize
 fun AuthenticatorNavBarScreen(
     viewModel: AuthenticatorNavBarViewModel = hiltViewModel(),
     navController: NavHostController = rememberNavController(),
+    onNavigateBack: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
@@ -106,6 +107,7 @@ fun AuthenticatorNavBarScreen(
         settingsTabClickedAction = {
             viewModel.trySendAction(AuthenticatorNavBarAction.SettingsTabClick)
         },
+        navigateBack = onNavigateBack,
         navigateToSearch = onNavigateToSearch,
         navigateToQrCodeScanner = onNavigateToQrCodeScanner,
         navigateToManualKeyEntry = onNavigateToManualKeyEntry,
@@ -121,6 +123,7 @@ private fun AuthenticatorNavBarScaffold(
     navController: NavHostController,
     verificationTabClickedAction: () -> Unit,
     settingsTabClickedAction: () -> Unit,
+    navigateBack: () -> Unit,
     navigateToSearch: () -> Unit,
     navigateToQrCodeScanner: () -> Unit,
     navigateToManualKeyEntry: () -> Unit,
@@ -168,6 +171,7 @@ private fun AuthenticatorNavBarScaffold(
         ) {
             itemListingGraph(
                 navController = navController,
+                navigateBack = navigateBack,
                 navigateToSearch = navigateToSearch,
                 navigateToQrCodeScanner = navigateToQrCodeScanner,
                 navigateToManualKeyEntry = navigateToManualKeyEntry,

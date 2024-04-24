@@ -10,8 +10,16 @@ const val SPLASH_ROUTE: String = "splash"
 /**
  * Add splash destinations to the nav graph.
  */
-fun NavGraphBuilder.splashDestination() {
-    composable(SPLASH_ROUTE) { SplashScreen() }
+fun NavGraphBuilder.splashDestination(
+    onSplashScreenDismissed: () -> Unit,
+    onExitApplication: () -> Unit,
+) {
+    composable(SPLASH_ROUTE) {
+        SplashScreen(
+            onNavigateToAuthenticator = onSplashScreenDismissed,
+            onExitApplication = onExitApplication,
+        )
+    }
 }
 
 /**

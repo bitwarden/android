@@ -1,9 +1,7 @@
 package com.bitwarden.authenticator.ui.platform.feature.tutorial
 
 import android.os.Parcelable
-import androidx.lifecycle.SavedStateHandle
 import com.bitwarden.authenticator.R
-import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
@@ -12,18 +10,13 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
-private const val KEY_STATE = "state"
-
 /**
  * View model for the [TutorialScreen].
  */
 @HiltViewModel
-class TutorialViewModel @Inject constructor(
-    private val settingsRepository: SettingsRepository,
-    savedStateHandle: SavedStateHandle,
-) :
+class TutorialViewModel @Inject constructor() :
     BaseViewModel<TutorialState, TutorialEvent, TutorialAction>(
-        initialState = savedStateHandle[KEY_STATE] ?: TutorialState.IntroSlide
+        initialState = TutorialState.IntroSlide
     ) {
 
     override fun handleAction(action: TutorialAction) {
@@ -56,7 +49,6 @@ class TutorialViewModel @Inject constructor(
             TutorialState.IntroSlide -> TutorialEvent.NavigateToQrScannerSlide
             TutorialState.QrScannerSlide -> TutorialEvent.NavigateToUniqueCodesSlide
             TutorialState.UniqueCodesSlide -> {
-                settingsRepository.hasSeenWelcomeTutorial = true
                 TutorialEvent.NavigateToAuthenticator
             }
         }
@@ -64,7 +56,6 @@ class TutorialViewModel @Inject constructor(
     }
 
     private fun handleSkipClick() {
-        settingsRepository.hasSeenWelcomeTutorial = true
         sendEvent(TutorialEvent.NavigateToAuthenticator)
     }
 }

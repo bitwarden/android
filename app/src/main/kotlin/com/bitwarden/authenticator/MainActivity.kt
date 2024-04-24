@@ -38,7 +38,8 @@ class MainActivity : AppCompatActivity() {
                 theme = state.theme
             ) {
                 RootNavScreen(
-                    onSplashScreenRemoved = { shouldShowSplashScreen = false }
+                    onSplashScreenRemoved = { shouldShowSplashScreen = false },
+                    onExitApplication = { finishAffinity() }
                 )
             }
         }

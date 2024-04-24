@@ -9,6 +9,7 @@ const val AUTHENTICATOR_NAV_BAR_ROUTE: String = "AuthenticatorNavBarRoute"
  * Add the authenticator nav bar to the nav graph.
  */
 fun NavGraphBuilder.authenticatorNavBarDestination(
+    onNavigateBack: () -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToQrCodeScanner: () -> Unit,
     onNavigateToManualKeyEntry: () -> Unit,
@@ -20,6 +21,7 @@ fun NavGraphBuilder.authenticatorNavBarDestination(
         route = AUTHENTICATOR_NAV_BAR_ROUTE,
     ) {
         AuthenticatorNavBarScreen(
+            onNavigateBack = onNavigateBack,
             onNavigateToQrCodeScanner = onNavigateToQrCodeScanner,
             onNavigateToManualKeyEntry = onNavigateToManualKeyEntry,
             onNavigateToEditItem = onNavigateToEditItem,

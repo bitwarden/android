@@ -22,6 +22,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -41,8 +42,11 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelect
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
 import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
+import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
+import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 
 /**
@@ -52,6 +56,7 @@ import com.bitwarden.authenticator.ui.platform.util.displayLabel
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     onNavigateToTutorial: () -> Unit,
     onNavigateToExport: () -> Unit,
 ) {
@@ -81,6 +86,18 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .verticalScroll(state = rememberScrollState())
         ) {
+            SecuritySettings(
+                state = state,
+                biometricsManager = biometricsManager,
+                onBiometricToggle = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            SettingsAction.SecurityClick.UnlockWithBiometricToggle(it)
+                        )
+                    }
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             VaultSettings(
                 onExportClick = remember(viewModel) {
                     {
@@ -114,12 +131,39 @@ fun SettingsScreen(
     }
 }
 
+//region Security settings
+
+@Composable
+fun SecuritySettings(
+    state: SettingsState,
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
+    onBiometricToggle: (Boolean) -> Unit,
+) {
+    if (!biometricsManager.isBiometricsSupported) return
+
+    BitwardenListHeaderText(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        label = stringResource(id = R.string.security)
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    UnlockWithBiometricsRow(
+        modifier = Modifier
+            .testTag("UnlockWithBiometricsSwitch")
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        isChecked = state.isUnlockWithBiometricsEnabled,
+        onBiometricToggle = { onBiometricToggle(it) },
+        biometricsManager = biometricsManager,
+    )
+}
+
+//endregion
+
 //region Vault settings
 
 @Composable
 fun VaultSettings(
     modifier: Modifier = Modifier,
-
     onExportClick: () -> Unit,
 ) {
     BitwardenListHeaderText(
@@ -142,6 +186,41 @@ fun VaultSettings(
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }
+    )
+}
+
+@Composable
+private fun UnlockWithBiometricsRow(
+    isChecked: Boolean,
+    onBiometricToggle: (Boolean) -> Unit,
+    biometricsManager: BiometricsManager,
+    modifier: Modifier = Modifier,
+) {
+    if (!biometricsManager.isBiometricsSupported) return
+    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
+    BitwardenWideSwitch(
+        modifier = modifier,
+        label = stringResource(
+            id = R.string.unlock_with,
+            stringResource(id = R.string.biometrics),
+        ),
+        isChecked = isChecked || showBiometricsPrompt,
+        onCheckedChange = { toggled ->
+            if (toggled) {
+                showBiometricsPrompt = true
+                biometricsManager.promptBiometrics(
+                    onSuccess = {
+                        onBiometricToggle(true)
+                        showBiometricsPrompt = false
+                    },
+                    onCancel = { showBiometricsPrompt = false },
+                    onLockOut = { showBiometricsPrompt = false },
+                    onError = { showBiometricsPrompt = false },
+                )
+            } else {
+                onBiometricToggle(false)
+            }
+        },
     )
 }
 

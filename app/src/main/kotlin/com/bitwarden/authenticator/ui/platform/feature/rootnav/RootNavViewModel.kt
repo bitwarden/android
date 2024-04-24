@@ -1,16 +1,11 @@
 package com.bitwarden.authenticator.ui.platform.feature.rootnav
 
 import android.os.Parcelable
-import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.data.auth.repository.AuthRepository
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -19,17 +14,11 @@ class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
-    initialState = RootNavState.Splash
+    initialState = RootNavState(
+        hasSeenWelcomeGuide = settingsRepository.hasSeenWelcomeTutorial,
+        navState = RootNavState.NavState.Splash,
+    )
 ) {
-
-    init {
-        viewModelScope.launch {
-            settingsRepository.hasSeenWelcomeTutorialFlow
-                .map { RootNavAction.Internal.HasSeenWelcomeTutorialChange(it) }
-                .onEach(::sendAction)
-                .launchIn(viewModelScope)
-        }
-    }
 
     override fun handleAction(action: RootNavAction) {
         when (action) {
@@ -40,6 +29,14 @@ class RootNavViewModel @Inject constructor(
             is RootNavAction.Internal.HasSeenWelcomeTutorialChange -> {
                 handleHasSeenWelcomeTutorialChange(action.hasSeenWelcomeGuide)
             }
+
+            RootNavAction.Internal.TutorialFinished -> {
+                handleTutorialFinished()
+            }
+
+            RootNavAction.Internal.SplashScreenDismissed -> {
+                handleSplashScreenDismissed()
+            }
         }
     }
 
@@ -49,9 +46,21 @@ class RootNavViewModel @Inject constructor(
 
     private fun handleHasSeenWelcomeTutorialChange(hasSeenWelcomeGuide: Boolean) {
         if (hasSeenWelcomeGuide) {
-            mutableStateFlow.update { RootNavState.ItemListing }
+            mutableStateFlow.update { it.copy(navState = RootNavState.NavState.ItemListing) }
         } else {
-            mutableStateFlow.update { RootNavState.Tutorial }
+            mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Tutorial) }
+        }
+    }
+
+    private fun handleTutorialFinished() {
+        settingsRepository.hasSeenWelcomeTutorial = true
+    }
+
+    private fun handleSplashScreenDismissed() {
+        if (settingsRepository.hasSeenWelcomeTutorial) {
+            mutableStateFlow.update { it.copy(navState = RootNavState.NavState.ItemListing) }
+        } else {
+            mutableStateFlow.update { it.copy(navState = RootNavState.NavState.Tutorial) }
         }
     }
 }
@@ -59,25 +68,32 @@ class RootNavViewModel @Inject constructor(
 /**
  * Models root level destinations for the app.
  */
-sealed class RootNavState : Parcelable {
+@Parcelize
+data class RootNavState(
+    val hasSeenWelcomeGuide: Boolean,
+    val navState: NavState,
+) : Parcelable {
 
-    /**
-     * App should display the Splash nav graph.
-     */
     @Parcelize
-    data object Splash : RootNavState()
+    sealed class NavState : Parcelable {
+        /**
+         * App should display the Splash nav graph.
+         */
+        @Parcelize
+        data object Splash : NavState()
 
-    /**
-     * App should display the Tutorial nav graph.
-     */
-    @Parcelize
-    data object Tutorial : RootNavState()
+        /**
+         * App should display the Tutorial nav graph.
+         */
+        @Parcelize
+        data object Tutorial : NavState()
 
-    /**
-     * App should display the Account List nav graph.
-     */
-    @Parcelize
-    data object ItemListing : RootNavState()
+        /**
+         * App should display the Account List nav graph.
+         */
+        @Parcelize
+        data object ItemListing : NavState()
+    }
 }
 
 /**
@@ -93,6 +109,10 @@ sealed class RootNavAction {
      * Models actions the [RootNavViewModel] itself may send.
      */
     sealed class Internal : RootNavAction() {
+
+        data object SplashScreenDismissed : Internal()
+
+        data object TutorialFinished : Internal()
 
         /**
          * Indicates an update in the welcome guide being seen has been received.
