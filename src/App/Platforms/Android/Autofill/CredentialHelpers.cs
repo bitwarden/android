@@ -90,12 +90,17 @@ namespace Bit.App.Platforms.Android.Autofill
                 return;
             }
 
-            var origin = callingRequest.Origin;
             var credentialCreationOptions = GetPublicKeyCredentialCreationOptionsFromJson(callingRequest.RequestJson);
+            var origin = await ValidateCallingAppInfoAndGetOriginAsync(getRequest.CallingAppInfo, credentialCreationOptions.Rp.Id);
 
             if (origin is null)
             {
-                origin = getRequest.CallingAppInfo?.GetAndroidOrigin();
+                if (ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
+                {
+                    await deviceActionService.DisplayAlertAsync(AppResources.ErrorCreatingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
+                }
+                FailAndFinish();
+                return;
             }
 
             var rp = new Core.Utilities.Fido2.PublicKeyCredentialRpEntity()
@@ -236,6 +241,54 @@ namespace Bit.App.Platforms.Android.Autofill
             }
 
             return extensionsJson;
+        }
+
+        public static async Task<string> LoadFido2PriviligedAllowedListAsync()
+        {
+            try
+            {
+                using var stream = await FileSystem.OpenAppPackageFileAsync("fido2_priviliged_allow_list.json");
+                using var reader = new StreamReader(stream);
+
+                return reader.ReadToEnd();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
+        public static async Task<string> ValidateCallingAppInfoAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
+        {
+            if (callingAppInfo.Origin is null)
+            {
+                return await ValidateNativeAppAndGetOriginAsync(callingAppInfo, rpId);
+            }
+
+            var priviligedAllowedList = await LoadFido2PriviligedAllowedListAsync();
+            if (priviligedAllowedList is null)
+            {
+                throw new InvalidOperationException("Could not load Fido2 priviliged allowed list");
+            }
+
+            try
+            {
+                return callingAppInfo.GetOrigin(priviligedAllowedList);
+            }
+            catch (Java.Lang.IllegalStateException)
+            {
+                return null; // not priviliged
+            }
+            catch (Java.Lang.IllegalArgumentException)
+            {
+                return null; // wrong list format
+            }
+        }
+
+        private static async Task<string> ValidateNativeAppAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
+        {
+            // TODO: do asset links verification
+            return callingAppInfo.GetAndroidOrigin();
         }
     }
 }
