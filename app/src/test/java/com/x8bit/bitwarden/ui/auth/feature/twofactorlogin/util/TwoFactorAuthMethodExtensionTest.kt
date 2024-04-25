@@ -79,7 +79,7 @@ class TwoFactorAuthMethodExtensionTest {
     }
 
     @Test
-    fun `isDuo returns the expected value`() {
+    fun `isContinueButtonEnabled returns the expected value`() {
         mapOf(
             TwoFactorAuthMethod.AUTHENTICATOR_APP to false,
             TwoFactorAuthMethod.EMAIL to false,
@@ -88,11 +88,29 @@ class TwoFactorAuthMethodExtensionTest {
             TwoFactorAuthMethod.U2F to false,
             TwoFactorAuthMethod.REMEMBER to false,
             TwoFactorAuthMethod.DUO_ORGANIZATION to true,
-            TwoFactorAuthMethod.WEB_AUTH to false,
+            TwoFactorAuthMethod.WEB_AUTH to true,
             TwoFactorAuthMethod.RECOVERY_CODE to false,
         )
-            .forEach { (type, isDuo) ->
-                assertEquals(isDuo, type.isDuo)
+            .forEach { (type, isContinueButtonEnabled) ->
+                assertEquals(isContinueButtonEnabled, type.isContinueButtonEnabled)
+            }
+    }
+
+    @Test
+    fun `showPasswordInput returns the expected value`() {
+        mapOf(
+            TwoFactorAuthMethod.AUTHENTICATOR_APP to true,
+            TwoFactorAuthMethod.EMAIL to true,
+            TwoFactorAuthMethod.DUO to false,
+            TwoFactorAuthMethod.YUBI_KEY to true,
+            TwoFactorAuthMethod.U2F to true,
+            TwoFactorAuthMethod.REMEMBER to true,
+            TwoFactorAuthMethod.DUO_ORGANIZATION to false,
+            TwoFactorAuthMethod.WEB_AUTH to false,
+            TwoFactorAuthMethod.RECOVERY_CODE to true,
+        )
+            .forEach { (type, showPasswordInput) ->
+                assertEquals(showPasswordInput, type.showPasswordInput)
             }
     }
 

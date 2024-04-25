@@ -200,6 +200,16 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
             it.copy(authMethod = TwoFactorAuthMethod.DUO)
         }
         composeTestRule.onNodeWithText("Verification code").assertIsNotDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(authMethod = TwoFactorAuthMethod.DUO_ORGANIZATION)
+        }
+        composeTestRule.onNodeWithText("Verification code").assertIsNotDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
+        }
+        composeTestRule.onNodeWithText("Verification code").assertIsNotDisplayed()
     }
 
     @Test
@@ -250,6 +260,13 @@ class TwoFactorLoginScreenTest : BaseComposeTest() {
     fun `NavigateToDuo should call intentManager startCustomTabsActivity`() {
         val mockUri = mockk<Uri>()
         mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToDuo(mockUri))
+        verify { intentManager.startCustomTabsActivity(mockUri) }
+    }
+
+    @Test
+    fun `NavigateToDuoNavigateToWebAuth should call intentManager startCustomTabsActivity`() {
+        val mockUri = mockk<Uri>()
+        mutableEventFlow.tryEmit(TwoFactorLoginEvent.NavigateToWebAuth(mockUri))
         verify { intentManager.startCustomTabsActivity(mockUri) }
     }
 

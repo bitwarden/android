@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.util.getCaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getDuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.getSsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.getWebAuthResultOrNull
 import com.x8bit.bitwarden.data.auth.util.getYubiKeyResultOrNull
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,6 +26,7 @@ class AuthCallbackViewModel @Inject constructor(
 
     private fun handleIntentReceived(action: AuthCallbackAction.IntentReceive) {
         val yubiKeyResult = action.intent.getYubiKeyResultOrNull()
+        val webAuthResult = action.intent.getWebAuthResultOrNull()
         val captchaCallbackTokenResult = action.intent.getCaptchaCallbackTokenResult()
         val duoCallbackTokenResult = action.intent.getDuoCallbackTokenResult()
         val ssoCallbackResult = action.intent.getSsoCallbackResult()
@@ -49,6 +51,10 @@ class AuthCallbackViewModel @Inject constructor(
                 authRepository.setSsoCallbackResult(
                     result = ssoCallbackResult,
                 )
+            }
+
+            webAuthResult != null -> {
+                authRepository.setWebAuthResult(webAuthResult = webAuthResult)
             }
 
             else -> Unit

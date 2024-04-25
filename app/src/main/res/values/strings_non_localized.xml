@@ -17,4 +17,5 @@
     <string name="autofill_suggestion" translatable="false">Autofill suggestion</string>
     <string name="continue_to_complete_web_authn_verfication" translatable="false">Continue to complete WebAuthn verification.</string>
     <string name="launch_web_authn" translatable="false">Launch WebAuthn</string>
+    <string name="there_was_an_error_starting_web_authn_two_factor_authentication" translatable="false">There was an error starting WebAuthn two factor authentication</string>
 </resources>
