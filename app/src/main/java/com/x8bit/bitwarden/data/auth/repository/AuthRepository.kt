@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
 import kotlinx.coroutines.flow.Flow
@@ -70,6 +71,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * receive updates whenever [setYubiKeyResult] is called.
      */
     val yubiKeyResultFlow: Flow<YubiKeyResult>
+
+    /**
+     * Flow of the current [WebAuthResult]. Subscribers should listen to the flow in order to
+     * receive updates whenever [setWebAuthResult] is called.
+     */
+    val webAuthResultFlow: Flow<WebAuthResult>
 
     /**
      * The organization identifier currently associated with this user's SSO flow.
@@ -284,6 +291,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Set the value of [yubiKeyResultFlow].
      */
     fun setYubiKeyResult(yubiKeyResult: YubiKeyResult)
+
+    /**
+     * Set the value of [webAuthResultFlow].
+     */
+    fun setWebAuthResult(webAuthResult: WebAuthResult)
 
     /**
      * Checks for a claimed domain organization for the [email] that can be used for an SSO request.

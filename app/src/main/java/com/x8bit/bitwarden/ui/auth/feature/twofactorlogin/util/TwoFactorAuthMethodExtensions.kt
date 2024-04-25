@@ -65,15 +65,41 @@ val TwoFactorAuthMethod.button: Text
     }
 
 /**
- * Gets a boolean indicating if the given auth method uses Duo.
+ * Gets a boolean indicating if the given auth method has the continue button enabled by default.
  */
-val TwoFactorAuthMethod.isDuo: Boolean
+val TwoFactorAuthMethod.isContinueButtonEnabled: Boolean
     get() = when (this) {
         TwoFactorAuthMethod.DUO,
         TwoFactorAuthMethod.DUO_ORGANIZATION,
+        TwoFactorAuthMethod.WEB_AUTH,
         -> true
 
-        else -> false
+        TwoFactorAuthMethod.AUTHENTICATOR_APP,
+        TwoFactorAuthMethod.EMAIL,
+        TwoFactorAuthMethod.YUBI_KEY,
+        TwoFactorAuthMethod.U2F,
+        TwoFactorAuthMethod.REMEMBER,
+        TwoFactorAuthMethod.RECOVERY_CODE,
+        -> false
+    }
+
+/**
+ * Gets a boolean indicating if the given auth method should display the password input field.
+ */
+val TwoFactorAuthMethod.showPasswordInput: Boolean
+    get() = when (this) {
+        TwoFactorAuthMethod.DUO,
+        TwoFactorAuthMethod.DUO_ORGANIZATION,
+        TwoFactorAuthMethod.WEB_AUTH,
+        -> false
+
+        TwoFactorAuthMethod.AUTHENTICATOR_APP,
+        TwoFactorAuthMethod.EMAIL,
+        TwoFactorAuthMethod.YUBI_KEY,
+        TwoFactorAuthMethod.U2F,
+        TwoFactorAuthMethod.REMEMBER,
+        TwoFactorAuthMethod.RECOVERY_CODE,
+        -> true
     }
 
 /**

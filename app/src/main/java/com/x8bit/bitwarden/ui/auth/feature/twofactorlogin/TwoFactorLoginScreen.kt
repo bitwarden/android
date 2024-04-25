@@ -108,6 +108,10 @@ fun TwoFactorLoginScreen(
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
+            is TwoFactorLoginEvent.NavigateToWebAuth -> {
+                intentManager.startCustomTabsActivity(uri = event.uri)
+            }
+
             is TwoFactorLoginEvent.ShowToast -> {
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }

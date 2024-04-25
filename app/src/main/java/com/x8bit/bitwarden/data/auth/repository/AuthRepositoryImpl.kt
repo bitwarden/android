@@ -59,6 +59,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -274,6 +275,9 @@ class AuthRepositoryImpl(
 
     private val yubiKeyResultChannel = Channel<YubiKeyResult>(capacity = Int.MAX_VALUE)
     override val yubiKeyResultFlow: Flow<YubiKeyResult> = yubiKeyResultChannel.receiveAsFlow()
+
+    private val webAuthResultChannel = Channel<WebAuthResult>(capacity = Int.MAX_VALUE)
+    override val webAuthResultFlow: Flow<WebAuthResult> = webAuthResultChannel.receiveAsFlow()
 
     private val mutableSsoCallbackResultFlow = bufferedMutableSharedFlow<SsoCallbackResult>()
     override val ssoCallbackResultFlow: Flow<SsoCallbackResult> =
@@ -932,6 +936,10 @@ class AuthRepositoryImpl(
 
     override fun setYubiKeyResult(yubiKeyResult: YubiKeyResult) {
         yubiKeyResultChannel.trySend(yubiKeyResult)
+    }
+
+    override fun setWebAuthResult(webAuthResult: WebAuthResult) {
+        webAuthResultChannel.trySend(webAuthResult)
     }
 
     override suspend fun getOrganizationDomainSsoDetails(

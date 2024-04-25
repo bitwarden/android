@@ -75,6 +75,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
@@ -4045,6 +4046,15 @@ class AuthRepositoryTest {
         repository.yubiKeyResultFlow.test {
             repository.setYubiKeyResult(yubiKeyResult)
             assertEquals(yubiKeyResult, awaitItem())
+        }
+    }
+
+    @Test
+    fun `setWebAuthResult should change the value of webAuthResultFlow`() = runTest {
+        val webAuthResult = WebAuthResult.Success("mockk")
+        repository.webAuthResultFlow.test {
+            repository.setWebAuthResult(webAuthResult)
+            assertEquals(webAuthResult, awaitItem())
         }
     }
 

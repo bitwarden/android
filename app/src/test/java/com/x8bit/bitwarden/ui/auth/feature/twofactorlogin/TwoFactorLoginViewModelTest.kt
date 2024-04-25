@@ -13,13 +13,17 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -36,33 +40,40 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@Suppress("LargeClass")
 class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     private val mutableCaptchaTokenResultFlow =
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
-    private val mutableDuoTokenResultFlow =
-        bufferedMutableSharedFlow<DuoCallbackTokenResult>()
+    private val mutableDuoTokenResultFlow = bufferedMutableSharedFlow<DuoCallbackTokenResult>()
     private val mutableYubiKeyResultFlow = bufferedMutableSharedFlow<YubiKeyResult>()
+    private val mutableWebAuthResultFlow = bufferedMutableSharedFlow<WebAuthResult>()
     private val authRepository: AuthRepository = mockk(relaxed = true) {
         every { twoFactorResponse } returns TWO_FACTOR_RESPONSE
         every { captchaTokenResultFlow } returns mutableCaptchaTokenResultFlow
         every { duoTokenResultFlow } returns mutableDuoTokenResultFlow
         every { yubiKeyResultFlow } returns mutableYubiKeyResultFlow
+        every { webAuthResultFlow } returns mutableWebAuthResultFlow
     }
-    private val environmentRepository: EnvironmentRepository = mockk(relaxed = true) {
-        every {
-            environment.environmentUrlData.baseWebVaultUrlOrDefault
-        } returns "https://vault.bitwarden.com"
+    private val environmentRepository: EnvironmentRepository = mockk {
+        every { environment } returns Environment.Us
     }
+    private val resourceManager: ResourceManager = mockk()
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(::generateUriForCaptcha)
+        mockkStatic(
+            ::generateUriForCaptcha,
+            ::generateUriForWebAuth,
+        )
         mockkStatic(Uri::class)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(::generateUriForCaptcha)
+        unmockkStatic(
+            ::generateUriForCaptcha,
+            ::generateUriForWebAuth,
+        )
         unmockkStatic(Uri::class)
     }
 
@@ -84,6 +95,59 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
             initialState.copy(
                 codeInput = token,
                 isContinueButtonEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `webAuthResultFlow update with success should populate the codeInput and initial login`() {
+        val token = "token"
+        val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
+        coEvery {
+            authRepository.login(
+                email = "example@email.com",
+                password = "password123",
+                twoFactorData = TwoFactorDataModel(
+                    code = token,
+                    method = TwoFactorAuthMethod.WEB_AUTH.value.toString(),
+                    remember = false,
+                ),
+                captchaToken = null,
+            )
+        } returns LoginResult.Success
+        val viewModel = createViewModel(state = initialState)
+
+        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Success(token))
+
+        assertEquals(
+            initialState.copy(codeInput = token),
+            viewModel.stateFlow.value,
+        )
+        coVerify(exactly = 1) {
+            authRepository.login(
+                email = "example@email.com",
+                password = "password123",
+                twoFactorData = TwoFactorDataModel(
+                    code = token,
+                    method = TwoFactorAuthMethod.WEB_AUTH.value.toString(),
+                    remember = false,
+                ),
+                captchaToken = null,
+            )
+        }
+    }
+
+    @Test
+    fun `webAuthResultFlow update with failure should display error dialog`() {
+        val initialState = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH)
+        val viewModel = createViewModel(state = initialState)
+        mutableWebAuthResultFlow.tryEmit(WebAuthResult.Failure)
+        assertEquals(
+            initialState.copy(
+                dialogState = TwoFactorLoginState.DialogState.Error(
+                    message = R.string.generic_error_message.asText(),
+                ),
             ),
             viewModel.stateFlow.value,
         )
@@ -312,6 +376,75 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
                 assertEquals(
                     TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick login should emit NavigateToWebAuth when auth method is WEB_AUTH and data is non-null`() =
+        runTest {
+            val data = JsonObject(mapOf("AuthUrl" to JsonPrimitive("bitwarden.com")))
+            val response = GetTokenResponseJson.TwoFactorRequired(
+                authMethodsData = mapOf(TwoFactorAuthMethod.WEB_AUTH to data),
+                captchaToken = null,
+                ssoToken = null,
+                twoFactorProviders = null,
+            )
+            val mockkUri = mockk<Uri>()
+            val headerText = "header"
+            val buttonText = "button"
+            val returnButtonText = "return"
+            every { resourceManager.getString(R.string.fido2_title) } returns headerText
+            every {
+                resourceManager.getString(R.string.fido2_authenticate_web_authn)
+            } returns buttonText
+            every {
+                resourceManager.getString(R.string.fido2_return_to_app)
+            } returns returnButtonText
+            every { authRepository.twoFactorResponse } returns response
+            every {
+                generateUriForWebAuth(
+                    baseUrl = Environment.Us.environmentUrlData.baseWebVaultUrlOrDefault,
+                    data = data,
+                    headerText = headerText,
+                    buttonText = buttonText,
+                    returnButtonText = returnButtonText,
+                )
+            } returns mockkUri
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    TwoFactorLoginEvent.NavigateToWebAuth(mockkUri),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick login should emit ShowToast when auth method is WEB_AUTH and data is null`() =
+        runTest {
+            val response = GetTokenResponseJson.TwoFactorRequired(
+                authMethodsData = emptyMap(),
+                captchaToken = null,
+                ssoToken = null,
+                twoFactorProviders = null,
+            )
+            every { authRepository.twoFactorResponse } returns response
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(authMethod = TwoFactorAuthMethod.WEB_AUTH),
+            )
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(TwoFactorLoginAction.ContinueButtonClick)
+                assertEquals(
+                    TwoFactorLoginEvent.ShowToast(
+                        message = R.string.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
+                    ),
                     awaitItem(),
                 )
             }
@@ -627,43 +760,42 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         TwoFactorLoginViewModel(
             authRepository = authRepository,
             environmentRepository = environmentRepository,
+            resourceManager = resourceManager,
             savedStateHandle = SavedStateHandle().also {
                 it["state"] = state
                 it["email_address"] = "example@email.com"
                 it["password"] = "password123"
             },
         )
-
-    companion object {
-        private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
-            TwoFactorAuthMethod.EMAIL to JsonObject(
-                mapOf("Email" to JsonPrimitive("ex***@email.com")),
-            ),
-            TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
-        )
-        private val TWO_FACTOR_RESPONSE =
-            GetTokenResponseJson.TwoFactorRequired(
-                authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
-                captchaToken = null,
-                ssoToken = null,
-                twoFactorProviders = null,
-            )
-
-        private val DEFAULT_STATE = TwoFactorLoginState(
-            authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
-            availableAuthMethods = listOf(
-                TwoFactorAuthMethod.EMAIL,
-                TwoFactorAuthMethod.AUTHENTICATOR_APP,
-                TwoFactorAuthMethod.RECOVERY_CODE,
-            ),
-            codeInput = "",
-            displayEmail = "ex***@email.com",
-            dialogState = null,
-            isContinueButtonEnabled = false,
-            isRememberMeEnabled = false,
-            captchaToken = null,
-            email = "example@email.com",
-            password = "password123",
-        )
-    }
 }
+
+private val TWO_FACTOR_AUTH_METHODS_DATA = mapOf(
+    TwoFactorAuthMethod.EMAIL to JsonObject(
+        mapOf("Email" to JsonPrimitive("ex***@email.com")),
+    ),
+    TwoFactorAuthMethod.AUTHENTICATOR_APP to JsonObject(mapOf("Email" to JsonNull)),
+)
+
+private val TWO_FACTOR_RESPONSE = GetTokenResponseJson.TwoFactorRequired(
+    authMethodsData = TWO_FACTOR_AUTH_METHODS_DATA,
+    captchaToken = null,
+    ssoToken = null,
+    twoFactorProviders = null,
+)
+
+private val DEFAULT_STATE = TwoFactorLoginState(
+    authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+    availableAuthMethods = listOf(
+        TwoFactorAuthMethod.EMAIL,
+        TwoFactorAuthMethod.AUTHENTICATOR_APP,
+        TwoFactorAuthMethod.RECOVERY_CODE,
+    ),
+    codeInput = "",
+    displayEmail = "ex***@email.com",
+    dialogState = null,
+    isContinueButtonEnabled = false,
+    isRememberMeEnabled = false,
+    captchaToken = null,
+    email = "example@email.com",
+    password = "password123",
+)

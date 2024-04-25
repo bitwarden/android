@@ -18,17 +18,21 @@ import com.x8bit.bitwarden.data.auth.repository.model.LoginResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForWebAuth
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebVaultUrlOrDefault
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.button
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.imageRes
-import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isDuo
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.isContinueButtonEnabled
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.shouldUseNfc
+import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.util.showPasswordInput
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -48,6 +52,7 @@ private const val KEY_STATE = "state"
 class TwoFactorLoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
+    private val resourceManager: ResourceManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<TwoFactorLoginState, TwoFactorLoginEvent, TwoFactorLoginAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -57,7 +62,10 @@ class TwoFactorLoginViewModel @Inject constructor(
             codeInput = "",
             displayEmail = authRepository.twoFactorResponse.twoFactorDisplayEmail,
             dialogState = null,
-            isContinueButtonEnabled = authRepository.twoFactorResponse.preferredAuthMethod.isDuo,
+            isContinueButtonEnabled = authRepository
+                .twoFactorResponse
+                .preferredAuthMethod
+                .isContinueButtonEnabled,
             isRememberMeEnabled = false,
             captchaToken = null,
             email = TwoFactorLoginArgs(savedStateHandle).emailAddress,
@@ -100,6 +108,13 @@ class TwoFactorLoginViewModel @Inject constructor(
             .map { TwoFactorLoginAction.Internal.ReceiveYubiKeyResult(yubiKeyResult = it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
+
+        // Process the Web Authn result when it is received.
+        authRepository
+            .webAuthResultFlow
+            .map { TwoFactorLoginAction.Internal.ReceiveWebAuthResult(webAuthResult = it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: TwoFactorLoginAction) {
@@ -128,6 +143,10 @@ class TwoFactorLoginViewModel @Inject constructor(
 
             is TwoFactorLoginAction.Internal.ReceiveYubiKeyResult -> {
                 handleReceiveYubiKeyResult(action)
+            }
+
+            is TwoFactorLoginAction.Internal.ReceiveWebAuthResult -> {
+                handleReceiveWebAuthResult(action)
             }
 
             is TwoFactorLoginAction.Internal.ReceiveResendEmailResult -> {
@@ -175,23 +194,59 @@ class TwoFactorLoginViewModel @Inject constructor(
     /**
      * Navigates to the Duo webpage if appropriate, else processes the login.
      */
+    @Suppress("MaxLineLength")
     private fun handleContinueButtonClick() {
-        if (state.authMethod.isDuo) {
-            val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
-            // The url should not be empty unless the environment is somehow not supported.
-            sendEvent(
-                event = authUrl
-                    ?.let {
-                        TwoFactorLoginEvent.NavigateToDuo(
-                            uri = Uri.parse(it),
-                        )
-                    }
-                    ?: TwoFactorLoginEvent.ShowToast(
-                        message = R.string.generic_error_message.asText(),
-                    ),
-            )
-        } else {
-            initiateLogin()
+        when (state.authMethod) {
+            TwoFactorAuthMethod.DUO,
+            TwoFactorAuthMethod.DUO_ORGANIZATION,
+            -> {
+                val authUrl = authRepository.twoFactorResponse.twoFactorDuoAuthUrl
+                // The url should not be empty unless the environment is somehow not supported.
+                sendEvent(
+                    event = authUrl
+                        ?.let { TwoFactorLoginEvent.NavigateToDuo(uri = Uri.parse(it)) }
+                        ?: TwoFactorLoginEvent.ShowToast(R.string.generic_error_message.asText()),
+                )
+            }
+
+            TwoFactorAuthMethod.WEB_AUTH -> {
+                sendEvent(
+                    event = authRepository
+                        .twoFactorResponse
+                        ?.authMethodsData
+                        ?.get(TwoFactorAuthMethod.WEB_AUTH)
+                        ?.let {
+                            val uri = generateUriForWebAuth(
+                                baseUrl = environmentRepository
+                                    .environment
+                                    .environmentUrlData
+                                    .baseWebVaultUrlOrDefault,
+                                data = it,
+                                headerText = resourceManager.getString(
+                                    resId = R.string.fido2_title,
+                                ),
+                                buttonText = resourceManager.getString(
+                                    resId = R.string.fido2_authenticate_web_authn,
+                                ),
+                                returnButtonText = resourceManager.getString(
+                                    resId = R.string.fido2_return_to_app,
+                                ),
+                            )
+                            TwoFactorLoginEvent.NavigateToWebAuth(uri = uri)
+                        }
+                        ?: TwoFactorLoginEvent.ShowToast(
+                            message = R.string.there_was_an_error_starting_web_authn_two_factor_authentication.asText(),
+                        ),
+                )
+            }
+
+            TwoFactorAuthMethod.AUTHENTICATOR_APP,
+            TwoFactorAuthMethod.EMAIL,
+            TwoFactorAuthMethod.YUBI_KEY,
+            TwoFactorAuthMethod.U2F,
+            TwoFactorAuthMethod.REMEMBER,
+            TwoFactorAuthMethod.RECOVERY_CODE,
+            -> initiateLogin()
         }
     }
 
@@ -286,6 +341,30 @@ class TwoFactorLoginViewModel @Inject constructor(
                 codeInput = action.yubiKeyResult.token,
                 isContinueButtonEnabled = true,
             )
+        }
+    }
+
+    /**
+     * Handle the web auth result.
+     */
+    private fun handleReceiveWebAuthResult(
+        action: TwoFactorLoginAction.Internal.ReceiveWebAuthResult,
+    ) {
+        when (val result = action.webAuthResult) {
+            WebAuthResult.Failure -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = TwoFactorLoginState.DialogState.Error(
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            is WebAuthResult.Success -> {
+                mutableStateFlow.update { it.copy(codeInput = result.token) }
+                initiateLogin()
+            }
         }
     }
 
@@ -481,7 +560,7 @@ data class TwoFactorLoginState(
     /**
      * Indicates whether the code input should be displayed.
      */
-    val shouldShowCodeInput: Boolean get() = !authMethod.isDuo
+    val shouldShowCodeInput: Boolean get() = authMethod.showPasswordInput
 
     /**
      * The image to display for the given the [authMethod].
@@ -531,6 +610,11 @@ sealed class TwoFactorLoginEvent {
      * Navigates to the Duo 2-factor authentication screen.
      */
     data class NavigateToDuo(val uri: Uri) : TwoFactorLoginEvent()
+
+    /**
+     * Navigates to the WebAuth authentication screen.
+     */
+    data class NavigateToWebAuth(val uri: Uri) : TwoFactorLoginEvent()
 
     /**
      * Navigates to the recovery code help page.
@@ -630,6 +714,13 @@ sealed class TwoFactorLoginAction {
         data class ReceiveResendEmailResult(
             val resendEmailResult: ResendEmailResult,
             val isUserInitiated: Boolean,
+        ) : Internal()
+
+        /**
+         * Indicates a web auth result has been received.
+         */
+        data class ReceiveWebAuthResult(
+            val webAuthResult: WebAuthResult,
         ) : Internal()
     }
 }
