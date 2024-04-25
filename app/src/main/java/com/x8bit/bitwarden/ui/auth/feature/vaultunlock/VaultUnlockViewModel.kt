@@ -94,6 +94,10 @@ class VaultUnlockViewModel @Inject constructor(
                 sendAction(VaultUnlockAction.Internal.UserStateUpdateReceive(userState = it))
             }
             .launchIn(viewModelScope)
+
+        if (state.showBiometricLogin) {
+            sendEvent(VaultUnlockEvent.PromptForBiometrics)
+        }
     }
 
     override fun handleAction(action: VaultUnlockAction) {
@@ -336,6 +340,11 @@ sealed class VaultUnlockEvent {
     data class ShowToast(
         val text: Text,
     ) : VaultUnlockEvent()
+
+    /**
+     * Prompts the user for biometrics unlock.
+     */
+    data object PromptForBiometrics : VaultUnlockEvent()
 }
 
 /**

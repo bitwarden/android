@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -52,6 +53,19 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
     private val encryptionManager: BiometricsEncryptionManager = mockk {
         every { isBiometricIntegrityValid(userId = DEFAULT_USER_STATE.activeUserId) } returns true
+    }
+
+    @Test
+    fun `on init with biometrics enabled and valid should emit PromptForBiometrics`() = runTest {
+        val initialState = DEFAULT_STATE.copy(
+            isBiometricEnabled = true,
+            isBiometricsValid = true,
+        )
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.eventFlow.test {
+            assertEquals(VaultUnlockEvent.PromptForBiometrics, awaitItem())
+        }
     }
 
     @Test
