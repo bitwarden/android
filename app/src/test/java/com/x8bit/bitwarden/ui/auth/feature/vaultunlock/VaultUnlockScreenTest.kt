@@ -76,6 +76,19 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `on PromptForBiometrics should call launchUri on intentManager`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.PromptForBiometrics)
+        verify {
+            biometricsManager.promptBiometrics(
+                onSuccess = any(),
+                onCancel = any(),
+                onError = any(),
+                onLockOut = any(),
+            )
+        }
+    }
+
+    @Test
     fun `account icon click should show the account switcher`() {
         composeTestRule.assertSwitcherIsNotDisplayed(
             accountSummaries = ACCOUNT_SUMMARIES,
