@@ -45,7 +45,7 @@ namespace Bit.Core.Test.Services
             _authenticatorResult = new Fido2AuthenticatorGetAssertionResult
             {
                 AuthenticatorData = RandomBytes(32),
-                SelectedCredential = new Fido2AuthenticatorGetAssertionSelectedCredential
+                SelectedCredential = new Fido2SelectedCredential
                 {
                     Id = RandomBytes(16),
                     UserHandle = RandomBytes(32)
@@ -74,7 +74,7 @@ namespace Bit.Core.Test.Services
             _params.Origin = "invalid-domain-name";
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.SecurityError, exception.Code);
@@ -90,7 +90,7 @@ namespace Bit.Core.Test.Services
             _params.RpId = "bitwarden.com";
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.SecurityError, exception.Code);
@@ -105,7 +105,7 @@ namespace Bit.Core.Test.Services
             _params.RpId = "bitwarden.com";
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.SecurityError, exception.Code);
@@ -124,7 +124,7 @@ namespace Bit.Core.Test.Services
             }));
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.UriBlockedError, exception.Code);
@@ -139,7 +139,7 @@ namespace Bit.Core.Test.Services
                 .Throws(new InvalidStateError());
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.InvalidStateError, exception.Code);
@@ -155,7 +155,7 @@ namespace Bit.Core.Test.Services
                 .Throws(new Exception("unknown error"));
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.UnknownError, exception.Code);
@@ -168,7 +168,7 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<IStateService>().IsAuthenticatedAsync().Returns(false);
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.InvalidStateError, exception.Code);
@@ -182,7 +182,7 @@ namespace Bit.Core.Test.Services
             _sutProvider.GetDependency<IEnvironmentService>().GetWebVaultUrl().Returns("https://vault.bitwarden.com");
 
             // Act
-            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params));
+            var exception = await Assert.ThrowsAsync<Fido2ClientException>(() => _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams()));
 
             // Assert
             Assert.Equal(Fido2ClientException.ErrorCode.NotAllowedError, exception.Code);
@@ -201,7 +201,7 @@ namespace Bit.Core.Test.Services
                 .Returns(_authenticatorResult);
 
             // Act
-            await _sutProvider.Sut.AssertCredentialAsync(_params);
+            await _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams());
 
             // Assert
             await _sutProvider.GetDependency<IFido2AuthenticatorService>().Received()
@@ -216,12 +216,13 @@ namespace Bit.Core.Test.Services
         {
             // Arrange
             var mockHash = RandomBytes(32);
+            var extraParams = new Fido2ExtraAssertCredentialParams(mockHash, null);
             _sutProvider.GetDependency<IFido2AuthenticatorService>()
                 .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
                 .Returns(_authenticatorResult);
 
             // Act
-            await _sutProvider.Sut.AssertCredentialAsync(_params, mockHash);
+            await _sutProvider.Sut.AssertCredentialAsync(_params, extraParams);
 
             // Assert
             await _sutProvider.GetDependency<IFido2AuthenticatorService>().Received()
@@ -241,7 +242,7 @@ namespace Bit.Core.Test.Services
                 .Returns(_authenticatorResult);
 
             // Act
-            var result = await _sutProvider.Sut.AssertCredentialAsync(_params);
+            var result = await _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams());
 
             // Assert
             await _sutProvider.GetDependency<IFido2AuthenticatorService>()
@@ -266,6 +267,45 @@ namespace Bit.Core.Test.Services
             Assert.Equal(CoreHelpers.Base64UrlEncode(_params.Challenge), clientDataJSON["challenge"].GetValue<string>());
             Assert.Equal(_params.Origin, clientDataJSON["origin"].GetValue<string>());
             Assert.Equal(!_params.SameOriginWithAncestors, clientDataJSON["crossOrigin"].GetValue<bool>());
+        }
+
+        [Fact]
+        public async Task AssertCredentialAsync_ReturnsAssertionWithAndroidPackage()
+        {
+            // Arrange
+            var packageName =  "com.example.app";
+            _params.UserVerification = "required";
+            _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .GetAssertionAsync(Arg.Any<Fido2AuthenticatorGetAssertionParams>(), _sutProvider.GetDependency<IFido2GetAssertionUserInterface>())
+                .Returns(_authenticatorResult);
+
+            // Act
+            var result = await _sutProvider.Sut.AssertCredentialAsync(_params, new Fido2ExtraAssertCredentialParams(null, packageName));
+
+            // Assert
+            await _sutProvider.GetDependency<IFido2AuthenticatorService>()
+                .Received()
+                .GetAssertionAsync(
+                    Arg.Is<Fido2AuthenticatorGetAssertionParams>(x =>
+                        x.RpId == _params.RpId &&
+                        x.UserVerificationPreference == Fido2UserVerificationPreference.Required &&
+                        x.AllowCredentialDescriptorList.Length == 1 &&
+                        x.AllowCredentialDescriptorList[0].Id == _params.AllowCredentials[0].Id
+                    ),
+                    _sutProvider.GetDependency<IFido2GetAssertionUserInterface>()
+                );
+
+            Assert.Equal(_authenticatorResult.SelectedCredential.Id, result.RawId);
+            Assert.Equal(CoreHelpers.Base64UrlEncode(_authenticatorResult.SelectedCredential.Id), result.Id);
+            Assert.Equal(_authenticatorResult.AuthenticatorData, result.AuthenticatorData);
+            Assert.Equal(_authenticatorResult.Signature, result.Signature);
+
+            var clientDataJSON = JsonSerializer.Deserialize<JsonObject>(Encoding.UTF8.GetString(result.ClientDataJSON));
+            Assert.Equal("webauthn.get", clientDataJSON["type"].GetValue<string>());
+            Assert.Equal(CoreHelpers.Base64UrlEncode(_params.Challenge), clientDataJSON["challenge"].GetValue<string>());
+            Assert.Equal(_params.Origin, clientDataJSON["origin"].GetValue<string>());
+            Assert.Equal(!_params.SameOriginWithAncestors, clientDataJSON["crossOrigin"].GetValue<bool>());
+            Assert.Equal(packageName, clientDataJSON["androidPackageName"].GetValue<string>());
         }
 
         private byte[] RandomBytes(int length)

@@ -252,7 +252,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
                 return reader.ReadToEnd();
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -285,10 +285,29 @@ namespace Bit.App.Platforms.Android.Autofill
             }
         }
 
-        private static async Task<string> ValidateNativeAppAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
+        public static async Task<string> ValidateNativeAppAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
         {
-            // TODO: do asset links verification
-            return callingAppInfo.GetAndroidOrigin();
+            if (!ServiceContainer.TryResolve<IApiService>(out var apiService))
+            {
+                throw new InvalidOperationException("Can't resolve IApiService");
+            }
+
+            var statementList = await apiService.GetDigitalAssetLinksForRpAsync(rpId);
+
+            var normalizedFingerprint = callingAppInfo.GetLatestCertificationFingerprint();
+
+            var isValid = statementList
+                .Any(s => s.Target.Namespace == "android_app" 
+                            && 
+                            s.Target.PackageName == callingAppInfo.PackageName
+                            &&
+                            s.Relation.Contains("delegate_permission/common.get_login_creds")
+                            &&
+                            s.Relation.Contains("delegate_permission/common.handle_all_urls")
+                            &&
+                            s.Target.Sha256CertFingerprints.Contains(normalizedFingerprint));
+
+            return isValid ? callingAppInfo.GetAndroidOrigin() : null;
         }
     }
 }
