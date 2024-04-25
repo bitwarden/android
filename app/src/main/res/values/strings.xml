@@ -93,4 +93,6 @@
     <string name="unlock_with">Unlock with %1$s</string>
     <string name="biometrics">Biometrics</string>
     <string name="security">Security</string>
+    <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
+    <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
 </resources>

@@ -13,6 +13,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.bitwarden.authenticator.ui.auth.unlock.UNLOCK_ROUTE
+import com.bitwarden.authenticator.ui.auth.unlock.navigateToUnlock
+import com.bitwarden.authenticator.ui.auth.unlock.unlockDestination
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.AUTHENTICATOR_GRAPH_ROUTE
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.authenticatorGraph
 import com.bitwarden.authenticator.ui.authenticator.feature.authenticator.navigateToAuthenticatorGraph
@@ -65,16 +68,16 @@ fun RootNavScreen(
         popEnterTransition = { toEnterTransition()(this) },
         popExitTransition = { toExitTransition()(this) },
     ) {
-        splashDestination(
-            onSplashScreenDismissed = {
-                viewModel.trySendAction(RootNavAction.Internal.SplashScreenDismissed)
-            },
-            onExitApplication = onExitApplication,
-        )
+        splashDestination()
         tutorialDestination(
             onTutorialFinished = {
                 viewModel.trySendAction(RootNavAction.Internal.TutorialFinished)
             },
+        )
+        unlockDestination(
+            onUnlocked = {
+                viewModel.trySendAction(RootNavAction.Internal.AppUnlocked)
+            }
         )
         authenticatorGraph(
             navController = navController,
@@ -83,9 +86,10 @@ fun RootNavScreen(
     }
 
     val targetRoute = when (state.navState) {
-        RootNavState.NavState.ItemListing -> AUTHENTICATOR_GRAPH_ROUTE
         RootNavState.NavState.Splash -> SPLASH_ROUTE
+        RootNavState.NavState.Locked -> UNLOCK_ROUTE
         RootNavState.NavState.Tutorial -> TUTORIAL_ROUTE
+        RootNavState.NavState.Unlocked -> AUTHENTICATOR_GRAPH_ROUTE
     }
 
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -120,7 +124,11 @@ fun RootNavScreen(
                 navController.navigateToTutorial(rootNavOptions)
             }
 
-            RootNavState.NavState.ItemListing -> {
+            RootNavState.NavState.Locked -> {
+                navController.navigateToUnlock(rootNavOptions)
+            }
+
+            RootNavState.NavState.Unlocked -> {
                 navController.navigateToAuthenticatorGraph(rootNavOptions)
             }
         }
