@@ -10,6 +10,7 @@ using Bit.App.Abstractions;
 using Bit.App.Droid.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
 using Bit.Core.Utilities.Fido2.Extensions;
@@ -252,7 +253,7 @@ namespace Bit.App.Platforms.Android.Autofill
 
                 return reader.ReadToEnd();
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -262,7 +263,7 @@ namespace Bit.App.Platforms.Android.Autofill
         {
             if (callingAppInfo.Origin is null)
             {
-                return await ValidateNativeAppAndGetOriginAsync(callingAppInfo, rpId);
+                return await ValidateAssetLinksAndGetOriginAsync(callingAppInfo, rpId);
             }
 
             var priviligedAllowedList = await LoadFido2PriviligedAllowedListAsync();
@@ -285,10 +286,18 @@ namespace Bit.App.Platforms.Android.Autofill
             }
         }
 
-        private static async Task<string> ValidateNativeAppAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
+        private static async Task<string> ValidateAssetLinksAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
         {
-            // TODO: do asset links verification
-            return callingAppInfo.GetAndroidOrigin();
+            if (!ServiceContainer.TryResolve<IAssetLinksService>(out var assetLinksService))
+            {
+                throw new InvalidOperationException("Can't resolve IAssetLinksService");
+            }
+
+            var normalizedFingerprint = callingAppInfo.GetLatestCertificationFingerprint();
+
+            var isValid = await assetLinksService.ValidateAssetLinksAsync(rpId, callingAppInfo.PackageName, normalizedFingerprint);
+
+            return isValid ? callingAppInfo.GetAndroidOrigin() : null;
         }
     }
 }

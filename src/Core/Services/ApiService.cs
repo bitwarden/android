@@ -839,6 +839,33 @@ namespace Bit.Core.Services
             }
         }
 
+        public async Task<List<Utilities.DigitalAssetLinks.Statement>> GetDigitalAssetLinksForRpAsync(string rpId)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                try
+                {
+                    httpclient.DefaultRequestHeaders.Add("Accept", "application/json");
+                    response = await httpclient.GetAsync(new Uri($"https://{rpId}/.well-known/assetlinks.json"));
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = response.StatusCode,
+                        Message = $"Digital Asset links Rp error: {(int)response.StatusCode} {response.ReasonPhrase}."
+                    });
+                }
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Utilities.DigitalAssetLinks.Statement>>(json);
+            }
+        }
+
         private ErrorResponse HandleWebError(Exception e)
         {
             return new ErrorResponse

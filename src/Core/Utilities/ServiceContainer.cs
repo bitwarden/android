@@ -116,6 +116,9 @@ namespace Bit.Core.Utilities
             Register<IUsernameGenerationService>(usernameGenerationService);
             Register<IDeviceTrustCryptoService>(deviceTrustCryptoService);
             Register<IPasswordResetEnrollmentService>(passwordResetEnrollmentService);
+#if ANDROID
+            Register<IAssetLinksService>(new AssetLinksService(apiService));
+#endif
         }
 
         public static void Register<T>(string serviceName, T obj)
