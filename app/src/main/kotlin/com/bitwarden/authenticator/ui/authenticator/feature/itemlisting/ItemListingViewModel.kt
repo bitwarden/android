@@ -21,6 +21,7 @@ import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
+import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -41,6 +42,7 @@ class ItemListingViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
+        settingsRepository.appTheme,
         settingsRepository.authenticatorAlertThresholdSeconds,
         viewState = ItemListingState.ViewState.Loading,
         dialog = null
@@ -52,6 +54,12 @@ class ItemListingViewModel @Inject constructor(
         settingsRepository
             .authenticatorAlertThresholdSecondsFlow
             .map { ItemListingAction.Internal.AlertThresholdSecondsReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .appThemeStateFlow
+            .map { ItemListingAction.Internal.AppThemeChangeReceive(it) }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
 
@@ -181,6 +189,16 @@ class ItemListingViewModel @Inject constructor(
             is ItemListingAction.Internal.DeleteItemReceive -> {
                 handleDeleteItemReceive(internalAction.result)
             }
+
+            is ItemListingAction.Internal.AppThemeChangeReceive -> {
+                handleAppThemeChangeReceive(internalAction.appTheme)
+            }
+        }
+    }
+
+    private fun handleAppThemeChangeReceive(appTheme: AppTheme) {
+        mutableStateFlow.update {
+            it.copy(appTheme = appTheme)
         }
     }
 
@@ -444,6 +462,7 @@ private const val ISSUER = "issuer"
  */
 @Parcelize
 data class ItemListingState(
+    val appTheme: AppTheme,
     val alertThresholdSeconds: Int,
     val viewState: ViewState,
     val dialog: DialogState?,
@@ -640,6 +659,11 @@ sealed class ItemListingAction {
          * Indicates a result for deleting an item has been received.
          */
         data class DeleteItemReceive(val result: DeleteItemResult) : Internal()
+
+        /**
+         * Indicates app theme change has been received.
+         */
+        data class AppThemeChangeReceive(val appTheme: AppTheme) : Internal()
     }
 
     /**

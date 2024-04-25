@@ -61,6 +61,7 @@ import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.manager.permissions.PermissionsManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
@@ -275,6 +276,7 @@ fun ItemListingScreen(
                 ItemListingState.ViewState.Loading,
                 -> {
                     EmptyItemListingContent(
+                        appTheme = state.appTheme,
                         onAddCodeClick = remember(viewModel) {
                             {
                                 launcher.launch(Manifest.permission.CAMERA)
@@ -336,6 +338,7 @@ private fun ItemListingDialogs(
 @Composable
 fun EmptyItemListingContent(
     modifier: Modifier = Modifier,
+    appTheme: AppTheme,
     onAddCodeClick: () -> Unit = {},
 ) {
     Column(
@@ -347,7 +350,13 @@ fun EmptyItemListingContent(
     ) {
         Image(
             modifier = Modifier.fillMaxWidth(),
-            painter = painterResource(id = R.drawable.ic_empty_vault),
+            painter = painterResource(
+                id = when (appTheme) {
+                    AppTheme.DARK -> R.drawable.ic_empty_vault_dark
+                    AppTheme.LIGHT -> R.drawable.ic_empty_vault_light
+                    AppTheme.DEFAULT -> R.drawable.ic_empty_vault
+                }
+            ),
             contentDescription = stringResource(
                 id = R.string.empty_item_list,
             ),
@@ -379,6 +388,7 @@ fun EmptyItemListingContent(
 @Preview(showBackground = true)
 fun EmptyListingContentPreview() {
     EmptyItemListingContent(
+        appTheme = AppTheme.DEFAULT,
         modifier = Modifier.padding(horizontal = 16.dp),
     )
 }
