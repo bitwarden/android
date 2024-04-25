@@ -100,7 +100,9 @@ class ManualCodeEntryViewModel @Inject constructor(
 
             CreateItemResult.Success -> {
                 sendEvent(
-                    event = ManualCodeEntryEvent.ShowToast(R.string.item_added.asText()),
+                    event = ManualCodeEntryEvent.ShowToast(
+                        message = R.string.verification_code_added.asText(),
+                    ),
                 )
                 sendEvent(
                     event = ManualCodeEntryEvent.NavigateBack,

@@ -230,7 +230,7 @@ class ItemListingViewModel @Inject constructor(
             CreateItemResult.Success -> {
                 sendEvent(
                     event = ItemListingEvent.ShowToast(
-                        message = R.string.authenticator_key_added.asText(),
+                        message = R.string.verification_code_added.asText(),
                     ),
                 )
             }
