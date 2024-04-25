@@ -18,9 +18,8 @@ fun List<VerificationCodeItem>.toViewState(
 fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
     VerificationCodeDisplayItem(
         id = id,
-        label = label,
         issuer = issuer,
-        supportingLabel = username,
+        username = username,
         timeLeftSeconds = timeLeftSeconds,
         periodSeconds = periodSeconds,
         alertThresholdSeconds = alertThresholdSeconds,

@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
+import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
@@ -29,7 +30,7 @@ class ManualCodeEntryViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
 ) : BaseViewModel<ManualCodeEntryState, ManualCodeEntryEvent, ManualCodeEntryAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: ManualCodeEntryState(code = "", accountName = "", dialog = null),
+        ?: ManualCodeEntryState(code = "", issuer = "", dialog = null),
 ) {
     override fun handleAction(action: ManualCodeEntryAction) {
         when (action) {
@@ -47,7 +48,7 @@ class ManualCodeEntryViewModel @Inject constructor(
 
     private fun handleIssuerTextChange(action: ManualCodeEntryAction.IssuerTextChange) {
         mutableStateFlow.update {
-            it.copy(accountName = action.accountName)
+            it.copy(issuer = action.issuer)
         }
     }
 
@@ -67,8 +68,14 @@ class ManualCodeEntryViewModel @Inject constructor(
                 AuthenticatorItemEntity(
                     id = UUID.randomUUID().toString(),
                     key = state.code,
-                    accountName = state.accountName,
+                    issuer = state.issuer,
+                    accountName = "",
                     userId = null,
+                    type = if (state.code.startsWith("steam://")) {
+                        AuthenticatorItemType.STEAM
+                    } else {
+                        AuthenticatorItemType.TOTP
+                    }
                 )
             )
             sendAction(ManualCodeEntryAction.Internal.CreateItemResultReceive(result))
@@ -118,7 +125,7 @@ class ManualCodeEntryViewModel @Inject constructor(
 @Parcelize
 data class ManualCodeEntryState(
     val code: String,
-    val accountName: String,
+    val issuer: String,
     val dialog: DialogState?,
 ) : Parcelable {
 
@@ -187,7 +194,7 @@ sealed class ManualCodeEntryAction {
     /**
      * The use has changed the issuer text.
      */
-    data class IssuerTextChange(val accountName: String) : ManualCodeEntryAction()
+    data class IssuerTextChange(val issuer: String) : ManualCodeEntryAction()
 
     /**
      * Models actions that the [ManualCodeEntryViewModel] itself might send.

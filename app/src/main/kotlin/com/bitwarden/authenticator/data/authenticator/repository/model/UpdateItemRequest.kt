@@ -16,12 +16,12 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
  */
 data class UpdateItemRequest(
     val key: String,
-    val accountName: String,
+    val accountName: String?,
     val type: AuthenticatorItemType,
     val algorithm: AuthenticatorItemAlgorithm,
     val period: Int,
     val digits: Int,
-    val issuer: String?,
+    val issuer: String,
 ) {
     /**
      * The composite label of the authenticator item. Derived from combining [issuer] and [accountName]
@@ -29,9 +29,9 @@ data class UpdateItemRequest(
      *  label = accountName /issuer (“:” / “%3A”) *”%20” accountName
      *  ```
      */
-    val label = if (issuer != null) {
-        "$issuer:$accountName"
+    val label = if (accountName.isNullOrBlank()) {
+        issuer
     } else {
-        accountName
+        "$issuer:$accountName"
     }
 }

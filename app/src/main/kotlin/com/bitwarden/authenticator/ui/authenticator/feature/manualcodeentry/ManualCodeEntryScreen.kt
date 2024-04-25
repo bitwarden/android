@@ -133,7 +133,7 @@ fun ManualCodeEntryScreen(
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.name),
-            value = state.accountName,
+            value = state.issuer,
             onValueChange = remember(viewModel) {
                 {
                     viewModel.trySendAction(

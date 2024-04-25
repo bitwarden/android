@@ -233,7 +233,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
 
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
         val headerLine =
-            "folder,favorite,type,name,login_uri,login_totp,issuer,period,digits"
+            "folder,favorite,type,name,login_uri,login_totp"
         val dataLines = authenticatorDiskSource
             .getItems()
             .firstOrNull()
@@ -250,7 +250,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     }
 
     private fun AuthenticatorItemEntity.toCsvFormat() =
-        ",,1,$accountName,,$key,$issuer,$period,$digits"
+        ",,1,$issuer,,${toOtpAuthUriString()},$issuer,$period,$digits"
 
     private suspend fun encodeVaultDataToJson(fileUri: Uri): ExportDataResult {
         val dataString: String = Json.encodeToString(
@@ -281,14 +281,11 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         folderId = null,
         organizationId = null,
         collectionIds = null,
-        name = accountName,
+        name = issuer,
         notes = null,
         type = 1,
         login = ExportJsonData.ExportItem.ItemLoginData(
-            totp = key,
-            issuer = issuer,
-            period = period,
-            digits = digits,
+            totp = toOtpAuthUriString(),
         ),
         favorite = false,
     )

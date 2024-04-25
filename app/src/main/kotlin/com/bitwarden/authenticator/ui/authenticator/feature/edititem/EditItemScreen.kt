@@ -139,17 +139,17 @@ fun EditItemScreen(
                         .imePadding()
                         .padding(innerPadding),
                     viewState = viewState,
-                    onAccountNameTextChange = remember(viewModel) {
+                    onIssuerNameTextChange = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.AccountNameTextChange(it)
+                                EditItemAction.IssuerNameTextChange(it)
                             )
                         }
                     },
-                    onIssuerTextChange = remember(viewModel) {
+                    onUsernameTextChange = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                EditItemAction.IssuerTextChange(it)
+                                EditItemAction.UsernameTextChange(it)
                             )
                         }
                     },
@@ -211,8 +211,8 @@ fun EditItemScreen(
 fun EditItemContent(
     modifier: Modifier = Modifier,
     viewState: EditItemState.ViewState.Content,
-    onAccountNameTextChange: (String) -> Unit = {},
-    onIssuerTextChange: (String) -> Unit = {},
+    onIssuerNameTextChange: (String) -> Unit = {},
+    onUsernameTextChange: (String) -> Unit = {},
     onTypeOptionClicked: (AuthenticatorItemType) -> Unit = {},
     onTotpCodeTextChange: (String) -> Unit = {},
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit = {},
@@ -237,8 +237,8 @@ fun EditItemContent(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
                     label = stringResource(id = R.string.name),
-                    value = viewState.itemData.accountName,
-                    onValueChange = onAccountNameTextChange,
+                    value = viewState.itemData.issuer,
+                    onValueChange = onIssuerNameTextChange,
                     singleLine = true,
                 )
             }
@@ -256,20 +256,18 @@ fun EditItemContent(
                 )
             }
 
-            viewState.itemData.issuer?.let { issuer ->
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
                     BitwardenTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp),
-                        label = stringResource(id = R.string.account_info),
-                        value = issuer,
-                        onValueChange = onIssuerTextChange,
+                        label = stringResource(id = R.string.username),
+                        value = viewState.itemData.username.orEmpty(),
+                        onValueChange = onUsernameTextChange,
                         singleLine = true,
                     )
                 }
-            }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -483,7 +481,7 @@ private fun EditItemContentExpandedOptionsPreview() {
                 refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
                 totpCode = "123456",
                 type = AuthenticatorItemType.TOTP,
-                accountName = "account name",
+                username = "account name",
                 issuer = "issuer",
                 algorithm = AuthenticatorItemAlgorithm.SHA1,
                 digits = VerificationCodeDigitsOption.SIX
@@ -502,7 +500,7 @@ private fun EditItemContentCollapsedOptionsPreview() {
                 refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
                 totpCode = "123456",
                 type = AuthenticatorItemType.TOTP,
-                accountName = "account name",
+                username = "account name",
                 issuer = "issuer",
                 algorithm = AuthenticatorItemAlgorithm.SHA1,
                 digits = VerificationCodeDigitsOption.SIX

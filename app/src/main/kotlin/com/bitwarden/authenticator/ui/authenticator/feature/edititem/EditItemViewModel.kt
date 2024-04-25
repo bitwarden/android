@@ -57,8 +57,8 @@ class EditItemViewModel @Inject constructor(
             is EditItemAction.AlgorithmOptionClick -> handleAlgorithmOptionClick(action)
             is EditItemAction.CancelClick -> handleCancelClick()
             is EditItemAction.TypeOptionClick -> handleTypeOptionClick(action)
-            is EditItemAction.AccountNameTextChange -> handleAccountNameTextChange(action)
-            is EditItemAction.IssuerTextChange -> handleIssuerTextChange(action)
+            is EditItemAction.IssuerNameTextChange -> handleIssuerNameTextChange(action)
+            is EditItemAction.UsernameTextChange -> handleIssuerTextChange(action)
             is EditItemAction.RefreshPeriodOptionClick -> handlePeriodTextChange(action)
             is EditItemAction.TotpCodeTextChange -> handleTotpCodeTextChange(action)
             is EditItemAction.NumberOfDigitsOptionClick -> handleNumberOfDigitsOptionChange(action)
@@ -76,7 +76,7 @@ class EditItemViewModel @Inject constructor(
     }
 
     private fun handleSaveClick() = onContent { content ->
-        if (content.itemData.accountName.isBlank()) {
+        if (content.itemData.issuer.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
@@ -110,12 +110,12 @@ class EditItemViewModel @Inject constructor(
                 AuthenticatorItemEntity(
                     id = state.itemId,
                     key = content.itemData.totpCode.trim(),
-                    accountName = content.itemData.accountName.trim(),
+                    accountName = content.itemData.username?.trim(),
                     type = content.itemData.type,
                     algorithm = content.itemData.algorithm,
                     period = content.itemData.refreshPeriod.seconds,
                     digits = content.itemData.digits.length,
-                    issuer = content.itemData.issuer?.trim(),
+                    issuer = content.itemData.issuer.trim(),
                 )
             )
             trySendAction(EditItemAction.Internal.UpdateItemResult(result))
@@ -130,18 +130,18 @@ class EditItemViewModel @Inject constructor(
         }
     }
 
-    private fun handleAccountNameTextChange(action: EditItemAction.AccountNameTextChange) {
+    private fun handleIssuerNameTextChange(action: EditItemAction.IssuerNameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                accountName = action.accountName
+                issuer = action.issuerName
             )
         }
     }
 
-    private fun handleIssuerTextChange(action: EditItemAction.IssuerTextChange) {
+    private fun handleIssuerTextChange(action: EditItemAction.UsernameTextChange) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                issuer = action.issue
+                username = action.username
             )
         }
     }
@@ -318,7 +318,7 @@ class EditItemViewModel @Inject constructor(
                 ?: AuthenticatorRefreshPeriodOption.THIRTY,
             totpCode = key,
             type = type,
-            accountName = accountName,
+            username = accountName,
             issuer = issuer,
             algorithm = algorithm,
             digits = VerificationCodeDigitsOption.fromIntOrNull(digits)
@@ -435,12 +435,12 @@ sealed class EditItemAction {
     /**
      * The user has changed the account name text.
      */
-    data class AccountNameTextChange(val accountName: String) : EditItemAction()
+    data class IssuerNameTextChange(val issuerName: String) : EditItemAction()
 
     /**
      * The user has changed the issue text.
      */
-    data class IssuerTextChange(val issue: String) : EditItemAction()
+    data class UsernameTextChange(val username: String) : EditItemAction()
 
     /**
      * The user has selected an Item Type option.

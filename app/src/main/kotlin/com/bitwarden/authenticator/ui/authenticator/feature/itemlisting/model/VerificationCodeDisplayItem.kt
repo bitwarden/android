@@ -11,9 +11,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class VerificationCodeDisplayItem(
     val id: String,
-    val label: String,
     val issuer: String?,
-    val supportingLabel: String?,
+    val username: String?,
     val timeLeftSeconds: Int,
     val periodSeconds: Int,
     val alertThresholdSeconds: Int,

@@ -36,16 +36,10 @@ data class ExportJsonData(
          * This model is loosely based off of Bitwarden's Cipher.Login JSON.
          *
          * @property totp OTP secret used to generate a verification code.
-         * @property issuer Optional issuer of the 2fa code.
-         * @property period Optional refresh period in seconds. Default is 30.
-         * @property digits Optional number of digits in the verification code. Default is 6
          */
         @Serializable
         data class ItemLoginData(
             val totp: String,
-            val issuer: String?,
-            val period: Int,
-            val digits: Int,
         )
     }
 }

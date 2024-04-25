@@ -1,5 +1,7 @@
 package com.bitwarden.authenticator.data.authenticator.datasource.disk.entity
 
+import android.net.Uri
+import androidx.core.text.htmlEncode
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -16,9 +18,6 @@ data class AuthenticatorItemEntity(
     @ColumnInfo(name = "key")
     val key: String,
 
-    @ColumnInfo(name = "accountName")
-    val accountName: String,
-
     @ColumnInfo(name = "type")
     val type: AuthenticatorItemType = AuthenticatorItemType.TOTP,
 
@@ -32,8 +31,42 @@ data class AuthenticatorItemEntity(
     val digits: Int = 6,
 
     @ColumnInfo(name = "issuer")
-    val issuer: String? = null,
+    val issuer: String,
 
     @ColumnInfo(name = "userId")
     val userId: String? = null,
-)
+
+    @ColumnInfo(name = "accountName")
+    val accountName: String? = null,
+) {
+    fun toOtpAuthUriString(): String {
+        return when (type) {
+            AuthenticatorItemType.TOTP -> {
+                val label = if (accountName.isNullOrBlank()) {
+                    issuer
+                } else {
+                    "$issuer:$accountName"
+                }
+                Uri.Builder()
+                    .scheme("otpauth")
+                    .authority("totp")
+                    .appendPath(label.htmlEncode())
+                    .appendQueryParameter("secret", key)
+                    .appendQueryParameter("algorithm", algorithm.name)
+                    .appendQueryParameter("digits", digits.toString())
+                    .appendQueryParameter("period", period.toString())
+                    .appendQueryParameter("issuer", issuer)
+                    .build()
+                    .toString()
+            }
+
+            AuthenticatorItemType.STEAM -> {
+                if (key.startsWith("steam://")) {
+                    key
+                } else {
+                    "steam://$key"
+                }
+            }
+        }
+    }
+}

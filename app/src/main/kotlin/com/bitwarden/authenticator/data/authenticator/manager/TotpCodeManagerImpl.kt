@@ -75,7 +75,7 @@ class TotpCodeManagerImpl @Inject constructor(
 
         return mutableVerificationCodeStateFlowMap.getOrPut(itemEntity) {
             flow<DataState<VerificationCodeItem?>> {
-                val totpCode = itemEntity.key
+                val totpCode = itemEntity.toOtpAuthUriString()
 
                 var item: VerificationCodeItem? = null
                 while (currentCoroutineContext().isActive) {

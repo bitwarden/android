@@ -31,6 +31,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -228,7 +229,8 @@ fun ItemListingScreen(
                         items(currentState.itemList) {
                             VaultVerificationCodeItem(
                                 authCode = it.authCode,
-                                issuer = it.issuer,
+                                name = it.issuer,
+                                username = it.username,
                                 periodSeconds = it.periodSeconds,
                                 timeLeftSeconds = it.timeLeftSeconds,
                                 alertThresholdSeconds = it.alertThresholdSeconds,
@@ -257,7 +259,6 @@ fun ItemListingScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 16.dp),
-                                supportingLabel = it.supportingLabel,
                             )
                         }
                     }

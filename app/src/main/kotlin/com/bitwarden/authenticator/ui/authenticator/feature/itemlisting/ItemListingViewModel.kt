@@ -391,6 +391,13 @@ class ItemListingViewModel @Inject constructor(
                 ?: return null
 
             val label = uri.pathSegments.firstOrNull() ?: return null
+            val accountName = if (label.contains(":")) {
+                label
+                    .split(":")
+                    .last()
+            } else {
+                label
+            }
 
             val key = uri.getQueryParameter(SECRET) ?: return null
 
@@ -401,14 +408,14 @@ class ItemListingViewModel @Inject constructor(
 
             val digits = uri.getQueryParameter(DIGITS)?.toInt() ?: 6
 
-            val issuer = uri.getQueryParameter(ISSUER)
+            val issuer = uri.getQueryParameter(ISSUER) ?: label
 
             val period = uri.getQueryParameter(PERIOD)?.toInt() ?: 30
 
             return AuthenticatorItemEntity(
                 id = UUID.randomUUID().toString(),
                 key = key,
-                accountName = label,
+                accountName = accountName,
                 type = type,
                 algorithm = algorithm,
                 period = period,

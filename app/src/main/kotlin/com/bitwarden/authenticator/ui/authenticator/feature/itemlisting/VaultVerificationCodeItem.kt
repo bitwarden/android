@@ -39,20 +39,21 @@ import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
  * The verification code item displayed to the user.
  *
  * @param authCode The code for the item.
- * @param issuer The label for the item.
+ * @param name The label for the item. Represents the OTP issuer.
+ * @param username The supporting label for the item. Represents the OTP account name.
  * @param periodSeconds The times span where the code is valid.
  * @param timeLeftSeconds The seconds remaining until a new code is needed.
  * @param startIcon The leading icon for the item.
  * @param onItemClick The lambda function to be invoked when the item is clicked.
  * @param modifier The modifier for the item.
- * @param supportingLabel The supporting label for the item.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Suppress("LongMethod", "MagicNumber")
 @Composable
 fun VaultVerificationCodeItem(
     authCode: String,
-    issuer: String?,
+    name: String?,
+    username: String?,
     periodSeconds: Int,
     timeLeftSeconds: Int,
     alertThresholdSeconds: Int,
@@ -61,7 +62,6 @@ fun VaultVerificationCodeItem(
     onEditItemClick: () -> Unit,
     onDeleteItemClick: () -> Unit,
     modifier: Modifier = Modifier,
-    supportingLabel: String? = null,
 ) {
     var shouldShowDropdownMenu by remember { mutableStateOf(value = false) }
     Box(modifier = modifier) {
@@ -93,9 +93,9 @@ fun VaultVerificationCodeItem(
                 verticalArrangement = Arrangement.SpaceEvenly,
                 modifier = Modifier.weight(1f),
             ) {
-                issuer?.let {
+                if (!name.isNullOrEmpty()) {
                     Text(
-                        text = it,
+                        text = name,
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.onSurface,
                         maxLines = 1,
@@ -103,9 +103,9 @@ fun VaultVerificationCodeItem(
                     )
                 }
 
-                supportingLabel?.let {
+                if (!username.isNullOrEmpty()) {
                     Text(
-                        text = it,
+                        text = username,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,
@@ -173,7 +173,8 @@ private fun VerificationCodeItem_preview() {
     AuthenticatorTheme {
         VaultVerificationCodeItem(
             authCode = "1234567890".chunked(3).joinToString(" "),
-            issuer = "Sample Label",
+            name = "Issuer, AKA Name",
+            username = "username@bitwarden.com",
             periodSeconds = 30,
             timeLeftSeconds = 15,
             alertThresholdSeconds = 7,
@@ -182,7 +183,6 @@ private fun VerificationCodeItem_preview() {
             onEditItemClick = {},
             onDeleteItemClick = {},
             modifier = Modifier.padding(horizontal = 16.dp),
-            supportingLabel = "Supporting Label",
         )
     }
 }

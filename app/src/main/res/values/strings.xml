@@ -34,7 +34,7 @@
     <string name="add_code">Add code</string>
     <string name="authenticator_key_read_error">Cannot read authenticator key.</string>
     <string name="verification_code_added">Verification code added</string>
-    <string name="account_info">Account info</string>
+    <string name="username">Username</string>
     <string name="refresh_period">Refresh period</string>
     <string name="algorithm">Algorithm</string>
     <string name="hide">Hide</string>
