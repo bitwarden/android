@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -33,7 +34,7 @@ namespace Bit.Core.Services
             _makeCredentialUserInterface = makeCredentialUserInterface;
         }
 
-        public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, byte[] clientDataHash = null)
+        public async Task<Fido2ClientCreateCredentialResult> CreateCredentialAsync(Fido2ClientCreateCredentialParams createCredentialParams, Fido2ExtraCreateCredentialParams extraParams)
         {
             var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
             var domain = CoreHelpers.GetHostname(createCredentialParams.Origin);
@@ -72,14 +73,15 @@ namespace Bit.Core.Services
                     "The length of user.id is not between 1 and 64 bytes (inclusive)");
             }
 
-            if (!createCredentialParams.Origin.StartsWith("https://"))
+            var isAndroidOrigin = createCredentialParams.Origin.StartsWith("android:apk-key-hash");
+            if (!isAndroidOrigin && !createCredentialParams.Origin.StartsWith("https://"))
             {
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.SecurityError,
                     "Origin is not a valid https origin");
             }
 
-            if (!Fido2DomainUtils.IsValidRpId(createCredentialParams.Rp.Id, createCredentialParams.Origin))
+            if (!isAndroidOrigin && !Fido2DomainUtils.IsValidRpId(createCredentialParams.Rp.Id, createCredentialParams.Origin))
             {
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.SecurityError,
@@ -110,17 +112,23 @@ namespace Bit.Core.Services
             }
 
             byte[] clientDataJSONBytes = null;
+            var clientDataHash = extraParams.ClientDataHash;
             if (clientDataHash == null)
             {
-                var clientDataJSON = JsonSerializer.Serialize(new
+                var clientDataJsonObject = new JsonObject
                 {
-                    type = "webauthn.create",
-                    challenge = CoreHelpers.Base64UrlEncode(createCredentialParams.Challenge),
-                    origin = createCredentialParams.Origin,
-                    crossOrigin = !createCredentialParams.SameOriginWithAncestors,
+                    { "type", "webauthn.create" },
+                    { "challenge", CoreHelpers.Base64UrlEncode(createCredentialParams.Challenge) },
+                    { "origin", createCredentialParams.Origin },
+                    { "crossOrigin", !createCredentialParams.SameOriginWithAncestors }
                     // tokenBinding: {} // Not supported
-                });
-                clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
+                };
+                if (!string.IsNullOrWhiteSpace(extraParams.AndroidPackageName))
+                {
+                    clientDataJsonObject.Add("androidPackageName", extraParams.AndroidPackageName);
+                }
+                
+                clientDataJSONBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(clientDataJsonObject));
                 clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
             }
             var makeCredentialParams = MapToMakeCredentialParams(createCredentialParams, credTypesAndPubKeyAlgs, clientDataHash);
@@ -163,7 +171,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, byte[] clientDataHash = null)
+        public async Task<Fido2ClientAssertCredentialResult> AssertCredentialAsync(Fido2ClientAssertCredentialParams assertCredentialParams, Fido2ExtraAssertCredentialParams extraParams)
         {
             var blockedUris = await _stateService.GetAutofillBlacklistedUrisAsync();
             var domain = CoreHelpers.GetHostname(assertCredentialParams.Origin);
@@ -188,14 +196,15 @@ namespace Bit.Core.Services
                     "Saving Bitwarden credentials in a Bitwarden vault is not allowed");
             }
 
-            if (!assertCredentialParams.Origin.StartsWith("https://"))
+            var isAndroidOrigin = assertCredentialParams.Origin.StartsWith("android:apk-key-hash");
+            if (!isAndroidOrigin && !assertCredentialParams.Origin.StartsWith("https://"))
             {
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.SecurityError,
                     "Origin is not a valid https origin");
             }
 
-            if (!Fido2DomainUtils.IsValidRpId(assertCredentialParams.RpId, assertCredentialParams.Origin))
+            if (!isAndroidOrigin && !Fido2DomainUtils.IsValidRpId(assertCredentialParams.RpId, assertCredentialParams.Origin))
             {
                 throw new Fido2ClientException(
                     Fido2ClientException.ErrorCode.SecurityError,
@@ -203,16 +212,23 @@ namespace Bit.Core.Services
             }
 
             byte[] clientDataJSONBytes = null;
+            var clientDataHash = extraParams.ClientDataHash;
             if (clientDataHash == null)
             {
-                var clientDataJSON = JsonSerializer.Serialize(new
+                var clientDataJsonObject = new JsonObject
                 {
-                    type = "webauthn.get",
-                    challenge = CoreHelpers.Base64UrlEncode(assertCredentialParams.Challenge),
-                    origin = assertCredentialParams.Origin,
-                    crossOrigin = !assertCredentialParams.SameOriginWithAncestors,
-                });
-                clientDataJSONBytes = Encoding.UTF8.GetBytes(clientDataJSON);
+                    { "type", "webauthn.get" },
+                    { "challenge", CoreHelpers.Base64UrlEncode(assertCredentialParams.Challenge) },
+                    { "origin", assertCredentialParams.Origin },
+                    { "crossOrigin", !assertCredentialParams.SameOriginWithAncestors }
+                    // tokenBinding: {} // Not supported
+                };
+                if (!string.IsNullOrWhiteSpace(extraParams.AndroidPackageName))
+                {
+                    clientDataJsonObject.Add("androidPackageName", extraParams.AndroidPackageName);
+                }
+
+                clientDataJSONBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(clientDataJsonObject));
                 clientDataHash = await _cryptoFunctionService.HashAsync(clientDataJSONBytes, CryptoHashAlgorithm.Sha256);
             }
             var getAssertionParams = MapToGetAssertionParams(assertCredentialParams, clientDataHash);
