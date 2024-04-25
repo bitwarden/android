@@ -262,7 +262,7 @@ namespace Bit.App.Platforms.Android.Autofill
         {
             if (callingAppInfo.Origin is null)
             {
-                return await ValidateNativeAppAndGetOriginAsync(callingAppInfo, rpId);
+                return await ValidateAssetLinksAndGetOriginAsync(callingAppInfo, rpId);
             }
 
             var priviligedAllowedList = await LoadFido2PriviligedAllowedListAsync();
@@ -285,7 +285,7 @@ namespace Bit.App.Platforms.Android.Autofill
             }
         }
 
-        public static async Task<string> ValidateNativeAppAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
+        private static async Task<string> ValidateAssetLinksAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
         {
             if (!ServiceContainer.TryResolve<IApiService>(out var apiService))
             {
