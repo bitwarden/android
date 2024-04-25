@@ -112,7 +112,7 @@
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input"
-                             IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+                             IsVisible="{Binding TypeEditMode, Converter={StaticResource inverseBool}}">
                     <Label
                         Text="{u:I18n Type}"
                         StyleClass="box-label" />
@@ -649,9 +649,11 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     SemanticProperties.Description="{u:I18n URI}"
+                                    IsEnabled="{Binding BindingContext.IsFromFido2Framework, Source={x:Reference _page}, Converter={StaticResource inverseBool}}"
                                     AutomationId="LoginUriEntry" />
                                 <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
+                                    IsVisible="{Binding BindingContext.IsFromFido2Framework, Source={x:Reference _page}, Converter={StaticResource inverseBool}}"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
                                     Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
                                     CommandParameter="{Binding .}"
@@ -665,6 +667,7 @@
                     </BindableLayout.ItemTemplate>
                 </StackLayout>
                 <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
+                        IsVisible="{Binding IsFromFido2Framework, Converter={StaticResource inverseBool}}"
                         Clicked="NewUri_Clicked"
                         AutomationId="LoginAddNewUriButton"></Button>
             </StackLayout>

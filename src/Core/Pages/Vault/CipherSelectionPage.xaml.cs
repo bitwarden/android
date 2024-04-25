@@ -115,6 +115,8 @@ namespace Bit.App.Pages
                     await _vm.LoadAsync();
                 }
             }, _mainContent);
+
+            UpdatePlaceholder();
         }
 
         protected override bool OnBackButtonPressed()
@@ -127,6 +129,11 @@ namespace Bit.App.Pages
 
 #if ANDROID
             _appOptions.Uri = null;
+
+            if (BindingContext is AutofillCiphersPageViewModel autofillVM)
+            {
+                autofillVM.Cancel();
+            }
 #endif
             return base.OnBackButtonPressed();
         }
@@ -175,7 +182,27 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 _accountsManager.StartDefaultNavigationFlowAsync(op => op.OtpData = null).FireAndForget();
+
+                if (BindingContext is AutofillCiphersPageViewModel autofillVM)
+                {
+                    autofillVM.Cancel();
+                }
             }
+        }
+
+        public override async Task UpdateOnThemeChanged()
+        {
+            await base.UpdateOnThemeChanged();
+
+            UpdatePlaceholder();
+        }
+
+        private void UpdatePlaceholder()
+        {
+#if ANDROID
+            MainThread.BeginInvokeOnMainThread(() =>
+                _emptyItemsPlaceholder.Source = ImageSource.FromFile(ThemeManager.UsingLightTheme ? "empty_items_state.png" : "empty_items_state_dark.png"));
+#endif
         }
     }
 }

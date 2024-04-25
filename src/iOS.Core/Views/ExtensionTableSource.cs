@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Bit.Core.Resources.Localization;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Models;
@@ -18,15 +13,15 @@ namespace Bit.iOS.Core.Views
 {
     public class ExtensionTableSource : ExtendedUITableViewSource
     {
-        private const string CellIdentifier = "TableCell";
+        public const string CipherLoginCellIdentifier = nameof(CipherLoginTableViewCell);
 
-        private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
+        protected IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
         protected ICipherService _cipherService;
         protected ITotpService _totpService;
         protected IStateService _stateService;
         protected ISearchService _searchService;
-        private AppExtensionContext _context;
-        private UIViewController _controller;
+        protected AppExtensionContext _context;
+        protected UIViewController _controller;
 
         public ExtensionTableSource(AppExtensionContext context, UIViewController controller)
         {
@@ -36,11 +31,19 @@ namespace Bit.iOS.Core.Views
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _context = context;
             _controller = controller;
+
+            Items = new List<CipherViewModel>();
         }
 
-        public IEnumerable<CipherViewModel> Items { get; private set; }
+        public IList<CipherViewModel> Items { get; private set; }
 
-        public async Task LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
+        public virtual async Task LoadAsync(bool urlFilter = true, string searchFilter = null)
+        {
+            _allItems = await LoadItemsAsync(urlFilter, searchFilter);
+            FilterResults(searchFilter, new CancellationToken());
+        }
+
+        protected virtual async Task<IEnumerable<CipherViewModel>> LoadItemsAsync(bool urlFilter = true, string? searchFilter = null)
         {
             var combinedLogins = new List<CipherView>();
 
@@ -62,14 +65,13 @@ namespace Bit.iOS.Core.Views
                 combinedLogins.AddRange(logins);
             }
 
-            _allItems = combinedLogins
+            return combinedLogins
                 .Where(c => c.Type == Bit.Core.Enums.CipherType.Login && !c.IsDeleted)
-                .Select(s => new CipherViewModel(s))
-                .ToList() ?? new List<CipherViewModel>();
-            FilterResults(searchFilter, new CancellationToken());
+                .Select(CreateCipherViewModel)
+                .ToList();
         }
 
-        public void FilterResults(string searchFilter, CancellationToken ct)
+        public virtual void FilterResults(string searchFilter, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
 
@@ -83,15 +85,24 @@ namespace Bit.iOS.Core.Views
                 var results = _searchService.SearchCiphersAsync(searchFilter,
                     c => c.Type == Bit.Core.Enums.CipherType.Login && !c.IsDeleted, null, ct)
                     .GetAwaiter().GetResult();
-                Items = results.Select(s => new CipherViewModel(s)).ToArray();
+                Items = results.Select(CreateCipherViewModel).ToList();
             }
+
+            OnItemsLoaded(searchFilter, ct);
         }
 
-        public IEnumerable<CipherViewModel> TableItems { get; set; }
+        protected virtual void OnItemsLoaded(string searchFilter, CancellationToken ct) { }
+
+        protected virtual CipherViewModel CreateCipherViewModel(CipherView cipherView) => new CipherViewModel(cipherView);
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
             return Items == null || Items.Count() == 0 ? 1 : Items.Count();
+        }
+
+        public virtual void RegisterTableViewCells(UITableView tableView)
+        {
+            tableView.RegisterClassForCellReuse(typeof(CipherLoginTableViewCell), CipherLoginCellIdentifier);
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -107,37 +118,59 @@ namespace Bit.iOS.Core.Views
                 return noDataCell;
             }
 
-            var cell = tableView.DequeueReusableCell(CellIdentifier);
-
-            // if there are no cells to reuse, create a new one
-            if (cell == null)
+            var cell = tableView.DequeueReusableCell(CipherLoginCellIdentifier);
+            if (cell is null)
             {
-                Debug.WriteLine("BW Log, Make new cell for list.");
-                cell = new ExtendedUITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
-                cell.TextLabel.TextColor = cell.TextLabel.TintColor = ThemeHelpers.TextColor;
-                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = ThemeHelpers.MutedColor;
+                throw new InvalidOperationException($"The cell {CipherLoginCellIdentifier} has not been registered in the UITableView");
             }
             return cell;
         }
 
         public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
         {
-            if (Items == null
-                || !Items.Any()
-                || cell?.TextLabel == null
-                || cell.DetailTextLabel == null)
+            try
             {
-                return;
-            }
+                if (Items == null
+                    || !Items.Any()
+                    || !(cell is CipherLoginTableViewCell cipherCell))
+                {
+                    return;
+                }
 
-            var item = Items.ElementAt(indexPath.Row);
-            cell.TextLabel.Text = item.Name;
-            cell.DetailTextLabel.Text = item.Username;
+                var item = Items.ElementAtOrDefault(GetIndexForItemAt(tableView, indexPath));
+                if (item is null)
+                {
+                    return;
+                }
+
+                cipherCell.SetTitle(item.Name);
+                cipherCell.SetSubtitle(GetCipherCellSubtitle(item, indexPath));
+                cipherCell.UpdateMainIcon(ShouldUseMainIconAsPasskey(item, indexPath));
+                if (item.IsShared)
+                {
+                    cipherCell.ShowOrganizationIcon();
+                }
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
-        public async Task<string> GetTotpAsync(CipherViewModel item)
+        protected virtual int GetIndexForItemAt(UITableView tableView, NSIndexPath indexPath) => indexPath.Row;
+
+        protected virtual bool ShouldUseMainIconAsPasskey(CipherViewModel item, NSIndexPath indexPath) => item.HasFido2Credential;
+
+        protected virtual string GetCipherCellSubtitle(CipherViewModel item, NSIndexPath indexPath) => item.Username;
+
+        public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
         {
-            string totp = null;
+            return 55;
+        }
+
+        public async Task<string?> GetTotpAsync(CipherViewModel item)
+        {
+            string? totp = null;
             var accessPremium = await _stateService.CanAccessPremiumAsync();
             if (accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
             {

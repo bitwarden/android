@@ -12,6 +12,8 @@ namespace Bit.App.Pages
         private bool _useDrawOver;
         private bool _askToAddLogin;
 
+        public bool SupportsCredentialProviderService => DeviceInfo.Platform == DevicePlatform.Android && _deviceActionService.SupportsCredentialProviderService();
+
         public bool SupportsAndroidAutofillServices => DeviceInfo.Platform == DevicePlatform.Android && _deviceActionService.SupportsAutofillServices();
 
         public bool UseAutofillServices
@@ -90,6 +92,7 @@ namespace Bit.App.Pages
         public AsyncRelayCommand ToggleUseDrawOverCommand { get; private set; }
         public AsyncRelayCommand ToggleAskToAddLoginCommand { get; private set; }
         public ICommand GoToBlockAutofillUrisCommand { get; private set; }
+        public ICommand GoToCredentialProviderSettingsCommand { get; private set; }
 
         private void InitAndroidCommands()
         {
@@ -99,6 +102,7 @@ namespace Bit.App.Pages
             ToggleUseDrawOverCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => ToggleDrawOver()), () => _inited, allowsMultipleExecutions: false);
             ToggleAskToAddLoginCommand = CreateDefaultAsyncRelayCommand(ToggleAskToAddLoginAsync, () => _inited, allowsMultipleExecutions: false);
             GoToBlockAutofillUrisCommand = CreateDefaultAsyncRelayCommand(() => Page.Navigation.PushAsync(new BlockAutofillUrisPage()), allowsMultipleExecutions: false);
+            GoToCredentialProviderSettingsCommand = CreateDefaultAsyncRelayCommand(() => MainThread.InvokeOnMainThreadAsync(() => GoToCredentialProviderSettings()), () => _inited, allowsMultipleExecutions: false);
         }
 
         private async Task InitAndroidAutofillSettingsAsync()
@@ -128,6 +132,17 @@ namespace Bit.App.Pages
                 TriggerPropertyChanged(nameof(UseDrawOver));
                 TriggerPropertyChanged(nameof(AskToAddLogin));
             });
+        }
+
+        private async Task GoToCredentialProviderSettings()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.SetBitwardenAsPasskeyManagerDescription, AppResources.ContinueToDeviceSettings,
+                AppResources.Continue,
+                AppResources.Cancel);
+            if (confirmed)
+            {
+                _deviceActionService.OpenCredentialProviderSettings();
+            }
         }
 
         private void ToggleUseAutofillServices()

@@ -78,12 +78,13 @@
                     Spacing="20"
                     IsVisible="{Binding ShowNoData}">
                     <Image
+                        x:Name="_emptyItemsPlaceholder"
                         Source="empty_items_state" />
                     <Label
                         Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"></Label>
                     <Button
-                        Text="{u:I18n AddAnItem}"
+                        Text="{Binding AddNewItemText}"
                         Command="{Binding AddCipherCommand}" />
                 </StackLayout>
 
@@ -133,7 +134,7 @@
         <Button
             x:Name="_fab"
             ImageSource="plus.png"
-            Command="{Binding AddCipherCommand}"
+            Command="{Binding AddFabCipherCommand}"
             Style="{StaticResource btn-fab}"
             IsVisible="{OnPlatform iOS=false, Android=true}"
             AbsoluteLayout.LayoutFlags="PositionProportional"

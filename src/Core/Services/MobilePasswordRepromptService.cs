@@ -57,7 +57,7 @@ namespace Bit.App.Services
             return passwordValid;
         }
 
-        private async Task<bool> ShouldByPassMasterPasswordRepromptAsync()
+        public async Task<bool> ShouldByPassMasterPasswordRepromptAsync()
         {
             return await _cryptoService.GetMasterKeyHashAsync() is null;
         }

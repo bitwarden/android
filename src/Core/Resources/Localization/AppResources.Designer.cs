@@ -1319,6 +1319,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services..
+        /// </summary>
+        public static string BitwardenCredentialProviderGoToSettings {
+            get {
+                return ResourceManager.GetString("BitwardenCredentialProviderGoToSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitwarden Help Center.
         /// </summary>
         public static string BitwardenHelpCenter {
@@ -1535,6 +1544,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose a login to save this passkey to.
+        /// </summary>
+        public static string ChooseALoginToSaveThisPasskeyTo {
+            get {
+                return ResourceManager.GetString("ChooseALoginToSaveThisPasskeyTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose file.
         /// </summary>
         public static string ChooseFile {
@@ -1702,6 +1720,15 @@ namespace Bit.Core.Resources.Localization {
         public static string ContinueToContactSupport {
             get {
                 return ResourceManager.GetString("ContinueToContactSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue to device Settings?.
+        /// </summary>
+        public static string ContinueToDeviceSettings {
+            get {
+                return ResourceManager.GetString("ContinueToDeviceSettings", resourceCulture);
             }
         }
         
@@ -2597,6 +2624,24 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error creating passkey.
+        /// </summary>
+        public static string ErrorCreatingPasskey {
+            get {
+                return ResourceManager.GetString("ErrorCreatingPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error reading passkey.
+        /// </summary>
+        public static string ErrorReadingPasskey {
+            get {
+                return ResourceManager.GetString("ErrorReadingPasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to EU.
         /// </summary>
         public static string EU {
@@ -3137,6 +3182,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 1. Go to your device&apos;s Settings &gt; Passwords &gt; Password Options.
+        /// </summary>
+        public static string FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions {
+            get {
+                return ResourceManager.GetString("FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First name.
         /// </summary>
         public static string FirstName {
@@ -3322,6 +3376,15 @@ namespace Bit.Core.Resources.Localization {
         public static string GenericErrorMessage {
             get {
                 return ResourceManager.GetString("GenericErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get instant access to your passwords and passkeys!.
+        /// </summary>
+        public static string GetInstantAccessToYourPasswordsAndPasskeys {
+            get {
+                return ResourceManager.GetString("GetInstantAccessToYourPasswordsAndPasskeys", resourceCulture);
             }
         }
         
@@ -5156,6 +5219,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwrite passkey?.
+        /// </summary>
+        public static string OverwritePasskey {
+            get {
+                return ResourceManager.GetString("OverwritePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ownership.
         /// </summary>
         public static string Ownership {
@@ -5174,11 +5246,47 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passkey management.
+        /// </summary>
+        public static string PasskeyManagement {
+            get {
+                return ResourceManager.GetString("PasskeyManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Bitwarden to save new passkeys and log in with passkeys stored in your vault..
+        /// </summary>
+        public static string PasskeyManagementExplanationLong {
+            get {
+                return ResourceManager.GetString("PasskeyManagementExplanationLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passkeys.
         /// </summary>
         public static string Passkeys {
             get {
                 return ResourceManager.GetString("Passkeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkeys for {0}.
+        /// </summary>
+        public static string PasskeysForX {
+            get {
+                return ResourceManager.GetString("PasskeysForX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkeys not supported for this app.
+        /// </summary>
+        public static string PasskeysNotSupportedForThisApp {
+            get {
+                return ResourceManager.GetString("PasskeysNotSupportedForThisApp", resourceCulture);
             }
         }
         
@@ -5363,11 +5471,29 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passwords.
+        /// </summary>
+        public static string Passwords {
+            get {
+                return ResourceManager.GetString("Passwords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This password was not found in any known data breaches. It should be safe to use..
         /// </summary>
         public static string PasswordSafe {
             get {
                 return ResourceManager.GetString("PasswordSafe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords for {0}.
+        /// </summary>
+        public static string PasswordsForX {
+            get {
+                return ResourceManager.GetString("PasswordsForX", resourceCulture);
             }
         }
         
@@ -5886,6 +6012,24 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save passkey.
+        /// </summary>
+        public static string SavePasskey {
+            get {
+                return ResourceManager.GetString("SavePasskey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save passkey as new login.
+        /// </summary>
+        public static string SavePasskeyAsNewLogin {
+            get {
+                return ResourceManager.GetString("SavePasskeyAsNewLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Saving....
         /// </summary>
         public static string Saving {
@@ -5990,6 +6134,15 @@ namespace Bit.Core.Resources.Localization {
         public static string SearchVault {
             get {
                 return ResourceManager.GetString("SearchVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. Turn on AutoFill.
+        /// </summary>
+        public static string SecondDotTurnOnAutoFill {
+            get {
+                return ResourceManager.GetString("SecondDotTurnOnAutoFill", resourceCulture);
             }
         }
         
@@ -6255,6 +6408,15 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set Bitwarden as your passkey provider in device settings..
+        /// </summary>
+        public static string SetBitwardenAsPasskeyManagerDescription {
+            get {
+                return ResourceManager.GetString("SetBitwardenAsPasskeyManagerDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set master password.
         /// </summary>
         public static string SetMasterPassword {
@@ -6314,6 +6476,24 @@ namespace Bit.Core.Resources.Localization {
         public static string SetUpAnUnlockOptionToChangeYourVaultTimeoutAction {
             get {
                 return ResourceManager.GetString("SetUpAnUnlockOptionToChangeYourVaultTimeoutAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set up auto-fill.
+        /// </summary>
+        public static string SetUpAutofill {
+            get {
+                return ResourceManager.GetString("SetUpAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings..
+        /// </summary>
+        public static string SetUpAutoFillDescriptionLong {
+            get {
+                return ResourceManager.GetString("SetUpAutoFillDescriptionLong", resourceCulture);
             }
         }
         
@@ -6723,11 +6903,38 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was a problem creating a passkey for {0}. Try again later..
+        /// </summary>
+        public static string ThereWasAProblemCreatingAPasskeyForXTryAgainLater {
+            get {
+                return ResourceManager.GetString("ThereWasAProblemCreatingAPasskeyForXTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem reading your passkey for {0}. Try again later..
+        /// </summary>
+        public static string ThereWasAProblemReadingAPasskeyForXTryAgainLater {
+            get {
+                return ResourceManager.GetString("ThereWasAProblemReadingAPasskeyForXTryAgainLater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The URI {0} is already blocked.
         /// </summary>
         public static string TheURIXIsAlreadyBlocked {
             get {
                 return ResourceManager.GetString("TheURIXIsAlreadyBlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3. Select &quot;Bitwarden&quot; to use for passwords and passkeys.
+        /// </summary>
+        public static string ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys {
+            get {
+                return ResourceManager.GetString("ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys", resourceCulture);
             }
         }
         
@@ -6755,6 +6962,15 @@ namespace Bit.Core.Resources.Localization {
         public static string ThirtySeconds {
             get {
                 return ResourceManager.GetString("ThirtySeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item already contains a passkey. Are you sure you want to overwrite the current passkey?.
+        /// </summary>
+        public static string ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey {
+            get {
+                return ResourceManager.GetString("ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey", resourceCulture);
             }
         }
         
@@ -7052,6 +7268,15 @@ namespace Bit.Core.Resources.Localization {
         public static string UnableToSaveAttachment {
             get {
                 return ResourceManager.GetString("UnableToSaveAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown account.
+        /// </summary>
+        public static string UnknownAccount {
+            get {
+                return ResourceManager.GetString("UnknownAccount", resourceCulture);
             }
         }
         
@@ -7542,6 +7767,24 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verification required by {0}.
+        /// </summary>
+        public static string VerificationRequiredByX {
+            get {
+                return ResourceManager.GetString("VerificationRequiredByX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification required for this action. Set up an unlock method in Bitwarden to continue..
+        /// </summary>
+        public static string VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue {
+            get {
+                return ResourceManager.GetString("VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verify Face ID.
         /// </summary>
         public static string VerifyFaceID {
@@ -7565,6 +7808,15 @@ namespace Bit.Core.Resources.Localization {
         public static string Verifying {
             get {
                 return ResourceManager.GetString("Verifying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verifying identity....
+        /// </summary>
+        public static string VerifyingIdentityEllipsis {
+            get {
+                return ResourceManager.GetString("VerifyingIdentityEllipsis", resourceCulture);
             }
         }
         
@@ -7871,6 +8123,24 @@ namespace Bit.Core.Resources.Localization {
         public static string YourOrganizationRequiresYouToSetAMasterPassword {
             get {
                 return ResourceManager.GetString("YourOrganizationRequiresYouToSetAMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your passkey will be saved to your Bitwarden vault.
+        /// </summary>
+        public static string YourPasskeyWillBeSavedToYourBitwardenVault {
+            get {
+                return ResourceManager.GetString("YourPasskeyWillBeSavedToYourBitwardenVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your passkey will be saved to your Bitwarden vault for {0}.
+        /// </summary>
+        public static string YourPasskeyWillBeSavedToYourBitwardenVaultForX {
+            get {
+                return ResourceManager.GetString("YourPasskeyWillBeSavedToYourBitwardenVaultForX", resourceCulture);
             }
         }
         

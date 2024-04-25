@@ -117,10 +117,13 @@
 	  <Folder Include="Platforms\Android\Services\" />
 	  <Folder Include="Platforms\Android\Tiles\" />
 	  <Folder Include="Platforms\Android\Utilities\" />
+	  <Folder Include="Platforms\Android\Resources\drawable-xxxhdpi\" />
+	  <Folder Include="Resources\Raw\" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
 	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
 	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
+      <PackageReference Include="Xamarin.AndroidX.Credentials" Version="1.0.0" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND !$(DefineConstants.Contains(FDROID))">
 	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
@@ -256,8 +259,13 @@
 	  <None Remove="Platforms\iOS\Resources\more_vert.png" />
 	  <None Remove="Platforms\iOS\Resources\logo_white.png" />
 	  <None Remove="Platforms\iOS\Resources\logo%402x.png" />
+	  <None Remove="Platforms\Android\Resources\drawable-xxxhdpi\" />
+	  <None Remove="Resources\Raw\" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">
 		<BundleResource Include="Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
+	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
+	  <MauiAsset Include="Resources\Raw\fido2_priviliged_allow_list.json" LogicalName="fido2_priviliged_allow_list.json" />
 	</ItemGroup>
 </Project>

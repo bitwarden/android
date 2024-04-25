@@ -1,11 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Android.App;
+﻿using Android.App;
 using Android.App.Assist;
 using Android.Content;
+using Android.Credentials;
 using Android.OS;
 using Android.Provider;
 using Android.Views.Autofill;
+using Bit.App.Abstractions;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -35,6 +35,42 @@ namespace Bit.Droid.Services
             _clipboardService = clipboardService;
             _platformUtilsService = platformUtilsService;
             _eventService = eventService;
+        }
+
+        public bool CredentialProviderServiceEnabled()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.UpsideDownCake)
+            {
+                return false;
+            }
+
+            try
+            {
+                var activity = (MainActivity)Platform.CurrentActivity;
+                if (activity == null)
+                {
+                    return false;
+                }
+
+                var credManager = activity.GetSystemService(Java.Lang.Class.FromType(typeof(CredentialManager))) as CredentialManager;
+                if (credManager == null)
+                {
+                    return false;
+                }
+
+                var credentialProviderServiceComponentName = new ComponentName(activity, Java.Lang.Class.FromType(typeof(CredentialProviderService)));
+                return credManager.IsEnabledCredentialProviderService(credentialProviderServiceComponentName);
+            }
+            catch (Java.Lang.NullPointerException) 
+            {
+                // CredentialManager API is not working fully and may return a NullPointerException even if the CredentialProviderService is working and enabled
+                // Info Here: https://developer.android.com/reference/android/credentials/CredentialManager#isEnabledCredentialProviderService(android.content.ComponentName)
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool AutofillServiceEnabled()
@@ -163,7 +199,17 @@ namespace Bit.Droid.Services
             return Accessibility.AccessibilityHelpers.OverlayPermitted();
         }
 
-        
+        public void DisableCredentialProviderService()
+        {
+            try
+            {
+                // We should try to find a way to programmatically disable the provider service when the API allows for it.
+                // For now we'll take the user to Credential Settings so they can manually disable it
+                var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>();
+                deviceActionService.OpenCredentialProviderSettings();
+            }
+            catch { }
+        }
 
         public void DisableAutofillService()
         {

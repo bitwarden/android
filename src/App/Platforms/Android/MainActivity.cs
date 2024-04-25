@@ -24,6 +24,7 @@ using Bit.App.Droid.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using FileProvider = AndroidX.Core.Content.FileProvider;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.Droid
 {
@@ -167,6 +168,13 @@ namespace Bit.Droid
             base.OnNewIntent(intent);
             try
             {
+                if (intent?.GetStringExtra(CredentialProviderConstants.Fido2CredentialAction) == CredentialProviderConstants.Fido2CredentialCreate
+                    &&
+                    _appOptions != null)
+                {
+                    _appOptions.HasUnlockedInThisTransaction = false;
+                }
+
                 if (intent?.GetStringExtra("uri") is string uri)
                 {
                     _messagingService.Send(App.App.POP_ALL_AND_GO_TO_AUTOFILL_CIPHERS_MESSAGE);
@@ -325,12 +333,15 @@ namespace Bit.Droid
 
         private AppOptions GetOptions()
         {
+            var fido2CredentialAction = Intent.GetStringExtra(CredentialProviderConstants.Fido2CredentialAction);
             var options = new AppOptions
             {
                 Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra(AutofillConstants.AutofillFrameworkUri),
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra(AutofillConstants.AutofillFramework, false),
+                Fido2CredentialAction = fido2CredentialAction,
+                FromFido2Framework = !string.IsNullOrWhiteSpace(fido2CredentialAction),
                 CreateSend = GetCreateSendRequest(Intent)
             };
             var fillType = Intent.GetIntExtra(AutofillConstants.AutofillFrameworkFillType, 0);

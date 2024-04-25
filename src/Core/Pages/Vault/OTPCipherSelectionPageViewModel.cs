@@ -70,5 +70,10 @@ namespace Bit.App.Pages
             var pageForLogin = new CipherAddEditPage(null, CipherType.Login, name: Name, appOptions: _appOptions);
             await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
+
+        protected override async Task AddFabCipherAsync()
+        {
+            await AddCipherAsync();
+        }
     }
 }

@@ -88,7 +88,7 @@ namespace Bit.iOS
                                 Core.Constants.AutofillNeedsIdentityReplacementKey);
                             if (needsAutofillReplacement.GetValueOrDefault())
                             {
-                                await ASHelpers.ReplaceAllIdentities();
+                                await ASHelpers.ReplaceAllIdentitiesAsync();
                             }
                         }
                         else if (message.Command == "showAppExtension")
@@ -102,7 +102,7 @@ namespace Bit.iOS
                                 var success = value as bool?;
                                 if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
                                 {
-                                    await ASHelpers.ReplaceAllIdentities();
+                                    await ASHelpers.ReplaceAllIdentitiesAsync();
                                 }
                             }
                         }
@@ -114,22 +114,21 @@ namespace Bit.iOS
                                 return;
                             }
 
-                            if (await ASHelpers.IdentitiesCanIncremental())
+                            if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                             {
                                 var cipherId = message.Data as string;
                                 if (message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
                                 {
-                                    var identity = await ASHelpers.GetCipherIdentityAsync(cipherId);
+                                    var identity = await ASHelpers.GetCipherPasswordIdentityAsync(cipherId);
                                     if (identity == null)
                                     {
                                         return;
                                     }
-                                    await ASCredentialIdentityStore.SharedStore?.SaveCredentialIdentitiesAsync(
-                                        new ASPasswordCredentialIdentity[] { identity });
+                                    await ASCredentialIdentityStoreExtensions.SaveCredentialIdentitiesAsync(identity);
                                     return;
                                 }
                             }
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                         else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
                         {
@@ -138,28 +137,27 @@ namespace Bit.iOS
                                 return;
                             }
 
-                            if (await ASHelpers.IdentitiesCanIncremental())
+                            if (await ASHelpers.IdentitiesSupportIncrementalAsync())
                             {
-                                var identity = ASHelpers.ToCredentialIdentity(
+                                var identity = ASHelpers.ToPasswordCredentialIdentity(
                                     message.Data as Bit.Core.Models.View.CipherView);
                                 if (identity == null)
                                 {
                                     return;
                                 }
-                                await ASCredentialIdentityStore.SharedStore?.RemoveCredentialIdentitiesAsync(
-                                    new ASPasswordCredentialIdentity[] { identity });
+                                await ASCredentialIdentityStoreExtensions.RemoveCredentialIdentitiesAsync(identity);
                                 return;
                             }
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                         else if (message.Command == "logout" && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
-                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                            await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
                         }
                         else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
                             && UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                         {
-                            await ASHelpers.ReplaceAllIdentities();
+                            await ASHelpers.ReplaceAllIdentitiesAsync();
                         }
                         else if (message.Command == AppHelpers.VAULT_TIMEOUT_ACTION_CHANGED_MESSAGE_COMMAND)
                         {
@@ -168,12 +166,12 @@ namespace Bit.iOS
                             {
                                 if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                                 {
-                                    await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                                    await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
                                 }
                             }
                             else
                             {
-                                await ASHelpers.ReplaceAllIdentities();
+                                await ASHelpers.ReplaceAllIdentitiesAsync();
                             }
                         }
                     }

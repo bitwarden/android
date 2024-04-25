@@ -1,0 +1,12 @@
+<metadata>
+  <attr path="/api/package[@name='androidx.credentials']" name="managedName">AndroidX.Credentials</attr>
+  <attr path="/api/package[@name='androidx.credentials.provider']" name="managedName">AndroidX.Credentials.Provider</attr>
+  <attr path="/api/package[@name='androidx.credentials.exceptions']" name="managedName">AndroidX.Credentials.Exceptions</attr>
+  <attr path="/api/package[@name='androidx.credentials.webauthn']" name="managedName">AndroidX.Credentials.WebAuthn</attr>
+
+  <!-- fix companions -->
+  <attr path="/api/package/class[substring(@name,string-length(@name)-9)='.Companion']" name="managedName">CompanionStatic</attr>
+  <remove-node path="/api/package/class[substring(@name,string-length(@name)-9)='.Companion' and count(method)=0 and count(field)=0]" />
+  <attr path="/api/package/class[substring(@name,string-length(@name)-7)='.Default']" name="managedName">DefaultStatic</attr>
+  <remove-node path="/api/package/class[substring(@name,string-length(@name)-7)='.Default' and count(method)=0 and count(field)=0]" />
+</metadata>

@@ -370,7 +370,7 @@ namespace Bit.App.Pages
 
             if (!_supportsBiometric
                 ||
-                !await _platformUtilsService.AuthenticateBiometricAsync(null, DeviceInfo.Platform == DevicePlatform.Android ? "." : null))
+                await _platformUtilsService.AuthenticateBiometricAsync(null, DeviceInfo.Platform == DevicePlatform.Android ? "." : null) != true)
             {
                 _canUnlockWithBiometrics = false;
                 MainThread.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(CanUnlockWithBiometrics)));

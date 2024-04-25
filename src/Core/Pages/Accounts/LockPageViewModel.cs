@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.Core.Resources.Localization;
@@ -73,7 +74,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
-            SubmitCommand = new Command(async () => await SubmitAsync());
+            SubmitCommand = CreateDefaultAsyncRelayCommand(SubmitAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel =
                 new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
@@ -157,7 +158,7 @@ namespace Bit.App.Pages
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
-        public Command SubmitCommand { get; }
+        public ICommand SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
 
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
@@ -233,8 +234,8 @@ namespace Bit.App.Pages
                 }
                 BiometricButtonVisible = true;
                 BiometricButtonText = AppResources.UseBiometricsToUnlock;
-                // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                if (Device.RuntimePlatform == Device.iOS)
+
+                if (DeviceInfo.Platform == DevicePlatform.iOS)
                 {
                     var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
@@ -330,6 +331,7 @@ namespace Bit.App.Pages
                     Pin = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetUserKeyAndContinueAsync(userKey);
+                    await Task.Delay(150); //Workaround Delay to avoid "duplicate" execution of SubmitAsync on Android when invoked from the ReturnCommand
                 }
             }
             catch (LegacyUserException)
@@ -418,6 +420,7 @@ namespace Bit.App.Pages
                 var userKey = await _cryptoService.DecryptUserKeyWithMasterKeyAsync(masterKey);
                 await _cryptoService.SetMasterKeyAsync(masterKey);
                 await SetUserKeyAndContinueAsync(userKey);
+                await Task.Delay(150); //Workaround Delay to avoid "duplicate" execution of SubmitAsync on Android when invoked from the ReturnCommand
 
                 // Re-enable biometrics
                 if (BiometricEnabled & !BiometricIntegrityValid)
@@ -515,7 +518,7 @@ namespace Bit.App.Pages
                 var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     PinEnabled ? AppResources.PIN : AppResources.MasterPassword,
                     () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)),
-                    !PinEnabled && !HasMasterPassword);
+                    !PinEnabled && !HasMasterPassword) ?? false;
 
                 await _stateService.SetBiometricLockedAsync(!success);
                 if (success)

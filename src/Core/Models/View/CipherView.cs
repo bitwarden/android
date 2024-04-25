@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.View
 {
@@ -52,7 +51,7 @@ namespace Bit.Core.Models.View
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
         public CipherKey Key { get; set; }
-
+        
         public ItemView Item
         {
             get
@@ -122,5 +121,14 @@ namespace Bit.Core.Models.View
         public bool IsClonable => OrganizationId is null;
 
         public bool HasFido2Credential => Type == CipherType.Login && Login?.HasFido2Credentials == true;
+
+        public string GetMainFido2CredentialUsername()
+        {
+            return Login?.MainFido2Credential?.UserName
+                    .FallbackOnNullOrWhiteSpace(Login?.MainFido2Credential?.UserDisplayName)
+                    .FallbackOnNullOrWhiteSpace(Login?.Username)
+                    .FallbackOnNullOrWhiteSpace(Name)
+                    .FallbackOnNullOrWhiteSpace(AppResources.UnknownAccount);
+        }
     }
 }

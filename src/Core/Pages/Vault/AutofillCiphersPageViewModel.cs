@@ -1,6 +1,7 @@
 ﻿using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
@@ -12,6 +13,8 @@ namespace Bit.App.Pages
     public class AutofillCiphersPageViewModel : CipherSelectionPageViewModel
     {
         private CipherType? _fillType;
+        private AppOptions _appOptions;
+        private readonly LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
 
         public string Uri { get; set; }
 
@@ -19,6 +22,7 @@ namespace Bit.App.Pages
         {
             Uri = appOptions?.Uri;
             _fillType = appOptions.FillType;
+            _appOptions = appOptions;
 
             string name = null;
             if (Uri?.StartsWith(Constants.AndroidAppProtocol) ?? false)
@@ -36,6 +40,7 @@ namespace Bit.App.Pages
             Name = name;
             PageTitle = string.Format(AppResources.ItemsForUri, Name ?? "--");
             NoDataText = string.Format(AppResources.NoItemsForUri, Name ?? "--");
+            AddNewItemText = _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential ? AppResources.SavePasskeyAsNewLogin : AppResources.AddAnItem;
         }
 
         protected override async Task<List<GroupingsPageListGroup>> LoadGroupedItemsAsync()
@@ -43,7 +48,11 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
 
-            var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)).ToList();
+            var matching = ciphers.Item1?.Select(c => new CipherItemViewModel(c, WebsiteIconsEnabled)
+            {
+                UsePasskeyIconAsPlaceholderFallback = _fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential
+            }).ToList();
+
             var hasMatching = matching?.Any() ?? false;
             if (matching?.Any() ?? false)
             {
@@ -75,6 +84,12 @@ namespace Bit.App.Pages
             if (_deviceActionService.SystemMajorVersion() < 21)
             {
                 await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                return;
+            }
+
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
+            {
+                await _fido2MakeCredentialConfirmationUserInterface.Value.ConfirmAsync(cipher.Id, cipher.Login.HasFido2Credentials, null);
                 return;
             }
 
@@ -130,8 +145,30 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override async Task AddFabCipherAsync()
+        {
+            //Scenario for creating a new Fido2 credential on Android but showing the Cipher Page
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
+            {
+                var pageForOther = new CipherAddEditPage(null, CipherType.Login, appOptions: _appOptions);
+                await Page.Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                return;
+            }
+            else
+            {
+                await AddCipherAsync();
+            }
+        }
+
         protected override async Task AddCipherAsync()
         {
+            //Scenario for creating a new Fido2 credential on Android
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
+            {
+                _fido2MakeCredentialConfirmationUserInterface.Value.Confirm(null, null);
+                return;
+            }
+
             if (_fillType.HasValue && _fillType != CipherType.Login)
             {
                 var pageForOther = new CipherAddEditPage(type: _fillType, fromAutofill: true);
@@ -142,6 +179,14 @@ namespace Bit.App.Pages
             var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: Uri, name: Name,
                 fromAutofill: true);
             await Page.Navigation.PushModalAsync(new NavigationPage(pageForLogin));
+        }
+
+        public void Cancel()
+        {
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
+            {
+                _fido2MakeCredentialConfirmationUserInterface.Value.Cancel();
+            }
         }
     }
 }
