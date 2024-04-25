@@ -34,6 +34,12 @@ class SpecialCircumstanceExtensionsTest {
                 data = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
                 assertNull(specialCircumstance.toAutofillSaveItemOrNull())
@@ -67,6 +73,12 @@ class SpecialCircumstanceExtensionsTest {
                 data = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
                 assertNull(specialCircumstance.toAutofillSelectionDataOrNull())

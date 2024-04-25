@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
+import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -54,6 +56,10 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
         )
+        mockkStatic(
+            Intent::isMyVaultShortcut,
+            Intent::isPasswordGeneratorShortcut,
+        )
     }
 
     @AfterEach
@@ -62,6 +68,10 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getPasswordlessRequestDataIntentOrNull,
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
+        )
+        unmockkStatic(
+            Intent::isMyVaultShortcut,
+            Intent::isPasswordGeneratorShortcut,
         )
     }
 
@@ -150,6 +160,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -175,6 +187,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -200,6 +214,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -226,6 +242,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -251,6 +269,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns shareData
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -276,6 +296,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns autofillSelectionData
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -301,6 +323,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns autofillSaveItem
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -327,6 +351,8 @@ class MainViewModelTest : BaseViewModelTest() {
         every { mockIntent.getAutofillSaveItemOrNull() } returns null
         every { mockIntent.getAutofillSelectionDataOrNull() } returns null
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { mockIntent.isMyVaultShortcut } returns false
+        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveNewIntent(
@@ -338,6 +364,54 @@ class MainViewModelTest : BaseViewModelTest() {
                 passwordlessRequestData = passwordlessRequestData,
                 shouldFinishWhenComplete = false,
             ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with a Vault deeplink data should set the special circumstance to VaultShortcut`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent> {
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { isMyVaultShortcut } returns true
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.VaultShortcut,
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveNewIntent with a password generator deeplink data should set the special circumstance to GeneratorShortcut`() {
+        val viewModel = createViewModel()
+        val mockIntent = mockk<Intent> {
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns true
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveNewIntent(
+                intent = mockIntent,
+            ),
+        )
+        assertEquals(
+            SpecialCircumstance.GeneratorShortcut,
             specialCircumstanceManager.specialCircumstance,
         )
     }

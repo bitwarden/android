@@ -15,6 +15,8 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
+import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -116,6 +118,8 @@ class MainViewModel @Inject constructor(
         val autofillSaveItem = intent.getAutofillSaveItemOrNull()
         val autofillSelectionData = intent.getAutofillSelectionDataOrNull()
         val shareData = intentManager.getShareDataFromIntent(intent)
+        val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
+        val hasVaultShortcut = intent.isMyVaultShortcut
         when {
             passwordlessRequestData != null -> {
                 specialCircumstanceManager.specialCircumstance =
@@ -152,6 +156,15 @@ class MainViewModel @Inject constructor(
                         // Send task when this is not the first intent.
                         shouldFinishWhenComplete = isFirstIntent,
                     )
+            }
+
+            hasGeneratorShortcut -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.GeneratorShortcut
+            }
+
+            hasVaultShortcut -> {
+                specialCircumstanceManager.specialCircumstance = SpecialCircumstance.VaultShortcut
             }
         }
     }

@@ -46,4 +46,16 @@ sealed class SpecialCircumstance : Parcelable {
         val passwordlessRequestData: PasswordlessRequestData,
         val shouldFinishWhenComplete: Boolean,
     ) : SpecialCircumstance()
+
+    /**
+     * The app was launched via deeplink to the generator.
+     */
+    @Parcelize
+    data object GeneratorShortcut : SpecialCircumstance()
+
+    /**
+     * The app was launched via deeplink to the vault.
+     */
+    @Parcelize
+    data object VaultShortcut : SpecialCircumstance()
 }
