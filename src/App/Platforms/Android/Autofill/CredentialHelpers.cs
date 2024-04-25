@@ -10,6 +10,7 @@ using Bit.App.Abstractions;
 using Bit.App.Droid.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Core.Utilities.Fido2;
 using Bit.Core.Utilities.Fido2.Extensions;
@@ -287,25 +288,14 @@ namespace Bit.App.Platforms.Android.Autofill
 
         private static async Task<string> ValidateAssetLinksAndGetOriginAsync(CallingAppInfo callingAppInfo, string rpId)
         {
-            if (!ServiceContainer.TryResolve<IApiService>(out var apiService))
+            if (!ServiceContainer.TryResolve<IAssetLinksService>(out var assetLinksService))
             {
-                throw new InvalidOperationException("Can't resolve IApiService");
+                throw new InvalidOperationException("Can't resolve IAssetLinksService");
             }
-
-            var statementList = await apiService.GetDigitalAssetLinksForRpAsync(rpId);
 
             var normalizedFingerprint = callingAppInfo.GetLatestCertificationFingerprint();
 
-            var isValid = statementList
-                .Any(s => s.Target.Namespace == "android_app" 
-                            && 
-                            s.Target.PackageName == callingAppInfo.PackageName
-                            &&
-                            s.Relation.Contains("delegate_permission/common.get_login_creds")
-                            &&
-                            s.Relation.Contains("delegate_permission/common.handle_all_urls")
-                            &&
-                            s.Target.Sha256CertFingerprints.Contains(normalizedFingerprint));
+            var isValid = await assetLinksService.ValidateAssetLinksAsync(rpId, callingAppInfo.PackageName, normalizedFingerprint);
 
             return isValid ? callingAppInfo.GetAndroidOrigin() : null;
         }
