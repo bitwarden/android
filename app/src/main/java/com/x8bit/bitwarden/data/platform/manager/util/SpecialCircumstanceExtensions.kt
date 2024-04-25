@@ -13,6 +13,8 @@ fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
         is SpecialCircumstance.AutofillSelection -> null
         is SpecialCircumstance.PasswordlessRequest -> null
         is SpecialCircumstance.ShareNewSend -> null
+        SpecialCircumstance.GeneratorShortcut -> null
+        SpecialCircumstance.VaultShortcut -> null
     }
 
 /**
@@ -24,4 +26,6 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
         is SpecialCircumstance.AutofillSelection -> this.autofillSelectionData
         is SpecialCircumstance.PasswordlessRequest -> null
         is SpecialCircumstance.ShareNewSend -> null
+        SpecialCircumstance.GeneratorShortcut -> null
+        SpecialCircumstance.VaultShortcut -> null
     }

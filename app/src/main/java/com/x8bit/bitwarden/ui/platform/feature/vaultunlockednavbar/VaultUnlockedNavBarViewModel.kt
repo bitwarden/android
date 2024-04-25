@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -11,10 +13,25 @@ import javax.inject.Inject
 @HiltViewModel
 class VaultUnlockedNavBarViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-) :
-    BaseViewModel<Unit, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
-        initialState = Unit,
-    ) {
+    specialCircumstancesManager: SpecialCircumstanceManager,
+) : BaseViewModel<Unit, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
+    initialState = Unit,
+) {
+    init {
+        when (specialCircumstancesManager.specialCircumstance) {
+            SpecialCircumstance.GeneratorShortcut -> {
+                sendEvent(VaultUnlockedNavBarEvent.NavigateToGeneratorScreen)
+                specialCircumstancesManager.specialCircumstance = null
+            }
+
+            SpecialCircumstance.VaultShortcut -> {
+                sendEvent(VaultUnlockedNavBarEvent.NavigateToVaultScreen)
+                specialCircumstancesManager.specialCircumstance = null
+            }
+
+            else -> Unit
+        }
+    }
 
     override fun handleAction(action: VaultUnlockedNavBarAction) {
         when (action) {

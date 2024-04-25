@@ -59,7 +59,6 @@ class RootNavViewModel @Inject constructor(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
         val userState = action.userState
-        val specialCircumstance = action.specialCircumstance
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
                 !userState.activeAccount.isVaultUnlocked -> RootNavState.TrustedDevice
@@ -73,7 +72,7 @@ class RootNavViewModel @Inject constructor(
                 userState.hasPendingAccountAddition -> RootNavState.Auth
 
             userState.activeAccount.isVaultUnlocked -> {
-                when (specialCircumstance) {
+                when (val specialCircumstance = action.specialCircumstance) {
                     is SpecialCircumstance.AutofillSave -> {
                         RootNavState.VaultUnlockedForAutofillSave(
                             autofillSaveItem = specialCircumstance.autofillSaveItem,
@@ -93,11 +92,10 @@ class RootNavViewModel @Inject constructor(
                         RootNavState.VaultUnlockedForAuthRequest
                     }
 
-                    null -> {
-                        RootNavState.VaultUnlocked(
-                            activeUserId = userState.activeAccount.userId,
-                        )
-                    }
+                    SpecialCircumstance.GeneratorShortcut,
+                    SpecialCircumstance.VaultShortcut,
+                    null,
+                    -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
                 }
             }
 
