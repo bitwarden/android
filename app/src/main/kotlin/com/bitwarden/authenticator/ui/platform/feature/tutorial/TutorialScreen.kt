@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -177,11 +178,13 @@ private fun VerificationCodesContent() {
             id = R.string.secure_your_accounts_with_bitwarden_authenticator,
         ),
     )
+    Spacer(Modifier.height(24.dp))
     Text(
         style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
         text = stringResource(R.string.secure_your_accounts_with_bitwarden_authenticator),
     )
+    Spacer(Modifier.height(8.dp))
     Text(
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
@@ -195,6 +198,7 @@ private fun TutorialQrScannerScreen() {
         painter = painterResource(id = R.drawable.ic_tutorial_qr_scanner),
         contentDescription = stringResource(id = R.string.scan_qr_code),
     )
+    Spacer(Modifier.height(24.dp))
     Text(
         style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
@@ -202,6 +206,7 @@ private fun TutorialQrScannerScreen() {
             R.string.use_your_device_camera_to_scan_codes
         ),
     )
+    Spacer(Modifier.height(8.dp))
     Text(
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
@@ -217,11 +222,13 @@ private fun UniqueCodesContent() {
         painter = painterResource(id = R.drawable.ic_tutorial_2fa),
         contentDescription = stringResource(id = R.string.unique_codes)
     )
+    Spacer(Modifier.height(24.dp))
     Text(
         style = MaterialTheme.typography.headlineSmall,
         textAlign = TextAlign.Center,
         text = stringResource(R.string.sign_in_using_unique_codes),
     )
+    Spacer(Modifier.height(8.dp))
     Text(
         style = MaterialTheme.typography.bodyLarge,
         textAlign = TextAlign.Center,
