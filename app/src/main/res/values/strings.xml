@@ -94,4 +94,13 @@
     <string name="security">Security</string>
     <string name="use_biometrics_to_unlock">Use biometrics to unlock</string>
     <string name="too_many_failed_biometric_attempts">Too many failed biometrics attempts.</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+    <string name="continue_text">Continue</string>
+    <string name="bitwarden_help_center">Bitwarden Help Center</string>
+    <string name="continue_to_help_center">Continue to Help Center?</string>
+    <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Learn more about how to use Bitwarden Authenticator on the Help Center.</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="continue_to_privacy_policy">Continue to privacy policy?</string>
+    <string name="privacy_policy_description_long">Check out our privacy policy on bitwarden.com</string>
 </resources>

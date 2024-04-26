@@ -1,7 +1,13 @@
 package com.bitwarden.authenticator.ui.platform.feature.settings
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -9,9 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -20,18 +29,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
+import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
@@ -40,13 +55,18 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicD
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
+import com.bitwarden.authenticator.ui.platform.components.row.BitwardenExternalLinkRow
 import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
+import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
+import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
+import com.bitwarden.authenticator.ui.platform.theme.AuthenticatorTheme
 import com.bitwarden.authenticator.ui.platform.theme.LocalBiometricsManager
+import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
 
 /**
@@ -57,6 +77,7 @@ import com.bitwarden.authenticator.ui.platform.util.displayLabel
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
+    intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToTutorial: () -> Unit,
     onNavigateToExport: () -> Unit,
 ) {
@@ -68,17 +89,26 @@ fun SettingsScreen(
         when (event) {
             SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
             SettingsEvent.NavigateToExport -> onNavigateToExport()
+            SettingsEvent.NavigateToHelpCenter -> {
+                intentManager.launchUri("https://bitwarden.com/help".toUri())
+            }
+
+            SettingsEvent.NavigateToPrivacyPolicy -> {
+                intentManager.launchUri("https://bitwarden.com/privacy".toUri())
+            }
         }
     }
 
     BitwardenScaffold(
+        modifier = Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             BitwardenMediumTopAppBar(
                 title = stringResource(id = R.string.settings),
                 scrollBehavior = scrollBehavior
             )
         },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -125,8 +155,37 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.HelpClick.ShowTutorialClick)
                     }
+                },
+                onHelpCenterClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(SettingsAction.HelpClick.HelpCenterClick)
+                    }
                 }
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            AboutSettings(
+                state = state,
+                onPrivacyPolicyClick = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.AboutClick.PrivacyPolicyClick) }
+                },
+                onVersionClick = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.AboutClick.VersionClick) }
+                }
+            )
+            Box(
+                modifier = Modifier
+                    .defaultMinSize(minHeight = 56.dp)
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    modifier = Modifier.padding(end = 16.dp),
+                    text = state.copyrightInfo.invoke(),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            }
         }
     }
 }
@@ -365,6 +424,7 @@ private fun ThemeSelectionRow(
 private fun HelpSettings(
     modifier: Modifier = Modifier,
     onTutorialClick: () -> Unit,
+    onHelpCenterClick: () -> Unit,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
@@ -376,6 +436,102 @@ private fun HelpSettings(
         modifier = modifier,
         withDivider = true,
     )
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenExternalLinkRow(
+        text = stringResource(id = R.string.bitwarden_help_center),
+        onConfirmClick = onHelpCenterClick,
+        dialogTitle = stringResource(id = R.string.continue_to_help_center),
+        dialogMessage = stringResource(
+            id = R.string.learn_more_about_how_to_use_bitwarden_on_the_help_center,
+        ),
+    )
 }
 
 //endregion Help settings
+
+//region About settings
+@Composable
+private fun AboutSettings(
+    state: SettingsState,
+    onPrivacyPolicyClick: () -> Unit,
+    onVersionClick: () -> Unit,
+) {
+    BitwardenListHeaderText(
+        modifier = Modifier.padding(horizontal = 16.dp),
+        label = stringResource(id = R.string.about)
+    )
+    BitwardenExternalLinkRow(
+        text = stringResource(id = R.string.privacy_policy),
+        onConfirmClick = onPrivacyPolicyClick,
+        dialogTitle = stringResource(id = R.string.continue_to_privacy_policy),
+        dialogMessage = stringResource(
+            id = R.string.privacy_policy_description_long,
+        ),
+    )
+    CopyRow(
+        text = state.version,
+        onClick = onVersionClick,
+    )
+}
+
+@Composable
+private fun CopyRow(
+    text: Text,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val resources = LocalContext.current.resources
+    Box(
+        contentAlignment = Alignment.BottomCenter,
+        modifier = modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
+                onClick = onClick,
+            )
+            .semantics(mergeDescendants = true) {
+                contentDescription = text.toString(resources)
+            },
+    ) {
+        Row(
+            modifier = Modifier
+                .defaultMinSize(minHeight = 56.dp)
+                .padding(start = 16.dp, end = 24.dp, top = 8.dp, bottom = 8.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .weight(1f),
+                text = text(),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Icon(
+                painter = rememberVectorPainter(id = R.drawable.ic_copy),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
+        HorizontalDivider(
+            modifier = Modifier.padding(start = 16.dp),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+    }
+}
+
+//endregion About settings
+
+@Preview
+@Composable
+private fun CopyRow_preview() {
+    AuthenticatorTheme {
+        CopyRow(
+            text = "Copyable Text".asText(),
+            onClick = { },
+        )
+    }
+}

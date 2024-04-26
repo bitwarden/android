@@ -61,7 +61,7 @@ fun NavGraphBuilder.itemListingGraph(
         settingsGraph(
             navController = navController,
             onNavigateToExport = navigateToExport,
-            onNavigateToTutorial = navigateToTutorial,
+            onNavigateToTutorial = navigateToTutorial
         )
     }
 }
