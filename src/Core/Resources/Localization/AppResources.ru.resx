@@ -421,6 +421,9 @@
   <data name="AutofillService" xml:space="preserve">
     <value>Служба автозаполнения</value>
   </data>
+  <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
+    <value>Установите Bitwarden в качестве провайдера passkey в настройках устройства.</value>
+  </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Избегать неоднозначных символов</value>
   </data>
@@ -1191,6 +1194,9 @@
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
+  <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
+    <value>Не удалось автоматически открыть для меню настроек провайдера учетных данных Android. Вы можете перейти в меню настроек учетных данных вручную из раздела Настройки Android &gt; Система &gt; Пароли и аккаунты &gt; Пароли, passkeys и службы данных.</value>
+  </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Не удалось автоматически открыть меню настроек автозаполнения Android. Вы можете перейти в меню настроек автозаполнения вручную из настроек Android &gt; Система &gt; Языки и ввод &gt; Дополнительно &gt; Служба автозаполнения.</value>
   </data>
@@ -1814,6 +1820,9 @@
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden требует внимания - включите 'Поверх других приложений' в 'Службах автозаполнения' из настроек Bitwarden.</value>
+  </data>
+  <data name="PasskeyManagement" xml:space="preserve">
+    <value>Управление passkeys</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Службы автозаполнения</value>
@@ -2798,6 +2807,9 @@
   <data name="XHours" xml:space="preserve">
     <value>{0} часов</value>
   </data>
+  <data name="PasskeyManagementExplanationLong" xml:space="preserve">
+    <value>Использовать Bitwarden для сохранения новых passkeys и авторизации при помощи passkeys, хранящимися в вашем хранилище.</value>
+  </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Использовать фреймворк автозаполнения Android для заполнения информации о входе в другие приложения на устройстве
 
@@ -2827,6 +2839,9 @@
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Перейти в магазин приложений?</value>
+  </data>
+  <data name="ContinueToDeviceSettings" xml:space="preserve">
+    <value>Перейти к настройкам устройства?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Сделайте ваш аккаунт более защищенным, настроив двухэтапную аутентификацию в веб-приложении Bitwarden.</value>
@@ -2878,6 +2893,27 @@
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Настройте опцию разблокировки для изменения действия по тайм-ауту хранилища.</value>
   </data>
+  <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
+    <value>Выберите логин, для которого будет сохранен данный passkey</value>
+  </data>
+  <data name="SavePasskeyAsNewLogin" xml:space="preserve">
+    <value>Сохранить passkey как новый логин</value>
+  </data>
+  <data name="SavePasskey" xml:space="preserve">
+    <value>Сохранить passkey</value>
+  </data>
+  <data name="PasskeysForX" xml:space="preserve">
+    <value>Passkeys для {0}</value>
+  </data>
+  <data name="PasswordsForX" xml:space="preserve">
+    <value>Пароли для {0}</value>
+  </data>
+  <data name="OverwritePasskey" xml:space="preserve">
+    <value>Перезаписать passkey?</value>
+  </data>
+  <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
+    <value>Этот элемент уже содержит passkey. Вы уверены, что хотите перезаписать текущий passkey?</value>
+  </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Для вашего аккаунта требуется двухэтапная аутентификация Duo. </value>
   </data>
@@ -2886,6 +2922,59 @@
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Запустить Duo</value>
+  </data>
+  <data name="VerificationRequiredByX" xml:space="preserve">
+    <value>Требуется верификация для {0}</value>
+  </data>
+  <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
+    <value>Для этого действия требуется верификация. Чтобы продолжить, настройте метод разблокировки Bitwarden.</value>
+  </data>
+  <data name="ErrorCreatingPasskey" xml:space="preserve">
+    <value>Ошибка создания passkey</value>
+  </data>
+  <data name="ErrorReadingPasskey" xml:space="preserve">
+    <value>Ошибка чтения passkey</value>
+  </data>
+  <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>Возникла проблема с созданием passkey для {0}. Повторите попытку позже.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>Возникла проблема с чтением passkey для {0}. Повторите попытку позже.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="VerifyingIdentityEllipsis" xml:space="preserve">
+    <value>Подтверждение личности...</value>
+  </data>
+  <data name="Passwords" xml:space="preserve">
+    <value>Пароли</value>
+  </data>
+  <data name="UnknownAccount" xml:space="preserve">
+    <value>Неизвестный аккаунт</value>
+  </data>
+  <data name="SetUpAutofill" xml:space="preserve">
+    <value>Настроить автозаполнение</value>
+  </data>
+  <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
+    <value>Получите мгновенный доступ к вашим паролям и passkeys!</value>
+  </data>
+  <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
+    <value>Чтобы настроить автозаполнение паролей и passkeys, установите Bitwarden в качестве предпочтительного провайдера в Настройках iOS.</value>
+  </data>
+  <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
+    <value>1. Перейдите в раздел Настройки &gt; Пароли &gt; Параметры пароля вашего устройства</value>
+  </data>
+  <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
+    <value>2. Включите автозаполнение</value>
+  </data>
+  <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
+    <value>3. Выберите "Bitwarden" для использования для паролей и passkeys</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
+    <value>Ваш passkey будет сохранен в вашем хранилище Bitwarden</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
+    <value>Ваш passkey будет сохранен в вашем хранилище Bitwarden для {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Уведомление: неприсвоенные элементы организации больше не видны в представлении "Все хранилища" и доступны только через консоль администратора. Назначьте эти элементы коллекции в консоли администратора, чтобы сделать их видимыми.</value>
@@ -2898,5 +2987,8 @@
   </data>
   <data name="Notice" xml:space="preserve">
     <value>Уведомление</value>
+  </data>
+  <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
+    <value>Ваш ключ доступа будет сохранен в вашем хранилище Bitwarden</value>
   </data>
 </root>
