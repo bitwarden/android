@@ -1,4 +1,5 @@
 using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
 
 namespace Bit.Core.Services
 {
@@ -18,18 +19,35 @@ namespace Bit.Core.Services
         /// <returns><c>True</c> if matches, <c>False</c> otherwise.</returns>
         public async Task<bool> ValidateAssetLinksAsync(string rpId, string packageName, string normalizedFingerprint)
         {
-            var statementList = await _apiService.GetDigitalAssetLinksForRpAsync(rpId);
+            try
+            {
+                var statementList = await _apiService.GetDigitalAssetLinksForRpAsync(rpId);
 
-            return statementList
-                .Any(s => s.Target.Namespace == "android_app" 
-                            && 
-                            s.Target.PackageName == packageName
-                            &&
-                            s.Relation.Contains("delegate_permission/common.get_login_creds")
-                            &&
-                            s.Relation.Contains("delegate_permission/common.handle_all_urls")
-                            &&
-                            s.Target.Sha256CertFingerprints.Contains(normalizedFingerprint));
+                var androidAppPackageStatements = statementList
+                    .Where(s => s.Target.Namespace == "android_app" 
+                                && 
+                                s.Target.PackageName == packageName
+                                &&
+                                s.Relation.Contains("delegate_permission/common.get_login_creds")
+                                &&
+                                s.Relation.Contains("delegate_permission/common.handle_all_urls"));
+
+                if (!androidAppPackageStatements.Any())
+                {
+                    throw new Exceptions.ValidationException(AppResources.PasskeyOperationFailedBecauseAppNotFoundInAssetLinks);
+                }
+
+                if (!androidAppPackageStatements.Any(s => s.Target.Sha256CertFingerprints.Contains(normalizedFingerprint)))
+                {
+                    throw new Exceptions.ValidationException(AppResources.PasskeyOperationFailedBecauseAppCouldNotBeVerified);
+                }
+
+                return true;
+            }
+            catch (Exceptions.ApiException)
+            {
+                throw new Exceptions.ValidationException(AppResources.PasskeyOperationFailedBecauseOfMissingAssetLinks);
+            }
         }
     }
 }

@@ -5264,6 +5264,51 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Passkey operation failed because app could not be verified.
+        /// </summary>
+        public static string PasskeyOperationFailedBecauseAppCouldNotBeVerified {
+            get {
+                return ResourceManager.GetString("PasskeyOperationFailedBecauseAppCouldNotBeVerified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkey operation failed because app not found in asset links.
+        /// </summary>
+        public static string PasskeyOperationFailedBecauseAppNotFoundInAssetLinks {
+            get {
+                return ResourceManager.GetString("PasskeyOperationFailedBecauseAppNotFoundInAssetLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkey operation failed because browser is not privileged.
+        /// </summary>
+        public static string PasskeyOperationFailedBecauseBrowserIsNotPrivileged {
+            get {
+                return ResourceManager.GetString("PasskeyOperationFailedBecauseBrowserIsNotPrivileged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkey operation failed because browser signature does not match.
+        /// </summary>
+        public static string PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch {
+            get {
+                return ResourceManager.GetString("PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passkey operation failed because of missing asset links.
+        /// </summary>
+        public static string PasskeyOperationFailedBecauseOfMissingAssetLinks {
+            get {
+                return ResourceManager.GetString("PasskeyOperationFailedBecauseOfMissingAssetLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Passkeys.
         /// </summary>
         public static string Passkeys {
