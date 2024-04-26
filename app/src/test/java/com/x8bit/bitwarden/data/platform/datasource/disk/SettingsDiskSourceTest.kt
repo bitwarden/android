@@ -520,7 +520,7 @@ class SettingsDiskSourceTest {
             .edit {
                 putInt(
                     "${defaultUriMatchTypeBaseKey}_$mockUserId",
-                    3,
+                    4,
                 )
             }
         val actual = settingsDiskSource.getDefaultUriMatchType(userId = mockUserId)
@@ -550,7 +550,7 @@ class SettingsDiskSourceTest {
             0,
         )
         assertEquals(
-            3,
+            4,
             actual,
         )
     }
