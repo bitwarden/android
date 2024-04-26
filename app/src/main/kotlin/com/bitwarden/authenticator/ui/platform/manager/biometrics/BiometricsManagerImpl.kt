@@ -78,8 +78,9 @@ class BiometricsManagerImpl(
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(R.string.bitwarden_authenticator))
             .setDescription(activity.getString(R.string.biometrics_direction))
-            .setNegativeButtonText(activity.getString(R.string.cancel))
-            .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
+            .setAllowedAuthenticators(
+                Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL
+            )
             .build()
 
         biometricPrompt.authenticate(promptInfo)
