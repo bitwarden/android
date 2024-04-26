@@ -25,38 +25,31 @@ class GeneratorDiskSourceImpl(
         storeUsernameGenerationOptions(userId = userId, options = null)
     }
 
-    override fun getPasscodeGenerationOptions(userId: String): PasscodeGenerationOptions? {
-        val key = getPasswordGenerationOptionsKey(userId)
-        return getString(key)?.let { json.decodeFromStringOrNull(it) }
-    }
+    override fun getPasscodeGenerationOptions(userId: String): PasscodeGenerationOptions? =
+        getString("${BASE_KEY}:${PASSWORD_GENERATION_OPTIONS_KEY}_$userId")
+            ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storePasscodeGenerationOptions(
         userId: String,
         options: PasscodeGenerationOptions?,
     ) {
-        val key = getPasswordGenerationOptionsKey(userId)
         putString(
-            key,
+            "${BASE_KEY}:${PASSWORD_GENERATION_OPTIONS_KEY}_$userId",
             options?.let { json.encodeToString(options) },
         )
     }
 
-    private fun getPasswordGenerationOptionsKey(userId: String): String =
-        "${BASE_KEY}_${PASSWORD_GENERATION_OPTIONS_KEY}_$userId"
-
-    override fun getUsernameGenerationOptions(userId: String): UsernameGenerationOptions? {
-        val key = getUsernameGenerationOptionsKey(userId)
-        return getString(key)?.let { json.decodeFromStringOrNull(it) }
-    }
+    override fun getUsernameGenerationOptions(userId: String): UsernameGenerationOptions? =
+        getString("${BASE_KEY}:${USERNAME_GENERATION_OPTIONS_KEY}_$userId")
+            ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storeUsernameGenerationOptions(
         userId: String,
         options: UsernameGenerationOptions?,
     ) {
-        val key = getUsernameGenerationOptionsKey(userId)
-        putString(key, options?.let { json.encodeToString(it) })
+        putString(
+            "${BASE_KEY}:${USERNAME_GENERATION_OPTIONS_KEY}_$userId",
+            options?.let { json.encodeToString(it) },
+        )
     }
-
-    private fun getUsernameGenerationOptionsKey(userId: String): String =
-        "${BASE_KEY}_${USERNAME_GENERATION_OPTIONS_KEY}_$userId"
 }

@@ -99,7 +99,7 @@ class GeneratorDiskSourceTest {
             numWords = 3,
         )
 
-        val key = "bwPreferencesStorage_passwordGenerationOptions_$userId"
+        val key = "bwPreferencesStorage:passwordGenerationOptions_$userId"
         fakeSharedPreferences.edit { putString(key, json.encodeToString(options)) }
 
         val result = generatorDiskSource.getPasscodeGenerationOptions(userId)
@@ -136,7 +136,7 @@ class GeneratorDiskSourceTest {
             numWords = 3,
         )
 
-        val key = "bwPreferencesStorage_passwordGenerationOptions_$userId"
+        val key = "bwPreferencesStorage:passwordGenerationOptions_$userId"
 
         generatorDiskSource.storePasscodeGenerationOptions(userId, options)
 
@@ -166,7 +166,7 @@ class GeneratorDiskSourceTest {
             emailWebsite = "email.example.com",
         )
 
-        val key = "bwPreferencesStorage_usernameGenerationOptions_$userId"
+        val key = "bwPreferencesStorage:usernameGenerationOptions_$userId"
         fakeSharedPreferences.edit { putString(key, json.encodeToString(options)) }
 
         val result = generatorDiskSource.getUsernameGenerationOptions(userId)
@@ -204,7 +204,7 @@ class GeneratorDiskSourceTest {
             emailWebsite = "email.example.com",
         )
 
-        val key = "bwPreferencesStorage_usernameGenerationOptions_$userId"
+        val key = "bwPreferencesStorage:usernameGenerationOptions_$userId"
 
         generatorDiskSource.storeUsernameGenerationOptions(userId, options)
 
