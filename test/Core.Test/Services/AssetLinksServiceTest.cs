@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Services;
 using Bit.Core.Utilities.DigitalAssetLinks;
 using Bit.Test.Common.AutoFixture;
@@ -71,7 +72,7 @@ namespace Bit.Core.Test.Services
         }
         
         [Fact]
-        public async Task ValidateAssetLinksAsync_Returns_False_When_Data_Statement_Has_No_GetLoginCreds_Relation()
+        public async Task ValidateAssetLinksAsync_Throws_When_Data_Statement_Has_No_GetLoginCreds_Relation()
         {
             // Arrange
             _sutProvider.GetDependency<IApiService>()
@@ -79,14 +80,14 @@ namespace Bit.Core.Test.Services
                 .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementNoGetLoginCredsRelationJson())));
 
             // Act
-            var isValid = await _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint);
+            var exception = await Assert.ThrowsAsync<Exceptions.ValidationException>(() => _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint));
 
             // Assert
-            Assert.False(isValid);
+            Assert.Equal(AppResources.PasskeyOperationFailedBecauseAppNotFoundInAssetLinks, exception.Message);
         }
 
         [Fact]
-        public async Task ValidateAssetLinksAsync_Returns_False_When_Data_Statement_Has_No_HandleAllUrls_Relation()
+        public async Task ValidateAssetLinksAsync_Throws_When_Data_Statement_Has_No_HandleAllUrls_Relation()
         {
             // Arrange
             _sutProvider.GetDependency<IApiService>()
@@ -94,14 +95,14 @@ namespace Bit.Core.Test.Services
                 .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementNoHandleAllUrlsRelationJson())));
 
             // Act
-            var isValid = await _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint);
+            var exception = await Assert.ThrowsAsync<Exceptions.ValidationException>(() => _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint));
 
             // Assert
-            Assert.False(isValid);
+            Assert.Equal(AppResources.PasskeyOperationFailedBecauseAppNotFoundInAssetLinks, exception.Message);
         }
 
         [Fact]
-        public async Task ValidateAssetLinksAsync_Returns_False_When_Data_Statement_Has_Wrong_Namespace()
+        public async Task ValidateAssetLinksAsync_Throws_When_Data_Statement_Has_Wrong_Namespace()
         {
             // Arrange
             _sutProvider.GetDependency<IApiService>()
@@ -109,14 +110,14 @@ namespace Bit.Core.Test.Services
                 .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementWrongNamespaceJson())));
 
             // Act
-            var isValid = await _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint);
+            var exception = await Assert.ThrowsAsync<Exceptions.ValidationException>(() => _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint));
 
             // Assert
-            Assert.False(isValid);
+            Assert.Equal(AppResources.PasskeyOperationFailedBecauseAppNotFoundInAssetLinks, exception.Message);
         }
 
         [Fact]
-        public async Task ValidateAssetLinksAsync_Returns_False_When_Data_Statement_Has_No_Fingerprints()
+        public async Task ValidateAssetLinksAsync_Throws_When_Data_Statement_Has_No_Fingerprints()
         {
             // Arrange
             _sutProvider.GetDependency<IApiService>()
@@ -124,14 +125,30 @@ namespace Bit.Core.Test.Services
                 .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementNoFingerprintsJson())));
 
             // Act
-            var isValid = await _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint);
+            var exception = await Assert.ThrowsAsync<Exceptions.ValidationException>(() => _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint));
 
             // Assert
-            Assert.False(isValid);
+            Assert.Equal(AppResources.PasskeyOperationFailedBecauseAppCouldNotBeVerified, exception.Message);
         }
 
         [Fact]
-        public async Task ValidateAssetLinksAsync_Returns_False_When_Data_PackageName_Doesnt_Match()
+        public async Task ValidateAssetLinksAsync_Throws_When_Data_PackageName_Doesnt_Match()
+        {
+            // Arrange
+            _sutProvider.GetDependency<IApiService>()
+                .GetDigitalAssetLinksForRpAsync(_validRpId)
+                .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementOneFingerprintJson())));
+
+
+            // Act
+            var exception = await Assert.ThrowsAsync<Exceptions.ValidationException>(() => _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, "com.foo.another", _validFingerprint));
+
+            // Assert
+            Assert.Equal(AppResources.PasskeyOperationFailedBecauseAppNotFoundInAssetLinks, exception.Message);
+        }
+
+        [Fact]
+        public async Task ValidateAssetLinksAsync_Throws_When_Data_Fingerprint_Doesnt_Match()
         {
             // Arrange
             _sutProvider.GetDependency<IApiService>()
@@ -139,25 +156,10 @@ namespace Bit.Core.Test.Services
                 .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementOneFingerprintJson())));
 
             // Act
-            var isValid = await _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, "com.foo.another", _validFingerprint);
+            var exception = await Assert.ThrowsAsync<Exceptions.ValidationException>(() => _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint.Replace("00", "33")));
 
             // Assert
-            Assert.False(isValid);
-        }
-
-        [Fact]
-        public async Task ValidateAssetLinksAsync_Returns_False_When_Data_Fingerprint_Doesnt_Match()
-        {
-            // Arrange
-            _sutProvider.GetDependency<IApiService>()
-                .GetDigitalAssetLinksForRpAsync(_validRpId)
-                .Returns(Task.FromResult(Deserialize(BasicAssetLinksTestData.OneStatementOneFingerprintJson())));
-
-            // Act
-            var isValid = await _sutProvider.Sut.ValidateAssetLinksAsync(_validRpId, _validPackageName, _validFingerprint.Replace("00", "33"));
-
-            // Assert
-            Assert.False(isValid);
+            Assert.Equal(AppResources.PasskeyOperationFailedBecauseAppCouldNotBeVerified, exception.Message);
         }
 
         public void Dispose() {}

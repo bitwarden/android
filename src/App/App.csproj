@@ -266,6 +266,6 @@
 		<BundleResource Include="Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-	  <MauiAsset Include="Resources\Raw\fido2_priviliged_allow_list.json" LogicalName="fido2_priviliged_allow_list.json" />
+	  <MauiAsset Include="Resources\Raw\fido2_privileged_allow_list.json" LogicalName="fido2_privileged_allow_list.json" />
 	</ItemGroup>
 </Project>

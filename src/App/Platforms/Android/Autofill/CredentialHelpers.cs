@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Nodes;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Nodes;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -83,23 +84,27 @@ namespace Bit.App.Platforms.Android.Autofill
 
             if (callingRequest is null)
             {
-                if (ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
-                {
-                    await deviceActionService.DisplayAlertAsync(AppResources.ErrorCreatingPasskey, string.Empty, AppResources.Ok);
-                }
+                await DisplayAlertAsync(AppResources.AnErrorHasOccurred, string.Empty);
                 FailAndFinish();
                 return;
             }
 
             var credentialCreationOptions = GetPublicKeyCredentialCreationOptionsFromJson(callingRequest.RequestJson);
-            var origin = await ValidateCallingAppInfoAndGetOriginAsync(getRequest.CallingAppInfo, credentialCreationOptions.Rp.Id);
+            string origin;
+            try
+            {
+                origin = await ValidateCallingAppInfoAndGetOriginAsync(getRequest.CallingAppInfo, credentialCreationOptions.Rp.Id);
+            }
+            catch (Core.Exceptions.ValidationException valEx)
+            {
+                await DisplayAlertAsync(AppResources.AnErrorHasOccurred, valEx.Message);
+                FailAndFinish();
+                return;
+            }
 
             if (origin is null)
             {
-                if (ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
-                {
-                    await deviceActionService.DisplayAlertAsync(AppResources.ErrorCreatingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
-                }
+                await DisplayAlertAsync(AppResources.ErrorCreatingPasskey, AppResources.PasskeysNotSupportedForThisApp);
                 FailAndFinish();
                 return;
             }
@@ -202,6 +207,14 @@ namespace Bit.App.Platforms.Android.Autofill
             activity.SetResult(Result.Ok, result);
             activity.Finish();
 
+            async Task DisplayAlertAsync(string title, string message)
+            {
+                if (ServiceContainer.TryResolve<IDeviceActionService>(out var deviceActionService))
+                {
+                    await deviceActionService.DisplayAlertAsync(title, message, AppResources.Ok);
+                }
+            }
+
             void FailAndFinish()
             {
                 var result = new Intent();
@@ -244,11 +257,11 @@ namespace Bit.App.Platforms.Android.Autofill
             return extensionsJson;
         }
 
-        public static async Task<string> LoadFido2PriviligedAllowedListAsync()
+        public static async Task<string> LoadFido2PrivilegedAllowedListAsync()
         {
             try
             {
-                using var stream = await FileSystem.OpenAppPackageFileAsync("fido2_priviliged_allow_list.json");
+                using var stream = await FileSystem.OpenAppPackageFileAsync("fido2_privileged_allow_list.json");
                 using var reader = new StreamReader(stream);
 
                 return reader.ReadToEnd();
@@ -266,19 +279,24 @@ namespace Bit.App.Platforms.Android.Autofill
                 return await ValidateAssetLinksAndGetOriginAsync(callingAppInfo, rpId);
             }
 
-            var priviligedAllowedList = await LoadFido2PriviligedAllowedListAsync();
-            if (priviligedAllowedList is null)
+            var privilegedAllowedList = await LoadFido2PrivilegedAllowedListAsync();
+            if (privilegedAllowedList is null)
             {
-                throw new InvalidOperationException("Could not load Fido2 priviliged allowed list");
+                throw new InvalidOperationException("Could not load Fido2 privileged allowed list");
+            }
+
+            if (!privilegedAllowedList.Contains($"\"package_name\": \"{callingAppInfo.PackageName}\""))
+            {
+                throw new Core.Exceptions.ValidationException(AppResources.PasskeyOperationFailedBecauseBrowserIsNotPrivileged);
             }
 
             try
             {
-                return callingAppInfo.GetOrigin(priviligedAllowedList);
+                return callingAppInfo.GetOrigin(privilegedAllowedList);
             }
             catch (Java.Lang.IllegalStateException)
             {
-                return null; // not priviliged
+                throw new Core.Exceptions.ValidationException(AppResources.PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch);
             }
             catch (Java.Lang.IllegalArgumentException)
             {

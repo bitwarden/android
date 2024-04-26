@@ -77,7 +77,18 @@ namespace Bit.Droid.Autofill
 
                 var packageName = getRequest.CallingAppInfo.PackageName;
 
-                var origin = await CredentialHelpers.ValidateCallingAppInfoAndGetOriginAsync(getRequest.CallingAppInfo, RpId);
+                string origin;
+                try
+                {
+                    origin = await CredentialHelpers.ValidateCallingAppInfoAndGetOriginAsync(getRequest.CallingAppInfo, RpId);
+                }
+                catch (Core.Exceptions.ValidationException valEx)
+                {
+                    await _deviceActionService.Value.DisplayAlertAsync(AppResources.AnErrorHasOccurred, valEx.Message, AppResources.Ok);
+                    FailAndFinish();
+                    return;
+                }
+
                 if (origin is null)
                 {
                     await _deviceActionService.Value.DisplayAlertAsync(AppResources.ErrorReadingPasskey, AppResources.PasskeysNotSupportedForThisApp, AppResources.Ok);
