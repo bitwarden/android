@@ -2,7 +2,7 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_generator"
+        android:icon="@mipmap/ic_generator_shortcut"
         android:shortcutId="bitwarden_password_generator"
         android:shortcutLongLabel="@string/password_generator"
         android:shortcutShortLabel="@string/password_generator">
@@ -14,7 +14,7 @@
     </shortcut>
     <shortcut
         android:enabled="true"
-        android:icon="@drawable/ic_vault"
+        android:icon="@mipmap/ic_vault_shortcut"
         android:shortcutId="bitwarden_my_vault"
         android:shortcutLongLabel="@string/my_vault"
         android:shortcutShortLabel="@string/my_vault">
