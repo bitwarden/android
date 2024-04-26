@@ -119,7 +119,7 @@ fun SettingsScreen(
                     }
                 },
             )
-
+            Spacer(Modifier.height(16.dp))
             HelpSettings(
                 onTutorialClick = remember(viewModel) {
                     {
