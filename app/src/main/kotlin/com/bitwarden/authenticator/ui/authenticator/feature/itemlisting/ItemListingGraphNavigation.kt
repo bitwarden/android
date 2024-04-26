@@ -25,6 +25,7 @@ fun NavGraphBuilder.itemListingGraph(
     navigateToManualKeyEntry: () -> Unit,
     navigateToEditItem: (String) -> Unit,
     navigateToExport: () -> Unit,
+    navigateToTutorial: () -> Unit,
 ) {
     navigation(
         route = ITEM_LISTING_GRAPH_ROUTE,
@@ -60,6 +61,7 @@ fun NavGraphBuilder.itemListingGraph(
         settingsGraph(
             navController = navController,
             onNavigateToExport = navigateToExport,
+            onNavigateToTutorial = navigateToTutorial,
         )
     }
 }

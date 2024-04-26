@@ -6,7 +6,6 @@ import androidx.navigation.NavOptions
 import androidx.navigation.navigation
 import com.bitwarden.authenticator.ui.platform.base.util.composableWithRootPushTransitions
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.exportDestination
-import com.bitwarden.authenticator.ui.platform.feature.tutorial.navigateToSettingsTutorial
 import com.bitwarden.authenticator.ui.platform.feature.tutorial.tutorialSettingsDestination
 
 const val SETTINGS_GRAPH_ROUTE = "settings_graph"
@@ -18,6 +17,7 @@ private const val SETTINGS_ROUTE = "settings"
 fun NavGraphBuilder.settingsGraph(
     navController: NavController,
     onNavigateToExport: () -> Unit,
+    onNavigateToTutorial: () -> Unit,
 ) {
     navigation(
         startDestination = SETTINGS_ROUTE,
@@ -27,7 +27,7 @@ fun NavGraphBuilder.settingsGraph(
             route = SETTINGS_ROUTE
         ) {
             SettingsScreen(
-                onNavigateToTutorial = { navController.navigateToSettingsTutorial() },
+                onNavigateToTutorial = onNavigateToTutorial,
                 onNavigateToExport = onNavigateToExport,
             )
         }
