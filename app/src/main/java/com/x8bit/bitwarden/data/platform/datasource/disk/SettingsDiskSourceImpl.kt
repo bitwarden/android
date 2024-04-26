@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -15,25 +14,25 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.time.Instant
 
-private const val APP_LANGUAGE_KEY = "$BASE_KEY:appLocale"
-private const val APP_THEME_KEY = "$BASE_KEY:theme"
-private const val PULL_TO_REFRESH_KEY = "$BASE_KEY:syncOnRefresh"
-private const val INLINE_AUTOFILL_ENABLED_KEY = "$BASE_KEY:inlineAutofillEnabled"
-private const val BLOCKED_AUTOFILL_URIS_KEY = "$BASE_KEY:autofillBlacklistedUris"
-private const val VAULT_LAST_SYNC_TIME = "$BASE_KEY:vaultLastSyncTime"
-private const val VAULT_TIMEOUT_ACTION_KEY = "$BASE_KEY:vaultTimeoutAction"
-private const val VAULT_TIME_IN_MINUTES_KEY = "$BASE_KEY:vaultTimeout"
-private const val DEFAULT_URI_MATCH_TYPE_KEY = "$BASE_KEY:defaultUriMatch"
-private const val DISABLE_AUTO_TOTP_COPY_KEY = "$BASE_KEY:disableAutoTotpCopy"
-private const val DISABLE_AUTOFILL_SAVE_PROMPT_KEY = "$BASE_KEY:autofillDisableSavePrompt"
-private const val DISABLE_ICON_LOADING_KEY = "$BASE_KEY:disableFavicon"
-private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "$BASE_KEY:approvePasswordlessLogins"
-private const val SCREEN_CAPTURE_ALLOW_KEY = "$BASE_KEY:screenCaptureAllowed"
-private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIntegritySource"
-private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
-private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
-private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "$BASE_KEY:clearClipboard"
-private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "$BASE_KEY:addSitePromptShown"
+private const val APP_LANGUAGE_KEY = "appLocale"
+private const val APP_THEME_KEY = "theme"
+private const val PULL_TO_REFRESH_KEY = "syncOnRefresh"
+private const val INLINE_AUTOFILL_ENABLED_KEY = "inlineAutofillEnabled"
+private const val BLOCKED_AUTOFILL_URIS_KEY = "autofillBlacklistedUris"
+private const val VAULT_LAST_SYNC_TIME = "vaultLastSyncTime"
+private const val VAULT_TIMEOUT_ACTION_KEY = "vaultTimeoutAction"
+private const val VAULT_TIME_IN_MINUTES_KEY = "vaultTimeout"
+private const val DEFAULT_URI_MATCH_TYPE_KEY = "defaultUriMatch"
+private const val DISABLE_AUTO_TOTP_COPY_KEY = "disableAutoTotpCopy"
+private const val DISABLE_AUTOFILL_SAVE_PROMPT_KEY = "autofillDisableSavePrompt"
+private const val DISABLE_ICON_LOADING_KEY = "disableFavicon"
+private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "approvePasswordlessLogins"
+private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
+private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "biometricIntegritySource"
+private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricIntegrityValid"
+private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
+private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
+private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -44,8 +43,7 @@ class SettingsDiskSourceImpl(
     private val json: Json,
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     SettingsDiskSource {
-    private val mutableAppThemeFlow =
-        bufferedMutableSharedFlow<AppTheme>(replay = 1)
+    private val mutableAppThemeFlow = bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
     private val mutableLastSyncFlowMap = mutableMapOf<String, MutableSharedFlow<Instant?>>()
 
@@ -58,11 +56,9 @@ class SettingsDiskSourceImpl(
     private val mutablePullToRefreshEnabledFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
-    private val mutableIsIconLoadingDisabledFlow =
-        bufferedMutableSharedFlow<Boolean?>()
+    private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
-    private val mutableIsCrashLoggingEnabledFlow =
-        bufferedMutableSharedFlow<Boolean?>()
+    private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -149,7 +145,7 @@ class SettingsDiskSourceImpl(
         )
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
-        removeWithPrefix(prefix = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_$userId")
+        removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
 
         // The following are intentionally not cleared so they can be
         // restored after logging out and back in:
@@ -161,7 +157,9 @@ class SettingsDiskSourceImpl(
         systemBioIntegrityState: String,
     ): Boolean? =
         getBoolean(
-            key = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_${userId}_$systemBioIntegrityState",
+            key = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY
+                .appendIdentifier(userId)
+                .appendIdentifier(systemBioIntegrityState),
         )
 
     override fun storeAccountBiometricIntegrityValidity(
@@ -170,30 +168,33 @@ class SettingsDiskSourceImpl(
         value: Boolean?,
     ) {
         putBoolean(
-            key = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_${userId}_$systemBioIntegrityState",
+            key = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY
+                .appendIdentifier(userId)
+                .appendIdentifier(systemBioIntegrityState),
             value = value,
         )
     }
 
     override fun getAutoCopyTotpDisabled(userId: String): Boolean? =
-        getBoolean(key = "${DISABLE_AUTO_TOTP_COPY_KEY}_$userId")
+        getBoolean(key = DISABLE_AUTO_TOTP_COPY_KEY.appendIdentifier(userId))
 
     override fun storeAutoCopyTotpDisabled(
         userId: String,
         isAutomaticallyCopyTotpDisabled: Boolean?,
     ) {
         putBoolean(
-            key = "${DISABLE_AUTO_TOTP_COPY_KEY}_$userId",
+            key = DISABLE_AUTO_TOTP_COPY_KEY.appendIdentifier(userId),
             value = isAutomaticallyCopyTotpDisabled,
         )
     }
 
     override fun getLastSyncTime(userId: String): Instant? =
-        getLong(key = "${VAULT_LAST_SYNC_TIME}_$userId")?.let { Instant.ofEpochMilli(it) }
+        getLong(key = VAULT_LAST_SYNC_TIME.appendIdentifier(userId))
+            ?.let { Instant.ofEpochMilli(it) }
 
     override fun storeLastSyncTime(userId: String, lastSyncTime: Instant?) {
         putLong(
-            key = "${VAULT_LAST_SYNC_TIME}_$userId",
+            key = VAULT_LAST_SYNC_TIME.appendIdentifier(userId),
             value = lastSyncTime?.toEpochMilli(),
         )
         getMutableLastSyncFlow(userId = userId).tryEmit(lastSyncTime)
@@ -204,7 +205,7 @@ class SettingsDiskSourceImpl(
             .onSubscription { emit(getLastSyncTime(userId = userId)) }
 
     override fun getVaultTimeoutInMinutes(userId: String): Int? =
-        getInt(key = "${VAULT_TIME_IN_MINUTES_KEY}_$userId")
+        getInt(key = VAULT_TIME_IN_MINUTES_KEY.appendIdentifier(userId))
 
     override fun getVaultTimeoutInMinutesFlow(userId: String): Flow<Int?> =
         getMutableVaultTimeoutInMinutesFlow(userId = userId)
@@ -215,24 +216,24 @@ class SettingsDiskSourceImpl(
         vaultTimeoutInMinutes: Int?,
     ) {
         putInt(
-            key = "${VAULT_TIME_IN_MINUTES_KEY}_$userId",
+            key = VAULT_TIME_IN_MINUTES_KEY.appendIdentifier(userId),
             value = vaultTimeoutInMinutes,
         )
         getMutableVaultTimeoutInMinutesFlow(userId = userId).tryEmit(vaultTimeoutInMinutes)
     }
 
     override fun getClearClipboardFrequencySeconds(userId: String): Int? =
-        getInt(key = "${CLEAR_CLIPBOARD_INTERVAL_KEY}_$userId")
+        getInt(key = CLEAR_CLIPBOARD_INTERVAL_KEY.appendIdentifier(userId))
 
     override fun storeClearClipboardFrequencySeconds(userId: String, frequency: Int?) {
         putInt(
-            key = "${CLEAR_CLIPBOARD_INTERVAL_KEY}_$userId",
+            key = CLEAR_CLIPBOARD_INTERVAL_KEY.appendIdentifier(userId),
             value = frequency,
         )
     }
 
     override fun getVaultTimeoutAction(userId: String): VaultTimeoutAction? =
-        getString(key = "${VAULT_TIMEOUT_ACTION_KEY}_$userId")?.let { storedValue ->
+        getString(key = VAULT_TIMEOUT_ACTION_KEY.appendIdentifier(userId))?.let { storedValue ->
             VaultTimeoutAction.entries.firstOrNull { storedValue == it.value }
         }
 
@@ -245,14 +246,14 @@ class SettingsDiskSourceImpl(
         vaultTimeoutAction: VaultTimeoutAction?,
     ) {
         putString(
-            key = "${VAULT_TIMEOUT_ACTION_KEY}_$userId",
+            key = VAULT_TIMEOUT_ACTION_KEY.appendIdentifier(userId),
             value = vaultTimeoutAction?.value,
         )
         getMutableVaultTimeoutActionFlow(userId = userId).tryEmit(vaultTimeoutAction)
     }
 
     override fun getDefaultUriMatchType(userId: String): UriMatchType? =
-        getInt(key = "${DEFAULT_URI_MATCH_TYPE_KEY}_$userId")?.let { storedValue ->
+        getInt(key = DEFAULT_URI_MATCH_TYPE_KEY.appendIdentifier(userId))?.let { storedValue ->
             UriMatchType.entries.find { it.value == storedValue }
         }
 
@@ -261,51 +262,54 @@ class SettingsDiskSourceImpl(
         uriMatchType: UriMatchType?,
     ) {
         putInt(
-            key = "${DEFAULT_URI_MATCH_TYPE_KEY}_$userId",
+            key = DEFAULT_URI_MATCH_TYPE_KEY.appendIdentifier(userId),
             value = uriMatchType?.value,
         )
     }
 
     override fun getAutofillSavePromptDisabled(userId: String): Boolean? =
-        getBoolean(key = "${DISABLE_AUTOFILL_SAVE_PROMPT_KEY}_$userId")
+        getBoolean(key = DISABLE_AUTOFILL_SAVE_PROMPT_KEY.appendIdentifier(userId))
 
     override fun storeAutofillSavePromptDisabled(
         userId: String,
         isAutofillSavePromptDisabled: Boolean?,
     ) {
         putBoolean(
-            key = "${DISABLE_AUTOFILL_SAVE_PROMPT_KEY}_$userId",
+            key = DISABLE_AUTOFILL_SAVE_PROMPT_KEY.appendIdentifier(userId),
             value = isAutofillSavePromptDisabled,
         )
     }
 
     override fun getPullToRefreshEnabled(userId: String): Boolean? =
-        getBoolean(key = "${PULL_TO_REFRESH_KEY}_$userId")
+        getBoolean(key = PULL_TO_REFRESH_KEY.appendIdentifier(userId))
 
     override fun getPullToRefreshEnabledFlow(userId: String): Flow<Boolean?> =
         getMutablePullToRefreshEnabledFlowMap(userId = userId)
             .onSubscription { emit(getPullToRefreshEnabled(userId = userId)) }
 
     override fun storePullToRefreshEnabled(userId: String, isPullToRefreshEnabled: Boolean?) {
-        putBoolean(key = "${PULL_TO_REFRESH_KEY}_$userId", value = isPullToRefreshEnabled)
+        putBoolean(
+            key = PULL_TO_REFRESH_KEY.appendIdentifier(userId),
+            value = isPullToRefreshEnabled,
+        )
         getMutablePullToRefreshEnabledFlowMap(userId = userId).tryEmit(isPullToRefreshEnabled)
     }
 
     override fun getInlineAutofillEnabled(userId: String): Boolean? =
-        getBoolean(key = "${INLINE_AUTOFILL_ENABLED_KEY}_$userId")
+        getBoolean(key = INLINE_AUTOFILL_ENABLED_KEY.appendIdentifier(userId))
 
     override fun storeInlineAutofillEnabled(
         userId: String,
         isInlineAutofillEnabled: Boolean?,
     ) {
         putBoolean(
-            key = "${INLINE_AUTOFILL_ENABLED_KEY}_$userId",
+            key = INLINE_AUTOFILL_ENABLED_KEY.appendIdentifier(userId),
             value = isInlineAutofillEnabled,
         )
     }
 
     override fun getBlockedAutofillUris(userId: String): List<String>? =
-        getString(key = "${BLOCKED_AUTOFILL_URIS_KEY}_$userId")?.let {
+        getString(key = BLOCKED_AUTOFILL_URIS_KEY.appendIdentifier(userId))?.let {
             json.decodeFromStringOrNull(it)
         }
 
@@ -314,7 +318,7 @@ class SettingsDiskSourceImpl(
         blockedAutofillUris: List<String>?,
     ) {
         putString(
-            key = "${BLOCKED_AUTOFILL_URIS_KEY}_$userId",
+            key = BLOCKED_AUTOFILL_URIS_KEY.appendIdentifier(userId),
             value = blockedAutofillUris?.let { json.encodeToString(it) },
         )
     }
@@ -353,7 +357,7 @@ class SettingsDiskSourceImpl(
         }
 
     override fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean? {
-        return getBoolean(key = "${APPROVE_PASSWORDLESS_LOGINS_KEY}_$userId")
+        return getBoolean(key = APPROVE_PASSWORDLESS_LOGINS_KEY.appendIdentifier(userId))
     }
 
     override fun storeApprovePasswordlessLoginsEnabled(
@@ -361,13 +365,13 @@ class SettingsDiskSourceImpl(
         isApprovePasswordlessLoginsEnabled: Boolean?,
     ) {
         putBoolean(
-            key = "${APPROVE_PASSWORDLESS_LOGINS_KEY}_$userId",
+            key = APPROVE_PASSWORDLESS_LOGINS_KEY.appendIdentifier(userId),
             value = isApprovePasswordlessLoginsEnabled,
         )
     }
 
     override fun getScreenCaptureAllowed(userId: String): Boolean? {
-        return getBoolean(key = "${SCREEN_CAPTURE_ALLOW_KEY}_$userId")
+        return getBoolean(key = SCREEN_CAPTURE_ALLOW_KEY.appendIdentifier(userId))
     }
 
     override fun getScreenCaptureAllowedFlow(userId: String): Flow<Boolean?> =
@@ -379,7 +383,7 @@ class SettingsDiskSourceImpl(
         isScreenCaptureAllowed: Boolean?,
     ) {
         putBoolean(
-            key = "${SCREEN_CAPTURE_ALLOW_KEY}_$userId",
+            key = SCREEN_CAPTURE_ALLOW_KEY.appendIdentifier(userId),
             value = isScreenCaptureAllowed,
         )
         getMutableScreenCaptureAllowedFlow(userId).tryEmit(isScreenCaptureAllowed)

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.onSubscription
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-private const val PRE_AUTH_URLS_KEY = "$BASE_KEY:preAuthEnvironmentUrls"
+private const val PRE_AUTH_URLS_KEY = "preAuthEnvironmentUrls"
 
 /**
  * Primary implementation of [EnvironmentDiskSource].

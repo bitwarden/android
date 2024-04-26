@@ -4,9 +4,7 @@ import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource.Companion.ENCRYPTED_BASE_KEY
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
@@ -18,28 +16,30 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.UUID
 
-private const val ACCOUNT_TOKENS_KEY = "$ENCRYPTED_BASE_KEY:accountTokens"
-private const val BIOMETRICS_UNLOCK_KEY = "$ENCRYPTED_BASE_KEY:userKeyBiometricUnlock"
-private const val USER_AUTO_UNLOCK_KEY_KEY = "$ENCRYPTED_BASE_KEY:userKeyAutoUnlock"
-private const val DEVICE_KEY_KEY = "$ENCRYPTED_BASE_KEY:deviceKey"
-private const val PENDING_ADMIN_AUTH_REQUEST_KEY = "$ENCRYPTED_BASE_KEY:pendingAdminAuthRequest"
+// These keys should be encrypted
+private const val ACCOUNT_TOKENS_KEY = "accountTokens"
+private const val BIOMETRICS_UNLOCK_KEY = "userKeyBiometricUnlock"
+private const val USER_AUTO_UNLOCK_KEY_KEY = "userKeyAutoUnlock"
+private const val DEVICE_KEY_KEY = "deviceKey"
+private const val PENDING_ADMIN_AUTH_REQUEST_KEY = "pendingAdminAuthRequest"
 
-private const val UNIQUE_APP_ID_KEY = "$BASE_KEY:appId"
-private const val REMEMBERED_EMAIL_ADDRESS_KEY = "$BASE_KEY:rememberedEmail"
-private const val REMEMBERED_ORG_IDENTIFIER_KEY = "$BASE_KEY:rememberedOrgIdentifier"
-private const val STATE_KEY = "$BASE_KEY:state"
-private const val LAST_ACTIVE_TIME_KEY = "$BASE_KEY:lastActiveTime"
-private const val INVALID_UNLOCK_ATTEMPTS_KEY = "$BASE_KEY:invalidUnlockAttempts"
-private const val MASTER_KEY_ENCRYPTION_USER_KEY = "$BASE_KEY:masterKeyEncryptedUserKey"
-private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "$BASE_KEY:encPrivateKey"
-private const val PIN_PROTECTED_USER_KEY_KEY = "$BASE_KEY:pinKeyEncryptedUserKey"
-private const val ENCRYPTED_PIN_KEY = "$BASE_KEY:protectedPin"
-private const val ORGANIZATIONS_KEY = "$BASE_KEY:organizations"
-private const val ORGANIZATION_KEYS_KEY = "$BASE_KEY:encOrgKeys"
-private const val TWO_FACTOR_TOKEN_KEY = "$BASE_KEY:twoFactorToken"
-private const val MASTER_PASSWORD_HASH_KEY = "$BASE_KEY:keyHash"
-private const val POLICIES_KEY = "$BASE_KEY:policies"
-private const val SHOULD_TRUST_DEVICE_KEY = "$BASE_KEY:shouldTrustDevice"
+// These keys should not be encrypted
+private const val UNIQUE_APP_ID_KEY = "appId"
+private const val REMEMBERED_EMAIL_ADDRESS_KEY = "rememberedEmail"
+private const val REMEMBERED_ORG_IDENTIFIER_KEY = "rememberedOrgIdentifier"
+private const val STATE_KEY = "state"
+private const val LAST_ACTIVE_TIME_KEY = "lastActiveTime"
+private const val INVALID_UNLOCK_ATTEMPTS_KEY = "invalidUnlockAttempts"
+private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
+private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "encPrivateKey"
+private const val PIN_PROTECTED_USER_KEY_KEY = "pinKeyEncryptedUserKey"
+private const val ENCRYPTED_PIN_KEY = "protectedPin"
+private const val ORGANIZATIONS_KEY = "organizations"
+private const val ORGANIZATION_KEYS_KEY = "encOrgKeys"
+private const val TWO_FACTOR_TOKEN_KEY = "twoFactorToken"
+private const val MASTER_PASSWORD_HASH_KEY = "keyHash"
+private const val POLICIES_KEY = "policies"
+private const val SHOULD_TRUST_DEVICE_KEY = "shouldTrustDevice"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -130,61 +130,63 @@ class AuthDiskSourceImpl(
     }
 
     override fun getShouldTrustDevice(userId: String): Boolean =
-        requireNotNull(getBoolean(key = "${SHOULD_TRUST_DEVICE_KEY}_$userId", default = false))
+        requireNotNull(
+            getBoolean(key = SHOULD_TRUST_DEVICE_KEY.appendIdentifier(userId), default = false),
+        )
 
     override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
-        putBoolean("${SHOULD_TRUST_DEVICE_KEY}_$userId", shouldTrustDevice)
+        putBoolean(SHOULD_TRUST_DEVICE_KEY.appendIdentifier(userId), shouldTrustDevice)
     }
 
     override fun getLastActiveTimeMillis(userId: String): Long? =
-        getLong(key = "${LAST_ACTIVE_TIME_KEY}_$userId")
+        getLong(key = LAST_ACTIVE_TIME_KEY.appendIdentifier(userId))
 
     override fun storeLastActiveTimeMillis(
         userId: String,
         lastActiveTimeMillis: Long?,
     ) {
         putLong(
-            key = "${LAST_ACTIVE_TIME_KEY}_$userId",
+            key = LAST_ACTIVE_TIME_KEY.appendIdentifier(userId),
             value = lastActiveTimeMillis,
         )
     }
 
     override fun getInvalidUnlockAttempts(userId: String): Int? =
-        getInt(key = "${INVALID_UNLOCK_ATTEMPTS_KEY}_$userId")
+        getInt(key = INVALID_UNLOCK_ATTEMPTS_KEY.appendIdentifier(userId))
 
     override fun storeInvalidUnlockAttempts(
         userId: String,
         invalidUnlockAttempts: Int?,
     ) {
         putInt(
-            key = "${INVALID_UNLOCK_ATTEMPTS_KEY}_$userId",
+            key = INVALID_UNLOCK_ATTEMPTS_KEY.appendIdentifier(userId),
             value = invalidUnlockAttempts,
         )
     }
 
     override fun getUserKey(userId: String): String? =
-        getString(key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId")
+        getString(key = MASTER_KEY_ENCRYPTION_USER_KEY.appendIdentifier(userId))
 
     override fun storeUserKey(userId: String, userKey: String?) {
         putString(
-            key = "${MASTER_KEY_ENCRYPTION_USER_KEY}_$userId",
+            key = MASTER_KEY_ENCRYPTION_USER_KEY.appendIdentifier(userId),
             value = userKey,
         )
     }
 
     override fun getPrivateKey(userId: String): String? =
-        getString(key = "${MASTER_KEY_ENCRYPTION_PRIVATE_KEY}_$userId")
+        getString(key = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId))
 
     override fun storePrivateKey(userId: String, privateKey: String?) {
         putString(
-            key = "${MASTER_KEY_ENCRYPTION_PRIVATE_KEY}_$userId",
+            key = MASTER_KEY_ENCRYPTION_PRIVATE_KEY.appendIdentifier(userId),
             value = privateKey,
         )
     }
 
     override fun getUserAutoUnlockKey(userId: String): String? =
         getEncryptedString(
-            key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
+            key = USER_AUTO_UNLOCK_KEY_KEY.appendIdentifier(userId),
             default = null,
         )
 
@@ -193,26 +195,26 @@ class AuthDiskSourceImpl(
         userAutoUnlockKey: String?,
     ) {
         putEncryptedString(
-            key = "${USER_AUTO_UNLOCK_KEY_KEY}_$userId",
+            key = USER_AUTO_UNLOCK_KEY_KEY.appendIdentifier(userId),
             value = userAutoUnlockKey,
         )
     }
 
     override fun getDeviceKey(
         userId: String,
-    ): String? = getEncryptedString(key = "${DEVICE_KEY_KEY}_$userId")
+    ): String? = getEncryptedString(key = DEVICE_KEY_KEY.appendIdentifier(userId))
 
     override fun storeDeviceKey(
         userId: String,
         deviceKey: String?,
     ) {
-        putEncryptedString(key = "${DEVICE_KEY_KEY}_$userId", value = deviceKey)
+        putEncryptedString(key = DEVICE_KEY_KEY.appendIdentifier(userId), value = deviceKey)
     }
 
     override fun getPendingAuthRequest(
         userId: String,
     ): PendingAuthRequestJson? =
-        getEncryptedString(key = "${PENDING_ADMIN_AUTH_REQUEST_KEY}_$userId")
+        getEncryptedString(key = PENDING_ADMIN_AUTH_REQUEST_KEY.appendIdentifier(userId))
             ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storePendingAuthRequest(
@@ -220,27 +222,27 @@ class AuthDiskSourceImpl(
         pendingAuthRequest: PendingAuthRequestJson?,
     ) {
         putEncryptedString(
-            key = "${PENDING_ADMIN_AUTH_REQUEST_KEY}_$userId",
+            key = PENDING_ADMIN_AUTH_REQUEST_KEY.appendIdentifier(userId),
             value = pendingAuthRequest?.let { json.encodeToString(it) },
         )
     }
 
     override fun getUserBiometricUnlockKey(userId: String): String? =
-        getEncryptedString(key = "${BIOMETRICS_UNLOCK_KEY}_$userId")
+        getEncryptedString(key = BIOMETRICS_UNLOCK_KEY.appendIdentifier(userId))
 
     override fun storeUserBiometricUnlockKey(
         userId: String,
         biometricsKey: String?,
     ) {
         putEncryptedString(
-            key = "${BIOMETRICS_UNLOCK_KEY}_$userId",
+            key = BIOMETRICS_UNLOCK_KEY.appendIdentifier(userId),
             value = biometricsKey,
         )
     }
 
     override fun getPinProtectedUserKey(userId: String): String? =
         inMemoryPinProtectedUserKeys[userId]
-            ?: getString(key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId")
+            ?: getString(key = PIN_PROTECTED_USER_KEY_KEY.appendIdentifier(userId))
 
     override fun storePinProtectedUserKey(
         userId: String,
@@ -250,36 +252,36 @@ class AuthDiskSourceImpl(
         inMemoryPinProtectedUserKeys[userId] = pinProtectedUserKey
         if (inMemoryOnly) return
         putString(
-            key = "${PIN_PROTECTED_USER_KEY_KEY}_$userId",
+            key = PIN_PROTECTED_USER_KEY_KEY.appendIdentifier(userId),
             value = pinProtectedUserKey,
         )
     }
 
     override fun getTwoFactorToken(email: String): String? =
-        getString(key = "${TWO_FACTOR_TOKEN_KEY}_$email")
+        getString(key = TWO_FACTOR_TOKEN_KEY.appendIdentifier(email))
 
     override fun storeTwoFactorToken(email: String, twoFactorToken: String?) {
         putString(
-            key = "${TWO_FACTOR_TOKEN_KEY}_$email",
+            key = TWO_FACTOR_TOKEN_KEY.appendIdentifier(email),
             value = twoFactorToken,
         )
     }
 
     override fun getEncryptedPin(userId: String): String? =
-        getString(key = "${ENCRYPTED_PIN_KEY}_$userId")
+        getString(key = ENCRYPTED_PIN_KEY.appendIdentifier(userId))
 
     override fun storeEncryptedPin(
         userId: String,
         encryptedPin: String?,
     ) {
         putString(
-            key = "${ENCRYPTED_PIN_KEY}_$userId",
+            key = ENCRYPTED_PIN_KEY.appendIdentifier(userId),
             value = encryptedPin,
         )
     }
 
     override fun getOrganizationKeys(userId: String): Map<String, String>? =
-        getString(key = "${ORGANIZATION_KEYS_KEY}_$userId")
+        getString(key = ORGANIZATION_KEYS_KEY.appendIdentifier(userId))
             ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storeOrganizationKeys(
@@ -287,7 +289,7 @@ class AuthDiskSourceImpl(
         organizationKeys: Map<String, String>?,
     ) {
         putString(
-            key = "${ORGANIZATION_KEYS_KEY}_$userId",
+            key = ORGANIZATION_KEYS_KEY.appendIdentifier(userId),
             value = organizationKeys?.let { json.encodeToString(it) },
         )
     }
@@ -295,7 +297,7 @@ class AuthDiskSourceImpl(
     override fun getOrganizations(
         userId: String,
     ): List<SyncResponseJson.Profile.Organization>? =
-        getString(key = "${ORGANIZATIONS_KEY}_$userId")
+        getString(key = ORGANIZATIONS_KEY.appendIdentifier(userId))
             ?.let {
                 // The organizations are stored as a map
                 val organizationMap: Map<String, SyncResponseJson.Profile.Organization>? =
@@ -314,7 +316,7 @@ class AuthDiskSourceImpl(
         organizations: List<SyncResponseJson.Profile.Organization>?,
     ) {
         putString(
-            key = "${ORGANIZATIONS_KEY}_$userId",
+            key = ORGANIZATIONS_KEY.appendIdentifier(userId),
             value = organizations?.let { nonNullOrganizations ->
                 // The organizations are stored as a map
                 val organizationsMap = nonNullOrganizations.associateBy { it.id }
@@ -325,14 +327,14 @@ class AuthDiskSourceImpl(
     }
 
     override fun getMasterPasswordHash(userId: String): String? =
-        getString(key = "${MASTER_PASSWORD_HASH_KEY}_$userId")
+        getString(key = MASTER_PASSWORD_HASH_KEY.appendIdentifier(userId))
 
     override fun storeMasterPasswordHash(userId: String, passwordHash: String?) {
-        putString(key = "${MASTER_PASSWORD_HASH_KEY}_$userId", value = passwordHash)
+        putString(key = MASTER_PASSWORD_HASH_KEY.appendIdentifier(userId), value = passwordHash)
     }
 
     override fun getPolicies(userId: String): List<SyncResponseJson.Policy>? =
-        getString(key = "${POLICIES_KEY}_$userId")
+        getString(key = POLICIES_KEY.appendIdentifier(userId))
             ?.let {
                 // The policies are stored as a map.
                 val policiesMap: Map<String, SyncResponseJson.Policy>? =
@@ -348,7 +350,7 @@ class AuthDiskSourceImpl(
 
     override fun storePolicies(userId: String, policies: List<SyncResponseJson.Policy>?) {
         putString(
-            key = "${POLICIES_KEY}_$userId",
+            key = POLICIES_KEY.appendIdentifier(userId),
             value = policies?.let { nonNullPolicies ->
                 // The policies are stored as a map.
                 val policiesMap = nonNullPolicies.associateBy { it.id }
@@ -359,7 +361,7 @@ class AuthDiskSourceImpl(
     }
 
     override fun getAccountTokens(userId: String): AccountTokensJson? =
-        getEncryptedString(key = "${ACCOUNT_TOKENS_KEY}_$userId")
+        getEncryptedString(key = ACCOUNT_TOKENS_KEY.appendIdentifier(userId))
             ?.let { json.decodeFromStringOrNull(it) }
 
     override fun getAccountTokensFlow(userId: String): Flow<AccountTokensJson?> =
@@ -368,7 +370,7 @@ class AuthDiskSourceImpl(
 
     override fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
         putEncryptedString(
-            key = "${ACCOUNT_TOKENS_KEY}_$userId",
+            key = ACCOUNT_TOKENS_KEY.appendIdentifier(userId),
             value = accountTokens?.let { json.encodeToString(it) },
         )
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)

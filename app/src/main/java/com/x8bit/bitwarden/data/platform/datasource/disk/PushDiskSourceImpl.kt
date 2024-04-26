@@ -1,14 +1,13 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseDiskSource.Companion.BASE_KEY
 import com.x8bit.bitwarden.data.platform.util.getBinaryLongFromZoneDateTime
 import com.x8bit.bitwarden.data.platform.util.getZoneDateTimeFromBinaryLong
 import java.time.ZonedDateTime
 
-private const val CURRENT_PUSH_TOKEN_KEY = "${BASE_KEY}:pushCurrentToken"
-private const val LAST_REGISTRATION_DATE_KEY = "${BASE_KEY}:pushLastRegistrationDate"
-private const val REGISTERED_PUSH_TOKEN_KEY = "${BASE_KEY}:pushRegisteredToken"
+private const val CURRENT_PUSH_TOKEN_KEY = "pushCurrentToken"
+private const val LAST_REGISTRATION_DATE_KEY = "pushLastRegistrationDate"
+private const val REGISTERED_PUSH_TOKEN_KEY = "pushRegisteredToken"
 
 /**
  * Primary implementation of [PushDiskSource].
@@ -32,17 +31,17 @@ class PushDiskSourceImpl(
     }
 
     override fun getCurrentPushToken(userId: String): String? {
-        return getString("${CURRENT_PUSH_TOKEN_KEY}_$userId")
+        return getString(CURRENT_PUSH_TOKEN_KEY.appendIdentifier(userId))
     }
 
     override fun getLastPushTokenRegistrationDate(userId: String): ZonedDateTime? {
-        return getLong("${LAST_REGISTRATION_DATE_KEY}_$userId", null)
+        return getLong(LAST_REGISTRATION_DATE_KEY.appendIdentifier(userId), null)
             ?.let { getZoneDateTimeFromBinaryLong(it) }
     }
 
     override fun storeCurrentPushToken(userId: String, pushToken: String?) {
         putString(
-            key = "${CURRENT_PUSH_TOKEN_KEY}_$userId",
+            key = CURRENT_PUSH_TOKEN_KEY.appendIdentifier(userId),
             value = pushToken,
         )
     }
@@ -52,7 +51,7 @@ class PushDiskSourceImpl(
         registrationDate: ZonedDateTime?,
     ) {
         putLong(
-            key = "${LAST_REGISTRATION_DATE_KEY}_$userId",
+            key = LAST_REGISTRATION_DATE_KEY.appendIdentifier(userId),
             value = registrationDate?.let { getBinaryLongFromZoneDateTime(registrationDate) },
         )
     }
