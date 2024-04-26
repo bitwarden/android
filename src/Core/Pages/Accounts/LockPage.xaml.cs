@@ -168,7 +168,7 @@ namespace Bit.App.Pages
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(50);
-                    _vm.SubmitCommand.Execute(null);
+                    MainThread.BeginInvokeOnMainThread(async () => await _vm.SubmitAsync());
                 });
             }
         }
