@@ -26,7 +26,7 @@ class GeneratorDiskSourceImpl(
     }
 
     override fun getPasscodeGenerationOptions(userId: String): PasscodeGenerationOptions? =
-        getString("${BASE_KEY}:${PASSWORD_GENERATION_OPTIONS_KEY}_$userId")
+        getString(PASSWORD_GENERATION_OPTIONS_KEY.appendIdentifier(userId))
             ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storePasscodeGenerationOptions(
@@ -34,13 +34,13 @@ class GeneratorDiskSourceImpl(
         options: PasscodeGenerationOptions?,
     ) {
         putString(
-            "${BASE_KEY}:${PASSWORD_GENERATION_OPTIONS_KEY}_$userId",
+            PASSWORD_GENERATION_OPTIONS_KEY.appendIdentifier(userId),
             options?.let { json.encodeToString(options) },
         )
     }
 
     override fun getUsernameGenerationOptions(userId: String): UsernameGenerationOptions? =
-        getString("${BASE_KEY}:${USERNAME_GENERATION_OPTIONS_KEY}_$userId")
+        getString(USERNAME_GENERATION_OPTIONS_KEY.appendIdentifier(userId))
             ?.let { json.decodeFromStringOrNull(it) }
 
     override fun storeUsernameGenerationOptions(
@@ -48,7 +48,7 @@ class GeneratorDiskSourceImpl(
         options: UsernameGenerationOptions?,
     ) {
         putString(
-            "${BASE_KEY}:${USERNAME_GENERATION_OPTIONS_KEY}_$userId",
+            USERNAME_GENERATION_OPTIONS_KEY.appendIdentifier(userId),
             options?.let { json.encodeToString(it) },
         )
     }

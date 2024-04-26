@@ -18,8 +18,8 @@ abstract class BaseDiskSource(
         key: String,
         default: Boolean? = null,
     ): Boolean? =
-        if (sharedPreferences.contains(key)) {
-            sharedPreferences.getBoolean(key, false)
+        if (sharedPreferences.contains(key.withBase())) {
+            sharedPreferences.getBoolean(key.withBase(), false)
         } else {
             // Make sure we can return a null value as a default if necessary
             default
@@ -35,9 +35,9 @@ abstract class BaseDiskSource(
     ): Unit =
         sharedPreferences.edit {
             if (value != null) {
-                putBoolean(key, value)
+                putBoolean(key.withBase(), value)
             } else {
-                remove(key)
+                remove(key.withBase())
             }
         }
 
@@ -49,8 +49,8 @@ abstract class BaseDiskSource(
         key: String,
         default: Int? = null,
     ): Int? =
-        if (sharedPreferences.contains(key)) {
-            sharedPreferences.getInt(key, 0)
+        if (sharedPreferences.contains(key.withBase())) {
+            sharedPreferences.getInt(key.withBase(), 0)
         } else {
             // Make sure we can return a null value as a default if necessary
             default
@@ -66,9 +66,9 @@ abstract class BaseDiskSource(
     ): Unit =
         sharedPreferences.edit {
             if (value != null) {
-                putInt(key, value)
+                putInt(key.withBase(), value)
             } else {
-                remove(key)
+                remove(key.withBase())
             }
         }
 
@@ -80,8 +80,8 @@ abstract class BaseDiskSource(
         key: String,
         default: Long? = null,
     ): Long? =
-        if (sharedPreferences.contains(key)) {
-            sharedPreferences.getLong(key, 0)
+        if (sharedPreferences.contains(key.withBase())) {
+            sharedPreferences.getLong(key.withBase(), 0)
         } else {
             // Make sure we can return a null value as a default if necessary
             default
@@ -97,31 +97,34 @@ abstract class BaseDiskSource(
     ): Unit =
         sharedPreferences.edit {
             if (value != null) {
-                putLong(key, value)
+                putLong(key.withBase(), value)
             } else {
-                remove(key)
+                remove(key.withBase())
             }
         }
 
     protected fun getString(
         key: String,
         default: String? = null,
-    ): String? = sharedPreferences.getString(key, default)
+    ): String? = sharedPreferences.getString(key.withBase(), default)
 
     protected fun putString(
         key: String,
         value: String?,
-    ): Unit = sharedPreferences.edit { putString(key, value) }
+    ): Unit = sharedPreferences.edit { putString(key.withBase(), value) }
 
     protected fun removeWithPrefix(prefix: String) {
         sharedPreferences
             .all
             .keys
-            .filter { it.startsWith(prefix) }
+            .filter { it.startsWith(prefix.withBase()) }
             .forEach { sharedPreferences.edit { remove(it) } }
     }
 
-    companion object {
-        const val BASE_KEY: String = "bwPreferencesStorage"
-    }
+    protected fun String.appendIdentifier(identifier: String): String = "${this}_$identifier"
 }
+
+/**
+ * Helper method for prepending the key with the appropriate base storage key.
+ */
+private fun String.withBase(): String = "bwPreferencesStorage:$this"

@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.legacy
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
 
 /**
  * Primary implementation of [LegacySecureStorageMigrator].
@@ -21,7 +20,7 @@ class LegacySecureStorageMigratorImpl(
         // which will all start with "bwSecureStorage". Hashing only occurred on devices with
         // SDK <23.
         val plaintextKeys = keys.filter {
-            it.startsWith(BaseEncryptedDiskSource.ENCRYPTED_BASE_KEY)
+            it.startsWith(ENCRYPTED_BASE_KEY)
         }
 
         plaintextKeys.forEach { unhashedKey ->
@@ -31,5 +30,9 @@ class LegacySecureStorageMigratorImpl(
             }
             legacySecureStorage.remove(unhashedKey)
         }
+    }
+
+    companion object {
+        private const val ENCRYPTED_BASE_KEY: String = "bwSecureStorage"
     }
 }
