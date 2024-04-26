@@ -25,15 +25,15 @@ enum class UriMatchType(
     STARTS_WITH(2),
 
     /**
+     * The URIs match if they are exactly the same.
+     */
+    EXACT(3),
+
+    /**
      * The URIs match if the "test" URI matches the known URI according to a specified regular
      * expression for the item.
      */
-    REGULAR_EXPRESSION(3),
-
-    /**
-     * The URIs match if they are exactly the same.
-     */
-    EXACT(4),
+    REGULAR_EXPRESSION(4),
 
     /**
      * The URIs should never match.
