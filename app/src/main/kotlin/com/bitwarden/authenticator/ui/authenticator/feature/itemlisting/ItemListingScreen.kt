@@ -320,10 +320,10 @@ private fun ItemListingContent(
                         onScanQrCodeClick = onScanQrCodeClick,
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(
-                        label = R.string.enter_a_setup_key.asText(),
+                        label = R.string.enter_key_manually.asText(),
                         icon = IconResource(
                             iconPainter = painterResource(id = R.drawable.ic_keyboard_24px),
-                            contentDescription = stringResource(id = R.string.enter_a_setup_key),
+                            contentDescription = stringResource(id = R.string.enter_key_manually),
                             testTag = "EnterSetupKeyButton",
                         ),
                         onEnterSetupKeyClick = onEnterSetupKeyClick
@@ -413,10 +413,10 @@ fun EmptyItemListingContent(
                         onScanQrCodeClick = onScanQuCodeClick
                     ),
                     ItemListingExpandableFabAction.EnterSetupKey(
-                        label = R.string.enter_a_setup_key.asText(),
+                        label = R.string.enter_key_manually.asText(),
                         icon = IconResource(
                             iconPainter = painterResource(id = R.drawable.ic_keyboard_24px),
-                            contentDescription = stringResource(id = R.string.enter_a_setup_key),
+                            contentDescription = stringResource(id = R.string.enter_key_manually),
                             testTag = "EnterSetupKeyButton",
                         ),
                         onEnterSetupKeyClick = onEnterSetupKeyClick,

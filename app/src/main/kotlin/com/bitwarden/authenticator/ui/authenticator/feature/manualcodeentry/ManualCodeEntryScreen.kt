@@ -35,7 +35,11 @@ import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.base.util.toAnnotatedString
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
+import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
+import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
+import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
+import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
@@ -108,11 +112,38 @@ fun ManualCodeEntryScreen(
         )
     }
 
+    when (val dialog = state.dialog) {
+
+        is ManualCodeEntryState.DialogState.Error -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialog.title,
+                    message = dialog.message
+                ),
+                onDismissRequest = remember(state) {
+                    { viewModel.trySendAction(ManualCodeEntryAction.DismissDialog) }
+                }
+            )
+        }
+
+        is ManualCodeEntryState.DialogState.Loading -> {
+            BitwardenLoadingDialog(
+                visibilityState = LoadingDialogState.Shown(
+                    dialog.message
+                )
+            )
+        }
+
+        null -> {
+            Unit
+        }
+    }
+
     BitwardenScaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             BitwardenTopAppBar(
-                title = stringResource(id = R.string.authenticator_key_scanner),
+                title = stringResource(id = R.string.create_verification_code),
                 navigationIcon = painterResource(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
@@ -133,22 +164,22 @@ fun ManualCodeEntryScreen(
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.name),
-            value = state.issuer,
-            onValueChange = remember(viewModel) {
-                {
-                    viewModel.trySendAction(
-                        ManualCodeEntryAction.IssuerTextChange(it),
-                    )
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                value = state.issuer,
+                onValueChange = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            ManualCodeEntryAction.IssuerTextChange(it),
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
             BitwardenTextField(
                 singleLine = false,
-                label = stringResource(id = R.string.authenticator_key_scanner),
+                label = stringResource(id = R.string.key),
                 value = state.code,
                 onValueChange = remember(viewModel) {
                     {
@@ -164,7 +195,7 @@ fun ManualCodeEntryScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenFilledTonalButton(
-                label = stringResource(id = R.string.add_totp),
+                label = stringResource(id = R.string.add_code),
                 onClick = remember(viewModel) {
                     { viewModel.trySendAction(ManualCodeEntryAction.CodeSubmit) }
                 },
@@ -185,7 +216,7 @@ fun ManualCodeEntryScreen(
             )
 
             Text(
-                text = stringResource(id = R.string.cannot_add_authenticator_key),
+                text = stringResource(id = R.string.cannot_add_key),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()

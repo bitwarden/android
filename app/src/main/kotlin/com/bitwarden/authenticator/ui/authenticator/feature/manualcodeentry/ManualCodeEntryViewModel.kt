@@ -43,7 +43,15 @@ class ManualCodeEntryViewModel @Inject constructor(
             is ManualCodeEntryAction.Internal.CreateItemResultReceive -> {
                 handleCreateItemReceive(action)
             }
+
+            ManualCodeEntryAction.DismissDialog -> {
+                handleDialogDismiss()
+            }
         }
+    }
+
+    private fun handleDialogDismiss() {
+        mutableStateFlow.update { it.copy(dialog = null) }
     }
 
     private fun handleIssuerTextChange(action: ManualCodeEntryAction.IssuerTextChange) {
@@ -63,6 +71,27 @@ class ManualCodeEntryViewModel @Inject constructor(
     }
 
     private fun handleCodeSubmit() {
+        if (state.code.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = ManualCodeEntryState.DialogState.Error(
+                        message = R.string.key_is_required.asText()
+                    )
+                )
+            }
+            return
+        }
+
+        if (state.issuer.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = ManualCodeEntryState.DialogState.Error(
+                        message = R.string.name_is_required.asText()
+                    )
+                )
+            }
+            return
+        }
         viewModelScope.launch {
             val result = authenticatorRepository.createItem(
                 AuthenticatorItemEntity(
@@ -216,4 +245,9 @@ sealed class ManualCodeEntryAction {
      * The action for the user clicking the settings button.
      */
     data object SettingsClick : ManualCodeEntryAction()
+
+    /**
+     * The user has dismissed the dialog.
+     */
+    data object DismissDialog : ManualCodeEntryAction()
 }

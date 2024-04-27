@@ -249,7 +249,7 @@ fun EditItemContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(horizontal = 16.dp),
-                    label = stringResource(id = R.string.secret_key),
+                    label = stringResource(id = R.string.key),
                     value = viewState.itemData.totpCode,
                     onValueChange = onTotpCodeTextChange,
                     singleLine = true,
