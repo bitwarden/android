@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           fetch-depth: 0
           # Allow subsequent steps to trigger GitHub Actions via git push
@@ -57,7 +57,7 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@5f19ec79cedfadb78ab837f95b87734d0003c899 # v1.173.0
+        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           fetch-depth: 0
           # Allow subsequent steps to trigger GitHub Actions via git push
@@ -114,7 +114,7 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@5f19ec79cedfadb78ab837f95b87734d0003c899 # v1.173.0
+        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
         with:
           bundler-cache: true
           ruby-version: ${{ env.RUBY_VERSION }}
@@ -183,14 +183,14 @@ jobs:
             > ./authenticator-android-apk-sha256.txt
 
       - name: Upload release APK to GitHub
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.bitwarden.authenticator.apk
           path: app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk
           if-no-files-found: error
 
       - name: Upload checksum file for Release .apk
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: authenticator-android-apk-sha256.txt
           path: ./authenticator-android-apk-sha256.txt

@@ -26,12 +26,12 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           ref: ${{  github.event.pull_request.head.sha }}
 
       - name: Scan with Checkmarx
-        uses: checkmarx/ast-github-action@8a59a15b86b4e2f35b974222d1f516eedfe2d585 # 2.0.24
+        uses: checkmarx/ast-github-action@dd0f9365942f29a99c3be5bdb308958ede8f906b # 2.0.25
         env:
           INCREMENTAL: "${{ contains(github.event_name, 'pull_request') && '--sast-incremental' || '' }}"
         with:
@@ -57,7 +57,7 @@ jobs:
 
     steps:
       - name: Check out repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           fetch-depth: 0
           ref: ${{  github.event.pull_request.head.sha }}
