@@ -41,14 +41,20 @@ class SaveInfoBuilderImpl(
         return if (autofillPartition is AutofillPartition.Login && isInCompatMode) {
             null
         } else {
-            val saveInfoBuilder = SaveInfo
+            SaveInfo
                 .Builder(
                     autofillPartition.saveType,
                     autofillPartition.requiredSaveIds.toTypedArray(),
                 )
-                .setOptionalIds(autofillPartition.optionalSaveIds.toTypedArray())
-            if (isInCompatMode) saveInfoBuilder.setFlags(SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE)
-            saveInfoBuilder.build()
+                .apply {
+                    // setOptionalIds will throw an IllegalArgumentException if the array is empty
+                    autofillPartition
+                        .optionalSaveIds
+                        .takeUnless { it.isEmpty() }
+                        ?.let { setOptionalIds(it.toTypedArray()) }
+                    if (isInCompatMode) setFlags(SaveInfo.FLAG_SAVE_ON_ALL_VIEWS_INVISIBLE)
+                }
+                .build()
         }
     }
 }
