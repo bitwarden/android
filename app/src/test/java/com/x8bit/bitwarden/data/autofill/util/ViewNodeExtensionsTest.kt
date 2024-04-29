@@ -356,7 +356,7 @@ class ViewNodeExtensionsTest {
     }
 
     @Test
-    fun `isUsernameField returns true whe supportedHint is AUTOFILL_HINT_USERNAME`() {
+    fun `isUsernameField returns true when supportedHint is AUTOFILL_HINT_USERNAME`() {
         // Setup
         val supportedHint = View.AUTOFILL_HINT_USERNAME
 
@@ -414,6 +414,21 @@ class ViewNodeExtensionsTest {
             // Verify
             assertTrue(actual)
         }
+    }
+
+    @Test
+    fun `isUsernameField returns true when htmlInfo isUserNameField is true`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+        every { viewNode.htmlInfo.isUsernameField() } returns true
+
+        // Test
+        val actual = viewNode.isUsernameField(
+            supportedHint = null,
+        )
+
+        // Verify
+        assertTrue(actual)
     }
 
     @Test
@@ -496,6 +511,7 @@ class ViewNodeExtensionsTest {
     private fun setupUnsupportedInputFieldViewNode() {
         every { viewNode.hint } returns null
         every { viewNode.htmlInfo.isPasswordField() } returns false
+        every { viewNode.htmlInfo.isUsernameField() } returns false
         every { viewNode.htmlInfo.isInputField } returns true
         every { viewNode.idEntry } returns null
         every { viewNode.autofillHints } returns emptyArray()

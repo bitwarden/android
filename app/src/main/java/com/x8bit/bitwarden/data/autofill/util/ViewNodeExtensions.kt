@@ -183,7 +183,8 @@ fun AssistStructure.ViewNode.isUsernameField(
         supportedHint == View.AUTOFILL_HINT_EMAIL_ADDRESS ||
         inputType.isUsernameInputType ||
         idEntry?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
-        hint?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true
+        hint?.containsAnyTerms(SUPPORTED_RAW_USERNAME_HINTS) == true ||
+        htmlInfo.isUsernameField()
 
 /**
  * The website that this [AssistStructure.ViewNode] is a part of representing.
