@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -51,6 +52,13 @@ class OtherViewModel @Inject constructor(
         settingsRepo
             .vaultLastSyncStateFlow
             .map { OtherAction.Internal.VaultLastSyncReceive(it) }
+            .onEach(::sendAction)
+            .launchIn(viewModelScope)
+
+        settingsRepo
+            .vaultLastSyncStateFlow
+            .drop(1)
+            .map { OtherAction.Internal.ManualVaultSyncReceive }
             .onEach(::sendAction)
             .launchIn(viewModelScope)
     }
@@ -97,6 +105,7 @@ class OtherViewModel @Inject constructor(
     private fun handleInternalAction(action: OtherAction.Internal) {
         when (action) {
             is OtherAction.Internal.VaultLastSyncReceive -> handleVaultDataReceive(action)
+            is OtherAction.Internal.ManualVaultSyncReceive -> handleManualVaultSyncReceive()
         }
     }
 
@@ -110,6 +119,10 @@ class OtherViewModel @Inject constructor(
                 dialogState = null,
             )
         }
+    }
+
+    private fun handleManualVaultSyncReceive() {
+        sendEvent(OtherEvent.ShowToast(R.string.syncing_complete.asText()))
     }
 }
 
@@ -146,6 +159,13 @@ sealed class OtherEvent {
      * Navigate back.
      */
     data object NavigateBack : OtherEvent()
+
+    /**
+     * Show a toast with the given message.
+     */
+    data class ShowToast(
+        val message: Text,
+    ) : OtherEvent()
 }
 
 /**
@@ -193,5 +213,10 @@ sealed class OtherAction {
         data class VaultLastSyncReceive(
             val vaultLastSyncTime: Instant?,
         ) : Internal()
+
+        /**
+         * Indicates a manual vault sync has been received.
+         */
+        data object ManualVaultSyncReceive : Internal()
     }
 }

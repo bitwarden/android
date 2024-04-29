@@ -166,6 +166,19 @@ class OtherViewModelTest : BaseViewModelTest() {
         verify { vaultRepository.sync() }
     }
 
+    @Test
+    fun `ManualVaultSyncReceive should emit ShowToast`() = runTest {
+        val newSyncTime = Instant.parse("2023-10-27T12:00:00Z")
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            mutableVaultLastSyncStateFlow.tryEmit(newSyncTime)
+            assertEquals(
+                OtherEvent.ShowToast(R.string.syncing_complete.asText()),
+                awaitItem(),
+            )
+        }
+    }
+
     private fun createViewModel(
         state: OtherState? = null,
     ) = OtherViewModel(
