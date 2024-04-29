@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.other
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -55,9 +57,19 @@ fun OtherScreen(
     viewModel: OtherViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsState()
+    val context = LocalContext.current
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             OtherEvent.NavigateBack -> onNavigateBack.invoke()
+            is OtherEvent.ShowToast -> {
+                Toast
+                    .makeText(
+                        context,
+                        event.message(context.resources),
+                        Toast.LENGTH_SHORT,
+                    )
+                    .show()
+            }
         }
     }
 
