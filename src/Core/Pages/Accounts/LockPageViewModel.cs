@@ -74,7 +74,10 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
-            SubmitCommand = CreateDefaultAsyncRelayCommand(SubmitAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
+            SubmitCommand = CreateDefaultAsyncRelayCommand(
+                () => MainThread.InvokeOnMainThreadAsync(SubmitAsync),
+                onException: _logger.Exception,
+                allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel =
                 new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
