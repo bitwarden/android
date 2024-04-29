@@ -435,7 +435,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-13
+    runs-on: macos-14
     needs: setup
     env:
       ios_folder_path: src/App/Platforms/iOS
