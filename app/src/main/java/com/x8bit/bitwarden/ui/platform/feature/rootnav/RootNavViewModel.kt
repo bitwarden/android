@@ -62,7 +62,7 @@ class RootNavViewModel @Inject constructor(
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
                 !userState.activeAccount.isVaultUnlocked &&
-                !userState.activeAccount.hasUnlockMechanism -> RootNavState.TrustedDevice
+                !userState.activeAccount.hasManualUnlockMechanism -> RootNavState.TrustedDevice
 
             userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
 
