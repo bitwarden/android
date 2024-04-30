@@ -70,6 +70,14 @@ data class UserState(
          * Indicates that the user does or does not have a master password.
          */
         val hasMasterPassword: Boolean get() = trustedDevice?.hasMasterPassword != false
+
+        /**
+         * Indicates that the user does or does not have a means to unlock the vault.
+         */
+        val hasUnlockMechanism: Boolean
+            get() = hasMasterPassword ||
+                isBiometricsEnabled ||
+                vaultUnlockType == VaultUnlockType.PIN
     }
 
     /**
