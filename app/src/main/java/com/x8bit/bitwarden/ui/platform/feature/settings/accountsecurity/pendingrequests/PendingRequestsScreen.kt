@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -46,6 +45,7 @@ import androidx.lifecycle.Lifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.LivecycleEventEffect
+import com.x8bit.bitwarden.ui.platform.base.util.bottomDivider
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledTonalButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.content.BitwardenErrorContent
@@ -199,7 +199,7 @@ private fun PendingRequestsContent(
         }
 
         LazyColumn(
-            Modifier.padding(bottom = 16.dp),
+            modifier = Modifier.weight(weight = 1f, fill = false),
         ) {
             items(state.requests) { request ->
                 PendingRequestItem(
@@ -209,14 +209,12 @@ private fun PendingRequestsContent(
                     onNavigateToLoginApproval = onNavigateToLoginApproval,
                     modifier = Modifier
                         .testTag("LoginRequestCell")
-                        .fillMaxWidth(),
-                )
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
+                        .fillMaxWidth()
+                        .bottomDivider(),
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
 
         BitwardenFilledTonalButtonWithIcon(
             label = stringResource(id = R.string.decline_all_requests),
