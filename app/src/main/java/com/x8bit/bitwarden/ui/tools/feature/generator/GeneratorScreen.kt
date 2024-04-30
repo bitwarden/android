@@ -80,6 +80,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Pa
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceType
 import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Username.UsernameType.ForwardedEmailAlias.ServiceTypeOption
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -339,7 +340,7 @@ private fun ScrollContent(
             Spacer(modifier = Modifier.height(8.dp))
             MainStateOptionsItem(
                 selectedType = state.selectedType,
-                possibleMainStates = state.typeOptions,
+                possibleMainStates = state.typeOptions.toImmutableList(),
                 onMainStateOptionClicked = onMainStateOptionClicked,
             )
         }
@@ -421,7 +422,7 @@ private fun GeneratedStringItem(
 @Composable
 private fun MainStateOptionsItem(
     selectedType: GeneratorState.MainType,
-    possibleMainStates: List<GeneratorState.MainTypeOption>,
+    possibleMainStates: ImmutableList<GeneratorState.MainTypeOption>,
     onMainStateOptionClicked: (GeneratorState.MainTypeOption) -> Unit,
 ) {
     val optionsWithStrings = possibleMainStates.associateWith { stringResource(id = it.labelRes) }

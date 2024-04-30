@@ -41,6 +41,8 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.feature.settings.folders.model.FolderDisplayItem
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the folders screen.
@@ -106,7 +108,7 @@ fun FoldersScreen(
         when (val viewState = state.value.viewState) {
             is FoldersState.ViewState.Content -> {
                 FoldersContent(
-                    foldersList = viewState.folderList,
+                    foldersList = viewState.folderList.toImmutableList(),
                     onItemClick = remember(viewModel) {
                         { viewModel.trySendAction(FoldersAction.FolderClick(it)) }
                     },
@@ -138,7 +140,7 @@ fun FoldersScreen(
 
 @Composable
 private fun FoldersContent(
-    foldersList: List<FolderDisplayItem>,
+    foldersList: ImmutableList<FolderDisplayItem>,
     onItemClick: (folderId: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {

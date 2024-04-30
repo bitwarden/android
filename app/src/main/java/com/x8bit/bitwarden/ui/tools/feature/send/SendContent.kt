@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.tools.feature.send.handlers.SendHandlers
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Content view for the [SendScreen].
@@ -96,7 +97,7 @@ fun SendContent(
                 startIcon = IconData.Local(it.type.iconRes),
                 label = it.name,
                 supportingLabel = it.deletionDate,
-                trailingLabelIcons = it.iconList,
+                trailingLabelIcons = it.iconList.toImmutableList(),
                 showMoreOptions = !policyDisablesSend,
                 onClick = { sendHandlers.onSendClick(it) },
                 onCopyClick = { sendHandlers.onCopySendClick(it) },

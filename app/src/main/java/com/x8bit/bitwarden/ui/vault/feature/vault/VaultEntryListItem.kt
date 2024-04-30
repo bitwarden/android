@@ -33,7 +33,7 @@ fun VaultEntryListItem(
     startIconTestTag: String,
     label: String,
     onClick: () -> Unit,
-    overflowOptions: List<ListingItemOverflowAction.VaultAction>,
+    overflowOptions: ImmutableList<ListingItemOverflowAction.VaultAction>,
     onOverflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
     modifier: Modifier = Modifier,
     trailingLabelIcons: ImmutableList<IconResource> = persistentListOf(),
@@ -68,7 +68,7 @@ private fun VaultEntryListItem_preview() {
             label = "Example Login",
             supportingLabel = "Username",
             onClick = {},
-            overflowOptions = emptyList(),
+            overflowOptions = persistentListOf(),
             onOverflowOptionClick = {},
             modifier = Modifier,
         )
