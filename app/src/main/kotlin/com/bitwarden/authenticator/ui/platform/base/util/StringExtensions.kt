@@ -9,6 +9,23 @@ import java.text.Normalizer
 import kotlin.math.floor
 
 /**
+ * This character takes up no space but can be used to ensure a string is not empty. It can also
+ * be used to insert "safe" line-break positions in a string.
+ *
+ * Note: Is a string only contains this charactor, it is _not_ considered blank.
+ */
+const val ZERO_WIDTH_CHARACTER: String = "\u200B"
+/**
+ * Returns the original [String] only if:
+ *
+ * - it is non-null
+ * - it is not blank (where blank refers to empty strings of those containing only white space)
+ *
+ * Otherwise `null` is returned.
+ */
+fun String?.orNullIfBlank(): String? = this?.takeUnless { it.isBlank() }
+
+/**
  * Returns a new [String] that includes line breaks after [widthPx] worth of text. This is useful
  * for long values that need to smoothly flow onto the next line without the OS inserting line
  * breaks earlier at special characters.

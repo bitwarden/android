@@ -4,7 +4,6 @@ import android.os.Parcelable
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.AuthenticatorRefreshPeriodOption
-import com.bitwarden.authenticator.ui.authenticator.feature.edititem.VerificationCodeDigitsOption
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -25,5 +24,5 @@ data class EditItemData(
     val username: String?,
     val issuer: String,
     val algorithm: AuthenticatorItemAlgorithm,
-    val digits: VerificationCodeDigitsOption,
+    val digits: Int,
 ) : Parcelable

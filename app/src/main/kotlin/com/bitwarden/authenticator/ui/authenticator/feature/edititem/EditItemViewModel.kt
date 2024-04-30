@@ -11,6 +11,8 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.takeUntilLoaded
+import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MAX_ALLOWED_CODE_DIGITS
+import com.bitwarden.authenticator.ui.authenticator.feature.edititem.EditItemState.Companion.MIN_ALLOWED_CODE_DIGITS
 import com.bitwarden.authenticator.ui.authenticator.feature.edititem.model.EditItemData
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
@@ -114,7 +116,7 @@ class EditItemViewModel @Inject constructor(
                     type = content.itemData.type,
                     algorithm = content.itemData.algorithm,
                     period = content.itemData.refreshPeriod.seconds,
-                    digits = content.itemData.digits.length,
+                    digits = content.itemData.digits,
                     issuer = content.itemData.issuer.trim(),
                 )
             )
@@ -125,7 +127,7 @@ class EditItemViewModel @Inject constructor(
     private fun handleNumberOfDigitsOptionChange(action: EditItemAction.NumberOfDigitsOptionClick) {
         updateItemData { currentItemData ->
             currentItemData.copy(
-                digits = action.digitsOption
+                digits = action.digits
             )
         }
     }
@@ -313,6 +315,8 @@ class EditItemViewModel @Inject constructor(
         isAdvancedOptionsExpanded: Boolean,
     ) = EditItemState.ViewState.Content(
         isAdvancedOptionsExpanded = isAdvancedOptionsExpanded,
+        minDigitsAllowed = MIN_ALLOWED_CODE_DIGITS,
+        maxDigitsAllowed = MAX_ALLOWED_CODE_DIGITS,
         itemData = EditItemData(
             refreshPeriod = AuthenticatorRefreshPeriodOption.fromSeconds(period)
                 ?: AuthenticatorRefreshPeriodOption.THIRTY,
@@ -321,9 +325,8 @@ class EditItemViewModel @Inject constructor(
             username = accountName,
             issuer = issuer,
             algorithm = algorithm,
-            digits = VerificationCodeDigitsOption.fromIntOrNull(digits)
-                ?: VerificationCodeDigitsOption.SIX,
-        )
+            digits = digits,
+        ),
     )
     //endregion Utility Functions
 }
@@ -368,6 +371,8 @@ data class EditItemState(
         @Parcelize
         data class Content(
             val isAdvancedOptionsExpanded: Boolean,
+            val minDigitsAllowed: Int,
+            val maxDigitsAllowed: Int,
             val itemData: EditItemData,
         ) : ViewState()
     }
@@ -393,6 +398,11 @@ data class EditItemState(
         data class Loading(
             val message: Text,
         ) : DialogState()
+    }
+
+    companion object {
+        const val MIN_ALLOWED_CODE_DIGITS = 5
+        const val MAX_ALLOWED_CODE_DIGITS = 10
     }
 }
 
@@ -470,7 +480,7 @@ sealed class EditItemAction {
      * The user has selected the number of verification code digits.
      */
     data class NumberOfDigitsOptionClick(
-        val digitsOption: VerificationCodeDigitsOption,
+        val digits: Int,
     ) : EditItemAction()
 
     data object ExpandAdvancedOptionsClick : EditItemAction()
@@ -508,19 +518,3 @@ enum class AuthenticatorRefreshPeriodOption(val seconds: Int) {
     }
 }
 
-/**
- * Enum class representing valid verification code lengths
- */
-enum class VerificationCodeDigitsOption(val length: Int) {
-    SIX(length = 6),
-    EIGHT(length = 8),
-    TEN(length = 10),
-    TWELVE(length = 12),
-    ;
-
-    companion object {
-        fun fromIntOrNull(intValue: Int): VerificationCodeDigitsOption? {
-            return entries.find { it.length == intValue }
-        }
-    }
-}

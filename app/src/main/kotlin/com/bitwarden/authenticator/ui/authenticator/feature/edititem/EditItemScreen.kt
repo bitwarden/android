@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -61,6 +62,7 @@ import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHe
 import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
+import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
 import com.bitwarden.authenticator.ui.platform.theme.DEFAULT_FADE_TRANSITION_TIME_MS
 import com.bitwarden.authenticator.ui.platform.theme.DEFAULT_STAY_TRANSITION_TIME_MS
 import kotlinx.collections.immutable.toImmutableList
@@ -181,7 +183,7 @@ fun EditItemScreen(
                             )
                         }
                     },
-                    onNumberOfDigitsOptionClicked = remember(viewModel) {
+                    onNumberOfDigitsChanged = remember(viewModel) {
                         {
                             viewModel.trySendAction(
                                 EditItemAction.NumberOfDigitsOptionClick(it)
@@ -217,7 +219,7 @@ fun EditItemContent(
     onTotpCodeTextChange: (String) -> Unit = {},
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit = {},
     onRefreshPeriodOptionClicked: (AuthenticatorRefreshPeriodOption) -> Unit = {},
-    onNumberOfDigitsOptionClicked: (VerificationCodeDigitsOption) -> Unit = {},
+    onNumberOfDigitsChanged: (Int) -> Unit = {},
     onExpandAdvancedOptionsClicked: () -> Unit = {},
 ) {
     Column(modifier = modifier) {
@@ -256,18 +258,18 @@ fun EditItemContent(
                 )
             }
 
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    BitwardenTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        label = stringResource(id = R.string.username),
-                        value = viewState.itemData.username.orEmpty(),
-                        onValueChange = onUsernameTextChange,
-                        singleLine = true,
-                    )
-                }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+                BitwardenTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    label = stringResource(id = R.string.username),
+                    value = viewState.itemData.username.orEmpty(),
+                    onValueChange = onUsernameTextChange,
+                    singleLine = true,
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -281,7 +283,7 @@ fun EditItemContent(
             onAlgorithmOptionClicked = onAlgorithmOptionClicked,
             onTypeOptionClicked = onTypeOptionClicked,
             onRefreshPeriodOptionClicked = onRefreshPeriodOptionClicked,
-            onNumberOfDigitsOptionClicked = onNumberOfDigitsOptionClicked
+            onNumberOfDigitsChanged = onNumberOfDigitsChanged
         )
     }
 }
@@ -294,7 +296,7 @@ private fun AdvancedOptions(
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit,
     onTypeOptionClicked: (AuthenticatorItemType) -> Unit,
     onRefreshPeriodOptionClicked: (AuthenticatorRefreshPeriodOption) -> Unit,
-    onNumberOfDigitsOptionClicked: (VerificationCodeDigitsOption) -> Unit,
+    onNumberOfDigitsChanged: (Int) -> Unit,
 ) {
     Column(modifier = modifier) {
         Row(
@@ -419,26 +421,12 @@ private fun AdvancedOptions(
                 }
 
                 item {
-                    val possibleDigitOptions = VerificationCodeDigitsOption.entries
-                    val digitOptionsWithStrings =
-                        possibleDigitOptions.associateWith { it.length.toString() }
                     Spacer(modifier = Modifier.height(8.dp))
-                    BitwardenMultiSelectButton(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        label = stringResource(id = R.string.number_of_digits),
-                        options = digitOptionsWithStrings.values.toImmutableList(),
-                        selectedOption = viewState.itemData.digits.length.toString(),
-                        onOptionSelected = remember(viewState) {
-                            { selectedOption ->
-                                val selectedOptionName = digitOptionsWithStrings
-                                    .entries
-                                    .first { it.value == selectedOption }
-                                    .key
-
-                                onNumberOfDigitsOptionClicked(selectedOptionName)
-                            }
-                        }
+                    DigitsCounterItem(
+                        digits = viewState.itemData.digits,
+                        onDigitsCounterChange = onNumberOfDigitsChanged,
+                        minValue = viewState.minDigitsAllowed,
+                        maxValue = viewState.maxDigitsAllowed,
                     )
                 }
             }
@@ -472,11 +460,30 @@ private fun EditItemDialogs(
     }
 }
 
+@Composable
+private fun DigitsCounterItem(
+    digits: Int,
+    onDigitsCounterChange: (Int) -> Unit,
+    minValue: Int,
+    maxValue: Int,
+) {
+    BitwardenStepper(
+        label = stringResource(id = R.string.number_of_digits),
+        value = digits.coerceIn(minValue, maxValue),
+        range = minValue..maxValue,
+        onValueChange = onDigitsCounterChange,
+        increaseButtonTestTag = "DigitsIncreaseButton",
+        decreaseButtonTestTag = "DigitsDecreaseButton",
+        modifier = Modifier.testTag("DigitsValueLabel"),
+    )
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun EditItemContentExpandedOptionsPreview() {
     EditItemContent(
         viewState = EditItemState.ViewState.Content(
+            isAdvancedOptionsExpanded = true,
             itemData = EditItemData(
                 refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
                 totpCode = "123456",
@@ -484,9 +491,10 @@ private fun EditItemContentExpandedOptionsPreview() {
                 username = "account name",
                 issuer = "issuer",
                 algorithm = AuthenticatorItemAlgorithm.SHA1,
-                digits = VerificationCodeDigitsOption.SIX
+                digits = 6
             ),
-            isAdvancedOptionsExpanded = true,
+            minDigitsAllowed = 5,
+            maxDigitsAllowed = 10,
         )
     )
 }
@@ -496,6 +504,7 @@ private fun EditItemContentExpandedOptionsPreview() {
 private fun EditItemContentCollapsedOptionsPreview() {
     EditItemContent(
         viewState = EditItemState.ViewState.Content(
+            isAdvancedOptionsExpanded = false,
             itemData = EditItemData(
                 refreshPeriod = AuthenticatorRefreshPeriodOption.THIRTY,
                 totpCode = "123456",
@@ -503,9 +512,10 @@ private fun EditItemContentCollapsedOptionsPreview() {
                 username = "account name",
                 issuer = "issuer",
                 algorithm = AuthenticatorItemAlgorithm.SHA1,
-                digits = VerificationCodeDigitsOption.SIX
+                digits = 6
             ),
-            isAdvancedOptionsExpanded = false,
+            minDigitsAllowed = 5,
+            maxDigitsAllowed = 10,
         )
     )
 }
