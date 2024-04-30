@@ -473,9 +473,8 @@ class AuthRepositoryImpl(
                 requestPrivateKey = requestPrivateKey,
                 method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
             ),
-            // We can separately unlock vault for organization data after
-            // receiving the sync response if this data is currently absent.
-            organizationKeys = null,
+            // We should already have the org keys from the login sync.
+            organizationKeys = authDiskSource.getOrganizationKeys(userId = userId),
         )
 
         authDiskSource.storeUserKey(userId = userId, userKey = asymmetricalKey)

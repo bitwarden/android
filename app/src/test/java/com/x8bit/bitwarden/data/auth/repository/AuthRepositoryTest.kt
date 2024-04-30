@@ -1257,8 +1257,10 @@ class AuthRepositoryTest {
         val requestPrivateKey = "requestPrivateKey"
         val asymmetricalKey = "asymmetricalKey"
         val privateKey = "privateKey"
+        val orgKeys = mapOf("orgId" to "orgKey")
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storePrivateKey(userId = USER_ID_1, privateKey = privateKey)
+        fakeAuthDiskSource.storeOrganizationKeys(userId = USER_ID_1, organizationKeys = orgKeys)
         coEvery {
             vaultRepository.unlockVault(
                 userId = USER_ID_1,
@@ -1269,7 +1271,7 @@ class AuthRepositoryTest {
                     requestPrivateKey = requestPrivateKey,
                     method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
                 ),
-                organizationKeys = null,
+                organizationKeys = orgKeys,
             )
         } returns VaultUnlockResult.Success
         coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -1289,7 +1291,7 @@ class AuthRepositoryTest {
                     requestPrivateKey = requestPrivateKey,
                     method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
                 ),
-                organizationKeys = null,
+                organizationKeys = orgKeys,
             )
             vaultRepository.syncIfNecessary()
         }
