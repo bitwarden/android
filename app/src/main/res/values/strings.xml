@@ -49,7 +49,7 @@
     <string name="saving">Saving</string>
     <string name="item_saved">Item saved</string>
     <string name="information">Information</string>
-    <string name="otp_authentication">OTP Authentication</string>
+    <string name="otp_type">OTP type</string>
     <string name="verification_codes">Verification codes</string>
     <string name="there_are_no_items_that_match_the_search">There are no items that match the search</string>
     <string name="back">Back</string>

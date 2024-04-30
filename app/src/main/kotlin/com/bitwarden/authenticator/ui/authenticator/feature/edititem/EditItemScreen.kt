@@ -352,7 +352,7 @@ private fun AdvancedOptions(
                         modifier = Modifier
                             .fillMaxSize()
                             .semantics { testTag = "ItemTypePicker" },
-                        label = stringResource(id = R.string.otp_authentication),
+                        label = stringResource(id = R.string.otp_type),
                         options = typeOptionsWithStrings.values.toImmutableList(),
                         selectedOption = viewState.itemData.type.name,
                         onOptionSelected = { selectedOption ->
