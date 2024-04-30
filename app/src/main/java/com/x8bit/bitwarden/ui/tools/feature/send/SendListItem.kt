@@ -19,6 +19,8 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -44,7 +46,7 @@ fun SendListItem(
     label: String,
     supportingLabel: String,
     startIcon: IconData,
-    trailingLabelIcons: List<IconRes>,
+    trailingLabelIcons: ImmutableList<IconRes>,
     showMoreOptions: Boolean,
     onClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -123,7 +125,7 @@ private fun SendListItem_preview() {
             label = "Sample Label",
             supportingLabel = "Jan 3, 2024, 10:35 AM",
             startIcon = IconData.Local(R.drawable.ic_send_text),
-            trailingLabelIcons = emptyList(),
+            trailingLabelIcons = persistentListOf(),
             showMoreOptions = true,
             onClick = {},
             onCopyClick = {},

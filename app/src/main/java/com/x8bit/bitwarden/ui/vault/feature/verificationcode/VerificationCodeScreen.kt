@@ -33,7 +33,9 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.verificationcode.handlers.VerificationCodeHandlers
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Displays the verification codes to the user.
@@ -114,7 +116,7 @@ fun VerificationCodeScreen(
         when (val viewState = state.viewState) {
             is VerificationCodeState.ViewState.Content -> {
                 VerificationCodeContent(
-                    items = viewState.verificationCodeDisplayItems,
+                    items = viewState.verificationCodeDisplayItems.toImmutableList(),
                     onCopyClick = verificationCodeHandler.copyClick,
                     itemClick = verificationCodeHandler.itemClick,
                     modifier = modifier,
@@ -151,7 +153,7 @@ private fun VerificationCodeDialogs(
 
 @Composable
 private fun VerificationCodeContent(
-    items: List<VerificationCodeDisplayItem>,
+    items: ImmutableList<VerificationCodeDisplayItem>,
     itemClick: (id: String) -> Unit,
     onCopyClick: (text: String) -> Unit,
     modifier: Modifier = Modifier,

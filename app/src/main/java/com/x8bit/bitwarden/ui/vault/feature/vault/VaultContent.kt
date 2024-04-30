@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.toIconResources
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -88,7 +89,7 @@ fun VaultContent(
                     label = favoriteItem.name(),
                     supportingLabel = favoriteItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(favoriteItem) },
-                    overflowOptions = favoriteItem.overflowOptions,
+                    overflowOptions = favoriteItem.overflowOptions.toImmutableList(),
                     onOverflowOptionClick = { action ->
                         if (favoriteItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
@@ -266,7 +267,7 @@ fun VaultContent(
                     label = noFolderItem.name(),
                     supportingLabel = noFolderItem.supportingLabel?.invoke(),
                     onClick = { vaultHandlers.vaultItemClick(noFolderItem) },
-                    overflowOptions = noFolderItem.overflowOptions,
+                    overflowOptions = noFolderItem.overflowOptions.toImmutableList(),
                     onOverflowOptionClick = { action ->
                         if (noFolderItem.shouldShowMasterPasswordReprompt &&
                             action.requiresPasswordReprompt
