@@ -155,6 +155,41 @@ class RootNavViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `when the active user has an untrusted device with password the nav state should be VaultLocked`() {
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarColorHex",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = false,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = false,
+                            hasMasterPassword = true,
+                            hasAdminApproval = true,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = false,
+                        ),
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(RootNavState.VaultLocked, viewModel.stateFlow.value)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `when the active user has an untrusted device but an unlocked vault the nav state should be Auth`() {
         mutableUserStateFlow.tryEmit(
             UserState(
