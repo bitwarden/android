@@ -40,6 +40,16 @@ interface SettingsDiskSource {
     val hasSeenWelcomeTutorialFlow: Flow<Boolean>
 
     /**
+     * The current setting for if crash logging is enabled.
+     */
+    var isCrashLoggingEnabled: Boolean?
+
+    /**
+     * The current setting for if crash logging is enabled.
+     */
+    val isCrashLoggingEnabledFlow: Flow<Boolean?>
+
+    /**
      * Stores the threshold at which users are alerted that an items validity period is nearing
      * expiration.
      */

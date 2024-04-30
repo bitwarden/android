@@ -107,4 +107,5 @@
     <string name="create_verification_code">Create Verification code</string>
     <string name="key_is_required">Key is required.</string>
     <string name="name_is_required">Name is required.</string>
+    <string name="submit_crash_logs">Submit crash logs</string>
 </resources>

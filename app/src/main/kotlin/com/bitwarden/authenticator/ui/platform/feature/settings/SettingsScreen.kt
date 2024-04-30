@@ -164,13 +164,18 @@ fun SettingsScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
             AboutSettings(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp),
                 state = state,
+                onSubmitCrashLogsCheckedChange = remember(viewModel) {
+                    { viewModel.trySendAction(SettingsAction.AboutClick.SubmitCrashLogsClick(it)) }
+                },
                 onPrivacyPolicyClick = remember(viewModel) {
                     { viewModel.trySendAction(SettingsAction.AboutClick.PrivacyPolicyClick) }
                 },
                 onVersionClick = remember(viewModel) {
                     { viewModel.trySendAction(SettingsAction.AboutClick.VersionClick) }
-                }
+                },
             )
             Box(
                 modifier = Modifier
@@ -452,13 +457,21 @@ private fun HelpSettings(
 //region About settings
 @Composable
 private fun AboutSettings(
+    modifier: Modifier = Modifier,
     state: SettingsState,
+    onSubmitCrashLogsCheckedChange: (Boolean) -> Unit,
     onPrivacyPolicyClick: () -> Unit,
     onVersionClick: () -> Unit,
 ) {
     BitwardenListHeaderText(
-        modifier = Modifier.padding(horizontal = 16.dp),
+        modifier = modifier,
         label = stringResource(id = R.string.about)
+    )
+    BitwardenWideSwitch(
+        modifier = modifier,
+        label = stringResource(id = R.string.submit_crash_logs),
+        isChecked = state.isSubmitCrashLogsEnabled,
+        onCheckedChange = onSubmitCrashLogsCheckedChange,
     )
     BitwardenExternalLinkRow(
         text = stringResource(id = R.string.privacy_policy),

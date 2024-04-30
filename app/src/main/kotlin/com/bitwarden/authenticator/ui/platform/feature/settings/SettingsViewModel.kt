@@ -41,7 +41,8 @@ class SettingsViewModel @Inject constructor(
             clock,
             settingsRepository.appLanguage,
             settingsRepository.appTheme,
-            settingsRepository.isUnlockWithBiometricsEnabled
+            settingsRepository.isUnlockWithBiometricsEnabled,
+            settingsRepository.isCrashLoggingEnabled
         )
 ) {
     override fun handleAction(action: SettingsAction) {
@@ -192,7 +193,16 @@ class SettingsViewModel @Inject constructor(
             SettingsAction.AboutClick.VersionClick -> {
                 handleVersionClick()
             }
+
+            is SettingsAction.AboutClick.SubmitCrashLogsClick -> {
+                handleSubmitCrashLogsClick(action.enabled)
+            }
         }
+    }
+
+    private fun handleSubmitCrashLogsClick(enabled: Boolean) {
+        mutableStateFlow.update { it.copy(isSubmitCrashLogsEnabled = enabled) }
+        settingsRepository.isCrashLoggingEnabled = enabled
     }
 
     private fun handlePrivacyPolicyClick() {
@@ -211,6 +221,7 @@ class SettingsViewModel @Inject constructor(
             appLanguage: AppLanguage,
             appTheme: AppTheme,
             unlockWithBiometricsEnabled: Boolean,
+            isSubmitCrashLogsEnabled: Boolean,
         ): SettingsState {
             val currentYear = Year.now(clock)
             val copyrightInfo = "© Bitwarden Inc. 2015-$currentYear".asText()
@@ -220,11 +231,12 @@ class SettingsViewModel @Inject constructor(
                     theme = appTheme,
                 ),
                 isUnlockWithBiometricsEnabled = unlockWithBiometricsEnabled,
+                isSubmitCrashLogsEnabled = isSubmitCrashLogsEnabled,
+                dialog = null,
                 version = R.string.version
                     .asText()
                     .concat(": ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})".asText()),
-                copyrightInfo = copyrightInfo,
-                dialog = null,
+                copyrightInfo = copyrightInfo
             )
         }
     }
@@ -237,6 +249,7 @@ class SettingsViewModel @Inject constructor(
 data class SettingsState(
     val appearance: Appearance,
     val isUnlockWithBiometricsEnabled: Boolean,
+    val isSubmitCrashLogsEnabled: Boolean,
     val dialog: Dialog?,
     val version: Text,
     val copyrightInfo: Text,
@@ -306,6 +319,9 @@ sealed class SettingsAction(
         ) : Dialog()
     }
 
+    /**
+     * Indicates the user clicked the Unlock with biometrics button.
+     */
     sealed class SecurityClick : SettingsAction() {
         data class UnlockWithBiometricToggle(val enabled: Boolean) : SecurityClick()
     }
@@ -370,6 +386,11 @@ sealed class SettingsAction(
          * Indicates the user clicked version.
          */
         data object VersionClick : AboutClick()
+
+        /**
+         * Indicates the user clicked submit crash logs toggle.
+         */
+        data class SubmitCrashLogsClick(val enabled: Boolean) : AboutClick()
     }
 
     /**

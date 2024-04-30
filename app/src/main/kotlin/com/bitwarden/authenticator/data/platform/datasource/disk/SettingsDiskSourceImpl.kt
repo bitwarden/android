@@ -15,6 +15,7 @@ private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "$BASE_KEY:biometricIn
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiometricIntegrityValid"
 private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
 private const val FIRST_LAUNCH_KEY = "$BASE_KEY:hasSeenWelcomeTutorial"
+private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -31,6 +32,9 @@ class SettingsDiskSourceImpl(
 
     private val mutableAlertThresholdSecondsFlow =
         bufferedMutableSharedFlow<Int>()
+
+    private val mutableIsCrashLoggingEnabledFlow =
+        bufferedMutableSharedFlow<Boolean?>()
 
     override var appLanguage: AppLanguage?
         get() = getString(key = APP_LANGUAGE_KEY)
@@ -80,6 +84,17 @@ class SettingsDiskSourceImpl(
 
     override val hasSeenWelcomeTutorialFlow: Flow<Boolean>
         get() = mutableFirstLaunchFlow.onSubscription { emit(hasSeenWelcomeTutorial) }
+
+    override var isCrashLoggingEnabled: Boolean?
+        get() = getBoolean(key = CRASH_LOGGING_ENABLED_KEY)
+        set(value) {
+            putBoolean(key = CRASH_LOGGING_ENABLED_KEY, value = value)
+            mutableIsCrashLoggingEnabledFlow.tryEmit(value)
+        }
+
+    override val isCrashLoggingEnabledFlow: Flow<Boolean?>
+        get() = mutableIsCrashLoggingEnabledFlow
+            .onSubscription { emit(getBoolean(CRASH_LOGGING_ENABLED_KEY)) }
 
     override fun storeAlertThresholdSeconds(thresholdSeconds: Int) {
         putInt(

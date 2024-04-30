@@ -9,6 +9,7 @@ import com.bitwarden.authenticator.data.platform.repository.model.BiometricsKeyR
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -90,4 +91,20 @@ class SettingsRepositoryImpl(
     override fun clearBiometricsKey() {
         authDiskSource.storeUserBiometricUnlockKey(biometricsKey = null)
     }
+
+    override var isCrashLoggingEnabled: Boolean
+        get() = settingsDiskSource.isCrashLoggingEnabled ?: true
+        set(value) {
+            settingsDiskSource.isCrashLoggingEnabled = value
+        }
+
+    override val isCrashLoggingEnabledFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .isCrashLoggingEnabledFlow
+            .map { it ?: isCrashLoggingEnabled }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = isCrashLoggingEnabled,
+            )
 }
