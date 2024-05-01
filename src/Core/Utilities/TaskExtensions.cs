@@ -37,9 +37,12 @@ namespace Bit.Core.Utilities
             {
                 await task.ConfigureAwait(false);
             }
-            catch (Exception ex) when (shouldLogException(ex))
+            catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                if (shouldLogException(ex))
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                }
             }
         }
     }
