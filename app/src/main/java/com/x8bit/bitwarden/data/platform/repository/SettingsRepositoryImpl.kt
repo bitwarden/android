@@ -245,19 +245,6 @@ class SettingsRepositoryImpl(
             )
         }
 
-    override var isApprovePasswordlessLoginsEnabled: Boolean
-        get() = activeUserId
-            ?.let {
-                settingsDiskSource.getApprovePasswordlessLoginsEnabled(it)
-            }
-            ?: false
-        set(value) {
-            val userId = activeUserId ?: return
-            settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-                userId = userId,
-                isApprovePasswordlessLoginsEnabled = value,
-            )
-        }
     override val isAutofillEnabledStateFlow: StateFlow<Boolean> =
         autofillEnabledManager.isAutofillEnabledStateFlow
 

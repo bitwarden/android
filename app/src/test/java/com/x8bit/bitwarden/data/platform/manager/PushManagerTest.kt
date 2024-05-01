@@ -10,8 +10,6 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
-import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeSettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
@@ -51,8 +49,6 @@ class PushManagerTest {
 
     private val authDiskSource: AuthDiskSource = FakeAuthDiskSource()
 
-    private val settingsDiskSource: SettingsDiskSource = FakeSettingsDiskSource()
-
     private val pushDiskSource: PushDiskSource = PushDiskSourceImpl(FakeSharedPreferences())
 
     private val pushService: PushService = mockk()
@@ -63,7 +59,6 @@ class PushManagerTest {
     fun setUp() {
         pushManager = PushManagerImpl(
             authDiskSource = authDiskSource,
-            settingsDiskSource = settingsDiskSource,
             pushDiskSource = pushDiskSource,
             pushService = pushService,
             dispatcherManager = dispatcherManager,
@@ -91,73 +86,33 @@ class PushManagerTest {
             pushManager.onMessageReceived(INVALID_NOTIFICATION_JSON)
         }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `onMessageReceived auth request emits to nothing when getApprovePasswordlessLoginsEnabled is not true`() =
-            runTest {
-                settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-                    userId = userId,
-                    isApprovePasswordlessLoginsEnabled = false,
+        fun `onMessageReceived auth request emits to passwordlessRequestFlow`() = runTest {
+            pushManager.passwordlessRequestFlow.test {
+                pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_JSON)
+                assertEquals(
+                    PasswordlessRequestData(
+                        loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                    ),
+                    awaitItem(),
                 )
-                pushManager.passwordlessRequestFlow.test {
-                    pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_JSON)
-                    expectNoEvents()
-                }
             }
+        }
 
-        @Suppress("MaxLineLength")
         @Test
-        fun `onMessageReceived auth request emits to passwordlessRequestFlow when getApprovePasswordlessLoginsEnabled is true`() =
-            runTest {
-                settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-                    userId = userId,
-                    isApprovePasswordlessLoginsEnabled = true,
+        fun `onMessageReceived auth request response emits to passwordlessRequestFlow`() = runTest {
+            pushManager.passwordlessRequestFlow.test {
+                pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON)
+                assertEquals(
+                    PasswordlessRequestData(
+                        loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                    ),
+                    awaitItem(),
                 )
-                pushManager.passwordlessRequestFlow.test {
-                    pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_JSON)
-                    assertEquals(
-                        PasswordlessRequestData(
-                            loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
-                        ),
-                        awaitItem(),
-                    )
-                }
             }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `onMessageReceived auth request response emits nothing when getApprovePasswordlessLoginsEnabled is not true`() =
-            runTest {
-                settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-                    userId = userId,
-                    isApprovePasswordlessLoginsEnabled = false,
-                )
-                pushManager.passwordlessRequestFlow.test {
-                    pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON)
-                    expectNoEvents()
-                }
-            }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `onMessageReceived auth request response emits to passwordlessRequestFlow when getApprovePasswordlessLoginsEnabled is true`() =
-            runTest {
-                settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-                    userId = userId,
-                    isApprovePasswordlessLoginsEnabled = true,
-                )
-                pushManager.passwordlessRequestFlow.test {
-                    pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON)
-                    assertEquals(
-                        PasswordlessRequestData(
-                            loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
-                        ),
-                        awaitItem(),
-                    )
-                }
-            }
+        }
 
         @Test
         fun `onMessageReceived logout should emit to logoutFlow`() = runTest {

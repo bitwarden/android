@@ -41,14 +41,13 @@ class AccountSecurityViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
-    private val policyManager: PolicyManager,
+    policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: AccountSecurityState(
             dialog = null,
             fingerprintPhrase = "".asText(), // This will be filled in dynamically
-            isApproveLoginRequestsEnabled = settingsRepository.isApprovePasswordlessLoginsEnabled,
             isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled,
             isUnlockWithPasswordEnabled = authRepository
                 .userStateFlow
@@ -118,11 +117,6 @@ class AccountSecurityViewModel @Inject constructor(
         }
 
         is AccountSecurityAction.UnlockWithPinToggle -> handleUnlockWithPinToggle(action)
-
-        is AccountSecurityAction.ApprovePasswordlessLoginsToggle -> {
-            handleApprovePasswordlessLoginsToggle(action)
-        }
-
         is AccountSecurityAction.PushNotificationConfirm -> handlePushNotificationConfirm()
         is AccountSecurityAction.Internal -> handleInternalAction(action)
     }
@@ -156,26 +150,6 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleLockNowClick() {
         vaultRepository.lockVaultForCurrentUser()
-    }
-
-    private fun handleApprovePasswordlessLoginsToggle(
-        action: AccountSecurityAction.ApprovePasswordlessLoginsToggle,
-    ) {
-        when (action) {
-            AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled -> {
-                settingsRepository.isApprovePasswordlessLoginsEnabled = false
-                mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
-            }
-
-            AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled -> {
-                settingsRepository.isApprovePasswordlessLoginsEnabled = true
-                mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
-            }
-
-            AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled -> {
-                mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
-            }
-        }
     }
 
     private fun handlePushNotificationConfirm() {
@@ -368,7 +342,6 @@ class AccountSecurityViewModel @Inject constructor(
 data class AccountSecurityState(
     val dialog: AccountSecurityDialog?,
     val fingerprintPhrase: Text,
-    val isApproveLoginRequestsEnabled: Boolean,
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPasswordEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
@@ -550,26 +523,6 @@ sealed class AccountSecurityAction {
      * User confirmed the push notification permission prompt.
      */
     data object PushNotificationConfirm : AccountSecurityAction()
-
-    /**
-     * User toggled the approve passwordless logins switch.
-     */
-    sealed class ApprovePasswordlessLoginsToggle : AccountSecurityAction() {
-        /**
-         * The toggle was enabled and confirmed.
-         */
-        data object Enabled : ApprovePasswordlessLoginsToggle()
-
-        /**
-         * The toggle was enabled but not yet confirmed.
-         */
-        data object PendingEnabled : ApprovePasswordlessLoginsToggle()
-
-        /**
-         * The toggle was disabled.
-         */
-        data object Disabled : ApprovePasswordlessLoginsToggle()
-    }
 
     /**
      * User toggled the unlock with pin switch.

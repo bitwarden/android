@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity
 
-import android.Manifest
-import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -58,10 +56,8 @@ import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
-import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
 import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialTypography
 import com.x8bit.bitwarden.ui.platform.util.displayLabel
@@ -84,7 +80,6 @@ fun AccountSecurityScreen(
     viewModel: AccountSecurityViewModel = hiltViewModel(),
     biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
-    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -149,7 +144,7 @@ fun AccountSecurityScreen(
         },
     ) { innerPadding ->
         Column(
-            Modifier
+            modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
@@ -160,31 +155,15 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            ApprovePasswordlessLoginsRow(
-                isApproveLoginRequestsEnabled = state.isApproveLoginRequestsEnabled,
-                onApprovePasswordlessLoginsAction = remember(viewModel) {
-                    { viewModel.trySendAction(it) }
-                },
-                permissionsManager = permissionsManager,
-                onPushNotificationConfirm = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm) }
+            BitwardenTextRow(
+                text = stringResource(id = R.string.pending_log_in_requests),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
                 },
                 modifier = Modifier
-                    .testTag("ApproveLoginRequestsSwitch")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .testTag("PendingLogInRequestsLabel")
+                    .fillMaxWidth(),
             )
-            if (state.isApproveLoginRequestsEnabled) {
-                BitwardenTextRow(
-                    text = stringResource(id = R.string.pending_log_in_requests),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
-                    },
-                    modifier = Modifier
-                        .testTag("PendingLogInRequestsLabel")
-                        .fillMaxWidth(),
-                )
-            }
 
             Spacer(Modifier.height(16.dp))
             BitwardenListHeaderText(
@@ -823,93 +802,4 @@ private fun FingerPrintPhraseDialog(
         },
         containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
     )
-}
-
-@Suppress("LongMethod")
-@Composable
-private fun ApprovePasswordlessLoginsRow(
-    isApproveLoginRequestsEnabled: Boolean,
-    @Suppress("MaxLineLength")
-    onApprovePasswordlessLoginsAction: (AccountSecurityAction.ApprovePasswordlessLoginsToggle) -> Unit,
-    onPushNotificationConfirm: () -> Unit,
-    permissionsManager: PermissionsManager,
-    modifier: Modifier = Modifier,
-) {
-    var shouldShowConfirmationDialog by remember { mutableStateOf(false) }
-    var shouldShowPermissionDialog by remember { mutableStateOf(false) }
-    BitwardenWideSwitch(
-        label = stringResource(
-            id = R.string.use_this_device_to_approve_login_requests_made_from_other_devices,
-        ),
-        isChecked = isApproveLoginRequestsEnabled,
-        onCheckedChange = { isChecked ->
-            if (isChecked) {
-                onApprovePasswordlessLoginsAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
-                )
-                shouldShowConfirmationDialog = true
-            } else {
-                onApprovePasswordlessLoginsAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
-                )
-            }
-        },
-        modifier = modifier,
-    )
-
-    if (shouldShowConfirmationDialog) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.approve_login_requests),
-            message = stringResource(
-                id = R.string.use_this_device_to_approve_login_requests_made_from_other_devices,
-            ),
-            confirmButtonText = stringResource(id = R.string.yes),
-            dismissButtonText = stringResource(id = R.string.no),
-            onConfirmClick = {
-                onApprovePasswordlessLoginsAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
-                )
-                shouldShowConfirmationDialog = false
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    @Suppress("MaxLineLength")
-                    if (!permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
-                        shouldShowPermissionDialog = true
-                    }
-                }
-            },
-            onDismissClick = {
-                onApprovePasswordlessLoginsAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
-                )
-                shouldShowConfirmationDialog = false
-            },
-            onDismissRequest = {
-                onApprovePasswordlessLoginsAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
-                )
-                shouldShowConfirmationDialog = false
-            },
-        )
-    }
-
-    if (shouldShowPermissionDialog) {
-        BitwardenTwoButtonDialog(
-            title = null,
-            message = stringResource(
-                id = R.string.receive_push_notifications_for_new_login_requests,
-            ),
-            confirmButtonText = stringResource(id = R.string.settings),
-            dismissButtonText = stringResource(id = R.string.no_thanks),
-            onConfirmClick = {
-                shouldShowPermissionDialog = false
-                onPushNotificationConfirm()
-            },
-            onDismissClick = {
-                shouldShowPermissionDialog = false
-            },
-            onDismissRequest = {
-                shouldShowPermissionDialog = false
-            },
-        )
-    }
 }

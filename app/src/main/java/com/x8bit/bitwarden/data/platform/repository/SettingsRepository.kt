@@ -119,11 +119,6 @@ interface SettingsRepository {
     var blockedAutofillUris: List<String>
 
     /**
-     * Whether or not approving passwordless logins is enabled for the current user.
-     */
-    var isApprovePasswordlessLoginsEnabled: Boolean
-
-    /**
      * Emits updates whenever there is a change in the app's status for supporting autofill.
      *
      * Note that the correct value is only populated upon subscription so calling [StateFlow.value]

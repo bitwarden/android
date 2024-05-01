@@ -906,31 +906,6 @@ class SettingsRepositoryTest {
     }
 
     @Test
-    fun `isApprovePasswordlessLoginsEnabled should properly update SettingsDiskSource`() {
-        fakeAuthDiskSource.userState = null
-        assertFalse(settingsRepository.isApprovePasswordlessLoginsEnabled)
-
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-
-        // Updates to the disk source change the repository value
-        fakeSettingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-            userId = USER_ID,
-            isApprovePasswordlessLoginsEnabled = true,
-        )
-        assertEquals(
-            true,
-            settingsRepository.isApprovePasswordlessLoginsEnabled,
-        )
-
-        // Updates to the repository value change the disk source
-        settingsRepository.isApprovePasswordlessLoginsEnabled = false
-        assertEquals(
-            false,
-            fakeSettingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = USER_ID),
-        )
-    }
-
-    @Test
     fun `isScreenCaptureAllowed property should update SettingsDiskSource and emit changes`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
