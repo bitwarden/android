@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
+import android.Manifest
+import android.os.Build
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -54,9 +56,11 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalExitManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
+import com.x8bit.bitwarden.ui.platform.composition.LocalPermissionsManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.vault.handlers.VaultHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -80,6 +84,7 @@ fun VaultScreen(
     onDimBottomNavBarRequest: (shouldDim: Boolean) -> Unit,
     exitManager: ExitManager = LocalExitManager.current,
     intentManager: IntentManager = LocalIntentManager.current,
+    permissionsManager: PermissionsManager = LocalPermissionsManager.current,
 ) {
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
@@ -120,12 +125,32 @@ fun VaultScreen(
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
+    VaultScreenPushNotifications(permissionsManager = permissionsManager)
     VaultScreenScaffold(
         state = state,
         pullToRefreshState = pullToRefreshState,
         vaultHandlers = vaultHandlers,
         onDimBottomNavBarRequest = onDimBottomNavBarRequest,
     )
+}
+
+/**
+ * Handles the notifications permission request.
+ */
+@Composable
+private fun VaultScreenPushNotifications(
+    permissionsManager: PermissionsManager,
+) {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+    val launcher = permissionsManager.getLauncher {
+        // We do not actually care what the response is, we just need
+        // to give the user a chance to give us the permission.
+    }
+    LaunchedEffect(key1 = Unit) {
+        if (!permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+    }
 }
 
 /**

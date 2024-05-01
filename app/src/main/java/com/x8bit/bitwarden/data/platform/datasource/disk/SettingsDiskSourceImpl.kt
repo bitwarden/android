@@ -26,7 +26,6 @@ private const val DEFAULT_URI_MATCH_TYPE_KEY = "defaultUriMatch"
 private const val DISABLE_AUTO_TOTP_COPY_KEY = "disableAutoTotpCopy"
 private const val DISABLE_AUTOFILL_SAVE_PROMPT_KEY = "autofillDisableSavePrompt"
 private const val DISABLE_ICON_LOADING_KEY = "disableFavicon"
-private const val APPROVE_PASSWORDLESS_LOGINS_KEY = "approvePasswordlessLogins"
 private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
 private const val SYSTEM_BIOMETRIC_INTEGRITY_SOURCE_KEY = "biometricIntegritySource"
 private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricIntegrityValid"
@@ -139,10 +138,6 @@ class SettingsDiskSourceImpl(
         storePullToRefreshEnabled(userId = userId, isPullToRefreshEnabled = null)
         storeInlineAutofillEnabled(userId = userId, isInlineAutofillEnabled = null)
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
-        storeApprovePasswordlessLoginsEnabled(
-            userId = userId,
-            isApprovePasswordlessLoginsEnabled = null,
-        )
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
@@ -355,20 +350,6 @@ class SettingsDiskSourceImpl(
         mutableScreenCaptureAllowedFlowMap.getOrPut(userId) {
             bufferedMutableSharedFlow(replay = 1)
         }
-
-    override fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean? {
-        return getBoolean(key = APPROVE_PASSWORDLESS_LOGINS_KEY.appendIdentifier(userId))
-    }
-
-    override fun storeApprovePasswordlessLoginsEnabled(
-        userId: String,
-        isApprovePasswordlessLoginsEnabled: Boolean?,
-    ) {
-        putBoolean(
-            key = APPROVE_PASSWORDLESS_LOGINS_KEY.appendIdentifier(userId),
-            value = isApprovePasswordlessLoginsEnabled,
-        )
-    }
 
     override fun getScreenCaptureAllowed(userId: String): Boolean? {
         return getBoolean(key = SCREEN_CAPTURE_ALLOW_KEY.appendIdentifier(userId))

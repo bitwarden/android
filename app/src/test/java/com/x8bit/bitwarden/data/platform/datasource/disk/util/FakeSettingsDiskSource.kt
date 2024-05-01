@@ -53,7 +53,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private var storedIsIconLoadingDisabled: Boolean? = null
     private var storedIsCrashLoggingEnabled: Boolean? = null
     private var storedInitialAutofillDialogShown: Boolean? = null
-    private val storedApprovePasswordLoginsEnabled = mutableMapOf<String, Boolean?>()
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
@@ -245,16 +244,6 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         blockedAutofillUris: List<String>?,
     ) {
         storedBlockedAutofillUris[userId] = blockedAutofillUris
-    }
-
-    override fun getApprovePasswordlessLoginsEnabled(userId: String): Boolean? =
-        storedApprovePasswordLoginsEnabled[userId]
-
-    override fun storeApprovePasswordlessLoginsEnabled(
-        userId: String,
-        isApprovePasswordlessLoginsEnabled: Boolean?,
-    ) {
-        storedApprovePasswordLoginsEnabled[userId] = isApprovePasswordlessLoginsEnabled
     }
 
     override fun getScreenCaptureAllowed(userId: String): Boolean? =

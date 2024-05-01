@@ -25,7 +25,6 @@ import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
 import io.mockk.every
 import io.mockk.just
@@ -51,7 +50,6 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         every { startActivity(any()) } just runs
         every { startApplicationDetailsSettingsActivity() } just runs
     }
-    private val permissionsManager = FakePermissionManager()
     private val captureBiometricsSuccess = slot<() -> Unit>()
     private val captureBiometricsCancel = slot<() -> Unit>()
     private val captureBiometricsLockOut = slot<() -> Unit>()
@@ -84,7 +82,6 @@ class AccountSecurityScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 biometricsManager = biometricsManager,
                 intentManager = intentManager,
-                permissionsManager = permissionsManager,
             )
         }
     }
@@ -93,211 +90,6 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     fun `on Log out click should send LogoutClick`() {
         composeTestRule.onNodeWithText("Log out").performScrollTo().performClick()
         verify { viewModel.trySendAction(AccountSecurityAction.LogoutClick) }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on approve login requests toggle on should send PendingEnabled action and display dialog`() {
-        composeTestRule.assertNoDialogExists()
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Approve login requests")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText(
-                "Use this device to approve login requests made from other devices",
-            )
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("No")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        verify {
-            viewModel.trySendAction(
-                AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
-            )
-        }
-    }
-
-    @Test
-    fun `on approve login requests toggle off should send Disabled action and hide requests row`() {
-        composeTestRule
-            .onNodeWithText("Pending login requests")
-            .assertDoesNotExist()
-
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-        composeTestRule
-            .onNodeWithText("Pending login requests")
-            .performScrollTo()
-            .assertIsDisplayed()
-
-        verify {
-            viewModel.trySendAction(
-                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on approve login requests confirm Yes should send Enabled action and hide dialog when permission already granted`() {
-        permissionsManager.checkPermissionResult = true
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-
-        verify {
-            viewModel.trySendAction(
-                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on approve login requests confirm Yes should send Enabled action and show permission dialog when permission not granted`() {
-        permissionsManager.checkPermissionResult = false
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Receive push notifications for new login requests")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("No thanks")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Settings")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        verify {
-            viewModel.trySendAction(
-                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
-            )
-        }
-    }
-
-    @Test
-    fun `on approve login requests confirm No should send Disabled action and hide dialog`() {
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("No")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-
-        verify {
-            viewModel.trySendAction(
-                AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
-            )
-        }
-    }
-
-    @Test
-    fun `on approve login requests should be toggled on or off according to state`() {
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .assertIsOff()
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .assertIsOn()
-    }
-
-    @Test
-    fun `on push permission dialog No thanks should hide dialog`() {
-        permissionsManager.checkPermissionResult = false
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("No thanks")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-    }
-
-    @Test
-    fun `on push permission dialog Settings should hide dialog and send confirm action`() {
-        permissionsManager.checkPermissionResult = false
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = false) }
-
-        composeTestRule
-            .onNodeWithText("Use this device to approve login requests made from other devices")
-            .performScrollTo()
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Yes")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule
-            .onAllNodesWithText("Settings")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        composeTestRule.assertNoDialogExists()
-
-        verify {
-            viewModel.trySendAction(AccountSecurityAction.PushNotificationConfirm)
-        }
     }
 
     @Test
@@ -309,7 +101,6 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
     @Test
     fun `on pending login requests click should send PendingLoginRequestsClick`() {
-        mutableStateFlow.update { it.copy(isApproveLoginRequestsEnabled = true) }
         composeTestRule
             .onNodeWithText("Pending login requests")
             .performScrollTo()
@@ -1566,19 +1357,16 @@ class AccountSecurityScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText(rowText).assertDoesNotExist()
     }
-
-    companion object {
-        private val DEFAULT_STATE = AccountSecurityState(
-            dialog = null,
-            fingerprintPhrase = "fingerprint-placeholder".asText(),
-            isApproveLoginRequestsEnabled = false,
-            isUnlockWithBiometricsEnabled = false,
-            isUnlockWithPasswordEnabled = true,
-            isUnlockWithPinEnabled = false,
-            vaultTimeout = VaultTimeout.ThirtyMinutes,
-            vaultTimeoutAction = VaultTimeoutAction.LOCK,
-            vaultTimeoutPolicyMinutes = null,
-            vaultTimeoutPolicyAction = null,
-        )
-    }
 }
+
+private val DEFAULT_STATE = AccountSecurityState(
+    dialog = null,
+    fingerprintPhrase = "fingerprint-placeholder".asText(),
+    isUnlockWithBiometricsEnabled = false,
+    isUnlockWithPasswordEnabled = true,
+    isUnlockWithPinEnabled = false,
+    vaultTimeout = VaultTimeout.ThirtyMinutes,
+    vaultTimeoutAction = VaultTimeoutAction.LOCK,
+    vaultTimeoutPolicyMinutes = null,
+    vaultTimeoutPolicyAction = null,
+)

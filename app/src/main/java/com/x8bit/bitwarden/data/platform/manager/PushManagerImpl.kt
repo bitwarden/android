@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.PushTokenRequest
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -36,10 +35,8 @@ import javax.inject.Inject
 /**
  * Primary implementation of [PushManager].
  */
-@Suppress("LongParameterList")
 class PushManagerImpl @Inject constructor(
     private val authDiskSource: AuthDiskSource,
-    private val settingsDiskSource: SettingsDiskSource,
     private val pushDiskSource: PushDiskSource,
     private val pushService: PushService,
     private val clock: Clock,
@@ -125,16 +122,14 @@ class PushManagerImpl @Inject constructor(
             NotificationType.AUTH_REQUEST,
             NotificationType.AUTH_REQUEST_RESPONSE,
             -> {
-                if (settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId) == true) {
-                    val payload: NotificationPayload.PasswordlessRequestNotification =
-                        json.decodeFromString(string = notification.payload)
-                    mutablePasswordlessRequestSharedFlow.tryEmit(
-                        PasswordlessRequestData(
-                            loginRequestId = payload.id,
-                            userId = payload.userId,
-                        ),
-                    )
-                }
+                val payload: NotificationPayload.PasswordlessRequestNotification =
+                    json.decodeFromString(string = notification.payload)
+                mutablePasswordlessRequestSharedFlow.tryEmit(
+                    PasswordlessRequestData(
+                        loginRequestId = payload.id,
+                        userId = payload.userId,
+                    ),
+                )
             }
 
             NotificationType.LOG_OUT -> {

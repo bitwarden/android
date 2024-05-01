@@ -35,8 +35,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class AccountSecurityViewModelTest : BaseViewModelTest() {
@@ -49,7 +47,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     private val vaultRepository: VaultRepository = mockk(relaxed = true)
     private val settingsRepository: SettingsRepository = mockk {
         every { isUnlockWithBiometricsEnabled } returns false
-        every { isApprovePasswordlessLoginsEnabled } returns false
         every { isUnlockWithPinEnabled } returns false
         every { vaultTimeout } returns VaultTimeout.ThirtyMinutes
         every { vaultTimeoutAction } returns VaultTimeoutAction.LOCK
@@ -530,54 +527,6 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         assertEquals(DEFAULT_STATE.copy(dialog = null), viewModel.stateFlow.value)
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ApprovePasswordlessLoginsToggle enabled should update settings and set isApprovePasswordlessLoginsEnabled to true`() =
-        runTest {
-            every { settingsRepository.isApprovePasswordlessLoginsEnabled = true } just runs
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Enabled,
-                )
-                expectNoEvents()
-                verify(exactly = 1) { settingsRepository.isApprovePasswordlessLoginsEnabled = true }
-            }
-            assertTrue(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ApprovePasswordlessLoginsToggle pending enabled should set isApprovePasswordlessLoginsEnabled to true`() =
-        runTest {
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.PendingEnabled,
-                )
-                expectNoEvents()
-            }
-            assertTrue(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on ApprovePasswordlessLoginsToggle disabled should update settings and set isApprovePasswordlessLoginsEnabled to false`() =
-        runTest {
-            every { settingsRepository.isApprovePasswordlessLoginsEnabled = false } just runs
-            val viewModel = createViewModel()
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(
-                    AccountSecurityAction.ApprovePasswordlessLoginsToggle.Disabled,
-                )
-                expectNoEvents()
-                verify(exactly = 1) {
-                    settingsRepository.isApprovePasswordlessLoginsEnabled = false
-                }
-            }
-            assertFalse(viewModel.stateFlow.value.isApproveLoginRequestsEnabled)
-        }
-
     @Test
     fun `on PushNotificationConfirm should send NavigateToApplicationDataSettings event`() =
         runTest {
@@ -616,7 +565,6 @@ private const val FINGERPRINT: String = "fingerprint"
 private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
     dialog = null,
     fingerprintPhrase = FINGERPRINT.asText(),
-    isApproveLoginRequestsEnabled = false,
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,

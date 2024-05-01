@@ -127,10 +127,6 @@ class SettingsDiskSourceTest {
             userId = userId,
             blockedAutofillUris = listOf("www.example.com"),
         )
-        settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-            userId = userId,
-            isApprovePasswordlessLoginsEnabled = true,
-        )
         settingsDiskSource.storeLastSyncTime(
             userId = userId,
             lastSyncTime = Instant.parse("2023-10-27T12:00:00Z"),
@@ -161,7 +157,6 @@ class SettingsDiskSourceTest {
         assertNull(settingsDiskSource.getPullToRefreshEnabled(userId = userId))
         assertNull(settingsDiskSource.getInlineAutofillEnabled(userId = userId))
         assertNull(settingsDiskSource.getBlockedAutofillUris(userId = userId))
-        assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = userId))
         assertNull(settingsDiskSource.getLastSyncTime(userId = userId))
         assertNull(settingsDiskSource.getClearClipboardFrequencySeconds(userId = userId))
         assertNull(
@@ -819,67 +814,6 @@ class SettingsDiskSourceTest {
             ),
             json.parseToJsonElement(requireNotNull(actual)),
         )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `getApprovePasswordlessLoginsEnabled when values are present should pull from SharedPreferences`() {
-        val approvePasswordlessLoginsBaseKey = "bwPreferencesStorage:approvePasswordlessLogins"
-        val mockUserId = "mockUserId"
-        val isEnabled = true
-        fakeSharedPreferences
-            .edit {
-                putBoolean(
-                    "${approvePasswordlessLoginsBaseKey}_$mockUserId",
-                    isEnabled,
-                )
-            }
-        val actual = settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = mockUserId)
-        assertEquals(
-            isEnabled,
-            actual,
-        )
-    }
-
-    @Test
-    fun `getApprovePasswordlessLoginsEnabled when values are absent should return null`() {
-        val mockUserId = "mockUserId"
-        assertNull(settingsDiskSource.getApprovePasswordlessLoginsEnabled(userId = mockUserId))
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `storeApprovePasswordlessLoginsEnabled for non-null values should update SharedPreferences`() {
-        val approvePasswordlessLoginsBaseKey = "bwPreferencesStorage:approvePasswordlessLogins"
-        val mockUserId = "mockUserId"
-        val isEnabled = true
-        settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-            userId = mockUserId,
-            isApprovePasswordlessLoginsEnabled = isEnabled,
-        )
-        val actual = fakeSharedPreferences.getBoolean(
-            "${approvePasswordlessLoginsBaseKey}_$mockUserId",
-            false,
-        )
-        assertEquals(
-            isEnabled,
-            actual,
-        )
-    }
-
-    @Test
-    fun `storeApprovePasswordlessLoginsEnabled for null values should clear SharedPreferences`() {
-        val approvePasswordlessLoginsBaseKey = "bwPreferencesStorage:approvePasswordlessLogins"
-        val mockUserId = "mockUserId"
-        val approvePasswordlessLoginsKey = "${approvePasswordlessLoginsBaseKey}_$mockUserId"
-        fakeSharedPreferences.edit {
-            putBoolean(approvePasswordlessLoginsKey, true)
-        }
-        settingsDiskSource.storeApprovePasswordlessLoginsEnabled(
-            userId = mockUserId,
-            isApprovePasswordlessLoginsEnabled = null,
-        )
-        assertFalse(fakeSharedPreferences.contains(approvePasswordlessLoginsKey))
     }
 
     @Test
