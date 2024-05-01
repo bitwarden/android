@@ -13,7 +13,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
-  RUBY_VERSION: 3.2.2
+  RUBY_VERSION: 3.3.1
 
 jobs:
   check:
