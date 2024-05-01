@@ -101,4 +101,9 @@ interface CiphersService {
         cipherId: String,
         attachmentId: String,
     ): Result<SyncResponseJson.Cipher.Attachment>
+
+    /**
+     * Returns a boolean indicating if the active user has unassigned ciphers.
+     */
+    suspend fun hasUnassignedCiphers(): Result<Boolean>
 }

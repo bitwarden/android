@@ -159,4 +159,7 @@ class CiphersServiceImpl(
             cipherId = cipherId,
             attachmentId = attachmentId,
         )
+
+    override suspend fun hasUnassignedCiphers(): Result<Boolean> =
+        ciphersApi.hasUnassignedCiphers()
 }
