@@ -54,6 +54,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -283,18 +284,22 @@ private fun CameraPreview(
                 ProcessCameraProvider.getInstance(context).also { future ->
                     future.addListener(
                         { continuation.resume(future.get()) },
-                        Executors.newSingleThreadExecutor(),
+                        ContextCompat.getMainExecutor(context),
                     )
                 }
             }
 
             cameraProvider?.unbindAll()
-            cameraProvider?.bindToLifecycle(
-                lifecycleOwner,
-                CameraSelector.DEFAULT_BACK_CAMERA,
-                preview,
-                imageAnalyzer,
-            )
+            if (cameraProvider?.hasCamera(CameraSelector.DEFAULT_BACK_CAMERA) == true) {
+                cameraProvider?.bindToLifecycle(
+                    lifecycleOwner,
+                    CameraSelector.DEFAULT_BACK_CAMERA,
+                    preview,
+                    imageAnalyzer,
+                )
+            } else {
+                cameraErrorReceive()
+            }
         } catch (e: Exception) {
             cameraErrorReceive()
         }
