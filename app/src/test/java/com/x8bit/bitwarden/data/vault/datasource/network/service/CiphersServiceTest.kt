@@ -22,6 +22,7 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.create
@@ -258,6 +259,13 @@ class CiphersServiceTest : BaseServiceTest() {
             createMockAttachment(number = 1),
             result.getOrThrow(),
         )
+    }
+
+    @Test
+    fun `hasUnassignedCiphers should return the correct response`() = runTest {
+        server.enqueue(MockResponse().setBody("true"))
+        val result = ciphersService.hasUnassignedCiphers()
+        assertTrue(result.getOrThrow())
     }
 }
 

@@ -130,4 +130,10 @@ interface CiphersApi {
         @Path("cipherId") cipherId: String,
         @Path("attachmentId") attachmentId: String,
     ): Result<SyncResponseJson.Cipher.Attachment>
+
+    /**
+     * Indicates if the active user has unassigned ciphers.
+     */
+    @GET("ciphers/has-unassigned-ciphers")
+    suspend fun hasUnassignedCiphers(): Result<Boolean>
 }
