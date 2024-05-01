@@ -7,7 +7,7 @@
 
 Bitwarden Authenticator allows you easily store and generate two-factor authentication codes on your device. The Bitwarden Authenticator Android application is written in Kotlin.
 
-<img src="https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/authenticator-android-codes.png" alt="" width="300" height="650" />
+<img src="https://raw.githubusercontent.com/bitwarden/brand/master/screenshots/authenticator-android-codes.png" alt="" width="325" height="650" />
 
 ## Compatibility
 
