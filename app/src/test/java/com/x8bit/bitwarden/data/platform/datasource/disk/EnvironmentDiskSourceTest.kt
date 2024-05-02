@@ -69,7 +69,7 @@ private const val ENVIRONMENT_URL_DATA_JSON = """
       "base": "base",
       "api": "api",
       "identity": "identity",
-      "icon": "icon",
+      "icons": "icon",
       "notifications": "notifications",
       "webVault": "webVault",
       "events": "events"
