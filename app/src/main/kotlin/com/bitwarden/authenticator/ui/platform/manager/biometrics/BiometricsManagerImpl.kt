@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.platform.manager.biometrics
 
 import android.app.Activity
+import android.os.Build
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators
 import androidx.biometric.BiometricPrompt
@@ -18,8 +19,20 @@ class BiometricsManagerImpl(
 
     private val fragmentActivity: FragmentActivity get() = activity as FragmentActivity
 
+    private val allowedAuthenticators: Int
+        get() {
+            // [Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_STRONG] is not a valid
+            // combination prior to SDK version 30 so we use
+            // [Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK] instead.
+            return if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_WEAK
+            } else {
+                Authenticators.DEVICE_CREDENTIAL or Authenticators.BIOMETRIC_STRONG
+            }
+        }
+
     override val isBiometricsSupported: Boolean
-        get() = when (biometricManager.canAuthenticate(Authenticators.BIOMETRIC_STRONG)) {
+        get() = when (biometricManager.canAuthenticate(allowedAuthenticators)) {
             BiometricManager.BIOMETRIC_SUCCESS -> true
             BiometricManager.BIOMETRIC_STATUS_UNKNOWN,
             BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED,
@@ -78,9 +91,7 @@ class BiometricsManagerImpl(
         val promptInfo = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(R.string.bitwarden_authenticator))
             .setDescription(activity.getString(R.string.biometrics_direction))
-            .setAllowedAuthenticators(
-                Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL
-            )
+            .setAllowedAuthenticators(allowedAuthenticators)
             .build()
 
         biometricPrompt.authenticate(promptInfo)
