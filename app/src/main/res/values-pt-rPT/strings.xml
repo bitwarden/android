@@ -86,6 +86,7 @@
   <string name="app_extension">Extensão da aplicação</string>
   <string name="autofill_accessibility_description">Utilize o serviço de acessibilidade Bitwarden para preencher automaticamente as suas credenciais entre as aplicações e a web.</string>
   <string name="autofill_service">Serviço de preenchimento automático</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Defina o Bitwarden como o seu fornecedor de chaves de acesso nas definições do dispositivo.</string>
   <string name="avoid_ambiguous_characters">Evitar caracteres ambíguos</string>
   <string name="bitwarden_app_extension">Extensão da aplicação Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da extensão da aplicação Bitwarden. Saiba mais sobre a utilização da extensão da aplicação Bitwarden ao navegar até ao ecrã \"Definições\".</string>
@@ -333,6 +334,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="use_face_id_to_unlock">Utilizar o Face ID para desbloquear</string>
   <string name="verify_face_id">Verificar Face ID</string>
   <string name="windows_hello">Windows Hello</string>
+  <string name="bitwarden_credential_provider_go_to_settings">Não foi possível abrir automaticamente o menu de definições do fornecedor de credenciais do Android. Pode navegar manualmente para o menu de definições do fornecedor de credenciais a partir de Definições do Android &gt; Sistema &gt; Palavras-passe e contas &gt; Palavras-passe, chaves de acesso e serviços de dados.</string>
   <string name="bitwarden_autofill_go_to_settings">Não foi possível abrir automaticamente o menu de definições de preenchimento automático do Android. Pode navegar manualmente para o menu de definições de preenchimento automático a partir das Definições do Android &gt; Sistema &gt; Idiomas e introdução &gt; Avançado &gt; Serviço de preenchimento automático.</string>
   <string name="custom_field_name">Nome do campo personalizado</string>
   <string name="field_type_boolean">Booleano</string>
@@ -528,6 +530,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="terms_of_service">Termos de utilização</string>
   <string name="privacy_policy">Política de privacidade</string>
   <string name="accessibility_draw_over_permission_alert">O Bitwarden precisa de atenção - Ative a definição \"Aparecer sobre outras\" em \"Serviços de preenchimento automático\" nas definições do Bitwarden</string>
+  <string name="passkey_management">Gestão de chaves de acesso</string>
   <string name="autofill_services">Serviços de preenchimento automático</string>
   <string name="inline_autofill">Utilizar o preenchimento automático em linha</string>
   <string name="inline_autofill_description">Utilize o preenchimento automático em linha se o IME (teclado) selecionado o suportar. Se a sua configuração não for suportada (ou se esta opção estiver desativada), será utilizada a sobreposição de preenchimento automático predefinida.</string>
@@ -845,6 +848,7 @@ Deseja mudar para esta conta?</string>
   <string name="x_hours_and_one_minute">%1$s horas e um minuto</string>
   <string name="x_hours_and_y_minutes">%1$s horas e %2$s minutos</string>
   <string name="x_hours">%1$s horas</string>
+  <string name="passkey_management_explanation_long">Utilize o Bitwarden para guardar novas chaves de acesso e iniciar sessão com chaves de acesso armazenadas no seu cofre.</string>
   <string name="autofill_services_explanation_long">A estrutura de preenchimento automático do Android é utilizada para ajudar a preencher as informações de início de sessão noutras aplicações do seu dispositivo.</string>
   <string name="use_inline_autofill_explanation_long">Utilize o preenchimento automático em linha se o teclado selecionado o suportar. Caso contrário, utilize a sobreposição predefinida.</string>
   <string name="additional_options">Opções adicionais</string>
@@ -854,6 +858,7 @@ Deseja mudar para esta conta?</string>
   <string name="continue_to_contact_support">Continuar a contactar o apoio ao cliente?</string>
   <string name="continue_to_privacy_policy">Continuar para a política de privacidade?</string>
   <string name="continue_to_app_store">Continuar para a loja de aplicações?</string>
+  <string name="continue_to_device_settings">Continuar para as Definições do dispositivo?</string>
   <string name="two_step_login_description_long">Torne a sua conta mais segura configurando a verificação de dois passos na aplicação Web Bitwarden.</string>
   <string name="change_master_password_description_long">Pode alterar a sua palavra-passe mestra na aplicação Web Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Pode importar dados para o seu cofre em %1$s.</string>
@@ -870,11 +875,36 @@ Deseja mudar para esta conta?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">As permissões da sua organização foram atualizadas, exigindo a definição de uma palavra-passe mestra.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">A sua organização exige a definição de uma palavra-passe mestra.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</string>
+  <string name="choose_a_login_to_save_this_passkey_to">Escolha uma credencial para guardar esta chave de acesso</string>
+  <string name="save_passkey_as_new_login">Guardar a chave de acesso como uma nova credencial</string>
+  <string name="save_passkey">Guardar a chave de acesso</string>
+  <string name="passkeys_for_x">Chave de acesso para %1$s</string>
+  <string name="passwords_for_x">Palavra-passe para %1$s</string>
+  <string name="overwrite_passkey">Substituir chave de acesso?</string>
+  <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Este item já contém uma chave de acesso. Tem a certeza de que pretende substituir a chave de acesso atual?</string>
   <string name="duo_two_step_login_is_required_for_your_account">A verificação de dois passos Duo é necessária para a sua conta.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Siga os passos do Duo para concluir o início de sessão.</string>
   <string name="launch_duo">Iniciar o Duo</string>
+  <string name="verification_required_by_x">Verificação necessária por %1$s</string>
+  <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">É necessária uma verificação para esta ação. Configure um método de desbloqueio no Bitwarden para continuar.</string>
+  <string name="error_creating_passkey">Erro ao criar chave de acesso</string>
+  <string name="error_reading_passkey">Erro ao ler chave de acesso</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Houve um problema ao criar uma chave de acesso para %1$s. Tente novamente mais tarde.</string>
+  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Houve um problema ao ler a sua chave de acesso para %1$s. Tente novamente mais tarde.</string>
+  <string name="verifying_identity_ellipsis">A verificar identidade...</string>
+  <string name="passwords">Palavras-passe</string>
+  <string name="unknown_account">Conta desconhecida</string>
+  <string name="set_up_autofill">Configurar o preenchimento automático</string>
+  <string name="get_instant_access_to_your_passwords_and_passkeys">Obtenha acesso instantâneo às suas palavras-passe e chaves de acesso!</string>
+  <string name="set_up_auto_fill_description_long">Para configurar o preenchimento automático de palavras-passe e a gestão de chaves-passe, defina o Bitwarden como o seu fornecedor preferido nas Definições do iOS.</string>
+  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Aceda às Definições do seu dispositivo &gt; Palavras-passe &gt; Opções de palavra-passe</string>
+  <string name="second_dot_turn_on_auto_fill">2. Ative o preenchimento automático</string>
+  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Selecione \"Bitwarden\" para usar as palavras-passe e chaves-passe</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">A sua chave de acesso será guardada no seu cofre Bitwarden</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">A sua chave de acesso para %1$s será guardada no seu cofre Bitwarden</string>
   <string name="organization_unassigned_items_message_useu_description_long">Os itens da organização não atribuídos já não são visíveis na vista Todos os cofres e só são acessíveis através da consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">A 16 de maio de 2024, os itens da organização não atribuídos deixarão de estar visíveis na vista Todos os cofres e só estarão acessíveis através da Consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</string>
   <string name="remind_me_later">Lembrar-me mais tarde</string>
   <string name="notice">Aviso</string>
+  <string name="passkeys_not_supported_for_this_app">Chaves de acesso não suportadas por esta app</string>
 </resources>

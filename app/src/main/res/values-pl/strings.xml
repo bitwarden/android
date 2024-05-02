@@ -86,6 +86,7 @@
   <string name="app_extension">Rozszerzenie aplikacji</string>
   <string name="autofill_accessibility_description">Użyj usługi ułatwienia dostępu Bitwarden, aby korzystać z autouzupełniania danych logowania w aplikacjach i na stronach internetowych.</string>
   <string name="autofill_service">Usługa autouzupełniania</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Ustaw Bitwarden jako dostawcę passkey w ustawieniach urządzenia.</string>
   <string name="avoid_ambiguous_characters">Unikaj niejednoznacznych znaków</string>
   <string name="bitwarden_app_extension">Rozszerzenie aplikacji Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">Najprostszym sposobem dodania nowych danych logowania do sejfu jest Rozszerzenie Aplikacji Bitwarden. Więcej informacji o używaniu Rozszerzenia Aplikacji Bitwarden znajdziesz w widoku \"Ustawienia\".</string>
@@ -333,6 +334,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="use_face_id_to_unlock">Odblokuj za pomocą Touch ID</string>
   <string name="verify_face_id">Zweryfikuj Face ID</string>
   <string name="windows_hello">Funkcja Windows Hello</string>
+  <string name="bitwarden_credential_provider_go_to_settings">Nie byliśmy w stanie automatycznie otworzyć dla Ciebie menu ustawień dostawcy poświadczeń Androida. Możesz przejść do menu ręcznie w Ustawieniach Android &gt; System &gt; Hasła i konta &gt; Hasła, passkey i usług transmisji danych.</string>
   <string name="bitwarden_autofill_go_to_settings">Nie można utworzyć ustawień usługi autouzupełniania Android. Możesz przejść do tego menu ręcznie, poprzez Ustawienia &gt; System &gt; Język i wprowadzanie &gt; Zaawansowane &gt; Usługa autouzupełniania.</string>
   <string name="custom_field_name">Nazwa pola niestandardowego</string>
   <string name="field_type_boolean">Wartość logiczna</string>
@@ -528,6 +530,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="terms_of_service">Regulamin</string>
   <string name="privacy_policy">Polityka prywatności</string>
   <string name="accessibility_draw_over_permission_alert">Aplikacja Bitwarden wymaga uwagi - włącz \"Wyświetlanie nad innymi aplikacjami\" w ustawieniach aplikacji Bitwarden</string>
+  <string name="passkey_management">Zarządzanie passkey</string>
   <string name="autofill_services">Usługi autouzupełniania</string>
   <string name="inline_autofill">Użyj usługi autouzupełniania</string>
   <string name="inline_autofill_description">Użyj usługi autouzupełniania, jeśli metoda wprowadzania (klawiatura) obsługuję tę funkcję. Jeśli konfiguracja nie jest obsługiwana (lub jest wyłączona), zostanie użyta domyślna usługa autouzupełniania wyświetlana nad innymi aplikacjami.</string>
@@ -846,6 +849,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="x_hours_and_one_minute">%1$s godzin i minuta</string>
   <string name="x_hours_and_y_minutes">%1$s godzin(y) i %2$s minut(y)</string>
   <string name="x_hours">%1$s godzin(y)</string>
+  <string name="passkey_management_explanation_long">Użyj Bitwarden, aby zapisać nowe passkey i zalogować się za pomocą passkeys przechowywanych w Twoim sejfie.</string>
   <string name="autofill_services_explanation_long">Android Autofill Framework jest używany do uzupełniania danych logowania w innych aplikacjach na twoim urządzeniu.</string>
   <string name="use_inline_autofill_explanation_long">Użyj bezpośredniego autouzupełniania, jeśli wybrana klawiatura je obsługuje. W przeciwnym razie użyj domyślnej nakładki.</string>
   <string name="additional_options">Dodatkowe opcje</string>
@@ -855,6 +859,7 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="continue_to_contact_support">Kontynuować kontakt z pomocą techniczną?</string>
   <string name="continue_to_privacy_policy">Kontynuować do polityki prywatności?</string>
   <string name="continue_to_app_store">Kontynuować do sklepu aplikacji?</string>
+  <string name="continue_to_device_settings">Kontynuować do ustawień urządzenia?</string>
   <string name="two_step_login_description_long">Spraw, aby Twoje konto było bezpieczniejsze poprzez skonfigurowanie dwustopniowego logowania w aplikacji internetowej Bitwarden.</string>
   <string name="change_master_password_description_long">Możesz zmienić swoje hasło główne w aplikacji internetowej Bitwarden.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Możesz zaimportować dane do swojego sejfu na %1$s.</string>
@@ -871,11 +876,36 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Uprawnienia w Twojej organizacji zostały zaktualizowane, musisz teraz ustawić hasło główne.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Twoja organizacja wymaga ustawienia hasła głównego.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Ustaw opcje odblokowania, aby zmienić czas blokowania sejfu.</string>
+  <string name="choose_a_login_to_save_this_passkey_to">Wybierz dane logowania do których przypisać passkey</string>
+  <string name="save_passkey_as_new_login">Zapisz passkey jako nowe dane logowania</string>
+  <string name="save_passkey">Zapisz passkey</string>
+  <string name="passkeys_for_x">Passkeys dla %1$s</string>
+  <string name="passwords_for_x">Hasła dla %1$s</string>
+  <string name="overwrite_passkey">Zastąpić passkey?</string>
+  <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Ten element zawiera już passkey. Czy na pewno chcesz nadpisać bieżący passkey?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Dwustopniowe logowanie Duo jest wymagane dla Twojego konta.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Wykonaj kroki od Duo, aby zakończyć logowanie.</string>
   <string name="launch_duo">Uruchom Duo</string>
+  <string name="verification_required_by_x">Weryfikacja wymagana przez %1$s</string>
+  <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">Weryfikacja wymagana dla tej akcji. Ustaw metodę odblokowania w Bitwarden, aby kontynuować.</string>
+  <string name="error_creating_passkey">Błąd podczas tworzenia passkey</string>
+  <string name="error_reading_passkey">Błąd podczas odczytu passkey</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Wystąpił problem podczas tworzenia passkey dla %1$s. Spróbuj ponownie później.</string>
+  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Wystąpił problem podczas odczytu passkey dla %1$s. Spróbuj ponownie później.</string>
+  <string name="verifying_identity_ellipsis">Weryfikowanie tożsamości...</string>
+  <string name="passwords">Hasła</string>
+  <string name="unknown_account">Nieznane konto</string>
+  <string name="set_up_autofill">Ustaw autouzupełnianie</string>
+  <string name="get_instant_access_to_your_passwords_and_passkeys">Uzyskaj natychmiastowy dostęp do haseł i passkeys!</string>
+  <string name="set_up_auto_fill_description_long">Aby skonfigurować automatyczne uzupełnianie haseł i zarządzanie hasłami, ustaw Bitwarden jako preferowanego dostawcę w ustawieniach iOS.</string>
+  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Przejdź do ustawień urządzenia &gt; Hasła &gt; Opcje hasła</string>
+  <string name="second_dot_turn_on_auto_fill">2. Włącz autouzupełnianie</string>
+  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Wybierz \"Bitwarden\" dla haseł i passkeys</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Twój passkey zostanie zapisane w Twoim sejfie Bitwarden</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Twój passkey zostanie zapisane w Twoim sejfie Bitwarden dla %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Nieprzypisane elementy w organizacji nie są już widoczne w widoku Wszystkie sejfy i są dostępne tylko przez Konsolę Administracyjną. Przypisz te elementy do kolekcji z konsoli administracyjnej, aby były one widoczne.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">16 maja 2024 r. nieprzypisane elementy w organizacji nie będą już widoczne w widoku Wszystkie sejfy i będą dostępne tylko przez Konsolę Administracyjną. Przypisz te elementy do kolekcji z konsoli administracyjnej, aby były one widoczne.</string>
   <string name="remind_me_later">Przypomnij mi później</string>
   <string name="notice">Zawiadomienie</string>
+  <string name="passkeys_not_supported_for_this_app">Passkeys nie są obsługiwany dla tej aplikacji</string>
 </resources>

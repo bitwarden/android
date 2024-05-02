@@ -86,6 +86,7 @@
   <string name="app_extension">Uygulama uzantısı</string>
   <string name="autofill_accessibility_description">Uygulamalarda ve web\'de giriş bilgilerinizi otomatik doldurmak için Bitwarden erişilebilirlik hizmetini kullanabilirsiniz.</string>
   <string name="autofill_service">Otomatik doldurma hizmeti</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
   <string name="avoid_ambiguous_characters">Okurken karışabilecek karakterleri kullanma</string>
   <string name="bitwarden_app_extension">Bitwarden uygulama uzantısı</string>
   <string name="bitwarden_app_extension_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden uygulama uzantısıdır. Bitwarden uygulama uzantısı hakkında daha fazla bilgi almak için \"Ayarlar\" ekranına bakabilirsiniz.</string>
@@ -333,6 +334,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="use_face_id_to_unlock">Kilidi Face ID ile aç</string>
   <string name="verify_face_id">Face ID\'yi doğrula</string>
   <string name="windows_hello">Windows Hello</string>
+  <string name="bitwarden_credential_provider_go_to_settings">We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</string>
   <string name="bitwarden_autofill_go_to_settings">Android otomatik doldurma ayarları menüsünü otomatik olarak açamadık. Lütfen şu yolu izleyerek otomatik doldurma ayarları menüsüne gidin: Android ayarları &gt; Sistem&gt; Dil ve giriş &gt; Gelişmiş &gt; Otomatik doldurma hizmeti.</string>
   <string name="custom_field_name">Özel alan adı</string>
   <string name="field_type_boolean">Boole</string>
@@ -528,6 +530,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="terms_of_service">Hizmet Koşulları</string>
   <string name="privacy_policy">Gizlilik Politikası</string>
   <string name="accessibility_draw_over_permission_alert">Bitwarden\'la ilgilenmeniz gerekiyor: Bitwarden ayarlarında \"Otomatik doldurma hizmetleri\"nden \"Üstünde gösterme\"yi açın</string>
+  <string name="passkey_management">Passkey management</string>
   <string name="autofill_services">Otomatik doldurma hizmetleri</string>
   <string name="inline_autofill">Satır içi otomatik doldurmayı kullan</string>
   <string name="inline_autofill_description">Seçtiğiniz IME (klavye) destekliyorsa satır içi otomatik doldurmayı kullanabilirsiniz. Yapılandırmanız desteklenmiyorsa (veya bu seçenek kapalıysa) varsayılan otomatik doldurma kutusu kullanılacaktır.</string>
@@ -845,6 +848,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="x_hours_and_one_minute">%1$s saat 1 dakika</string>
   <string name="x_hours_and_y_minutes">%1$s saat %2$s dakika</string>
   <string name="x_hours">%1$s saat</string>
+  <string name="passkey_management_explanation_long">Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</string>
   <string name="autofill_services_explanation_long">Cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi kullanılır.</string>
   <string name="use_inline_autofill_explanation_long">Seçtiğiniz klavye destekliyorsa satır içi otomatik doldurma kullanılır. Aksi halde varsayılan üstünde gösterme kullanılır.</string>
   <string name="additional_options">Ek seçenekler</string>
@@ -854,6 +858,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="continue_to_contact_support">Destek ekibiyle iletişim kurmak ister misiniz?</string>
   <string name="continue_to_privacy_policy">Gizlilik ilkelerine gidilsin mi?</string>
   <string name="continue_to_app_store">App Store\'a gitmek ister misiniz?</string>
+  <string name="continue_to_device_settings">Continue to device Settings?</string>
   <string name="two_step_login_description_long">Bitwarden web uygulamasında iki aşamalı girişi ayarlayarak hesabınızın güvenliğini artırabilirsiniz.</string>
   <string name="change_master_password_description_long">Ana parolanızı Bitwarden web uygulamasında değiştirebilirsiniz.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Verilerinizi %1$s adresinden kasanıza aktarabilirsiniz.</string>
@@ -870,11 +875,36 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Kuruluş izinleriniz güncellendi ve bir ana parola belirlemeniz gerekiyor.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Kuruluşunuz bir ana parola belirlemenizi gerektiriyor.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</string>
+  <string name="choose_a_login_to_save_this_passkey_to">Choose a login to save this passkey to</string>
+  <string name="save_passkey_as_new_login">Save passkey as new login</string>
+  <string name="save_passkey">Save passkey</string>
+  <string name="passkeys_for_x">Passkeys for %1$s</string>
+  <string name="passwords_for_x">Passwords for %1$s</string>
+  <string name="overwrite_passkey">Overwrite passkey?</string>
+  <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">This item already contains a passkey. Are you sure you want to overwrite the current passkey?</string>
   <string name="duo_two_step_login_is_required_for_your_account">Hesabınız için Duo\'ya iki adımlı giriş yapmanız gerekiyor.</string>
   <string name="follow_the_steps_from_duo_to_finish_logging_in">Oturum açmayı tamamlamak için Duo\'daki adımları izleyin.</string>
   <string name="launch_duo">Duo\'yu başlat</string>
+  <string name="verification_required_by_x">Verification required by %1$s</string>
+  <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">Verification required for this action. Set up an unlock method in Bitwarden to continue.</string>
+  <string name="error_creating_passkey">Error creating passkey</string>
+  <string name="error_reading_passkey">Error reading passkey</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">There was a problem creating a passkey for %1$s. Try again later.</string>
+  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">There was a problem reading your passkey for %1$s. Try again later.</string>
+  <string name="verifying_identity_ellipsis">Verifying identity...</string>
+  <string name="passwords">Passwords</string>
+  <string name="unknown_account">Unknown account</string>
+  <string name="set_up_autofill">Set up auto-fill</string>
+  <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
+  <string name="set_up_auto_fill_description_long">To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
+  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
+  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
+  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
   <string name="remind_me_later">Remind me later</string>
   <string name="notice">Notice</string>
+  <string name="passkeys_not_supported_for_this_app">Passkeys not supported for this app</string>
 </resources>
