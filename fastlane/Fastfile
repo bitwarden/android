@@ -42,7 +42,7 @@ platform :android do
     # Current date used to derive next version name.
     currentDate = Time.new
     major = currentDate.year.to_s
-    minor = "5"
+    minor = currentDate.strftime "%m"
 
     # Determine the next revision number to apply.
     revision = 0
