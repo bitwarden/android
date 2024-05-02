@@ -14,11 +14,12 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:name=".BitwardenApplication"
         android:allowBackup="false"
+        android:appComponentFactory=".BitwardenAppComponentFactory"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -27,6 +28,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/LaunchTheme"
+        tools:replace="appComponentFactory"
         tools:targetApi="33">
         <activity
             android:name=".MainActivity"
@@ -120,11 +122,16 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <!--
+        The AutofillService name below refers to the legacy Xamarin app's service name. This must
+        always match in order for the app to properly query if it is providing autofill services.
+        -->
         <service
-            android:name=".data.autofill.BitwardenAutofillService"
+            android:name="com.x8bit.bitwarden.Autofill.AutofillService"
             android:exported="true"
-            android:label="Bitwarden"
-            android:permission="android.permission.BIND_AUTOFILL_SERVICE">
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_AUTOFILL_SERVICE"
+            tools:ignore="MissingClass">
             <meta-data
                 android:name="android.autofill"
                 android:resource="@xml/autofill_service_configuration" />
