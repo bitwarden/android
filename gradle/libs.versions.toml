@@ -47,7 +47,6 @@ retrofit = "2.11.0"
 retrofitKotlinxSerialization = "1.0.0"
 roboelectric = "4.12.1"
 turbine = "1.1.0"
-zxcvbn4j = "1.8.2"
 zxing = "3.5.3"
 
 [libraries]
@@ -100,7 +99,6 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 mockk-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
-nulab-zxcvbn4j = { module = "com.nulab-inc:zxcvbn", version.ref = "zxcvbn4j" }
 robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 square-okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }

@@ -106,7 +106,6 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization)
-    implementation(libs.nulab.zxcvbn4j)
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)
     implementation(libs.square.retrofit)
