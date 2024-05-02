@@ -233,7 +233,10 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
 
-            _appOptions.HasJustLoggedInOrUnlocked = true;
+            if (_appOptions != null)
+            {
+                _appOptions.HasJustLoggedInOrUnlocked = true;
+            }
             App.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
