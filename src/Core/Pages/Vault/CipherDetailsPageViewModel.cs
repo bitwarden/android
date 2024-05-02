@@ -334,6 +334,7 @@ namespace Bit.App.Pages
             ShowCardNumber = !ShowCardNumber;
             if (ShowCardNumber)
             {
+                ShowCardCode = false;
                 var task = _eventService.CollectAsync(
                     Core.Enums.EventType.Cipher_ClientToggledCardNumberVisible, CipherId);
             }
@@ -348,6 +349,7 @@ namespace Bit.App.Pages
             ShowCardCode = !ShowCardCode;
             if (ShowCardCode)
             {
+                ShowCardNumber = false;
                 var task = _eventService.CollectAsync(
                     Core.Enums.EventType.Cipher_ClientToggledCardCodeVisible, CipherId);
             }
