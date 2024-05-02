@@ -25,7 +25,7 @@ data class EnvironmentUrlDataJson(
     @SerialName("identity")
     val identity: String? = null,
 
-    @SerialName("icon")
+    @SerialName("icons")
     val icon: String? = null,
 
     @SerialName("notifications")
@@ -45,9 +45,37 @@ data class EnvironmentUrlDataJson(
             EnvironmentUrlDataJson(base = "https://vault.bitwarden.com")
 
         /**
+         * Default [EnvironmentUrlDataJson] for the US region as written to disk by the legacy
+         * Xamarin app.
+         */
+        val DEFAULT_LEGACY_US: EnvironmentUrlDataJson = EnvironmentUrlDataJson(
+            base = "https://vault.bitwarden.com",
+            api = "https://api.bitwarden.com",
+            identity = "https://identity.bitwarden.com",
+            icon = "https://icons.bitwarden.net",
+            notifications = "https://notifications.bitwarden.com",
+            webVault = "https://vault.bitwarden.com",
+            events = "https://events.bitwarden.com",
+        )
+
+        /**
          * Default [EnvironmentUrlDataJson] for the EU region.
          */
         val DEFAULT_EU: EnvironmentUrlDataJson =
             EnvironmentUrlDataJson(base = "https://vault.bitwarden.eu")
+
+        /**
+         * Default [EnvironmentUrlDataJson] for the EU region as written to disk by the legacy
+         * Xamarin app.
+         */
+        val DEFAULT_LEGACY_EU: EnvironmentUrlDataJson = EnvironmentUrlDataJson(
+            base = "https://vault.bitwarden.eu",
+            api = "https://api.bitwarden.eu",
+            identity = "https://identity.bitwarden.eu",
+            icon = "https://icons.bitwarden.eu",
+            notifications = "https://notifications.bitwarden.eu",
+            webVault = "https://vault.bitwarden.eu",
+            events = "https://events.bitwarden.eu",
+        )
     }
 }

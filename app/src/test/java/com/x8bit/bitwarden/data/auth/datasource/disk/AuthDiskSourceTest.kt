@@ -1086,7 +1086,7 @@ private const val USER_STATE_JSON = """
               "base": "base",
               "api": "api",
               "identity": "identity",
-              "icon": "icon",
+              "icons": "icon",
               "notifications": "notifications",
               "webVault": "webVault",
               "events": "events"

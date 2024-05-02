@@ -111,8 +111,10 @@ private fun EnvironmentUrlDataJson.getSelfHostedUrlOrNull(): String? =
  */
 fun EnvironmentUrlDataJson.toEnvironmentUrls(): Environment =
     when (this) {
-        Environment.Us.environmentUrlData -> Environment.Us
-        Environment.Eu.environmentUrlData -> Environment.Eu
+        EnvironmentUrlDataJson.DEFAULT_US -> Environment.Us
+        EnvironmentUrlDataJson.DEFAULT_LEGACY_US -> Environment.Us
+        EnvironmentUrlDataJson.DEFAULT_EU -> Environment.Eu
+        EnvironmentUrlDataJson.DEFAULT_LEGACY_EU -> Environment.Eu
         else -> Environment.SelfHosted(environmentUrlData = this)
     }
 

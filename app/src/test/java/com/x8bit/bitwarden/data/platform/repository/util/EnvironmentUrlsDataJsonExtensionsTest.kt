@@ -178,11 +178,29 @@ class EnvironmentUrlsDataJsonExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toEnvironmentUrlsOrDefault should correctly convert legacy US urls to the expected type`() {
+        assertEquals(
+            Environment.Us,
+            EnvironmentUrlDataJson.DEFAULT_LEGACY_US.toEnvironmentUrlsOrDefault(),
+        )
+    }
+
     @Test
     fun `toEnvironmentUrlsOrDefault should correctly convert EU urls to the expected type`() {
         assertEquals(
             Environment.Eu,
             EnvironmentUrlDataJson.DEFAULT_EU.toEnvironmentUrlsOrDefault(),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toEnvironmentUrlsOrDefault should correctly convert legacy EU urls to the expected type`() {
+        assertEquals(
+            Environment.Eu,
+            EnvironmentUrlDataJson.DEFAULT_LEGACY_EU.toEnvironmentUrlsOrDefault(),
         )
     }
 
