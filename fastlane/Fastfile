@@ -42,7 +42,7 @@ platform :android do
     # Current date used to derive next version name.
     currentDate = Time.new
     major = currentDate.year.to_s
-    minor = currentDate.strftime "%m"
+    minor = "5"
 
     # Determine the next revision number to apply.
     revision = 0
@@ -94,8 +94,42 @@ platform :android do
     )
   end
 
+  desc "Bundle and sign release AAB"
+  lane :bundleRelease do |options|
+    gradle(
+        task: "bundle",
+        build_type: "Release",
+        properties: {
+          "android.injected.signing.store.file" => options[:storeFile],
+          "android.injected.signing.store.password" => options[:storePassword],
+          "android.injected.signing.key.alias" => options[:keyAlias],
+          "android.injected.signing.key.password" => options[:keyPassword]
+        },
+        print_command: false,
+    )
+  end
+
   desc "Publish release to Firebase"
-    lane :distributeReleaseToFirebase do |options|
+  lane :distributeReleaseToFirebase do |options|
+    release_notes = changelog_from_git_commits(
+      commits_count: 1,
+      pretty: "- %s"
+    )
+
+    puts "Release notes #{release_notes}"
+
+    firebase_app_distribution(
+      app: "1:867301491091:android:50b626dba42a361651e866",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk",
+      service_credentials_file: options[:serviceCredentialsFile],
+      groups: "internal-prod-group",
+      release_notes: release_notes,
+    )
+  end
+
+    desc "Publish release AAB to Firebase"
+    lane :distributeReleaseBundleToFirebase do |options|
       release_notes = changelog_from_git_commits(
         commits_count: 1,
         pretty: "- %s"
@@ -105,11 +139,21 @@ platform :android do
 
       firebase_app_distribution(
         app: "1:867301491091:android:50b626dba42a361651e866",
-        android_artifact_type: "APK",
-        android_artifact_path: "app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk",
+        android_artifact_type: "AAB",
+        android_artifact_path: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
         service_credentials_file: options[:serviceCredentialsFile],
         groups: "internal-prod-group",
         release_notes: release_notes,
       )
     end
+
+  desc "Publish release to Google Play Store"
+  lane :publishReleaseToGooglePlayStore do |options|
+    upload_to_play_store(
+      json_key: options[:serviceCredentialsFile],
+      track: "internal",
+      aab: "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab",
+      mapping: "app/build/outputs/mapping/release/mapping.txt",
+    )
+  end
 end

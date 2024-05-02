@@ -61,7 +61,7 @@ android {
     }
     packaging {
         resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE*.md}"
         }
     }
 }
@@ -124,4 +124,6 @@ dependencies {
     testImplementation(libs.robolectric.robolectric)
     testImplementation(libs.square.okhttp.mockwebserver)
     testImplementation(libs.square.turbine)
+
+    androidTestImplementation(libs.bundles.tests.instrumented)
 }

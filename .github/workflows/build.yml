@@ -76,6 +76,9 @@ jobs:
     needs:
       - check
     runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        variant: [ "aab", "apk" ]
     steps:
       - name: Checkout
         uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
@@ -169,6 +172,7 @@ jobs:
         shell: bash
 
       - name: Assemble Release APK
+        if: ${{ matrix.variant == 'apk' }}
         run: |
           bundle exec fastlane buildRelease \
           storeFile:${{ github.workspace }}/keystores/authenticator_apk-keystore.jks \
@@ -178,11 +182,13 @@ jobs:
         shell: bash
 
       - name: Create checksum file for Release APK
+        if: ${{ matrix.variant == 'apk' }}
         run: |
           sha256sum "app/build/outputs/apk/release/com.bitwarden.authenticator-release.apk" \
             > ./authenticator-android-apk-sha256.txt
 
       - name: Upload release APK to GitHub
+        if: ${{ matrix.variant == 'apk' }}
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.bitwarden.authenticator.apk
@@ -190,6 +196,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload checksum file for Release .apk
+        if: ${{ matrix.variant == 'apk' }}
         uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: authenticator-android-apk-sha256.txt
@@ -201,10 +208,61 @@ jobs:
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release APK to Firebase
-        if: ${{ github.ref_name == 'main' }}
+        if: ${{ github.ref_name == 'main' && matrix.variant == 'apk' }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleaseToFirebase \
           serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
         shell: bash
+
+      - name: Bundle release AAB
+        if: ${{ matrix.variant == 'aab' }}
+        run: |
+          bundle exec fastlane bundleRelease \
+          storeFile:${{ github.workspace }}/keystores/authenticator_aab-keystore.jks \
+          storePassword:'${{ secrets.AAB_KEYSTORE_STORE_PASSWORD }}' \
+          keyAlias:authenticatorupload \
+          keyPassword:'${{ secrets.AAB_KEYSTORE_KEY_PASSWORD }}'
+        shell: bash
+
+      - name: Create checksum file for Release AAB
+        if: ${{ matrix.variant == 'aab' }}
+        run: |
+          sha256sum "app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab" \
+           > ./authenticator-android-aab-sha256.txt
+        shell: bash
+
+      - name: Upload release AAB to GitHub
+        if: ${{ matrix.variant == 'aab' }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.bitwarden.authenticator.aab
+          path: app/build/outputs/bundle/release/com.bitwarden.authenticator-release.aab
+          if-no-files-found: error
+
+      - name: Upload checksum file for Release .aab
+        if: ${{ matrix.variant == 'aab' }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: authenticator-android-aab-sha256.txt
+          path: ./authenticator-android-aab-sha256.txt
+          if-no-files-found: error
+
+      - name: Publish release AAB to Firebase
+        if: ${{ github.ref_name == 'main' && matrix.variant == 'aab' }}
+        env:
+          FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
+        run: |
+          bundle exec fastlane distributeReleaseBundleToFirebase \
+          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
+        shell: bash
+
+#      - name: Publish release AAB to Google Play Store
+#        if: ${{ github.ref_name == 'main' && matrix.variant == 'aab'}}
+#        env:
+#          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
+#        run: |
+#          bundle exec fastlane publishReleaseToGooglePlayStore \
+#          serviceCredentialsFile:${{ env.PLAY_STORE_CREDS_FILE }} \
+#        shell: bash

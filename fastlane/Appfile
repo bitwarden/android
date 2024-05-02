@@ -1,2 +1,1 @@
-json_key_file("secrets/authenticator_play_firebase-creds.json") # Path to the json secret file
 package_name("com.bitwarden.authenticator")
