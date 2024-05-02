@@ -191,7 +191,7 @@ namespace Bit.App.Pages
 
         private async Task StartDeviceApprovalOptionsAsync()
         {
-            var page = new LoginApproveDevicePage();
+            var page = new LoginApproveDevicePage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
