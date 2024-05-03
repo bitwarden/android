@@ -285,6 +285,8 @@ namespace Bit.App.Pages
             var failed = true;
             try
             {
+                await MainThread.InvokeOnMainThreadAsync(() => _deviceActionService.ShowLoadingAsync(AppResources.Loading));
+
                 EncString userKeyPin;
                 EncString oldPinProtected;
                 switch (_pinStatus)
@@ -333,12 +335,13 @@ namespace Bit.App.Pages
                 {
                     Pin = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                    await SetUserKeyAndContinueAsync(userKey);
+                    await SetUserKeyAndContinueAsync(userKey, shouldHandleHideLoading: true);
                     await Task.Delay(150); //Workaround Delay to avoid "duplicate" execution of SubmitAsync on Android when invoked from the ReturnCommand
                 }
             }
             catch (LegacyUserException)
             {
+                await MainThread.InvokeOnMainThreadAsync(_deviceActionService.HideLoadingAsync); 
                 throw;
             }
             catch
@@ -348,6 +351,9 @@ namespace Bit.App.Pages
             if (failed)
             {
                 var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+
+                await MainThread.InvokeOnMainThreadAsync(_deviceActionService.HideLoadingAsync); 
+
                 if (invalidUnlockAttempts >= 5)
                 {
                     _messagingService.Send("logout");
@@ -536,7 +542,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task SetUserKeyAndContinueAsync(UserKey key)
+        private async Task SetUserKeyAndContinueAsync(UserKey key, bool shouldHandleHideLoading = false)
         {
             var hasKey = await _cryptoService.HasUserKeyAsync();
             if (!hasKey)
@@ -544,14 +550,18 @@ namespace Bit.App.Pages
                 await _cryptoService.SetUserKeyAsync(key);
             }
             await _deviceTrustCryptoService.TrustDeviceIfNeededAsync();
-            await DoContinueAsync();
+            await DoContinueAsync(shouldHandleHideLoading);
         }
 
-        private async Task DoContinueAsync()
+        private async Task DoContinueAsync(bool shouldHandleHideLoading = false)
         {
             _syncService.FullSyncAsync(false).FireAndForget();
             await _stateService.SetBiometricLockedAsync(false);
             _watchDeviceService.SyncDataToWatchAsync().FireAndForget();
+            if (shouldHandleHideLoading)
+            {
+                await MainThread.InvokeOnMainThreadAsync(_deviceActionService.HideLoadingAsync); 
+            }
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }
