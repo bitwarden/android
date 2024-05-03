@@ -109,8 +109,7 @@ fun LazyListScope.vaultAddEditLoginItems(
             BitwardenTextFieldWithActions(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-                    .testTag("LoginTotpEntry"),
+                    .padding(horizontal = 16.dp),
                 label = stringResource(id = R.string.totp),
                 value = loginState.totp,
                 trailingIconContent = {
@@ -144,6 +143,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                         onClick = onTotpSetupClick,
                     )
                 },
+                textFieldTestTag = "LoginTotpEntry",
             )
         }
     } else {
@@ -398,8 +398,8 @@ private fun UsernameRow(
             )
         },
         modifier = Modifier
-            .testTag("LoginUsernameEntry")
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "LoginUsernameEntry",
     )
 
     if (shouldShowDialog) {

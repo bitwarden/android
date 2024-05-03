@@ -120,7 +120,6 @@ fun VaultItemLoginContent(
                     isPremiumUser = loginItemState.isPremiumUser,
                     onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
                     modifier = Modifier
-                        .testTag("LoginTotpEntry")
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
@@ -396,6 +395,7 @@ private fun TotpField(
                     )
                 },
                 modifier = modifier,
+                textFieldTestTag = "LoginTotpEntry",
             )
         }
     } else {

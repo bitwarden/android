@@ -51,8 +51,8 @@ fun VaultAddEditUriItem(
             )
         },
         modifier = Modifier
-            .testTag("LoginUriEntry")
             .padding(horizontal = 16.dp),
+        textFieldTestTag = "LoginUriEntry",
     )
 
     if (shouldShowOptionsDialog) {
