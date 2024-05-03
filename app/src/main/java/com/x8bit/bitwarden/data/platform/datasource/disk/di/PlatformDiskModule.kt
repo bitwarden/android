@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.di
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
@@ -10,10 +11,13 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigratorImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorage
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigratorImpl
+import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -58,6 +62,20 @@ object PlatformDiskModule {
         LegacySecureStorageMigratorImpl(
             legacySecureStorage = legacySecureStorage,
             encryptedSharedPreferences = encryptedSharedPreferences,
+        )
+
+    @Provides
+    @Singleton
+    fun provideLegacyAppCenterMigrator(
+        application: Application,
+        settingsRepository: SettingsRepository,
+    ): LegacyAppCenterMigrator =
+        LegacyAppCenterMigratorImpl(
+            settingsRepository = settingsRepository,
+            appCenterPreferences = application.getSharedPreferences(
+                "AppCenter",
+                Context.MODE_PRIVATE,
+            ),
         )
 
     @Provides
