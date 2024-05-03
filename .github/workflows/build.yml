@@ -13,7 +13,6 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
-  RUBY_VERSION: 3.3.1
 
 jobs:
   check:
@@ -60,7 +59,6 @@ jobs:
         uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
         with:
           bundler-cache: true
-          ruby-version: ${{ env.RUBY_VERSION }}
 
       - name: Install Fastlane
         run: |
@@ -120,7 +118,6 @@ jobs:
         uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
         with:
           bundler-cache: true
-          ruby-version: ${{ env.RUBY_VERSION }}
 
       - name: Install Fastlane
         run: |
