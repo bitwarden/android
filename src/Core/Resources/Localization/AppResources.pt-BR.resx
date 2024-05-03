@@ -422,7 +422,7 @@
     <value>Serviço de autopreenchimento</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Defina o Bitwarden como seu provedor de chaves de acesso nas configurações de seu dispositivo.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar Caracteres Ambíguos</value>
@@ -1823,7 +1823,7 @@ A leitura será feita automaticamente.</value>
     <value>O Bitwarden precisa de atenção - Ative "Sobrepor a" em "Serviços de Autopreenchimento" nas Configurações do Bitwarden</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Gerenciamento de chaves de acesso</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Serviços de autopreenchimento</value>
@@ -2809,7 +2809,7 @@ Você deseja mudar para esta conta?</value>
     <value>{0} horas</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Usar o Bitwarden para salvar chaves de acesso novas e fazer login com chaves de acesso armazenadas no seu cofre.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>O Framework de Preenchimento Automático do Android é usado para ajudar a preencher informações de login em outros aplicativos do seu dispositivo.</value>
@@ -2840,7 +2840,7 @@ Você deseja mudar para esta conta?</value>
     <value>Continuar para a loja de apps?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Continuar para as Configurações do dispositivo?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Torne sua conta mais segura configurando o login em duas etapas no aplicativo web do Bitwarden.</value>
@@ -2893,25 +2893,25 @@ Você deseja mudar para esta conta?</value>
     <value>Configure um método de desbloqueio para alterar o tempo limite do cofre.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Escolha um login para qual salvar essa chave de acesso</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Salvar chave de acesso como um novo login</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Salvar chave de acesso</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Chaves de acesso para {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Senhas para {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Sobrescrever chave de acesso?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Esse item já contém uma chave de acesso. Tem certeza que deseja sobrescrever a chave de acesso atual?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>A autenticação em duas etapas do Duo é necessária para sua conta. </value>
@@ -2923,57 +2923,57 @@ Você deseja mudar para esta conta?</value>
     <value>Abrir o Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Verificação requerida por {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>Verificação necessária para esta ação. Configure um método de desbloqueio no Bitwarden para continuar.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Erro ao criar chave de acesso</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Erro ao ler chave de acesso</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Houve um problema ao criar uma chave de acesso para {0}. Tente novamente mais tarde.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Houve um problema ao ler sua chave de acesso para {0}. Tente novamente mais tarde.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Verificando identidade...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Senhas</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Conta desconhecida</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Configurar preenchimento automático</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Obtenha acesso instantâneo às suas senhas e chaves de acesso!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>Para configurar o preenchimento automático de senha e o gerenciamento de chaves de acesso, defina o Bitwarden como seu provedor preferido nas Configurações do iOS.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Vá para Configurações de seu dispositivo &gt; Senhas &gt; Opções de senha</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Ative o preenchimento automático</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Selecione "Bitwarden" para o uso de senhas e chaves de acesso</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Sua chave de acesso será salva no seu cofre do Bitwarden</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Sua chave de acesso será salva no seu cofre do Bitwarden para {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Itens da organização não atribuídos não são mais visíveis na visualização Todos os Cofres e acessíveis apenas através da console. Atribuir estes itens a uma coleção do Console de Administração para torná-los visíveis.</value>
@@ -2988,6 +2988,21 @@ Você deseja mudar para esta conta?</value>
     <value>Nota</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Chaves de acesso não são suportadas por este app</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Operação de chave de acesso falhou pois o navegador não é privilegiado</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Operação de chave de acesso falhou pois a assinatura do navegador não corresponde</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Operação de chave de acesso falhou devido a links de conteúdos faltando</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Operação de chave de acesso falhou pois o app não foi encontrado nos links de conteúdo</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Operação de chave de acesso falhou pois o app não pôde ser verificado</value>
   </data>
 </root>

@@ -2841,7 +2841,7 @@ Vill du byta till detta konto?</value>
     <value>Fortsätt till appbutiken?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Fortsätt till enhetsinställningar?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Gör ditt konto säkrare genom att konfigurera tvåstegsverifiering i Bitwardens webbapp.</value>
@@ -2947,10 +2947,10 @@ Vill du byta till detta konto?</value>
     <value>Verifying identity...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Lösenord</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Okänt konto</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
     <value>Set up auto-fill</value>
@@ -2962,7 +2962,7 @@ Vill du byta till detta konto?</value>
     <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Gå till din enhets Inställningar &gt; Lösenord &gt; Lösenordsalternativ</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
     <value>2. Turn on AutoFill</value>
@@ -2990,5 +2990,20 @@ Vill du byta till detta konto?</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
     <value>Passkeys not supported for this app</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Passkey operation failed because browser is not privileged</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Passkey operation failed because browser signature does not match</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because of missing asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because app not found in asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Passkey operation failed because app could not be verified</value>
   </data>
 </root>

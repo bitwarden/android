@@ -422,7 +422,7 @@
     <value>自動入力サービス</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>デバイス設定で Bitwarden をパスキープロバイダとして設定してください。</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>あいまいな文字を避ける</value>
@@ -1195,7 +1195,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>Android 資格情報プロバイダ設定メニューを自動的に開くことができませんでした。 認証情報プロバイダ設定メニューは、Android の設定 &gt; システム &gt; パスワードとアカウント &gt; パスワード、 パスキーとデータサービスで開けます。</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Android の自動入力設定を自動的に開けませんでした。Android の設定 &gt; システム &gt; 言語と入力 &gt; 詳細設定 &gt; 自動入力サービスで自動入力を設定できます。</value>
@@ -1822,7 +1822,7 @@
     <value>Bitwarden の設定が必要です - Bitwarden の設定にある「自動入力サービス」の「重ねて表示」を有効化してください。</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>パスキー管理</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>自動入力サービス</value>
@@ -2808,7 +2808,7 @@
     <value>{0}時間</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Bitwarden を使って新しいパスキーを保存し、保管庫に保存されているパスキーでログインします。</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Android Autofill Frameworkは、お使いのデバイス上の他のアプリケーションにログイン情報を入力する際に使用されます。</value>
@@ -2839,7 +2839,7 @@
     <value>アプリストアに進みますか?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>デバイス設定に進みますか？</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Bitwarden ウェブアプリで2段階認証を設定すると、アカウントがより安全になります。</value>
@@ -2892,25 +2892,25 @@
     <value>保管庫のタイムアウト動作を変更するには、ロック解除方法を設定してください。</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>このパスキーを保存するログイン情報を選択してください</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>パスキーを新しいログイン情報として保存</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>パスキーを保存</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>{0} のパスキー</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>{0} のパスワード</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>パスキーを上書きしますか?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>このアイテムにはすでにパスキーが含まれています。現在のパスキーを上書きしてもよろしいですか?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>アカウントには Duo 二段階認証が必要です。</value>
@@ -2922,57 +2922,57 @@
     <value>Duo を起動</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>{0} が必要とする認証</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>この操作には検証が必要です。続行するには Bitwarden でロック解除方法を設定してください。</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>パスキーの作成に失敗しました</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>パスキーの読み取りに失敗しました</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>{0} のパスキーを作成する際に問題が発生しました。後でもう一度お試しください。</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>{0} のパスキーを読み込む際に問題が発生しました。後でもう一度お試しください。</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>認証中...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>パスワード</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>不明なアカウント</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>自動入力の設定</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>パスワードとパスキーにすぐにアクセスできます！</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>パスワードの自動入力とパスキー管理を設定するには、iOS の設定で Bitwarden を優先プロバイダとして設定してください。</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. デバイスの設定 &gt; パスワード &gt; パスワード オプションを開く</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. 自動入力を有効化</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. 「Bitwarden」を選択してパスワードとパスキーに使用する</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>あなたのパスキーは Bitwarden 保管庫に保存されます</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>あなたのパスキーは {0} の Bitwarden 保管庫に保存されます。</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>割り当てられていない組織アイテムはすべての保管庫ビューに表示されなくなり、管理コンソールからのみアクセス可能になります。 管理コンソールからコレクションにこれらのアイテムを割り当てると、表示できるようになります。</value>
@@ -2987,6 +2987,21 @@
     <value>お知らせ</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>このアプリではパスキーに対応していません</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>ブラウザに特権がないため、パスキーの操作に失敗しました</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>ブラウザの署名が一致しないため、パスキーの操作に失敗しました</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>アセットリンクが不足しているため、パスキーの操作に失敗しました</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>アセットリンクにアプリが見つからないため、パスキーの操作に失敗しました</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>アプリを確認できなかったため、パスキーの操作に失敗しました</value>
   </data>
 </root>

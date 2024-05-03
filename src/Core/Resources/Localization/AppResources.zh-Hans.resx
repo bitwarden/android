@@ -422,7 +422,7 @@
     <value>自动填充服务</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>在设备设置中将 Bitwarden 设置为您的通行密钥提供程序。</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>避免易混淆的字符</value>
@@ -1195,7 +1195,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>我们无法为您自动打开 Android 凭据提供者设置菜单。您可以通过“Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务”手动定位到凭据提供者设置菜单。</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</value>
@@ -1822,7 +1822,7 @@
     <value>Bitwarden 需要注意 - 请在 Bitwarden 设置的「自动填充服务」中启用「Draw-Over」</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>通行密钥管理</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>自动填充服务</value>
@@ -2808,7 +2808,7 @@
     <value>{0} 小时</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>使用 Bitwarden 保存新的通行密钥并使用存储在密码库中的通行密钥登录。</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Android 自动填充框架用于帮助将登录信息填充到您设备上的其他应用。</value>
@@ -2839,7 +2839,7 @@
     <value>前往 App Store 吗？</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>前往设备设置吗？</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>通过在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。</value>
@@ -2892,25 +2892,25 @@
     <value>设置解锁选项以更改您的密码库超时动作。</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>选择一个用于保存此通行密钥的登录项目</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>将通行密钥保存为新的登录</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>保存通行密钥</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>{0} 的通行密钥</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>{0} 的密码</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>覆盖通行密钥吗？</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>此项目已包含一个通行密钥。确定要覆盖当前的通行密钥吗？</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>您的账户要求使用 Duo 两步登录。 </value>
@@ -2922,57 +2922,57 @@
     <value>启动 Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>{0} 要求验证</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>此操作需要验证。在 Bitwarden 中设置一个解锁方式以继续。</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>创建通行密钥时出错</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>读取通行密钥时出错</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>为 {0} 创建通行密钥时出错。请稍后再试。</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>读取 {0} 的通行密钥时。请稍后再试。</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>正在验证身份...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>密码</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>未知账户</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>设置自动填充</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>立即访问您的密码和通行密钥！</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>要设置密码自动填充和通行密钥管理，请在 iOS 设置中将 Bitwarden 设置为您的首选提供程序。</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. 转到您设备的设置 &gt; 密码 &gt; 密码选项</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. 打开自动填充</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. 选择「Bitwarden」用于密码和通行密钥</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>您的通行密钥将保存在您的 Bitwarden 密码库中</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>您的通行密钥将保存在您的 {0} Bitwarden 密码库中</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>未分配的组织项目在「所有密码库」视图中不再可见，只能通过管理控制台访问。通过管理控制台将这些项目分配给集合以使其可见。</value>
@@ -2987,6 +2987,21 @@
     <value>注意</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>此应用不支持通行密钥</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>由于浏览器没有权限，通行密钥操作失败</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>由于浏览器签名不匹配，通行密钥操作失败</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>由于资源链接缺失，通行密钥操作失败</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>由于在资源链接中找不到应用，通行密钥操作失败</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>由于无法验证应用，通行密钥操作失败</value>
   </data>
 </root>

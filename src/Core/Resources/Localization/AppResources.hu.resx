@@ -422,7 +422,7 @@
     <value>Automatikus kitöltő szolgáltatás</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>A Bitwarden beállítása jelszó szolgáltatóként az eszközbeállításokban.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Félreérthető karakterek mellőzése</value>
@@ -909,7 +909,7 @@
     <value>Egyszeri jelszó másolása</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>Ha a bejelentkezéshez csatolva van egy hitelesítő kulcs, a TOTP ellenőrző kód automatikusan a vágólapra kerül, amikor a bejelentkezési adatok automatikus kitöltésénél.</value>
+    <value>Ha a bejelentkezéshez csatolva van egy hitelesítő kulcs, a TOTP ellenőrző kód automatikusan a vágólapra kerül a bejelentkezési adatok automatikus kitöltésénél.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>TOTP automatikus másolása</value>
@@ -1194,7 +1194,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>Nem lehetett automatikusan megnyitni az Android hitelesítő adatszolgáltató beállítási menüjét. Manuálisan navigálhatunk a hitelesítő adatszolgáltató beállítási menüjébe az Android Beállítások &gt; Rendszer &gt; Jelszavak és fiókok &gt; Jelszavak, belépőkulcsok és adatszolgáltatások menüpontban.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Nem sikerült automatikusan megnyitni az Android automatikus kitöltés beállításai menüt. A beállítás megnyitásához nyitssuk meg a Beállítások &gt; Rendszer &gt; Nyelv és bevitel &gt; Speciális &gt; Automatikus kitöltés menüpontot.</value>
@@ -1821,7 +1821,7 @@
     <value>A Bitwarden figyelmet igényel - Engedélyezzük Bitwarden beállításokban a  "Felülrajzolás" opciót az "Automatikus kitöltési szolgáltatások" résznél.</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Belépőkulcs kezelés</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Automatikus kitöltés</value>
@@ -2807,7 +2807,7 @@ Szeretnénk átváltani erre a fiókra?</value>
     <value>{0} óra</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>A Bitwarden használata az új belépőkulcsok mentéséhez és bejelentkezés a széfben tárolt belépőkulcskkal.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Az Android automatikus kitöltési keretrendszere segít a bejelentkezési adatok kitöltésében az eszközön lévő más alkalmazásokba.</value>
@@ -2838,7 +2838,7 @@ Szeretnénk átváltani erre a fiókra?</value>
     <value>Tovább az alkalmazásboltba?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Továbblépés az eszköz beállításokhoz?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Tegyük biztonságosabbá a fiókot a kétlépcsős bejelentkezés beállításával a Bitwarden webalkalmazásban.</value>
@@ -2891,25 +2891,25 @@ Szeretnénk átváltani erre a fiókra?</value>
     <value>Állítsunk be egy feloldási módot a széf időkifutási műveletének módosításához.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Válasszunk egy bejelentkezési nevet, amelyhez menteni szeretnénk ezt a belépőkulcsot.</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Belépőkulcs mentése új bejelentkezésként</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Belépőkulcs mentése</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Belépőkulcs: {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Belépőkulcs: {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Belépőkulcs felülírása?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Ez az elem már tartalmaz egy belépőkulcsot. Biztosan felülírásra kerüljön az aktuális belépőkulcs?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>DUO kétlépéses bejelentkezés szükséges a fiókhoz. </value>
@@ -2921,57 +2921,57 @@ Szeretnénk átváltani erre a fiókra?</value>
     <value>Duo indítása</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Ellenőrzés szükséges: {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>Ehhez a művelethez ellenőrzés szükséges. A folytatáshoz állítsunk be egy feloldási módot a Bitwardenben.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Hiba történt a belépőkulcs létrehozásakor.</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Hiba történt a belépőkulcs olvasásakor.</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Hiba történt {0} belépőkulcsának létrehozásakor. Próbáljuk újra később.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Hiba történt {0} belépőkulcsának olvasásakor. Próbáljuk újra később.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Személyazonosság ellenőrzése...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Jelszavak</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Ismeretlen fiók</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Automatikus kitöltés beüzemelése</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Azonnali hozzáférés a jelszavakhoz és belépőkulcsokhoz!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>A jelszó automatikus kitöltésének és a belépőkulcs kezelésnek a beüzemeléséhez állítsuk be a Bitwardent preferált szolgáltatóként az iOS beállításokban.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Nyissuk meg az eszköz Beállítások &gt; Jelszavak &gt; Jelszó opciók menüpontot.</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>4. Kapcsoljuk be az Automatikus kitöltést.</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. A jelszavakhoz és a belépőkulcsokhoz válasszuk a "Bitwarden" lehetőséget.</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>A belépőkulcs mentésre került a Bitwarden széfbe.</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>A belépőkulcs mentésre kerül a Bitwarden széfbe: {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Megjegyzés: A nem hozzá nem rendelt szervezeti elemek már nem láthatók az Összes széf nézetben és csak az Adminisztrátori konzolon keresztül érhetők el. Rendeljük ezeket az elemeket egy gyűjteményhez az Adminisztrátor konzolból, hogy láthatóvá tegyük azokat.</value>
@@ -2986,6 +2986,21 @@ Szeretnénk átváltani erre a fiókra?</value>
     <value>Megjegyzés</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Ennél az alkalmazásnál a belépőkulcsok nem támogatottak.</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>A belépőkulcs művelet nem sikerült, mert a böngésző nem privilegizált.</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>A belépőkulcs művelet nem sikerült, mert a böngésző aláírás nem egyezik.</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>A belépőkulcs művelet nem sikerült, mert a készlet hivatkozások hiányoznak.</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>A belépőkulcs művelet nem sikerült, mert az alkalmazás nem található a készlet hivatkozásokban.</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>A belépőkulcs művelet nem sikerült, mert az alkalmazás nem lett ellenőrizve.</value>
   </data>
 </root>

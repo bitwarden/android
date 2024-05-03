@@ -1822,7 +1822,7 @@ Kod otomatik olarak taranacaktır.</value>
     <value>Bitwarden'la ilgilenmeniz gerekiyor: Bitwarden ayarlarında "Otomatik doldurma hizmetleri"nden "Üstünde gösterme"yi açın</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Geçiş anahtarı yönetimi</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Otomatik doldurma hizmetleri</value>
@@ -2894,43 +2894,43 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Choose a login to save this passkey to</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Geçiş anahtarını yeni hesap olarak kaydet</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Geçiş anahtarını kaydet</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>{0} geçiş anahtarları</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>{0} parolaları</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Geçiş anahtarının üzerine yazılsın mı?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Bu kayıt zaten bir geçiş anahtarı içeriyor. Mevcut geçiş anahtarının üzerine yazmak istediğinizden emin misiniz?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
-    <value>Hesabınız için Duo'ya iki adımlı giriş yapmanız gerekiyor. </value>
+    <value>Hesabınız için Duo iki adımlı giriş gereklidir. </value>
   </data>
   <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
-    <value>Oturum açmayı tamamlamak için Duo'daki adımları izleyin.</value>
+    <value>Girişi tamamlamak için Duo'daki adımları izleyin.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Duo'yu başlat</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>{0} için doğrulama gerekli</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
     <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Geçiş anahtarı oluşturma hatası</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Geçiş anahtarı okuma hatası</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
     <value>There was a problem creating a passkey for {0}. Try again later.</value>
@@ -2941,19 +2941,19 @@ Bu hesaba geçmek ister misiniz?</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Kimlik doğrulanıyor...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Parolalar</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Bilinmeyen hesap</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Otomatik doldurmayı ayarla</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Parolalarınıza ve geçiş anahtarlarınıza anında erişin!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
     <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
@@ -2980,12 +2980,27 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
   </data>
   <data name="RemindMeLater" xml:space="preserve">
-    <value>Remind me later</value>
+    <value>Daha sonra hatırlat</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Notice</value>
+    <value>Dikkat</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Bu uygulamada geçiş anahtarları desteklenmiyor</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Passkey operation failed because browser is not privileged</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Passkey operation failed because browser signature does not match</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because of missing asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because app not found in asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Passkey operation failed because app could not be verified</value>
   </data>
 </root>

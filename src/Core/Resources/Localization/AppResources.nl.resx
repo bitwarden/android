@@ -422,7 +422,7 @@
     <value>Dienst Automatisch aanvullen</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Bitwarden instellen als je passkey-provider in apparaatinstellingen.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Dubbelzinnige tekens vermijden</value>
@@ -1195,7 +1195,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>We konden het instellingenmenu voor Android credential provider niet automatisch voor je openen. Je kunt handmaltig navigeren naar de credential provider instellingen vanaf Android Instellingen &gt; Systeem &gt; Wachtwoorden &amp; accounts &gt; Wachtwoorden, passkeys en datadiensten.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Het instellingenmenu Android Automatisch aanvullen is niet geopend. Je kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatische aanvuldienst.</value>
@@ -1822,7 +1822,7 @@ Het scannen gebeurt automatisch.</value>
     <value>Bitwarden vraagt om aandacht - Activeer "Bovenop weergeven" in "Bitwarden Instellingen - Automatisch aanvullen".</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Passkey-beheer</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Automatisch aanvullen</value>
@@ -2808,7 +2808,7 @@ Wilt u naar dit account wisselen?</value>
     <value>{0} uur</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Gebruik Bitwarden voor het opslaan van nieuwe passkeys en inloggen met passkeys die zijn opgeslagen in je kluis.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Het Android Autofill Framework helpt het het invullen van inloggegevens in andere apps op je apparaat.</value>
@@ -2839,7 +2839,7 @@ Wilt u naar dit account wisselen?</value>
     <value>Doorgaan naar de app store?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Doorgaan naar apparaatinstellingen?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Maak je account veiliger met het instellen van tweestapsaanmelding in de Bitwarden-webapp.</value>
@@ -2892,25 +2892,25 @@ Wilt u naar dit account wisselen?</value>
     <value>Stel een ontgrendelingsmethode in om je kluis time-out actie te wijzigen.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Kies een login om deze passkey bij op te slaan</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Passkey als nieuwe login opslaan</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Passkey opslaan</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Passkeys voor {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Wachtwoorden voor {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Passkey overschrijven?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Dit item heeft al een passkey. Weet je zeker dat je de huidige passkey wilt overschrijven?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Jouw account vereist Duo-tweestapsaanmelding. </value>
@@ -2922,57 +2922,57 @@ Wilt u naar dit account wisselen?</value>
     <value>Duo starten</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Verificatie vereist door {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>Deze actie vereist verificatie. Stel een ontgrendelingsmethode in Bitwarden in om door te gaan.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Fout bij het aanmaken van passkey</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Fout bij het lezen van passkey</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Er is een fout opgetreden bij het maken van een passkey voor {0}. Probeer het later opnieuw.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Er is een fout opgetreden bij het lezen van je passkey voor {0}. Probeer het later opnieuw.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Identiteit controleren...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Wachtwoorden</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Onbekend account</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Automatisch invullen instellen</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Overal je wachtwoorden en passkeys onder handbereik!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>Bitwarden als voorkeursprovider instellen in de iOS-instellingen voor het instellen van automatisch invullen van wachtwoorden en beheren van passkeys.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Ga naar Instellingen &gt; Wachtwoorden &gt; Wachtwoordopties</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Automatisch invullen inschakelen</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Selecteer "Bitwarden" om te gebruiken voor wachtwoorden en passkeys</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Je passkeys worden bewaard in je Bitwarden-kluis</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Je passkey wordt bewaard in je Bitwarden-kluis voor {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Niet-toegewezen organisatie-items zijn niet meer zichtbaar in de weergave van alle kluisjes en alleen toegankelijk via de Admin Console. Je kunt deze items in het Admin Console aan een collectie toewijzen om ze zichtbaar te maken.</value>
@@ -2987,6 +2987,21 @@ Wilt u naar dit account wisselen?</value>
     <value>Kennisgeving</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Passkeys zijn niet ondersteund voor deze app</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Passkey operation failed because browser is not privileged</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Passkey operation failed because browser signature does not match</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because of missing asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because app not found in asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Passkey operation failed because app could not be verified</value>
   </data>
 </root>

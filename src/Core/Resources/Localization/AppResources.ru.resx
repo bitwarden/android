@@ -2991,4 +2991,19 @@
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
     <value>Ваш ключ доступа будет сохранен в вашем хранилище Bitwarden</value>
   </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Операция с Passkey не удалась, поскольку браузер не имеет привилегий</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Операция с Passkey не удалась, поскольку подпись браузера не совпадает</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Операция с Passkey не удалась из-за отсутствия ссылок на ресурсы</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Операция с Passkey не удалась, поскольку приложение не найдено в ссылках на ресурсы</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Операция с Passkey не удалась, поскольку не удалось проверить приложение</value>
+  </data>
 </root>
