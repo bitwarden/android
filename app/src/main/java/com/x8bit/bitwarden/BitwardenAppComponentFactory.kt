@@ -26,9 +26,9 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
         intent: Intent?,
     ): Service = when (className) {
         LEGACY_AUTOFILL_SERVICE_NAME -> {
-            super.instantiateService(cl, BitwardenAutofillService::class.java.name, intent)
+            super.instantiateServiceCompat(cl, BitwardenAutofillService::class.java.name, intent)
         }
 
-        else -> super.instantiateService(cl, className, intent)
+        else -> super.instantiateServiceCompat(cl, className, intent)
     }
 }
