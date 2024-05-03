@@ -28,13 +28,19 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param value Current text in the text field.
  * @param onValueChange Callback that is triggered when the text content changes.
  * @param modifier [Modifier] applied to this layout composable.
+ * @param textStyle The [TextStyle], or null if default.
+ * @param shouldAddCustomLineBreaks If `true`, line breaks will be inserted to allow for filling
+ * an entire line before breaking. `false` by default.
+ * @param visualTransformation Transforms the visual representation of the input [value].
  * @param readOnly `true` if the input should be read-only and not accept user interactions.
  * @param singleLine when `true`, this text field becomes a single line that horizontally scrolls
  * instead of wrapping onto multiple lines.
+ * @param keyboardType the preferred type of keyboard input.
  * @param trailingIconContent the content for the trailing icon in the text field.
  * @param actions A lambda containing the set of actions (usually icons or similar) to display
  * next to the text field. This lambda extends [RowScope],
  * providing flexibility in the layout definition.
+ * @param actionsTestTag The test tag to use for the row of actions, or null if there is none.
  * @param textFieldTestTag The test tag to be used on the text field.
  */
 @Composable
