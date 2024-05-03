@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
@@ -160,8 +161,10 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideCrashLogsManager(
+        legacyAppCenterMigrator: LegacyAppCenterMigrator,
         settingsRepository: SettingsRepository,
     ): CrashLogsManager = CrashLogsManagerImpl(
         settingsRepository = settingsRepository,
+        legacyAppCenterMigrator = legacyAppCenterMigrator,
     )
 }
