@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden
 
-import android.app.AppComponentFactory
 import android.app.Service
 import android.content.Intent
+import androidx.core.app.AppComponentFactory
 import com.x8bit.bitwarden.data.autofill.BitwardenAutofillService
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
@@ -20,7 +20,7 @@ class BitwardenAppComponentFactory : AppComponentFactory() {
      * service is created. This is required because the [className] used in the manifest must match
      * the legacy Xamarin app service name but the service name in this app is different.
      */
-    override fun instantiateService(
+    override fun instantiateServiceCompat(
         cl: ClassLoader,
         className: String,
         intent: Intent?,
