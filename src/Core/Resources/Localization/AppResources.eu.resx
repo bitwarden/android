@@ -2988,4 +2988,19 @@ Kontu honetara aldatu nahi duzu?</value>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
     <value>Passkeys not supported for this app</value>
   </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Passkey operation failed because browser is not privileged</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Passkey operation failed because browser signature does not match</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because of missing asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because app not found in asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Passkey operation failed because app could not be verified</value>
+  </data>
 </root>

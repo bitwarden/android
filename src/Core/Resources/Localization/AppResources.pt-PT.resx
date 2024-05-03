@@ -584,11 +584,11 @@
     <value>A palavra-passe mestra deve ter pelo menos {0} caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Números mínimos</value>
+    <value>Mínimo de números</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Caracteres especiais minímos</value>
+    <value>Mínimo de caracteres especiais</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -769,7 +769,7 @@
     <value>Ativado</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Desligado</value>
+    <value>Desativado</value>
   </data>
   <data name="On" xml:space="preserve">
     <value>Ligado</value>
@@ -1080,7 +1080,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Nome completo</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Número da licença</value>
+    <value>Número da carta de condução</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Março</value>
@@ -1122,7 +1122,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Número de segurança social</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>Estado / Província</value>
+    <value>Estado / Região</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Título</value>
@@ -2987,5 +2987,20 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
     <value>Chaves de acesso não suportadas por esta app</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>A operação da chave de acesso falhou porque o navegador não tem privilégios</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>A operação da chave de acesso falhou porque a assinatura do navegador não corresponde</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>A operação da chave de acesso falhou devido à falta de links ativos</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>A operação da chave de acesso falhou porque a aplicação não foi encontrada nos links ativos</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>A operação da chave de acesso falhou porque a aplicação não pôde ser verificada</value>
   </data>
 </root>

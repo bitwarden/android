@@ -422,7 +422,7 @@
     <value>Služba automatického vypĺňania</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Nastavte Bitwarden ako poskytovateľa prístupových kľúčov v nastaveniach zariadenia.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Vyhnúť sa dvojvýznamovým znakom</value>
@@ -1195,7 +1195,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>Nepodarilo sa automaticky otvoriť nastavenia poskytovateľa poverení pre Android. Môžete otvoriť nastavenie manuálne cez Nastavenia &gt; Systém &gt; Heslá a účty &gt; Heslá, prístupové kľúče a automatické vypĺňanie.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Nepodarilo sa automaticky otvoriť nastavenia automatického dopĺňania pre systém Android. Môžete otvoriť nastavenie manuálne cez Nastavenia &gt; Systém &gt; Jazyky a vstup &gt; Rozšírené &gt; Služba automatického dopĺňania.</value>
@@ -1822,7 +1822,7 @@ Skenovanie prebehne automaticky.</value>
     <value>Bitwarden vyžaduje vašu pozornosť - z nastavení aplikácie Bitwarden povoľte "Zobrazenie cez iné aplikácie" v "Služba automatického vypĺňania"</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Správa prístupových kľúčov</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Služba automatického vypĺňania</value>
@@ -2808,7 +2808,7 @@ Chcete prepnúť na toto konto?</value>
     <value>{0} hodín</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Používajte Bitwarden na ukladanie nových prístupových kľúčov a prihlasovanie pomocou prístupových kľúčov uložených v trezore.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Android Autofill Framework sa používa na uľahčenie vyplňovania prihlasovacích údajov do iných aplikácií na vašom zariadení.</value>
@@ -2839,7 +2839,7 @@ Chcete prepnúť na toto konto?</value>
     <value>Pokračovať v obchode s aplikáciami?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Pokračovať do nastavení zariadenia?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Zabezpečte svoje konto nastavením dvojstupňového prihlasovania vo webovej aplikácii Bitwarden.</value>
@@ -2892,25 +2892,25 @@ Chcete prepnúť na toto konto?</value>
     <value>Nastavte možnosť odomknutia, aby ste zmenili akciu pri vypršaní času trezoru.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Vyberte prihlásenie na uloženie tohto prístupového kľúča</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Uložiť prístupový kľúč ako nové prihlásenie</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Uložiť prístupový kľúč</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Prístupové kľúče pre {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Heslá pre {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Prepísať prístupový kľúč?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Táto položka už obsahuje prístupový kľúč. Naozaj chcete prepísať aktuálny prístupový kľúč?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Pre váš účet je potrebné dvojstupňové prihlásenie Duo. </value>
@@ -2922,57 +2922,57 @@ Chcete prepnúť na toto konto?</value>
     <value>Spustiť Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Vyžaduje sa overenie od {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>Pre túto akciu sa vyžaduje overenie. Ak chcete pokračovať, nastavte metódu odomknutia v Bitwardene.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Chyba pri vytváraní prístupového kľúča</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Chyba pri čítaní prístupového kľúča</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Vyskytol sa problém s vytvorením prístupového kľúča pre {0}. Skúste to neskôr.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Pri čítaní vášho prístupového kľúča pre {0} došlo k problému. Skúste to neskôr.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Overovanie totožnosti...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Heslá</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Neznámy účet</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Nastaviť automatické vypĺňanie</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Získajte okamžitý prístup k vašim heslám prístupovým kľúčom!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>Ak chcete nastaviť automatické vypĺňanie hesla a správu prístupových kľúčov, nastavte Bitwarden ako predvoleného poskytovateľa v nastaveniach iOS.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Prejdite do Nastavenia &gt; Heslá &gt; Možnosti hesiel</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Zapnite Automatické vypĺňanie hesiel</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Vyberte "Bitwarden" na používanie hesiel a prístupových kľúčov</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Váš prístupový kľúč sa uloží do vášho Bitwarden trezoru</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Váš prístupový kľúč sa uloží do vášho Bitwarden trezoru pre {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Nepriradené položky organizácie už nie sú viditeľné v zobrazení Všetky Trezory a sú prístupné len cez administrátorskú konzolu. Aby boli viditeľné, priraďte tieto položky do kolekcie z konzoly administrátora.</value>
@@ -2987,6 +2987,21 @@ Chcete prepnúť na toto konto?</value>
     <value>Upozornenie</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Prístupové kľúče nie sú pre túto aplikáciu podporované</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Operácia prístupového kľúča zlyhala, pretože prehliadač nemá oprávnenie</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Operácia prístupového kľúča zlyhala, pretože podpis prehliadača sa nezhoduje</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Operácia prístupového kľúča zlyhala, pretože súbor s protokolom Digital Asset Links chýba</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Operácia prístupového kľúča zlyhala, pretože sa aplikácia nenašla v súbore s protokolom Digital Asset Links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Operácia prístupového kľúča zlyhala, pretože aplikácia sa nedá overiť</value>
   </data>
 </root>

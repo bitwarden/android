@@ -2990,4 +2990,19 @@ Do you want to switch to this account?</value>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
     <value>Passkeys not supported for this app</value>
   </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Passkey-operasjonen feila fordi nettlesaren ikkje er priviligert</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Passkey-operasjonen feila fordi nettlesar-signaturen ikkje stemte</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Passkey-operasjonen feila på grunn av manglande ressurslenker</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Passkey-operasjonen feila fordi appen ikkje vart funnen blant ressurslenkene</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Passkey-operasjonen feila fordi appen ikkje kunne verifiserast</value>
+  </data>
 </root>

@@ -1195,7 +1195,7 @@
     <value>ويندوز هيلو</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>لم نتمكن من فتح قائمة إعدادات موفر بيانات اعتماد أندرويد تلقائياً لك. يمكنك الانتقال إلى قائمة إعدادات موفر بيانات الاعتماد يدويًا من إعدادات الأندرويد &gt; النظام &gt; كلمات المرور والحسابات &gt; كلمات المرور. مفاتيح المرور وخدمات البيانات.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>لم نتمكن من فتح قائمة إعدادات الملء التلقائي لنظام Android نيابةً عنك. يمكنك الانتقال إلى قائمة إعدادات الملء التلقائي يدويًا من إعدادات Android &amp; GT ؛ نظام &amp; GT. اللغات والمدخلات &amp; GT. متقدم &amp; GT. خدمة الملء التلقائي.</value>
@@ -1823,7 +1823,7 @@
     <value>يحتاج Bitwarden إلى الاهتمام - قم بتمكين "السحب" في "خدمات الملء التلقائي" من إعدادات Bitwarden</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>إدارة مفتاح المرور</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>خدمات التعبئة التلقائية</value>
@@ -2809,7 +2809,7 @@
     <value>{0} ساعات</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>استخدم Bitwarden لحفظ مفاتيح المرور الجديدة وتسجيل الدخول باستخدام مفاتيح المرور المخزنة في المخزن الخاص بك.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>يتم استخدام إطار التعبئة التلقائية لأندرويد للمساعدة في ملء معلومات تسجيل الدخول في تطبيقات أخرى على جهازك.</value>
@@ -2840,7 +2840,7 @@
     <value>هل تريد المتابعة إلى متجر التطبيقات؟</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>هل تريد المتابعة إلى إعدادات الجهاز؟</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>اجعل حسابك أكثر أمنا من خلال إعداد تسجيل الدخول بخطوتين في تطبيق Bitwarden على شبكة الإنترنت.</value>
@@ -2893,25 +2893,25 @@
     <value>أعدنّ ميزة إلغاء القُفْل لتغيير إجراء مهلة المخزن الخاص بك.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>اختر تسجيل الدخول لحفظ مفتاح المرور هذا إلى</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>حفظ مفتاح المرور كتسجيل دخول جديد</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>حفظ مفتاح المرور</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>مفاتيح المرور لـ {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>كلمات المرور لـ {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>الكتابة فوق مفتاح المرور؟</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>هذا العنصر يحتوي بالفعل على مفتاح مرور. هل أنت متأكد من أنك تريد الكتابة فوق مفتاح المرور الحالي؟</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>تسجيل الدخول لـ Duo من خطوتين مطلوب لحسابك. </value>
@@ -2923,71 +2923,86 @@
     <value>تشغيل Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>التحقق مطلوب من قِبَل {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>التحقق مطلوب لهذا الإجراء. قم بإعداد طريقة إلغاء القفل في Bitwarden للمتابعة.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>خطأ في إنشاء مفتاح المرور</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>خطأ في قراءة مفتاح المرور</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>حدثت مشكلة في إنشاء مفتاح مرور لـ {0}. حاول مرة أخرى لاحقاً.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>حدثت مشكلة في قراءة مفتاح المرور الخاص بك لـ {0}. حاول مرة أخرى لاحقاً.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>التحقق من الهوية...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>كلمات المرور</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>حساب غير معروف</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>إعداد الملء التلقائي</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>احصل على الوصول الفوري إلى كلمات المرور ومفاتيح المرور الخاصة بك!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>لإعداد ملء كلمة المرور التلقائي وإدارة مفتاح المرور، عيّن Bitwarden كموفر مفضل لك في إعدادات iOS.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. انتقل إلى إعدادات جهازك &gt; كلمات المرور &gt; خيارات كلمة المرور</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. تشغيل التعبئة التلقائية</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. حدد "Bitwarden" لاستخدامه لكلمات المرور ومفاتيح المرور</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>سيتم حفظ مفتاح المرور الخاص بك في مخزن Bitwarden الخاص بك</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>سيتم حفظ مفتاح المرور الخاص بك في مخزن Bitwarden الخاص بك لـ {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
-    <value>Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+    <value>عناصر المؤسسة غير المعينة لم تعد مرئية في عرض جميع المستودعات ويمكن الوصول إليها فقط عن طريق لوحة التحكم. تعيين هذه العناصر لمجموعة من وحدة تحكم المدير لجعلها مرئية.</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
-    <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+    <value>في 16 مايو 2024، لن تكون عناصر المؤسسة غير المعينة مرئية في عرض جميع المستودعات ويمكن الوصول إليها فقط عن طريق مدير النظام. تعيين هذه العناصر لمجموعة من وحدة تحكم المدير لجعلها مرئية.</value>
   </data>
   <data name="RemindMeLater" xml:space="preserve">
-    <value>Remind me later</value>
+    <value>ذكرني لاحقاً</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Notice</value>
+    <value>إشعار</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>مفاتيح المرور غير مدعومة لهذا التطبيق</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>فشلت عملية مفتاح المرور لأن المتصفح ليس لديه امتيازات</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>فشلت عملية مفتاح المرور لأن توقيع المتصفح غير مطابق</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>فشلت عملية مفتاح المرور بسبب عدم وجود روابط أصلية</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>فشلت عملية مفتاح المرور لأن التطبيق لم يتم العثور عليه في روابط أصلية</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>فشلت عملية مفتاح المرور لأنه تعذر التحقق من التطبيق</value>
   </data>
 </root>

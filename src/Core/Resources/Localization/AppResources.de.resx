@@ -422,7 +422,7 @@
     <value>Auto-Ausfüllen-Dienst</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Lege Bitwarden in den Geräteeinstellungen als deinen Passkey-Anbieter fest.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Mehrdeutige Zeichen vermeiden</value>
@@ -1822,7 +1822,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Bitwarden braucht Aufmerksamkeit - Aktiviere "Überschreiben" im "Auto-Ausfüllen-Dienst" in den Bitwarden-Einstellungen</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Passkey-Verwaltung</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Auto-Ausfüllen-Dienst</value>
@@ -2807,7 +2807,7 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>{0} Stunden</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Verwende Bitwarden, um neue Passkeys zu speichern und dich mit Passkeys aus deinem Tresor anzumelden.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Das Android Autofill Framework wird verwendet, um Zugangsdaten in andere Apps auf deinem Gerät auszufüllen.</value>
@@ -2838,7 +2838,7 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Weiter zum App Store?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Weiter zu den Geräteeinstellungen?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Mache dein Konto sicherer, indem du eine Zwei-Faktor-Authentifizierung in der Bitwarden Web-App einrichtest.</value>
@@ -2891,25 +2891,25 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Richte eine Entsperroption ein, um deine Aktion bei Tresor-Timeout zu ändern.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Wähle die Zugangsdaten aus, in die dieser Passkey gespeichert werden soll</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Passkey als neue Zugangsdaten speichern</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Passkey speichern</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Passkeys für {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Passwörter für {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Passkey überschreiben?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Dieser Eintrag enthält bereits einen Passkey. Bist du sicher, dass du den aktuellen Passkey überschreiben möchtest?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Für dein Konto ist die Duo Zwei-Faktor-Authentifizierung erforderlich. </value>
@@ -2921,57 +2921,57 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Duo starten</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Verifizierung erforderlich durch {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>Diese Aktion erfordert eine Verifizierung. Richte eine Entsperrmethode in Bitwarden ein, um fortzufahren.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Fehler beim Erstellen des Passkeys</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Fehler beim Lesen des Passkeys</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Es gab ein Problem beim Erstellen eines Passkeys für {0}. Versuche es später erneut.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Es gab ein Problem beim Lesen deines Passkeys für {0}. Versuche es später erneut.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Identität wird verifiziert...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Passwörter</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Unbekanntes Konto</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Auto-Ausfüllen einrichten</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Erhalte sofortigen Zugriff auf deine Passwörter und Passkeys!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>Um das automatische Ausfüllen von Passwörtern und die Passkey-Verwaltung einzurichten, lege Bitwarden in den iOS-Einstellungen als deinen bevorzugten Anbieter fest.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Geh in deine Geräteeinstellungen &gt; Passwörter &gt; Passwortoptionen</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Schalte "Automatisch ausfüllen" ein</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Wähle "Bitwarden" bei "Passwörter und Passkeys verwenden von"</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Dein Passkey wird in deinem Bitwarden-Tresor gespeichert</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Dein Passkey wird in deinem Bitwarden-Tresor für {0} gespeichert</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Hinweis: Nicht zugeordnete Organisationseinträge sind nicht mehr in der Ansicht aller Tresore sichtbar und nur über die Administrator-Konsole zugänglich. Weise diese Einträge einer Sammlung aus der Administrator-Konsole zu, um sie sichtbar zu machen.</value>
@@ -2986,6 +2986,21 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Hinweis</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Passkeys werden für diese App nicht unterstützt</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Der Passkey-Vorgang ist fehlgeschlagen, da der Browser nicht autorisiert ist</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Der Passkey-Vorgang ist fehlgeschlagen, da die Browser-Signatur nicht übereinstimmt</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Der Passkey-Vorgang ist wegen fehlender Asset-Links fehlgeschlagen</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht in den Asset-Links gefunden wurde</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Der Passwort-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</value>
   </data>
 </root>

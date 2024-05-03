@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>מאמת</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -422,7 +422,7 @@
     <value>שירות מילוי-אוטומטי</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>הגדירו את Bitwarden בתור ספק מפתחות אבטחה בהגדרות המכשיר.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>המנע מאותיות ותוים דומים</value>
@@ -581,7 +581,7 @@
     <value>רמז לסיסמה הראשית יכול לעזור במקרה ושכחת את הסיסמה.</value>
   </data>
   <data name="MasterPasswordLengthValMessageX" xml:space="preserve">
-    <value>Master password must be at least {0} characters long.</value>
+    <value>הסיסמה הראשית חייבת להיות לפחות באורך {0} תווים.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>מינימום ספרות</value>
@@ -769,10 +769,10 @@
     <value>מופעל</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>כבוי</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>פעיל</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>סטטוס</value>
@@ -895,8 +895,8 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>קריאת מפתח האימות נכשלה.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>כוונו את המצלמה לכיוון הברקוד.
+הסריקה תתרחש באופן אוטומטי.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>סרוק קוד QR</value>
@@ -911,10 +911,10 @@ Scanning will happen automatically.</value>
     <value>העתק TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clipboard when you auto-fill the login.</value>
+    <value>אם לפרטי כניסה יש אפליקציית אימות, העתיקו את קוד האימות TOTP ללוח שלכם כשמתבצעת ההשלמה האוטומטית לטופס הכניסה.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>העתק קוד TOTP אוטומטית</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>בכדי להשתמש ביכולת זו יש צורך במנוי פרמיום.</value>
@@ -950,7 +950,7 @@ Scanning will happen automatically.</value>
     <value>לא ניתן להשתמש ביכולת זו עד שתעדכן את מפתח ההצפנה שלך.</value>
   </data>
   <data name="EncryptionKeyMigrationRequiredDescriptionLong" xml:space="preserve">
-    <value>Encryption key migration required. Please login through the web vault to update your encryption key.</value>
+    <value>נדרשת הסבת מפתח הצפנה. נא להיכנס לכספת דרך האתר כדי לעדכן את מפתח ההצפנה שלך.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>למידע נוסף</value>
@@ -2991,5 +2991,20 @@ Do you want to switch to this account?</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
     <value>Passkeys not supported for this app</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
+    <value>Passkey operation failed because browser is not privileged</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
+    <value>Passkey operation failed because browser signature does not match</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because of missing asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
+    <value>Passkey operation failed because app not found in asset links</value>
+  </data>
+  <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
+    <value>Passkey operation failed because app could not be verified</value>
   </data>
 </root>
