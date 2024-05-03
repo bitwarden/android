@@ -344,8 +344,9 @@ namespace Bit.App.Pages
                 await MainThread.InvokeOnMainThreadAsync(_deviceActionService.HideLoadingAsync); 
                 throw;
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Exception(ex);
                 failed = true;
             }
             if (failed)
