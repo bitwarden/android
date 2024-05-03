@@ -11,6 +11,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.CreateIte
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
+import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -82,6 +83,17 @@ class ManualCodeEntryViewModel @Inject constructor(
             return
         }
 
+        if (!state.code.isBase32()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = ManualCodeEntryState.DialogState.Error(
+                        message = R.string.key_is_invalid.asText()
+                    )
+                )
+            }
+            return
+        }
+
         if (state.issuer.isBlank()) {
             mutableStateFlow.update {
                 it.copy(
@@ -92,6 +104,7 @@ class ManualCodeEntryViewModel @Inject constructor(
             }
             return
         }
+
         viewModelScope.launch {
             val result = authenticatorRepository.createItem(
                 AuthenticatorItemEntity(

@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -67,6 +68,7 @@ fun BitwardenPasswordField(
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
 ) {
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
@@ -83,6 +85,7 @@ fun BitwardenPasswordField(
         singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions = KeyboardOptions(
+            capitalization = capitalization,
             keyboardType = keyboardType,
             imeAction = imeAction,
         ),
@@ -156,6 +159,7 @@ fun BitwardenPasswordField(
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
+    capitalization: KeyboardCapitalization = KeyboardCapitalization.None,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(initialShowPassword) }
     BitwardenPasswordField(
@@ -172,6 +176,7 @@ fun BitwardenPasswordField(
         autoFocus = autoFocus,
         keyboardType = keyboardType,
         imeAction = imeAction,
+        capitalization = capitalization,
     )
 }
 

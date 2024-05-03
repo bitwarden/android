@@ -27,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,6 +41,7 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicD
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
+import com.bitwarden.authenticator.ui.platform.components.field.BitwardenPasswordField
 import com.bitwarden.authenticator.ui.platform.components.field.BitwardenTextField
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
@@ -177,7 +179,7 @@ fun ManualCodeEntryScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(8.dp))
-            BitwardenTextField(
+            BitwardenPasswordField(
                 singleLine = false,
                 label = stringResource(id = R.string.key),
                 value = state.code,
@@ -188,6 +190,7 @@ fun ManualCodeEntryScreen(
                         )
                     }
                 },
+                capitalization = KeyboardCapitalization.Characters,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),

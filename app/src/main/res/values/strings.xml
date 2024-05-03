@@ -44,7 +44,6 @@
     <string name="number_of_digits">Number of digits</string>
     <string name="save">Save</string>
     <string name="validation_field_required">The %1$s field is required.</string>
-    <string name="secret_key">Secret key</string>
     <string name="refresh_period_seconds" tools:ignore="PluralsCandidate">%d seconds</string>
     <string name="saving">Saving</string>
     <string name="item_saved">Item saved</string>
@@ -108,4 +107,9 @@
     <string name="key_is_required">Key is required.</string>
     <string name="name_is_required">Name is required.</string>
     <string name="submit_crash_logs">Submit crash logs</string>
+    <string name="import_vault_failure">There was a problem importing your vault.</string>
+    <string name="file_source">File Source</string>
+    <string name="import_vault">Import</string>
+    <string name="import_success">Vault import successful</string>
+    <string name="key_is_invalid">Key is invalid.</string>
 </resources>

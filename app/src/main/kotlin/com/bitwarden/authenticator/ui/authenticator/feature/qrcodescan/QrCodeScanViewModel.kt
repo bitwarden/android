@@ -5,6 +5,7 @@ import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRe
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
+import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -159,12 +160,4 @@ sealed class QrCodeScanAction {
      * The Camera is unable to be setup.
      */
     data object CameraSetupErrorReceive : QrCodeScanAction()
-}
-
-/**
- * Checks if a string is using base32 digits.
- */
-private fun String.isBase32(): Boolean {
-    val regex = ("^[A-Z2-7]+=*$").toRegex()
-    return regex.matches(this)
 }

@@ -1,6 +1,8 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.edititem
 
 import android.os.Parcelable
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
@@ -18,6 +20,7 @@ import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.concat
+import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -93,7 +96,17 @@ class EditItemViewModel @Inject constructor(
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.secret_key),
+                        message = R.string.validation_field_required.asText(R.string.key),
+                    )
+                )
+            }
+            return@onContent
+        } else if (!content.itemData.totpCode.isBase32()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = EditItemState.DialogState.Generic(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.key_is_invalid.asText()
                     )
                 )
             }
@@ -320,7 +333,7 @@ class EditItemViewModel @Inject constructor(
         itemData = EditItemData(
             refreshPeriod = AuthenticatorRefreshPeriodOption.fromSeconds(period)
                 ?: AuthenticatorRefreshPeriodOption.THIRTY,
-            totpCode = key,
+            totpCode = key.toUpperCase(Locale.current),
             type = type,
             username = accountName,
             issuer = issuer,
