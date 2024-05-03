@@ -84,6 +84,8 @@
 		1BDBFEB3290B5D07009C78C7 /* CoreDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BDBFEB2290B5D07009C78C7 /* CoreDataHelper.swift */; };
 		1BF5F6DB29103066002DDC0C /* CipherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5F6DA29103066002DDC0C /* CipherService.swift */; };
 		1BF5F6DE29103B86002DDC0C /* CipherServiceMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BF5F6DD29103B86002DDC0C /* CipherServiceMock.swift */; };
+		B7A3ABF42BCEECD700A07178 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B7A3ABF32BCEECD700A07178 /* PrivacyInfo.xcprivacy */; };
+		B7A3ABF52BCEECD700A07178 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = B7A3ABF32BCEECD700A07178 /* PrivacyInfo.xcprivacy */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -267,6 +269,7 @@
 		B78CEC832A25455400539F0D /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = vi; path = vi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		B78CEC842A25455D00539F0D /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B78CEC852A25456400539F0D /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		B7A3ABF32BCEECD700A07178 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -322,6 +325,7 @@
 		1B15612628B7F3D400610B9B = {
 			isa = PBXGroup;
 			children = (
+				B7A3ABF32BCEECD700A07178 /* PrivacyInfo.xcprivacy */,
 				1B5BE45D295B472C00E0C323 /* GoogleService-Info.plist */,
 				1B15613128B7F3D400610B9B /* bitwarden */,
 				1B15614128B7F3D700610B9B /* bitwarden WatchKit App */,
@@ -727,6 +731,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B7A3ABF42BCEECD700A07178 /* PrivacyInfo.xcprivacy in Resources */,
 				1B15614328B7F3D800610B9B /* Assets.xcassets in Resources */,
 				1B5BE45F295B472C00E0C323 /* GoogleService-Info.plist in Resources */,
 			);
@@ -739,6 +744,7 @@
 				1B15615B28B7F3D900610B9B /* Preview Assets.xcassets in Resources */,
 				1B5BE460295B472C00E0C323 /* GoogleService-Info.plist in Resources */,
 				1B5AFF0729197822004478F9 /* Localizable.strings in Resources */,
+				B7A3ABF52BCEECD700A07178 /* PrivacyInfo.xcprivacy in Resources */,
 				1B15615828B7F3D900610B9B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

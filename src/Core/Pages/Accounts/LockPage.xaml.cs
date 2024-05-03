@@ -168,7 +168,7 @@ namespace Bit.App.Pages
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(50);
-                    MainThread.BeginInvokeOnMainThread(async () => await _vm.SubmitAsync());
+                    _vm.SubmitCommand.Execute(null);
                 });
             }
         }
@@ -233,6 +233,10 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
 
+            if (_appOptions != null)
+            {
+                _appOptions.HasJustLoggedInOrUnlocked = true;
+            }
             App.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }

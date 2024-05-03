@@ -1,45 +1,60 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.iOS.Autofill.Models;
+using Bit.iOS.Autofill.Utilities;
+using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Bit.iOS.Core.Controllers;
-using Bit.Core.Resources.Localization;
-using Bit.iOS.Core.Views;
-using Bit.iOS.Autofill.Utilities;
-using Bit.iOS.Core.Utilities;
-using Bit.App.Abstractions;
-using Bit.Core.Utilities;
 
 namespace Bit.iOS.Autofill
 {
-    public partial class LoginSearchViewController : ExtendedUITableViewController
+    public partial class LoginSearchViewController : ExtendedUITableViewController, ILoginListViewController
     {
         public LoginSearchViewController(IntPtr handle)
             : base(handle)
         {
             DismissModalAction = Cancel;
-            PasswordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
         }
 
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
         public bool FromList { get; set; }
-        public IPasswordRepromptService PasswordRepromptService { get; private set; }
 
         public async override void ViewDidLoad()
         {
-            base.ViewDidLoad();
-            NavItem.Title = AppResources.SearchVault;
-            CancelBarButton.Title = AppResources.Cancel;
-            SearchBar.Placeholder = AppResources.Search;
-            SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
-            SearchBar.UpdateThemeIfNeeded();
+            try
+            {
+                base.ViewDidLoad();
 
-            TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 44;
-            TableView.Source = new TableSource(this);
-            SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
-            await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
+                NavItem.Title = AppResources.SearchVault;
+                CancelBarButton.Title = AppResources.Cancel;
+                SearchBar.Placeholder = AppResources.Search;
+                SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                SearchBar.UpdateThemeIfNeeded();
+
+                TableView.RowHeight = UITableView.AutomaticDimension;
+                TableView.EstimatedRowHeight = 55;
+
+                var tableSource = new TableSource(this);
+                TableView.Source = tableSource;
+                tableSource.RegisterTableViewCells(TableView);
+
+                if (UIDevice.CurrentDevice.CheckSystemVersion(15, 0))
+                {
+                    TableView.SectionHeaderTopPadding = 0;
+                }
+
+                SearchBar.Delegate = new ExtensionSearchDelegate(TableView);
+                await ReloadItemsAsync();
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+            }
         }
 
         public override void ViewDidAppear(bool animated)
@@ -61,13 +76,13 @@ namespace Bit.iOS.Autofill
             }
             else
             {
-                CPViewController.CompleteRequest();
+                CPViewController.CancelRequest(AuthenticationServices.ASExtensionErrorCode.UserCanceled);
             }
         }
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("loginAddFromSearchSegue", this);
+            PerformSegue(SegueConstants.ADD_LOGIN_FROM_SEARCH, this);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -88,29 +103,28 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
-                TableView.ReloadData();
+                await ReloadItemsAsync();
             });
         }
 
-        public class TableSource : ExtensionTableSource
+        public void OnItemsLoaded(string searchFilter) { }
+
+        public async Task ReloadItemsAsync()
         {
-            private Context _context;
-            private LoginSearchViewController _controller;
+            await((TableSource)TableView.Source).LoadAsync(false, SearchBar.Text);
+            TableView.ReloadData();
+        }
 
+        public void ReloadTableViewData() => TableView.ReloadData();
+
+        public class TableSource : BaseLoginListTableSource<LoginSearchViewController>
+        {
             public TableSource(LoginSearchViewController controller)
-                : base(controller.Context, controller)
+                : base(controller)
             {
-                _context = controller.Context;
-                _controller = controller;
             }
 
-            public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
-            {
-                await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
-                    _controller.CPViewController, _controller, _controller.PasswordRepromptService,
-                    "loginAddFromSearchSegue");
-            }
+            protected override string LoginAddSegue => SegueConstants.ADD_LOGIN_FROM_SEARCH;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 
 namespace Bit.Core.Models.Domain
 {
@@ -9,7 +8,7 @@ namespace Bit.Core.Models.Domain
         {
             if (key == null)
             {
-                throw new Exception("Must provide key.");
+                throw new ArgumentKeyNullException(nameof(key));
             }
 
             if (encType == null)
@@ -24,7 +23,7 @@ namespace Bit.Core.Models.Domain
                 }
                 else
                 {
-                    throw new Exception("Unable to determine encType.");
+                    throw new InvalidKeyOperationException("Unable to determine encType.");
                 }
             }
 
@@ -48,7 +47,7 @@ namespace Bit.Core.Models.Domain
             }
             else
             {
-                throw new Exception("Unsupported encType/key length.");
+                throw new InvalidKeyOperationException("Unsupported encType/key length.");
             }
 
             if (Key != null)
@@ -72,6 +71,32 @@ namespace Bit.Core.Models.Domain
         public string KeyB64 { get; set; }
         public string EncKeyB64 { get; set; }
         public string MacKeyB64 { get; set; }
+
+        public class ArgumentKeyNullException : ArgumentNullException
+        {
+            public ArgumentKeyNullException(string paramName) : base(paramName)
+            {
+            }
+
+            public ArgumentKeyNullException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+
+            public ArgumentKeyNullException(string paramName, string message) : base(paramName, message)
+            {
+            }
+        }
+
+        public class InvalidKeyOperationException : InvalidOperationException
+        {
+            public InvalidKeyOperationException(string message) : base(message)
+            {
+            }
+
+            public InvalidKeyOperationException(string message, Exception innerException) : base(message, innerException)
+            {
+            }
+        }
     }
 
     public class UserKey : SymmetricCryptoKey

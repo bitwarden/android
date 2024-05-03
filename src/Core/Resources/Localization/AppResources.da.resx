@@ -421,6 +421,9 @@
   <data name="AutofillService" xml:space="preserve">
     <value>Autoudfyldningstjeneste</value>
   </data>
+  <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
+    <value>Set Bitwarden as your passkey provider in device settings.</value>
+  </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Undgå tvetydige tegn</value>
   </data>
@@ -1191,6 +1194,9 @@ Skanning vil ske automatisk.</value>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
+  <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+  </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Vi var ude af stand til automatisk at åbne Android indstillingsmenuen AutoFyld-tjenesten for dig. Du kan manuelt navigere til AutoFyld indstillingsmenuen fra Android Indstillinger &gt; System &gt; Sprog og indtastning &gt; Avanceret &gt; AutoFyld-tjenesten.</value>
   </data>
@@ -1814,6 +1820,9 @@ Skanning vil ske automatisk.</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden behøver tilladelse - Aktivér "Tegn over" i "Autoudfyldtjeneste" i Bitwarden-indstillingerne</value>
+  </data>
+  <data name="PasskeyManagement" xml:space="preserve">
+    <value>Passkey management</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Autoudfyldtjeneste</value>
@@ -2798,6 +2807,9 @@ Vil du skifte til denne konto?</value>
   <data name="XHours" xml:space="preserve">
     <value>{0} timer</value>
   </data>
+  <data name="PasskeyManagementExplanationLong" xml:space="preserve">
+    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+  </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Android Autofill Framework bruges til at hjælpe med at udfylde loginoplysninger i andre apps på enheden.</value>
   </data>
@@ -2825,6 +2837,9 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Fortsæt til app-butik?</value>
+  </data>
+  <data name="ContinueToDeviceSettings" xml:space="preserve">
+    <value>Continue to device Settings?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Øg kontosikkerheden ved at oprette totrins-indlogning i Bitwarden web-appen.</value>
@@ -2876,6 +2891,27 @@ Vil du skifte til denne konto?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Opsæt en oplåsningsmetode for at ændre Bokstimeouthandlingen.</value>
   </data>
+  <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
+    <value>Choose a login to save this passkey to</value>
+  </data>
+  <data name="SavePasskeyAsNewLogin" xml:space="preserve">
+    <value>Save passkey as new login</value>
+  </data>
+  <data name="SavePasskey" xml:space="preserve">
+    <value>Save passkey</value>
+  </data>
+  <data name="PasskeysForX" xml:space="preserve">
+    <value>Passkeys for {0}</value>
+  </data>
+  <data name="PasswordsForX" xml:space="preserve">
+    <value>Passwords for {0}</value>
+  </data>
+  <data name="OverwritePasskey" xml:space="preserve">
+    <value>Overwrite passkey?</value>
+  </data>
+  <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
+    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+  </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Duo-totrinsindlogning kræves for kontoen. </value>
   </data>
@@ -2884,5 +2920,73 @@ Vil du skifte til denne konto?</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Start Duo</value>
+  </data>
+  <data name="VerificationRequiredByX" xml:space="preserve">
+    <value>Verification required by {0}</value>
+  </data>
+  <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
+    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+  </data>
+  <data name="ErrorCreatingPasskey" xml:space="preserve">
+    <value>Error creating passkey</value>
+  </data>
+  <data name="ErrorReadingPasskey" xml:space="preserve">
+    <value>Error reading passkey</value>
+  </data>
+  <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="VerifyingIdentityEllipsis" xml:space="preserve">
+    <value>Verifying identity...</value>
+  </data>
+  <data name="Passwords" xml:space="preserve">
+    <value>Passwords</value>
+  </data>
+  <data name="UnknownAccount" xml:space="preserve">
+    <value>Unknown account</value>
+  </data>
+  <data name="SetUpAutofill" xml:space="preserve">
+    <value>Set up auto-fill</value>
+  </data>
+  <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
+    <value>Get instant access to your passwords and passkeys!</value>
+  </data>
+  <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
+    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+  </data>
+  <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
+    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+  </data>
+  <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
+    <value>2. Turn on AutoFill</value>
+  </data>
+  <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
+    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
+    <value>Your passkey will be saved to your Bitwarden vault</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
+    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Utildelte organisationsemner er ikke længere synlige i Alle Bokse-visningen og er kun tilgængelige via Admin-konsollen. Føj disse emner til en samling fra Admin-konsollen for at gøre dem synlige.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Pr. 16. maj 2024 vil utildelte organisationsemner ikke længere være synlige i Alle Bokse-visningen og vil kun være tilgængelige via Admin-konsollen. Tildel disse emner til en samling via Admin-konsollen for at gøre dem synlige.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Påmind senere</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Varsling</value>
+  </data>
+  <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
+    <value>Passkeys not supported for this app</value>
   </data>
 </root>

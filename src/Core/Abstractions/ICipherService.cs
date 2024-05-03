@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
@@ -37,5 +34,8 @@ namespace Bit.Core.Abstractions
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string cipherId, AttachmentView attachment, string organizationId);
         Task SoftDeleteWithServerAsync(string id);
         Task RestoreWithServerAsync(string id);
+        Task<string> CreateNewLoginForPasskeyAsync(Fido2ConfirmNewCredentialParams newPasskeyParams);
+        Task CopyTotpCodeIfNeededAsync(CipherView cipher);
+        Task<bool> VerifyOrganizationHasUnassignedItemsAsync();
     }
 }

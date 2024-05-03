@@ -1,5 +1,4 @@
-﻿using System;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Models
@@ -9,6 +8,8 @@ namespace Bit.App.Models
         public bool MyVaultTile { get; set; }
         public bool GeneratorTile { get; set; }
         public bool FromAutofillFramework { get; set; }
+        public bool FromFido2Framework { get; set; }
+        public string Fido2CredentialAction { get; set; }
         public CipherType? FillType { get; set; }
         public string Uri { get; set; }
         public CipherType? SaveType { get; set; }
@@ -25,6 +26,8 @@ namespace Bit.App.Models
         public bool CopyInsteadOfShareAfterSaving { get; set; }
         public bool HideAccountSwitcher { get; set; }
         public OtpData? OtpData { get; set; }
+        public bool HasUnlockedInThisTransaction { get; set; }
+        public bool HasJustLoggedInOrUnlocked { get; set; }
 
         public void SetAllFrom(AppOptions o)
         {
@@ -35,6 +38,7 @@ namespace Bit.App.Models
             MyVaultTile = o.MyVaultTile;
             GeneratorTile = o.GeneratorTile;
             FromAutofillFramework = o.FromAutofillFramework;
+            Fido2CredentialAction = o.Fido2CredentialAction;
             FillType = o.FillType;
             Uri = o.Uri;
             SaveType = o.SaveType;
@@ -51,6 +55,7 @@ namespace Bit.App.Models
             CopyInsteadOfShareAfterSaving = o.CopyInsteadOfShareAfterSaving;
             HideAccountSwitcher = o.HideAccountSwitcher;
             OtpData = o.OtpData;
+            HasUnlockedInThisTransaction = o.HasUnlockedInThisTransaction;
         }
     }
 }

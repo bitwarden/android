@@ -147,4 +147,7 @@
       <Link>Resources\ext-icon%403x.png</Link>
     </BundleResource>
   </ItemGroup>
+	<ItemGroup>
+		<BundleResource Include="..\App\Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 </Project>

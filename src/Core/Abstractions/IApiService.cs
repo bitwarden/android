@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -46,6 +41,7 @@ namespace Bit.Core.Abstractions
         Task<CipherResponse> PutShareCipherAsync(string id, CipherShareRequest request);
         Task PutDeleteCipherAsync(string id);
         Task<CipherResponse> PutRestoreCipherAsync(string id);
+        Task<bool> HasUnassignedCiphersAsync();
         Task RefreshIdentityTokenAsync();
         Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
@@ -99,5 +95,6 @@ namespace Bit.Core.Abstractions
         Task<bool> GetDevicesExistenceByTypes(DeviceType[] deviceTypes);
         Task<ConfigResponse> GetConfigsAsync();
         Task<string> GetFastmailAccountIdAsync(string apiKey);
+        Task<List<Utilities.DigitalAssetLinks.Statement>> GetDigitalAssetLinksForRpAsync(string rpId);
     }
 }

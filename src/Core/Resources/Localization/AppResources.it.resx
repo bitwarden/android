@@ -421,6 +421,9 @@
   <data name="AutofillService" xml:space="preserve">
     <value>Servizio di riempimento automatico</value>
   </data>
+  <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
+    <value>Set Bitwarden as your passkey provider in device settings.</value>
+  </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evita caratteri ambigui</value>
   </data>
@@ -1190,6 +1193,9 @@
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
+  <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+  </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Non siamo riusciti ad aprire le impostazioni del riempimento automatico di Android per te. Puoi navigare manualmente nelle impostazioni di riempimento automatico dalle Impostazioni di Android &gt; Cerca Impostazioni &gt; Cerca "Password e autofill"</value>
   </data>
@@ -1814,6 +1820,9 @@
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden richiede la tua attenzione - Abilita "Mostra sopra altre app" in "Servizi di riempimento automatico" dalle impostazioni di Bitwarden</value>
+  </data>
+  <data name="PasskeyManagement" xml:space="preserve">
+    <value>Passkey management</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Servizi di riempimento automatico</value>
@@ -2798,6 +2807,9 @@ Vuoi passare a questo account?</value>
   <data name="XHours" xml:space="preserve">
     <value>{0} ore</value>
   </data>
+  <data name="PasskeyManagementExplanationLong" xml:space="preserve">
+    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+  </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>La struttura di riempimento automatico di Android è usata per aiutare a inserire le tue credenziali su altre app nel tuo dispositivo.</value>
   </data>
@@ -2825,6 +2837,9 @@ Vuoi passare a questo account?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continuare sull'App Store?</value>
+  </data>
+  <data name="ContinueToDeviceSettings" xml:space="preserve">
+    <value>Continue to device Settings?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Rendi il tuo account più sicuro impostando la verifica in due passaggi sul sito web di Bitwarden.</value>
@@ -2876,13 +2891,102 @@ Vuoi passare a questo account?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Imposta un metodo di sblocco per modificare l'azione timeout cassaforte.</value>
   </data>
+  <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
+    <value>Choose a login to save this passkey to</value>
+  </data>
+  <data name="SavePasskeyAsNewLogin" xml:space="preserve">
+    <value>Save passkey as new login</value>
+  </data>
+  <data name="SavePasskey" xml:space="preserve">
+    <value>Save passkey</value>
+  </data>
+  <data name="PasskeysForX" xml:space="preserve">
+    <value>Passkeys for {0}</value>
+  </data>
+  <data name="PasswordsForX" xml:space="preserve">
+    <value>Passwords for {0}</value>
+  </data>
+  <data name="OverwritePasskey" xml:space="preserve">
+    <value>Overwrite passkey?</value>
+  </data>
+  <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
+    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+  </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
-    <value>Duo two-step login is required for your account. </value>
+    <value>Per il tuo account è richiesta la verifica in due passaggi di Duo.</value>
   </data>
   <data name="FollowTheStepsFromDuoToFinishLoggingIn" xml:space="preserve">
-    <value>Follow the steps from Duo to finish logging in.</value>
+    <value>Segui i passaggi da Duo per completare l'accesso.</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
-    <value>Launch Duo</value>
+    <value>Avvia Duo</value>
+  </data>
+  <data name="VerificationRequiredByX" xml:space="preserve">
+    <value>Verification required by {0}</value>
+  </data>
+  <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
+    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+  </data>
+  <data name="ErrorCreatingPasskey" xml:space="preserve">
+    <value>Error creating passkey</value>
+  </data>
+  <data name="ErrorReadingPasskey" xml:space="preserve">
+    <value>Error reading passkey</value>
+  </data>
+  <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="VerifyingIdentityEllipsis" xml:space="preserve">
+    <value>Verifying identity...</value>
+  </data>
+  <data name="Passwords" xml:space="preserve">
+    <value>Passwords</value>
+  </data>
+  <data name="UnknownAccount" xml:space="preserve">
+    <value>Unknown account</value>
+  </data>
+  <data name="SetUpAutofill" xml:space="preserve">
+    <value>Set up auto-fill</value>
+  </data>
+  <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
+    <value>Get instant access to your passwords and passkeys!</value>
+  </data>
+  <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
+    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+  </data>
+  <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
+    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+  </data>
+  <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
+    <value>2. Turn on AutoFill</value>
+  </data>
+  <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
+    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
+    <value>Your passkey will be saved to your Bitwarden vault</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
+    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Gli elementi dell'organizzazione non assegnati non sono più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e sono ora accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>Dal 16 maggio 2024, gli elementi dell'organizzazione non assegnati non saranno più visibili nella visualizzazione Tutte le Cassaforti su tutti i dispositivi e saranno accessibili solo tramite la Console di amministrazione. Assegna questi elementi ad una raccolta dalla Console di amministrazione per renderli visibili.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Ricordamelo più tardi</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Avviso</value>
+  </data>
+  <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
+    <value>Passkeys not supported for this app</value>
   </data>
 </root>

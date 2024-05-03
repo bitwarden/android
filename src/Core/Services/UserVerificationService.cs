@@ -25,7 +25,7 @@ namespace Bit.Core.Services
             _keyConnectorService = keyConnectorService;
         }
 
-        async public Task<bool> VerifyUser(string secret, VerificationType verificationType)
+        public async Task<bool> VerifyUser(string secret, VerificationType verificationType)
         {
             if (string.IsNullOrEmpty(secret))
             {
@@ -59,6 +59,12 @@ namespace Bit.Core.Services
             }
 
             return true;
+        }
+
+        public async Task<bool> VerifyMasterPasswordAsync(string masterPassword)
+        {
+            var masterKey = await _cryptoService.GetOrDeriveMasterKeyAsync(masterPassword);
+            return await _cryptoService.CompareAndUpdateKeyHashAsync(masterPassword, masterKey);
         }
 
         async private Task InvalidSecretErrorAsync(VerificationType verificationType)

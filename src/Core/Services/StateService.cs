@@ -1384,6 +1384,16 @@ namespace Bit.Core.Services
             await _storageMediatorService.SaveAsync(Constants.RegionEnvironment, value);
         }
 
+        public async Task<bool> GetShouldCheckOrganizationUnassignedItemsAsync(string userId = null)
+        {
+            return await _storageMediatorService.GetAsync<bool?>(await ComposeKeyAsync(Constants.ShouldCheckOrganizationUnassignedItemsKey, userId)) ?? true;
+        }
+
+        public async Task SetShouldCheckOrganizationUnassignedItemsAsync(bool shouldCheck, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync<bool?>(await ComposeKeyAsync(Constants.ShouldCheckOrganizationUnassignedItemsKey, userId), shouldCheck);
+        }
+
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]
@@ -1688,6 +1698,11 @@ namespace Bit.Core.Services
             await _storageService.SaveAsync(Constants.iOSExtensionActiveUserIdKey, userId);
         }
 
+        public async Task ReloadStateAsync()
+        {
+            _state = await GetStateFromStorageAsync() ?? new State();
+        }
+
         private async Task CheckStateAsync()
         {
             if (!_migrationChecked)
@@ -1699,7 +1714,7 @@ namespace Bit.Core.Services
 
             if (_state == null)
             {
-                _state = await GetStateFromStorageAsync() ?? new State();
+                await ReloadStateAsync();
             }
         }
 

@@ -7,6 +7,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 
 namespace Bit.App.Pages
 {
@@ -21,6 +22,10 @@ namespace Bit.App.Pages
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
         private readonly IPolicyService _policyService;
+#if ANDROID
+        private readonly LazyResolve<IFido2MakeCredentialConfirmationUserInterface> _fido2MakeCredentialConfirmationUserInterface = new LazyResolve<IFido2MakeCredentialConfirmationUserInterface>();
+#endif
+
         private CancellationTokenSource _searchCancellationTokenSource;
         private readonly ILogger _logger;
 
@@ -46,6 +51,9 @@ namespace Bit.App.Pages
             CipherOptionsCommand = CreateDefaultAsyncRelayCommand<CipherView>(cipher => Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+            AddFabCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
             AddCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -53,6 +61,7 @@ namespace Bit.App.Pages
 
         public ICommand CipherOptionsCommand { get; }
         public ICommand AddCipherCommand { get; }
+        public ICommand AddFabCipherCommand { get; }
         public ExtendedObservableCollection<CipherItemViewModel> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
@@ -168,6 +177,14 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher)
         {
+#if ANDROID
+            if (_fido2MakeCredentialConfirmationUserInterface.Value.IsConfirmingNewCredential)
+            {
+                await _fido2MakeCredentialConfirmationUserInterface.Value.ConfirmAsync(cipher.Id, cipher.Login.HasFido2Credentials, null);
+                return;
+            }
+#endif
+
             string selection = null;
 
             if (!string.IsNullOrWhiteSpace(AutofillUrl))

@@ -17,6 +17,8 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui;
 using Bit.App.Utilities;
 using CommunityToolkit.Mvvm.Input;
+using Bit.Core.Utilities.Fido2;
+using Bit.Core.Services;
 
 #nullable enable
 
@@ -37,7 +39,9 @@ namespace Bit.App.Pages
         private readonly IAutofillHandler _autofillHandler;
         private readonly IWatchDeviceService _watchDeviceService;
         private readonly IAccountsManager _accountsManager;
-
+        private readonly IFido2MakeCredentialConfirmationUserInterface _fido2MakeCredentialConfirmationUserInterface;
+        private readonly IUserVerificationMediatorService _userVerificationMediatorService;
+        
         private bool _showNotesSeparator;
         private bool _showPassword;
         private bool _showCardNumber;
@@ -92,6 +96,11 @@ namespace Bit.App.Pages
             _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _watchDeviceService = ServiceContainer.Resolve<IWatchDeviceService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>();
+            if (ServiceContainer.TryResolve<IFido2MakeCredentialConfirmationUserInterface>(out var fido2MakeService))
+            {
+                _fido2MakeCredentialConfirmationUserInterface = fido2MakeService;
+            }
+            _userVerificationMediatorService = ServiceContainer.Resolve<IUserVerificationMediatorService>(); 
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -292,7 +301,9 @@ namespace Bit.App.Pages
                 });
         }
         public bool ShowCollections => (!EditMode || CloneMode) && Cipher?.OrganizationId != null;
+        public bool IsFromFido2Framework { get; set; }
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
+        public bool TypeEditMode => !string.IsNullOrWhiteSpace(CipherId) || IsFromFido2Framework;
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
         public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
         public bool CloneMode { get; set; }
@@ -324,6 +335,7 @@ namespace Bit.App.Pages
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
             _fromOtp = appOptions?.OtpData != null;
+            IsFromFido2Framework = _fido2MakeCredentialConfirmationUserInterface?.IsConfirmingNewCredential == true;
 
             var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
@@ -536,6 +548,26 @@ namespace Bit.App.Pages
             }
             try
             {
+                bool isFido2UserVerified = false;
+                if (IsFromFido2Framework)
+                {
+                    // Verify the user and prevent saving cipher if enforcing is needed and it's not verified.
+                    var userVerification = await VerifyUserAsync();
+                    if (userVerification.IsCancelled)
+                    {
+                        return false;
+                    }
+                    isFido2UserVerified = userVerification.Result;
+
+                    var options = _fido2MakeCredentialConfirmationUserInterface.GetCurrentUserVerificationOptions();
+
+                    if (!isFido2UserVerified && await _userVerificationMediatorService.ShouldEnforceFido2RequiredUserVerificationAsync(options.Value))
+                    {
+                        await _platformUtilsService.ShowDialogAsync(AppResources.ErrorCreatingPasskey, AppResources.SavePasskey);
+                        return false;
+                    }
+                }
+
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
 
                 await _cipherService.SaveWithServerAsync(cipher);
@@ -553,6 +585,11 @@ namespace Bit.App.Pages
                 {
                     // Close and go back to app
                     _autofillHandler.CloseAutofill();
+                }
+                else if (IsFromFido2Framework)
+                {
+                    _fido2MakeCredentialConfirmationUserInterface.Confirm(cipher.Id, isFido2UserVerified);
+                    return true;
                 }
                 else if (_fromOtp)
                 {
@@ -587,6 +624,27 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
             }
             return false;
+        }
+
+        private async Task<CancellableResult<bool>> VerifyUserAsync()
+        {
+            try
+            {
+                var options = _fido2MakeCredentialConfirmationUserInterface.GetCurrentUserVerificationOptions();
+                ArgumentNullException.ThrowIfNull(options);
+
+                if (options.Value.UserVerificationPreference == Fido2UserVerificationPreference.Discouraged)
+                {
+                    return new CancellableResult<bool>(false);
+                }
+
+                return await _userVerificationMediatorService.VerifyUserForFido2Async(options.Value);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                return new CancellableResult<bool>(false);
+            }
         }
 
         public async Task<bool> DeleteAsync()

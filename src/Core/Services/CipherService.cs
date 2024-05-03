@@ -34,6 +34,8 @@ namespace Bit.Core.Services
         private readonly II18nService _i18nService;
         private readonly Func<ISearchService> _searchService;
         private readonly IConfigService _configService;
+        private readonly ITotpService _totpService;
+        private readonly IClipboardService _clipboardService;
         private readonly string _clearCipherCacheKey;
         private readonly string[] _allClearCipherCacheKeys;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
@@ -53,6 +55,8 @@ namespace Bit.Core.Services
             II18nService i18nService,
             Func<ISearchService> searchService,
             IConfigService configService,
+            ITotpService totpService,
+            IClipboardService clipboardService,
             string clearCipherCacheKey,
             string[] allClearCipherCacheKeys)
         {
@@ -65,6 +69,8 @@ namespace Bit.Core.Services
             _i18nService = i18nService;
             _searchService = searchService;
             _configService = configService;
+            _totpService = totpService;
+            _clipboardService = clipboardService;
             _clearCipherCacheKey = clearCipherCacheKey;
             _allClearCipherCacheKeys = allClearCipherCacheKeys;
         }
@@ -829,6 +835,24 @@ namespace Bit.Core.Services
             await ClearCacheAsync();
         }
 
+        public async Task<bool> VerifyOrganizationHasUnassignedItemsAsync()
+        {
+            var organizations = await _stateService.GetOrganizationsAsync();
+            if (organizations?.Any() != true)
+            {
+                return false;
+            }
+
+            try
+            {
+                return await _apiService.HasUnassignedCiphersAsync();
+            }
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                return false;
+            }
+        }
+
         // Helpers
 
         private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId, Cipher cipher = null, CipherView cipherView = null)
@@ -1284,6 +1308,51 @@ namespace Bit.Core.Services
             }
             await Task.WhenAll(tasks);
             cipher.PasswordHistory = encPhs;
+        }
+
+        public async Task<string> CreateNewLoginForPasskeyAsync(Fido2ConfirmNewCredentialParams newPasskeyParams)
+        {
+            var newCipher = new CipherView
+            {
+                Name = newPasskeyParams.CredentialName,
+                Type = CipherType.Login,
+                Login = new LoginView
+                {
+                    Username = newPasskeyParams.UserName,
+                    Uris = new List<LoginUriView>
+                    {
+                        new LoginUriView { Uri = newPasskeyParams.RpId }
+                    }
+                },
+                Card = new CardView(),
+                Identity = new IdentityView(),
+                SecureNote = new SecureNoteView
+                {
+                    Type = SecureNoteType.Generic
+                },
+                Reprompt = CipherRepromptType.None
+            };
+
+            var encryptedCipher = await EncryptAsync(newCipher);
+            await SaveWithServerAsync(encryptedCipher);
+
+            return encryptedCipher.Id;
+        }
+
+        public async Task CopyTotpCodeIfNeededAsync(CipherView cipher)
+        {
+            if (string.IsNullOrWhiteSpace(cipher?.Login?.Totp)
+                ||
+                await _stateService.GetDisableAutoTotpCopyAsync() == true)
+            {
+                return;
+            }
+
+            if (cipher.OrganizationUseTotp || await _stateService.CanAccessPremiumAsync())
+            {
+                var totpCode = await _totpService.GetCodeAsync(cipher.Login.Totp);
+                await _clipboardService.CopyTextAsync(totpCode);
+            }
         }
 
         private class CipherLocaleComparer : IComparer<CipherView>

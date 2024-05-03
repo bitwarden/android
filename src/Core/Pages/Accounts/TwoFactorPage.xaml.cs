@@ -191,7 +191,7 @@ namespace Bit.App.Pages
 
         private async Task StartDeviceApprovalOptionsAsync()
         {
-            var page = new LoginApproveDevicePage();
+            var page = new LoginApproveDevicePage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
@@ -205,6 +205,11 @@ namespace Bit.App.Pages
             if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
                 return;
+            }
+
+            if (_appOptions != null)
+            {
+                _appOptions.HasJustLoggedInOrUnlocked = true;
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
             App.MainPage = new TabsPage(_appOptions, previousPage);

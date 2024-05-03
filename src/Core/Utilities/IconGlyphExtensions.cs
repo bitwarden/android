@@ -6,12 +6,12 @@ namespace Bit.App.Utilities
 {
     public static class IconGlyphExtensions
     {
-        public static string GetIcon(this CipherView cipher)
+        public static string GetIcon(this CipherView cipher, bool usePasskeyIconAsPlaceholderFallback = false)
         {
             switch (cipher.Type)
             {
                 case CipherType.Login:
-                    return GetLoginIconGlyph(cipher);
+                    return GetLoginIconGlyph(cipher, usePasskeyIconAsPlaceholderFallback);
                 case CipherType.SecureNote:
                     return BitwardenIcons.StickyNote;
                 case CipherType.Card:
@@ -22,9 +22,9 @@ namespace Bit.App.Utilities
             return null;
         }
 
-        static string GetLoginIconGlyph(CipherView cipher)
+        static string GetLoginIconGlyph(CipherView cipher, bool usePasskeyIconAsPlaceholderFallback = false)
         {
-            var icon = BitwardenIcons.Globe;
+            var icon = cipher.HasFido2Credential && usePasskeyIconAsPlaceholderFallback ? BitwardenIcons.Passkey : BitwardenIcons.Globe;
             if (cipher.Login.Uri != null)
             {
                 var hostnameUri = cipher.Login.Uri;

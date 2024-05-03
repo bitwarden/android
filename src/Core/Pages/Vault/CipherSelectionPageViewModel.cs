@@ -4,6 +4,7 @@ using Bit.App.Controls;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
@@ -22,6 +23,7 @@ namespace Bit.App.Pages
         protected bool _showNoData;
         protected bool _showList;
         protected string _noDataText;
+        protected string _addNewItemText;
         protected bool _websiteIconsEnabled;
 
         public CipherSelectionPageViewModel()
@@ -42,6 +44,9 @@ namespace Bit.App.Pages
             SelectCipherCommand = CreateDefaultAsyncRelayCommand<IGroupingsPageListItem>(SelectCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
+            AddFabCipherCommand = CreateDefaultAsyncRelayCommand(AddFabCipherAsync,
+                onException: ex => HandleException(ex),
+                allowsMultipleExecutions: false);
             AddCipherCommand = CreateDefaultAsyncRelayCommand(AddCipherAsync,
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
@@ -50,6 +55,8 @@ namespace Bit.App.Pages
             {
                 AllowAddAccountRow = false
             };
+
+            AddNewItemText = AppResources.AddAnItem;
         }
 
         public string Name { get; set; }
@@ -60,6 +67,7 @@ namespace Bit.App.Pages
         public ICommand CipherOptionsCommand { get; set; }
         public ICommand SelectCipherCommand { get; set; }
         public ICommand AddCipherCommand { get; set; }
+        public ICommand AddFabCipherCommand { get; set; }
 
         public bool ShowNoData
         {
@@ -77,6 +85,12 @@ namespace Bit.App.Pages
         {
             get => _noDataText;
             set => SetProperty(ref _noDataText, value);
+        }
+
+        public string AddNewItemText
+        {
+            get => _addNewItemText;
+            set => SetProperty(ref _addNewItemText, value);
         }
 
         public bool WebsiteIconsEnabled
@@ -153,5 +167,6 @@ namespace Bit.App.Pages
         protected abstract Task SelectCipherAsync(IGroupingsPageListItem item);
 
         protected abstract Task AddCipherAsync();
+        protected abstract Task AddFabCipherAsync();
     }
 }

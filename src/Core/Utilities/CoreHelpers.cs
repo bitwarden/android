@@ -38,12 +38,38 @@ namespace Bit.Core.Utilities
 #endif
         }
 
+        /// <summary>
+        /// Returns the host (and not port) of the given uri.
+        /// Does not support plain hostnames without a protocol.
+        /// 
+        /// Input => Output examples:
+        /// <para>https://bitwarden.com => bitwarden.com</para>
+        /// <para>https://login.bitwarden.com:1337 => login.bitwarden.com</para>
+        /// <para>https://sub.login.bitwarden.com:1337 => sub.login.bitwarden.com</para>
+        /// <para>https://localhost:8080 => localhost</para>
+        /// <para>localhost => null</para>
+        /// <para>bitwarden => null</para>
+        /// <para>127.0.0.1 => 127.0.0.1</para>
+        /// </summary>
         public static string GetHostname(string uriString)
         {
             var uri = GetUri(uriString);
             return string.IsNullOrEmpty(uri?.Host) ? null : uri.Host;
         }
 
+        /// <summary>
+        /// Returns the host and port of the given uri.
+        /// Does not support plain hostnames without 
+        /// 
+        /// Input => Output examples:
+        /// <para>https://bitwarden.com => bitwarden.com</para>
+        /// <para>https://login.bitwarden.com:1337 => login.bitwarden.com:1337</para>
+        /// <para>https://sub.login.bitwarden.com:1337 => sub.login.bitwarden.com:1337</para>
+        /// <para>https://localhost:8080 => localhost:8080</para>
+        /// <para>localhost => null</para>
+        /// <para>bitwarden => null</para>
+        /// <para>127.0.0.1 => 127.0.0.1</para>
+        /// </summary>
         public static string GetHost(string uriString)
         {
             var uri = GetUri(uriString);
@@ -61,6 +87,19 @@ namespace Bit.Core.Utilities
             return null;
         }
 
+        /// <summary>
+        /// Returns the second and top level domain of the given uri.
+        /// Does not support plain hostnames without 
+        /// 
+        /// Input => Output examples:
+        /// <para>https://bitwarden.com => bitwarden.com</para>
+        /// <para>https://login.bitwarden.com:1337 => bitwarden.com</para>
+        /// <para>https://sub.login.bitwarden.com:1337 => bitwarden.com</para>
+        /// <para>https://localhost:8080 => localhost</para>
+        /// <para>localhost => null</para>
+        /// <para>bitwarden => null</para>
+        /// <para>127.0.0.1 => 127.0.0.1</para>
+        /// </summary>
         public static string GetDomain(string uriString)
         {
             var uri = GetUri(uriString);

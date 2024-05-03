@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Set up CLOC
         run: |
@@ -40,7 +40,7 @@ jobs:
       hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           submodules: 'true'
 
@@ -83,7 +83,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
 
       # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
@@ -109,7 +109,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           fetch-depth: 0
 
@@ -226,7 +226,7 @@ jobs:
 
       - name: Upload Prod .aab artifact
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
@@ -234,7 +234,7 @@ jobs:
 
       - name: Upload Prod .apk artifact
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
@@ -242,7 +242,7 @@ jobs:
 
       - name: Upload Other .apk artifact
         if: ${{ matrix.variant != 'prod' }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.${{ matrix.variant }}.apk
           path: ./com.x8bit.bitwarden.${{ matrix.variant }}.apk
@@ -262,7 +262,7 @@ jobs:
 
       - name: Upload .apk sha file for prod
         if: ${{ matrix.variant == 'prod' }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-apk-sha256.txt
           path: ./bw-android-apk-sha256.txt
@@ -270,7 +270,7 @@ jobs:
 
       - name: Upload .apk sha file for other
         if: ${{ matrix.variant != 'prod' }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-${{ matrix.variant }}-apk-sha256.txt
           path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
@@ -305,12 +305,12 @@ jobs:
           nuget-version: 6.4.0
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
         with:
           dotnet-version: '8.0.x'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@ede762b26a2de8d110bb5a3db4d7e0e080c0e917 # v1.3.3
+        uses: microsoft/setup-msbuild@6fb02220983dee41ce7ae257b6f4d8f9bf5ed4ce # v2.0.0
 
       # This step might be obsolete at some point as .NET MAUI workloads
       # are starting to come pre-installed on the GH Actions build agents.
@@ -335,7 +335,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
@@ -414,7 +414,7 @@ jobs:
           Copy-Item $signedApkPath $signedApkDestPath
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
@@ -426,7 +426,7 @@ jobs:
             -t sha256 | Out-File -Encoding ASCII ./bw-fdroid-apk-sha256.txt
 
       - name: Upload F-Droid sha file
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-fdroid-apk-sha256.txt
           path: ./bw-fdroid-apk-sha256.txt
@@ -435,7 +435,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-13
+    runs-on: macos-14
     needs: setup
     env:
       ios_folder_path: src/App/Platforms/iOS
@@ -453,7 +453,7 @@ jobs:
           nuget-version: 6.4.0
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
         with:
           dotnet-version: '8.0.x'
 
@@ -470,7 +470,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           submodules: 'true'
 
@@ -631,7 +631,7 @@ jobs:
           cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
 
       - name: Upload App Store .ipa & dSYMs artifacts
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: Bitwarden iOS
           path: |
@@ -640,7 +640,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload .app file for Automation CI
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ env.app_ci_output_filename }}.app.zip
           path: ./bitwarden-export/${{ env.app_ci_output_filename }}.app.zip
@@ -718,7 +718,7 @@ jobs:
       _CROWDIN_PROJECT_ID: "269690"
     steps:
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
@@ -733,7 +733,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Upload Sources
-        uses: crowdin/github-action@c953b17499daa6be3e5afbf7a63616fb02d8b18d # v1.19.0
+        uses: crowdin/github-action@67705afb6985401459cd143d5f5f00c9dc212f23 # v1.20.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
@@ -778,7 +778,7 @@ jobs:
           secrets: "devops-alerts-slack-webhook-url"
 
       - name: Notify Slack on failure
-        uses: act10ns/slack@ed1309ab9862e57e9e583e51c7889486b9a00b0f # v2.0.0
+        uses: act10ns/slack@44541246747a30eb3102d87f7a4cc5471b0ffb7d # v2.1.0
         if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}

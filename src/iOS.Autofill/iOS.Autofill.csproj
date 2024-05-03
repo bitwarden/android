@@ -7,6 +7,7 @@
       <ApplicationId>com.8bit.bitwarden.autofill</ApplicationId>
       <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
       <ApplicationVersion>1</ApplicationVersion>
+		  <RootNamespace>Bit.iOS.Autofill</RootNamespace>
 
       <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
 
@@ -43,6 +44,9 @@
   </PropertyGroup>
 	<ItemGroup>
 		<TrimmerRootAssembly Include="System.Security.Cryptography" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="ListItems\" />
 	</ItemGroup>
   <ItemGroup>
     <Compile Include="CredentialProviderViewController.cs" />
@@ -81,6 +85,15 @@
     <Compile Include="Models\Context.cs" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
+    <Compile Include="CredentialProviderViewController.Passkeys.cs" />
+    <Compile Include="SegueConstants.cs" />
+    <Compile Include="ColorConstants.cs" />
+    <Compile Include="ListItems\HeaderItemView.cs" />
+    <Compile Include="Utilities\BaseLoginListTableSource.cs" />
+    <Compile Include="ILoginListViewController.cs" />
+    <Compile Include="Fido2MakeCredentialUserInterface.cs" />
+    <Compile Include="Utilities\InvalidOperationNeedsUIException.cs" />
+    <Compile Include="Utilities\Fido2GetAssertionFromListUserInterface.cs" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\check.png" />
@@ -179,4 +192,10 @@
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\iOS.Core\iOS.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ListItems\" />
+  </ItemGroup>
+	<ItemGroup>
+		<BundleResource Include="..\App\Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 </Project>

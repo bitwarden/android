@@ -421,6 +421,9 @@
   <data name="AutofillService" xml:space="preserve">
     <value>Serviço de preenchimento automático</value>
   </data>
+  <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
+    <value>Defina o Bitwarden como o seu fornecedor de chaves de acesso nas definições do dispositivo.</value>
+  </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar caracteres ambíguos</value>
   </data>
@@ -1191,6 +1194,9 @@ A leitura será efetuada automaticamente.</value>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
+  <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
+    <value>Não foi possível abrir automaticamente o menu de definições do fornecedor de credenciais do Android. Pode navegar manualmente para o menu de definições do fornecedor de credenciais a partir de Definições do Android &gt; Sistema &gt; Palavras-passe e contas &gt; Palavras-passe, chaves de acesso e serviços de dados.</value>
+  </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Não foi possível abrir automaticamente o menu de definições de preenchimento automático do Android. Pode navegar manualmente para o menu de definições de preenchimento automático a partir das Definições do Android &gt; Sistema &gt; Idiomas e introdução &gt; Avançado &gt; Serviço de preenchimento automático.</value>
   </data>
@@ -1814,6 +1820,9 @@ A leitura será efetuada automaticamente.</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>O Bitwarden precisa de atenção - Ative a definição "Aparecer sobre outras" em "Serviços de preenchimento automático" nas definições do Bitwarden</value>
+  </data>
+  <data name="PasskeyManagement" xml:space="preserve">
+    <value>Gestão de chaves de acesso</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Serviços de preenchimento automático</value>
@@ -2797,6 +2806,9 @@ Deseja mudar para esta conta?</value>
   <data name="XHours" xml:space="preserve">
     <value>{0} horas</value>
   </data>
+  <data name="PasskeyManagementExplanationLong" xml:space="preserve">
+    <value>Utilize o Bitwarden para guardar novas chaves de acesso e iniciar sessão com chaves de acesso armazenadas no seu cofre.</value>
+  </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>A estrutura de preenchimento automático do Android é utilizada para ajudar a preencher as informações de início de sessão noutras aplicações do seu dispositivo.</value>
   </data>
@@ -2824,6 +2836,9 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="ContinueToAppStore" xml:space="preserve">
     <value>Continuar para a loja de aplicações?</value>
+  </data>
+  <data name="ContinueToDeviceSettings" xml:space="preserve">
+    <value>Continuar para as Definições do dispositivo?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Torne a sua conta mais segura configurando a verificação de dois passos na aplicação Web Bitwarden.</value>
@@ -2875,6 +2890,27 @@ Deseja mudar para esta conta?</value>
   <data name="SetUpAnUnlockOptionToChangeYourVaultTimeoutAction" xml:space="preserve">
     <value>Configure uma opção de desbloqueio para alterar a ação de tempo limite do seu cofre.</value>
   </data>
+  <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
+    <value>Escolha uma credencial para guardar esta chave de acesso</value>
+  </data>
+  <data name="SavePasskeyAsNewLogin" xml:space="preserve">
+    <value>Guardar a chave de acesso como uma nova credencial</value>
+  </data>
+  <data name="SavePasskey" xml:space="preserve">
+    <value>Guardar a chave de acesso</value>
+  </data>
+  <data name="PasskeysForX" xml:space="preserve">
+    <value>Chave de acesso para {0}</value>
+  </data>
+  <data name="PasswordsForX" xml:space="preserve">
+    <value>Palavra-passe para {0}</value>
+  </data>
+  <data name="OverwritePasskey" xml:space="preserve">
+    <value>Substituir chave de acesso?</value>
+  </data>
+  <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
+    <value>Este item já contém uma chave de acesso. Tem a certeza de que pretende substituir a chave de acesso atual?</value>
+  </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>A verificação de dois passos Duo é necessária para a sua conta. </value>
   </data>
@@ -2883,5 +2919,73 @@ Deseja mudar para esta conta?</value>
   </data>
   <data name="LaunchDuo" xml:space="preserve">
     <value>Iniciar o Duo</value>
+  </data>
+  <data name="VerificationRequiredByX" xml:space="preserve">
+    <value>Verificação necessária por {0}</value>
+  </data>
+  <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
+    <value>É necessária uma verificação para esta ação. Configure um método de desbloqueio no Bitwarden para continuar.</value>
+  </data>
+  <data name="ErrorCreatingPasskey" xml:space="preserve">
+    <value>Erro ao criar chave de acesso</value>
+  </data>
+  <data name="ErrorReadingPasskey" xml:space="preserve">
+    <value>Erro ao ler chave de acesso</value>
+  </data>
+  <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>Houve um problema ao criar uma chave de acesso para {0}. Tente novamente mais tarde.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
+    <value>Houve um problema ao ler a sua chave de acesso para {0}. Tente novamente mais tarde.</value>
+    <comment>The parameter is the RpId</comment>
+  </data>
+  <data name="VerifyingIdentityEllipsis" xml:space="preserve">
+    <value>A verificar identidade...</value>
+  </data>
+  <data name="Passwords" xml:space="preserve">
+    <value>Palavras-passe</value>
+  </data>
+  <data name="UnknownAccount" xml:space="preserve">
+    <value>Conta desconhecida</value>
+  </data>
+  <data name="SetUpAutofill" xml:space="preserve">
+    <value>Configurar o preenchimento automático</value>
+  </data>
+  <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
+    <value>Obtenha acesso instantâneo às suas palavras-passe e chaves de acesso!</value>
+  </data>
+  <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
+    <value>Para configurar o preenchimento automático de palavras-passe e a gestão de chaves-passe, defina o Bitwarden como o seu fornecedor preferido nas Definições do iOS.</value>
+  </data>
+  <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
+    <value>1. Aceda às Definições do seu dispositivo &gt; Palavras-passe &gt; Opções de palavra-passe</value>
+  </data>
+  <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
+    <value>2. Ative o preenchimento automático</value>
+  </data>
+  <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
+    <value>3. Selecione "Bitwarden" para usar as palavras-passe e chaves-passe</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
+    <value>A sua chave de acesso será guardada no seu cofre Bitwarden</value>
+  </data>
+  <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
+    <value>A sua chave de acesso para {0} será guardada no seu cofre Bitwarden</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
+    <value>Os itens da organização não atribuídos já não são visíveis na vista Todos os cofres e só são acessíveis através da consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</value>
+  </data>
+  <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
+    <value>A 16 de maio de 2024, os itens da organização não atribuídos deixarão de estar visíveis na vista Todos os cofres e só estarão acessíveis através da Consola de administração. Atribua estes itens a uma coleção a partir da Consola de administração para os tornar visíveis.</value>
+  </data>
+  <data name="RemindMeLater" xml:space="preserve">
+    <value>Lembrar-me mais tarde</value>
+  </data>
+  <data name="Notice" xml:space="preserve">
+    <value>Aviso</value>
+  </data>
+  <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
+    <value>Chaves de acesso não suportadas por esta app</value>
   </data>
 </root>

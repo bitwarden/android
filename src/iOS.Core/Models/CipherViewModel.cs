@@ -1,8 +1,5 @@
 ﻿using Bit.Core.Enums;
 using Bit.Core.Models.View;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Bit.iOS.Core.Models
 {
@@ -30,6 +27,12 @@ namespace Bit.iOS.Core.Models
         public List<Tuple<string, string>> Fields { get; set; }
         public CipherView CipherView { get; set; }
         public CipherRepromptType Reprompt { get; set; }
+        public bool IsFido2ListItem { get; set; }
+        public bool ForceSectionIcon { get; set; }
+
+        public bool HasFido2Credential => CipherView?.HasFido2Credential ?? false;
+
+        public bool IsShared => CipherView?.Shared ?? false;
 
         public class LoginUriModel
         {
@@ -41,6 +44,14 @@ namespace Bit.iOS.Core.Models
 
             public string Uri { get; set; }
             public UriMatchType? Match { get; set; }
+        }
+
+        public CipherViewModel ToPasskeyListItemCipherViewModel()
+        {
+            var vm = new CipherViewModel(CipherView);
+            vm.IsFido2ListItem = true;
+            vm.ForceSectionIcon = ForceSectionIcon;
+            return vm;
         }
     }
 }

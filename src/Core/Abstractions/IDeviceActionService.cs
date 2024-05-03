@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Bit.App.Models;
 using Bit.App.Utilities.Prompts;
 using Bit.Core.Enums;
 using Bit.Core.Models;
@@ -28,6 +29,7 @@ namespace Bit.App.Abstractions
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsFido2();
+        bool SupportsCredentialProviderService();
         bool SupportsAutofillServices();
         bool SupportsInlineAutofill();
         bool SupportsDrawOver();
@@ -36,8 +38,10 @@ namespace Bit.App.Abstractions
         void RateApp();
         void OpenAccessibilitySettings();
         void OpenAccessibilityOverlayPermissionSettings();
+        void OpenCredentialProviderSettings();
         void OpenAutofillSettings();
         long GetActiveTime();
+        Task ExecuteFido2CredentialActionAsync(AppOptions appOptions);
         void CloseMainApp();
         float GetSystemFontSizeScale();
         Task OnAccountSwitchCompleteAsync();

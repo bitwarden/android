@@ -24,7 +24,7 @@ jobs:
       hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           submodules: 'true'
 
@@ -45,7 +45,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-13
+    runs-on: macos-14
     needs: setup
     env:
       ios_folder_path: src/App/Platforms/iOS
@@ -63,7 +63,7 @@ jobs:
           nuget-version: 6.4.0
       
       - name: Set up .NET
-        uses: actions/setup-dotnet@3447fd6a9f9e57506b15f895c5b76d3b197dc7c2 # v3.2.0
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
         with:
           dotnet-version: '8.0.x'
   
@@ -80,7 +80,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
         with:
           fetch-depth: 0
           ref: ${{ inputs.ref }}
@@ -266,7 +266,7 @@ jobs:
           cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
 
       - name: Upload App Store .ipa & dSYMs artifacts
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: Bitwarden iOS
           path: |
@@ -275,7 +275,7 @@ jobs:
           if-no-files-found: error
 
       - name: Upload .app file for Automation CI
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: ${{ env.app_ci_output_filename }}.app.zip
           path: ./bitwarden-export/${{ env.app_ci_output_filename }}.app.zip
@@ -342,7 +342,7 @@ jobs:
           secrets: "devops-alerts-slack-webhook-url"
 
       - name: Notify Slack on failure
-        uses: act10ns/slack@ed1309ab9862e57e9e583e51c7889486b9a00b0f # v2.0.0
+        uses: act10ns/slack@44541246747a30eb3102d87f7a4cc5471b0ffb7d # v2.1.0
         if: failure()
         env:
           SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}

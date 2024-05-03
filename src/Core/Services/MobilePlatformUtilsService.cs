@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Models;
-using Bit.Core.Resources.Localization;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
-using Microsoft.Maui.ApplicationModel.DataTransfer;
-using Microsoft.Maui.ApplicationModel;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui;
 
 namespace Bit.App.Services
 {
@@ -245,30 +238,33 @@ namespace Bit.App.Services
             return await stateService.IsAccountBiometricIntegrityValidAsync(bioIntegritySrcKey);
         }
 
-        public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
-            Action fallback = null, bool logOutOnTooManyAttempts = false)
+        public async Task<bool?> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
+            Action fallback = null, bool logOutOnTooManyAttempts = false, bool allowAlternativeAuthentication = false)
         {
             try
             {
                 if (text == null)
                 {
                     text = AppResources.BiometricsDirection;
-                    // TODO Xamarin.Forms.Device.RuntimePlatform is no longer supported. Use Microsoft.Maui.Devices.DeviceInfo.Platform instead. For more details see https://learn.microsoft.com/en-us/dotnet/maui/migration/forms-projects#device-changes
-                    if (Device.RuntimePlatform == Device.iOS)
-                    {
-                        var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
-                        text = supportsFace ? AppResources.FaceIDDirection : AppResources.FingerprintDirection;
-                    }
+#if IOS
+                    var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
+                    text = supportsFace ? AppResources.FaceIDDirection : AppResources.FingerprintDirection;
+#endif
                 }
                 var biometricRequest = new AuthenticationRequestConfiguration(AppResources.Bitwarden, text)
                 {
                     CancelTitle = AppResources.Cancel,
-                    FallbackTitle = fallbackText
+                    FallbackTitle = fallbackText,
+                    AllowAlternativeAuthentication = allowAlternativeAuthentication
                 };
                 var result = await CrossFingerprint.Current.AuthenticateAsync(biometricRequest);
                 if (result.Authenticated)
                 {
                     return true;
+                }
+                if (result.Status == FingerprintAuthenticationResultStatus.Canceled)
+                {
+                    return null;
                 }
                 if (result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
                 {
