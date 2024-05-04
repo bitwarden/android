@@ -129,12 +129,14 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>("Visa", "Visa"),
                 new KeyValuePair<string, string>("Mastercard", "Mastercard"),
                 new KeyValuePair<string, string>("American Express", "Amex"),
-                new KeyValuePair<string, string>("Discover", "Discover"),
+                new KeyValuePair<string, string>("DinaCard", "DinaCard"),
                 new KeyValuePair<string, string>("Diners Club", "Diners Club"),
+                new KeyValuePair<string, string>("Discover", "Discover"),
                 new KeyValuePair<string, string>("JCB", "JCB"),
                 new KeyValuePair<string, string>("Maestro", "Maestro"),
-                new KeyValuePair<string, string>("UnionPay", "UnionPay"),
+                new KeyValuePair<string, string>("Mir", "Mir"),
                 new KeyValuePair<string, string>("RuPay", "RuPay"),
+                new KeyValuePair<string, string>("UnionPay", "UnionPay"),
                 new KeyValuePair<string, string>(AppResources.Other, "Other")
             };
             CardExpMonthOptions = new List<KeyValuePair<string, string>>
