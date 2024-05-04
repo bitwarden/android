@@ -23,7 +23,7 @@ on:
 jobs:
   release:
     name: Create Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
@@ -121,7 +121,7 @@ jobs:
 
   f-droid:
     name: F-Droid Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: release
     if: inputs.fdroid_publish
     steps:
