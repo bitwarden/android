@@ -1,19 +1,26 @@
 android:
-- src/App/*
-- src/Core/*
-- src/Android/*
+- changed-files:
+  - any-glob-to-any-file:
+    - src/App/*
+    - src/Core/*
+    - src/Android/*
+    - 'src/Xamarin.AndroidX.Credentials/*'
 
 iOS:
-- src/App/*
-- src/Core/*
-- lib/ios/*
-- src/iOS/*
-- 'src/iOS.Autofill/*'
-- 'src/iOS.Core/*'
-- 'src/iOS.Extension/*'
-- 'src/iOS.ShareExtension/*'
-- 'src/iOS.Widget/*'
-- src/watchOS/*
+- changed-files:
+  - any-glob-to-any-file:
+    - src/App/*
+    - src/Core/*
+    - lib/ios/*
+    - src/iOS/*
+    - 'src/iOS.Autofill/*'
+    - 'src/iOS.Core/*'
+    - 'src/iOS.Extension/*'
+    - 'src/iOS.ShareExtension/*'
+    - 'src/iOS.Widget/*'
+    - src/watchOS/*
 
 watchOS:
-- src/watchOS/*
+- changed-files:
+  - any-glob-to-any-file:
+    - src/watchOS/*
