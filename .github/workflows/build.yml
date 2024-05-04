@@ -73,7 +73,7 @@ jobs:
       android_folder_path_bash: src/App/Platforms/Android
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
+        uses: nuget/setup-nuget@a21f25cd3998bf370fde17e3f1b4c12c175172f9 # v2.0.0
         with:
           nuget-version: 6.4.0
 
@@ -300,7 +300,7 @@ jobs:
       android_manifest_path: src/App/Platforms/Android/AndroidManifest.xml
     steps:
       - name: Setup NuGet
-        uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
+        uses: nuget/setup-nuget@a21f25cd3998bf370fde17e3f1b4c12c175172f9 # v2.0.0
         with:
           nuget-version: 6.4.0
 
@@ -448,7 +448,7 @@ jobs:
           xcode-version: 15.1
 
       - name: Setup NuGet
-        uses: nuget/setup-nuget@296fd3ccf8528660c91106efefe2364482f86d6f # v1.2.0
+        uses: nuget/setup-nuget@a21f25cd3998bf370fde17e3f1b4c12c175172f9 # v2.0.0
         with:
           nuget-version: 6.4.0
 
