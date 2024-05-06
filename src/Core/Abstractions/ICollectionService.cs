@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
+using CollectionView = Bit.Core.Models.View.CollectionView;
 
 namespace Bit.Core.Abstractions
 {

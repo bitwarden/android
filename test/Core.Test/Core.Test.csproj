@@ -1,14 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <IsPackable>false</IsPackable>
     <RootNamespace>Bit.Core.Test</RootNamespace>
   </PropertyGroup>
 
-    <ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DefineConstants>TRACE;DEBUG;NET;NET8_0;NETCOREAPP</DefineConstants>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageReference Include="NSubstitute" Version="5.0.0" />
+    <PackageReference Include="System.Formats.Cbor" Version="8.0.0" />
     <PackageReference Include="xunit" Version="2.5.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
       <PrivateAssets>all</PrivateAssets>
@@ -19,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Core\Core.csproj" />
-    <ProjectReference Include="..\common\Common.csproj" />
+    <ProjectReference Condition="$(CustomConstants.Contains(UT))" Include="..\..\src\Core\Core.csproj" />
+    <ProjectReference Condition="$(CustomConstants.Contains(UT))" Include="..\common\Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -8,10 +8,10 @@ on:
 jobs:
   stale:
     name: 'Check for stale issues and PRs'
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: 'Run stale action'
-        uses: actions/stale@f7176fd3007623b69d27091f9b9d4ab7995f0a06  # v5.2.1
+        uses: actions/stale@28ca1036281a5e5922ead5184a1bbf96e5fc984e # v9.0.0
         with:
           stale-issue-label: 'needs-reply'
           stale-pr-label: 'needs-changes'
@@ -27,4 +27,4 @@ jobs:
 
             If you’re still working on this, please respond here after you’ve made the changes we’ve requested and our team will re-open it for further review.
 
-            Please make sure to resolve any conflicts with the master branch before requesting another review.
+            Please make sure to resolve any conflicts with the main branch before requesting another review.

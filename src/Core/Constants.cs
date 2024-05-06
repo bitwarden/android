@@ -46,6 +46,11 @@ namespace Bit.Core
         public const string PreLoginEmailKey = "preLoginEmailKey";
         public const string ConfigsKey = "configsKey";
         public const string DisplayEuEnvironmentFlag = "display-eu-environment";
+        public const string UnassignedItemsBannerFlag = "unassigned-items-banner";
+        public const string RegionEnvironment = "regionEnvironment";
+        public const string DuoCallback = "bitwarden://duo-callback";
+        public const string NavigateToMessageCommand = "navigateTo";
+        public const string CredentialNavigateToAutofillCipherMessageCommand = "credentialNavigateToAutofillCipher";
 
         /// <summary>
         /// This key is used to store the value of "ShouldConnectToWatch" of the last user that had logged in
@@ -56,6 +61,7 @@ namespace Bit.Core
         public const string AppLocaleKey = "appLocale";
         public const string ClearSensitiveFields = "clearSensitiveFields";
         public const string ForceUpdatePassword = "forceUpdatePassword";
+        public const string ForceSetPassword = "forceSetPassword";
         public const string ShouldTrustDevice = "shouldTrustDevice";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
@@ -68,10 +74,11 @@ namespace Bit.Core
         public const int Argon2Parallelism = 4;
         public const int MasterPasswordMinimumChars = 12;
         public const int CipherKeyRandomBytesLength = 64;
-        public const string CipherKeyEncryptionMinServerVersion = "2023.9.1";
+        public const string CipherKeyEncryptionMinServerVersion = "2024.2.0";
         public const string DefaultFido2CredentialType = "public-key";
         public const string DefaultFido2CredentialAlgorithm = "ECDSA";
         public const string DefaultFido2CredentialCurve = "P-256";
+        public const int LatestStateVersion = 7;
 
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
@@ -132,6 +139,7 @@ namespace Bit.Core
         public static string ShouldConnectToWatchKey(string userId) => $"shouldConnectToWatch_{userId}";
         public static string ScreenCaptureAllowedKey(string userId) => $"screenCaptureAllowed_{userId}";
         public static string PendingAdminAuthRequest(string userId) => $"pendingAdminAuthRequest_{userId}";
+        public static string ShouldCheckOrganizationUnassignedItemsKey(string userId) => $"shouldCheckOrganizationUnassignedItems_{userId}";
         [Obsolete]
         public static string KeyKey(string userId) => $"key_{userId}";
         [Obsolete]

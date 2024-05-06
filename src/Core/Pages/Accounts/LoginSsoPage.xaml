@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.LoginSsoPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:LoginSsoPageViewModel"
+    HideSoftInputOnTapped="True"
+    Title="{Binding PageTitle}">
+    
+    <ContentPage.BindingContext>
+        <pages:LoginSsoPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <StackLayout Spacing="20" Margin="0,10,0,0">
+            <StackLayout StyleClass="box">
+                <Label Text="{u:I18n LogInSsoSummary}"
+                   StyleClass="text-md"
+                   HorizontalTextAlignment="Start" />
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n OrgIdentifier}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_orgIdentifier"
+                        Text="{Binding OrgIdentifier}"
+                        Keyboard="Default"
+                        StyleClass="box-value" 
+                        ReturnType="Go"
+                        ReturnCommand="{Binding LogInCommand}" 
+                        AutomationId="OrgIdentifierEntry" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Padding="10, 0">
+                <Button Text="{u:I18n LogIn}"
+                        StyleClass="btn-primary"
+                        Clicked="LogIn_Clicked"
+                        AutomationId="LogInButton" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

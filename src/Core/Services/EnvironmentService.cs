@@ -1,9 +1,7 @@
-﻿using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Services
 {
@@ -33,6 +31,7 @@ namespace Bit.Core.Services
         public string IconsUrl { get; set; }
         public string NotificationsUrl { get; set; }
         public string EventsUrl { get; set; }
+        public BwRegion SelectedRegion { get; set; }
 
         public string GetWebVaultUrl(bool returnNullIfDefault = false)
         {
@@ -54,38 +53,33 @@ namespace Bit.Core.Services
             return GetWebVaultUrl(true) is string webVaultUrl ? $"{webVaultUrl}/#/send/" : DEFAULT_WEB_SEND_URL;
         }
 
+        public string GetCurrentDomain()
+        {
+            return new EnvironmentUrlData
+            {
+                WebVault = WebVaultUrl,
+                Base = BaseUrl,
+                Api = ApiUrl,
+                Identity = IdentityUrl
+            }.GetDomainOrHostname();
+        }
+
         public async Task SetUrlsFromStorageAsync()
         {
             try
             {
+                var region = await _stateService.GetActiveUserRegionAsync();
                 var urls = await _stateService.GetEnvironmentUrlsAsync();
-                if (urls == null)
-                {
-                    urls = await _stateService.GetPreAuthEnvironmentUrlsAsync();
-                }
-                if (urls == null)
-                {
-                    urls = new EnvironmentUrlData();
-                }
-                var envUrls = new EnvironmentUrls();
-                if (!string.IsNullOrWhiteSpace(urls.Base))
-                {
-                    BaseUrl = envUrls.Base = urls.Base;
-                    _apiService.SetUrls(envUrls);
+                urls ??= await _stateService.GetPreAuthEnvironmentUrlsAsync();
 
+                if (urls == null || urls.IsEmpty || region is null)
+                {
+                    await SetRegionAsync(BwRegion.US);
                     _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
                     return;
                 }
 
-                BaseUrl = urls.Base;
-                WebVaultUrl = urls.WebVault;
-                ApiUrl = envUrls.Api = urls.Api;
-                IdentityUrl = envUrls.Identity = urls.Identity;
-                IconsUrl = urls.Icons;
-                NotificationsUrl = urls.Notifications;
-                EventsUrl = envUrls.Events = urls.Events;
-                _apiService.SetUrls(envUrls);
-
+                await SetRegionAsync(region.Value, urls);
                 _conditionedAwaiterManager.SetAsCompleted(AwaiterPrecondition.EnvironmentUrlsInited);
             }
             catch (System.Exception ex)
@@ -96,15 +90,26 @@ namespace Bit.Core.Services
 
         }
 
-        public async Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls)
+        public async Task<EnvironmentUrlData> SetRegionAsync(BwRegion region, EnvironmentUrlData selfHostedUrls = null)
         {
-            urls.Base = FormatUrl(urls.Base);
-            urls.WebVault = FormatUrl(urls.WebVault);
-            urls.Api = FormatUrl(urls.Api);
-            urls.Identity = FormatUrl(urls.Identity);
-            urls.Icons = FormatUrl(urls.Icons);
-            urls.Notifications = FormatUrl(urls.Notifications);
-            urls.Events = FormatUrl(urls.Events);
+            EnvironmentUrlData urls;
+
+            if (region == BwRegion.SelfHosted)
+            {
+                // If user saves a self-hosted region with empty fields, default to US
+                if (selfHostedUrls.IsEmpty)
+                {
+                    return await SetRegionAsync(BwRegion.US);
+                }
+                urls = selfHostedUrls.FormatUrls();
+            }
+            else
+            {
+                urls = region.GetUrls();
+            }
+
+            SelectedRegion = region;
+            await _stateService.SetPreAuthRegionAsync(region);
             await _stateService.SetPreAuthEnvironmentUrlsAsync(urls);
             BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
@@ -113,35 +118,8 @@ namespace Bit.Core.Services
             IconsUrl = urls.Icons;
             NotificationsUrl = urls.Notifications;
             EventsUrl = urls.Events;
-
-            var envUrls = new EnvironmentUrls();
-            if (!string.IsNullOrWhiteSpace(BaseUrl))
-            {
-                envUrls.Base = BaseUrl;
-            }
-            else
-            {
-                envUrls.Api = ApiUrl;
-                envUrls.Identity = IdentityUrl;
-                envUrls.Events = EventsUrl;
-            }
-
-            _apiService.SetUrls(envUrls);
+            _apiService.SetUrls(urls);
             return urls;
-        }
-
-        private string FormatUrl(string url)
-        {
-            if (string.IsNullOrWhiteSpace(url))
-            {
-                return null;
-            }
-            url = Regex.Replace(url, "\\/+$", string.Empty);
-            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
-            {
-                url = string.Concat("https://", url);
-            }
-            return url.Trim();
         }
     }
 }

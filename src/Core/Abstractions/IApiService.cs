@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
-using Bit.Core.Models.Domain;
+﻿using Bit.Core.Enums;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
+using DeviceType = Bit.Core.Enums.DeviceType;
 
 namespace Bit.Core.Abstractions
 {
@@ -46,12 +41,13 @@ namespace Bit.Core.Abstractions
         Task<CipherResponse> PutShareCipherAsync(string id, CipherShareRequest request);
         Task PutDeleteCipherAsync(string id);
         Task<CipherResponse> PutRestoreCipherAsync(string id);
+        Task<bool> HasUnassignedCiphersAsync();
         Task RefreshIdentityTokenAsync();
         Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse, Action<HttpRequestMessage> alterRequest, bool logoutOnUnauthorized = true, bool sendToIdentity = false);
         Task<HttpResponseMessage> SendAsync(HttpRequestMessage requestMessage, CancellationToken cancellationToken = default);
-        void SetUrls(EnvironmentUrls urls);
+        void SetUrls(EnvironmentUrlData urls);
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         Task<CipherResponse> PostCipherAttachmentLegacyAsync(string id, MultipartFormDataContent data);
         Task<AttachmentUploadDataResponse> PostCipherAttachmentAsync(string id, AttachmentRequest request);
@@ -99,5 +95,6 @@ namespace Bit.Core.Abstractions
         Task<bool> GetDevicesExistenceByTypes(DeviceType[] deviceTypes);
         Task<ConfigResponse> GetConfigsAsync();
         Task<string> GetFastmailAccountIdAsync(string apiKey);
+        Task<List<Utilities.DigitalAssetLinks.Statement>> GetDigitalAssetLinksForRpAsync(string rpId);
     }
 }

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using BwRegion = Bit.Core.Enums.Region;
 
 namespace Bit.Core.Services
 {
@@ -1363,6 +1360,40 @@ namespace Bit.Core.Services
             _storageMediatorService.Save(Constants.ConfigsKey, value);
         }
 
+        public async Task SetUserHasMasterPasswordAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.UserDecryptionOptions.HasMasterPassword = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        public async Task<BwRegion?> GetActiveUserRegionAsync()
+        {
+            return await GetActiveUserCustomDataAsync(a => a?.Settings?.Region);
+        }
+
+        public async Task<BwRegion?> GetPreAuthRegionAsync()
+        {
+            return await _storageMediatorService.GetAsync<BwRegion?>(Constants.RegionEnvironment);
+        }
+
+        public async Task SetPreAuthRegionAsync(BwRegion value)
+        {
+            await _storageMediatorService.SaveAsync(Constants.RegionEnvironment, value);
+        }
+
+        public async Task<bool> GetShouldCheckOrganizationUnassignedItemsAsync(string userId = null)
+        {
+            return await _storageMediatorService.GetAsync<bool?>(await ComposeKeyAsync(Constants.ShouldCheckOrganizationUnassignedItemsKey, userId)) ?? true;
+        }
+
+        public async Task SetShouldCheckOrganizationUnassignedItemsAsync(bool shouldCheck, string userId = null)
+        {
+            await _storageMediatorService.SaveAsync<bool?>(await ComposeKeyAsync(Constants.ShouldCheckOrganizationUnassignedItemsKey, userId), shouldCheck);
+        }
+
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]
@@ -1552,6 +1583,7 @@ namespace Bit.Core.Services
             await CheckStateAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
+            account.Settings.Region = await GetPreAuthRegionAsync();
 
             // Storage
             var state = await GetStateFromStorageAsync() ?? new State();
@@ -1666,6 +1698,11 @@ namespace Bit.Core.Services
             await _storageService.SaveAsync(Constants.iOSExtensionActiveUserIdKey, userId);
         }
 
+        public async Task ReloadStateAsync()
+        {
+            _state = await GetStateFromStorageAsync() ?? new State();
+        }
+
         private async Task CheckStateAsync()
         {
             if (!_migrationChecked)
@@ -1677,7 +1714,7 @@ namespace Bit.Core.Services
 
             if (_state == null)
             {
-                _state = await GetStateFromStorageAsync() ?? new State();
+                await ReloadStateAsync();
             }
         }
 

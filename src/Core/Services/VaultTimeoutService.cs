@@ -63,9 +63,10 @@ namespace Bit.Core.Services
         /// </param>
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            // If biometrics are used, we can use the flag to determine locked state
+            // If biometrics are used, we can use the flag to determine locked state taking into account the auto unlock key for vault timeout never.
             var biometricSet = await IsBiometricLockSetAsync(userId);
-            if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
+            var hasAutoUnlockKey = await _cryptoService.HasAutoUnlockKeyAsync(userId);
+            if (biometricSet && await _stateService.GetBiometricLockedAsync(userId) && !hasAutoUnlockKey)
             {
                 return true;
             }
@@ -75,7 +76,7 @@ namespace Bit.Core.Services
                 try
                 {
                     // Filter out accounts without auto key
-                    if (!await _cryptoService.HasAutoUnlockKeyAsync(userId))
+                    if (!hasAutoUnlockKey)
                     {
                         return true;
                     }
@@ -91,7 +92,6 @@ namespace Bit.Core.Services
                     // Legacy users must migrate on web vault before login
                     await LogOutAsync(false, userId);
                 }
-
             }
 
             // Check again to verify auto key was set

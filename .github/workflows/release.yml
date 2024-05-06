@@ -23,12 +23,12 @@ on:
 jobs:
   release:
     name: Create Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     outputs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
-        if: github.event.inputs.release_type != 'Dry Run'
+        if: inputs.release_type != 'Dry Run'
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc" ]]; then
             echo "==================================="
@@ -38,15 +38,15 @@ jobs:
           fi
 
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Check Release Version
         id: version
-        uses: bitwarden/gh-actions/release-version-check@4a7ddc1b38ca5cb4e3e43578f4df5cabe4f55a67
+        uses: bitwarden/gh-actions/release-version-check@main
         with:
-          release-type: ${{ github.event.inputs.release_type }}
+          release-type: ${{ inputs.release_type }}
           project-type: xamarin
-          file: src/Android/Properties/AndroidManifest.xml
+          file: src/App/Platforms/Android/AndroidManifest.xml
 
       - name: Get branch name
         id: branch
@@ -55,8 +55,8 @@ jobs:
           echo "branch-name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Create GitHub deployment
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: chrnorm/deployment-action@d42cde7132fcec920de534fffc3be83794335c00 # v2.0.5
+        if: ${{ inputs.release_type != 'Dry Run' }}
+        uses: chrnorm/deployment-action@55729fcebec3d284f60f5bcabbd8376437d696b1 # v2.0.7
         id: deployment
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
@@ -67,27 +67,27 @@ jobs:
 
 
       - name: Download all artifacts
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        if: ${{ inputs.release_type != 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ steps.branch.outputs.branch-name }}
 
       - name: Dry Run - Download all artifacts
-        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        if: ${{ inputs.release_type == 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master
+          branch: main
 
       - name: Prep Bitwarden iOS release asset
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: Create release
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: ncipollo/release-action@6c75be85e571768fa31b40abf38de58ba0397db5  # v1.13.0
+        if: ${{ inputs.release_type != 'Dry Run' }}
+        uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
@@ -103,16 +103,16 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: ${{ github.event.inputs.release_type != 'Dry Run' && success() }}
-        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
+        if: ${{ inputs.release_type != 'Dry Run' && success() }}
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806 # v2.0.3
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'success'
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Update deployment status to Failure
-        if: ${{ github.event.inputs.release_type != 'Dry Run' && failure() }}
-        uses: chrnorm/deployment-status@2afb7d27101260f4a764219439564d954d10b5b0 # v2.0.1
+        if: ${{ inputs.release_type != 'Dry Run' && failure() }}
+        uses: chrnorm/deployment-status@9a72af4586197112e0491ea843682b5dc280d806 # v2.0.3
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
           state: 'failure'
@@ -121,16 +121,16 @@ jobs:
 
   f-droid:
     name: F-Droid Release
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     needs: release
     if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
 
       - name: Download F-Droid .apk artifact
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        if: ${{ inputs.release_type != 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -138,16 +138,16 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Dry Run - Download F-Droid .apk artifact
-        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615  # v2.27.0
+        if: ${{ inputs.release_type == 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master
+          branch: main
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
-        uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d  # v3.8.1
+        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
         with:
           node-version: '16.x'
 
@@ -176,13 +176,19 @@ jobs:
       - name: Install Node dependencies
         run: npm install
 
-      - name: Decrypt secrets
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Download secrets
         env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
         run: |
-          mkdir -p ~/secrets
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
-            --output ./store/fdroid/keystore.jks ./.github/secrets/store_fdroid-keystore.jks.gpg
+          mkdir -p $HOME/secrets
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name store_fdroid-keystore.jks --file ./store/fdroid/keystore.jks --output none
 
       - name: Compile for F-Droid Store
         env:
@@ -211,5 +217,5 @@ jobs:
           cd $GITHUB_WORKSPACE
 
       - name: Deploy to gh-pages
-        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
+        if: ${{ inputs.release_type != 'Dry Run' }}
         run: npm run deploy

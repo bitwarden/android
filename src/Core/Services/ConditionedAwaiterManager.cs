@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Collections.Concurrent;
 using Bit.Core.Abstractions;
 
 namespace Bit.Core.Services
@@ -10,7 +7,9 @@ namespace Bit.Core.Services
     {
         private readonly ConcurrentDictionary<AwaiterPrecondition, TaskCompletionSource<bool>> _preconditionsTasks = new ConcurrentDictionary<AwaiterPrecondition, TaskCompletionSource<bool>>
         {
-            [AwaiterPrecondition.EnvironmentUrlsInited] = new TaskCompletionSource<bool>()
+            [AwaiterPrecondition.EnvironmentUrlsInited] = new TaskCompletionSource<bool>(),
+            [AwaiterPrecondition.AndroidWindowCreated] = new TaskCompletionSource<bool>(),
+            [AwaiterPrecondition.AutofillIOSExtensionViewDidAppear] = new TaskCompletionSource<bool>()
         };
 
         public Task GetAwaiterForPrecondition(AwaiterPrecondition awaiterPrecondition)
@@ -36,6 +35,16 @@ namespace Bit.Core.Services
             if (_preconditionsTasks.TryGetValue(awaiterPrecondition, out var tcs))
             {
                 tcs.TrySetException(ex);
+            }
+        }
+
+        public void Recreate(AwaiterPrecondition awaiterPrecondition)
+        {
+            if (_preconditionsTasks.TryRemove(awaiterPrecondition, out var oldTcs))
+            {
+                oldTcs.TrySetCanceled();
+
+                _preconditionsTasks.TryAdd(awaiterPrecondition, new TaskCompletionSource<bool>());
             }
         }
     }

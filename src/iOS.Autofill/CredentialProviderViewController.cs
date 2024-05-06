@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
@@ -8,17 +8,21 @@ using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using CoreFoundation;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Platform;
+using ObjCRuntime;
 using UIKit;
-using Xamarin.Forms;
-using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Autofill
 {
@@ -29,7 +33,10 @@ namespace Bit.iOS.Autofill
         private Core.NFCReaderDelegate _nfcDelegate = null;
         private IAccountsManager _accountsManager;
 
-        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
+        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>();
+        private readonly LazyResolve<IConditionedAwaiterManager> _conditionedAwaiterManager = new LazyResolve<IConditionedAwaiterManager>();
+        private readonly LazyResolve<IBroadcasterService> _broadcasterService = new LazyResolve<IBroadcasterService>();
+        private readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>();
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -37,31 +44,44 @@ namespace Bit.iOS.Autofill
             ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
         }
 
+        private ASCredentialProviderExtensionContext ASExtensionContext => _context?.ExtContext as ASCredentialProviderExtensionContext;
+
         public override void ViewDidLoad()
         {
             try
             {
-                InitApp();
+                InitAppIfNeededAsync().FireAndForget(ex => OnProvidingCredentialException(ex));
+
                 base.ViewDidLoad();
+
                 Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
                 View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
+
                 _context = new Context
                 {
                     ExtContext = ExtensionContext
                 };
+
+                _conditionedAwaiterManager.Value.Recreate(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            _conditionedAwaiterManager.Value.SetAsCompleted(AwaiterPrecondition.AutofillIOSExtensionViewDidAppear);
         }
 
         public override async void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
         {
             try
             {
-                InitAppIfNeeded();
+                await InitAppIfNeededAsync();
                 _context.ServiceIdentifiers = serviceIdentifiers;
                 if (serviceIdentifiers.Length > 0)
                 {
@@ -78,77 +98,125 @@ namespace Bit.iOS.Autofill
                 }
                 else if (await IsLocked())
                 {
-                    PerformSegue("lockPasswordSegue", this);
+                    PerformSegue(SegueConstants.LOCK, this);
                 }
                 else
                 {
-                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                    if (_context.IsCreatingOrPreparingListForPasskey || _context.ServiceIdentifiers?.Length > 0)
                     {
-                        PerformSegue("loginSearchSegue", this);
+                        PerformSegue(SegueConstants.LOGIN_LIST, this);
                     }
                     else
                     {
-                        PerformSegue("loginListSegue", this);
+                        PerformSegue(SegueConstants.LOGIN_SEARCH, this);
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
         }
 
-        public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
+        [Export("provideCredentialWithoutUserInteractionForRequest:")]
+        public override async void ProvideCredentialWithoutUserInteraction(IASCredentialRequest credentialRequest)
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+            {
+                return;
+            }
+
+            _context.VaultUnlockedDuringThisSession = false;
+            _context.IsExecutingWithoutUserInteraction = true;
+
             try
             {
-                InitAppIfNeeded();
-                await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
-                await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
-                if (!await IsAuthed() || await IsLocked())
+                switch (credentialRequest?.Type)
                 {
-                    var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                        Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                    ExtensionContext.CancelRequest(err);
-                    return;
+                    case ASCredentialRequestType.Password:
+                        var passwordCredentialIdentity = Runtime.GetNSObject<ASPasswordCredentialIdentity>(credentialRequest.CredentialIdentity.GetHandle());
+                        await ProvideCredentialWithoutUserInteractionAsync(passwordCredentialIdentity);
+                        break;
+                    case ASCredentialRequestType.PasskeyAssertion:
+                        var asPasskeyCredentialRequest = Runtime.GetNSObject<ASPasskeyCredentialRequest>(credentialRequest.GetHandle());
+                        await ProvideCredentialWithoutUserInteractionAsync(asPasskeyCredentialRequest);
+                        break;
+                    default:
+                        CancelRequest(ASExtensionErrorCode.Failed);
+                        break;
                 }
-                _context.CredentialIdentity = credentialIdentity;
-                await ProvideCredentialAsync(false);
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
         }
 
-        public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
+        //public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
+        //{
+        //    try
+        //    {
+        //        await ProvideCredentialWithoutUserInteractionAsync(credentialIdentity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OnProvidingCredentialException(ex);
+        //    }
+        //}
+
+        [Export("prepareInterfaceToProvideCredentialForRequest:")]
+        public override async void PrepareInterfaceToProvideCredential(IASCredentialRequest credentialRequest)
         {
+            if (!UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
+            {
+                return;
+            }
+
+            _context.VaultUnlockedDuringThisSession = false;
+
             try
             {
-                InitAppIfNeeded();
-                if (!await IsAuthed())
+                switch (credentialRequest?.Type)
                 {
-                    await _accountsManager.NavigateOnAccountChangeAsync(false);
-                    return;
+                    case ASCredentialRequestType.Password:
+                        var passwordCredentialIdentity = Runtime.GetNSObject<ASPasswordCredentialIdentity>(credentialRequest.CredentialIdentity.GetHandle());
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = passwordCredentialIdentity);
+                        break;
+                    case ASCredentialRequestType.PasskeyAssertion:
+                        var asPasskeyCredentialRequest = Runtime.GetNSObject<ASPasskeyCredentialRequest>(credentialRequest.GetHandle());
+                        await PrepareInterfaceToProvideCredentialAsync(c => c.PasskeyCredentialRequest = asPasskeyCredentialRequest);
+                        break;
+                    default:
+                        CancelRequest(ASExtensionErrorCode.Failed);
+                        break;
                 }
-                _context.CredentialIdentity = credentialIdentity;
-                await CheckLockAsync(async () => await ProvideCredentialAsync());
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
         }
+
+        //public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
+        //{
+        //    try
+        //    {
+        //        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialIdentity);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OnProvidingCredentialException(ex);
+        //    }
+        //}
 
         public override async void PrepareInterfaceForExtensionConfiguration()
         {
             try
             {
-                InitAppIfNeeded();
+                await InitAppIfNeededAsync();
                 _context.Configuring = true;
+                _context.VaultUnlockedDuringThisSession = false;
+
                 if (!await IsAuthed())
                 {
                     await _accountsManager.NavigateOnAccountChangeAsync(false);
@@ -158,9 +226,36 @@ namespace Bit.iOS.Autofill
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
+        }
+        
+        private async Task ProvideCredentialWithoutUserInteractionAsync(ASPasswordCredentialIdentity credentialIdentity)
+        {
+            await InitAppIfNeededAsync();
+            await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
+            await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
+            if (!await IsAuthed() || await IsLocked())
+            {
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                ExtensionContext.CancelRequest(err);
+                return;
+            }
+            _context.PasswordCredentialIdentity = credentialIdentity;
+            await ProvideCredentialAsync(false);
+        }
+
+        private async Task PrepareInterfaceToProvideCredentialAsync(Action<Context> updateContext)
+        {
+            await InitAppIfNeededAsync();
+            if (!await IsAuthed())
+            {
+                await _accountsManager.NavigateOnAccountChangeAsync(false);
+                return;
+            }
+            updateContext(_context);
+            await CheckLockAsync(async () => await ProvideCredentialAsync());
         }
 
         public void CompleteRequest(string id = null, string username = null,
@@ -169,7 +264,7 @@ namespace Bit.iOS.Autofill
             if ((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteExtensionConfigurationRequest();
+                ASExtensionContext?.CompleteExtensionConfigurationRequest();
                 return;
             }
 
@@ -178,9 +273,11 @@ namespace Bit.iOS.Autofill
                 ServiceContainer.Reset();
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
-                NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CancelRequest(err));
+                NSRunLoop.Main.BeginInvokeOnMainThread(() => ASExtensionContext?.CancelRequest(err));
                 return;
             }
+
+            _context.PickCredentialForFido2GetAssertionFromListTcs?.TrySetCanceled();
 
             if (!string.IsNullOrWhiteSpace(totp))
             {
@@ -196,8 +293,27 @@ namespace Bit.iOS.Autofill
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
                 }
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteRequest(cred, null);
+                ASExtensionContext?.CompleteRequest(cred, null);
             });
+        }
+
+        internal void OnProvidingCredentialException(Exception ex)
+        {
+            LoggerHelper.LogEvenIfCantBeResolved(ex);
+            CancelRequest(ASExtensionErrorCode.Failed);
+        }
+
+        public void CancelRequest(ASExtensionErrorCode code)
+        {
+            if (_context?.IsPasskey == true)
+            {
+                _context.PickCredentialForFido2CreationTcs?.TrySetCanceled();
+                _context.UnlockVaultTcs?.TrySetCanceled();
+            }
+
+            //var err = new NSError(new NSString("ASExtensionErrorDomain"), Convert.ToInt32(code), null);
+            var err = new NSError(ASExtensionErrorCodeExtensions.GetDomain(code), (int)code);
+            ExtensionContext?.CancelRequest(err);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -238,110 +354,147 @@ namespace Bit.iOS.Autofill
             }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
         }
 
         public void DismissLockAndContinue()
         {
-            DismissViewController(false, async () =>
+            DismissViewController(false, async () => await OnLockDismissedAsync());
+        }
+
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+            var uiController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
+            uiController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+
+            PresentViewController(uiController, true, null);
+        }
+
+        public async Task OnLockDismissedAsync()
+        {
+            try
             {
-                try
+                _context.VaultUnlockedDuringThisSession = true;
+
+                if (_context.IsCreatingPasskey)
                 {
-                    if (_context.CredentialIdentity != null)
-                    {
-                        await ProvideCredentialAsync();
-                        return;
-                    }
-                    if (_context.Configuring)
-                    {
-                        PerformSegue("setupSegue", this);
-                        return;
-                    }
-                    if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
-                    {
-                        PerformSegue("loginSearchSegue", this);
-                    }
-                    else
-                    {
-                        PerformSegue("loginListSegue", this);
-                    }
+                    _context.UnlockVaultTcs.TrySetResult(true);
+                    return;
                 }
-                catch (Exception ex)
+
+                if (_context.PasswordCredentialIdentity != null || _context.IsPasskey)
                 {
-                    LoggerHelper.LogEvenIfCantBeResolved(ex);
-                    throw;
+                    await MainThread.InvokeOnMainThreadAsync(() => ProvideCredentialAsync());
+                    return;
                 }
-            });
+                if (_context.Configuring)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("setupSegue", this));
+                    return;
+                }
+
+                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginSearchSegue", this));
+                }
+                else
+                {
+                    await MainThread.InvokeOnMainThreadAsync(() => PerformSegue("loginListSegue", this));
+                }
+            }
+            catch (Exception ex)
+            {
+                OnProvidingCredentialException(ex);
+            }
         }
 
         private async Task ProvideCredentialAsync(bool userInteraction = true)
         {
             try
             {
-                var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService", true);
-                Bit.Core.Models.Domain.Cipher cipher = null;
-                var cancel = cipherService == null || _context.CredentialIdentity?.RecordIdentifier == null;
-                if (!cancel)
+                if (_context.IsPasskey && UIDevice.CurrentDevice.CheckSystemVersion(17, 0))
                 {
-                    cipher = await cipherService.GetAsync(_context.CredentialIdentity.RecordIdentifier);
-                    cancel = cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login || cipher.Login == null;
+                    if (_context.PasskeyCredentialIdentity is null)
+                    {
+                        CancelRequest(ASExtensionErrorCode.Failed);
+                    }
+
+                    await CompleteAssertionRequestAsync(_context.PasskeyCredentialIdentity.RelyingPartyIdentifier,
+                        _context.PasskeyCredentialIdentity.UserHandle,
+                        _context.PasskeyCredentialIdentity.CredentialId,
+                        _context.RecordIdentifier);
+                    return;
                 }
-                if (cancel)
+
+                if (!ServiceContainer.TryResolve<ICipherService>(out var cipherService)
+                    ||
+                    _context.RecordIdentifier == null)
                 {
-                    var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                        Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
-                    ExtensionContext?.CancelRequest(err);
+                    CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
+                    return;
+                }
+
+                var cipher = await cipherService.GetAsync(_context.RecordIdentifier);
+                if (cipher?.Login is null || cipher.Type != CipherType.Login)
+                {
+                    CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
                     return;
                 }
 
                 var decCipher = await cipher.DecryptAsync();
-                if (decCipher.Reprompt != Bit.Core.Enums.CipherRepromptType.None)
+
+                if (!CanProvideCredentialOnPasskeyRequest(decCipher))
+                {
+                    CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
+                    return;
+                }
+
+                if (decCipher.Reprompt != CipherRepromptType.None)
                 {
                     // Prompt for password using either the lock screen or dialog unless
                     // already verified the password.
                     if (!userInteraction)
                     {
                         await _stateService.Value.SetPasswordRepromptAutofillAsync(true);
-                        var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                        Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                        ExtensionContext?.CancelRequest(err);
+                        CancelRequest(ASExtensionErrorCode.UserInteractionRequired);
                         return;
                     }
-                    else if (!await _stateService.Value.GetPasswordVerifiedAutofillAsync())
+
+                    if (!await _stateService.Value.GetPasswordVerifiedAutofillAsync())
                     {
                         // Add a timeout to resolve keyboard not always showing up.
                         await Task.Delay(250);
-                        var passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+                        var passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>();
                         if (!await passwordRepromptService.PromptAndCheckPasswordIfNeededAsync())
                         {
-                            var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                                Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
-                            ExtensionContext?.CancelRequest(err);
+                            CancelRequest(ASExtensionErrorCode.UserCanceled);
                             return;
                         }
                     }
                 }
+
                 string totpCode = null;
-                var disableTotpCopy = await _stateService.Value.GetDisableAutoTotpCopyAsync();
-                if (!disableTotpCopy.GetValueOrDefault(false))
+                if (await _stateService.Value.GetDisableAutoTotpCopyAsync() != true)
                 {
-                    var canAccessPremiumAsync = await _stateService.Value.CanAccessPremiumAsync();
-                    if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp) &&
-                        (canAccessPremiumAsync || cipher.OrganizationUseTotp))
+                    if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp)
+                        &&
+                        (cipher.OrganizationUseTotp || await _stateService.Value.CanAccessPremiumAsync()))
                     {
-                        var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-                        totpCode = await totpService.GetCodeAsync(decCipher.Login.Totp);
+                        totpCode = await ServiceContainer.Resolve<ITotpService>().GetCodeAsync(decCipher.Login.Totp);
                     }
                 }
 
                 CompleteRequest(decCipher.Id, decCipher.Login.Username, decCipher.Login.Password, totpCode);
             }
+            catch (Fido2AuthenticatorException)
+            {
+                CancelRequest(ASExtensionErrorCode.Failed);
+            }
             catch (Exception ex)
             {
-                LoggerHelper.LogEvenIfCantBeResolved(ex);
-                throw;
+                OnProvidingCredentialException(ex);
             }
         }
 
@@ -349,7 +502,7 @@ namespace Bit.iOS.Autofill
         {
             if (await IsLocked() || await _stateService.Value.GetPasswordRepromptAutofillAsync())
             {
-                DispatchQueue.MainQueue.DispatchAsync(() =>  PerformSegue("lockPasswordSegue", this));
+                DispatchQueue.MainQueue.DispatchAsync(() => PerformSegue("lockPasswordSegue", this));
             }
             else
             {
@@ -359,8 +512,7 @@ namespace Bit.iOS.Autofill
 
         private Task<bool> IsLocked()
         {
-            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            return vaultTimeoutService.IsLockedAsync();
+            return _vaultTimeoutService.Value.IsLockedAsync();
         }
 
         private Task<bool> IsAuthed()
@@ -392,38 +544,31 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
-            // Init Xamarin Forms
-            Forms.Init();
+            iOSCoreHelpers.InitApp(this, Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey,
+                _nfcSession, out _nfcDelegate, out _accountsManager);
 
-            if (ServiceContainer.RegisteredServices.Count > 0)
-            {
-                ServiceContainer.Reset();
-            }
-            iOSCoreHelpers.RegisterLocalServices();
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
-                Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            iOSCoreHelpers.InitLogger();
-            iOSCoreHelpers.RegisterFinallyBeforeBootstrap();
-            iOSCoreHelpers.Bootstrap();
-            var appOptions = new AppOptions { IosExtension = true };
-            var app = new App.App(appOptions);
-            ThemeManager.SetTheme(app.Resources);
-            iOSCoreHelpers.AppearanceAdjustments();
-            _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
-                messagingService.Send("gotYubiKeyOTP", message));
-            iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
-
-            _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
-            _accountsManager.Init(() => appOptions, this);
+            _broadcasterService.Value.Subscribe(nameof(CredentialProviderViewController), OnMessageReceived);
         }
 
-        private void InitAppIfNeeded()
+        private async Task InitAppIfNeededAsync()
         {
             if (ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
             {
-                InitApp();
+                await MainThread.InvokeOnMainThreadAsync(InitApp);
+            }
+
+            await _stateService.Value.ReloadStateAsync();
+        }
+
+        private void OnMessageReceived(Message message)
+        {
+            if (message?.Command == AccountsManagerMessageCommands.ACCOUNT_SWITCH_COMPLETED
+                &&
+                _context != null)
+            {
+                _context.VaultUnlockedDuringThisSession = false;
+                _context.PickCredentialForFido2CreationTcs?.TrySetException(new AccountSwitchedException());
+                _context.PickCredentialForFido2GetAssertionFromListTcs?.TrySetException(new AccountSwitchedException());
             }
         }
 
@@ -443,10 +588,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => CompleteRequest();
             }
 
-            var navigationPage = new NavigationPage(homePage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(homePage);
 
             LogoutIfAuthed();
         }
@@ -459,14 +601,15 @@ namespace Bit.iOS.Autofill
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.SubmitSuccessTask = async () =>
+                {
+                    await DismissViewControllerAsync(false);
+                    await MainThread.InvokeOnMainThreadAsync(() => LaunchHomePage());
+                };
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(environmentPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(environmentPage);
         }
 
         private void LaunchRegisterFlow()
@@ -481,10 +624,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(registerPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(registerPage);
         }
 
         private void LaunchLoginFlow(string email = null)
@@ -504,10 +644,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -527,18 +664,16 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginWithDevicePage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginWithDevicePage);
 
             LogoutIfAuthed();
         }
 
         private void LaunchLoginSsoFlow()
         {
-            var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var loginPage = new LoginSsoPage(appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
@@ -551,10 +686,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -581,10 +713,7 @@ namespace Bit.iOS.Autofill
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
             }
 
-            var navigationPage = new NavigationPage(twoFactorPage);
-            var twoFactorController = navigationPage.CreateViewController();
-            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(twoFactorController, true, null);
+            NavigateToPage(twoFactorPage);
         }
 
         private void LaunchSetPasswordFlow()
@@ -600,10 +729,7 @@ namespace Bit.iOS.Autofill
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(setPasswordPage);
-            var setPasswordController = navigationPage.CreateViewController();
-            setPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(setPasswordController, true, null);
+            NavigateToPage(setPasswordPage);
         }
 
         private void LaunchUpdateTempPasswordFlow()
@@ -618,10 +744,7 @@ namespace Bit.iOS.Autofill
                 vm.LogOutAction = () => DismissViewController(false, () => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(updateTempPasswordPage);
-            var updateTempPasswordController = navigationPage.CreateViewController();
-            updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(updateTempPasswordController, true, null);
+            NavigateToPage(updateTempPasswordPage);
         }
 
         private void LaunchDeviceApprovalOptionsFlow()
@@ -637,16 +760,31 @@ namespace Bit.iOS.Autofill
                 vm.LogInWithDeviceAction = () => DismissViewController(false, () => LaunchLoginWithDevice(AuthRequestType.AuthenticateAndUnlock, vm.Email, true));
             }
 
-            var navigationPage = new NavigationPage(loginApproveDevicePage);
-            var loginApproveDeviceController = navigationPage.CreateViewController();
-            loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginApproveDeviceController, true, null);
+            NavigateToPage(loginApproveDevicePage);
         }
 
         public Task SetPreviousPageInfoAsync() => Task.CompletedTask;
         public Task UpdateThemeAsync() => Task.CompletedTask;
 
         public void Navigate(NavigationTarget navTarget, INavigationParams navParams = null)
+        {
+            if (_context?.IsCreatingPasskey == true
+                &&
+                _context.PickCredentialForFido2CreationTcs != null
+                &&
+                !_context.PickCredentialForFido2CreationTcs.Task.IsCompleted)
+            {
+                // if it's creating passkey
+                // and we have an active pending TaskCompletionSource
+                // then we let the Fido2 Authenticator flow manage the navigation to avoid issues
+                // like duplicated navigation.
+                return;
+            }
+
+            DoNavigate(navTarget, navParams);
+        }
+
+        internal void DoNavigate(NavigationTarget navTarget, INavigationParams navParams = null)
         {
             switch (navTarget)
             {
@@ -664,11 +802,11 @@ namespace Bit.iOS.Autofill
                     }
                     break;
                 case NavigationTarget.Lock:
-                    DismissViewController(false, () => PerformSegue("lockPasswordSegue", this));
+                    DismissViewController(false, () => PerformSegue(SegueConstants.LOCK, this));
                     break;
                 case NavigationTarget.AutofillCiphers:
                 case NavigationTarget.Home:
-                    DismissViewController(false, () => PerformSegue("loginListSegue", this));
+                    DismissViewController(false, () => PerformSegue(SegueConstants.LOGIN_LIST, this));
                     break;
             }
         }

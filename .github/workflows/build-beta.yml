@@ -1,0 +1,350 @@
+---
+name: Build Beta
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch or tag to build'
+        required: true
+        default: 'main'
+        type: string
+
+env:
+  main_app_folder_path: src/App
+  main_app_project_path: src/App/App.csproj
+  target-net-version: net8.0
+
+jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-22.04
+    outputs:
+      rc_branch_exists: ${{ steps.branch-check.outputs.rc_branch_exists }}
+      hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+        with:
+          submodules: 'true'
+
+      - name: Check if special branches exist
+        id: branch-check
+        run: |
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "rc_branch_exists=1" >> $GITHUB_OUTPUT
+          else
+            echo "rc_branch_exists=0" >> $GITHUB_OUTPUT
+          fi
+
+          if [[ $(git ls-remote --heads origin hotfix-rc) ]]; then
+            echo "hotfix_branch_exists=1" >> $GITHUB_OUTPUT
+          else
+            echo "hotfix_branch_exists=0" >> $GITHUB_OUTPUT
+          fi
+
+  ios:
+    name: Apple iOS
+    runs-on: macos-14
+    needs: setup
+    env:
+      ios_folder_path: src/App/Platforms/iOS
+      app_output_name: App
+      app_ci_output_filename: App_x64_Debug
+    steps:
+      - name: Set XCode version
+        uses: maxim-lobanov/setup-xcode@60606e260d2fc5762a71e64e74b2174e8ea3c8bd # v1.6.0
+        with:
+          xcode-version: 15.1
+
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@a21f25cd3998bf370fde17e3f1b4c12c175172f9 # v2.0.0
+        with:
+          nuget-version: 6.4.0
+      
+      - name: Set up .NET
+        uses: actions/setup-dotnet@4d6c8fcf3c8f7a60068d26b594648e99df24cee3 # v4.0.0
+        with:
+          dotnet-version: '8.0.x'
+  
+      # This step might be obsolete at some point as .NET MAUI workloads 
+      # are starting to come pre-installed on the GH Actions build agents.
+      - name: Install MAUI Workload
+        run: dotnet workload install maui --ignore-failed-sources
+
+      - name: Print environment
+        run: |
+          nuget help | grep Version
+          dotnet --info
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
+
+      - name: Checkout repo
+        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4.1.4
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.ref }}
+          submodules: 'true'
+
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: "bitwarden-ci"
+          secrets: "appcenter-ios-token"
+
+      - name: Download Provisioning Profiles secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: profiles
+        run: |
+          mkdir -p $HOME/secrets
+          profiles=(
+              "dist_beta_autofill.mobileprovision"
+              "dist_beta_bitwarden.mobileprovision"
+              "dist_beta_extension.mobileprovision"
+              "dist_beta_share_extension.mobileprovision"
+              "dist_beta_bitwarden_watch_app.mobileprovision"
+              "dist_beta_bitwarden_watch_app_extension.mobileprovision"
+          )
+
+          for FILE in "${profiles[@]}"
+          do
+            az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+              --file $HOME/secrets/$FILE --output none
+          done
+
+      - name: Download Google Services secret
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+          FILE: GoogleService-Info.plist
+        run: |
+          mkdir -p $HOME/secrets
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME --name $FILE \
+            --file $HOME/secrets/$FILE --output none
+
+      - name: Increment version
+        run: |
+          BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
+          echo "##### Setting CFBundleVersion $BUILD_NUMBER"
+
+          echo "### CFBundleVersion $BUILD_NUMBER" >> $GITHUB_STEP_SUMMARY
+
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./${{ env.ios_folder_path }}/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
+          cd src/watchOS/bitwarden
+          agvtool new-version -all  $BUILD_NUMBER
+
+      - name: Update Entitlements
+        run: |
+          echo "##### Updating Entitlements"
+          perl -0777 -pi.bak -e 's/<key>aps-environment<\/key>\s*<string>development<\/string>/<key>aps-environment<\/key>\n\t<string>beta<\/string>/' ./${{ env.ios_folder_path }}/Entitlements.plist
+
+      - name: Get certificates
+        run: |
+          mkdir -p $HOME/certificates
+          az keyvault secret show --id https://bitwarden-ci.vault.azure.net/certificates/ios-distribution |
+            jq -r .value | base64 -d > $HOME/certificates/ios-distribution.p12
+
+      - name: Set up Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+          MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
+          DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
+        run: |
+          security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
+          security set-keychain-settings -lut 1200 build.keychain
+
+          security import $HOME/certificates/ios-distribution.p12 -k build.keychain -P "" -T /usr/bin/codesign \
+            -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
+
+      - name: Set up provisioning profiles
+        run: |
+          AUTOFILL_PROFILE_PATH=$HOME/secrets/dist_beta_autofill.mobileprovision
+          BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden.mobileprovision
+          EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_extension.mobileprovision
+          SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_share_extension.mobileprovision
+          WATCH_APP_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden_watch_app.mobileprovision
+          WATCH_APP_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_beta_bitwarden_watch_app_extension.mobileprovision
+          PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
+
+          mkdir -p "$PROFILES_DIR_PATH"
+
+          AUTOFILL_UUID=$(grep UUID -A1 -a $AUTOFILL_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $AUTOFILL_PROFILE_PATH "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
+
+          BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $BITWARDEN_PROFILE_PATH "$PROFILES_DIR_PATH/$BITWARDEN_UUID.mobileprovision"
+
+          EXTENSION_UUID=$(grep UUID -A1 -a $EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$EXTENSION_UUID.mobileprovision"
+
+          SHARE_EXTENSION_UUID=$(grep UUID -A1 -a $SHARE_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $SHARE_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$SHARE_EXTENSION_UUID.mobileprovision"
+
+          WATCH_APP_UUID=$(grep UUID -A1 -a $WATCH_APP_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_UUID.mobileprovision"
+
+          WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
+
+      - name: Restore packages
+        run: |
+          dotnet restore
+          dotnet tool restore
+
+      - name: Setup iOS build CAKE (Testing)
+        run: dotnet cake build.cake --target iOS --variant beta
+
+      - name: Bulid WatchApp
+        run: |
+          echo "##### Build WatchApp with Release Configuration"
+          xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
+
+          echo "##### Done"
+
+      - name: Archive Build for App Store
+        shell: pwsh
+        run: |
+          Write-Output "##### Archive for Release ios-arm64"
+          dotnet publish ${{ env.main_app_project_path }} -c Release -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=ios-arm64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
+
+          Write-Output "##### Done"
+
+      - name: Archive Build for Mobile Automation
+        shell: pwsh
+        run: |
+          Write-Output "##### Archive Debug for iossimulator-x64"
+          dotnet build ${{ env.main_app_project_path }} -c Debug -f ${{ env.target-net-version }}-ios /p:RuntimeIdentifier=iossimulator-x64 /p:ArchiveOnBuild=true /p:MtouchUseLlvm=false
+
+          Write-Output "##### Done"
+          ls ~/Library/Developer/Xcode/Archives
+          
+      - name: Export .ipa for App Store
+        env:
+          EXPORT_OPTIONS_PATH: ./.github/resources/export-options-app-store.plist
+          EXPORT_PATH: ./bitwarden-export
+        run: |
+          ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
+
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
+            -exportOptionsPlist $EXPORT_OPTIONS_PATH
+
+      - name: Export .app for Automation CI
+        env:
+          ARCHIVE_PATH: ./${{ env.main_app_folder_path }}/bin/Debug/${{ env.target-net-version }}-ios/iossimulator-x64
+          EXPORT_PATH: ./bitwarden-export
+        run: |
+          zip -r -q ${{ env.app_ci_output_filename }}.app.zip $ARCHIVE_PATH
+          mv ${{ env.app_ci_output_filename }}.app.zip $EXPORT_PATH
+
+      - name: Show Bitwarden Export
+        shell: bash
+        run:  ls -a -R ./bitwarden-export
+
+      - name: Copy all dSYMs files to upload
+        env:
+          EXPORT_PATH: ./bitwarden-export
+          WATCH_ARCHIVE_DSYMS_PATH: ./src/watchOS/bitwarden.xcarchive/dSYMs/
+          WATCH_DSYMS_EXPORT_PATH: ./bitwarden-export/Watch_dSYMs
+        run: |
+          ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
+
+          cp -r -v $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+          mkdir $WATCH_DSYMS_EXPORT_PATH
+          cp -r -v $WATCH_ARCHIVE_DSYMS_PATH $WATCH_DSYMS_EXPORT_PATH
+
+      - name: Upload App Store .ipa & dSYMs artifacts
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: Bitwarden iOS
+          path: |
+            ./bitwarden-export/Bitwarden*.ipa
+            ./bitwarden-export/dSYMs/*.*
+          if-no-files-found: error
+
+      - name: Upload .app file for Automation CI
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
+        with:
+          name: ${{ env.app_ci_output_filename }}.app.zip
+          path: ./bitwarden-export/${{ env.app_ci_output_filename }}.app.zip
+          if-no-files-found: error
+
+      - name: Install AppCenter CLI
+        run: npm install -g appcenter-cli
+
+      - name: Upload dSYMs to App Center
+        env:
+          APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
+        run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+
+      - name: Upload Watch dSYMs to Firebase Crashlytics
+        run: |
+          echo "##### Uploading Watch dSYMs to Firebase"
+          find "$HOME/Library/Developer/XCode/DerivedData" -name "upload-symbols" -exec chmod +x {} \; -exec {} -gsp "./src/watchOS/bitwarden/GoogleService-Info.plist" -p ios "./bitwarden-export/Watch_dSYMs" \;
+
+      - name: Validate app in App Store
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        run: |
+          xcrun altool --validate-app --type ios --file "./bitwarden-export/Bitwarden Beta.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
+
+      - name: Deploy to App Store
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        run: |
+          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden Beta.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+
+  check-failures:
+    name: Check for failures
+    if: always()
+    runs-on: ubuntu-22.04
+    needs:
+      - setup
+      - ios
+    steps:
+      - name: Check if any job failed
+        if: |
+          (github.ref == 'refs/heads/main'
+          || github.ref == 'refs/heads/rc'
+          || github.ref == 'refs/heads/hotfix-rc')
+          && contains(needs.*.result, 'failure')
+        run: exit 1
+
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        if: failure()
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        if: failure()
+        with:
+          keyvault: "bitwarden-ci"
+          secrets: "devops-alerts-slack-webhook-url"
+
+      - name: Notify Slack on failure
+        uses: act10ns/slack@44541246747a30eb3102d87f7a4cc5471b0ffb7d # v2.1.0
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}
+        with:
+          status: ${{ job.status }}

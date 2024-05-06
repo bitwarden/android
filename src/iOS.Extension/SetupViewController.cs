@@ -1,9 +1,9 @@
 ﻿using System;
+using Bit.Core.Resources.Localization;
+using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
 using Bit.iOS.Extension.Models;
 using UIKit;
-using Bit.iOS.Core.Controllers;
-using Bit.App.Resources;
-using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Extension
 {

@@ -20,7 +20,9 @@ namespace Bit.Core.Models.Api
             RpName = fido2Key.RpName?.EncryptedString;
             UserHandle = fido2Key.UserHandle?.EncryptedString;
             UserName = fido2Key.UserName?.EncryptedString;
+            UserDisplayName = fido2Key.UserDisplayName?.EncryptedString;
             Counter = fido2Key.Counter?.EncryptedString;
+            CreationDate = fido2Key.CreationDate;
         }
 
         public string CredentialId { get; set; }
@@ -33,6 +35,8 @@ namespace Bit.Core.Models.Api
         public string RpName { get; set; }
         public string UserHandle { get; set; }
         public string UserName { get; set; }
+        public string UserDisplayName { get; set; }
         public string Counter { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
@@ -10,12 +7,6 @@ namespace Bit.Core.Abstractions
 {
     public interface ICipherService
     {
-        public enum ShareWithServerError
-        {
-            None,
-            DuplicatedPasskeyInOrg
-        }
-
         Task ClearAsync(string userId);
         Task ClearCacheAsync();
         Task DeleteAsync(List<string> ids);
@@ -36,12 +27,15 @@ namespace Bit.Core.Abstractions
         Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data);
         Task SaveCollectionsWithServerAsync(Cipher cipher);
         Task SaveWithServerAsync(Cipher cipher);
-        Task<ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
+        Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds);
         Task UpdateLastUsedDateAsync(string id);
         Task UpsertAsync(CipherData cipher);
         Task UpsertAsync(List<CipherData> cipher);
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string cipherId, AttachmentView attachment, string organizationId);
         Task SoftDeleteWithServerAsync(string id);
         Task RestoreWithServerAsync(string id);
+        Task<string> CreateNewLoginForPasskeyAsync(Fido2ConfirmNewCredentialParams newPasskeyParams);
+        Task CopyTotpCodeIfNeededAsync(CipherView cipher);
+        Task<bool> VerifyOrganizationHasUnassignedItemsAsync();
     }
 }

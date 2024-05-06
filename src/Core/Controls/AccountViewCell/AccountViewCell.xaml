@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="Bit.App.Controls.AccountViewCell"
+          xmlns:controls="clr-namespace:Bit.App.Controls"
+          xmlns:u="clr-namespace:Bit.App.Utilities"
+          xmlns:core="clr-namespace:Bit.Core" 
+          xmlns:behaviors="clr-namespace:CommunityToolkit.Maui.Behaviors"
+          x:Name="_accountView"
+          x:DataType="controls:AccountViewCellViewModel">
+    <Grid RowSpacing="0"
+          ColumnSpacing="0">
+        <Grid.Behaviors>
+            <!--TODO: [TouchEffect] Currently using a "copied" implementation from the github issue in the link until they add this to the Community Toolkit ( https://github.com/CommunityToolkit/Maui/issues/86 ) -->
+            <behaviors:TouchBehavior NativeAnimation="True" 
+                                     LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}" 
+                                     LongPressCommandParameter="{Binding BindingContext, Source={x:Reference _accountView}}" />
+        </Grid.Behaviors>
+        <Grid.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}" CommandParameter="{Binding .}" />
+        </Grid.GestureRecognizers>
+
+        <Grid.Resources>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </Grid.Resources>
+
+        <Grid
+            IsVisible="{Binding IsAccount}"
+            VerticalOptions="CenterAndExpand">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Image
+                Grid.Column="0"
+                Source="{Binding AvatarImageSource}"
+                HorizontalOptions="Center"
+                HeightRequest="40"
+                WidthRequest="40"
+                Margin="10,0"
+                VerticalOptions="Center" />
+
+            <Grid
+                Grid.Column="1"
+                RowSpacing="1"
+                VerticalOptions="Center">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Text="{Binding AccountView.Email}"
+                    IsVisible="{Binding IsActive}"
+                    StyleClass="accountlist-title, accountlist-title-platform"
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountEmailLabel" />
+                <Label
+                    Grid.Row="0"
+                    Text="{Binding AccountView.Email}"
+                    IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
+                    StyleClass="accountlist-title, accountlist-title-platform"
+                    TextColor="{DynamicResource MutedColor}"
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountEmailLabel" />
+                <Label
+                    Grid.Row="1"
+                    IsVisible="{Binding ShowHostname}"
+                    Text="{Binding AccountView.Hostname}"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountHostUrlLabel" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountUnlocked}"
+                    IsVisible="{Binding IsUnlockedAndNotActive}"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountStatusLabel" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountLocked}"
+                    IsVisible="{Binding IsLockedAndNotActive}"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountStatusLabel" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountLoggedOut}"
+                    IsVisible="{Binding IsLoggedOutAndNotActive}"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
+                    LineBreakMode="TailTruncation"
+                    AutomationId="AccountStatusLabel" />
+            </Grid>
+
+            <controls:IconLabel
+                Grid.Column="2"
+                Text="{Binding AuthStatusIconNotActive}" 
+                IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
+                Margin="12,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform"
+                AutomationId="InactiveVaultIcon" />
+            <controls:IconLabel
+                Grid.Column="2"
+                Text="{Binding AuthStatusIconActive}" 
+                IsVisible="{Binding IsActive}"
+                Margin="12,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform"
+                TextColor="{DynamicResource TextColor}"
+                AutomationId="ActiveVaultIcon" />
+        </Grid>
+
+        <Grid
+            IsVisible="{Binding IsAccount, Converter={StaticResource inverseBool}}"
+            VerticalOptions="CenterAndExpand">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <controls:IconLabel
+                Grid.Column="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Margin="14,0"
+                TextColor="{DynamicResource TextColor}"
+                Text="{Binding Source={x:Static core:BitwardenIcons.Plus}}"
+                AutomationProperties.IsInAccessibleTree="False" />
+            <Label
+                Text="{u:I18n AddAccount}"
+                StyleClass="accountlist-title, accountlist-title-platform"
+                LineBreakMode="TailTruncation"
+                VerticalOptions="Center"
+                Grid.Column="1"
+                AutomationId="AddAccountButton" />
+        </Grid>
+    </Grid>
+</ViewCell>

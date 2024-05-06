@@ -1,4 +1,5 @@
-﻿using Bit.Core.Models.Api;
+﻿using System;
+using Bit.Core.Models.Api;
 
 namespace Bit.Core.Models.Data
 {
@@ -18,7 +19,9 @@ namespace Bit.Core.Models.Data
             RpName = apiData.RpName;
             UserHandle = apiData.UserHandle;
             UserName = apiData.UserName;
+            UserDisplayName = apiData.UserDisplayName;
             Counter = apiData.Counter;
+            CreationDate = apiData.CreationDate;
         }
 
         public string CredentialId { get; set; }
@@ -31,6 +34,8 @@ namespace Bit.Core.Models.Data
         public string RpName { get; set; }
         public string UserHandle { get; set; }
         public string UserName { get; set; }
+        public string UserDisplayName { get; set; }
         public string Counter { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ---
-name: Version Auto Bump
+name: Auto Bump Mobile Version
 
 on:
   push:
@@ -7,33 +7,25 @@ on:
       - v**
 
 jobs:
-  setup:
-    name: "Setup"
+  bump-version:
+    name: Bump Mobile Version
     runs-on: ubuntu-22.04
-    outputs:
-      version_number: ${{ steps.version.outputs.new-version }}
     steps:
-      - name: Checkout Branch
-        uses: actions/checkout@c85c95e3d7251135ab7dc9ce3241c5835cc595a9 # v3.5.3
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
 
-      - name: Calculate bumped version
-        id: version
+      - name: Retrieve bot secrets
+        id: retrieve-bot-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: bitwarden-ci
+          secrets: "github-pat-bitwarden-devops-bot-repo-scope"
+
+      - name: Trigger Version Bump workflow
         env:
-          RELEASE_TAG: ${{ github.ref }}
+          GH_TOKEN: ${{ steps.retrieve-bot-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
         run: |
-          CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/refs\/tags\/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\1/')
-          CURR_PATCH=$(echo $RELEASE_TAG | sed -r 's/refs\/tags\/v([0-9]{4}\.[0-9]{1,2})\.([0-9]{1,2})/\2/')
-          echo "Current Major: $CURR_MAJOR"
-          echo "Current Patch: $CURR_PATCH"
-
-          NEW_PATCH=$((CURR_PATCH+1))
-          NEW_VER=$CURR_MAJOR.$NEW_PATCH
-          echo "New Version: $NEW_VER"
-          echo "new-version=$NEW_VER" >> $GITHUB_OUTPUT
-
-  trigger_version_bump:
-    name: Bump version to ${{ needs.setup.outputs.version_number }}
-    needs: setup
-    uses: ./.github/workflows/version-bump.yml
-    with:
-      version_number: ${{ needs.setup.outputs.version_number }}
+          echo '{"cut_rc_branch": "false"}' | \
+          gh workflow run version-bump.yml --json --repo bitwarden/mobile

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 
 namespace Bit.Core.Abstractions
 {
@@ -11,7 +8,7 @@ namespace Bit.Core.Abstractions
         /// <summary>
         /// Gets the device type on the server enum
         /// </summary>
-        DeviceType GetDevice();
+        Enums.DeviceType GetDevice();
         string GetDeviceString();
         ClientType GetClientType();
         bool IsSelfHost();
@@ -29,7 +26,7 @@ namespace Bit.Core.Abstractions
         bool SupportsDuo();
         Task<bool> SupportsBiometricAsync();
         Task<bool> IsBiometricIntegrityValidAsync(string bioIntegritySrcKey = null);
-        Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null, Action fallback = null, bool logOutOnTooManyAttempts = false);
+        Task<bool?> AuthenticateBiometricAsync(string text = null, string fallbackText = null, Action fallback = null, bool logOutOnTooManyAttempts = false, bool allowAlternativeAuthentication = false);
         long GetActiveTime();
     }
 }

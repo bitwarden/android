@@ -15,16 +15,18 @@ abstract record VariantConfig(
     string AppName, 
     string AndroidPackageName,
     string iOSBundleId,
-    string ApsEnvironment
+    string ApsEnvironment,
+    string DistProvisioningProfilePrefix
     );
 
 const string BASE_BUNDLE_ID_DROID = "com.x8bit.bitwarden";
 const string BASE_BUNDLE_ID_IOS = "com.8bit.bitwarden";
 
-record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development");
-record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development");
-record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production");
-record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production");
+//NOTE: Beta iOS variants have a different ITSEncryptionExportComplianceCode 
+record Dev(): VariantConfig("Bitwarden Dev", $"{BASE_BUNDLE_ID_DROID}.dev", $"{BASE_BUNDLE_ID_IOS}.dev", "development", "Dist:");
+record QA(): VariantConfig("Bitwarden QA", $"{BASE_BUNDLE_ID_DROID}.qa", $"{BASE_BUNDLE_ID_IOS}.qa", "development", "Dist:");
+record Beta(): VariantConfig("Bitwarden Beta", $"{BASE_BUNDLE_ID_DROID}.beta", $"{BASE_BUNDLE_ID_IOS}.beta", "production", "Dist: Beta");
+record Prod(): VariantConfig("Bitwarden", $"{BASE_BUNDLE_ID_DROID}", $"{BASE_BUNDLE_ID_IOS}", "production", "Dist:");
 
 VariantConfig GetVariant() => variant.ToLower() switch{
     "qa" => new QA(),
@@ -67,7 +69,7 @@ Task("UpdateAndroidManifest")
     .Does(()=> 
     {
         var buildVariant = GetVariant();
-        var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
+        var manifestPath = Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "AndroidManifest.xml");
 
         // Cake.AndroidAppManifest doesn't currently enable us to access nested items so, quick (not ideal) fix:
         var manifestText = FileReadText(manifestPath);
@@ -119,26 +121,26 @@ Task("UpdateAndroidCodeFiles")
         //We're not using _androidPackageName here because the codefile is currently slightly different string than the one in AndroidManifest.xml
         var keyName = "com.8bit.bitwarden";
         var fixedPackageName = buildVariant.AndroidPackageName.Replace("x8bit", "8bit");
-        var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
+        var filePath = Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Services", "BiometricService.cs");
         ReplaceInFile(filePath, keyName, fixedPackageName);
 
         var packageFileList = new string[] {
-            Path.Combine(_slnPath, "src", "Android", "MainActivity.cs"),
-            Path.Combine(_slnPath, "src", "Android", "MainApplication.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Constants.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Accessibility", "AccessibilityService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillHelpers.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "ClearClipboardAlarmReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "EventUploadReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "PackageReplacedReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Receivers", "RestrictionsChangedReceiver.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Services", "DeviceActionService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Services", "FileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Tiles", "AutofillTileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Tiles", "GeneratorTileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "Tiles", "MyVaultTileService.cs"),
-            Path.Combine(_slnPath, "src", "Android", "google-services.json"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "MainActivity.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "MainApplication.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Constants.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Accessibility", "AccessibilityService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Autofill", "AutofillHelpers.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Autofill", "AutofillService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "ClearClipboardAlarmReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "EventUploadReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "PackageReplacedReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Receivers", "RestrictionsChangedReceiver.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Services", "DeviceActionService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Services", "FileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Tiles", "AutofillTileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Tiles", "GeneratorTileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Tiles", "MyVaultTileService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "google-services.json"),
             Path.Combine(_slnPath, "store", "google", "Publisher", "Program.cs"),
         };
 
@@ -148,7 +150,7 @@ Task("UpdateAndroidCodeFiles")
         }
 
         var labelFileList = new string[] {
-            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),
+            Path.Combine(_slnPath, "src", "App", "Platforms", "Android", "Autofill", "AutofillService.cs"),
         };
 
         foreach(string path in labelFileList)
@@ -197,7 +199,8 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     var prevBundleId = plist["CFBundleIdentifier"];
     var prevBundleName = plist["CFBundleName"];
     //var newVersion = CreateBuildNumber(prevVersion).ToString();
-    var newVersionName = GetVersionName(prevVersionName, buildVariant, git);
+    // we need to maintain version formatting here composed of one to three period-separated integers, so we cannot use the GetVersionName method as in Android for non-Prod.
+    var newVersionName = prevVersionName;
     var newBundleId = GetiOSBundleId(buildVariant, projectType);
     var newBundleName = GetiOSBundleName(buildVariant, projectType);
 
@@ -219,6 +222,11 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
         plist["NSExtension"]["NSExtensionAttributes"]["NSExtensionActivationRule"] = keyText.Replace("com.8bit.bitwarden", buildVariant.iOSBundleId);
     }
 
+    if(buildVariant is Beta)
+    {
+        plist["ITSEncryptionExportComplianceCode"] = "3dd3e32f-efa6-4d99-b410-28aa28b1cb77";
+    }
+
     SerializePlist(plistFile, plist);
 
     Information($"Changed app name from {prevBundleName} to {newBundleName}");
@@ -228,12 +236,15 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     Information($"{plistPath} updated with success!");
 }
 
-private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant)
+private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant, bool updateApsEnv)
 {
     var EntitlementlistFile = File(entitlementsPath);
     dynamic Entitlements = DeserializePlist(EntitlementlistFile);
 
-    Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    if (updateApsEnv)
+    {
+        Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    }
     Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
     Entitlements["com.apple.security.application-groups"] = new List<string>() { $"group.{buildVariant.iOSBundleId}" };;
 
@@ -272,9 +283,10 @@ private void UpdateWatchPbxproj(string pbxprojPath, string newVersion)
     const string pattern = @"MARKETING_VERSION = [^;]*;";
 
     fileText = Regex.Replace(fileText, pattern, $"MARKETING_VERSION = {newVersion};");
-
+    
     FileWriteText(pbxprojPath, fileText);
-    Information($"{pbxprojPath} modified successfully.");
+
+    Information($"{pbxprojPath} modified Marketing Version successfully.");
 }
 
 /// <summary>
@@ -315,7 +327,7 @@ private void UpdateAppleIcons(string target, string appiconsetTarget)
 
 Task("UpdateiOSIcons")
     .Does(()=>{
-        UpdateAppleIcons("ios", Path.Combine(_slnPath, "src", "iOS", "Resources", "Assets.xcassets", "AppIcons.appiconset"));
+        UpdateAppleIcons("ios", Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Resources", "Assets.xcassets", "AppIcons.appiconset"));
         UpdateAppleIcons("watch", Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden WatchKit App", "Assets.xcassets", "AppIcon.appiconset"));
         // TODO: Update complication icons when they start working
     });
@@ -324,10 +336,10 @@ Task("UpdateiOSPlist")
     .IsDependentOn("GetGitInfo")
     .Does(()=> {
         var buildVariant = GetVariant();
-        var infoPath = Path.Combine(_slnPath, "src", "iOS", "Info.plist");
-        var entitlementsPath = Path.Combine(_slnPath, "src", "iOS", "Entitlements.plist");
+        var infoPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Info.plist");
+        var entitlementsPath = Path.Combine(_slnPath, "src", "App", "Platforms", "iOS", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, true);
     });
 
 Task("UpdateiOSAutofillPlist")
@@ -338,7 +350,7 @@ Task("UpdateiOSAutofillPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Autofill);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSExtensionPlist")
@@ -349,7 +361,7 @@ Task("UpdateiOSExtensionPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Extension);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSShareExtensionPlist")
@@ -360,7 +372,7 @@ Task("UpdateiOSShareExtensionPlist")
         var infoPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Entitlements.plist");
         UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.ShareExtension);
-        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant, false);
     });
 
 Task("UpdateiOSCodeFiles")
@@ -397,6 +409,22 @@ Task("UpdateWatchKitAppInfoPlist")
         UpdateWatchKitAppInfoPlist(infoPath, buildVariant);
     });
 
+Task("UpdateDistProfiles")
+    .IsDependentOn("UpdateiOSCodeFiles")
+    .Does(()=> {
+        var buildVariant = GetVariant();
+    
+        var filesToReplace = new string[] {
+            Path.Combine(".github", "resources", "export-options-app-store.plist"),
+            Path.Combine(_slnPath, "src", "watchOS", "bitwarden", "bitwarden.xcodeproj", "project.pbxproj")
+        };
+
+        foreach(string path in filesToReplace)
+        {
+            ReplaceInFile(path, "Dist:", buildVariant.DistProvisioningProfilePrefix);
+        }
+    });
+
 #endregion iOS
 
 #region Main Tasks
@@ -418,6 +446,7 @@ Task("iOS")
     .IsDependentOn("UpdateiOSCodeFiles")
     .IsDependentOn("UpdateWatchProject")
     .IsDependentOn("UpdateWatchKitAppInfoPlist")
+    .IsDependentOn("UpdateDistProfiles")
     .Does(()=>
     {
         Information("iOS app updated");

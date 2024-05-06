@@ -19,6 +19,7 @@ namespace Bit.Core.Services
 
         private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
+        private readonly ILogger _logger;
 
         private SymmetricCryptoKey _legacyEtmKey;
         private string _masterKeyHash;
@@ -29,10 +30,12 @@ namespace Bit.Core.Services
 
         public CryptoService(
             IStateService stateService,
-            ICryptoFunctionService cryptoFunctionService)
+            ICryptoFunctionService cryptoFunctionService,
+            ILogger logger)
         {
             _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
+            _logger = logger;
         }
 
         public void ClearCache()
@@ -730,6 +733,33 @@ namespace Bit.Core.Services
             }
         }
 
+        public async Task<string> HashAsync(string value, CryptoHashAlgorithm hashAlgorithm)
+        {
+            var hashArray = await _cryptoFunctionService.HashAsync(value, hashAlgorithm);
+            return Convert.ToBase64String(hashArray);
+        }
+
+        public async Task<bool> ValidateUriChecksumAsync(EncString remoteUriChecksum, string rawUri, string orgId, SymmetricCryptoKey key)
+        {
+            try
+            {
+                if (remoteUriChecksum == null)
+                {
+                    return false;
+                }
+
+                var localChecksum = await HashAsync(rawUri, CryptoHashAlgorithm.Sha256);
+
+                var remoteChecksum = await remoteUriChecksum.DecryptAsync(orgId, key);
+                return remoteChecksum == localChecksum;
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                return false;
+            }
+        }
+
         // --HELPER METHODS--
 
         private async Task StoreAdditionalKeysAsync(UserKey userKey, string userId = null)
@@ -1087,6 +1117,12 @@ namespace Bit.Core.Services
             if (await _stateService.GetBiometricUnlockAsync(userId) is true)
             {
                 await _stateService.SetUserKeyBiometricUnlockAsync(userKey, userId);
+            }
+            // Clear old enc key only if we don't need to still migrate PIN
+            if (await _stateService.GetPinProtectedAsync() == null
+                && await _stateService.GetPinProtectedKeyAsync() == null)
+            {
+                await _stateService.SetEncKeyEncryptedAsync(null, userId);
             }
             await _stateService.SetKeyEncryptedAsync(null, userId);
 

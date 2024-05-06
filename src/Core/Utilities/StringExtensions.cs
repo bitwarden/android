@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 
 namespace Bit.Core.Utilities
@@ -30,5 +29,7 @@ namespace Bit.Core.Utilities
                 .ToString()
                 .Normalize(NormalizationForm.FormC);
         }
+
+        public static string FallbackOnNullOrWhiteSpace(this string s, string fallback) => string.IsNullOrWhiteSpace(s) ? fallback : s;
     }
 }

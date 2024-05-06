@@ -16,6 +16,7 @@ using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using View = Bit.Core.Models.View.View;
 
 namespace Bit.Core.Services
 {
@@ -33,6 +34,8 @@ namespace Bit.Core.Services
         private readonly II18nService _i18nService;
         private readonly Func<ISearchService> _searchService;
         private readonly IConfigService _configService;
+        private readonly ITotpService _totpService;
+        private readonly IClipboardService _clipboardService;
         private readonly string _clearCipherCacheKey;
         private readonly string[] _allClearCipherCacheKeys;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
@@ -52,6 +55,8 @@ namespace Bit.Core.Services
             II18nService i18nService,
             Func<ISearchService> searchService,
             IConfigService configService,
+            ITotpService totpService,
+            IClipboardService clipboardService,
             string clearCipherCacheKey,
             string[] allClearCipherCacheKeys)
         {
@@ -64,6 +69,8 @@ namespace Bit.Core.Services
             _i18nService = i18nService;
             _searchService = searchService;
             _configService = configService;
+            _totpService = totpService;
+            _clipboardService = clipboardService;
             _clearCipherCacheKey = clearCipherCacheKey;
             _allClearCipherCacheKeys = allClearCipherCacheKeys;
         }
@@ -564,13 +571,8 @@ namespace Bit.Core.Services
             await UpsertAsync(data);
         }
 
-        public async Task<ICipherService.ShareWithServerError> ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
+        public async Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
         {
-            if (!await ValidateCanBeSharedWithOrgAsync(cipher, organizationId))
-            {
-                return ICipherService.ShareWithServerError.DuplicatedPasskeyInOrg;
-            }
-
             var attachmentTasks = new List<Task>();
             if (cipher.Attachments != null)
             {
@@ -591,21 +593,6 @@ namespace Bit.Core.Services
             var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, collectionIds);
             await UpsertAsync(data);
-
-            return ICipherService.ShareWithServerError.None;
-        }
-
-        private async Task<bool> ValidateCanBeSharedWithOrgAsync(CipherView cipher, string organizationId)
-        {
-            if (!cipher.HasFido2Credential)
-            {
-                return true;
-            }
-
-            var decCiphers = await GetAllDecryptedAsync();
-            return !decCiphers
-                .Where(c => c.OrganizationId == organizationId)
-                .Any(c => !cipher.Login.MainFido2Credential.IsUniqueAgainst(c.Login?.MainFido2Credential));
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -846,6 +833,24 @@ namespace Bit.Core.Services
             ciphers[id].RevisionDate = response.RevisionDate;
             await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
+        }
+
+        public async Task<bool> VerifyOrganizationHasUnassignedItemsAsync()
+        {
+            var organizations = await _stateService.GetOrganizationsAsync();
+            if (organizations?.Any() != true)
+            {
+                return false;
+            }
+
+            try
+            {
+                return await _apiService.HasUnassignedCiphersAsync();
+            }
+            catch (ApiException ex) when (ex.Error?.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                return false;
+            }
         }
 
         // Helpers
@@ -1166,13 +1171,15 @@ namespace Bit.Core.Services
                     if (model.Login.Uris != null)
                     {
                         cipher.Login.Uris = new List<LoginUri>();
-                        foreach (var uri in model.Login.Uris)
+                        foreach (var uri in model.Login.Uris.Where(u => u.Uri != null))
                         {
                             var loginUri = new LoginUri
                             {
                                 Match = uri.Match
                             };
                             await EncryptObjPropertyAsync(uri, loginUri, new HashSet<string> { "Uri" }, key);
+                            var uriHash = await _cryptoService.HashAsync(uri.Uri, CryptoHashAlgorithm.Sha256);
+                            loginUri.UriChecksum = await _cryptoService.EncryptAsync(uriHash, key);
                             cipher.Login.Uris.Add(loginUri);
                         }
                     }
@@ -1181,8 +1188,11 @@ namespace Bit.Core.Services
                         cipher.Login.Fido2Credentials = new List<Fido2Credential>();
                         foreach (var fido2Credential in model.Login.Fido2Credentials)
                         {
-                            var fido2CredentialDomain = new Fido2Credential();
-                            await EncryptObjPropertyAsync(fido2Credential, fido2CredentialDomain, Fido2Credential.EncryptableProperties, key);
+                            var fido2CredentialDomain = new Fido2Credential
+                            {
+                                CreationDate = fido2Credential.CreationDate
+                            };
+                            await EncryptObjPropertyAsync(fido2Credential, fido2CredentialDomain, Fido2Credential.EncryptablePropertiesToMap, key);
                             cipher.Login.Fido2Credentials.Add(fido2CredentialDomain);
                         }
                     }
@@ -1298,6 +1308,51 @@ namespace Bit.Core.Services
             }
             await Task.WhenAll(tasks);
             cipher.PasswordHistory = encPhs;
+        }
+
+        public async Task<string> CreateNewLoginForPasskeyAsync(Fido2ConfirmNewCredentialParams newPasskeyParams)
+        {
+            var newCipher = new CipherView
+            {
+                Name = newPasskeyParams.CredentialName,
+                Type = CipherType.Login,
+                Login = new LoginView
+                {
+                    Username = newPasskeyParams.UserName,
+                    Uris = new List<LoginUriView>
+                    {
+                        new LoginUriView { Uri = newPasskeyParams.RpId }
+                    }
+                },
+                Card = new CardView(),
+                Identity = new IdentityView(),
+                SecureNote = new SecureNoteView
+                {
+                    Type = SecureNoteType.Generic
+                },
+                Reprompt = CipherRepromptType.None
+            };
+
+            var encryptedCipher = await EncryptAsync(newCipher);
+            await SaveWithServerAsync(encryptedCipher);
+
+            return encryptedCipher.Id;
+        }
+
+        public async Task CopyTotpCodeIfNeededAsync(CipherView cipher)
+        {
+            if (string.IsNullOrWhiteSpace(cipher?.Login?.Totp)
+                ||
+                await _stateService.GetDisableAutoTotpCopyAsync() == true)
+            {
+                return;
+            }
+
+            if (cipher.OrganizationUseTotp || await _stateService.CanAccessPremiumAsync())
+            {
+                var totpCode = await _totpService.GetCodeAsync(cipher.Login.Totp);
+                await _clipboardService.CopyTextAsync(totpCode);
+            }
         }
 
         private class CipherLocaleComparer : IComparer<CipherView>

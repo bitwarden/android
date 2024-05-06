@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
-using Bit.Core.Models.Domain;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using DeviceType = Bit.Core.Enums.DeviceType;
 
 namespace Bit.Core.Services
 {
@@ -54,7 +55,7 @@ namespace Bit.Core.Services
         public string IdentityBaseUrl { get; set; }
         public string EventsBaseUrl { get; set; }
 
-        public void SetUrls(EnvironmentUrls urls)
+        public void SetUrls(EnvironmentUrlData urls)
         {
             UrlsSet = true;
             if (!string.IsNullOrWhiteSpace(urls.Base))
@@ -333,6 +334,11 @@ namespace Bit.Core.Services
             return SendAsync<object, CipherResponse>(HttpMethod.Put, string.Concat("/ciphers/", id, "/restore"), null, true, true);
         }
 
+        public Task<bool> HasUnassignedCiphersAsync()
+        {
+            return SendAsync<object, bool>(HttpMethod.Get, "/ciphers/has-unassigned-ciphers", null, true, true);
+        }
+
         #endregion
 
         #region Attachments APIs
@@ -593,7 +599,8 @@ namespace Bit.Core.Services
 
         public Task<PasswordlessLoginResponse> PostCreateRequestAsync(PasswordlessCreateLoginRequest passwordlessCreateLoginRequest, AuthRequestType authRequestType)
         {
-            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? "/auth-requests/admin-request" : "/auth-requests", passwordlessCreateLoginRequest, authRequestType == AuthRequestType.AdminApproval, true);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Post, authRequestType == AuthRequestType.AdminApproval ? "/auth-requests/admin-request" : "/auth-requests", passwordlessCreateLoginRequest, authRequestType == AuthRequestType.AdminApproval, true,
+                (message) => message.Headers.Add("Device-Identifier", passwordlessCreateLoginRequest.DeviceIdentifier));
         }
 
         public Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string encKey, string encMasterPasswordHash, string deviceIdentifier, bool requestApproved)
@@ -629,7 +636,7 @@ namespace Bit.Core.Services
 
         public async Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier)
         {
-            var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
+            var path = "/sso/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
@@ -829,6 +836,33 @@ namespace Bit.Core.Services
                 }
                 var result = JObject.Parse(await response.Content.ReadAsStringAsync());
                 return result["primaryAccounts"]?["https://www.fastmail.com/dev/maskedemail"]?.ToString();
+            }
+        }
+
+        public async Task<List<Utilities.DigitalAssetLinks.Statement>> GetDigitalAssetLinksForRpAsync(string rpId)
+        {
+            using (var httpclient = new HttpClient())
+            {
+                HttpResponseMessage response;
+                try
+                {
+                    httpclient.DefaultRequestHeaders.Add("Accept", "application/json");
+                    response = await httpclient.GetAsync(new Uri($"https://{rpId}/.well-known/assetlinks.json"));
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = response.StatusCode,
+                        Message = $"Digital Asset links Rp error: {(int)response.StatusCode} {response.ReasonPhrase}."
+                    });
+                }
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Utilities.DigitalAssetLinks.Statement>>(json);
             }
         }
 

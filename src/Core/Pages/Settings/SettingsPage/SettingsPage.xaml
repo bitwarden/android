@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bit.App.Pages.SettingsPage"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
+             x:DataType="pages:SettingsPageViewModel"
+             Title="{u:I18n Settings}"
+             x:Name="_page">
+    <ContentPage.BindingContext>
+        <pages:SettingsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout BindableLayout.ItemsSource="{Binding SettingsItems}">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate x:DataType="pages:SettingsPageListItem">
+                <StackLayout>
+                    <StackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding BindingContext.ExecuteSettingItemCommand, Source={x:Reference _page}}"
+                                              CommandParameter="{Binding .}"/>
+                    </StackLayout.GestureRecognizers>
+                    <controls:CustomLabel
+                        Text="{Binding Name}"
+                        StyleClass="settings-navigatable-label"
+                        AutomationId="{Binding AutomationId}" />
+                    <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+    </StackLayout>
+</pages:BaseContentPage>

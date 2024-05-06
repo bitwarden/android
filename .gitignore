@@ -31,6 +31,7 @@ Components/
 x64/
 x86/
 !src/lib/x86/
+!src/App/Platforms/Android/lib/x86/
 build/
 bld/
 [Bb]in/
@@ -147,6 +148,7 @@ publish/
 
 # NuGet Packages
 *.nupkg
+!**/Xamarin.AndroidX.Credentials.1.0.0.nupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
 # except build/, which is used as an MSBuild target.

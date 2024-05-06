@@ -1,159 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProjectGuid>{324BE76C-38FA-4F11-8BB1-95C7B3B1B545}</ProjectGuid>
-    <ProjectTypeGuids>{EE2C853D-36AF-4FDB-B1AD-8E90477E2198};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Bit.iOS.Extension</RootNamespace>
-    <AssemblyName>BitwardeniOSExtension</AssemblyName>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+      <TargetFrameworks>net8.0-ios</TargetFrameworks>
+      <UseMaui>True</UseMaui>
+      <OutputType>Library</OutputType>
+      <ApplicationId>com.8bit.bitwarden.find-login-action-extension</ApplicationId>
+      <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+      <ApplicationVersion>1</ApplicationVersion>
+
+      <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
+
+      <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">11.0</SupportedOSPlatformVersion>
+      <RootNamespace>Bit.iOS.Extension</RootNamespace>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <MtouchArch>x86_64</MtouchArch>
-    <MtouchLink>None</MtouchLink>
-    <MtouchDebug>true</MtouchDebug>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchSdkVersion>9.3</MtouchSdkVersion>
-    <CodesignKey>iPhone Developer</CodesignKey>
+
+  <PropertyGroup>
+      <IsAppExtension>true</IsAppExtension>
+      <IsWatchExtension>false</IsWatchExtension>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
+    <CreatePackage>false</CreatePackage>
+	  <CodesignProvision>Automatic</CodesignProvision>
+	  <CodesignKey>iPhone Developer</CodesignKey>
+	  <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+	  <MtouchInterpreter>all</MtouchInterpreter>
+		<!--TODO: add argon2id load when library is built with the corresponding architecture for iOS Simulator-->
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|iossimulator-x64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(RuntimeIdentifier)'=='Debug|net8.0-ios|ios-arm64'">
+		<MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
+	</PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
+    <CreatePackage>false</CreatePackage>
+    <CodesignProvision>$(ReleaseCodesignProvision)</CodesignProvision>
+    <CodesignKey>$(ReleaseCodesignKey)</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+	  <UseInterpreter>true</UseInterpreter>
+    <MtouchExtraArgs>$(Argon2IdLoadMtouchExtraArgs)</MtouchExtraArgs>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <MtouchLink>Full</MtouchLink>
-    <MtouchArch>x86_64</MtouchArch>
-    <ConsolePause>false</ConsolePause>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchSdkVersion>9.3</MtouchSdkVersion>
-    <CodesignKey>iPhone Developer</CodesignKey>
-    <CodesignProvision>Automatic</CodesignProvision>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <MtouchArch>ARM64</MtouchArch>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchDebug>true</MtouchDebug>
-    <MtouchLink>None</MtouchLink>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchSdkVersion>10.2</MtouchSdkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <DebugType>none</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\iPhone\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchArch>ARM64</MtouchArch>
-    <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchLink>Full</MtouchLink>
-    <CodesignProvision>Dist: Bitwarden Ext</CodesignProvision>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
-    <AppExtensionDebugBundleId />
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator'">
-    <OutputPath>bin\iPhoneSimulator\AppStore\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <MtouchLink>Full</MtouchLink>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchSdkVersion>9.3</MtouchSdkVersion>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Dist: Bitwarden Ext</CodesignProvision>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhone'">
-    <OutputPath>bin\iPhone\AppStore\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchArch>ARM64</MtouchArch>
-    <MtouchLink>Full</MtouchLink>
-    <MtouchSdkVersion>10.2</MtouchSdkVersion>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Automatic:AppStore</CodesignProvision>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhoneSimulator'">
-    <OutputPath>bin\iPhoneSimulator\Ad-Hoc\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchLink>Full</MtouchLink>
-    <MtouchSdkVersion>9.3</MtouchSdkVersion>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Adhoc: Bitwarden ext</CodesignProvision>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone'">
-    <OutputPath>bin\iPhone\Ad-Hoc\</OutputPath>
-    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
-    <Optimize>true</Optimize>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <MtouchArch>ARM64</MtouchArch>
-    <MtouchLink>Full</MtouchLink>
-    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=BitwardeniOSShareExtension -gcc_flags "-L${ProjectDir}/../../lib/ios -largon2 -force_load ${ProjectDir}/../../lib/ios/libargon2.a"</MtouchExtraArgs>
-    <OptimizePNGs>true</OptimizePNGs>
-    <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-  </PropertyGroup>
+	<ItemGroup>
+		<TrimmerRootAssembly Include="System.Security.Cryptography" />
+	</ItemGroup>
   <ItemGroup>
     <Compile Include="LoadingViewController.cs" />
     <Compile Include="LoadingViewController.designer.cs">
@@ -184,32 +74,12 @@
     <Compile Include="PasswordGeneratorViewController.designer.cs">
       <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <InterfaceDefinition Include="MainInterface.storyboard" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="Xamarin.iOS" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\App\App.csproj">
-      <Project>{ee44c6a1-2a85-45fe-8d9b-bf1d5f88809c}</Project>
-      <Name>App</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Core\Core.csproj">
-      <Project>{4b8a8c41-9820-4341-974c-41e65b7f4366}</Project>
-      <Name>Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iOS.Core\iOS.Core.csproj">
-      <Project>{e71f3053-056c-4381-9638-048ed73bdff6}</Project>
-      <Name>iOS.Core</Name>
-      <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\iOS.Core\iOS.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="extension.js">
@@ -230,20 +100,54 @@
     <BundleResource Include="Resources\yubikey.png" />
     <BundleResource Include="Resources\yubikey%403x.png" />
     <BundleResource Include="Resources\yubikey%402x.png" />
-    <BundleResource Include="..\iOS\Resources\more_vert.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert.png">
       <Link>Resources\more_vert.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\more_vert%402x.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert%402x.png">
       <Link>Resources\more_vert%402x.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\more_vert%403x.png">
+    <BundleResource Include="..\App\Platforms\iOS\Resources\more_vert%403x.png">
       <Link>Resources\more_vert%403x.png</Link>
     </BundleResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>5.0.2</Version>
-    </PackageReference>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
   </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
+  <ItemGroup>
+    <BundleResource Update="Resources\yubikey%403x.png">
+      <Link>Resources\yubikey%403x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\yubikey%402x.png">
+      <Link>Resources\yubikey%402x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\Icon%402x.png">
+      <Link>Resources\Icon%402x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\logo%403x.png">
+      <Link>Resources\logo%403x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\logo%402x.png">
+      <Link>Resources\logo%402x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\Icon%403x.png">
+      <Link>Resources\Icon%403x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\ext-icon%402x.png">
+      <Link>Resources\ext-icon%402x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\logo_white%403x.png">
+      <Link>Resources\logo_white%403x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\logo_white%402x.png">
+      <Link>Resources\logo_white%402x.png</Link>
+    </BundleResource>
+    <BundleResource Update="Resources\ext-icon%403x.png">
+      <Link>Resources\ext-icon%403x.png</Link>
+    </BundleResource>
+  </ItemGroup>
+	<ItemGroup>
+		<BundleResource Include="..\App\Platforms\iOS\PrivacyInfo.xcprivacy" LogicalName="PrivacyInfo.xcprivacy" />
+	</ItemGroup>
 </Project>

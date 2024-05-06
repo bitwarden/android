@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Bit.Core.Abstractions
+﻿namespace Bit.Core.Abstractions
 {
     public enum AwaiterPrecondition
     {
-        EnvironmentUrlsInited
+        EnvironmentUrlsInited,
+        AndroidWindowCreated,
+        AutofillIOSExtensionViewDidAppear
     }
 
     public interface IConditionedAwaiterManager
@@ -13,5 +12,6 @@ namespace Bit.Core.Abstractions
         Task GetAwaiterForPrecondition(AwaiterPrecondition awaiterPrecondition);
         void SetAsCompleted(AwaiterPrecondition awaiterPrecondition);
         void SetException(AwaiterPrecondition awaiterPrecondition, Exception ex);
+        void Recreate(AwaiterPrecondition awaiterPrecondition);
     }
 }

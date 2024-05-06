@@ -7,6 +7,7 @@ using System.Web;
 using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Newtonsoft.Json;
+using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Bit.Core.Utilities
 {
@@ -37,12 +38,38 @@ namespace Bit.Core.Utilities
 #endif
         }
 
+        /// <summary>
+        /// Returns the host (and not port) of the given uri.
+        /// Does not support plain hostnames without a protocol.
+        /// 
+        /// Input => Output examples:
+        /// <para>https://bitwarden.com => bitwarden.com</para>
+        /// <para>https://login.bitwarden.com:1337 => login.bitwarden.com</para>
+        /// <para>https://sub.login.bitwarden.com:1337 => sub.login.bitwarden.com</para>
+        /// <para>https://localhost:8080 => localhost</para>
+        /// <para>localhost => null</para>
+        /// <para>bitwarden => null</para>
+        /// <para>127.0.0.1 => 127.0.0.1</para>
+        /// </summary>
         public static string GetHostname(string uriString)
         {
             var uri = GetUri(uriString);
             return string.IsNullOrEmpty(uri?.Host) ? null : uri.Host;
         }
 
+        /// <summary>
+        /// Returns the host and port of the given uri.
+        /// Does not support plain hostnames without 
+        /// 
+        /// Input => Output examples:
+        /// <para>https://bitwarden.com => bitwarden.com</para>
+        /// <para>https://login.bitwarden.com:1337 => login.bitwarden.com:1337</para>
+        /// <para>https://sub.login.bitwarden.com:1337 => sub.login.bitwarden.com:1337</para>
+        /// <para>https://localhost:8080 => localhost:8080</para>
+        /// <para>localhost => null</para>
+        /// <para>bitwarden => null</para>
+        /// <para>127.0.0.1 => 127.0.0.1</para>
+        /// </summary>
         public static string GetHost(string uriString)
         {
             var uri = GetUri(uriString);
@@ -60,6 +87,19 @@ namespace Bit.Core.Utilities
             return null;
         }
 
+        /// <summary>
+        /// Returns the second and top level domain of the given uri.
+        /// Does not support plain hostnames without 
+        /// 
+        /// Input => Output examples:
+        /// <para>https://bitwarden.com => bitwarden.com</para>
+        /// <para>https://login.bitwarden.com:1337 => bitwarden.com</para>
+        /// <para>https://sub.login.bitwarden.com:1337 => bitwarden.com</para>
+        /// <para>https://localhost:8080 => localhost</para>
+        /// <para>localhost => null</para>
+        /// <para>bitwarden => null</para>
+        /// <para>127.0.0.1 => 127.0.0.1</para>
+        /// </summary>
         public static string GetDomain(string uriString)
         {
             var uri = GetUri(uriString);
@@ -266,13 +306,16 @@ namespace Bit.Core.Utilities
 
         public static string TextColorFromBgColor(string hexColor, int threshold = 166)
         {
-            if (new ColorConverter().ConvertFromString(hexColor) is Color bgColor)
+            var isValidColor = Color.TryParse(hexColor, out var bgColor);
+            if (isValidColor)
             {
-                var luminance = bgColor.R * 0.299 + bgColor.G * 0.587 + bgColor.B * 0.114;
+                var luminance = (bgColor.Red * 255 * 0.299) + (bgColor.Green * 255 * 0.587) + (bgColor.Blue * 255 * 0.114);
                 return luminance > threshold ? "#ff000000" : "#ffffffff";
             }
-
-            return "#ff000000";
+            else
+            {
+                return "#ff000000";
+            }
         }
 
         public static string StringToColor(string str, string fallback)

@@ -12,19 +12,20 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Bit.iOS.ShareExtension.Models;
 using CoreNFC;
 using Foundation;
+using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
+using Microsoft.Maui.Platform;
 using MobileCoreServices;
 using UIKit;
-using Xamarin.Forms;
 
 namespace Bit.iOS.ShareExtension
 {
-    public partial class LoadingViewController : ExtendedUIViewController, IAccountsManagerHost
+    public partial class LoadingViewController : UIViewController, IAccountsManagerHost
     {
         const string STORYBOARD_NAME = "MainInterface";
 
@@ -137,6 +138,16 @@ namespace Bit.iOS.ShareExtension
             }
         }
 
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+
+            _currentModalController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
+            _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            _presentingOnNavigationPage = true;
+            PresentViewController(_currentModalController, true, null);
+        }
+
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
@@ -195,15 +206,6 @@ namespace Bit.iOS.ShareExtension
             SetupAppAndApplyResources(sendPage);
 
             NavigateToPage(sendPage);
-        }
-
-        private void NavigateToPage(ContentPage page)
-        {
-            var navigationPage = new NavigationPage(page);
-            _currentModalController = navigationPage.CreateViewController();
-            _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            _presentingOnNavigationPage = true;
-            PresentViewController(_currentModalController, true, null);
         }
 
         private async Task<(string, byte[])> LoadDataBytesAsync()
@@ -266,13 +268,21 @@ namespace Bit.iOS.ShareExtension
         {
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if (await IsAuthed())
+                try
                 {
-                    await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
-                    if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                    if (await IsAuthed())
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
+                        if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
+                    throw;
                 }
             });
         }
@@ -312,7 +322,11 @@ namespace Bit.iOS.ShareExtension
             ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.SubmitSuccessTask = async () =>
+                {
+                    await DismissViewControllerAsync(false);
+                    await MainThread.InvokeOnMainThreadAsync(() => LaunchHomePage());
+                };
                 vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
             }
 
@@ -367,7 +381,7 @@ namespace Bit.iOS.ShareExtension
 
         private void LaunchLoginSsoFlow()
         {
-            var loginPage = new LoginSsoPage();
+            var loginPage = new LoginSsoPage(_appOptions.Value);
             SetupAppAndApplyResources(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
@@ -444,7 +458,7 @@ namespace Bit.iOS.ShareExtension
             }
 
             var navigationPage = new NavigationPage(loginApproveDevicePage);
-            var loginApproveDeviceController = navigationPage.CreateViewController();
+            var loginApproveDeviceController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginApproveDeviceController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginApproveDeviceController, true, null);
         }

@@ -8,6 +8,7 @@ using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using CollectionView = Bit.Core.Models.View.CollectionView;
 
 namespace Bit.Core.Services
 {

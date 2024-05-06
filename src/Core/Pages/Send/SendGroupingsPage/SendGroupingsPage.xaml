@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:BaseContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.SendGroupingsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:DataType="pages:SendGroupingsPageViewModel"
+    Title="{Binding PageTitle}"
+    x:Name="_page">
+
+    <ContentPage.BindingContext>
+        <pages:SendGroupingsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem IconImageSource="search.png" Clicked="Search_Clicked"
+                     SemanticProperties.Description="{u:I18n Search}" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+
+            <ToolbarItem x:Name="_aboutIconItem" x:Key="aboutIconItem" IconImageSource="info.png"
+                         Clicked="About_Clicked" Order="Primary" Priority="-1"
+                         SemanticProperties.Description="{u:I18n AboutSend}" />
+            <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
+                         Clicked="Sync_Clicked" Order="Secondary" />
+            <ToolbarItem x:Name="_lockItem" x:Key="lockItem" Text="{u:I18n Lock}"
+                         Clicked="Lock_Clicked" Order="Secondary" />
+            <ToolbarItem x:Name="_aboutTextItem" x:Key="aboutTextItem" Text="{u:I18n AboutSend}"
+                         Clicked="About_Clicked" Order="Secondary" />
+            <ToolbarItem x:Name="_addItem" x:Key="addItem" IconImageSource="plus.png"
+                         Clicked="AddButton_Clicked" Order="Primary"
+                         SemanticProperties.Description="{u:I18n AddItem}" />
+
+            <DataTemplate x:Key="sendTemplate"
+                          x:DataType="pages:SendGroupingsPageListItem"> 
+                <Grid>
+                    <controls:SendViewCell
+                        BindingContext="{Binding SendItemViewModel}"
+                        ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
+                        AutomationId="SendCell" />
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="sendGroupTemplate"
+                          x:DataType="pages:SendGroupingsPageListItem">
+                <controls:ExtendedStackLayout Orientation="Horizontal" 
+                                              StyleClass="list-row, list-row-platform"
+                                              Spacing="6"
+                                              AutomationId="{Binding AutomationId}">
+                    <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
+                                      HorizontalOptions="Start"
+                                      VerticalOptions="Center"
+                                      StyleClass="list-icon, list-icon-platform"
+                                      ShouldUpdateFontSizeDynamicallyForAccesibility="True">
+                        <controls:IconLabel.Effects>
+                            <effects:FixedSizeEffect />
+                        </controls:IconLabel.Effects>
+                    </controls:IconLabel>
+                    <Label Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="TailTruncation"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           StyleClass="list-title"
+                           AutomationId="SendFilterNameLabel" />
+                    <Label Text="{Binding ItemCount, Mode=OneWay}"
+                           HorizontalOptions="End"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalTextAlignment="End"
+                           StyleClass="list-sub"
+                           AutomationId="SendFilterCountLabel" />
+                </controls:ExtendedStackLayout>
+            </DataTemplate>
+
+            <DataTemplate
+                x:Key="headerTemplate"
+                x:DataType="pages:SendGroupingsPageHeaderListItem">
+                <StackLayout
+                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Title}"
+                            StyleClass="list-header, list-header-platform" />
+                        <Label
+                            Text="{Binding ItemCount}"
+                            StyleClass="list-header-sub" />
+                    </StackLayout>
+                    <BoxView
+                        StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                </StackLayout>
+	        </DataTemplate>
+
+            <pages:SendGroupingsPageListItemSelector x:Key="sendListItemDataTemplateSelector"
+                                                     HeaderTemplate="{StaticResource headerTemplate}"
+                                                     SendTemplate="{StaticResource sendTemplate}"
+                                                     GroupTemplate="{StaticResource sendGroupTemplate}" />
+
+            <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
+                <StackLayout 
+                    IsVisible="{Binding SendEnabled, Converter={StaticResource inverseBool}}"
+                    StyleClass="box">
+                    <Frame
+                        Padding="10"
+                        Margin="0, 12, 0, 6"
+                        HasShadow="False"
+                        BackgroundColor="Transparent"
+                        BorderColor="{DynamicResource PrimaryColor}">
+                        <Label
+                            Text="{u:I18n SendDisabledWarning}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                </StackLayout>
+                <StackLayout
+                    VerticalOptions="CenterAndExpand"
+                    Padding="20, 0"
+                    Spacing="20"
+                    IsVisible="{Binding ShowNoData}">
+                    <Label
+                        Text="{Binding NoDataText}"
+                        HorizontalTextAlignment="Center" />
+                    <Button
+                        Text="{u:I18n AddASend}"
+                        Clicked="AddButton_Clicked" />
+                </StackLayout>
+
+                <RefreshView
+                    IsVisible="{Binding ShowList}"
+                    IsRefreshing="{Binding Refreshing}"
+                    Command="{Binding RefreshCommand}">
+                    <controls:ExtendedCollectionView
+                        ItemsSource="{Binding GroupedSends}"
+                        VerticalOptions="FillAndExpand"
+                        ItemTemplate="{StaticResource sendListItemDataTemplateSelector}"
+                        SelectionMode="Single"
+                        SelectionChanged="RowSelected"
+                        StyleClass="list, list-platform"
+                        ExtraDataForLogging="Send Groupings Page" />
+                </RefreshView>
+            </StackLayout>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1" />
+        <Button
+            x:Name="_fab"
+            ImageSource="plus.png"
+            IsVisible="{Binding SendEnabled}"
+            Clicked="AddButton_Clicked"
+            Style="{StaticResource btn-fab}"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
+            SemanticProperties.Description="{u:I18n AddItem}"/>
+    </AbsoluteLayout>
+
+</pages:BaseContentPage>

@@ -1,7 +1,7 @@
 ﻿using System;
 using UIKit;
 using Bit.iOS.Core.Controllers;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Autofill
@@ -31,7 +31,7 @@ namespace Bit.iOS.Autofill
 
             BackButton.Title = AppResources.Back;
             base.ViewDidLoad();
-            var task = ASHelpers.ReplaceAllIdentities();
+            var task = ASHelpers.ReplaceAllIdentitiesAsync();
         }
 
         partial void BackButton_Activated(UIBarButtonItem sender)

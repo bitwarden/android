@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Pages;
-using Bit.App.Resources;
+using Bit.Core.Resources.Localization;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -15,8 +15,8 @@ using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+using Microsoft.Maui.Controls.Compatibility;
+using Microsoft.Maui.Platform;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -205,27 +205,45 @@ namespace Bit.iOS.Core.Controllers
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
-                    NSRunLoop.Main.BeginInvokeOnMainThread(async () => await PromptBiometricAsync());
+                    NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
+                    {
+                        try
+                        {
+                            await PromptBiometricAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerHelper.LogEvenIfCantBeResolved(ex);
+                            throw;
+                        }
+                    });
                 });
             }
         }
 
         public override void ViewDidAppear(bool animated)
         {
-            base.ViewDidAppear(animated);
-
-            // Users with key connector and without biometric or pin has no MP to unlock with
-            if (!_hasMasterPassword)
+            try
             {
-                if (!(_pinEnabled || _biometricEnabled) ||
-                    (_biometricEnabled && !_biometricIntegrityValid))
+                base.ViewDidAppear(animated);
+
+                // Users with key connector and without biometric or pin has no MP to unlock with
+                if (!_hasMasterPassword)
                 {
-                    PromptSSO();
+                    if (!(_pinEnabled || _biometricEnabled) ||
+                        (_biometricEnabled && !_biometricIntegrityValid))
+                    {
+                        PromptSSO();
+                    }
+                }
+                else if (!_biometricEnabled || !_biometricIntegrityValid)
+                {
+                    MasterPasswordCell.TextField.BecomeFirstResponder();
                 }
             }
-            else if (!_biometricEnabled || !_biometricIntegrityValid)
+            catch (Exception ex)
             {
-                MasterPasswordCell.TextField.BecomeFirstResponder();
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 
@@ -406,7 +424,7 @@ namespace Bit.iOS.Core.Controllers
                 var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     _pinEnabled ? AppResources.PIN : AppResources.MasterPassword,
                     () => MasterPasswordCell.TextField.BecomeFirstResponder(),
-                    !_pinEnabled && !_hasMasterPassword);
+                    !_pinEnabled && !_hasMasterPassword) ?? false;
 
                 await _stateService.SetBiometricLockedAsync(!success);
                 if (success)
@@ -423,8 +441,9 @@ namespace Bit.iOS.Core.Controllers
 
         public void PromptSSO()
         {
-            var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var loginPage = new LoginSsoPage(appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
@@ -434,7 +453,7 @@ namespace Bit.iOS.Core.Controllers
             }
 
             var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
+            var loginController = navigationPage.ToUIViewController(MauiContextSingleton.Instance.MauiContext);
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
         }

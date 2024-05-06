@@ -7,7 +7,7 @@ namespace Bit.Core.Models.Request
         public string MasterPasswordHash { get; set; }
         public string Key { get; set; }
         public string MasterPasswordHint { get; set; }
-        public KeysRequest Keys { get; set; }
+        public KeysRequest? Keys { get; set; }
         public KdfType Kdf { get; set; }
         public int KdfIterations { get; set; }
         public int? KdfMemory { get; set; }
