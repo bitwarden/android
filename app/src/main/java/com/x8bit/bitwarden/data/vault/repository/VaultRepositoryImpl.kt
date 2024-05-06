@@ -107,6 +107,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flatMapLatest
@@ -114,6 +115,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
@@ -225,8 +227,17 @@ class VaultRepositoryImpl(
         get() = mutableSendDataStateFlow.asStateFlow()
 
     init {
-        authDiskSource
-            .userSwitchingChangesFlow
+        // Cancel any ongoing sync request and clear the vault data in memory every time
+        // the user switches or the vault is locked for the active user.
+        merge(
+            authDiskSource.userSwitchingChangesFlow,
+            vaultLockManager
+                .vaultUnlockDataStateFlow
+                .filter { vaultUnlockDataList ->
+                    // Clear if the active user is not currently unlocking or unlocked
+                    vaultUnlockDataList.none { it.userId == activeUserId }
+                },
+        )
             .onEach {
                 syncJob.cancel()
                 clearUnlockedData()
