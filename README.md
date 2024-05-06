@@ -57,7 +57,7 @@
 
 The following is a list of all third-party dependencies included as part of the application beyond the standard Android SDK.
 
-- **Appcompat**
+- **AndroidX Appcompat**
     - https://developer.android.com/jetpack/androidx/releases/appcompat
     - Purpose: Allows access to new APIs on older API versions.
     - License: Apache 2.0
@@ -77,14 +77,29 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Displays webpages with the user's default browser.
     - License: Apache 2.0
 
-- **AndroidX Camera**
+- **AndroidX CameraX Camera2**
     - https://developer.android.com/jetpack/androidx/releases/camera
     - Purpose: Display and capture images for barcode scanning.
+    - License: Apache 2.0
+
+- **AndroidX Compose**
+  - https://developer.android.com/jetpack/androidx/releases/compose
+  - Purpose: A Kotlin-based declarative UI framework.
+  - License: Apache 2.0
+
+- **AndroidX Core SplashScreen**
+    - https://developer.android.com/jetpack/androidx/releases/core
+    - Purpose: Backwards compatible SplashScreen API implementation.
     - License: Apache 2.0
 
 - **AndroidX Lifecycle**
     - https://developer.android.com/jetpack/androidx/releases/lifecycle
     - Purpose: Lifecycle aware components and tooling.
+    - License: Apache 2.0
+
+- **AndroidX Room**
+    - https://developer.android.com/jetpack/androidx/releases/room
+    - Purpose: A convenient SQLite-based persistence layer for Android.
     - License: Apache 2.0
 
 - **AndroidX Security**
@@ -95,11 +110,6 @@ The following is a list of all third-party dependencies included as part of the 
 - **AndroidX WorkManager**
     - https://developer.android.com/jetpack/androidx/releases/work
     - Purpose: The WorkManager is used to schedule deferrable, asynchronous tasks that must be run reliably.
-    - License: Apache 2.0
-
-- **Core SplashScreen**
-    - https://developer.android.com/jetpack/androidx/releases/core
-    - Purpose: Backwards compatible SplashScreen API implementation.
     - License: Apache 2.0
 
 - **Dagger Hilt**
@@ -122,11 +132,6 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Image loading and caching.
     - License: BSD, part MIT and Apache 2.0
 
-- **Jetpack Compose**
-    - https://developer.android.com/jetpack/androidx/releases/compose
-    - Purpose: A Kotlin-based declarative UI framework.
-    - License: Apache 2.0
-
 - **kotlinx.collections.immutable**
     - https://github.com/Kotlin/kotlinx.collections.immutable
     - Purpose: Immutable collection interfaces and implementation prototypes for Kotlin.
@@ -145,11 +150,6 @@ The following is a list of all third-party dependencies included as part of the 
 - **kotlinx.serialization converter**
     - https://github.com/square/retrofit/tree/trunk/retrofit-converters/kotlinx-serialization
     - Purpose: Converter for Retrofit 2 and kotlinx.serialization.
-    - License: Apache 2.0
-
-- **Room**
-    - https://developer.android.com/jetpack/androidx/releases/room
-    - Purpose: A convenient SQLite-based persistence layer for Android.
     - License: Apache 2.0
 
 - **OkHttp 3**
