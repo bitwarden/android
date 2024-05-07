@@ -20,6 +20,7 @@ data class VerificationCodeItem(
     val id: String,
     val username: String?,
     val issuer: String?,
+    val favorite: Boolean,
 ) {
     /**
      * The composite label of the authenticator item. Used for constructing an OTPAuth URI.

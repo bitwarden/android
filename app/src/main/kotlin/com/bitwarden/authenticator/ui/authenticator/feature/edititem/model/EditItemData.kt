@@ -25,4 +25,5 @@ data class EditItemData(
     val issuer: String,
     val algorithm: AuthenticatorItemAlgorithm,
     val digits: Int,
+    val favorite: Boolean,
 ) : Parcelable

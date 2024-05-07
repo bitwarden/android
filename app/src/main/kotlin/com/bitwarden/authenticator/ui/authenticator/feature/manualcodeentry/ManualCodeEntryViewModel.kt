@@ -117,7 +117,8 @@ class ManualCodeEntryViewModel @Inject constructor(
                         AuthenticatorItemType.STEAM
                     } else {
                         AuthenticatorItemType.TOTP
-                    }
+                    },
+                    favorite = false,
                 )
             )
             sendAction(ManualCodeEntryAction.Internal.CreateItemResultReceive(result))

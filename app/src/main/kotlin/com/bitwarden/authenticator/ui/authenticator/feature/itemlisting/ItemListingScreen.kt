@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -57,6 +59,7 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenTwoBut
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFabIcon
 import com.bitwarden.authenticator.ui.platform.components.fab.ExpandableFloatingActionButton
+import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderTextWithSupportLabel
 import com.bitwarden.authenticator.ui.platform.components.model.IconResource
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
@@ -347,6 +350,48 @@ private fun ItemListingContent(
                 .padding(paddingValues),
         ) {
             LazyColumn {
+                if (state.favoriteItems.isNotEmpty()) {
+                    item {
+                        BitwardenListHeaderTextWithSupportLabel(
+                            label = stringResource(id = R.string.favorites),
+                            supportingLabel = state.favoriteItems.count().toString(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(4.dp))
+                    }
+
+                    items(state.favoriteItems) {
+                        VaultVerificationCodeItem(
+                            authCode = it.authCode,
+                            name = it.issuer,
+                            username = it.username,
+                            periodSeconds = it.periodSeconds,
+                            timeLeftSeconds = it.timeLeftSeconds,
+                            alertThresholdSeconds = it.alertThresholdSeconds,
+                            startIcon = it.startIcon,
+                            onItemClick = { onItemClick(it.authCode) },
+                            onEditItemClick = { onEditItemClick(it.id) },
+                            onDeleteItemClick = { onDeleteItemClick(it.id) },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                    }
+
+                    item {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(all = 16.dp),
+                        )
+                    }
+                }
+
                 items(state.itemList) {
                     VaultVerificationCodeItem(
                         authCode = it.authCode,
@@ -359,9 +404,7 @@ private fun ItemListingContent(
                         onItemClick = { onItemClick(it.authCode) },
                         onEditItemClick = { onEditItemClick(it.id) },
                         onDeleteItemClick = { onDeleteItemClick(it.id) },
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }

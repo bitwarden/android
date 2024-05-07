@@ -18,4 +18,5 @@ data class VerificationCodeDisplayItem(
     val alertThresholdSeconds: Int,
     val authCode: String,
     val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
+    val favorite: Boolean,
 ) : Parcelable

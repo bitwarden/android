@@ -22,6 +22,7 @@ data class UpdateItemRequest(
     val period: Int,
     val digits: Int,
     val issuer: String,
+    val favorite: Boolean,
 ) {
     /**
      * The composite label of the authenticator item. Derived from combining [issuer] and [accountName]

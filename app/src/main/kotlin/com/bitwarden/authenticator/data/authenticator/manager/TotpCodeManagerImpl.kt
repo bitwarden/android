@@ -1,11 +1,11 @@
 package com.bitwarden.authenticator.data.authenticator.manager
 
-import com.bitwarden.core.DateTime
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
+import com.bitwarden.core.DateTime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -98,6 +98,7 @@ class TotpCodeManagerImpl @Inject constructor(
                                     id = cipherId,
                                     username = itemEntity.accountName,
                                     issuer = itemEntity.issuer,
+                                    favorite = itemEntity.favorite,
                                 )
                             }
                             .onFailure {

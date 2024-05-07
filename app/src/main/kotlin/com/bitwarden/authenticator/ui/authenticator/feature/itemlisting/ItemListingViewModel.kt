@@ -440,6 +440,7 @@ class ItemListingViewModel @Inject constructor(
                 digits = digits,
                 issuer = issuer,
                 userId = null,
+                favorite = false,
             )
         } catch (e: Throwable) {
             return null
@@ -491,6 +492,7 @@ data class ItemListingState(
          */
         @Parcelize
         data class Content(
+            val favoriteItems: List<VerificationCodeDisplayItem>,
             val itemList: List<VerificationCodeDisplayItem>,
         ) : ViewState()
 

@@ -76,7 +76,10 @@ fun VaultVerificationCodeItem(
                     }
                 )
                 .defaultMinSize(minHeight = 72.dp)
-                .padding(vertical = 8.dp)
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = 16.dp
+                )
                 .then(modifier),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(16.dp),

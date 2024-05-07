@@ -11,7 +11,15 @@ fun List<VerificationCodeItem>.toViewState(
         ItemListingState.ViewState.NoItems
     } else {
         ItemListingState.ViewState.Content(
-            map { it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds) },
+            favoriteItems = this
+                .filter { it.favorite }
+                .map {
+                    it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds)
+                },
+            itemList = filterNot { it.favorite }
+                .map {
+                    it.toDisplayItem(alertThresholdSeconds = alertThresholdSeconds)
+                },
         )
     }
 
@@ -24,4 +32,5 @@ fun VerificationCodeItem.toDisplayItem(alertThresholdSeconds: Int) =
         periodSeconds = periodSeconds,
         alertThresholdSeconds = alertThresholdSeconds,
         authCode = code,
+        favorite = favorite,
     )

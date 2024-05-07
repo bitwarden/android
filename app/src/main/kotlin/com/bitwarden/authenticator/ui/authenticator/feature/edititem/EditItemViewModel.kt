@@ -64,6 +64,7 @@ class EditItemViewModel @Inject constructor(
             is EditItemAction.TypeOptionClick -> handleTypeOptionClick(action)
             is EditItemAction.IssuerNameTextChange -> handleIssuerNameTextChange(action)
             is EditItemAction.UsernameTextChange -> handleIssuerTextChange(action)
+            is EditItemAction.FavoriteToggleClick -> handleFavoriteToggleClick(action)
             is EditItemAction.RefreshPeriodOptionClick -> handlePeriodTextChange(action)
             is EditItemAction.TotpCodeTextChange -> handleTotpCodeTextChange(action)
             is EditItemAction.NumberOfDigitsOptionClick -> handleNumberOfDigitsOptionChange(action)
@@ -131,6 +132,7 @@ class EditItemViewModel @Inject constructor(
                     period = content.itemData.refreshPeriod.seconds,
                     digits = content.itemData.digits,
                     issuer = content.itemData.issuer.trim(),
+                    favorite = content.itemData.favorite,
                 )
             )
             trySendAction(EditItemAction.Internal.UpdateItemResult(result))
@@ -157,6 +159,14 @@ class EditItemViewModel @Inject constructor(
         updateItemData { currentItemData ->
             currentItemData.copy(
                 username = action.username
+            )
+        }
+    }
+
+    private fun handleFavoriteToggleClick(action: EditItemAction.FavoriteToggleClick) {
+        updateItemData { currentItemData ->
+            currentItemData.copy(
+                favorite = action.favorite
             )
         }
     }
@@ -339,6 +349,7 @@ class EditItemViewModel @Inject constructor(
             issuer = issuer,
             algorithm = algorithm,
             digits = digits,
+            favorite = favorite,
         ),
     )
     //endregion Utility Functions
@@ -466,6 +477,11 @@ sealed class EditItemAction {
     data class UsernameTextChange(val username: String) : EditItemAction()
 
     /**
+     * The user toggled the favorite checkbox.
+     */
+    data class FavoriteToggleClick(val favorite: Boolean) : EditItemAction()
+
+    /**
      * The user has selected an Item Type option.
      */
     data class TypeOptionClick(val typeOption: AuthenticatorItemType) : EditItemAction()
@@ -530,4 +546,3 @@ enum class AuthenticatorRefreshPeriodOption(val seconds: Int) {
         fun fromSeconds(seconds: Int) = entries.find { it.seconds == seconds }
     }
 }
-

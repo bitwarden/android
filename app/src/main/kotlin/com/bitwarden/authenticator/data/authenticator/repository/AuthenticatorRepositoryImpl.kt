@@ -226,6 +226,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
                     digits = updateItemRequest.digits,
                     issuer = updateItemRequest.issuer,
                     userId = null,
+                    favorite = updateItemRequest.favorite
                 ),
             )
             UpdateItemResult.Success
@@ -407,6 +408,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
             digits = digits,
             issuer = issuer,
             accountName = label,
+            favorite = favorite,
         )
     }
 }

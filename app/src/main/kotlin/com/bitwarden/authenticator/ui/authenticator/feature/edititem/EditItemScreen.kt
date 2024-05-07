@@ -64,6 +64,7 @@ import com.bitwarden.authenticator.ui.platform.components.icon.BitwardenIcon
 import com.bitwarden.authenticator.ui.platform.components.model.IconData
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.stepper.BitwardenStepper
+import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenSwitch
 import com.bitwarden.authenticator.ui.platform.theme.DEFAULT_FADE_TRANSITION_TIME_MS
 import com.bitwarden.authenticator.ui.platform.theme.DEFAULT_STAY_TRANSITION_TIME_MS
 import kotlinx.collections.immutable.toImmutableList
@@ -156,6 +157,13 @@ fun EditItemScreen(
                             )
                         }
                     },
+                    onToggleFavorite = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                EditItemAction.FavoriteToggleClick(it)
+                            )
+                        }
+                    },
                     onTypeOptionClicked = remember(viewModel) {
                         {
                             viewModel.trySendAction(
@@ -216,6 +224,7 @@ fun EditItemContent(
     viewState: EditItemState.ViewState.Content,
     onIssuerNameTextChange: (String) -> Unit = {},
     onUsernameTextChange: (String) -> Unit = {},
+    onToggleFavorite: (Boolean) -> Unit = {},
     onTypeOptionClicked: (AuthenticatorItemType) -> Unit = {},
     onTotpCodeTextChange: (String) -> Unit = {},
     onAlgorithmOptionClicked: (AuthenticatorItemAlgorithm) -> Unit = {},
@@ -272,9 +281,22 @@ fun EditItemContent(
                     singleLine = true,
                 )
             }
+
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                BitwardenSwitch(
+                    label = stringResource(id = R.string.favorite),
+                    isChecked = viewState.itemData.favorite,
+                    onCheckedChange = onToggleFavorite,
+                    modifier = Modifier
+                        .testTag("ItemFavoriteToggle")
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+            }
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         AdvancedOptions(
             modifier = Modifier
@@ -493,7 +515,8 @@ private fun EditItemContentExpandedOptionsPreview() {
                 username = "account name",
                 issuer = "issuer",
                 algorithm = AuthenticatorItemAlgorithm.SHA1,
-                digits = 6
+                digits = 6,
+                favorite = true,
             ),
             minDigitsAllowed = 5,
             maxDigitsAllowed = 10,
@@ -514,7 +537,8 @@ private fun EditItemContentCollapsedOptionsPreview() {
                 username = "account name",
                 issuer = "issuer",
                 algorithm = AuthenticatorItemAlgorithm.SHA1,
-                digits = 6
+                digits = 6,
+                favorite = false,
             ),
             minDigitsAllowed = 5,
             maxDigitsAllowed = 10,
