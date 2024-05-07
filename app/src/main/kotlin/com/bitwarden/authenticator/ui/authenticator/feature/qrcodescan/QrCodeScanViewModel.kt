@@ -1,6 +1,8 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
 import android.net.Uri
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
@@ -53,8 +55,12 @@ class QrCodeScanViewModel @Inject constructor(
         }
 
         val scannedCodeUri = Uri.parse(scannedCode)
-        val secretValue = scannedCodeUri.getQueryParameter(TotpCodeManager.SECRET_PARAM)
-        if (secretValue == null || !secretValue.isBase32()) {
+        val secretValue = scannedCodeUri
+            .getQueryParameter(TotpCodeManager.SECRET_PARAM)
+            .orEmpty()
+            .toUpperCase(Locale.current)
+
+        if (secretValue.isEmpty() || !secretValue.isBase32()) {
             authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
             sendEvent(QrCodeScanEvent.NavigateBack)
             return
