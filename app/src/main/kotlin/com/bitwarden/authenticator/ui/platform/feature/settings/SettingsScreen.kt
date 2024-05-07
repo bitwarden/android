@@ -80,6 +80,7 @@ fun SettingsScreen(
     intentManager: IntentManager = LocalIntentManager.current,
     onNavigateToTutorial: () -> Unit,
     onNavigateToExport: () -> Unit,
+    onNavigateToImport: () -> Unit,
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val scrollBehavior =
@@ -89,6 +90,7 @@ fun SettingsScreen(
         when (event) {
             SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
             SettingsEvent.NavigateToExport -> onNavigateToExport()
+            SettingsEvent.NavigateToImport -> onNavigateToImport()
             SettingsEvent.NavigateToHelpCenter -> {
                 intentManager.launchUri("https://bitwarden.com/help".toUri())
             }
@@ -133,7 +135,12 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.VaultClick.ExportClick)
                     }
-                }
+                },
+                onImportClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(SettingsAction.VaultClick.ImportClick)
+                    }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
@@ -160,7 +167,7 @@ fun SettingsScreen(
                     {
                         viewModel.trySendAction(SettingsAction.HelpClick.HelpCenterClick)
                     }
-                }
+                },
             )
             Spacer(modifier = Modifier.height(16.dp))
             AboutSettings(
@@ -229,10 +236,28 @@ fun SecuritySettings(
 fun VaultSettings(
     modifier: Modifier = Modifier,
     onExportClick: () -> Unit,
+    onImportClick: () -> Unit,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
         label = stringResource(id = R.string.vault)
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenTextRow(
+        text = stringResource(id = R.string.import_vault),
+        onClick = onImportClick,
+        modifier = modifier,
+        withDivider = true,
+        content = {
+            Icon(
+                modifier = Modifier
+                    .mirrorIfRtl()
+                    .size(24.dp),
+                painter = painterResource(id = R.drawable.ic_navigate_next),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+        }
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextRow(

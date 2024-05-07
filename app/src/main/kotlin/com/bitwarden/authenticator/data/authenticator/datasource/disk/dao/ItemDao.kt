@@ -18,7 +18,7 @@ interface ItemDao {
      * Inserts a single authenticator item into the database.
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(item: AuthenticatorItemEntity)
+    suspend fun insert(vararg item: AuthenticatorItemEntity)
 
     /**
      * Read all authenticator items from the database.

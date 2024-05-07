@@ -13,8 +13,8 @@ class AuthenticatorDiskSourceImpl @Inject constructor(
 
     private val forceItemsFlow = bufferedMutableSharedFlow<List<AuthenticatorItemEntity>>()
 
-    override suspend fun saveItem(authenticatorItem: AuthenticatorItemEntity) {
-        itemDao.insert(authenticatorItem)
+    override suspend fun saveItem(vararg authenticatorItem: AuthenticatorItemEntity) {
+        itemDao.insert(*authenticatorItem)
     }
 
     override fun getItems(): Flow<List<AuthenticatorItemEntity>> = merge(

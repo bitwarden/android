@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.ui.authenticator.feature.qrcodescan
 
 import android.net.Uri
+import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
@@ -8,12 +9,6 @@ import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.isBase32
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-
-private const val ALGORITHM = "algorithm"
-private const val DIGITS = "digits"
-private const val PERIOD = "period"
-private const val SECRET = "secret"
-private const val TOTP_CODE_PREFIX = "otpauth://totp"
 
 /**
  * Handles [QrCodeScanAction],
@@ -51,14 +46,14 @@ class QrCodeScanViewModel @Inject constructor(
         var result: TotpCodeResult = TotpCodeResult.Success(action.qrCode)
         val scannedCode = action.qrCode
 
-        if (scannedCode.isBlank() || !scannedCode.startsWith(TOTP_CODE_PREFIX)) {
+        if (scannedCode.isBlank() || !scannedCode.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
             authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
             sendEvent(QrCodeScanEvent.NavigateBack)
             return
         }
 
         val scannedCodeUri = Uri.parse(scannedCode)
-        val secretValue = scannedCodeUri.getQueryParameter(SECRET)
+        val secretValue = scannedCodeUri.getQueryParameter(TotpCodeManager.SECRET_PARAM)
         if (secretValue == null || !secretValue.isBase32()) {
             authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
             sendEvent(QrCodeScanEvent.NavigateBack)
@@ -85,21 +80,21 @@ class QrCodeScanViewModel @Inject constructor(
         parameters.forEach { parameter ->
             Uri.parse(scannedCode).getQueryParameter(parameter)?.let { value ->
                 when (parameter) {
-                    DIGITS -> {
+                    TotpCodeManager.DIGITS_PARAM -> {
                         val digit = value.toInt()
                         if (digit > 10 || digit < 1) {
                             return false
                         }
                     }
 
-                    PERIOD -> {
+                    TotpCodeManager.PERIOD_PARAM -> {
                         val period = value.toInt()
                         if (period < 1) {
                             return false
                         }
                     }
 
-                    ALGORITHM -> {
+                    TotpCodeManager.ALGORITHM_PARAM -> {
                         val lowercaseAlgo = value.lowercase()
                         if (lowercaseAlgo != "sha1" &&
                             lowercaseAlgo != "sha256" &&

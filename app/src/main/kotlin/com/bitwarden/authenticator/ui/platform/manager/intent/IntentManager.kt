@@ -45,6 +45,11 @@ interface IntentManager {
     fun getFileDataFromActivityResult(activityResult: ActivityResult): FileData?
 
     /**
+     * Creates an intent for choosing a file saved to disk.
+     */
+    fun createFileChooserIntent(mimeType: String): Intent
+
+    /**
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
      */
     fun createDocumentIntent(fileName: String): Intent

@@ -11,7 +11,7 @@ interface AuthenticatorDiskSource {
     /**
      * Saves an authenticator item to the data source.
      */
-    suspend fun saveItem(authenticatorItem: AuthenticatorItemEntity)
+    suspend fun saveItem(vararg authenticatorItem: AuthenticatorItemEntity)
 
     /**
      * Retrieves all authenticator items from the data source.

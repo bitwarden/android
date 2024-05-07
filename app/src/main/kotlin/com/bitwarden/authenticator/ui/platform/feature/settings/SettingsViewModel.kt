@@ -128,11 +128,16 @@ class SettingsViewModel @Inject constructor(
     private fun handleVaultClick(action: SettingsAction.VaultClick) {
         when (action) {
             SettingsAction.VaultClick.ExportClick -> handleExportClick()
+            SettingsAction.VaultClick.ImportClick -> handleImportClick()
         }
     }
 
     private fun handleExportClick() {
         sendEvent(SettingsEvent.NavigateToExport)
+    }
+
+    private fun handleImportClick() {
+        sendEvent(SettingsEvent.NavigateToImport)
     }
 
     private fun handleAppearanceChange(action: SettingsAction.AppearanceChange) {
@@ -289,6 +294,11 @@ sealed class SettingsEvent {
     data object NavigateToExport : SettingsEvent()
 
     /**
+     * Navigate to the Import screen.
+     */
+    data object NavigateToImport : SettingsEvent()
+
+    /**
      * Navigate to the Help Center web page.
      */
     data object NavigateToHelpCenter : SettingsEvent()
@@ -335,6 +345,11 @@ sealed class SettingsAction(
          * Indicates the user clicked export.
          */
         data object ExportClick : VaultClick()
+
+        /**
+         * Indicates the user clicked import.
+         */
+        data object ImportClick : VaultClick()
     }
 
     /**

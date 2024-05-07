@@ -13,6 +13,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
+import androidx.core.content.ContextCompat
+import com.bitwarden.authenticator.R
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
@@ -44,6 +46,17 @@ class IntentManagerImpl(
         if (activityResult.resultCode != Activity.RESULT_OK) return null
         val uri = activityResult.data?.data ?: return null
         return getLocalFileData(uri)
+    }
+
+    override fun createFileChooserIntent(mimeType: String): Intent {
+        val chooserIntent = Intent.createChooser(
+            Intent(Intent.ACTION_OPEN_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType(mimeType),
+            ContextCompat.getString(context, R.string.file_source),
+        )
+
+        return chooserIntent
     }
 
     override fun createDocumentIntent(fileName: String): Intent =

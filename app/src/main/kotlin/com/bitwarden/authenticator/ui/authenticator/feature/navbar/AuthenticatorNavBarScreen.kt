@@ -72,6 +72,7 @@ fun AuthenticatorNavBarScreen(
     onNavigateToManualKeyEntry: () -> Unit,
     onNavigateToEditItem: (itemId: String) -> Unit,
     onNavigateToExport: () -> Unit,
+    onNavigateToImport: () -> Unit,
     onNavigateToTutorial: () -> Unit,
 ) {
     EventsEffect(viewModel = viewModel) { event ->
@@ -112,6 +113,7 @@ fun AuthenticatorNavBarScreen(
         navigateToManualKeyEntry = onNavigateToManualKeyEntry,
         navigateToEditItem = onNavigateToEditItem,
         navigateToExport = onNavigateToExport,
+        navigateToImport = onNavigateToImport,
         navigateToTutorial = onNavigateToTutorial,
     )
 }
@@ -128,6 +130,7 @@ private fun AuthenticatorNavBarScaffold(
     navigateToManualKeyEntry: () -> Unit,
     navigateToEditItem: (itemId: String) -> Unit,
     navigateToExport: () -> Unit,
+    navigateToImport: () -> Unit,
     navigateToTutorial: () -> Unit,
 ) {
     BitwardenScaffold(
@@ -176,6 +179,7 @@ private fun AuthenticatorNavBarScaffold(
                 navigateToManualKeyEntry = navigateToManualKeyEntry,
                 navigateToEditItem = navigateToEditItem,
                 navigateToExport = navigateToExport,
+                navigateToImport = navigateToImport,
                 navigateToTutorial = navigateToTutorial,
             )
         }
