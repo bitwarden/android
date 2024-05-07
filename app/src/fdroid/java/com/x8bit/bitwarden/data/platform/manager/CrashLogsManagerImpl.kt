@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 
 /**
@@ -7,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
  */
 class CrashLogsManagerImpl(
     settingsRepository: SettingsRepository,
+    legacyAppCenterMigrator: LegacyAppCenterMigrator,
 ) : CrashLogsManager {
     override var isEnabled: Boolean = true
 }
