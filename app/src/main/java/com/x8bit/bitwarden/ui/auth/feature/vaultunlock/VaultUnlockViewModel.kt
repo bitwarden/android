@@ -28,6 +28,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -51,6 +52,7 @@ class VaultUnlockViewModel @Inject constructor(
         val activeAccountSummary = userState.toActiveAccountSummary()
         val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
             userId = userState.activeUserId,
+            cipher = biometricsEncryptionManager.getOrCreateCipher(userState.activeUserId),
         )
         val vaultUnlockType = userState.activeAccount.vaultUnlockType
         val hasNoMasterPassword = trustedDevice?.hasMasterPassword == false
@@ -73,6 +75,7 @@ class VaultUnlockViewModel @Inject constructor(
             isBiometricsValid = isBiometricsValid,
             showAccountMenu = VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD,
             vaultUnlockType = vaultUnlockType,
+            userId = userState.activeUserId,
         )
     },
 ) {
@@ -95,8 +98,13 @@ class VaultUnlockViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        if (state.showBiometricLogin) {
-            sendEvent(VaultUnlockEvent.PromptForBiometrics)
+        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
+        if (state.showBiometricLogin && cipher != null) {
+            sendEvent(
+                VaultUnlockEvent.PromptForBiometrics(
+                    cipher = cipher,
+                ),
+            )
         }
     }
 
@@ -111,6 +119,7 @@ class VaultUnlockViewModel @Inject constructor(
             is VaultUnlockAction.SwitchAccountClick -> handleSwitchAccountClick(action)
             VaultUnlockAction.BiometricsLockOut -> handleBiometricsLockOut()
             VaultUnlockAction.BiometricsUnlockClick -> handleBiometricsUnlockClick()
+            is VaultUnlockAction.BiometricsUnlockSuccess -> handleBiometricsUnlockSuccess(action)
             VaultUnlockAction.UnlockClick -> handleUnlockClick()
             is VaultUnlockAction.Internal -> handleInternalAction(action)
         }
@@ -151,8 +160,22 @@ class VaultUnlockViewModel @Inject constructor(
     }
 
     private fun handleBiometricsUnlockClick() {
+        val cipher = biometricsEncryptionManager.getOrCreateCipher(state.userId)
+        if (cipher != null) {
+            sendEvent(
+                event = VaultUnlockEvent.PromptForBiometrics(
+                    cipher = cipher,
+                ),
+            )
+        } else {
+            mutableStateFlow.update { it.copy(isBiometricsValid = false) }
+            // TODO BIT-2345 show failure message when user added a new fingerprint
+        }
+    }
+
+    private fun handleBiometricsUnlockSuccess(action: VaultUnlockAction.BiometricsUnlockSuccess) {
         val activeUserId = authRepository.activeUserId ?: return
-        if (!biometricsEncryptionManager.isBiometricIntegrityValid(activeUserId)) {
+        if (!biometricsEncryptionManager.isBiometricIntegrityValid(activeUserId, action.cipher)) {
             mutableStateFlow.update { it.copy(isBiometricsValid = false) }
             return
         }
@@ -298,6 +321,7 @@ data class VaultUnlockState(
     val isBiometricEnabled: Boolean,
     val showAccountMenu: Boolean,
     val vaultUnlockType: VaultUnlockType,
+    val userId: String,
 ) : Parcelable {
 
     /**
@@ -344,7 +368,7 @@ sealed class VaultUnlockEvent {
     /**
      * Prompts the user for biometrics unlock.
      */
-    data object PromptForBiometrics : VaultUnlockEvent()
+    data class PromptForBiometrics(val cipher: Cipher) : VaultUnlockEvent()
 }
 
 /**
@@ -400,6 +424,13 @@ sealed class VaultUnlockAction {
      * The user has clicked the biometrics button.
      */
     data object BiometricsUnlockClick : VaultUnlockAction()
+
+    /**
+     * The user has received a successful response from the biometrics call.
+     */
+    data class BiometricsUnlockSuccess(
+        val cipher: Cipher?,
+    ) : VaultUnlockAction()
 
     /**
      * The user has attempted to login with biometrics too many times and has been locked out.

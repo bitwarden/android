@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import javax.crypto.Cipher
 
 /**
  * Default implementation of the [BiometricsManager] to manage biometrics within the app.
@@ -35,10 +36,11 @@ class BiometricsManagerImpl(
         }
 
     override fun promptBiometrics(
-        onSuccess: () -> Unit,
+        onSuccess: (cipher: Cipher?) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
+        cipher: Cipher,
     ) {
         val biometricPrompt = BiometricPrompt(
             fragmentActivity,
@@ -46,7 +48,7 @@ class BiometricsManagerImpl(
             object : BiometricPrompt.AuthenticationCallback() {
                 override fun onAuthenticationSucceeded(
                     result: BiometricPrompt.AuthenticationResult,
-                ) = onSuccess()
+                ) = onSuccess(result.cryptoObject?.cipher)
 
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     when (errorCode) {
@@ -84,6 +86,6 @@ class BiometricsManagerImpl(
             .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
             .build()
 
-        biometricPrompt.authenticate(promptInfo)
+        biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
     }
 }

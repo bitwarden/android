@@ -84,6 +84,16 @@ fun AccountSecurityScreen(
     val state by viewModel.stateFlow.collectAsState()
     val context = LocalContext.current
     val resources = context.resources
+    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
+    val unlockWithBiometricToggle: () -> Unit = remember(viewModel) {
+        {
+            viewModel.trySendAction(
+                action = AccountSecurityAction.UnlockWithBiometricToggle(
+                    enabled = true,
+                ),
+            )
+        }
+    }
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             AccountSecurityEvent.NavigateBack -> onNavigateBack()
@@ -106,6 +116,20 @@ fun AccountSecurityScreen(
 
             is AccountSecurityEvent.NavigateToChangeMasterPassword -> {
                 intentManager.launchUri(event.url.toUri())
+            }
+
+            is AccountSecurityEvent.ShowBiometricsPrompt -> {
+                showBiometricsPrompt = true
+                biometricsManager.promptBiometrics(
+                    onSuccess = {
+                        unlockWithBiometricToggle()
+                        showBiometricsPrompt = false
+                    },
+                    onCancel = { showBiometricsPrompt = false },
+                    onLockOut = { showBiometricsPrompt = false },
+                    onError = { showBiometricsPrompt = false },
+                    cipher = event.cipher,
+                )
             }
 
             is AccountSecurityEvent.ShowToast -> {
@@ -174,8 +198,18 @@ fun AccountSecurityScreen(
             )
             UnlockWithBiometricsRow(
                 isChecked = state.isUnlockWithBiometricsEnabled,
-                onBiometricToggle = remember(viewModel) {
-                    { viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(it)) }
+                showBiometricsPrompt = showBiometricsPrompt,
+                onDisableBiometrics = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(
+                            AccountSecurityAction.UnlockWithBiometricToggle(
+                                enabled = false,
+                            ),
+                        )
+                    }
+                },
+                onEnableBiometrics = remember(viewModel) {
+                    { viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick) }
                 },
                 biometricsManager = biometricsManager,
                 modifier = Modifier
@@ -349,12 +383,13 @@ private fun AccountSecurityDialogs(
 @Composable
 private fun UnlockWithBiometricsRow(
     isChecked: Boolean,
-    onBiometricToggle: (Boolean) -> Unit,
+    showBiometricsPrompt: Boolean,
+    onDisableBiometrics: () -> Unit,
+    onEnableBiometrics: () -> Unit,
     biometricsManager: BiometricsManager,
     modifier: Modifier = Modifier,
 ) {
     if (!biometricsManager.isBiometricsSupported) return
-    var showBiometricsPrompt by rememberSaveable { mutableStateOf(false) }
     BitwardenWideSwitch(
         modifier = modifier,
         label = stringResource(
@@ -364,18 +399,9 @@ private fun UnlockWithBiometricsRow(
         isChecked = isChecked || showBiometricsPrompt,
         onCheckedChange = { toggled ->
             if (toggled) {
-                showBiometricsPrompt = true
-                biometricsManager.promptBiometrics(
-                    onSuccess = {
-                        onBiometricToggle(true)
-                        showBiometricsPrompt = false
-                    },
-                    onCancel = { showBiometricsPrompt = false },
-                    onLockOut = { showBiometricsPrompt = false },
-                    onError = { showBiometricsPrompt = false },
-                )
+                onEnableBiometrics()
             } else {
-                onBiometricToggle(false)
+                onDisableBiometrics()
             }
         },
     )

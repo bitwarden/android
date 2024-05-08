@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import org.junit.Before
 import org.junit.Test
+import javax.crypto.Cipher
 
 class VaultUnlockScreenTest : BaseComposeTest() {
 
@@ -51,7 +52,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
-    private val captureBiometricsSuccess = slot<() -> Unit>()
+    private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
     private val captureBiometricsLockOut = slot<() -> Unit>()
     private val biometricsManager: BiometricsManager = mockk {
         every { isBiometricsSupported } returns true
@@ -61,6 +62,7 @@ class VaultUnlockScreenTest : BaseComposeTest() {
                 onCancel = any(),
                 onLockOut = capture(captureBiometricsLockOut),
                 onError = any(),
+                cipher = CIPHER,
             )
         } just runs
     }
@@ -76,15 +78,34 @@ class VaultUnlockScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on PromptForBiometrics should call launchUri on intentManager`() {
-        mutableEventFlow.tryEmit(VaultUnlockEvent.PromptForBiometrics)
-        verify {
+    fun `on PromptForBiometrics should call promptBiometrics on biometricsManager`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.PromptForBiometrics(CIPHER))
+        verify(exactly = 1) {
             biometricsManager.promptBiometrics(
                 onSuccess = any(),
                 onCancel = any(),
                 onError = any(),
                 onLockOut = any(),
+                cipher = any(),
             )
+        }
+    }
+
+    @Test
+    fun `on biometrics authentication success should send BiometricsUnlockSuccess`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.PromptForBiometrics(CIPHER))
+        captureBiometricsSuccess.captured(CIPHER)
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
+        }
+    }
+
+    @Test
+    fun `on biometrics authentication lockout should send BiometricsLockOut`() {
+        mutableEventFlow.tryEmit(VaultUnlockEvent.PromptForBiometrics(CIPHER))
+        captureBiometricsLockOut.captured()
+        verify(exactly = 1) {
+            viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
         }
     }
 
@@ -408,29 +429,14 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         }
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `unlock with biometrics click should send BiometricsUnlockClick on biometrics authentication success`() {
+    fun `unlock with biometrics click should send BiometricsUnlockClick`() {
         composeTestRule
             .onNodeWithText("Use biometrics to unlock")
             .performScrollTo()
             .performClick()
-        captureBiometricsSuccess.captured()
         verify(exactly = 1) {
             viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unlock with biometrics click should send BiometricsLockOut on biometrics authentication lock out`() {
-        composeTestRule
-            .onNodeWithText("Use biometrics to unlock")
-            .performScrollTo()
-            .performClick()
-        captureBiometricsLockOut.captured()
-        verify(exactly = 1) {
-            viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut)
         }
     }
 
@@ -490,6 +496,7 @@ private val ACCOUNT_SUMMARIES = listOf(
     LOCKED_ACCOUNT_SUMMARY,
 )
 
+private val CIPHER = mockk<Cipher>()
 private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     accountSummaries = ACCOUNT_SUMMARIES,
     avatarColorString = "0000FF",
@@ -502,5 +509,6 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     isBiometricsValid = true,
     isBiometricEnabled = true,
     showAccountMenu = true,
+    userId = ACTIVE_ACCOUNT_SUMMARY.userId,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )
