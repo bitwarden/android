@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -36,6 +37,7 @@ import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import javax.crypto.Cipher
 
 class AccountSecurityViewModelTest : BaseViewModelTest() {
 
@@ -53,6 +55,9 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         coEvery { getUserFingerprint() } returns UserFingerprintResult.Success(FINGERPRINT)
     }
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
+    private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
+        every { createCipher(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
+    }
     private val policyManager: PolicyManager = mockk {
         every {
             getActivePoliciesFlow(type = PolicyTypeJson.MAXIMUM_VAULT_TIMEOUT)
@@ -69,11 +74,27 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct when saved state is not set`() {
         every { settingsRepository.isUnlockWithPinEnabled } returns true
+        every {
+            biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_STATE.activeUserId)
+        } returns CIPHER
+        every {
+            biometricsEncryptionManager.isBiometricIntegrityValid(
+                userId = DEFAULT_USER_STATE.activeUserId,
+                cipher = CIPHER,
+            )
+        } returns true
         val viewModel = createViewModel(initialState = null)
         assertEquals(
             DEFAULT_STATE.copy(isUnlockWithPinEnabled = true),
             viewModel.stateFlow.value,
         )
+        verify {
+            biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_STATE.activeUserId)
+            biometricsEncryptionManager.isBiometricIntegrityValid(
+                userId = DEFAULT_USER_STATE.activeUserId,
+                cipher = CIPHER,
+            )
+        }
         coVerify { settingsRepository.getUserFingerprint() }
     }
 
@@ -305,6 +326,19 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `on EnableBiometricsClick should emit ShowBiometricsPrompt`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
+
+            assertEquals(
+                AccountSecurityEvent.ShowBiometricsPrompt(CIPHER),
+                awaitItem(),
+            )
+        }
+    }
 
     @Test
     fun `on UnlockWithBiometricToggle false should call clearBiometricsKey and update the state`() =
@@ -547,12 +581,14 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         vaultRepository: VaultRepository = this.vaultRepository,
         environmentRepository: EnvironmentRepository = this.fakeEnvironmentRepository,
         settingsRepository: SettingsRepository = this.settingsRepository,
+        biometricsEncryptionManager: BiometricsEncryptionManager = this.biometricsEncryptionManager,
         policyManager: PolicyManager = this.policyManager,
     ): AccountSecurityViewModel = AccountSecurityViewModel(
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         settingsRepository = settingsRepository,
         environmentRepository = environmentRepository,
+        biometricsEncryptionManager = biometricsEncryptionManager,
         policyManager = policyManager,
         savedStateHandle = SavedStateHandle().apply {
             set("state", initialState)
@@ -560,19 +596,8 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     )
 }
 
+private val CIPHER = mockk<Cipher>()
 private const val FINGERPRINT: String = "fingerprint"
-
-private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
-    dialog = null,
-    fingerprintPhrase = FINGERPRINT.asText(),
-    isUnlockWithBiometricsEnabled = false,
-    isUnlockWithPasswordEnabled = true,
-    isUnlockWithPinEnabled = false,
-    vaultTimeout = VaultTimeout.ThirtyMinutes,
-    vaultTimeoutAction = VaultTimeoutAction.LOCK,
-    vaultTimeoutPolicyMinutes = null,
-    vaultTimeoutPolicyAction = null,
-)
 
 private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
@@ -593,4 +618,17 @@ private val DEFAULT_USER_STATE = UserState(
             trustedDevice = null,
         ),
     ),
+)
+
+private val DEFAULT_STATE: AccountSecurityState = AccountSecurityState(
+    dialog = null,
+    fingerprintPhrase = FINGERPRINT.asText(),
+    isUnlockWithBiometricsEnabled = false,
+    isUnlockWithPasswordEnabled = true,
+    isUnlockWithPinEnabled = false,
+    userId = DEFAULT_USER_STATE.activeUserId,
+    vaultTimeout = VaultTimeout.ThirtyMinutes,
+    vaultTimeoutAction = VaultTimeoutAction.LOCK,
+    vaultTimeoutPolicyMinutes = null,
+    vaultTimeoutPolicyAction = null,
 )

@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.auth.repository.model.UserFingerprintResult
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -34,21 +36,28 @@ private const val KEY_STATE = "state"
 /**
  * View model for the account security screen.
  */
-@Suppress("TooManyFunctions")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class AccountSecurityViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val settingsRepository: SettingsRepository,
     private val environmentRepository: EnvironmentRepository,
+    private val biometricsEncryptionManager: BiometricsEncryptionManager,
     policyManager: PolicyManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AccountSecurityState, AccountSecurityEvent, AccountSecurityAction>(
-    initialState = savedStateHandle[KEY_STATE]
-        ?: AccountSecurityState(
+    initialState = savedStateHandle[KEY_STATE] ?: run {
+        val userId = requireNotNull(authRepository.userStateFlow.value).activeUserId
+        val isBiometricsValid = biometricsEncryptionManager.isBiometricIntegrityValid(
+            userId = userId,
+            cipher = biometricsEncryptionManager.getOrCreateCipher(userId),
+        )
+        AccountSecurityState(
             dialog = null,
             fingerprintPhrase = "".asText(), // This will be filled in dynamically
-            isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled,
+            isUnlockWithBiometricsEnabled = settingsRepository.isUnlockWithBiometricsEnabled &&
+                isBiometricsValid,
             isUnlockWithPasswordEnabled = authRepository
                 .userStateFlow
                 .value
@@ -56,11 +65,13 @@ class AccountSecurityViewModel @Inject constructor(
                 ?.trustedDevice
                 ?.hasMasterPassword != false,
             isUnlockWithPinEnabled = settingsRepository.isUnlockWithPinEnabled,
+            userId = userId,
             vaultTimeout = settingsRepository.vaultTimeout,
             vaultTimeoutAction = settingsRepository.vaultTimeoutAction,
             vaultTimeoutPolicyMinutes = null,
             vaultTimeoutPolicyAction = null,
-        ),
+        )
+    },
 ) {
     private val webSettingsUrl: String
         get() {
@@ -104,6 +115,7 @@ class AccountSecurityViewModel @Inject constructor(
         AccountSecurityAction.ConfirmLogoutClick -> handleConfirmLogoutClick()
         AccountSecurityAction.DeleteAccountClick -> handleDeleteAccountClick()
         AccountSecurityAction.DismissDialog -> handleDismissDialog()
+        AccountSecurityAction.EnableBiometricsClick -> handleEnableBiometricsClick()
         AccountSecurityAction.FingerPrintLearnMoreClick -> handleFingerPrintLearnMoreClick()
         AccountSecurityAction.LockNowClick -> handleLockNowClick()
         AccountSecurityAction.LogoutClick -> handleLogoutClick()
@@ -142,6 +154,17 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleDismissDialog() {
         mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun handleEnableBiometricsClick() {
+        sendEvent(
+            AccountSecurityEvent.ShowBiometricsPrompt(
+                // Generate a new key in case the previous one was invalidated
+                cipher = biometricsEncryptionManager.createCipher(
+                    userId = state.userId,
+                ),
+            ),
+        )
     }
 
     private fun handleFingerPrintLearnMoreClick() {
@@ -345,6 +368,7 @@ data class AccountSecurityState(
     val isUnlockWithBiometricsEnabled: Boolean,
     val isUnlockWithPasswordEnabled: Boolean,
     val isUnlockWithPinEnabled: Boolean,
+    val userId: String,
     val vaultTimeout: VaultTimeout,
     val vaultTimeoutAction: VaultTimeoutAction,
     val vaultTimeoutPolicyMinutes: Int?,
@@ -424,6 +448,13 @@ sealed class AccountSecurityEvent {
     data class NavigateToChangeMasterPassword(val url: String) : AccountSecurityEvent()
 
     /**
+     * Shows the prompt for biometrics using with the given [cipher].
+     */
+    data class ShowBiometricsPrompt(
+        val cipher: Cipher,
+    ) : AccountSecurityEvent()
+
+    /**
      * Displays a toast with the given [Text].
      */
     data class ShowToast(
@@ -465,6 +496,11 @@ sealed class AccountSecurityAction {
      * User dismissed the currently displayed dialog.
      */
     data object DismissDialog : AccountSecurityAction()
+
+    /**
+     * The user clicked to enable biometrics.
+     */
+    data object EnableBiometricsClick : AccountSecurityAction()
 
     /**
      * User clicked fingerprint phrase.

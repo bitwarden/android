@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.update
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import javax.crypto.Cipher
 
 @Suppress("LargeClass")
 class AccountSecurityScreenTest : BaseComposeTest() {
@@ -50,7 +51,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         every { startActivity(any()) } just runs
         every { startApplicationDetailsSettingsActivity() } just runs
     }
-    private val captureBiometricsSuccess = slot<() -> Unit>()
+    private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
     private val captureBiometricsCancel = slot<() -> Unit>()
     private val captureBiometricsLockOut = slot<() -> Unit>()
     private val captureBiometricsError = slot<() -> Unit>()
@@ -62,6 +63,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
                 onCancel = capture(captureBiometricsCancel),
                 onLockOut = capture(captureBiometricsLockOut),
                 onError = capture(captureBiometricsError),
+                cipher = CIPHER,
             )
         } just runs
     }
@@ -108,8 +110,9 @@ class AccountSecurityScreenTest : BaseComposeTest() {
         verify { viewModel.trySendAction(AccountSecurityAction.PendingLoginRequestsClick) }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+    fun `on unlock with biometrics toggle should send EnableBiometricsClick when isUnlockWithBiometricsEnabled is false`() {
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
@@ -118,17 +121,24 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
             .performClick()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick)
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle`() {
+        mutableStateFlow.update { it.copy(isUnlockWithBiometricsEnabled = true) }
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
             .assertIsOn()
-        captureBiometricsSuccess.captured()
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
-            .assertIsOff()
+            .performClick()
         verify(exactly = 1) {
-            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(false))
         }
     }
 
@@ -138,10 +148,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
             .assertIsOff()
-        composeTestRule
-            .onNodeWithText("Unlock with Biometrics")
-            .performScrollTo()
-            .performClick()
+        mutableEventFlow.tryEmit(AccountSecurityEvent.ShowBiometricsPrompt(CIPHER))
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
@@ -162,10 +169,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
             .assertIsOff()
-        composeTestRule
-            .onNodeWithText("Unlock with Biometrics")
-            .performScrollTo()
-            .performClick()
+        mutableEventFlow.tryEmit(AccountSecurityEvent.ShowBiometricsPrompt(CIPHER))
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
@@ -186,10 +190,7 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
             .assertIsOff()
-        composeTestRule
-            .onNodeWithText("Unlock with Biometrics")
-            .performScrollTo()
-            .performClick()
+        mutableEventFlow.tryEmit(AccountSecurityEvent.ShowBiometricsPrompt(CIPHER))
         composeTestRule
             .onNodeWithText("Unlock with Biometrics")
             .performScrollTo()
@@ -201,6 +202,27 @@ class AccountSecurityScreenTest : BaseComposeTest() {
             .assertIsOff()
         verify(exactly = 0) {
             viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        mutableEventFlow.tryEmit(AccountSecurityEvent.ShowBiometricsPrompt(CIPHER))
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsSuccess.captured(CIPHER)
+        composeTestRule
+            .onNodeWithText("Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 1) {
+            viewModel.trySendAction(AccountSecurityAction.UnlockWithBiometricToggle(true))
         }
     }
 
@@ -1359,12 +1381,15 @@ class AccountSecurityScreenTest : BaseComposeTest() {
     }
 }
 
+private val CIPHER = mockk<Cipher>()
+private const val USER_ID: String = "activeUserId"
 private val DEFAULT_STATE = AccountSecurityState(
     dialog = null,
     fingerprintPhrase = "fingerprint-placeholder".asText(),
     isUnlockWithBiometricsEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithPinEnabled = false,
+    userId = USER_ID,
     vaultTimeout = VaultTimeout.ThirtyMinutes,
     vaultTimeoutAction = VaultTimeoutAction.LOCK,
     vaultTimeoutPolicyMinutes = null,

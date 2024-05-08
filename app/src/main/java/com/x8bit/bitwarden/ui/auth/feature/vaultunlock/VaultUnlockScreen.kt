@@ -57,6 +57,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import javax.crypto.Cipher
 
 /**
  * The top level composable for the Vault Unlock screen.
@@ -72,8 +73,8 @@ fun VaultUnlockScreen(
     val context = LocalContext.current
     val resources = context.resources
 
-    val onBiometricsUnlockClick: () -> Unit = remember(viewModel) {
-        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
+    val onBiometricsUnlockSuccess: (cipher: Cipher?) -> Unit = remember(viewModel) {
+        { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(it)) }
     }
     val onBiometricsLockOut: () -> Unit = remember(viewModel) {
         { viewModel.trySendAction(VaultUnlockAction.BiometricsLockOut) }
@@ -85,10 +86,17 @@ fun VaultUnlockScreen(
                 Toast.makeText(context, event.text(resources), Toast.LENGTH_SHORT).show()
             }
 
-            VaultUnlockEvent.PromptForBiometrics -> {
-                biometricsManager.promptForBiometrics(
-                    onSuccess = onBiometricsUnlockClick,
+            is VaultUnlockEvent.PromptForBiometrics -> {
+                biometricsManager.promptBiometrics(
+                    onSuccess = onBiometricsUnlockSuccess,
+                    onCancel = {
+                        // no-op
+                    },
+                    onError = {
+                        // no-op
+                    },
                     onLockOut = onBiometricsLockOut,
+                    cipher = event.cipher,
                 )
             }
         }
@@ -216,11 +224,8 @@ fun VaultUnlockScreen(
                 if (state.showBiometricLogin && biometricsManager.isBiometricsSupported) {
                     BitwardenOutlinedButton(
                         label = stringResource(id = R.string.use_biometrics_to_unlock),
-                        onClick = {
-                            biometricsManager.promptForBiometrics(
-                                onSuccess = onBiometricsUnlockClick,
-                                onLockOut = onBiometricsLockOut,
-                            )
+                        onClick = remember(viewModel) {
+                            { viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick) }
                         },
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
@@ -267,23 +272,4 @@ fun VaultUnlockScreen(
             )
         }
     }
-}
-
-/**
- * Helper method for easier prompting for biometrics.
- */
-private fun BiometricsManager.promptForBiometrics(
-    onSuccess: () -> Unit,
-    onLockOut: () -> Unit,
-) {
-    promptBiometrics(
-        onSuccess = onSuccess,
-        onCancel = {
-            // no-op
-        },
-        onError = {
-            // no-op
-        },
-        onLockOut = onLockOut,
-    )
 }
