@@ -328,11 +328,6 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private bool CanProvideCredentialOnPasskeyRequest(CipherView cipherView)
-        {
-            return _context.PasskeyCredentialRequest != null && !cipherView.Login.HasFido2Credentials;
-        }
-
         private void OnConfirmingNewCredential()
         {
             MainThread.BeginInvokeOnMainThread(() =>
