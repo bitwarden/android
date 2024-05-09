@@ -22,7 +22,9 @@
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\eff_long_word_list.txt" />
-    <EmbeddedResource Include="Resources\public_suffix_list.dat" />
+    <MauiAsset Include="Resources\Raw\public_suffix_list.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </MauiAsset>
   </ItemGroup>
   <ItemGroup>
 		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
