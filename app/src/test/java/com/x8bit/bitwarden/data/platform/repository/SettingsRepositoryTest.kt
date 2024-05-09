@@ -274,6 +274,19 @@ class SettingsRepositoryTest {
     }
 
     @Test
+    fun `hasUserLoggedInOrCreatedAccount should pull from and update SettingsDiskSource`() {
+        assertFalse(settingsRepository.hasUserLoggedInOrCreatedAccount)
+
+        // Updates to the disk source change the repository value.
+        fakeSettingsDiskSource.hasUserLoggedInOrCreatedAccount = false
+        assertFalse(settingsRepository.hasUserLoggedInOrCreatedAccount)
+
+        // Updates to the repository change the disk source value
+        settingsRepository.hasUserLoggedInOrCreatedAccount = true
+        assertTrue(fakeSettingsDiskSource.hasUserLoggedInOrCreatedAccount!!)
+    }
+
+    @Test
     fun `appTheme should pull from and update SettingsDiskSource`() {
         fakeAuthDiskSource.userState = null
         assertEquals(

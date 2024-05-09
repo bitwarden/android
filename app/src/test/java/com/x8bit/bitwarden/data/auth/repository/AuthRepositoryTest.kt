@@ -149,6 +149,7 @@ class AuthRepositoryTest {
             }
     private val settingsRepository: SettingsRepository = mockk {
         every { setDefaultsIfNecessary(any()) } just runs
+        every { hasUserLoggedInOrCreatedAccount = true } just runs
     }
     private val authSdkSource = mockk<AuthSdkSource> {
         coEvery {

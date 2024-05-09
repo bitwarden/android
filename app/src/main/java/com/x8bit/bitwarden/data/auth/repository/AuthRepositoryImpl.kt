@@ -723,6 +723,7 @@ class AuthRepositoryImpl(
                         }
 
                         is RegisterResponseJson.Success -> {
+                            settingsRepository.hasUserLoggedInOrCreatedAccount = true
                             RegisterResult.Success(captchaToken = it.captchaBypassToken)
                         }
 
@@ -1280,6 +1281,7 @@ class AuthRepositoryImpl(
                 refreshToken = loginResponse.refreshToken,
             ),
         )
+        settingsRepository.hasUserLoggedInOrCreatedAccount = true
         authDiskSource.userState = userStateJson
         loginResponse.key?.let {
             // Only set the value if it's present, since we may have set it already

@@ -286,6 +286,33 @@ class SettingsDiskSourceTest {
     }
 
     @Test
+    fun `hasUserLoggedInOrCreatedAccount should pull from and update SharedPreferences`() {
+        val hasUserLoggedInOrCreatedAccount = "bwPreferencesStorage:hasUserLoggedInOrCreatedAccount"
+        val expected = false
+
+        assertNull(settingsDiskSource.hasUserLoggedInOrCreatedAccount)
+
+        fakeSharedPreferences
+            .edit {
+                putBoolean(
+                    hasUserLoggedInOrCreatedAccount,
+                    expected,
+                )
+            }
+        assertEquals(
+            expected,
+            settingsDiskSource.hasUserLoggedInOrCreatedAccount,
+        )
+
+        settingsDiskSource.hasUserLoggedInOrCreatedAccount = true
+        assertTrue(
+            fakeSharedPreferences.getBoolean(
+                hasUserLoggedInOrCreatedAccount, false,
+            ),
+        )
+    }
+
+    @Test
     fun `appTheme when values are present should pull from SharedPreferences`() {
         val appThemeBaseKey = "bwPreferencesStorage:appTheme"
         val appTheme = AppTheme.DEFAULT

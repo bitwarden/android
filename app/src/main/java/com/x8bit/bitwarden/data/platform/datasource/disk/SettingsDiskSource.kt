@@ -59,6 +59,16 @@ interface SettingsDiskSource {
     val isCrashLoggingEnabledFlow: Flow<Boolean?>
 
     /**
+     * The current status if a user has logged in or created an account.
+     */
+    var hasUserLoggedInOrCreatedAccount: Boolean?
+
+    /**
+     * Emits updates that track [hasUserLoggedInOrCreatedAccount].
+     */
+    val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
+
+    /**
      * Clears all the settings data for the given user.
      */
     fun clearData(userId: String)
