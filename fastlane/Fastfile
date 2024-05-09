@@ -1,0 +1,208 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  before_all do
+    ENV["KEYSTORE_DIR"] = ENV["PWD"] + "/keystores/"
+  end
+
+  desc "Assemble debug APKs."
+  lane :assembleDebugApks do |options|
+    gradle(
+      tasks: ["assembleDebug"],
+    )
+  end
+
+  desc "Assemble FDroid release APK"
+  lane :assembleFDroidReleaseApk do |options|
+    buildAndSignBitwarden(
+      taskName: "assemble",
+      flavor: "Fdroid",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Assemble F-Droid Beta APK"
+  lane :assembleFDroidBetaApk do |options|
+    buildAndSignBitwarden(
+      taskName: "assemble",
+      flavor: "Fdroid",
+      buildType: "Beta",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Assemble Play Store release APK"
+  lane :assemblePlayStoreReleaseApk do |options|
+    buildAndSignBitwarden(
+      taskName: "assemble",
+      flavor: "Standard",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Assemble Play Store release APK"
+  lane :assemblePlayStoreBetaApk do |options|
+    buildAndSignBitwarden(
+      taskName: "assemble",
+      flavor: "Standard",
+      buildType: "Beta",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Bundle Play Store release"
+  lane :bundlePlayStoreRelease do |options|
+    buildAndSignBitwarden(
+      taskName: "bundle",
+      flavor: "Standard",
+      buildType: "Release",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Bundle Play Store release"
+  lane :bundlePlayStoreBeta do |options|
+    buildAndSignBitwarden(
+      taskName: "bundle",
+      flavor: "Standard",
+      buildType: "Beta",
+      storeFile: options[:storeFile],
+      storePassword: options[:storePassword],
+      keyAlias: options[:keyAlias],
+      keyPassword: options[:keyPassword],
+    )
+  end
+
+  desc "Runs Standard Debug tests and generates Kover report."
+  lane :test do
+    gradle(
+        tasks: ["testStandardDebug", "lintStandardDebug", "detektStandardDebug", "koverXmlReportStandardDebug"]
+    )
+  end
+
+  desc "Apply build version information"
+  fastlane_require "time"
+  lane :setBuildVersionInfo do |options|
+
+    # Read-in app build config file.
+    buildConfigPath = "../app/build.gradle.kts"
+    buildConfigFile = File.open(buildConfigPath)
+    buildConfigText = buildConfigFile.read
+    buildConfigFile.close
+
+    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
+    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
+
+    if options[:versionName].nil? or options[:versionName].to_s.empty?
+        nextVersionName = currentVersionName
+    else
+        nextVersionName = options[:versionName].to_s
+    end
+
+    # Append "-native" to the builds so they are easily distinguished from MAUI builds while both
+    # are being distributed.
+    nextVersionName = nextVersionName + "-native"
+
+    # Replace version information.
+    puts "Setting version code to #{options[:versionCode]}."
+    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
+    puts "Setting version name to #{nextVersionName}."
+    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
+
+    # Save changes
+    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+  end
+  
+  desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
+  private_lane :buildAndSignBitwarden do |options|
+    gradle(
+      task: options[:taskName],
+      flavor: options[:flavor],
+      build_type: options[:buildType],
+      properties: {
+        "android.injected.signing.store.file" => ENV["KEYSTORE_DIR"] + options[:storeFile],
+        "android.injected.signing.store.password" => options[:storePassword],
+        "android.injected.signing.key.alias" => options[:keyAlias],
+        "android.injected.signing.key.password" => options[:keyPassword]
+      },
+      print_command: false,
+    )
+  end
+
+  desc "Publish Release Play Store artifacts to Firebase App Distribution"
+  lane :distributeReleasePlayStoreToFirebase do |options|
+    firebase_app_distribution(
+      app: "1:64530857057:android:f8d67b786db1b844",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group",
+      release_notes: "Native Play Store Release from commit #{sh("git rev-parse --short HEAD")} on branch #{sh("git rev-parse --abbrev-ref HEAD")}",
+    )
+  end
+
+  desc "Publish Beta Play Store artifacts to Firebase App Distribution"
+  lane :distributeBetaPlayStoreToFirebase do |options|
+    firebase_app_distribution(
+      app: "1:64530857057:android:54c1ae56b269b959887e20",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group",
+      release_notes: "Native Play Store Beta from commit #{sh("git rev-parse --short HEAD")} on branch #{sh("git rev-parse --abbrev-ref HEAD")}",
+    )
+  end
+
+  desc "Publish Release F-Droid artifacts to Firebase App Distribution"
+  lane :distributeReleaseFDroidToFirebase do |options|
+    firebase_app_distribution(
+      app: "1:439897860529:android:b143708734b99c0e3fb590",
+      android_artifact_type: "APK",
+      android_artifact_path: "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk",
+      service_credentials_file: options[:service_credentials_file],
+      groups: "internal-prod-group",
+      release_notes: "Native F-Droid Beta from commit #{sh("git rev-parse --short HEAD")} on branch #{sh("git rev-parse --abbrev-ref HEAD")}",
+    )
+  end
+
+  desc "Publish PlayStore bundle to Google Play Store Internal testing track"
+  lane :publishForInternalTesting do
+    upload_to_play_store(
+      track: "internal",
+      release_status: "draft",
+      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab"
+    )
+  end
+end

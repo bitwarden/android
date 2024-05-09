@@ -1,0 +1,603 @@
+---
+name: Main Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      version-name:
+        description: 'Optional. Version string to use, in X.Y.Z format. Overrides default in the project.'
+        required: false
+        type: string
+      version-code:
+        description: 'Optional. Build number to use. Overrides default of GitHub run number.'
+        required: false
+        type: number
+      distribute-to-firebase:
+        description: 'Optional. Distribute artifacts to Firebase.'
+        required: false
+        default: false
+        type: boolean
+      publish-to-play-store:
+        description: 'Optional. Deploy bundle artifact to Google Play Store'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  JAVA_VERSION: 17
+
+jobs:
+
+  # Job responsible for compiling the project and running checks
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+
+      # Checkout project.
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+          # Allow subsequent steps to trigger GitHub Actions via git push
+          # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
+          persist-credentials: false
+
+      # Validate the gradle wrapper is known and not corrupted.
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
+
+      # Configure gradle caching
+      - name: Cache Gradle Files
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      # Configure build output caching
+      - name: Cache build output
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      # Set the default JDK version.
+      - name: Configure JDK
+        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      # Install required Ruby language version.
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
+        with:
+          bundler-cache: true
+
+      # Install fastlane CLI and dependencies.
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      # Perform build checks, which include code analysis and test execution.
+      - name: Check
+        run: bundle exec fastlane test
+
+      # Compile project debug artifacts.
+      - name: Build
+        run: bundle exec fastlane assembleDebugApks
+
+  publish_playstore:
+    name: Publish PlayStore Artifacts
+    needs:
+      - build
+    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: [ "prod", "qa" ]
+        artifact: [ "apk", "aab" ]
+    steps:
+
+      # Checkout project
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+          # Allow subsequent steps to trigger GitHub Actions via git push
+          # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
+          persist-credentials: false
+
+      # Install Ruby
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
+        with:
+          bundler-cache: true
+
+      # Install Fastlane
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      # Login to Azure
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      # Download keys and secrets needed for signing release and beta builds
+      - name: Download secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+          mkdir -p ${{ github.workspace }}/app/src/standardBeta
+          mkdir -p ${{ github.workspace }}/app/src/standardRelease
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_play-keystore.jks --file ${{ github.workspace }}/keystores/app_play-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_upload-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name play_creds.json --file ${{ github.workspace }}/secrets/play_creds.json --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_beta_play-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_play-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_beta_upload-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_upload-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name google-services.json --file ${{ github.workspace }}/app/src/standardRelease/google-services.json --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
+        shell: bash
+
+      # Download Firebase credentials for publishing to App Distribution on 'prod' variants.
+      - name: Download Firebase Credentials
+        if: ${{ matrix.variant == 'prod' && inputs.distribute-to-firebase }}
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_play_prod_firebase-creds.json --file ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json --output none
+        shell: bash
+
+      # Validate the gradle wrapper is known and not corrupted.
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
+
+        # Configure gradle caching
+      - name: Cache Gradle Files
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      # Configure build output caching
+      - name: Cache build output
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      # Set default JDK
+      - name: Configure JDK
+        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      # Set the latest build version information. Start from 11000 to prevent collisions with mobile
+      # build version codes.
+      - name: Increment version
+        run: |
+          DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          bundle exec fastlane setBuildVersionInfo \
+          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
+          versionName:${{ inputs.version-name }}
+        shell: bash
+
+      # Generate the Release Play Store Bundle (AAB) when building 'prod' variants.
+      - name: Generate Release Play Store Bundle
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' }}
+        env:
+          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+        run: |
+          bundle exec fastlane bundlePlayStoreRelease \
+          storeFile:app_upload-keystore.jks \
+          storePassword:${{ env.UPLOAD_KEYSTORE_PASSWORD }} \
+          keyAlias:upload \
+          keyPassword:${{ env.UPLOAD_KEYSTORE_PASSWORD }}
+        shell: bash
+
+      # Generate the Beta Play Store Bundle (AAB) when building 'prod' variants.
+      - name: Generate Beta Play Store Bundle
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        env:
+          UPLOAD_BETA_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_BETA_KEYSTORE_PASSWORD }}
+          UPLOAD_BETA_KEY_PASSWORD: ${{ secrets.UPLOAD_BETA_KEY_PASSWORD }}
+        run: |
+          bundle exec fastlane bundlePlayStoreBeta \
+          storeFile:app_beta_upload-keystore.jks \
+          storePassword:${{ env.UPLOAD_BETA_KEYSTORE_PASSWORD }} \
+          keyAlias:bitwarden-beta-upload \
+          keyPassword:${{ env.UPLOAD_BETA_KEY_PASSWORD }}
+        shell: bash
+
+      # Generate the Release Play Store APK when building 'prod' variants.
+      - name: Generate Release Play Store APK
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        env:
+          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+        run: |
+          bundle exec fastlane assemblePlayStoreReleaseApk \
+          storeFile:app_play-keystore.jks \
+          storePassword:${{ env.PLAY_KEYSTORE_PASSWORD }} \
+          keyAlias:bitwarden \
+          keyPassword:${{ env.PLAY_KEYSTORE_PASSWORD }}
+        shell: bash
+
+      # Generate the Beta Play Store APK when building 'prod' variants.
+      - name: Generate Beta Play Store APK
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        env:
+          PLAY_BETA_KEYSTORE_PASSWORD: ${{ secrets.PLAY_BETA_KEYSTORE_PASSWORD }}
+          PLAY_BETA_KEY_PASSWORD: ${{ secrets.PLAY_BETA_KEY_PASSWORD }}
+        run: |
+          bundle exec fastlane assemblePlayStoreBetaApk \
+          storeFile:app_beta_play-keystore.jks \
+          storePassword:${{ env.PLAY_BETA_KEYSTORE_PASSWORD }} \
+          keyAlias:bitwarden-beta \
+          keyPassword:${{ env.PLAY_BETA_KEY_PASSWORD }}
+        shell: bash
+
+      # Generate debug version of the Play Store APKs when building variants other than 'prod'.
+      - name: Generate PlayStore QA APKs
+        if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
+        run: |
+          bundle exec fastlane assembleDebugApks
+
+      # Upload Release Play Store AAB to GitHub workflow artifacts when building 'prod' variants.
+      - name: Upload Release Play Store .aab artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.x8bit.bitwarden.aab
+          path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab
+          if-no-files-found: error
+
+      # Upload Play Store Beta AAB to GitHub workflow artifacts when building 'prod' variants.
+      - name: Upload Beta Play Store .aab artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.x8bit.bitwarden.beta.aab
+          path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab
+          if-no-files-found: error
+
+      # Upload Play Store Release APK to GitHub workflow artifacts when building 'prod' variants.
+      - name: Upload Release .apk artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.x8bit.bitwarden.apk
+          path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk
+          if-no-files-found: error
+
+      # Upload Play Store Beta APK to GitHub workflow artifacts when building 'prod' variants.
+      - name: Upload Beta .apk artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.x8bit.bitwarden.beta.apk
+          path: app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk
+          if-no-files-found: error
+
+      # Upload Play Store debug APK to GitHub workflow artifacts when building variants other than 'prod'.
+      - name: Upload Other .apk artifact
+        if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.x8bit.bitwarden-${{ matrix.variant }}.apk
+          path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden-standard-debug.apk
+          if-no-files-found: error
+
+      # Generate SHA256 file for Release Play Store APK when building 'prod' variants.
+      - name: Create checksum for Release .apk artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        run: |
+          sha256sum "app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk" \
+            > ./bw-android-apk-sha256.txt
+
+      # Generate SHA256 file for Beta Play Store APK when building 'prod' variants.
+      - name: Create checksum for Beta .apk artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        run: |
+          sha256sum "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk" \
+            > ./bw-android-beta-apk-sha256.txt
+
+      # Generate SHA256 file for Release Play Store bundle (AAB) when building 'prod' variants.
+      - name: Create checksum for Release .aab artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        run: |
+          sha256sum "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab" \
+            > ./bw-android-aab-sha256.txt
+
+      # Generate SHA256 file for Beta Play Store bundle (AAB) when building 'prod' variants.
+      - name: Create checksum for Beta .aab artifact
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        run: |
+          sha256sum "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab" \
+            > ./bw-android-beta-aab-sha256.txt
+
+      # Generate SHA256 file for debug Play Store APK when building variants other than 'prod'.
+      - name: Create checksum for Other .apk artifact
+        if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
+        run: |
+          sha256sum "app/build/outputs/apk/standard/debug/com.x8bit.bitwarden-standard-debug.apk" \
+           > ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+
+      # Upload SHA256 file for Release Play Store APK when building 'prod' variants.
+      - name: Upload .apk sha file for Release
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bw-android-apk-sha256.txt
+          path: ./bw-android-apk-sha256.txt
+          if-no-files-found: error
+
+      # Upload SHA256 file for Beta Play Store APK when building 'prod' variants.
+      - name: Upload .apk sha file for Beta
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bw-android-beta-apk-sha256.txt
+          path: ./bw-android-beta-apk-sha256.txt
+          if-no-files-found: error
+
+      # Upload SHA256 file for Release Play Store bundle (AAB) when building 'prod' variants.
+      - name: Upload .aab sha file for Release
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bw-android-aab-sha256.txt
+          path: ./bw-android-aab-sha256.txt
+          if-no-files-found: error
+
+      # Upload SHA256 file for Beta Play Store bundle (AAB) when building 'prod' variants.
+      - name: Upload .aab sha file for Beta
+        if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bw-android-beta-aab-sha256.txt
+          path: ./bw-android-beta-aab-sha256.txt
+          if-no-files-found: error
+
+      # Upload SHA256 file for Play Store debug APK when building variants other than 'prod'.
+      - name: Upload .apk sha file for other
+        if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bw-android-${{ matrix.variant }}-apk-sha256.txt
+          path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
+          if-no-files-found: error
+
+      # Install Fastlane's Firebase App Distribution plugin when building 'prod' variants.
+      - name: Install Firebase App Distribution plugin
+        if: ${{ matrix.variant == 'prod' && github.ref_name == 'main' && inputs.distribute-to-firebase }}
+        run: bundle exec fastlane add_plugin firebase_app_distribution
+
+      # Publish Release Play Store artifacts to Firebase.
+      - name: Publish Release artifacts to Firebase
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && github.ref_name == 'main' && inputs.distribute-to-firebase }}
+        env:
+          APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
+        run: |
+          bundle exec fastlane distributeReleasePlayStoreToFirebase \
+          service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
+        shell: bash
+
+      # Publish Beta Play Store artifacts to Firebase.
+      - name: Publish Beta artifacts to Firebase
+        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && github.ref_name == 'main' && inputs.distribute-to-firebase }}
+        env:
+          APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
+        run: |
+          bundle exec fastlane distributeBetaPlayStoreToFirebase \
+          service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS }}
+        shell: bash
+
+      # Verify play store creds are valid for publication
+      - name: Verify Play Store creds
+        if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
+        run: |
+          bundle exec fastlane run validate_play_store_json_key
+        shell: bash
+
+        # Publish the Play Store bundle (AAB) to Google Play Store Internal testing track.
+      - name: Publish Play Store bundle to Play Store
+        if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
+        run: bundle exec fastlane publishForInternalTesting
+        shell: bash
+
+  publish_fdroid:
+    name: Publish FDroid Artifacts
+    # Job dependencies ignored while troubleshooting publish jobs.
+    needs:
+      - build
+    runs-on: ubuntu-22.04
+    steps:
+
+      # Checkout project
+      - name: Checkout
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        with:
+          fetch-depth: 0
+          # Allow subsequent steps to trigger GitHub Actions via git push
+          # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
+          persist-credentials: false
+
+      # Configure Ruby
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
+        with:
+          bundler-cache: true
+
+      # Install fastlane
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
+      # Azure login
+      - name: Login to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      # Download F-Droid secrets
+      - name: Download secrets
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_fdroid-keystore.jks --output none
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_beta_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_fdroid-keystore.jks --output none
+        shell: bash
+
+      # Download Firebase credentials for publishing to App Distribution on 'prod' variants.
+      - name: Download Firebase Credentials
+        if: ${{ matrix.variant == 'prod' && inputs.distribute-to-firebase }}
+        env:
+          ACCOUNT_NAME: bitwardenci
+          CONTAINER_NAME: mobile
+        run: |
+          mkdir -p ${{ github.workspace }}/secrets
+
+          az storage blob download --account-name $ACCOUNT_NAME --container-name $CONTAINER_NAME \
+          --name app_fdroid_firebase-creds.json --file ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json --output none
+        shell: bash
+
+      # Verify the gradle wrapper is known and not corrupted
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
+
+        # Configure gradle caching
+      - name: Cache Gradle Files
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-v2-
+
+      # Configure build output caching
+      - name: Cache build output
+        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      # Set the JDK to be used
+      - name: Configure JDK
+        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
+        with:
+          distribution: 'temurin'
+          java-version: ${{ env.JAVA_VERSION }}
+
+      # Bump the build version name and version code. Start from 11000 to prevent collisions with
+      # mobile build version codes.
+      - name: Increment version
+        run: |
+          DEFAULT_VERSION_CODE=$((11000+$GITHUB_RUN_NUMBER))
+          bundle exec fastlane setBuildVersionInfo \
+          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
+          versionName:${{ inputs.version-name || '' }}
+
+      # Generate the F-Droid APK for publishing
+      - name: Generate F-Droid Artifacts
+        env:
+          FDROID_STORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
+        run: |
+          bundle exec fastlane assembleFDroidReleaseApk \
+          storeFile:app_fdroid-keystore.jks \
+          storePassword:"${{ env.FDROID_STORE_PASSWORD }}" \
+          keyAlias:bitwarden \
+          keyPassword:"${{ env.FDROID_STORE_PASSWORD }}"
+          
+            # Generate the F-Droid APK for publishing
+      - name: Generate F-Droid Beta Artifacts
+        env:
+          FDROID_BETA_KEYSTORE_PASSWORD: ${{ secrets.FDROID_BETA_KEYSTORE_PASSWORD }}
+          FDROID_BETA_KEY_PASSWORD: ${{ secrets.FDROID_BETA_KEY_PASSWORD }}
+        run: |
+          bundle exec fastlane assembleFDroidBetaApk \
+          storeFile:app_beta_fdroid-keystore.jks \
+          storePassword:"${{ env.FDROID_BETA_KEYSTORE_PASSWORD }}" \
+          keyAlias:bitwarden-beta \
+          keyPassword:"${{ env.FDROID_BETA_KEY_PASSWORD }}"
+
+      # Upload F-Droid APK to GitHub workflow artifacts container
+      - name: Upload F-Droid .apk artifact
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: com.x8bit.bitwarden-fdroid.apk
+          path: app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk
+          if-no-files-found: error
+
+      # Generate checksum for F-Droid ARK verification
+      - name: Create checksum for F-Droid artifact
+        run: |
+          sha256sum "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk" \
+          > ./bw-fdroid-apk-sha256.txt
+
+      # Upload F-Droid checksum file to GitHub workflow artifacts container
+      - name: Upload F-Droid sha file
+        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        with:
+          name: bw-fdroid-apk-sha256.txt
+          path: ./bw-fdroid-apk-sha256.txt
+          if-no-files-found: error
+
+      # Install Fastlane's Firebase App Distribution plugin when building 'prod' variants.
+      - name: Install Firebase App Distribution plugin
+        run: bundle exec fastlane add_plugin firebase_app_distribution
+
+      # Publish Release F-Droid artifacts to Firebase.
+      - name: Publish Release F-Droid artifacts to Firebase
+        if: ${{ github.ref_name == 'main' }}
+        env:
+          APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
+        run: |
+          bundle exec fastlane distributeReleaseFDroidToFirebase \
+          service_credentials_file:${{ env.APP_FDROID_FIREBASE_CREDS_PATH }}
+        shell: bash

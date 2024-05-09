@@ -1,6 +1,14 @@
+# Fastlane generated and temporary files are ignored per suggested best practices:
+# https://github.com/fastlane/docs/blob/master/docs/best-practices/source-control.md
+fastlane/report.xml
+fastlane/README.md
+
 # General
 .DS_Store
 Thumbs.db
+
+# Gradle build cache
+/build-cache/
 
 # IDEs and editors
 .gradle
@@ -12,5 +20,7 @@ Thumbs.db
 local.properties
 user.properties
 
-# Gradle build cache
-/build-cache/
+# Secrets
+/keystores/*.jks
+/app/src/standardDebug/google-services.json
+/app/src/standardRelease/google-services.json

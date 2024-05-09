@@ -28,6 +28,8 @@ android {
         versionCode = 1
         versionName = "2024.05.0"
 
+        setProperty("archivesBaseName", "com.x8bit.bitwarden")
+
         ksp {
             // The location in which the generated Room Database Schemas will be stored in the repo.
             arg("room.schemaLocation", "$projectDir/schemas")
@@ -56,6 +58,12 @@ android {
             signingConfig = signingConfigs.getByName("debug")
             isDebuggable = true
             isMinifyEnabled = false
+        }
+
+        // Beta and Release variants are identical except beta has a different package name
+        create("beta") {
+            initWith(buildTypes.getByName("release"))
+            applicationIdSuffix = ".beta"
         }
         release {
             isDebuggable = false
