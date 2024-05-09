@@ -908,4 +908,9 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="remind_me_later">Przypomnij mi później</string>
   <string name="notice">Zawiadomienie</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys nie są obsługiwany dla tej aplikacji</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Operacja z Passkey nie powiodła się, ponieważ przeglądarka nie ma uprawnień</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Operacja z Passkey nie powiodła się, ponieważ podpis przeglądarki się nie zgadza</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Operacja z Passkey nie powiodła się, ponieważ aplikacja nie mogła zostać zweryfikowana</string>
 </resources>

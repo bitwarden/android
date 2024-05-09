@@ -139,8 +139,8 @@
   <string name="master_password_hint">Dica da palavra-passe mestra (opcional)</string>
   <string name="master_password_hint_description">Uma dica da palavra-passe mestra pode ajudá-lo a lembrar-se da sua palavra-passe, caso se esqueça dela.</string>
   <string name="master_password_length_val_message_x">A palavra-passe mestra deve ter pelo menos %1$s caracteres.</string>
-  <string name="min_numbers">Números mínimos</string>
-  <string name="min_special">Caracteres especiais minímos</string>
+  <string name="min_numbers">Mínimo de números</string>
+  <string name="min_special">Mínimo de caracteres especiais</string>
   <string name="more_settings">Mais definições</string>
   <string name="must_log_in_main_app">Tem de iniciar sessão na aplicação Bitwarden principal antes de poder utilizar a extensão.</string>
   <string name="never">Nunca</string>
@@ -197,7 +197,7 @@
   <string name="bitwarden_autofill_service_step2">2. Ligue o interruptor e pressione OK para aceitar.</string>
   <string name="disabled">Desativado</string>
   <string name="enabled">Ativado</string>
-  <string name="off" tools:override="true">Desligado</string>
+  <string name="off" tools:override="true">Desativado</string>
   <string name="on" tools:override="true">Ligado</string>
   <string name="status">Estado</string>
   <string name="bitwarden_autofill_service_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do Serviço de preenchimento automático do Bitwarden. Saiba mais sobre como utilizar o Serviço de preenchimento automático do Bitwarden ao navegar até ao ecrã \"Definições\".</string>
@@ -296,7 +296,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="june">Junho</string>
   <string name="last_name">Apelido</string>
   <string name="full_name">Nome completo</string>
-  <string name="license_number">Número da licença</string>
+  <string name="license_number">Número da carta de condução</string>
   <string name="march">Março</string>
   <string name="may">Maio</string>
   <string name="middle_name">Segundo nome</string>
@@ -310,7 +310,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="phone">Telefone</string>
   <string name="september">Setembro</string>
   <string name="ssn">Número de segurança social</string>
-  <string name="state_province">Estado / Província</string>
+  <string name="state_province">Estado / Região</string>
   <string name="title">Título</string>
   <string name="zip_postal_code">Código postal</string>
   <string name="address">Endereço</string>
@@ -907,4 +907,9 @@ Deseja mudar para esta conta?</string>
   <string name="remind_me_later">Lembrar-me mais tarde</string>
   <string name="notice">Aviso</string>
   <string name="passkeys_not_supported_for_this_app">Chaves de acesso não suportadas por esta app</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">A operação da chave de acesso falhou porque o navegador não tem privilégios</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">A operação da chave de acesso falhou porque a assinatura do navegador não corresponde</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">A operação da chave de acesso falhou devido à falta de links ativos</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">A operação da chave de acesso falhou porque a aplicação não foi encontrada nos links ativos</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">A operação da chave de acesso falhou porque a aplicação não pôde ser verificada</string>
 </resources>

@@ -860,7 +860,7 @@ Vill du byta till detta konto?</string>
   <string name="continue_to_contact_support">Fortsätt att kontakta supporten?</string>
   <string name="continue_to_privacy_policy">Fortsätt till integritetspolicy?</string>
   <string name="continue_to_app_store">Fortsätt till appbutiken?</string>
-  <string name="continue_to_device_settings">Continue to device Settings?</string>
+  <string name="continue_to_device_settings">Fortsätt till enhetsinställningar?</string>
   <string name="two_step_login_description_long">Gör ditt konto säkrare genom att konfigurera tvåstegsverifiering i Bitwardens webbapp.</string>
   <string name="change_master_password_description_long">Du kan ändra ditt huvudlösenord i Bitwardens webbapp.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Du kan importera data till ditt valv på %1$s.</string>
@@ -894,12 +894,12 @@ Vill du byta till detta konto?</string>
   <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">There was a problem creating a passkey for %1$s. Try again later.</string>
   <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">There was a problem reading your passkey for %1$s. Try again later.</string>
   <string name="verifying_identity_ellipsis">Verifying identity...</string>
-  <string name="passwords">Passwords</string>
-  <string name="unknown_account">Unknown account</string>
+  <string name="passwords">Lösenord</string>
+  <string name="unknown_account">Okänt konto</string>
   <string name="set_up_autofill">Set up auto-fill</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Get instant access to your passwords and passkeys!</string>
   <string name="set_up_auto_fill_description_long">To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
-  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
+  <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Gå till din enhets Inställningar &gt; Lösenord &gt; Lösenordsalternativ</string>
   <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
@@ -909,4 +909,9 @@ Vill du byta till detta konto?</string>
   <string name="remind_me_later">Påminn mig senare</string>
   <string name="notice">Notice</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys not supported for this app</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
 </resources>

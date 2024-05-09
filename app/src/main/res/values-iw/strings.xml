@@ -51,7 +51,7 @@
   <string name="master_password">סיסמה ראשית</string>
   <string name="more">הגדרות נוספות</string>
   <string name="my_vault">הכספת שלי</string>
-  <string name="authenticator">Authenticator</string>
+  <string name="authenticator">מאמת</string>
   <string name="name">שם</string>
   <string name="no">לא</string>
   <string name="notes">הערות</string>
@@ -86,7 +86,7 @@
   <string name="app_extension">הרחבת אפליקציה</string>
   <string name="autofill_accessibility_description">השתמש בשירות הנגישות של Bitwarden עבור השלמה אוטמטית של פרטי כניסה לאפליקציות ולאתרים באינטרנט.</string>
   <string name="autofill_service">שירות מילוי-אוטומטי</string>
-  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
+  <string name="set_bitwarden_as_passkey_manager_description">הגדירו את Bitwarden בתור ספק מפתחות אבטחה בהגדרות המכשיר.</string>
   <string name="avoid_ambiguous_characters">המנע מאותיות ותוים דומים</string>
   <string name="bitwarden_app_extension">תוסף האפליקציה של Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">הדרך הקלה ביותר להוספת סיסמאות לכספת היא דרך התוסף של Bitwarden. למד עוד אודות השימוש בתוסף של Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
@@ -138,7 +138,7 @@
   <string name="master_password_description">הסיסמה הראשית היא הסיסמה שבאמצעותה תיגש לכספת שלך. חשוב מאוד שלא תשכח את הסיסמה הזו. אין שום דרך לשחזר אותה במקרה ושכחת אותה.</string>
   <string name="master_password_hint">רמז לסיסמה ראשית (אופציונאלי)</string>
   <string name="master_password_hint_description">רמז לסיסמה הראשית יכול לעזור במקרה ושכחת את הסיסמה.</string>
-  <string name="master_password_length_val_message_x">Master password must be at least %1$s characters long.</string>
+  <string name="master_password_length_val_message_x">הסיסמה הראשית חייבת להיות לפחות באורך %1$s תווים.</string>
   <string name="min_numbers">מינימום ספרות</string>
   <string name="min_special">מינימום תוים מיוחדים</string>
   <string name="more_settings">הגדרות נוספות</string>
@@ -197,8 +197,8 @@
   <string name="bitwarden_autofill_service_step2">2. הפעל את האפשרות ולחץ אישור.</string>
   <string name="disabled">מבוטל</string>
   <string name="enabled">מופעל</string>
-  <string name="off" tools:override="true">Off</string>
-  <string name="on" tools:override="true">On</string>
+  <string name="off" tools:override="true">כבוי</string>
+  <string name="on" tools:override="true">פעיל</string>
   <string name="status">סטטוס</string>
   <string name="bitwarden_autofill_service_alert2">הדרך הקלה ביותר להוספת סיסמאות לכספת היא דרך שירות ההשלמה האוטומטי של Bitwarden. למד עוד אודות השימוש ביכולת ההשלמה האוטומטית של 
 Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
@@ -235,14 +235,14 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="verification_code_totp">קוד אימות (TOTP)</string>
   <string name="authenticator_key_added">מפתח אימות נוסף.</string>
   <string name="authenticator_key_read_error">קריאת מפתח האימות נכשלה.</string>
-  <string name="point_your_camera_at_the_qr_code">Point your camera at the QR Code.
-Scanning will happen automatically.</string>
+  <string name="point_your_camera_at_the_qr_code">כוונו את המצלמה לכיוון הברקוד.
+הסריקה תתרחש באופן אוטומטי.</string>
   <string name="scan_qr_title">סרוק קוד QR</string>
   <string name="camera">מצלמה</string>
   <string name="photos">תמונות</string>
   <string name="copy_totp">העתק TOTP</string>
-  <string name="copy_totp_automatically_description">If a login has an authenticator key, copy the TOTP verification code to your clipboard when you auto-fill the login.</string>
-  <string name="copy_totp_automatically">Copy TOTP automatically</string>
+  <string name="copy_totp_automatically_description">אם לפרטי כניסה יש אפליקציית אימות, העתיקו את קוד האימות TOTP ללוח שלכם כשמתבצעת ההשלמה האוטומטית לטופס הכניסה.</string>
+  <string name="copy_totp_automatically">העתק קוד TOTP אוטומטית</string>
   <string name="premium_required">בכדי להשתמש ביכולת זו יש צורך במנוי פרמיום.</string>
   <string name="attachement_added">קובץ מצורף התווסף</string>
   <string name="attachment_deleted">קובץ מצורף נמחק</string>
@@ -254,7 +254,7 @@ Scanning will happen automatically.</string>
   <string name="feature_unavailable">יכולת זו לא זמינה</string>
   <string name="max_file_size">גודל הקובץ המירבי הוא 100 מגה.</string>
   <string name="update_key">לא ניתן להשתמש ביכולת זו עד שתעדכן את מפתח ההצפנה שלך.</string>
-  <string name="encryption_key_migration_required_description_long">Encryption key migration required. Please login through the web vault to update your encryption key.</string>
+  <string name="encryption_key_migration_required_description_long">נדרשת הסבת מפתח הצפנה. נא להיכנס לכספת דרך האתר כדי לעדכן את מפתח ההצפנה שלך.</string>
   <string name="learn_more">למידע נוסף</string>
   <string name="api_url">כתובת שרת הAPI</string>
   <string name="custom_environment">סביבה מותאמת אישית</string>
@@ -911,4 +911,9 @@ Do you want to switch to this account?</string>
   <string name="remind_me_later">Remind me later</string>
   <string name="notice">Notice</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys not supported for this app</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
 </resources>

@@ -910,4 +910,9 @@
   <string name="remind_me_later">Напомнить позже</string>
   <string name="notice">Уведомление</string>
   <string name="passkeys_not_supported_for_this_app">Ваш ключ доступа будет сохранен в вашем хранилище Bitwarden</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Операция с Passkey не удалась, поскольку браузер не имеет привилегий</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Операция с Passkey не удалась, поскольку подпись браузера не совпадает</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">Операция с Passkey не удалась из-за отсутствия ссылок на ресурсы</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Операция с Passkey не удалась, поскольку приложение не найдено в ссылках на ресурсы</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Операция с Passkey не удалась, поскольку не удалось проверить приложение</string>
 </resources>
