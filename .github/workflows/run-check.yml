@@ -47,18 +47,13 @@ jobs:
           java-version: ${{ env.JAVA_VERSION }}
 
       - name: Build and Run Check
-        # Run checks while excluding release-build tests, which are not configured to work properly
-        # with the Compose testing library. Also exclude most FDroid-related tasks, as there is no
-        # significant code difference between builds.
+        # Run checks on standard variant only because release and beta builds are not configured to
+        # work properly with the Compose testing library. F-Droid related tasks are also skipped as
+        # there is no significant code difference between the builds.
         run: |
-          ./gradlew check --no-daemon \
-            -x testStandardRelease \
-            -x testFdroidDebug \
-            -x testFdroidRelease \
-            -x lintFdroidDebug \
-            -x lintFdroidRelease \
-            -x detektFdroidDebug \
-            -x detektFdroidRelease \
+          ./gradlew testStandardDebug \
+            lintStandardDebug \
+            detektStandardDebug \
             koverXmlReportStandardDebug
 
       - name: Danger

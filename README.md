@@ -215,6 +215,11 @@ The following is a list of additional third-party dependencies used as part of t
     - Purpose: A Danger plugin for enforcing code coverage via Kover / Jacoco.
     - License: Apache 2.0
 
+- **Fastlane**
+    - https://fastlane.tools/
+    - Purpose: Automates building, signing, and distributing applications.
+    - License: MIT
+
 - **Kover**
     - https://github.com/Kotlin/kotlinx-kover
     - Purpose: Kotlin code coverage toolset.

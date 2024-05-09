@@ -109,3 +109,11 @@
 -dontwarn com.google.zxing.EncodeHintType
 -dontwarn com.google.zxing.MultiFormatWriter
 -dontwarn com.google.zxing.common.BitMatrix
+
+################################################################################
+# Gradle generated rules
+################################################################################
+-dontwarn com.google.errorprone.annotations.CanIgnoreReturnValue
+-dontwarn com.google.errorprone.annotations.CheckReturnValue
+-dontwarn com.google.errorprone.annotations.Immutable
+-dontwarn com.google.errorprone.annotations.RestrictedApi
