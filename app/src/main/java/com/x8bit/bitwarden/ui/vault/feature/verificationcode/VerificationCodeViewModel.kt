@@ -277,6 +277,7 @@ class VerificationCodeViewModel @Inject constructor(
                             VerificationCodeDisplayItem(
                                 id = item.id,
                                 authCode = item.code,
+                                hideAuthCode = item.hasPasswordReprompt,
                                 label = item.name,
                                 supportingLabel = item.username,
                                 periodSeconds = item.periodSeconds,
@@ -381,6 +382,7 @@ data class VerificationCodeDisplayItem(
     val timeLeftSeconds: Int,
     val periodSeconds: Int,
     val authCode: String,
+    val hideAuthCode: Boolean,
     val startIcon: IconData = IconData.Local(R.drawable.ic_login_item),
 ) : Parcelable
 

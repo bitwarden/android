@@ -130,6 +130,49 @@ class VerificationCodeScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `auth code and copy button should be displayed according to state`() {
+        val authCode = "123 456"
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = VerificationCodeState.ViewState.Content(
+                    verificationCodeDisplayItems = listOf(
+                        createDisplayItem(
+                            number = 1,
+                            hideAuthCode = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithText(authCode)
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Copy")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            DEFAULT_STATE.copy(
+                viewState = VerificationCodeState.ViewState.Content(
+                    verificationCodeDisplayItems = listOf(
+                        createDisplayItem(
+                            number = 1,
+                            hideAuthCode = true,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(authCode)
+            .assertIsNotDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Copy")
+            .assertIsNotDisplayed()
+    }
+
+    @Test
     fun `Items text should be displayed according to state`() {
         val items = "Items"
         mutableStateFlow.update { DEFAULT_STATE }
@@ -343,10 +386,14 @@ class VerificationCodeScreenTest : BaseComposeTest() {
     }
 }
 
-private fun createDisplayItem(number: Int): VerificationCodeDisplayItem =
+private fun createDisplayItem(
+    number: Int,
+    hideAuthCode: Boolean = false,
+): VerificationCodeDisplayItem =
     VerificationCodeDisplayItem(
         id = number.toString(),
         authCode = "123456",
+        hideAuthCode = hideAuthCode,
         label = "Label $number",
         supportingLabel = "Supporting Label $number",
         periodSeconds = 30,

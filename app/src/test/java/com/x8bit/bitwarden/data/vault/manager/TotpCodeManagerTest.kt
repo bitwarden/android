@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import app.cash.turbine.test
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.TotpResponse
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -94,16 +95,18 @@ class TotpCodeManagerTest {
         }
 
     @Test
-    fun `getTotpCodeStateFlow should have loaded item with a valid data passed in`() = runTest {
-
+    fun `getTotpCodeStateFlow should have loaded item with valid data passed in`() = runTest {
         val totpResponse = TotpResponse("123456", 30u)
         coEvery {
             vaultSdkSource.generateTotp(any(), any(), any())
         } returns totpResponse.asSuccess()
 
-        val cipherView = createMockCipherView(1)
+        val cipherView = createMockCipherView(
+            number = 1,
+            repromptType = CipherRepromptType.PASSWORD,
+        )
 
-        val expected = createVerificationCodeItem()
+        val expected = createVerificationCodeItem().copy(hasPasswordReprompt = true)
 
         totpCodeManager.getTotpCodeStateFlow(userId, cipherView).test {
             assertEquals(DataState.Loaded(expected), awaitItem())
