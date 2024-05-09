@@ -36,6 +36,9 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val mutableIsCrashLoggingEnabled =
         bufferedMutableSharedFlow<Boolean?>()
 
+    private val mutableHasUserLoggedInOrCreatedAccount =
+        bufferedMutableSharedFlow<Boolean?>()
+
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
 
@@ -52,6 +55,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedBlockedAutofillUris = mutableMapOf<String, List<String>?>()
     private var storedIsIconLoadingDisabled: Boolean? = null
     private var storedIsCrashLoggingEnabled: Boolean? = null
+    private var storedHasUserLoggedInOrCreatedAccount: Boolean? = null
     private var storedInitialAutofillDialogShown: Boolean? = null
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
@@ -105,6 +109,18 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     override val isCrashLoggingEnabledFlow: Flow<Boolean?>
         get() = mutableIsCrashLoggingEnabled.onSubscription {
             emit(isCrashLoggingEnabled)
+        }
+
+    override var hasUserLoggedInOrCreatedAccount: Boolean?
+        get() = storedHasUserLoggedInOrCreatedAccount
+        set(value) {
+            storedHasUserLoggedInOrCreatedAccount = value
+            mutableHasUserLoggedInOrCreatedAccount.tryEmit(value)
+        }
+
+    override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
+        get() = mutableHasUserLoggedInOrCreatedAccount.onSubscription {
+            emit(hasUserLoggedInOrCreatedAccount)
         }
 
     override fun getAccountBiometricIntegrityValidity(

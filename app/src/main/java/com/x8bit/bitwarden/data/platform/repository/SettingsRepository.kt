@@ -73,6 +73,16 @@ interface SettingsRepository {
     val isCrashLoggingEnabledFlow: Flow<Boolean>
 
     /**
+     * The current status if a user has logged in or created an account.
+     */
+    var hasUserLoggedInOrCreatedAccount: Boolean
+
+    /**
+     * Emits updates that track the [hasUserLoggedInOrCreatedAccount] value.
+     */
+    val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean>
+
+    /**
      * The [VaultTimeout] for the current user.
      */
     var vaultTimeout: VaultTimeout

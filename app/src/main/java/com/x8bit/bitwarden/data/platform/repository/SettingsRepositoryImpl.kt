@@ -145,6 +145,22 @@ class SettingsRepositoryImpl(
                 initialValue = isCrashLoggingEnabled,
             )
 
+    override var hasUserLoggedInOrCreatedAccount: Boolean
+        get() = settingsDiskSource.hasUserLoggedInOrCreatedAccount ?: false
+        set(value) {
+            settingsDiskSource.hasUserLoggedInOrCreatedAccount = value
+        }
+
+    override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean>
+        get() = settingsDiskSource
+            .hasUserLoggedInOrCreatedAccountFlow
+            .map { it ?: hasUserLoggedInOrCreatedAccount }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = hasUserLoggedInOrCreatedAccount,
+            )
+
     override var vaultTimeout: VaultTimeout
         get() = activeUserId
             ?.let {

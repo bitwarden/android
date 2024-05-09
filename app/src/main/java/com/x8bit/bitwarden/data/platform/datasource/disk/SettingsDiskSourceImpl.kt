@@ -32,6 +32,7 @@ private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "accountBiometricInteg
 private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
+private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -58,6 +59,8 @@ class SettingsDiskSourceImpl(
     private val mutableIsIconLoadingDisabledFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableIsCrashLoggingEnabledFlow = bufferedMutableSharedFlow<Boolean?>()
+
+    private val mutableHasUserLoggedInOrCreatedAccountFlow = bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableScreenCaptureAllowedFlowMap =
         mutableMapOf<String, MutableSharedFlow<Boolean?>>()
@@ -128,6 +131,17 @@ class SettingsDiskSourceImpl(
     override val isCrashLoggingEnabledFlow: Flow<Boolean?>
         get() = mutableIsCrashLoggingEnabledFlow
             .onSubscription { emit(getBoolean(CRASH_LOGGING_ENABLED_KEY)) }
+
+    override var hasUserLoggedInOrCreatedAccount: Boolean?
+        get() = getBoolean(key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)
+        set(value) {
+            putBoolean(key = HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY, value = value)
+            mutableHasUserLoggedInOrCreatedAccountFlow.tryEmit(value)
+        }
+
+    override val hasUserLoggedInOrCreatedAccountFlow: Flow<Boolean?>
+        get() = mutableHasUserLoggedInOrCreatedAccountFlow
+            .onSubscription { emit(getBoolean(HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY)) }
 
     override fun clearData(userId: String) {
         storeVaultTimeoutInMinutes(userId = userId, vaultTimeoutInMinutes = null)
