@@ -6,6 +6,7 @@ using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui;
+using Nager.PublicSuffix;
 
 namespace Bit.App.Utilities
 {
@@ -42,33 +43,42 @@ namespace Bit.App.Utilities
             {
                 foreach (var uri in cipher.Login.Uris.Where(u => u.Uri != null))
                 {
-                    var hostnameUri = uri.Uri;
-                    var isWebsite = false;
-                    if (!hostnameUri.Contains("."))
+                    var domain = GetValidDomainOrNull(uri.Uri);
+                    if (domain != null)
                     {
-                        continue;
-                    }
-                    if (!hostnameUri.Contains("://"))
-                    {
-                        hostnameUri = string.Concat("http://", hostnameUri);
-                    }
-                    isWebsite = hostnameUri.StartsWith("http");
-
-                    if (isWebsite)
-                    {
-                        image = GetIconUrl(hostnameUri);
+                        image = GetIconUrl(domain);
                         break;
                     }
                 }
             }
+
             return image;
         }
 
-        private static string GetIconUrl(string hostnameUri)
+        // TODO: Assumes that only valid domains (not IP addresses) have a favicon.
+        // This might be shortsighted in the event that
+        //     a) a webservice is hosted on an IP
+        //     b) the icon server is user-supplied and has access to intranet services etc.
+        private static string GetValidDomainOrNull(string uriString)
         {
-            IEnvironmentService _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            var domainParser = ServiceContainer.Resolve<IDomainParser>();
+            var uri = CoreHelpers.GetUri(uriString);
+            if (uri == null)
+                return null;
 
-            var hostname = CoreHelpers.GetHostname(hostnameUri);
+            if (uri.Host.EndsWith(".onion") || uri.Host.EndsWith(".i2p"))
+                return null;
+
+            var domainInfo = domainParser.Parse(uri.Host);
+            return domainInfo?.RegistrableDomain;
+        }
+
+        // TODO: Getting the service and re-formatting the icon API string doesn't have to be done for every single requested domain, right?
+        private static string GetIconUrl(string domain)
+        {
+            IEnvironmentService _environmentService =
+                ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+
             var iconsUrl = _environmentService.IconsUrl;
             if (string.IsNullOrWhiteSpace(iconsUrl))
             {
@@ -81,7 +91,8 @@ namespace Bit.App.Utilities
                     iconsUrl = "https://icons.bitwarden.net";
                 }
             }
-            return string.Format("{0}/{1}/icon.png", iconsUrl, hostname);
+
+            return string.Format("{0}/{1}/icon.png", iconsUrl, domain);
         }
     }
 }

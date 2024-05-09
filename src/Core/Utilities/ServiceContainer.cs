@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Text;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
+using Nager.PublicSuffix;
 
 namespace Bit.Core.Utilities
 {
@@ -11,7 +12,7 @@ namespace Bit.Core.Utilities
         public static ConcurrentDictionary<string, object> RegisteredServices { get; set; } = new ConcurrentDictionary<string, object>();
         public static bool Inited { get; set; }
 
-        public static void Init(string customUserAgent = null, string clearCipherCacheKey = null,
+        public static async Task Init(string customUserAgent = null, string clearCipherCacheKey = null,
             string[] allClearCipherCacheKeys = null)
         {
             if (Inited)
@@ -119,6 +120,11 @@ namespace Bit.Core.Utilities
 #if ANDROID
             Register<IAssetLinksService>(new AssetLinksService(apiService));
 #endif
+
+            var ruleProvider = new MauiAssetRuleProvider();
+            await ruleProvider.BuildAsync();
+
+            Register<IDomainParser>("domainParser", new DomainParser(ruleProvider));
         }
 
         public static void Register<T>(string serviceName, T obj)

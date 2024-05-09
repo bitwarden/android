@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using Bit.Core.Models.Domain;
 using Bit.Core.Services;
+using Nager.PublicSuffix;
 using Newtonsoft.Json;
 using Color = Microsoft.Maui.Graphics.Color;
 
@@ -19,6 +20,7 @@ namespace Bit.Core.Utilities
             "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
             "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
+        // TODO: What's the point of this regex? Why not use the public suffix list data?
         public static readonly string TldEndingRegex =
             ".*\\.(com|net|org|edu|uk|gov|ca|de|jp|fr|au|ru|ch|io|es|us|co|xyz|info|ly|mil)$";
 
@@ -41,7 +43,7 @@ namespace Bit.Core.Utilities
         /// <summary>
         /// Returns the host (and not port) of the given uri.
         /// Does not support plain hostnames without a protocol.
-        /// 
+        ///
         /// Input => Output examples:
         /// <para>https://bitwarden.com => bitwarden.com</para>
         /// <para>https://login.bitwarden.com:1337 => login.bitwarden.com</para>
@@ -53,14 +55,15 @@ namespace Bit.Core.Utilities
         /// </summary>
         public static string GetHostname(string uriString)
         {
+            // TODO: The summary above seems to be wrong, this method does (and always has) support(ed) "plain hostnames without a protocol"
             var uri = GetUri(uriString);
-            return string.IsNullOrEmpty(uri?.Host) ? null : uri.Host;
+            return uri?.Host;
         }
 
         /// <summary>
         /// Returns the host and port of the given uri.
-        /// Does not support plain hostnames without 
-        /// 
+        /// Does not support plain hostnames without
+        ///
         /// Input => Output examples:
         /// <para>https://bitwarden.com => bitwarden.com</para>
         /// <para>https://login.bitwarden.com:1337 => login.bitwarden.com:1337</para>
@@ -89,8 +92,8 @@ namespace Bit.Core.Utilities
 
         /// <summary>
         /// Returns the second and top level domain of the given uri.
-        /// Does not support plain hostnames without 
-        /// 
+        /// Does not support plain hostnames without
+        ///
         /// Input => Output examples:
         /// <para>https://bitwarden.com => bitwarden.com</para>
         /// <para>https://login.bitwarden.com:1337 => bitwarden.com</para>
@@ -104,44 +107,42 @@ namespace Bit.Core.Utilities
         {
             var uri = GetUri(uriString);
             if (uri == null)
-            {
                 return null;
-            }
 
+            // TODO: What's the point of checking for "localhost" here? GetUri("localhost") always returns null
+            // TODO: Also, neither "localhost" nor any IPv4 (IPv6 addresses are never matched here), are "domain" (as in, domains with a name and tld)
             if (uri.Host == "localhost" || Regex.IsMatch(uri.Host, IpRegex))
-            {
                 return uri.Host;
-            }
-            try
-            {
-                if (DomainName.TryParseBaseDomain(uri.Host, out var baseDomain))
-                {
-                    return baseDomain ?? uri.Host;
-                }
-            }
-            catch { }
-            return null;
+
+            // TODO: Resolving on every invocation is probably not a good idea
+            var domainParser = ServiceContainer.Resolve<IDomainParser>();
+            var domainInfo = domainParser.Parse(uri.Host);
+            if (domainInfo == null)
+                //TODO: Doing this results in non-domains being returned (like for example a Tor or I2P link) - return null instead
+                return uri.Host;
+
+            return domainInfo.RegistrableDomain;
         }
 
         public static Uri GetUri(string uriString)
         {
             if (string.IsNullOrWhiteSpace(uriString))
-            {
                 return null;
-            }
-            var hasHttpProtocol = uriString.StartsWith("http://") || uriString.StartsWith("https://");
-            if (!hasHttpProtocol && !uriString.Contains("://") && uriString.Contains("."))
-            {
-                if (Uri.TryCreate("http://" + uriString, UriKind.Absolute, out var uri))
-                {
-                    return uri;
-                }
-            }
-            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri2))
-            {
-                return uri2;
-            }
-            return null;
+
+            // TODO: Checking for a dot here (as before) means localhost (or any IPv6) is not recognised as a
+            // valid uri (but 127.0.0.1 is), even though all of them are perfectly valid
+            if (!IsHttpUrl(uriString) && uriString.Contains('.'))
+                uriString = $"http://{uriString}";
+
+            return Uri.TryCreate(uriString, UriKind.Absolute, out var uri) ? uri : null;
+        }
+
+        private static bool IsHttpUrl(string url)
+        {
+            if (url.Length > 6 && url[..7].Equals(Uri.UriSchemeHttp, StringComparison.InvariantCultureIgnoreCase))
+                return true;
+
+            return url.Length > 7 && url[..8].Equals("https://", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public static void NestedTraverse<T>(List<TreeNode<T>> nodeTree, int partIndex, string[] parts,
