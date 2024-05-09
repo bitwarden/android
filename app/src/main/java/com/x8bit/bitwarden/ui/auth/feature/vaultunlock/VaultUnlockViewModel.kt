@@ -74,6 +74,7 @@ class VaultUnlockViewModel @Inject constructor(
             isBiometricEnabled = isBiometricsEnabled,
             isBiometricsValid = isBiometricsValid,
             showAccountMenu = VaultUnlockArgs(savedStateHandle).unlockType == UnlockType.STANDARD,
+            showBiometricInvalidatedMessage = false,
             vaultUnlockType = vaultUnlockType,
             userId = userState.activeUserId,
         )
@@ -168,8 +169,13 @@ class VaultUnlockViewModel @Inject constructor(
                 ),
             )
         } else {
-            mutableStateFlow.update { it.copy(isBiometricsValid = false) }
-            // TODO BIT-2345 show failure message when user added a new fingerprint
+            mutableStateFlow.update {
+                it.copy(
+                    isBiometricsValid = false,
+                    showBiometricInvalidatedMessage = !biometricsEncryptionManager
+                        .isAccountBiometricIntegrityValid(state.userId),
+                )
+            }
         }
     }
 
@@ -320,6 +326,7 @@ data class VaultUnlockState(
     val isBiometricsValid: Boolean,
     val isBiometricEnabled: Boolean,
     val showAccountMenu: Boolean,
+    val showBiometricInvalidatedMessage: Boolean,
     val vaultUnlockType: VaultUnlockType,
     val userId: String,
 ) : Parcelable {

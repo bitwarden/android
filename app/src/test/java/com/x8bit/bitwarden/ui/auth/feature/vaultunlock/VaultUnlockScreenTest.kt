@@ -440,6 +440,25 @@ class VaultUnlockScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `biometric invalidated message should display according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                isBiometricsValid = false,
+                showBiometricInvalidatedMessage = true,
+            )
+        }
+        composeTestRule
+            .onNodeWithText("Biometric unlock for this account is disabled pending verification of master password.")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(showBiometricInvalidatedMessage = false) }
+        composeTestRule
+            .onNodeWithText("Biometric unlock for this account is disabled pending verification of master password.")
+            .assertDoesNotExist()
+    }
+
     @Test
     fun `account button should update according to state`() {
         mutableStateFlow.update { it.copy(showAccountMenu = true) }
@@ -509,6 +528,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     isBiometricsValid = true,
     isBiometricEnabled = true,
     showAccountMenu = true,
+    showBiometricInvalidatedMessage = false,
     userId = ACTIVE_ACCOUNT_SUMMARY.userId,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )

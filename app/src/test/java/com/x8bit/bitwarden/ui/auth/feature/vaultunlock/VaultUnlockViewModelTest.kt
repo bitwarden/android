@@ -309,15 +309,39 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
             verify { encryptionManager.getOrCreateCipher(USER_ID) }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `on BiometricsUnlockClick should disable isBiometricsValid when cipher is null`() {
+    fun `on BiometricsUnlockClick should disable isBiometricsValid and show message when cipher is null and integrity check returns false`() {
         val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
         val viewModel = createViewModel(state = initialState)
         every { encryptionManager.getOrCreateCipher(USER_ID) } returns null
+        every { encryptionManager.isAccountBiometricIntegrityValid(USER_ID) } returns false
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
         assertEquals(
-            initialState.copy(isBiometricsValid = false),
+            initialState.copy(
+                isBiometricsValid = false,
+                showBiometricInvalidatedMessage = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+        verify { encryptionManager.getOrCreateCipher(USER_ID) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on BiometricsUnlockClick should disable isBiometricsValid and not show message when cipher is null and integrity check returns true`() {
+        val initialState = DEFAULT_STATE.copy(isBiometricsValid = true)
+        val viewModel = createViewModel(state = initialState)
+        every { encryptionManager.getOrCreateCipher(USER_ID) } returns null
+        every { encryptionManager.isAccountBiometricIntegrityValid(USER_ID) } returns true
+
+        viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockClick)
+        assertEquals(
+            initialState.copy(
+                isBiometricsValid = false,
+                showBiometricInvalidatedMessage = false,
+            ),
             viewModel.stateFlow.value,
         )
         verify { encryptionManager.getOrCreateCipher(USER_ID) }
@@ -890,6 +914,7 @@ private val DEFAULT_STATE: VaultUnlockState = VaultUnlockState(
     isBiometricsValid = true,
     isBiometricEnabled = false,
     showAccountMenu = true,
+    showBiometricInvalidatedMessage = false,
     userId = USER_ID,
     vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
 )

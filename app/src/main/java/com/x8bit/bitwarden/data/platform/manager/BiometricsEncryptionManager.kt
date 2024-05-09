@@ -35,4 +35,9 @@ interface BiometricsEncryptionManager {
         userId: String,
         cipher: Cipher?,
     ): Boolean
+
+    /**
+     * Returns a boolean indicating whether the system reflects biometric availability.
+     */
+    fun isAccountBiometricIntegrityValid(userId: String): Boolean
 }
