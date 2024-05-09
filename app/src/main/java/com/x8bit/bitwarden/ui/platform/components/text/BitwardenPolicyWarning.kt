@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 /**
@@ -38,5 +39,13 @@ fun BitwardenPolicyWarningText(
                 shape = RoundedCornerShape(4.dp),
             )
             .padding(8.dp),
+    )
+}
+
+@Preview
+@Composable
+private fun BitwardenPolicyWarningText_preview() {
+    BitwardenPolicyWarningText(
+        text = "text",
     )
 }

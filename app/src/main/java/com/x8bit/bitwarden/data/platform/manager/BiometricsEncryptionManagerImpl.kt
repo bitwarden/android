@@ -75,7 +75,7 @@ class BiometricsEncryptionManagerImpl(
     override fun isBiometricIntegrityValid(userId: String, cipher: Cipher?): Boolean =
         isSystemBiometricIntegrityValid(userId, cipher) && isAccountBiometricIntegrityValid(userId)
 
-    private fun isAccountBiometricIntegrityValid(userId: String): Boolean {
+    override fun isAccountBiometricIntegrityValid(userId: String): Boolean {
         val systemBioIntegrityState = settingsDiskSource
             .systemBiometricIntegritySource
             ?: return false

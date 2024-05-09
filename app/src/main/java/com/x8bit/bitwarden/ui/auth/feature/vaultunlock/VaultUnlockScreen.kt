@@ -27,6 +27,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -230,6 +231,15 @@ fun VaultUnlockScreen(
                         modifier = Modifier
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                } else if (state.showBiometricInvalidatedMessage) {
+                    Text(
+                        text = stringResource(R.string.account_biometric_invalidated),
+                        textAlign = TextAlign.Start,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        modifier = Modifier.padding(horizontal = 16.dp),
                     )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
