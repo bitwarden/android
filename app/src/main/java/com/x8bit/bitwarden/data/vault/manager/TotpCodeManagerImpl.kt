@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherView
 import com.bitwarden.core.DateTime
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -111,6 +112,10 @@ class TotpCodeManagerImpl(
                                     id = cipherId,
                                     name = cipher.name,
                                     username = cipher.login?.username,
+                                    hasPasswordReprompt = when (cipher.reprompt) {
+                                        CipherRepromptType.PASSWORD -> true
+                                        CipherRepromptType.NONE -> false
+                                    },
                                 )
                             }
                             .onFailure {

@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.net.Uri
 import app.cash.turbine.test
+import com.bitwarden.core.CipherRepromptType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -163,7 +164,10 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
         mutableAuthCodeFlow.tryEmit(
             value = DataState.Pending(
-                data = listOf(createVerificationCodeItem()),
+                data = listOf(
+                    createVerificationCodeItem(number = 1),
+                    createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                ),
             ),
         )
 
@@ -205,7 +209,10 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
         mutableAuthCodeFlow.tryEmit(
             value = DataState.Error(
-                data = listOf(createVerificationCodeItem()),
+                data = listOf(
+                    createVerificationCodeItem(number = 1),
+                    createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                ),
                 error = IllegalStateException(),
             ),
         )
@@ -317,7 +324,10 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
         mutableAuthCodeFlow.tryEmit(
             value = DataState.NoNetwork(
-                listOf(createVerificationCodeItem()),
+                data = listOf(
+                    createVerificationCodeItem(number = 1),
+                    createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                ),
             ),
         )
 
@@ -358,7 +368,10 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
 
         mutableAuthCodeFlow.tryEmit(
             value = DataState.Loaded(
-                listOf(createVerificationCodeItem()),
+                data = listOf(
+                    createVerificationCodeItem(number = 1),
+                    createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                ),
             ),
         )
 
@@ -461,6 +474,27 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
                 VerificationCodeDisplayItem(
                     id = cipherView.id.toString(),
                     authCode = "123456",
+                    hideAuthCode = false,
+                    label = cipherView.name,
+                    supportingLabel = cipherView.login?.username,
+                    periodSeconds = 30,
+                    timeLeftSeconds = 30,
+                    startIcon = cipherView.login?.uris.toLoginIconData(
+                        isIconLoadingDisabled = initialState.isIconLoadingDisabled,
+                        baseIconUrl = initialState.baseIconUrl,
+                    ),
+                )
+            },
+        createMockCipherView(
+            number = 2,
+            isDeleted = false,
+            repromptType = CipherRepromptType.PASSWORD,
+        )
+            .let { cipherView ->
+                VerificationCodeDisplayItem(
+                    id = cipherView.id.toString(),
+                    authCode = "123456",
+                    hideAuthCode = true,
                     label = cipherView.name,
                     supportingLabel = cipherView.login?.username,
                     periodSeconds = 30,

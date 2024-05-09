@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * The verification code item displayed to the user.
  *
  * @param authCode The code for the item.
+ * @param hideAuthCode Indicates whether the auth / verification code should be hidden.
  * @param label The label for the item.
  * @param periodSeconds The times span where the code is valid.
  * @param timeLeftSeconds The seconds remaining until a new code is needed.
@@ -45,6 +46,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 @Composable
 fun VaultVerificationCodeItem(
     authCode: String,
+    hideAuthCode: Boolean,
     label: String,
     periodSeconds: Int,
     timeLeftSeconds: Int,
@@ -103,21 +105,23 @@ fun VaultVerificationCodeItem(
             periodSeconds = periodSeconds,
         )
 
-        Text(
-            text = authCode.chunked(3).joinToString(" "),
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-
-        IconButton(
-            onClick = onCopyClick,
-        ) {
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_copy),
-                contentDescription = stringResource(id = R.string.copy),
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp),
+        if (!hideAuthCode) {
+            Text(
+                text = authCode.chunked(3).joinToString(" "),
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+
+            IconButton(
+                onClick = onCopyClick,
+            ) {
+                Icon(
+                    painter = rememberVectorPainter(id = R.drawable.ic_copy),
+                    contentDescription = stringResource(id = R.string.copy),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(24.dp),
+                )
+            }
         }
     }
 }
@@ -132,6 +136,7 @@ private fun VerificationCodeItem_preview() {
             label = "Sample Label",
             supportingLabel = "Supporting Label",
             authCode = "1234567890".chunked(3).joinToString(" "),
+            hideAuthCode = false,
             timeLeftSeconds = 15,
             periodSeconds = 30,
             onCopyClick = {},

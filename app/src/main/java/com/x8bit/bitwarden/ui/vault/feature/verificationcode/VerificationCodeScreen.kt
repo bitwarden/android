@@ -179,6 +179,7 @@ private fun VerificationCodeContent(
                 timeLeftSeconds = it.timeLeftSeconds,
                 periodSeconds = it.periodSeconds,
                 authCode = it.authCode,
+                hideAuthCode = it.hideAuthCode,
                 onCopyClick = { onCopyClick(it.authCode) },
                 onItemClick = {
                     itemClick(it.id)
