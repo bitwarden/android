@@ -126,6 +126,7 @@
         The AutofillService name below refers to the legacy Xamarin app's service name. This must
         always match in order for the app to properly query if it is providing autofill services.
         -->
+        <!--suppress AndroidDomInspection -->
         <service
             android:name="com.x8bit.bitwarden.Autofill.AutofillService"
             android:exported="true"
