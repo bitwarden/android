@@ -31,6 +31,11 @@ namespace Bit.App.Pages
         {
             get
             {
+                if (!_websiteIconsEnabled)
+                {
+                    return null;
+                }
+
                 if (_iconImageSource == string.Empty) // default value since icon source can return null
                 {
                     _iconImageSource = IconImageHelper.GetIconImage(Cipher);
