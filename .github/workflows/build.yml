@@ -425,7 +425,7 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeBetaPlayStoreToFirebase \
-          service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS }}
+          service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
         shell: bash
 
       # Verify play store creds are valid for publication
@@ -489,9 +489,9 @@ jobs:
           --name app_beta_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_fdroid-keystore.jks --output none
         shell: bash
 
-      # Download Firebase credentials for publishing to App Distribution on 'prod' variants.
+      # Download Firebase credentials for publishing to App Distribution.
       - name: Download Firebase Credentials
-        if: ${{ matrix.variant == 'prod' && inputs.distribute-to-firebase }}
+        if: ${{ inputs.distribute-to-firebase }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
