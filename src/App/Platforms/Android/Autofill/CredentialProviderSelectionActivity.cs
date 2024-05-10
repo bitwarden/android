@@ -1,26 +1,31 @@
-﻿using Android.App;
+﻿using System.Diagnostics;
+using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
+using AndroidX.Activity.Result;
+using AndroidX.Activity.Result.Contract;
 using AndroidX.Credentials;
+using AndroidX.Credentials.Exceptions;
 using AndroidX.Credentials.Provider;
 using AndroidX.Credentials.WebAuthn;
-using Bit.App.Droid.Utilities;
 using Bit.App.Abstractions;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using Bit.Core.Resources.Localization;
-using Bit.Core.Utilities.Fido2;
-using Bit.Core.Services;
+using Bit.App.Droid.Utilities;
 using Bit.App.Platforms.Android.Autofill;
-using AndroidX.Credentials.Exceptions;
+using Bit.Core.Abstractions;
+using Bit.Core.Resources.Localization;
+using Bit.Core.Services;
+using Bit.Core.Utilities;
+using Bit.Core.Utilities.Fido2;
 using Org.Json;
 
 namespace Bit.Droid.Autofill
 {
     [Activity(
-        NoHistory = true,
-        LaunchMode = LaunchMode.SingleTop)]
+        NoHistory = false,
+        LaunchMode = LaunchMode.SingleInstance)]
+    [Register("com.x8bit.bitwarden.CredentialProviderSelectionActivity")]
     public class CredentialProviderSelectionActivity : MauiAppCompatActivity
     {
         private LazyResolve<IFido2MediatorService> _fido2MediatorService = new LazyResolve<IFido2MediatorService>();
@@ -30,6 +35,8 @@ namespace Bit.Droid.Autofill
         private LazyResolve<ICipherService> _cipherService = new LazyResolve<ICipherService>();
         private LazyResolve<IUserVerificationMediatorService> _userVerificationMediatorService = new LazyResolve<IUserVerificationMediatorService>();
         private LazyResolve<IDeviceActionService> _deviceActionService = new LazyResolve<IDeviceActionService>();
+
+        private ActivityResultLauncher _activityResultLauncher;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -100,8 +107,14 @@ namespace Bit.Droid.Autofill
                     cipherId,
                     false,
                     () => hasVaultBeenUnlockedInThisTransaction,
-                    RpId
-                );
+                        RpId
+                    );
+
+                _activityResultLauncher = RegisterForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback(result =>
+                    {
+                        _fido2GetAssertionUserInterface.Value.ConfirmVaultUnlocked(result.ResultCode == (int)Result.Ok);
+                    }));
 
                 var clientAssertParams = new Fido2ClientAssertCredentialParams
                 {
@@ -171,6 +184,19 @@ namespace Bit.Droid.Autofill
             }
         }
 
+        public void LaunchToUnlock()
+        {
+            if (_activityResultLauncher is null)
+            {
+                throw new InvalidOperationException("There is no activity result launcher available");
+            }
+
+            var intent = new Intent(this, typeof(MainActivity));
+            intent.PutExtra(CredentialProviderConstants.Fido2CredentialAction, CredentialProviderConstants.Fido2CredentialNeedsUnlockingAgainBecauseImmediateTimeout);
+
+            _activityResultLauncher.Launch(intent);
+        }
+
         private void FailAndFinish()
         {
             var result = new Intent();
@@ -179,5 +205,13 @@ namespace Bit.Droid.Autofill
             SetResult(Result.Ok, result);
             Finish();
         }
+    }
+
+    public class ActivityResultCallback : Java.Lang.Object, IActivityResultCallback
+    {
+        readonly Action<ActivityResult> _callback;
+        public ActivityResultCallback(Action<ActivityResult> callback) => _callback = callback;
+        public ActivityResultCallback(TaskCompletionSource<ActivityResult> tcs) => _callback = tcs.SetResult;
+        public void OnActivityResult(Java.Lang.Object p0) => _callback((ActivityResult)p0);
     }
 }

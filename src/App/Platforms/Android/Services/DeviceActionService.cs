@@ -23,11 +23,14 @@ using Resource = Bit.Core.Resource;
 using Application = Android.App.Application;
 using Bit.Core.Services;
 using Bit.Core.Utilities.Fido2;
+using Bit.Core.Utilities;
 
 namespace Bit.Droid.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        public const int DELAY_LOCK_LOGOUT_FOR_FIDO2_AUTOFILL_ON_IMMEDIATE_TIMEOUT_MS = 15000;
+
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private AlertDialog _progressDialog;
@@ -577,6 +580,15 @@ namespace Bit.Droid.Services
             if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialGet)
             {
                 await ExecuteFido2GetCredentialAsync(appOptions);
+            }
+            else if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialNeedsUnlockingAgainBecauseImmediateTimeout
+                    &&
+                    ServiceContainer.TryResolve<IVaultTimeoutService>(out var vaultTimeoutService))
+            {
+                vaultTimeoutService.DelayLockAndLogoutMs = DELAY_LOCK_LOGOUT_FOR_FIDO2_AUTOFILL_ON_IMMEDIATE_TIMEOUT_MS;
+
+                activity.SetResult(Result.Ok);
+                activity.Finish();
             }
             else if (appOptions.Fido2CredentialAction == CredentialProviderConstants.Fido2CredentialCreate)
             {

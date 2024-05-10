@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities.Fido2;
+using Bit.Droid.Autofill;
 
 namespace Bit.App.Platforms.Android.Autofill
 {
@@ -10,6 +11,11 @@ namespace Bit.App.Platforms.Android.Autofill
             bool userVerified,
             Func<bool> hasVaultBeenUnlockedInThisTransaction,
             string rpId);
+
+        /// <summary>
+        /// Call this after the vault was unlocked so that Fido2 credential autofill can proceed.
+        /// </summary>
+        void ConfirmVaultUnlocked(bool unlocked);
     }
 
     public class Fido2GetAssertionUserInterface : Core.Utilities.Fido2.Fido2GetAssertionUserInterface, IFido2AndroidGetAssertionUserInterface
@@ -18,6 +24,8 @@ namespace Bit.App.Platforms.Android.Autofill
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICipherService _cipherService;
         private readonly IUserVerificationMediatorService _userVerificationMediatorService;
+
+        private TaskCompletionSource<bool> _unlockVaultTcs;
 
         public Fido2GetAssertionUserInterface(IStateService stateService, 
             IVaultTimeoutService vaultTimeoutService,
@@ -46,9 +54,36 @@ namespace Bit.App.Platforms.Android.Autofill
         {
             if (!await _stateService.IsAuthenticatedAsync() || await _vaultTimeoutService.IsLockedAsync())
             {
-                // this should never happen but just in case.
-                throw new InvalidOperationException("Not authed or vault locked");
+                if (await _stateService.GetVaultTimeoutAsync() != 0)
+                {
+                    // this should never happen but just in case.
+                    throw new InvalidOperationException("Not authed or vault locked");
+                }
+
+                // if vault timeout is immediate, then we need to unlock the vault
+                if (!await NavigateAndWaitForUnlockAsync())
+                {
+                    throw new InvalidOperationException("Couldn't unlock with immediate timeout");
+                }
             }
+        }
+
+        public void ConfirmVaultUnlocked(bool unlocked) => _unlockVaultTcs?.TrySetResult(unlocked);
+
+        private async Task<bool> NavigateAndWaitForUnlockAsync()
+        {
+            var credentialProviderSelectionActivity = Platform.CurrentActivity as CredentialProviderSelectionActivity;
+            if (credentialProviderSelectionActivity == null)
+            {
+                throw new InvalidOperationException("Can't get current activity");
+            }
+
+            _unlockVaultTcs?.TrySetCanceled();
+            _unlockVaultTcs = new TaskCompletionSource<bool>();
+
+            credentialProviderSelectionActivity.LaunchToUnlock();
+
+            return await _unlockVaultTcs.Task;
         }
 
         private async Task<bool> VerifyUserAsync(string selectedCipherId, Fido2UserVerificationPreference userVerificationPreference, string rpId, bool vaultUnlockedDuringThisTransaction)
