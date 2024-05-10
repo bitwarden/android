@@ -422,7 +422,7 @@
     <value>Сервис Ауто-попуњавања</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Поставити Bitwarden као добављача приступног кључа у подешавањима уређаја.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Избегавај двосмислене карактере</value>
@@ -1195,7 +1195,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>Нисмо успели да аутоматски отворимо мени за подешавања Андроид провајдера акредитива за вас. Можете да се крећете до менија подешавања добављача акредитива ручно из Андроид подешавања &gt; Систем &gt; Лозинке и налози &gt; Лозинке, приступни кључени.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Нисмо могли аутоматски да отворимо мени за подешавања Ауто-пуњења. До менија подешавања ауто-пуњења можете ручно да дођете из Андроид подешавања &gt; Систем &gt; Језици и унос &gt; Напредно &gt; Сервис ауто-пуњења.</value>
@@ -1823,7 +1823,7 @@
     <value>Bitwarden треба пажњу - Омогућите „Преко“ у „Сервиси Ауто-пуњења“ из подешавања Bitwarden-а</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Управљање приступачног кључа</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Сервиси Ауто-пуњења</value>
@@ -2810,7 +2810,7 @@
     <value>{0} сати/а</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Употребити Bitwarden да сачувате нове приступне кључеве и пријавите се са приступним кључевима ускладиштеним у вашем трезору.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>Android Autofill Framework се користи за помоћ при попуњавању података за пријаву у друге апликације на вашем уређају.</value>
@@ -2841,7 +2841,7 @@
     <value>Настави на радњу апликације?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Желите ли да наставите на подешавања уређаја?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Учините свој налог сигурнијим подешавањем пријаве у два корака у Bitwarden веб апликацији.</value>
@@ -2894,25 +2894,25 @@
     <value>Подесите опцију откључавања да бисте променили радњу временског ограничења сефа.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Изаберите пријаву да бисте сачували овај приступни кључ</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Сачувати приступни кључ као нову пријаву</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Сачувати приступни кључ</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Приступни кључ за {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Лозинке за {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Заменити приступни кључ?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Ова ставка већ садржи приступни кључ. Да ли сте сигурни да желите да замените тренутни приступни кључ?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Duo пријава у два корака је потребна за ваш налог. </value>
@@ -2924,57 +2924,57 @@
     <value>Покренути Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Потребдна верификација {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>За ову радњу је потребна верификација. Подесите метод откључавања у Bitwarden да би наставили.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Грешка у креацији приступачног кључа</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Грешка у читању приступачног кључа</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Дошло је до проблема при креирању приступачког кључа за {0}. Покушајте поново касније.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Дошло је до проблема при читању приступачког кључа за {0}. Покушајте поново касније.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Верификација идентитета...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Лозинке</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Непознат налог</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Подесити ауто-пуњење</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>Имајте инстантни приступ Вашим лозинкама и приступачним кључевима!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>Да бисте подесили ауто-пуњење лозинки и управљање приступним кључевима, подесите Bitwarden као ваш омиљени провајдер у подешавањима iOS-а.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Идите на подешавања уређаја &gt; Лозинке &gt; Опције лозинке</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Омогућите ауто-пуњење</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Одабрати "Bitwarden" за употребу за лозинке</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Ваш приступни кључ ће бити сачуван у вашем Bitwarden сефу</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Ваш приступни кључ ће бити сачуван у вашем Bitwarden сефу за {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Недодељене ставке организације више нису видљиве у приказу Сви сефови и доступне су само преко Админ конзоле. Доделите ове ставке колекцији са Админ конзолом да бисте их учинили видљивим.</value>
@@ -2989,21 +2989,21 @@
     <value>Напомена</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Приступни кључеви нису подржани за ову апликацију</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
     <value>Passkey operation failed because browser is not privileged</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
-    <value>Passkey operation failed because browser signature does not match</value>
+    <value>Операција лозинке није успела јер се потпис прегледача не подудара</value>
   </data>
   <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
-    <value>Passkey operation failed because of missing asset links</value>
+    <value>Операција лозинке није успела због недостајућих веза средстава</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
-    <value>Passkey operation failed because app not found in asset links</value>
+    <value>Операција лозинке није успела јер апликација није пронађена у везама за средства</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
-    <value>Passkey operation failed because app could not be verified</value>
+    <value>Операција лозинке није успела јер апликација није могла да се верификује</value>
   </data>
 </root>
