@@ -109,6 +109,13 @@ class VaultUnlockViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        // TODO: This is required because there is an OS-level leak occurring that leaves the
+        //   ViewModel in memory. We should remove this when that leak is fixed. (BIT-2287)
+        mutableStateFlow.update { it.copy(input = "") }
+        super.onCleared()
+    }
+
     override fun handleAction(action: VaultUnlockAction) {
         when (action) {
             VaultUnlockAction.AddAccountClick -> handleAddAccountClick()
