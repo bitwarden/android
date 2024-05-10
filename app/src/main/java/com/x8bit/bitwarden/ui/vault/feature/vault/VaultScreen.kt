@@ -173,34 +173,13 @@ private fun VaultScreenScaffold(
         onDimBottomNavBarRequest(shouldShowMenu)
     }
     var shouldShowExitConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    val scrollBehavior =
-        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
-            state = rememberTopAppBarState(),
-            canScroll = { !accountMenuVisible },
-        )
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+        state = rememberTopAppBarState(),
+        canScroll = { !accountMenuVisible },
+    )
 
     // Dynamic dialogs
-    when (val dialog = state.dialog) {
-        is VaultState.DialogState.Syncing -> {
-            BitwardenLoadingDialog(
-                visibilityState = LoadingDialogState.Shown(
-                    text = R.string.syncing.asText(),
-                ),
-            )
-        }
-
-        is VaultState.DialogState.Error -> {
-            BitwardenBasicDialog(
-                visibilityState = BasicDialogState.Shown(
-                    title = dialog.title,
-                    message = dialog.message,
-                ),
-                onDismissRequest = vaultHandlers.dialogDismiss,
-            )
-        }
-
-        null -> Unit
-    }
+    VaultDialogs(dialogState = state.dialog, vaultHandlers = vaultHandlers)
 
     // Static dialogs
     if (shouldShowExitConfirmationDialog) {
@@ -353,5 +332,29 @@ private fun VaultScreenScaffold(
                 modifier = outerModifier,
             )
         }
+    }
+}
+
+@Composable
+private fun VaultDialogs(
+    dialogState: VaultState.DialogState?,
+    vaultHandlers: VaultHandlers,
+) {
+    when (dialogState) {
+        is VaultState.DialogState.Syncing -> BitwardenLoadingDialog(
+            visibilityState = LoadingDialogState.Shown(
+                text = R.string.syncing.asText(),
+            ),
+        )
+
+        is VaultState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = vaultHandlers.dialogDismiss,
+        )
+
+        null -> Unit
     }
 }
