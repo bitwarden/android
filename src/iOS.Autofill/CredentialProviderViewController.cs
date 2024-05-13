@@ -443,13 +443,16 @@ namespace Bit.iOS.Autofill
                     return;
                 }
 
-                var decCipher = await cipher.DecryptAsync();
-
-                if (!CanProvideCredentialOnPasskeyRequest(decCipher))
+                if (_context.IsPasskey)
                 {
+                    // this shouldn't happen but as a safeguard we've set it here:
+                    // if somehow the flow got into here then it's impossible to find the credential identity
+                    // i.e. if on iOS < 17 and somehow there is a PasskeyCredentialRequest that was passed along in the iOS callbacks
                     CancelRequest(ASExtensionErrorCode.CredentialIdentityNotFound);
                     return;
                 }
+
+                var decCipher = await cipher.DecryptAsync();
 
                 if (decCipher.Reprompt != CipherRepromptType.None)
                 {
@@ -614,8 +617,9 @@ namespace Bit.iOS.Autofill
 
         private void LaunchRegisterFlow()
         {
-            var registerPage = new RegisterPage(null);
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var registerPage = new RegisterPage(null, appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
@@ -693,8 +697,9 @@ namespace Bit.iOS.Autofill
 
         private void LaunchTwoFactorFlow(bool authingWithSso)
         {
-            var twoFactorPage = new TwoFactorPage(authingWithSso);
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var twoFactorPage = new TwoFactorPage(authingWithSso, appOptions);
+            var app = new App.App();
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)

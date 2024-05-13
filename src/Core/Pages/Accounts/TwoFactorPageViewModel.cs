@@ -11,6 +11,13 @@ using Bit.Core.Models.Request;
 using Bit.Core.Resources.Localization;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
+using Bit.Core.Services;
+
+#if IOS
+using WebAuthenticator = Bit.Core.Utilities.MAUI.WebAuthenticator;
+using WebAuthenticatorResult = Bit.Core.Utilities.MAUI.WebAuthenticatorResult;
+using WebAuthenticatorOptions = Bit.Core.Utilities.MAUI.WebAuthenticatorOptions;
+#endif
 
 namespace Bit.App.Pages
 {
@@ -136,6 +143,7 @@ namespace Bit.App.Pages
                 nameof(ShowTryAgain),
             });
         }
+
         public ICommand SubmitCommand { get; }
         public ICommand MoreCommand { get; }
         public ICommand AuthenticateWithDuoFramelessCommand { get; }
@@ -261,7 +269,11 @@ namespace Bit.App.Pages
                 authResult = await WebAuthenticator.AuthenticateAsync(new WebAuthenticatorOptions
                 {
                     Url = new Uri(url),
-                    CallbackUrl = new Uri(Constants.DuoCallback)
+                    CallbackUrl = new Uri(Constants.DuoCallback),
+#if IOS
+                    ShouldUseSharedApplicationKeyWindow = FromIosExtension
+#endif
+
                 });
             }
             catch (TaskCanceledException)
@@ -348,6 +360,9 @@ namespace Bit.App.Pages
                         Url = new Uri(url),
                         CallbackUrl = new Uri(callbackUri),
                         PrefersEphemeralWebBrowserSession = true,
+#if IOS
+                        ShouldUseSharedApplicationKeyWindow = FromIosExtension
+#endif
                     };
                     authResult = await WebAuthenticator.AuthenticateAsync(options);
                 }

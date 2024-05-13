@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>Acerca de</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Engadir</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Add Folder</value>
+    <value>Engadir cartafol</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Engadir elemento</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>An error has occurred.</value>
+    <value>Produciuse un erro.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Back</value>
+    <value>Atrás</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
@@ -144,155 +144,155 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Cancelar</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Copiar</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Copy password</value>
+    <value>Copiar contrasinal</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copy username</value>
+    <value>Copiar nome de usuario</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Credits</value>
+    <value>Créditos</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>Borrar</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Deleting...</value>
+    <value>Borrando...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Do you really want to delete? This cannot be undone.</value>
+    <value>Vostede realmente quere borrar? Isto non pode ser desfeito.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>Editar</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Edit folder</value>
+    <value>Editar cartafol</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Correo electrónico</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Email address</value>
+    <value>Enderezo de correo electrónico</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Email us</value>
+    <value>Envíanos un correo</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Email us directly to get help or leave feedback.</value>
+    <value>Envíanos un correo directamente para obter axuda ou deixar comentarios.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Enter your PIN code.</value>
+    <value>Introduza o seu código PIN.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favorites</value>
+    <value>Favoritos</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>File a bug report</value>
+    <value>Presentar un informe de fallo</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open an issue at our GitHub repository.</value>
+    <value>Abrir unha incidencia no noso repositorio de GitHub.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Use your fingerprint to verify.</value>
+    <value>Emprega a túa pegada dactilar para verificar.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Folder</value>
+    <value>Cartafol</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>New folder created.</value>
+    <value>Creouse un novo cartafol.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Folder deleted.</value>
+    <value>Cartafol eliminado.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>No Folder</value>
+    <value>Sen cartafois</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Folders</value>
+    <value>Cartafois</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Folder saved</value>
+    <value>Cartafol gardado</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Go to website</value>
+    <value>Ir á páxina web</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Help and feedback</value>
+    <value>Axuda e comentarios</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Hide</value>
+    <value>Agochar</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>Por favor conéctese a Internet antes de continuar.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet connection required</value>
+    <value>Requírese unha conexión a Internet</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Invalid master password. Try again.</value>
+    <value>Contrasinal mestre non válido. Téntao de novo.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Invalid PIN. Try again.</value>
+    <value>PIN non válido. Téntao de novo.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Launch</value>
+    <value>Abrir</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Log In</value>
+    <value>Iniciar sesión</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>Inicio de sesión</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Log out</value>
+    <value>Pechar sesión</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Are you sure you want to log out?</value>
+    <value>Estás seguro de que queres pechar a sesión?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove account</value>
+    <value>Eliminar conta</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Estás seguro de que queres eliminar a conta?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account already added</value>
+    <value>Conta xa engadida</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>Gustaríache cambiar a ela agora?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Master password</value>
+    <value>Contrasinal mestre</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>More</value>
+    <value>Máis</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
