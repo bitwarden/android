@@ -36,7 +36,7 @@ jvmTarget = "17"
 # first checking the Compose to Kotlin Compatibility Map.
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin
 kotlin = "1.9.23"
-kotlinCompilerExtensionVersion = "1.5.11"
+kotlinCompilerExtensionVersion = "1.5.13"
 kotlinxCollectionsImmutable = "0.3.7"
 kotlinxCoroutines = "1.8.0"
 kotlinxSerialization = "1.6.3"
