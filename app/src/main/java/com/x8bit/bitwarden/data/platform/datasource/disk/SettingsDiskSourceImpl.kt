@@ -33,6 +33,7 @@ private const val CRASH_LOGGING_ENABLED_KEY = "crashLoggingEnabled"
 private const val CLEAR_CLIPBOARD_INTERVAL_KEY = "clearClipboard"
 private const val INITIAL_AUTOFILL_DIALOG_SHOWN = "addSitePromptShown"
 private const val HAS_USER_LOGGED_IN_OR_CREATED_AN_ACCOUNT_KEY = "hasUserLoggedInOrCreatedAccount"
+private const val SHOULD_CHECK_ORG_UNASSIGNED_ITEMS = "shouldCheckOrganizationUnassignedItems"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -154,6 +155,7 @@ class SettingsDiskSourceImpl(
         storeBlockedAutofillUris(userId = userId, blockedAutofillUris = null)
         storeLastSyncTime(userId = userId, lastSyncTime = null)
         storeClearClipboardFrequencySeconds(userId = userId, frequency = null)
+        storeShouldCheckOrgUnassignedItems(userId = userId, shouldCheckOrgUnassignedItems = null)
         removeWithPrefix(prefix = ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY.appendIdentifier(userId))
 
         // The following are intentionally not cleared so they can be
@@ -181,6 +183,19 @@ class SettingsDiskSourceImpl(
                 .appendIdentifier(userId)
                 .appendIdentifier(systemBioIntegrityState),
             value = value,
+        )
+    }
+
+    override fun getShouldCheckOrgUnassignedItems(userId: String): Boolean? =
+        getBoolean(key = SHOULD_CHECK_ORG_UNASSIGNED_ITEMS.appendIdentifier(userId))
+
+    override fun storeShouldCheckOrgUnassignedItems(
+        userId: String,
+        shouldCheckOrgUnassignedItems: Boolean?,
+    ) {
+        putBoolean(
+            key = SHOULD_CHECK_ORG_UNASSIGNED_ITEMS.appendIdentifier(userId),
+            value = shouldCheckOrgUnassignedItems,
         )
     }
 
