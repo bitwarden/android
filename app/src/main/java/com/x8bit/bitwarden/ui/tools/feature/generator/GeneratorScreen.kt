@@ -34,7 +34,11 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -578,6 +582,7 @@ private fun ColumnScope.PasswordTypeContent(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun PasswordLengthSliderItem(
     length: Int,
@@ -614,6 +619,21 @@ private fun PasswordLengthSliderItem(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
+                .onKeyEvent { keyEvent ->
+                    when (keyEvent.key) {
+                        Key.DirectionUp -> {
+                            onPasswordSliderLengthChange(sliderValue + 1, true)
+                            true
+                        }
+
+                        Key.DirectionDown -> {
+                            onPasswordSliderLengthChange(sliderValue - 1, true)
+                            true
+                        }
+
+                        else -> false
+                    }
+                }
                 .testTag("PasswordLengthLabel")
                 .wrapContentWidth()
                 .width(labelTextWidth + 16.dp + 16.dp),
@@ -636,6 +656,7 @@ private fun PasswordLengthSliderItem(
                 disabledInactiveTickColor = Color.Transparent,
             ),
             modifier = Modifier
+                .focusProperties { canFocus = false }
                 .testTag("PasswordLengthSlider")
                 .weight(1f),
         )
