@@ -2330,16 +2330,16 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</value>
     <value>Login attempt by {0} on {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device type</value>
+    <value>Jenis perangkat</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP address</value>
+    <value>Alamat IP</value>
   </data>
   <data name="Time" xml:space="preserve">
-    <value>Time</value>
+    <value>Waktu</value>
   </data>
   <data name="Near" xml:space="preserve">
-    <value>Near</value>
+    <value>Dekat</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
     <value>Confirm login</value>
@@ -2348,10 +2348,10 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</value>
     <value>Deny login</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just now</value>
+    <value>Baru saja</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
-    <value>{0} minutes ago</value>
+    <value>{0} menit yang lalu</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
     <value>Login confirmed</value>
@@ -2399,19 +2399,19 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</value>
     <value>Forwarded email alias</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random word</value>
+    <value>Kata acak</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>Email (wajib)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
     <value>Domain name (required)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API key (required)</value>
+    <value>Key API (wajib)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>Layanan</value>
   </data>
   <data name="AddyIo" xml:space="preserve">
     <value>addy.io</value>
@@ -2450,7 +2450,7 @@ pilih Tambahkan TOTP untuk menyimpan kunci dengan aman</value>
     <value>Email Type</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Website (required)</value>
+    <value>Situs web (wajib)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
     <value>Unknown {0} error occurred.</value>
@@ -2545,13 +2545,13 @@ Do you want to switch to this account?</value>
     <value>No pending requests</value>  
   </data>
   <data name="EnableCamerPermissionToUseTheScanner" xml:space="preserve">
-    <value>Enable camera permission to use the scanner</value>
+    <value>Aktifkan izin kamera untuk menggunakan pemindai</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Bahasa</value>
   </data>
   <data name="LanguageChangeXDescription" xml:space="preserve">
-    <value>The language has been changed to {0}. Please restart the app to see the change</value>
+    <value>Bahasa telah diubah ke {0}. Silakan mulai ulang aplikasi untuk melihat perubahan</value>
   </data>
   <data name="LanguageChangeRequiresAppRestart" xml:space="preserve">
     <value>Language change requires app restart</value>
@@ -2563,25 +2563,25 @@ Do you want to switch to this account?</value>
     <value>Important</value>
   </data>
   <data name="YourMasterPasswordCannotBeRecoveredIfYouForgetItXCharactersMinimum" xml:space="preserve">
-    <value>Your master password cannot be recovered if you forget it! {0} characters minimum.</value>
+    <value>Sandi utama Anda tidak akan bisa dipulihkan jika Anda lupa! Setidaknya {0} karakter.</value>
   </data>
   <data name="WeakMasterPassword" xml:space="preserve">
-    <value>Weak Master Password</value>
+    <value>Sandi Utama Lemah</value>
   </data>
   <data name="WeakPasswordIdentifiedUseAStrongPasswordToProtectYourAccount" xml:space="preserve">
-    <value>Weak password identified. Use a strong password to protect your account. Are you sure you want to use a weak password?</value>
+    <value>Sandi lemah ditemukan. Gunakan sandi yang kuat untuk melindungi akun Anda. Apakah Anda yakin ingin menggunakan sandi yang lemah?</value>
   </data>
   <data name="Weak" xml:space="preserve">
-    <value>Weak</value>
+    <value>Lemah</value>
   </data>
   <data name="Good" xml:space="preserve">
-    <value>Good</value>
+    <value>Baik</value>
   </data>
   <data name="Strong" xml:space="preserve">
-    <value>Strong</value>
+    <value>Kuat</value>
   </data>
   <data name="CheckKnownDataBreachesForThisPassword" xml:space="preserve">
-    <value>Check known data breaches for this password</value>
+    <value>Periksa pelanggaran data yang diketahui untuk kata sandi ini</value>
   </data>
   <data name="ExposedMasterPassword" xml:space="preserve">
     <value>Exposed Master Password</value>
@@ -2611,7 +2611,7 @@ Do you want to switch to this account?</value>
     <value>There are no items that match the search</value>
   </data>
   <data name="US" xml:space="preserve">
-    <value>US</value>
+    <value>AS</value>
   </data>
   <data name="EU" xml:space="preserve">
     <value>EU</value>
@@ -2653,16 +2653,16 @@ Do you want to switch to this account?</value>
     <value>Passkey</value>
   </data>
   <data name="Passkeys" xml:space="preserve">
-    <value>Passkeys</value>
+    <value>Passkey</value>
   </data>
   <data name="Application" xml:space="preserve">
-    <value>Application</value>
+    <value>Aplikasi</value>
   </data>
   <data name="YouCannotEditPasskeyApplicationBecauseItWouldInvalidateThePasskey" xml:space="preserve">
     <value>You cannot edit passkey application because it would invalidate the passkey</value>
   </data>
   <data name="PasskeyWillNotBeCopied" xml:space="preserve">
-    <value>Passkey will not be copied</value>
+    <value>Passkey tidak akan disalin</value>
   </data>
   <data name="ThePasskeyWillNotBeCopiedToTheClonedItemDoYouWantToContinueCloningThisItem" xml:space="preserve">
     <value>The passkey will not be copied to the cloned item. Do you want to continue cloning this item?</value>
@@ -2759,25 +2759,25 @@ Do you want to switch to this account?</value>
     <value>Logging in on</value>
   </data>
   <data name="Vault" xml:space="preserve">
-    <value>Vault</value>
+    <value>Brankas</value>
   </data>
   <data name="Appearance" xml:space="preserve">
-    <value>Appearance</value>
+    <value>Tampilan</value>
   </data>
   <data name="AccountSecurity" xml:space="preserve">
-    <value>Account security</value>
+    <value>Keamanan akun</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Pusat Bantuan Bitwarden</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
-    <value>Contact Bitwarden support</value>
+    <value>Hubungi dukungan Bitwarden</value>
   </data>
   <data name="CopyAppInformation" xml:space="preserve">
-    <value>Copy app information</value>
+    <value>Salin informasi aplikasi</value>
   </data>
   <data name="SyncNow" xml:space="preserve">
-    <value>Sync now</value>
+    <value>Sinkronkan sekarang</value>
   </data>
   <data name="UnlockOptions" xml:space="preserve">
     <value>Unlock options</value>
@@ -2793,25 +2793,25 @@ Do you want to switch to this account?</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="OneHourAndOneMinute" xml:space="preserve">
-    <value>One hour and one minute</value>
+    <value>Satu jam satu menit</value>
   </data>
   <data name="OneHourAndXMinute" xml:space="preserve">
-    <value>One hour and {0} minutes</value>
+    <value>1 jam {0} menit</value>
   </data>
   <data name="XHoursAndOneMinute" xml:space="preserve">
-    <value>{0} hours and one minute</value>
+    <value>{0} jam 1 menit</value>
   </data>
   <data name="XHoursAndYMinutes" xml:space="preserve">
-    <value>{0} hours and {1} minutes</value>
+    <value>{0} jam {1} menit</value>
   </data>
   <data name="XHours" xml:space="preserve">
-    <value>{0} hours</value>
+    <value>{0} jam</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
     <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
-    <value>The Android Autofill Framework is used to assist in filling login information into other apps on your device.</value>
+    <value>Android Autofill Framework digunakan untuk membantu Anda mengisi informasi login ke aplikasi lain di perangkat Anda.</value>
   </data>
   <data name="UseInlineAutofillExplanationLong" xml:space="preserve">
     <value>Use inline autofill if your selected keyboard supports it. Otherwise, use the default overlay.</value>

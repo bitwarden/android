@@ -1440,7 +1440,7 @@ Skanning skjer automatisk.</value>
     <value>Vel ei samskipnad du ynskjer å flytta denne oppføringa til. Ved å flytta ei oppføring til ei samskipnad fører ein eigarskapen til oppføringa til den samskipnaden. Du vil ikkje lenger ha bein eigarskap til denne oppføringa etter ho er flytta.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of words</value>
+    <value>Antal ord</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
     <value>Passphrase</value>
@@ -1492,7 +1492,7 @@ Skanning skjer automatisk.</value>
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Logga inn som {0} på {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1550,13 +1550,13 @@ Skanning skjer automatisk.</value>
     <value>Brigda fargetemaet på appen</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Standard (System)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default dark theme</value>
+    <value>Standard mørkt tema</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy note</value>
+    <value>Kopier notat</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Far ut</value>
@@ -1565,7 +1565,7 @@ Skanning skjer automatisk.</value>
     <value>Er du trygg på at du vil fara ut av Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Vil du krevje opplåsing med superpassordet ditt når programmet startast på nytt?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Svart</value>
@@ -1583,7 +1583,7 @@ Skanning skjer automatisk.</value>
     <value>Auto-fill blocked URIs</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>Spør om å leggje til innlogging</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>Ask to add an item if one isn't found in your vault.</value>
@@ -1632,7 +1632,7 @@ Skanning skjer automatisk.</value>
     <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to allow overlay support.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>Løyve</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
     <value>Open Overlay Permission Settings</value>
@@ -1647,19 +1647,19 @@ Skanning skjer automatisk.</value>
     <value>Granted</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File format</value>
+    <value>Filformat</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Enter your master password to export your vault data.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Send ein stadfestingskode til e-posten din</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
     <value>Kode sendt!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Stadfest identiteten din for å fortsetje.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
@@ -1671,7 +1671,7 @@ Skanning skjer automatisk.</value>
     <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm vault export</value>
+    <value>Stadfest eksportering av kvelv</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1771,7 +1771,7 @@ Skanning skjer automatisk.</value>
     <value>Currently unable to login with SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set master password</value>
+    <value>Set hovudpassord</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
@@ -1804,7 +1804,7 @@ Skanning skjer automatisk.</value>
     <value>Passordet møter ikkje samskipnadskrava. Ver venleg og les retningslinene og freista om att.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Lastar</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
     <value>By activating this switch you agree to the following:
