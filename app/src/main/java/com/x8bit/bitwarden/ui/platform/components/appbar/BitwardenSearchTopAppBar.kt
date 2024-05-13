@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.mirrorIfRtl
+import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
 /**
@@ -91,6 +92,7 @@ fun BitwardenSearchTopAppBar(
                 },
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                 modifier = Modifier
+                    .tabNavigation()
                     .focusRequester(focusRequester)
                     .fillMaxWidth(),
             )

@@ -10,8 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.isShiftPressed
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
@@ -87,3 +95,28 @@ fun Modifier.mirrorIfRtl(): Modifier =
     } else {
         this
     }
+
+/**
+ * This is a [Modifier] extension for ensuring that the tab button navigates properly when using
+ * a physical keyboard.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.tabNavigation(): Modifier {
+    val focusManager = LocalFocusManager.current
+    return onPreviewKeyEvent { keyEvent ->
+        if (keyEvent.key == Key.Tab && keyEvent.type == KeyEventType.KeyDown) {
+            focusManager.moveFocus(
+                if (keyEvent.isShiftPressed) {
+                    FocusDirection.Previous
+                } else {
+                    FocusDirection.Next
+                },
+            )
+            true
+        } else {
+            false
+        }
+    }
+}
