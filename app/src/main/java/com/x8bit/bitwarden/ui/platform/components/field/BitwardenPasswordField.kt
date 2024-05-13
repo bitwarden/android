@@ -27,6 +27,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.platform.base.util.tabNavigation
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 
@@ -70,7 +71,9 @@ fun BitwardenPasswordField(
 ) {
     val focusRequester = remember { FocusRequester() }
     OutlinedTextField(
-        modifier = modifier.focusRequester(focusRequester),
+        modifier = modifier
+            .tabNavigation()
+            .focusRequester(focusRequester),
         textStyle = MaterialTheme.typography.bodyLarge,
         label = { Text(text = label) },
         value = value,
