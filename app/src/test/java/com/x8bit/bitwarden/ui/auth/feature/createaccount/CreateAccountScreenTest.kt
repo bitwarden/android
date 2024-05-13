@@ -287,6 +287,24 @@ class CreateAccountScreenTest : BaseComposeTest() {
             .assertCountEquals(2)
     }
 
+    @Test
+    fun `terms of service click should send TermsClick action`() {
+        composeTestRule
+            .onNodeWithText("Terms of Service")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(CreateAccountAction.TermsClick) }
+    }
+
+    @Test
+    fun `privacy policy click should send PrivacyPolicyClick action`() {
+        composeTestRule
+            .onNodeWithText("Privacy Policy")
+            .performScrollTo()
+            .performClick()
+        verify { viewModel.trySendAction(CreateAccountAction.PrivacyPolicyClick) }
+    }
+
     companion object {
         private const val TEST_INPUT = "input"
         private val DEFAULT_STATE = CreateAccountState(
