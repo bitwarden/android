@@ -14,6 +14,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +24,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -45,12 +47,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -60,9 +57,8 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
-import com.x8bit.bitwarden.ui.platform.theme.LocalNonMaterialColors
-import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzer
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import java.util.concurrent.Executors
@@ -408,66 +404,27 @@ private fun QrCodeSquare(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun BottomClickableText(
     onEnterCodeManuallyClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val cannotScanText = stringResource(id = R.string.cannot_scan_qr_code)
-    val enterKeyText = stringResource(id = R.string.enter_key_manually)
-    val clickableStyle = clickableSpanStyle()
-    val manualTextColor = LocalNonMaterialColors.current.qrCodeClickableText
-
-    val customTitleLineBreak = LineBreak(
-        strategy = LineBreak.Strategy.Balanced,
-        strictness = LineBreak.Strictness.Strict,
-        wordBreak = LineBreak.WordBreak.Phrase,
-    )
-
-    val annotatedString = remember {
-        buildAnnotatedString {
-            withStyle(style = clickableStyle.copy(color = Color.White)) {
-                pushStringAnnotation(
-                    tag = cannotScanText,
-                    annotation = cannotScanText,
-                )
-                append(cannotScanText)
-            }
-
-            append("  ")
-
-            withStyle(style = clickableStyle.copy(color = manualTextColor)) {
-                pushStringAnnotation(tag = enterKeyText, annotation = enterKeyText)
-                append(enterKeyText)
-            }
-        }
+    FlowRow(
+        modifier = modifier,
+        verticalArrangement = Arrangement.SpaceEvenly,
+    ) {
+        Text(
+            modifier = Modifier.padding(vertical = 4.dp),
+            text = stringResource(id = R.string.cannot_scan_qr_code),
+            color = Color.White,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        BitwardenClickableText(
+            label = stringResource(id = R.string.enter_key_manually),
+            style = MaterialTheme.typography.labelLarge,
+            innerPadding = PaddingValues(vertical = 4.dp, horizontal = 12.dp),
+            onClick = onEnterCodeManuallyClick,
+        )
     }
-
-    ClickableText(
-        text = annotatedString,
-        style = MaterialTheme.typography.bodyMedium.copy(
-            textAlign = TextAlign.Center,
-            lineBreak = customTitleLineBreak,
-        ),
-        onClick = { offset ->
-            annotatedString
-                .getStringAnnotations(
-                    tag = enterKeyText,
-                    start = offset,
-                    end = offset,
-                )
-                .firstOrNull()
-                ?.let { onEnterCodeManuallyClick.invoke() }
-        },
-        modifier = modifier
-            .semantics {
-                CustomAccessibilityAction(
-                    label = enterKeyText,
-                    action = {
-                        onEnterCodeManuallyClick.invoke()
-                        true
-                    },
-                )
-            },
-    )
 }
