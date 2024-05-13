@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthToke
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.HeadersInterceptor
+import com.x8bit.bitwarden.data.platform.datasource.network.util.HEADER_KEY_AUTHORIZATION
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -75,6 +76,7 @@ class RetrofitsImpl(
             }
         }
             .apply {
+                redactHeader(name = HEADER_KEY_AUTHORIZATION)
                 setLevel(
                     if (BuildConfig.DEBUG) {
                         HttpLoggingInterceptor.Level.BODY
