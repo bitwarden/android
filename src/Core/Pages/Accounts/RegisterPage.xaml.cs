@@ -1,4 +1,6 @@
-﻿namespace Bit.App.Pages
+﻿using Bit.App.Models;
+
+namespace Bit.App.Pages
 {
     public partial class RegisterPage : BaseContentPage
     {
@@ -6,11 +8,12 @@
 
         private bool _inputFocused;
 
-        public RegisterPage(HomePage homePage)
+        public RegisterPage(HomePage homePage, AppOptions appOptions = null)
         {
             InitializeComponent();
             _vm = BindingContext as RegisterPageViewModel;
             _vm.Page = this;
+            _vm.FromIosExtension = appOptions?.IosExtension ?? false;
             _vm.RegistrationSuccess = () => MainThread.BeginInvokeOnMainThread(async () => await RegistrationSuccessAsync(homePage));
             _vm.CloseAction = async () =>
             {

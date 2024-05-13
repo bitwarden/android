@@ -19,6 +19,7 @@ namespace Bit.App.Pages
             _vm.Email = email;
             _vm.AuthRequestType = authRequestType;
             _vm.AuthingWithSso = authingWithSso;
+            _vm.FromIosExtension = _appOptions?.IosExtension ?? false;
             _vm.StartTwoFactorAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.UpdateTempPasswordAction = () => MainThread.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
