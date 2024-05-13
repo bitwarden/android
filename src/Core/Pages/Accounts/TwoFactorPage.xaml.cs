@@ -28,6 +28,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             _vm.AuthingWithSso = authingWithSso ?? false;
+            _vm.FromIosExtension = _appOptions?.IosExtension ?? false;
             _vm.StartSetPasswordAction = () =>
                 MainThread.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>

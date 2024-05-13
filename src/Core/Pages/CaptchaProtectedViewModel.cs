@@ -6,6 +6,12 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Microsoft.Maui.Authentication;
 
+#if IOS
+using WebAuthenticator = Bit.Core.Utilities.MAUI.WebAuthenticator;
+using WebAuthenticatorResult = Bit.Core.Utilities.MAUI.WebAuthenticatorResult;
+using WebAuthenticatorOptions = Bit.Core.Utilities.MAUI.WebAuthenticatorOptions;
+#endif
+
 namespace Bit.App.Pages
 {
     public abstract class CaptchaProtectedViewModel : BaseViewModel
@@ -15,6 +21,8 @@ namespace Bit.App.Pages
         protected abstract IDeviceActionService deviceActionService { get; }
         protected abstract IPlatformUtilsService platformUtilsService { get; }
         protected string _captchaToken = null;
+
+        public bool FromIosExtension { get; set; }
 
         protected async Task<bool> HandleCaptchaAsync(string captchaSiteKey, bool needsCaptcha, Func<Task> onSuccess)
         {
@@ -61,6 +69,9 @@ namespace Bit.App.Pages
                     Url = new Uri(url),
                     CallbackUrl = new Uri(callbackUri),
                     PrefersEphemeralWebBrowserSession = false,
+#if IOS
+                    ShouldUseSharedApplicationKeyWindow = FromIosExtension
+#endif
                 };
                 authResult = await WebAuthenticator.AuthenticateAsync(options);
             }
