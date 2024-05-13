@@ -101,7 +101,7 @@ class ResetPasswordViewModel @Inject constructor(
             mutableStateFlow.update {
                 it.copy(
                     dialogState = ResetPasswordState.DialogState.Error(
-                        title = null,
+                        title = R.string.an_error_has_occurred.asText(),
                         message = R.string.validation_field_required
                             .asText(R.string.master_password.asText()),
                     ),
@@ -126,7 +126,7 @@ class ResetPasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
-                            title = null,
+                            title = R.string.an_error_has_occurred.asText(),
                             message = R.string.master_password_length_val_message_x
                                 .asText(MIN_PASSWORD_LENGTH),
                         ),
@@ -218,7 +218,7 @@ class ResetPasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
-                            title = null,
+                            title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -243,7 +243,7 @@ class ResetPasswordViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ResetPasswordState.DialogState.Error(
-                            title = null,
+                            title = R.string.an_error_has_occurred.asText(),
                             message = R.string.generic_error_message.asText(),
                         ),
                     )
@@ -256,7 +256,7 @@ class ResetPasswordViewModel @Inject constructor(
                     mutableStateFlow.update {
                         it.copy(
                             dialogState = ResetPasswordState.DialogState.Error(
-                                title = null,
+                                title = R.string.an_error_has_occurred.asText(),
                                 message = R.string.invalid_master_password.asText(),
                             ),
                         )
@@ -309,7 +309,7 @@ class ResetPasswordViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = ResetPasswordState.DialogState.Error(
-                    title = null,
+                    title = R.string.an_error_has_occurred.asText(),
                     message = R.string.master_password_confirmation_val_message.asText(),
                 ),
             )
@@ -365,7 +365,7 @@ data class ResetPasswordState(
          */
         @Parcelize
         data class Error(
-            val title: Text? = null,
+            val title: Text?,
             val message: Text,
         ) : DialogState()
 
