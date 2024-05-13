@@ -37,7 +37,7 @@ jobs:
 
       # Checkout project.
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
         with:
           fetch-depth: 0
           # Allow subsequent steps to trigger GitHub Actions via git push
@@ -46,11 +46,11 @@ jobs:
 
       # Validate the gradle wrapper is known and not corrupted.
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
+        uses: gradle/wrapper-validation-action@b5418f5a58f5fd2eb486dd7efb368fe7be7eae45 # v2.1.3
 
       # Configure gradle caching
       - name: Cache Gradle Files
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ~/.gradle/caches
@@ -61,7 +61,7 @@ jobs:
 
       # Configure build output caching
       - name: Cache build output
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -78,7 +78,7 @@ jobs:
 
       # Install required Ruby language version.
       - name: Configure Ruby
-        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
+        uses: ruby/setup-ruby@cacc9f1c0b3f4eb8a16a6bb0ed10897b43b9de49 # v1.176.0
         with:
           bundler-cache: true
 
@@ -111,7 +111,7 @@ jobs:
 
       # Checkout project
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
         with:
           fetch-depth: 0
           # Allow subsequent steps to trigger GitHub Actions via git push
@@ -120,7 +120,7 @@ jobs:
 
       # Install Ruby
       - name: Configure Ruby
-        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
+        uses: ruby/setup-ruby@cacc9f1c0b3f4eb8a16a6bb0ed10897b43b9de49 # v1.176.0
         with:
           bundler-cache: true
 
@@ -178,11 +178,11 @@ jobs:
 
       # Validate the gradle wrapper is known and not corrupted.
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
+        uses: gradle/wrapper-validation-action@b5418f5a58f5fd2eb486dd7efb368fe7be7eae45 # v2.1.3
 
         # Configure gradle caching
       - name: Cache Gradle Files
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ~/.gradle/caches
@@ -193,7 +193,7 @@ jobs:
 
       # Configure build output caching
       - name: Cache build output
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -281,7 +281,7 @@ jobs:
       # Upload Release Play Store AAB to GitHub workflow artifacts when building 'prod' variants.
       - name: Upload Release Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.aab
           path: app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab
@@ -290,7 +290,7 @@ jobs:
       # Upload Play Store Beta AAB to GitHub workflow artifacts when building 'prod' variants.
       - name: Upload Beta Play Store .aab artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.beta.aab
           path: app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab
@@ -299,7 +299,7 @@ jobs:
       # Upload Play Store Release APK to GitHub workflow artifacts when building 'prod' variants.
       - name: Upload Release .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.apk
           path: app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk
@@ -308,7 +308,7 @@ jobs:
       # Upload Play Store Beta APK to GitHub workflow artifacts when building 'prod' variants.
       - name: Upload Beta .apk artifact
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden.beta.apk
           path: app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk
@@ -317,7 +317,7 @@ jobs:
       # Upload Play Store debug APK to GitHub workflow artifacts when building variants other than 'prod'.
       - name: Upload Other .apk artifact
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden-${{ matrix.variant }}.apk
           path: app/build/outputs/apk/standard/debug/com.x8bit.bitwarden-standard-debug.apk
@@ -361,7 +361,7 @@ jobs:
       # Upload SHA256 file for Release Play Store APK when building 'prod' variants.
       - name: Upload .apk sha file for Release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-apk-sha256.txt
           path: ./bw-android-apk-sha256.txt
@@ -370,7 +370,7 @@ jobs:
       # Upload SHA256 file for Beta Play Store APK when building 'prod' variants.
       - name: Upload .apk sha file for Beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-beta-apk-sha256.txt
           path: ./bw-android-beta-apk-sha256.txt
@@ -379,7 +379,7 @@ jobs:
       # Upload SHA256 file for Release Play Store bundle (AAB) when building 'prod' variants.
       - name: Upload .aab sha file for Release
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-aab-sha256.txt
           path: ./bw-android-aab-sha256.txt
@@ -388,7 +388,7 @@ jobs:
       # Upload SHA256 file for Beta Play Store bundle (AAB) when building 'prod' variants.
       - name: Upload .aab sha file for Beta
         if: ${{ (matrix.variant == 'prod') && (matrix.artifact == 'aab') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-beta-aab-sha256.txt
           path: ./bw-android-beta-aab-sha256.txt
@@ -397,7 +397,7 @@ jobs:
       # Upload SHA256 file for Play Store debug APK when building variants other than 'prod'.
       - name: Upload .apk sha file for other
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-android-${{ matrix.variant }}-apk-sha256.txt
           path: ./bw-android-${{ matrix.variant }}-apk-sha256.txt
@@ -451,7 +451,7 @@ jobs:
 
       # Checkout project
       - name: Checkout
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
         with:
           fetch-depth: 0
           # Allow subsequent steps to trigger GitHub Actions via git push
@@ -460,7 +460,7 @@ jobs:
 
       # Configure Ruby
       - name: Configure Ruby
-        uses: ruby/setup-ruby@1198b074305f9356bd56dd4b311757cc0dab2f1c # v1.175.1
+        uses: ruby/setup-ruby@cacc9f1c0b3f4eb8a16a6bb0ed10897b43b9de49 # v1.176.0
         with:
           bundler-cache: true
 
@@ -504,11 +504,11 @@ jobs:
 
       # Verify the gradle wrapper is known and not corrupted
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2 # v2.1.1
+        uses: gradle/wrapper-validation-action@b5418f5a58f5fd2eb486dd7efb368fe7be7eae45 # v2.1.3
 
         # Configure gradle caching
       - name: Cache Gradle Files
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ~/.gradle/caches
@@ -519,7 +519,7 @@ jobs:
 
       # Configure build output caching
       - name: Cache build output
-        uses: actions/cache@ab5e6d0c87105b4c9c2047343972218f562e4319 # v4.0.1
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ${{ github.workspace }}/build-cache
@@ -568,7 +568,7 @@ jobs:
 
       # Upload F-Droid APK to GitHub workflow artifacts container
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk
@@ -582,7 +582,7 @@ jobs:
 
       # Upload F-Droid checksum file to GitHub workflow artifacts container
       - name: Upload F-Droid sha file
-        uses: actions/upload-artifact@5d5d22a31266ced268874388b861e4b58bb5c2f3 # v4.3.1
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4.3.3
         with:
           name: bw-fdroid-apk-sha256.txt
           path: ./bw-fdroid-apk-sha256.txt
