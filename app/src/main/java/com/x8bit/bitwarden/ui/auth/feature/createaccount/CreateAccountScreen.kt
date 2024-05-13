@@ -5,6 +5,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,8 +17,8 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -36,15 +39,11 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.CustomAccessibilityAction
-import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -75,11 +74,11 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.platform.theme.clickableSpanStyle
 
 /**
  * Top level composable for the create account screen.
@@ -288,6 +287,7 @@ fun CreateAccountScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Suppress("LongMethod")
 @Composable
 private fun TermsAndPrivacySwitch(
@@ -296,22 +296,6 @@ private fun TermsAndPrivacySwitch(
     onTermsClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
 ) {
-    val clickableStyle = clickableSpanStyle()
-    val termsString = stringResource(id = R.string.terms_of_service)
-    val privacyString = stringResource(id = R.string.privacy_policy)
-    val annotatedString = remember {
-        buildAnnotatedString {
-            withStyle(style = clickableStyle) {
-                pushStringAnnotation(tag = termsString, annotation = termsString)
-                append("$termsString,")
-            }
-            append(" ")
-            withStyle(style = clickableStyle) {
-                pushStringAnnotation(tag = privacyString, annotation = privacyString)
-                append(privacyString)
-            }
-        }
-    }
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -319,22 +303,6 @@ private fun TermsAndPrivacySwitch(
             .semantics(mergeDescendants = true) {
                 testTag = "AcceptPoliciesToggle"
                 toggleableState = ToggleableState(isChecked)
-                customActions = listOf(
-                    CustomAccessibilityAction(
-                        label = termsString,
-                        action = {
-                            onTermsClick.invoke()
-                            true
-                        },
-                    ),
-                    CustomAccessibilityAction(
-                        label = privacyString,
-                        action = {
-                            onPrivacyPolicyClick.invoke()
-                            true
-                        },
-                    ),
-                )
             }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -357,21 +325,35 @@ private fun TermsAndPrivacySwitch(
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
-            ClickableText(
-                text = annotatedString,
-                onClick = { offset ->
-                    annotatedString
-                        .getStringAnnotations(offset, offset)
-                        .firstOrNull()
-                        ?.let { span ->
-                            when (span.tag) {
-                                termsString -> onTermsClick.invoke()
-                                privacyString -> onPrivacyPolicyClick.invoke()
-                                else -> onCheckedChange.invoke(!isChecked)
-                            }
-                        } ?: onCheckedChange.invoke(!isChecked)
-                },
-            )
+            FlowRow(
+                horizontalArrangement = Arrangement.Start,
+                modifier = Modifier
+                    .padding(end = 16.dp)
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+            ) {
+                BitwardenClickableText(
+                    label = stringResource(id = R.string.terms_of_service),
+                    onClick = onTermsClick,
+                    style = MaterialTheme.typography.bodyMedium,
+                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = ",",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(vertical = 4.dp),
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                BitwardenClickableText(
+                    label = stringResource(id = R.string.privacy_policy),
+                    onClick = onPrivacyPolicyClick,
+                    style = MaterialTheme.typography.bodyMedium,
+                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            }
         }
     }
 }
