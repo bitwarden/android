@@ -1,4 +1,4 @@
-﻿#define ENABLE_NEW_CIPHER_KEY_ENCRYPTION_ON_CREATION
+﻿//#define ENABLE_NEW_CIPHER_KEY_ENCRYPTION_ON_CREATION
 
 using System;
 using System.Collections.Generic;
