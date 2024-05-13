@@ -31,7 +31,7 @@ import org.junit.Test
 class ResetPasswordScreenTest : BaseComposeTest() {
     private val mutableEventFlow = bufferedMutableSharedFlow<ResetPasswordEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
-    val viewModel = mockk<ResetPasswordViewModel>(relaxed = true) {
+    private val viewModel = mockk<ResetPasswordViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
     }
