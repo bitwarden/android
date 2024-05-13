@@ -134,14 +134,25 @@ namespace Bit.Core.Models.Domain
             {
                 model.Attachments = new List<AttachmentView>();
                 var tasks = new List<Task>();
-                async Task decryptAndAddAttachmentAsync(Attachment attachment)
-                {
-                    var decAttachment = await attachment.DecryptAsync(OrganizationId, model.Key);
+                async Task decryptAndAddAttachmentAsync(Attachment attachment, SymmetricCryptoKey decKey)
+                {                   
+                    var decAttachment = await attachment.DecryptAsync(OrganizationId, model.Key ?? decKey);
                     model.Attachments.Add(decAttachment);
                 }
                 foreach (var attachment in Attachments)
                 {
-                    tasks.Add(decryptAndAddAttachmentAsync(attachment));
+                    SymmetricCryptoKey decKey = null;
+                    //If the cipher.key is null but the attachment.cipherKey has a value we will use it to decrypt the attachment
+                    if (Key == null && attachment.CipherKey != null)
+                    {
+                        var cryptoService = ServiceContainer.Resolve<ICryptoService>();
+
+                        var orgKey = await cryptoService.GetOrgKeyAsync(OrganizationId);
+
+                        var key = await cryptoService.DecryptToBytesAsync(attachment.CipherKey, orgKey);
+                        decKey = new CipherKey(key);
+                    }
+                    tasks.Add(decryptAndAddAttachmentAsync(attachment, decKey));
                 }
                 await Task.WhenAll(tasks);
             }

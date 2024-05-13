@@ -20,6 +20,7 @@ namespace Bit.Core.Models.View
         public string SizeName { get; set; }
         public string FileName { get; set; }
         public SymmetricCryptoKey Key { get; set; }
+        public CipherKey CipherKey { get; set; }
 
         public long FileSize
         {

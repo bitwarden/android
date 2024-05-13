@@ -34,6 +34,7 @@ namespace Bit.Core.Models.Domain
         public string SizeName { get; set; }
         public EncString Key { get; set; }
         public EncString FileName { get; set; }
+        public EncString CipherKey { get; set; }
 
         public async Task<AttachmentView> DecryptAsync(string orgId, SymmetricCryptoKey key = null)
         {
