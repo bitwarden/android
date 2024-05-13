@@ -60,6 +60,7 @@ class FakeSettingsDiskSource : SettingsDiskSource {
     private val storedScreenCaptureAllowed = mutableMapOf<String, Boolean?>()
     private var storedSystemBiometricIntegritySource: String? = null
     private val storedAccountBiometricIntegrityValidity = mutableMapOf<String, Boolean?>()
+    private val storedShouldCheckOrgUnassignedItems = mutableMapOf<String, Boolean?>()
 
     override var appLanguage: AppLanguage? = null
 
@@ -146,10 +147,21 @@ class FakeSettingsDiskSource : SettingsDiskSource {
         storedInlineAutofillEnabled.remove(userId)
         storedBlockedAutofillUris.remove(userId)
         storedClearClipboardFrequency.remove(userId)
+        storedShouldCheckOrgUnassignedItems.remove(userId)
 
         mutableVaultTimeoutActionsFlowMap.remove(userId)
         mutableVaultTimeoutInMinutesFlowMap.remove(userId)
         mutableLastSyncCallFlowMap.remove(userId)
+    }
+
+    override fun getShouldCheckOrgUnassignedItems(userId: String): Boolean? =
+        storedShouldCheckOrgUnassignedItems[userId]
+
+    override fun storeShouldCheckOrgUnassignedItems(
+        userId: String,
+        shouldCheckOrgUnassignedItems: Boolean?,
+    ) {
+        storedShouldCheckOrgUnassignedItems[userId] = shouldCheckOrgUnassignedItems
     }
 
     override fun getLastSyncTime(userId: String): Instant? = storedLastSyncTime[userId]

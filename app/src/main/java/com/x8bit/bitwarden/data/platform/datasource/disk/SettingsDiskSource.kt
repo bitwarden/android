@@ -74,6 +74,17 @@ interface SettingsDiskSource {
     fun clearData(userId: String)
 
     /**
+     * Retrieves the preference indicating whether we should check for unassigned organization
+     * ciphers.
+     */
+    fun getShouldCheckOrgUnassignedItems(userId: String): Boolean?
+
+    /**
+     * Stores the given [shouldCheckOrgUnassignedItems] for the given [userId].
+     */
+    fun storeShouldCheckOrgUnassignedItems(userId: String, shouldCheckOrgUnassignedItems: Boolean?)
+
+    /**
      * Retrieves the biometric integrity validity for the given [userId] and
      * [systemBioIntegrityState].
      */

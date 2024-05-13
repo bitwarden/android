@@ -355,6 +355,18 @@ private fun VaultDialogs(
             onDismissRequest = vaultHandlers.dialogDismiss,
         )
 
+        VaultState.DialogState.UnassignedItems -> BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.notice),
+            message = stringResource(
+                id = R.string.organization_unassigned_items_message_useu_description_long,
+            ),
+            confirmButtonText = stringResource(id = R.string.remind_me_later),
+            dismissButtonText = stringResource(id = R.string.ok),
+            onConfirmClick = vaultHandlers.dialogDismiss,
+            onDismissClick = vaultHandlers.unassignedItemsAcknowledgeClick,
+            onDismissRequest = vaultHandlers.dialogDismiss,
+        )
+
         null -> Unit
     }
 }

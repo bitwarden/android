@@ -1258,6 +1258,26 @@ class VaultRepositoryImpl(
             )
     }
 
+    @Suppress("ReturnCount")
+    override suspend fun shouldShowUnassignedItemsInfo(): Boolean {
+        val userId = activeUserId ?: return false
+        if (settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId) == false) {
+            return false
+        }
+        return ciphersService.hasUnassignedCiphers().fold(
+            onFailure = { false },
+            onSuccess = { it },
+        )
+    }
+
+    override fun acknowledgeUnassignedItemsInfo(hasAcknowledged: Boolean) {
+        val userId = activeUserId ?: return
+        settingsDiskSource.storeShouldCheckOrgUnassignedItems(
+            userId = userId,
+            shouldCheckOrgUnassignedItems = !hasAcknowledged,
+        )
+    }
+
     /**
      * Checks if the given [userId] has an associated encrypted PIN key but not a pin-protected user
      * key. This indicates a scenario in which a user has requested PIN unlocking but requires
