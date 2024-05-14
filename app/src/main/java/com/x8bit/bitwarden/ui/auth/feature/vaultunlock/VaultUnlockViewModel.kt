@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.crypto.Cipher
 import javax.inject.Inject
@@ -39,12 +40,13 @@ private const val KEY_STATE = "state"
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VaultUnlockViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
     environmentRepo: EnvironmentRepository,
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
+    // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
         val trustedDevice = userState.activeAccount.trustedDevice
@@ -81,9 +83,6 @@ class VaultUnlockViewModel @Inject constructor(
     },
 ) {
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
         environmentRepo
             .environmentStateFlow
             .onEach { environment ->
@@ -329,7 +328,8 @@ data class VaultUnlockState(
     val email: String,
     val environmentUrl: String,
     val dialog: VaultUnlockDialog?,
-    val input: String,
+    // We never want this saved since the input is sensitive data.
+    @IgnoredOnParcel val input: String = "",
     val isBiometricsValid: Boolean,
     val isBiometricEnabled: Boolean,
     val showAccountMenu: Boolean,
