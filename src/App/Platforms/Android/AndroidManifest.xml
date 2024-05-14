@@ -24,7 +24,7 @@
 		<meta-data android:name="com.samsung.android.sdk.multiwindow.penwindow.enable" android:value="true" />
 		<!-- Support for LG "Dual Window" mode (for Android < 7.0 users) -->
 		<meta-data android:name="com.lge.support.SPLIT_WINDOW" android:value="true" />
-		<!-- Declare exported activities manually so we can set LaunchMode/TaskAffinity using API dependant resource -->
+		<!-- Declare exported activities manually so we can set LaunchMode using API dependant resource -->
 		<activity android:name="com.x8bit.bitwarden.MainActivity" android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize|uiMode" android:exported="true" android:icon="@mipmap/ic_launcher" android:label="Bitwarden" android:launchMode="@integer/launchModeAPIlevel" android:theme="@style/LaunchTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,6 @@
 				<data android:mimeType="text/*" />
 			</intent-filter>
 		</activity>
-		<!-- Declare activities manually so we can set taskAffinity using API dependant resource -->
 		<activity android:name="com.x8bit.bitwarden.WebAuthCallbackActivity" android:launchMode="@integer/webAuthCallbackLaunchMode" android:noHistory="true" android:exported="true">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
