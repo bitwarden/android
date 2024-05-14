@@ -10,7 +10,7 @@ namespace Bit.Droid.Autofill
 {
     [Activity(
         NoHistory = true,
-        LaunchMode = LaunchMode.SingleInstance,
+        LaunchMode = LaunchMode.SingleTop,
         Exported = false)]
     public class AutofillExternalSelectionActivity : MauiAppCompatActivity
     {

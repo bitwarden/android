@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
   <integer name="launchModeAPIlevel">2</integer>
+  <integer name="webAuthCallbackLaunchMode">3</integer>
 </resources>

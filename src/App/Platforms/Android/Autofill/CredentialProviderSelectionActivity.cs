@@ -20,7 +20,7 @@ namespace Bit.Droid.Autofill
 {
     [Activity(
         NoHistory = true,
-        LaunchMode = LaunchMode.SingleInstance)]
+        LaunchMode = LaunchMode.SingleTop)]
     public class CredentialProviderSelectionActivity : MauiAppCompatActivity
     {
         private LazyResolve<IFido2MediatorService> _fido2MediatorService = new LazyResolve<IFido2MediatorService>();
