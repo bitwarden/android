@@ -38,7 +38,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.key
-import androidx.compose.ui.input.key.onKeyEvent
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -619,7 +619,7 @@ private fun PasswordLengthSliderItem(
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
-                .onKeyEvent { keyEvent ->
+                .onPreviewKeyEvent { keyEvent ->
                     when (keyEvent.key) {
                         Key.DirectionUp -> {
                             onPasswordSliderLengthChange(sliderValue + 1, true)
