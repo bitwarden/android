@@ -699,7 +699,7 @@ namespace Bit.iOS.Autofill
         {
             var appOptions = new AppOptions { IosExtension = true };
             var twoFactorPage = new TwoFactorPage(authingWithSso, appOptions);
-            var app = new App.App();
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
