@@ -1100,6 +1100,7 @@ class VaultViewModelTest : BaseViewModelTest() {
         verify { vaultRepository.sync() }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `UnassignedItemsAcknowledgeClick should acknowledge the message and clear the dialog state`() {
         coEvery { vaultRepository.shouldShowUnassignedItemsInfo() } returns true
