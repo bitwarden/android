@@ -2,11 +2,13 @@ package com.x8bit.bitwarden.data.autofill.di
 
 import android.app.Activity
 import android.view.autofill.AutofillManager
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillActivityManagerImpl
 import com.x8bit.bitwarden.data.autofill.manager.AutofillEnabledManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,13 +29,13 @@ object ActivityAutofillModule {
         @ActivityScopedManager autofillManager: AutofillManager,
         appForegroundManager: AppForegroundManager,
         autofillEnabledManager: AutofillEnabledManager,
-        dispatcherManager: DispatcherManager,
+        lifecycleScope: LifecycleCoroutineScope,
     ): AutofillActivityManager =
         AutofillActivityManagerImpl(
             autofillManager = autofillManager,
             appForegroundManager = appForegroundManager,
             autofillEnabledManager = autofillEnabledManager,
-            dispatcherManager = dispatcherManager,
+            lifecycleScope = lifecycleScope,
         )
 
     /**
@@ -46,4 +48,10 @@ object ActivityAutofillModule {
     fun provideActivityScopedAutofillManager(
         activity: Activity,
     ): AutofillManager = activity.getSystemService(AutofillManager::class.java)
+
+    @ActivityScoped
+    @Provides
+    fun provideLifecycleCoroutineScope(
+        activity: Activity,
+    ): LifecycleCoroutineScope = (activity as LifecycleOwner).lifecycleScope
 }

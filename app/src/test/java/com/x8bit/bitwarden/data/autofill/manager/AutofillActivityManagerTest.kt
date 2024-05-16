@@ -1,20 +1,23 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
 import android.view.autofill.AutofillManager
+import androidx.lifecycle.LifecycleCoroutineScope
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AutofillActivityManagerTest {
     private val autofillManager: AutofillManager = mockk {
         every { hasEnabledAutofillServices() } answers { isAutofillEnabledAndSupported }
@@ -28,6 +31,9 @@ class AutofillActivityManagerTest {
     private val appForegroundManager: AppForegroundManager = mockk {
         every { appForegroundStateFlow } returns mutableAppForegroundStateFlow
     }
+    private val lifecycleScope = mockk<LifecycleCoroutineScope> {
+        every { coroutineContext } returns UnconfinedTestDispatcher()
+    }
 
     // We will construct an instance here just to hook the various dependencies together internally
     @Suppress("unused")
@@ -35,7 +41,7 @@ class AutofillActivityManagerTest {
         autofillManager = autofillManager,
         appForegroundManager = appForegroundManager,
         autofillEnabledManager = autofillEnabledManager,
-        dispatcherManager = FakeDispatcherManager(),
+        lifecycleScope = lifecycleScope,
     )
 
     private var isAutofillEnabledAndSupported = false
