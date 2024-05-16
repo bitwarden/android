@@ -206,8 +206,10 @@ jobs:
           mv $GITHUB_WORKSPACE/com.x8bit.bitwarden-fdroid.apk store/fdroid/repo/
 
           # Run update and deploy.
+          cd store/fdroid
           fdroid update
           fdroid deploy
+          cd ../..
 
           # Move files for distribution.
           rm -rf store/temp/fdroid/archive
