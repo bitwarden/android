@@ -65,7 +65,6 @@ jobs:
           description: 'Deployment ${{ steps.version.outputs.version }} from branch ${{ steps.branch.outputs.branch-name }}'
           task: release
 
-
       - name: Download all artifacts
         if: ${{ inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
@@ -152,9 +151,7 @@ jobs:
           node-version: '16.x'
 
       - name: Set up F-Droid server
-        run: |
-          sudo apt-get -qq update
-          sudo apt-get -qqy install --no-install-recommends fdroidserver wget
+        run: pip install git+https://gitlab.com/fdroid/fdroidserver.git
 
       - name: Set up Git credentials
         env:
@@ -194,27 +191,28 @@ jobs:
         env:
           FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
         run: |
-          cd $GITHUB_WORKSPACE
+          # Create required directories.
           mkdir dist
-          cp CNAME ./dist
-          cd store
-          chmod 600 fdroid/config.py fdroid/keystore.jks
-          mkdir -p temp/fdroid
+          mkdir -p store/temp/fdroid
+          mkdir -p store/fdroid/repo
+
+          # Configure F-Droid server.
+          cp CNAME dist/
+          chmod 600 store/fdroid/config.yml store/fdroid/keystore.jks
           TEMP_DIR="$GITHUB_WORKSPACE/store/temp/fdroid"
-          cd fdroid
-          echo "keypass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
-          echo "keystorepass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
-          echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
-          mkdir -p repo
-          mv $GITHUB_WORKSPACE/com.x8bit.bitwarden-fdroid.apk ./repo/
+          echo "keypass: $FDROID_STORE_KEYSTORE_PASSWORD" >> store/fdroid/config.yml
+          echo "keystorepass: $FDROID_STORE_KEYSTORE_PASSWORD" >> store/fdroid/config.yml
+          echo "local_copy_dir: $TEMP_DIR" >> store/fdroid/config.yml
+          mv $GITHUB_WORKSPACE/com.x8bit.bitwarden-fdroid.apk store/fdroid/repo/
+
+          # Run update and deploy.
           fdroid update
-          fdroid server update
-          cd ..
-          rm -rf temp/fdroid/archive
-          mv -v temp/fdroid ../dist
-          cd fdroid
-          cp index.html btn.png qr.png ../../dist/fdroid
-          cd $GITHUB_WORKSPACE
+          fdroid deploy
+
+          # Move files for distribution.
+          rm -rf store/temp/fdroid/archive
+          mv -v store/temp/fdroid dist
+          cp store/fdroid/index.html store/fdroid/btn.png store/fdroid/qr.png dist/fdroid
 
       - name: Deploy to gh-pages
         if: ${{ inputs.release_type != 'Dry Run' }}
