@@ -22,6 +22,7 @@ androidxRoom = "2.6.1"
 androidXSecurityCrypto = "1.1.0-alpha06"
 androidxSplash = "1.1.0-rc01"
 androidxTest = "1.5.0"
+androidxTestRules = "1.5.0"
 androidXAppCompat = "1.6.1"
 androdixAutofill = "1.1.0"
 androidxWork = "2.9.0"
@@ -87,7 +88,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "androidXSecurityCrypto" }
 androidx-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxSplash" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidxTest" }
-androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTest" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidxTestRules" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
