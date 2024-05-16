@@ -7,7 +7,7 @@ repo_description: >-
   F-Droid repo for Bitwarden.
 
 archive_older: 2
-archive_url: https://does.not.exist
+archive_url: https://does.not.exist/archive
 archive_name: Bitwarden Archive Repo
 archive_icon: fdroid-icon.png
 archive_description: >-
