@@ -133,17 +133,17 @@ fun VaultUnlockedNavBarScreen(
         navigateToFolders = onNavigateToFolders,
         navigateToPendingRequests = onNavigateToPendingRequests,
         navigateToPasswordHistory = onNavigateToPasswordHistory,
-        generatorTabClickedAction = {
-            viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick)
+        generatorTabClickedAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultUnlockedNavBarAction.GeneratorTabClick) }
         },
-        sendTabClickedAction = {
-            viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick)
+        sendTabClickedAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultUnlockedNavBarAction.SendTabClick) }
         },
-        vaultTabClickedAction = {
-            viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick)
+        vaultTabClickedAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultUnlockedNavBarAction.VaultTabClick) }
         },
-        settingsTabClickedAction = {
-            viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
+        settingsTabClickedAction = remember(viewModel) {
+            { viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick) }
         },
     )
 }
