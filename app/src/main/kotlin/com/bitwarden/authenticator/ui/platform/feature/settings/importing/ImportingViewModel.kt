@@ -4,11 +4,11 @@ import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
-import com.bitwarden.authenticator.data.authenticator.repository.model.ImportDataResult
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.base.BaseViewModel
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.feature.settings.importing.model.ImportFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
@@ -24,7 +24,7 @@ class ImportingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
 ) :
     BaseViewModel<ImportState, ImportEvent, ImportAction>(
-        initialState = ImportState(importFormat = ImportFormat.JSON)
+        initialState = ImportState(importFileFormat = ImportFileFormat.BITWARDEN_JSON)
     ) {
 
     override fun handleAction(action: ImportAction) {
@@ -60,7 +60,7 @@ class ImportingViewModel @Inject constructor(
     }
 
     private fun handleConfirmImportClick() {
-        sendEvent(ImportEvent.NavigateToSelectImportFile(state.importFormat))
+        sendEvent(ImportEvent.NavigateToSelectImportFile(state.importFileFormat))
     }
 
     private fun handleDialogDismiss() {
@@ -68,13 +68,13 @@ class ImportingViewModel @Inject constructor(
     }
 
     private fun handleImportFormatOptionSelect(action: ImportAction.ImportFormatOptionSelect) {
-        mutableStateFlow.update { it.copy(importFormat = action.option) }
+        mutableStateFlow.update { it.copy(importFileFormat = action.option) }
     }
 
     private fun handleImportLocationReceive(action: ImportAction.ImportLocationReceive) {
         mutableStateFlow.update { it.copy(dialogState = ImportState.DialogState.Loading()) }
         viewModelScope.launch {
-            val result = authenticatorRepository.importVaultData(state.importFormat, action.fileUri)
+            val result = authenticatorRepository.importVaultData(state.importFileFormat, action.fileUri)
             sendAction(ImportAction.Internal.SaveImportDataToUriResultReceive(result))
         }
     }
@@ -120,7 +120,7 @@ data class ImportState(
     @IgnoredOnParcel
     val fileUri: Uri? = null,
     val dialogState: DialogState? = null,
-    val importFormat: ImportFormat,
+    val importFileFormat: ImportFileFormat,
 ) {
 
     /**
@@ -163,7 +163,7 @@ sealed class ImportEvent {
     /**
      * Navigate to the select import file screen.
      */
-    data class NavigateToSelectImportFile(val importFormat: ImportFormat) : ImportEvent()
+    data class NavigateToSelectImportFile(val importFileFormat: ImportFileFormat) : ImportEvent()
 }
 
 /**
@@ -189,7 +189,7 @@ sealed class ImportAction {
     /**
      * Indicates the user selected and import file format.
      */
-    data class ImportFormatOptionSelect(val option: ImportFormat) : ImportAction()
+    data class ImportFormatOptionSelect(val option: ImportFileFormat) : ImportAction()
 
     /**
      * Indicates the user selected a file to import.

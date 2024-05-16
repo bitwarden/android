@@ -10,9 +10,8 @@ import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.Exp
  */
 val ExportFormat.displayLabel: Text
     get() = when (this) {
-        ExportFormat.JSON -> R.string.json_extension.asText()
-        ExportFormat.CSV -> R.string.csv_extension.asText()
-
+        ExportFormat.JSON -> R.string.export_format_label_json.asText()
+        ExportFormat.CSV -> R.string.export_format_label_csv.asText()
     }
 
 /**

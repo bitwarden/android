@@ -1,4 +1,4 @@
-package com.bitwarden.authenticator.data.authenticator.repository.model
+package com.bitwarden.authenticator.data.platform.manager.imports.model
 
 /**
  * Represents the result of a data import operation.

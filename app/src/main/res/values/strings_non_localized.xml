@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="json_extension" translatable="false">.json</string>
-    <string name="csv_extension" translatable="false">.csv</string>
+    <string name="export_format_label_json">.json</string>
+    <string name="export_format_label_csv">.csv</string>
+    <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
+    <string name="import_format_label_2fas_json">2FAS (.2fas)</string>
 </resources>

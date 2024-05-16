@@ -7,13 +7,13 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
-import com.bitwarden.authenticator.data.authenticator.repository.model.ImportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
-import com.bitwarden.authenticator.ui.platform.feature.settings.importing.model.ImportFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -94,7 +94,7 @@ interface AuthenticatorRepository {
      * Attempt to read the user's data from a file
      */
     suspend fun importVaultData(
-        format: ImportFormat,
+        format: ImportFileFormat,
         fileData: IntentManager.FileData,
     ): ImportDataResult
 }

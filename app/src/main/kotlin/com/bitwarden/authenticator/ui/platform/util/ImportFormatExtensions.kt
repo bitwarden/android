@@ -1,22 +1,15 @@
 package com.bitwarden.authenticator.ui.platform.util
 
 import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
-import com.bitwarden.authenticator.ui.platform.feature.settings.importing.model.ImportFormat
 
 /**
  *  Provides a human-readable label for the export format.
  */
-val ImportFormat.displayLabel: Text
+val ImportFileFormat.displayLabel: Text
     get() = when (this) {
-        ImportFormat.JSON -> R.string.json_extension.asText()
-    }
-
-/**
- * Provides the file extension associated with the export format.
- */
-val ImportFormat.fileExtension: String
-    get() = when (this) {
-        ImportFormat.JSON -> "json"
+        ImportFileFormat.BITWARDEN_JSON -> R.string.import_format_label_bitwarden_json.asText()
+        ImportFileFormat.TWO_FAS_JSON -> R.string.import_format_label_2fas_json.asText()
     }

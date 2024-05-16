@@ -13,11 +13,13 @@ import com.bitwarden.authenticator.data.authenticator.repository.model.Authentic
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.ExportDataResult
-import com.bitwarden.authenticator.data.authenticator.repository.model.ImportDataResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemRequest
 import com.bitwarden.authenticator.data.authenticator.repository.model.UpdateItemResult
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
+import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.repository.util.combineDataStates
@@ -25,7 +27,6 @@ import com.bitwarden.authenticator.data.platform.repository.util.map
 import com.bitwarden.authenticator.data.platform.util.asSuccess
 import com.bitwarden.authenticator.data.platform.util.flatMap
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
-import com.bitwarden.authenticator.ui.platform.feature.settings.importing.model.ImportFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -60,6 +61,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     private val authenticatorDiskSource: AuthenticatorDiskSource,
     private val totpCodeManager: TotpCodeManager,
     private val fileManager: FileManager,
+    private val importManager: ImportManager,
     dispatcherManager: DispatcherManager,
 ) : AuthenticatorRepository {
 
@@ -243,13 +245,14 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     }
 
     override suspend fun importVaultData(
-        format: ImportFormat,
+        format: ImportFileFormat,
         fileData: IntentManager.FileData,
-    ): ImportDataResult = when (format) {
-        ImportFormat.JSON -> {
-            decodeVaultDataFromJson(fileData)
-        }
-    }
+    ): ImportDataResult = fileManager.uriToByteArray(fileData.uri)
+        .map { importManager.import(importFileFormat = format, byteArray = it) }
+        .fold(
+            onSuccess = { ImportDataResult.Success },
+            onFailure = { ImportDataResult.Error }
+        )
 
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {
         val headerLine =

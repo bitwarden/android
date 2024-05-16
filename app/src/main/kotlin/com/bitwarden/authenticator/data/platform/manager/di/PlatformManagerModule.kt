@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.di
 
 import android.content.Context
+import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManagerImpl
@@ -12,6 +13,8 @@ import com.bitwarden.authenticator.data.platform.manager.SdkClientManager
 import com.bitwarden.authenticator.data.platform.manager.SdkClientManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
+import com.bitwarden.authenticator.data.platform.manager.imports.ImportManager
+import com.bitwarden.authenticator.data.platform.manager.imports.ImportManagerImpl
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
@@ -53,8 +56,15 @@ object PlatformManagerModule {
     ): BiometricsEncryptionManager = BiometricsEncryptionManagerImpl(settingsDiskSource)
 
     @Provides
+    @Singleton
     fun provideCrashLogsManager(settingsRepository: SettingsRepository): CrashLogsManager =
         CrashLogsManagerImpl(
             settingsRepository = settingsRepository,
         )
+
+    @Provides
+    @Singleton
+    fun provideImportManager(
+        authenticatorDiskSource: AuthenticatorDiskSource,
+    ): ImportManager = ImportManagerImpl(authenticatorDiskSource)
 }

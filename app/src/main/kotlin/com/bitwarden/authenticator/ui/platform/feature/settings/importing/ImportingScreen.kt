@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bitwarden.authenticator.R
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.ui.platform.base.util.EventsEffect
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenTopAppBar
 import com.bitwarden.authenticator.ui.platform.components.button.BitwardenFilledTonalButton
@@ -36,7 +37,6 @@ import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenLoadin
 import com.bitwarden.authenticator.ui.platform.components.dialog.LoadingDialogState
 import com.bitwarden.authenticator.ui.platform.components.dropdown.BitwardenMultiSelectButton
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
-import com.bitwarden.authenticator.ui.platform.feature.settings.importing.model.ImportFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import com.bitwarden.authenticator.ui.platform.theme.LocalIntentManager
 import com.bitwarden.authenticator.ui.platform.util.displayLabel
@@ -66,7 +66,7 @@ fun ImportingScreen(
         when (event) {
             ImportEvent.NavigateBack -> onNavigateBack()
             is ImportEvent.NavigateToSelectImportFile -> {
-                launcher.launch(intentManager.createFileChooserIntent(event.importFormat.mimeType))
+                launcher.launch(intentManager.createFileChooserIntent(event.importFileFormat.mimeType))
             }
 
             is ImportEvent.ShowToast -> {
@@ -145,7 +145,7 @@ fun ImportingScreen(
 private fun ImportScreenContent(
     modifier: Modifier = Modifier,
     state: ImportState,
-    onImportFormatOptionSelected: (ImportFormat) -> Unit,
+    onImportFormatOptionSelected: (ImportFileFormat) -> Unit,
     onImportClick: () -> Unit,
 ) {
     Column(
@@ -156,10 +156,10 @@ private fun ImportScreenContent(
         val resources = LocalContext.current.resources
         BitwardenMultiSelectButton(
             label = stringResource(id = R.string.file_format),
-            options = ImportFormat.entries.map { it.displayLabel() }.toImmutableList(),
-            selectedOption = state.importFormat.displayLabel(),
+            options = ImportFileFormat.entries.map { it.displayLabel() }.toImmutableList(),
+            selectedOption = state.importFileFormat.displayLabel(),
             onOptionSelected = { selectedOptionLabel ->
-                val selectedOption = ImportFormat
+                val selectedOption = ImportFileFormat
                     .entries
                     .first { it.displayLabel(resources) == selectedOptionLabel }
                 onImportFormatOptionSelected(selectedOption)
