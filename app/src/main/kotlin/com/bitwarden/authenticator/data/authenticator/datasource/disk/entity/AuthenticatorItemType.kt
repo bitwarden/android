@@ -14,4 +14,10 @@ enum class AuthenticatorItemType {
      * Steam's implementation of a one time password.
      */
     STEAM,
+    ;
+
+    companion object {
+        fun fromStringOrNull(value: String): AuthenticatorItemType? =
+            entries.find { it.name.equals(value, ignoreCase = true) }
+    }
 }

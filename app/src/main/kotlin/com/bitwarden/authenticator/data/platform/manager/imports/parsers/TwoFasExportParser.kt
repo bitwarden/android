@@ -4,17 +4,20 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.imports.model.TwoFasJsonExport
+import com.bitwarden.authenticator.data.platform.util.asFailure
 import com.bitwarden.authenticator.data.platform.util.asSuccess
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
+import java.io.IOException
 import java.util.UUID
 
 private const val TOKEN_TYPE_HOTP = "HOTP"
 
 /**
- * A [ExportParser] responsible for transforming 2FAS export files into Bitwarden Authenticator
+ * An [ExportParser] responsible for transforming 2FAS export files into Bitwarden Authenticator
  * items.
  */
 class TwoFasExportParser : ExportParser {
@@ -30,14 +33,22 @@ class TwoFasExportParser : ExportParser {
             explicitNulls = false
         }
 
-        return importJson
-            .decodeFromStream<TwoFasJsonExport>(ByteArrayInputStream(byteArray))
-            .asSuccess()
-            .map { exportData ->
-                exportData
-                    .services
-                    .toAuthenticatorItemEntities()
-            }
+        return try {
+            importJson
+                .decodeFromStream<TwoFasJsonExport>(ByteArrayInputStream(byteArray))
+                .asSuccess()
+                .mapCatching { exportData ->
+                    exportData
+                        .services
+                        .toAuthenticatorItemEntities()
+                }
+        } catch (e: SerializationException) {
+            e.asFailure()
+        } catch (e: IllegalArgumentException) {
+            e.asFailure()
+        } catch (e: IOException) {
+            e.asFailure()
+        }
     }
 
     private fun List<TwoFasJsonExport.Service>.toAuthenticatorItemEntities() =
@@ -51,11 +62,7 @@ class TwoFasExportParser : ExportParser {
                 if (tokenType.equals(other = TOKEN_TYPE_HOTP, ignoreCase = true)) {
                     null
                 } else {
-                    AuthenticatorItemType
-                        .entries
-                        .find { entry ->
-                            entry.name.equals(other = tokenType, ignoreCase = true)
-                        }
+                    AuthenticatorItemType.fromStringOrNull(tokenType)
                 }
             }
             ?: throw IllegalArgumentException("Unsupported OTP type: ${otp.tokenType}.")

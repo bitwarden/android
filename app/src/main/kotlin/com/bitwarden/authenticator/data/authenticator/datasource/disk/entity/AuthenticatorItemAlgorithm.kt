@@ -18,5 +18,11 @@ enum class AuthenticatorItemAlgorithm {
     /**
      * Authenticator item verification code uses SHA512 hash.
      */
-    SHA512
+    SHA512,
+    ;
+
+    companion object {
+        fun fromStringOrNull(value: String): AuthenticatorItemAlgorithm? =
+            entries.find { it.name.equals(value, ignoreCase = true) }
+    }
 }

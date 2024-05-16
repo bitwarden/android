@@ -5,6 +5,7 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDat
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.BitwardenExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.ExportParser
+import com.bitwarden.authenticator.data.platform.manager.imports.parsers.LastPassExportParser
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.TwoFasExportParser
 
 /**
@@ -22,13 +23,18 @@ class ImportManagerImpl(
         val parser: ExportParser = when (importFileFormat) {
             ImportFileFormat.BITWARDEN_JSON -> BitwardenExportParser(importFileFormat)
             ImportFileFormat.TWO_FAS_JSON -> TwoFasExportParser()
+            ImportFileFormat.LAST_PASS_JSON -> LastPassExportParser()
         }
 
-        return parser.parse(byteArray)
-            .map { authenticatorDiskSource.saveItem(*it.toTypedArray()) }
-            .fold(
-                onSuccess = { ImportDataResult.Success },
-                onFailure = { ImportDataResult.Error }
-            )
+        return try {
+            parser.parse(byteArray)
+                .mapCatching { authenticatorDiskSource.saveItem(*it.toTypedArray()) }
+                .fold(
+                    onSuccess = { ImportDataResult.Success },
+                    onFailure = { ImportDataResult.Error }
+                )
+        } catch (e: Throwable) {
+            ImportDataResult.Error
+        }
     }
 }

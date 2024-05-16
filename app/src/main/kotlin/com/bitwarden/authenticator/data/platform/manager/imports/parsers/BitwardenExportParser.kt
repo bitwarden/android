@@ -10,9 +10,11 @@ import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFil
 import com.bitwarden.authenticator.data.platform.util.asFailure
 import com.bitwarden.authenticator.data.platform.util.asSuccess
 import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.io.ByteArrayInputStream
+import java.io.IOException
 
 class BitwardenExportParser(
     private val fileFormat: ImportFileFormat,
@@ -32,14 +34,22 @@ class BitwardenExportParser(
             explicitNulls = false
         }
 
-        return importJson
-            .decodeFromStream<ExportJsonData>(ByteArrayInputStream(byteArray))
-            .asSuccess()
-            .map { exportData ->
-                exportData
-                    .items
-                    .toAuthenticatorItemEntities()
-            }
+        return try {
+            importJson
+                .decodeFromStream<ExportJsonData>(ByteArrayInputStream(byteArray))
+                .asSuccess()
+                .mapCatching { exportData ->
+                    exportData
+                        .items
+                        .toAuthenticatorItemEntities()
+                }
+        } catch (e: SerializationException) {
+            e.asFailure()
+        } catch (e: IllegalArgumentException) {
+            e.asFailure()
+        } catch (e: IOException) {
+            e.asFailure()
+        }
     }
 
     private fun List<ExportJsonData.ExportItem>.toAuthenticatorItemEntities() =
