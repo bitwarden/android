@@ -422,7 +422,7 @@
     <value>自动填充服务</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>在设备设置中将 Bitwarden 设置为您的通行密钥提供程序。</value>
+    <value>在设备的设置中将 Bitwarden 设置为您的通行密钥提供程序。</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>避免易混淆的字符</value>
@@ -1195,7 +1195,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>我们无法为您自动打开 Android 凭据提供者设置菜单。您可以通过“Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务”手动定位到凭据提供者设置菜单。</value>
+    <value>我们无法为您自动打开 Android 凭据提供程序设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务手动定位到凭据提供程序设置菜单。</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</value>
@@ -2938,7 +2938,7 @@
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>读取 {0} 的通行密钥时。请稍后再试。</value>
+    <value>读取 {0} 的通行密钥时出错。请稍后再试。</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">

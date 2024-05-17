@@ -1195,7 +1195,7 @@ A leitura será feita automaticamente.</value>
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>Não foi possível abrir automaticamente o menu de configurações do provedor de credenciais do Android para você. Você pode navegar para o menu de configurações do provedor de credenciais manualmente a partir de Configurações do Android &gt; Sistema &gt; Senhas e Contas &gt; Senhas chaves e serviços de dados.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Não foi possível abrir automaticamente o menu de configurações de autopreenchimento do Android para você. Você pode navegar para o menu de configurações de autopreenchimento manualmente a partir de Configurações do Android &gt; Sistema &gt; Idiomas e Entrada &gt; Avançado &gt; Serviço de autopreenchimento.</value>

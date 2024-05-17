@@ -2397,7 +2397,7 @@ turvallisesti valitsemalla "Lisää TOTP"</value>
     <value>Catch-all-sähköposti</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Sähköpostialias välitykseen</value>
+    <value>Sähköpostialias ohjaukseen</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Satunnainen sana</value>
@@ -2991,7 +2991,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Suojausavaimia ei tueta tässä sovelluksessa</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
-    <value>Suojausavaintoiminto epäonnistui, koska selainta ei ole korotettu</value>
+    <value>Suojausavaintoiminto epäonnistui, koska selainta ei ole hyväksytty</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
     <value>Suojausavaintoiminto epäonnistui, koska selaimen allekirjoitus ei täsmää</value>
@@ -3003,6 +3003,6 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Suojausavaintoiminto epäonnistui, koska sovellusta ei löytynyt asset-liitoksista</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
-    <value>Suojausavaintoiminto epäonnistui, koska sovellusta ei voitu vahvistaa</value>
+    <value>Suojausavaintoiminto epäonnistui, koska sovellusta ei voitu varmentaa</value>
   </data>
 </root>
