@@ -51,6 +51,7 @@ okhttp = "4.12.0"
 retrofit = "2.11.0"
 retrofitKotlinxSerialization = "1.0.0"
 roboelectric = "4.12.1"
+sonarqube = "5.0.0.4638" 
 turbine = "1.1.0"
 zxing = "3.5.3"
 
@@ -127,6 +128,7 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }
 
 [bundles]
 tests-instrumented = [

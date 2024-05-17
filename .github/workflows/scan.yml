@@ -40,12 +40,15 @@ jobs:
           base_uri: https://ast.checkmarx.net/
           cx_client_id: ${{ secrets.CHECKMARX_CLIENT_ID }}
           cx_client_secret: ${{ secrets.CHECKMARX_SECRET }}
-          # additional_params: --report-format sarif --output-path . ${{ env.INCREMENTAL }}
+          additional_params: |
+            --report-format sarif \
+            --filter "state=TO_VERIFY;PROPOSED_NOT_EXPLOITABLE;CONFIRMED;URGENT" \
+            --output-path . ${{ env.INCREMENTAL }}
 
-      # - name: Upload Checkmarx results to GitHub
-      #   uses: github/codeql-action/upload-sarif@1b1aada464948af03b950897e5eb522f92603cc2 # v3.24.9
-      #   with:
-      #     sarif_file: cx_result.sarif
+      - name: Upload Checkmarx results to GitHub
+        uses: github/codeql-action/upload-sarif@d39d31e687223d841ef683f52467bd88e9b21c14 # v3.25.3
+        with:
+          sarif_file: cx_result.sarif
 
   quality:
     name: Quality scan
@@ -68,8 +71,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          # TODO: see https://docs.sonarsource.com/sonarcloud/advanced-setup/analysis-parameters/
-          # for parameters to configure
           args: >
             -Dsonar.organization=${{ github.repository_owner }}
             -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
+

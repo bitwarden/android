@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.sonarqube)
 }
 
 android {
@@ -127,3 +128,19 @@ dependencies {
 
     androidTestImplementation(libs.bundles.tests.instrumented)
 }
+
+sonar {
+    properties {
+        property("sonar.projectKey", "bitwarden_authenticator-android")
+        property("sonar.organization", "bitwarden")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.sources", "src/main/,src/debug/")
+        property("sonar.tests", "src/test/")
+    }
+}
+
+tasks {
+    getByName("sonar") {
+        dependsOn("check")
+    }
+} 
