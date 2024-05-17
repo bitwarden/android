@@ -13,4 +13,5 @@ val ImportFileFormat.displayLabel: Text
         ImportFileFormat.BITWARDEN_JSON -> R.string.import_format_label_bitwarden_json.asText()
         ImportFileFormat.TWO_FAS_JSON -> R.string.import_format_label_2fas_json.asText()
         ImportFileFormat.LAST_PASS_JSON -> R.string.import_format_label_lastpass_json.asText()
+        ImportFileFormat.AEGIS -> R.string.import_format_label_aegis_json.asText()
     }

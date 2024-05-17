@@ -8,5 +8,6 @@ enum class ImportFileFormat(
 ) {
     BITWARDEN_JSON("application/json"),
     TWO_FAS_JSON("*/*"),
-    LAST_PASS_JSON("application/json")
+    LAST_PASS_JSON("application/json"),
+    AEGIS("application/json"),
 }

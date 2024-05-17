@@ -5,4 +5,5 @@
     <string name="import_format_label_bitwarden_json">Bitwarden (.json)</string>
     <string name="import_format_label_2fas_json">2FAS (.2fas)</string>
     <string name="import_format_label_lastpass_json">LastPass (.json)</string>
+    <string name="import_format_label_aegis_json">Aegis (.json)</string>
 </resources>
