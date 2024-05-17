@@ -3001,6 +3001,6 @@ Möchtest du zu diesem Konto wechseln?</value>
     <value>Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht in den Asset-Links gefunden wurde</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
-    <value>Der Passwort-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</value>
+    <value>Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</value>
   </data>
 </root>

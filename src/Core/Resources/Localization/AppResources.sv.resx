@@ -422,7 +422,7 @@
     <value>Hjälpmedelsservice för automatisk ifyllnad</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Ange Bitwarden som din lösenordsleverantör i enhetsinställningarna.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Undvik tvetydiga tecken</value>
@@ -1196,7 +1196,7 @@ Skanningen sker automatiskt.</value>
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>Det gick inte att automatiskt öppna menyn för Android-autentiseringsleverantörsinställningar för dig. Du kan navigera till menyn autentiseringsleverantörsinställningar manuellt från Android Inställningar &gt; System &gt; Lösenord och konton &gt; Lösenord, Nyckelord och datatjänster.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>Det gick inte att automatiskt öppna inställningsmenyn för Android automatisk ifyllnad. Du kan navigera till menyn manuellt från Android inställningar &gt; System &gt; Språk och inmatning &gt; Avancerat &gt; Tjänsten autofyll.</value>
@@ -1824,7 +1824,7 @@ Skanningen sker automatiskt.</value>
     <value>Bitwarden behöver din uppmärksamhet - Aktivera "Överlappning" under "Tjänster för automatisk ifyllnad" i Bitwardens inställningar</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Passkey hantering</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Tjänster för automatisk ifyllnad</value>
