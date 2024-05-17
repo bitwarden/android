@@ -26,45 +26,30 @@ platform :android do
   fastlane_require "time"
   lane :setBuildVersionInfo do |options|
 
-    latestRelease = firebase_app_distribution_get_latest_release(
-      app: "1:867301491091:android:50b626dba42a361651e866",
-      service_credentials_file:options[:serviceCredentialsFile]
-    )
-
-    currentVersionName = latestRelease[:displayVersion]
-
-    # Gather current version information
-    versionParts = currentVersionName.split(".")
-    currentMajor = versionParts[0]
-    currentMinor = versionParts[1]
-    currentRevision = versionParts[2]
-
-    # Current date used to derive next version name.
-    currentDate = Time.new
-    major = currentDate.year.to_s
-    minor = currentDate.strftime "%m"
-
-    # Determine the next revision number to apply.
-    revision = 0
-    if currentMajor == major and currentMinor == minor
-        revision = currentRevision.to_i + 1
-    end
-
-    # Cache next version information
-    nextVersionName = major.to_s + "." + minor.to_s + "." + revision.to_s
-    nextVersionCode = latestRelease[:buildVersion].to_i + 1
-
-    # Read in app build config file.
+    # Read-in app build config file.
     buildConfigPath = "../app/build.gradle.kts"
     buildConfigFile = File.open(buildConfigPath)
     buildConfigText = buildConfigFile.read
     buildConfigFile.close
 
+    if options[:versionName].nil? or options[:versionName].to_s.empty?
+        # Use the latest version name in Firebase as the default version name.
+        latestRelease = firebase_app_distribution_get_latest_release(
+          app: "1:867301491091:android:50b626dba42a361651e866",
+          service_credentials_file:options[:serviceCredentialsFile]
+        )
+        nextVersionName = latestRelease[:displayVersion]
+    else
+        nextVersionName = options[:versionName].to_s
+    end
+
     # Replace version information.
-    puts "Setting version code to #{nextVersionCode}."
-    buildConfigText.gsub!("versionCode = 1", "versionCode = #{nextVersionCode}")
+    currentVersionCode = buildConfigText.match(/versionCode = (\d+)/).captures[0]
+    currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
+    puts "Setting version code to #{options[:versionCode]}."
+    buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
     puts "Setting version name to #{nextVersionName}."
-    buildConfigText.gsub!("versionName = \"1.0\"", "versionName = \"#{nextVersionName}\"")
+    buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
 
     # Save changes
     File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }

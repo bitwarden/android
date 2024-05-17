@@ -9,6 +9,20 @@ on:
     paths-ignore:
       - ".github/workflows/**"
   workflow_dispatch:
+    inputs:
+      version-name:
+        description: 'Optional. Version string to use, in X.Y.Z format. Overrides default in the project.'
+        required: false
+        type: string
+      version-code:
+        description: 'Optional. Build number to use. Overrides default of GitHub run number.'
+        required: false
+        type: number
+      publish-to-play-store:
+        description: 'Optional. Deploy bundle artifact to Google Play Store'
+        required: false
+        default: false
+        type: boolean
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -164,8 +178,11 @@ jobs:
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
         run: |
+          DEFAULT_VERSION_CODE=$GITHUB_RUN_NUMBER
           bundle exec fastlane setBuildVersionInfo \
-          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
+          serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }} \
+          versionCode:${{ inputs.version-code || '$DEFAULT_VERSION_CODE' }} \
+          versionName:${{ inputs.version-name }}
         shell: bash
 
       - name: Assemble Release APK
@@ -204,7 +221,7 @@ jobs:
         if: ${{ github.ref_name == 'main' }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
-      - name: Publish release APK to Firebase
+      - name: Distribute release APK to Firebase
         if: ${{ github.ref_name == 'main' && matrix.variant == 'apk' }}
         env:
           FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
@@ -255,11 +272,13 @@ jobs:
           serviceCredentialsFile:${{ env.FIREBASE_CREDS_PATH }}
         shell: bash
 
-#      - name: Publish release AAB to Google Play Store
-#        if: ${{ github.ref_name == 'main' && matrix.variant == 'aab'}}
-#        env:
-#          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
-#        run: |
-#          bundle exec fastlane publishReleaseToGooglePlayStore \
-#          serviceCredentialsFile:${{ env.PLAY_STORE_CREDS_FILE }} \
-#        shell: bash
+      # Only publish bundles to Play Store when `publish-to-play-store` is true while building
+      # bundles
+      - name: Publish release AAB to Google Play Store
+        if: ${{ inputs.publish-to-play-store && matrix.variant == 'aab' }}
+        env:
+          PLAY_STORE_CREDS_FILE: ${{ github.workspace }}/secrets/authenticator_play_firebase-creds.json
+        run: |
+          bundle exec fastlane publishReleaseToGooglePlayStore \
+          serviceCredentialsFile:${{ env.PLAY_STORE_CREDS_FILE }} \
+        shell: bash
