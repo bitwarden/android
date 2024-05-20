@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.manager.intent
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
@@ -79,6 +80,16 @@ interface IntentManager {
      * Creates an intent to use when selecting to save an item with [fileName] to disk.
      */
     fun createDocumentIntent(fileName: String): Intent
+
+    /**
+     * Creates a pending intent to use when providing [androidx.credentials.provider.CreateEntry]
+     * instances for FIDO 2 credential creation.
+     */
+    fun createFido2CreationPendingIntent(
+        action: String,
+        userId: String,
+        requestCode: Int,
+    ): PendingIntent
 
     /**
      * Represents file information.
