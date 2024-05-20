@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import java.io.File
@@ -41,6 +43,13 @@ private const val TEMP_CAMERA_IMAGE_NAME: String = "temp_camera_image.jpg"
  * This directory must also be declared in file_paths.xml
  */
 private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
+
+/**
+ * Key for the user id included in FIDO 2 provider "create entries".
+ *
+ * @see IntentManager.createFido2CreationPendingIntent
+ */
+private const val EXTRA_KEY_USER_ID: String = "EXTRA_KEY_USER_ID"
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
@@ -184,6 +193,23 @@ class IntentManagerImpl(
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
+
+    override fun createFido2CreationPendingIntent(
+        action: String,
+        userId: String,
+        requestCode: Int,
+    ): PendingIntent {
+        val intent = Intent(action)
+            .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_USER_ID, userId)
+
+        return PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ requestCode,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+    }
 
     private fun getCameraFileData(): IntentManager.FileData {
         val tmpDir = File(context.filesDir, TEMP_CAMERA_IMAGE_DIR)

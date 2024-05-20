@@ -92,6 +92,11 @@ The following is a list of all third-party dependencies included as part of the 
     - Purpose: Backwards compatible SplashScreen API implementation.
     - License: Apache 2.0
 
+- **AndroidX Credentials**
+    - https://developer.android.com/jetpack/androidx/releases/credentials
+    - Purpose: Unified access to user's credentials.
+    - License: Apache 2.0
+
 - **AndroidX Lifecycle**
     - https://developer.android.com/jetpack/androidx/releases/lifecycle
     - Purpose: Lifecycle aware components and tooling.

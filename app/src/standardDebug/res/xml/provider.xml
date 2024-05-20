@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<credential-provider>
+    <capabilities>
+        <capability name="androidx.credentials.TYPE_PUBLIC_KEY_CREDENTIAL" />
+    </capabilities>
+</credential-provider>
