@@ -422,7 +422,7 @@
     <value>Otomatik doldurma hizmeti</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Cihaz ayarlarınızdan Bitwarden'ı geçiş anahtarı sağlayıcınız olarak ayarlayın.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Okurken karışabilecek karakterleri kullanma</value>
@@ -2891,7 +2891,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Bu geçiş anahtarının kaydedileceği hesabı seçin</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
     <value>Geçiş anahtarını yeni hesap olarak kaydet</value>
