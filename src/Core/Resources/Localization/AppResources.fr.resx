@@ -2905,7 +2905,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Clés d'accès pour {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Mots de passe pour {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
     <value>Overwrite passkey?</value>
@@ -2946,7 +2946,7 @@ Voulez-vous basculer vers ce compte ?</value>
     <value>Verifying identity...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Mots de passe</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
     <value>Unknown account</value>
