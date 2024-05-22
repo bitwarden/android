@@ -37,8 +37,9 @@
       "matchPackagePatterns": [
         "androidx.compose.compiler:compiler",
         "androidx.compose:compose-bom",
-        "org.jetbrains.kotlin.*",
-        "com.google.devtools.ksp"
+        "androidx.lifecycle:*",
+        "com.google.devtools.ksp",
+        "org.jetbrains.kotlin.*"
       ],
       "matchManagers": [
         "gradle"
