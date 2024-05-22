@@ -69,7 +69,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     item {
         Spacer(modifier = Modifier.height(8.dp))
         UsernameRow(
-            loginState = loginState,
+            username = loginState.username,
             loginItemTypeHandlers = loginItemTypeHandlers,
         )
     }
@@ -77,7 +77,8 @@ fun LazyListScope.vaultAddEditLoginItems(
     item {
         Spacer(modifier = Modifier.height(8.dp))
         PasswordRow(
-            loginState = loginState,
+            password = loginState.password,
+            canViewPassword = loginState.canViewPassword,
             loginItemTypeHandlers = loginItemTypeHandlers,
         )
     }
@@ -372,14 +373,14 @@ fun LazyListScope.vaultAddEditLoginItems(
 
 @Composable
 private fun UsernameRow(
-    loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
+    username: String,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.username),
-        value = loginState.username,
+        value = username,
         onValueChange = loginItemTypeHandlers.onUsernameTextChange,
         actions = {
             BitwardenIconButtonWithResource(
@@ -388,7 +389,7 @@ private fun UsernameRow(
                     contentDescription = stringResource(id = R.string.generate_username),
                 ),
                 onClick = {
-                    if (loginState.username.isEmpty()) {
+                    if (username.isEmpty()) {
                         loginItemTypeHandlers.onOpenUsernameGeneratorClick()
                     } else {
                         shouldShowDialog = true
@@ -428,15 +429,16 @@ private fun UsernameRow(
 @Suppress("LongMethod")
 @Composable
 private fun PasswordRow(
-    loginState: VaultAddEditState.ViewState.Content.ItemType.Login,
+    password: String,
+    canViewPassword: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
 ) {
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
-    if (loginState.canViewPassword) {
+    if (canViewPassword) {
         BitwardenPasswordFieldWithActions(
             label = stringResource(id = R.string.password),
-            value = loginState.password,
+            value = password,
             onValueChange = loginItemTypeHandlers.onPasswordTextChange,
             showPasswordTestTag = "ViewPasswordButton",
             passwordFieldTestTag = "LoginPasswordEntry",
@@ -459,7 +461,7 @@ private fun PasswordRow(
                     contentDescription = stringResource(id = R.string.generate_password),
                 ),
                 onClick = {
-                    if (loginState.password.isEmpty()) {
+                    if (password.isEmpty()) {
                         loginItemTypeHandlers.onOpenPasswordGeneratorClick()
                     } else {
                         shouldShowDialog = true
@@ -494,7 +496,7 @@ private fun PasswordRow(
     } else {
         BitwardenHiddenPasswordField(
             label = stringResource(id = R.string.password),
-            value = loginState.password,
+            value = password,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
