@@ -51,7 +51,7 @@ class SettingsViewModel @Inject constructor(
                 handleSecurityClick(action)
             }
 
-            is SettingsAction.VaultClick -> {
+            is SettingsAction.DataClick -> {
                 handleVaultClick(action)
             }
 
@@ -125,10 +125,11 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    private fun handleVaultClick(action: SettingsAction.VaultClick) {
+    private fun handleVaultClick(action: SettingsAction.DataClick) {
         when (action) {
-            SettingsAction.VaultClick.ExportClick -> handleExportClick()
-            SettingsAction.VaultClick.ImportClick -> handleImportClick()
+            SettingsAction.DataClick.ExportClick -> handleExportClick()
+            SettingsAction.DataClick.ImportClick -> handleImportClick()
+            SettingsAction.DataClick.BackupClick -> handleBackupClick()
         }
     }
 
@@ -138,6 +139,10 @@ class SettingsViewModel @Inject constructor(
 
     private fun handleImportClick() {
         sendEvent(SettingsEvent.NavigateToImport)
+    }
+
+    private fun handleBackupClick() {
+        sendEvent(SettingsEvent.NavigateToBackup)
     }
 
     private fun handleAppearanceChange(action: SettingsAction.AppearanceChange) {
@@ -299,6 +304,11 @@ sealed class SettingsEvent {
     data object NavigateToImport : SettingsEvent()
 
     /**
+     * Navigate to the Backup web page.
+     */
+    data object NavigateToBackup : SettingsEvent()
+
+    /**
      * Navigate to the Help Center web page.
      */
     data object NavigateToHelpCenter : SettingsEvent()
@@ -322,7 +332,7 @@ sealed class SettingsAction(
     sealed class Dialog {
 
         /**
-         *
+         * Display the loading screen with a [message].
          */
         data class Loading(
             val message: Text,
@@ -339,17 +349,22 @@ sealed class SettingsAction(
     /**
      * Models actions for the Vault section of settings.
      */
-    sealed class VaultClick : SettingsAction() {
+    sealed class DataClick : SettingsAction() {
 
         /**
          * Indicates the user clicked export.
          */
-        data object ExportClick : VaultClick()
+        data object ExportClick : DataClick()
 
         /**
          * Indicates the user clicked import.
          */
-        data object ImportClick : VaultClick()
+        data object ImportClick : DataClick()
+
+        /**
+         * Indicates the user click backup.
+         */
+        data object BackupClick : DataClick()
     }
 
     /**

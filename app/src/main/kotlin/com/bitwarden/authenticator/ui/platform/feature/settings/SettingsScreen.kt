@@ -91,6 +91,12 @@ fun SettingsScreen(
             SettingsEvent.NavigateToTutorial -> onNavigateToTutorial()
             SettingsEvent.NavigateToExport -> onNavigateToExport()
             SettingsEvent.NavigateToImport -> onNavigateToImport()
+            SettingsEvent.NavigateToBackup -> {
+                intentManager.launchUri(
+                    uri = "https://support.google.com/android/answer/2819582".toUri(),
+                )
+            }
+
             SettingsEvent.NavigateToHelpCenter -> {
                 intentManager.launchUri("https://bitwarden.com/help".toUri())
             }
@@ -133,14 +139,19 @@ fun SettingsScreen(
             VaultSettings(
                 onExportClick = remember(viewModel) {
                     {
-                        viewModel.trySendAction(SettingsAction.VaultClick.ExportClick)
+                        viewModel.trySendAction(SettingsAction.DataClick.ExportClick)
                     }
                 },
                 onImportClick = remember(viewModel) {
                     {
-                        viewModel.trySendAction(SettingsAction.VaultClick.ImportClick)
+                        viewModel.trySendAction(SettingsAction.DataClick.ImportClick)
                     }
                 },
+                onBackupClick = remember(viewModel) {
+                    {
+                        viewModel.trySendAction(SettingsAction.DataClick.BackupClick)
+                    }
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
@@ -230,17 +241,18 @@ fun SecuritySettings(
 
 //endregion
 
-//region Vault settings
+//region Data settings
 
 @Composable
 fun VaultSettings(
     modifier: Modifier = Modifier,
     onExportClick: () -> Unit,
     onImportClick: () -> Unit,
+    onBackupClick: () -> Unit,
 ) {
     BitwardenListHeaderText(
         modifier = Modifier.padding(horizontal = 16.dp),
-        label = stringResource(id = R.string.vault)
+        label = stringResource(id = R.string.data)
     )
     Spacer(modifier = Modifier.height(8.dp))
     BitwardenTextRow(
@@ -275,6 +287,15 @@ fun VaultSettings(
                 tint = MaterialTheme.colorScheme.onSurface,
             )
         }
+    )
+    Spacer(modifier = Modifier.height(8.dp))
+    BitwardenExternalLinkRow(
+        text = stringResource(R.string.backup),
+        onConfirmClick = onBackupClick,
+        dialogTitle = stringResource(R.string.data_backup_title),
+        dialogMessage = stringResource(R.string.data_backup_message),
+        dialogConfirmButtonText = stringResource(R.string.learn_more),
+        dialogDismissButtonText = stringResource(R.string.ok),
     )
 }
 
@@ -313,7 +334,7 @@ private fun UnlockWithBiometricsRow(
     )
 }
 
-//endregion Vault settings
+//endregion Data settings
 
 //region Appearance settings
 

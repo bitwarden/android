@@ -80,7 +80,7 @@
     <string name="item_deleted">Item deleted</string>
     <string name="delete">Delete</string>
     <string name="do_you_really_want_to_permanently_delete_cipher">Do you really want to permanently delete? This cannot be undone.</string>
-    <string name="vault">Vault</string>
+    <string name="data">Data</string>
     <string name="export">Export</string>
     <string name="loading">Loading</string>
     <string name="export_confirmation_title">Confirm export</string>
@@ -115,4 +115,8 @@
     <string name="favorite_tooltip">Save as a favorite</string>
     <string name="favorite">Favorite</string>
     <string name="favorites">Favorites</string>
+    <string name="backup">Backup</string>
+    <string name="data_backup_title">Data backup</string>
+    <string name="data_backup_message">Bitwarden Authenticator data is backed up and can be restored with your regularly scheduled device backups.</string>
+    <string name="learn_more">Learn more</string>
 </resources>
