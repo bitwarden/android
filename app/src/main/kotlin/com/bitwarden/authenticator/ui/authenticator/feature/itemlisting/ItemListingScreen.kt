@@ -407,6 +407,12 @@ private fun ItemListingContent(
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
+
+                // Add a spacer item to prevent the FAB from hiding verification codes at the
+                // bottom of the list
+                item {
+                    Spacer(Modifier.height(72.dp))
+                }
             }
         }
     }
