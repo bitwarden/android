@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -80,6 +81,10 @@ class TotpCodeManagerImpl(
         val cipherId = cipher?.id ?: return MutableStateFlow(DataState.Loaded(null))
 
         return mutableVerificationCodeStateFlowMap.getOrPut(cipher) {
+            // Define a per-item scope so that we can clear the Flow from the scope when it is
+            // no longer needed.
+            val itemScope = CoroutineScope(dispatcherManager.unconfined)
+
             flow<DataState<VerificationCodeItem?>> {
                 val totpCode = cipher
                     .login
@@ -139,9 +144,10 @@ class TotpCodeManagerImpl(
             }
                 .onCompletion {
                     mutableVerificationCodeStateFlowMap.remove(cipher)
+                    itemScope.cancel()
                 }
                 .stateIn(
-                    scope = unconfinedScope,
+                    scope = itemScope,
                     started = SharingStarted.WhileSubscribed(),
                     initialValue = DataState.Loading,
                 )
