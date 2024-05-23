@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationStatusType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.OrganizationType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 
 /**
  * The default [PolicyManager] implementation. This class is responsible for
@@ -22,15 +23,15 @@ class PolicyManagerImpl(
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getActivePoliciesFlow(type: PolicyTypeJson): Flow<List<SyncResponseJson.Policy>> =
         authDiskSource
-            .userStateFlow
-            .flatMapLatest { userStateJson ->
-                userStateJson
-                    ?.activeUserId
-                    ?.let { activeUserId ->
-                        authDiskSource.getPoliciesFlow(activeUserId)
-                            .map {
+            .activeUserIdChangesFlow
+            .flatMapLatest { activeUserId ->
+                activeUserId
+                    ?.let { userId ->
+                        authDiskSource
+                            .getPoliciesFlow(userId)
+                            .mapNotNull {
                                 filterPolicies(
-                                    userId = activeUserId,
+                                    userId = userId,
                                     type = type,
                                     policies = it,
                                 )
@@ -56,12 +57,14 @@ class PolicyManagerImpl(
     /**
      * A helper method to filter policies.
      */
+    @Suppress("ReturnCount")
     private fun filterPolicies(
         userId: String,
         type: PolicyTypeJson,
         policies: List<SyncResponseJson.Policy>?,
-    ): List<SyncResponseJson.Policy> {
-        if (policies.isNullOrEmpty()) return emptyList()
+    ): List<SyncResponseJson.Policy>? {
+        policies ?: return null
+        if (policies.isEmpty()) return emptyList()
 
         // Get a list of the user's organizations that enforce policies.
         val organizationIdsWithActivePolicies = authDiskSource

@@ -385,9 +385,11 @@ class VaultRepositoryImpl(
 
                         unlockVaultForOrganizationsIfNecessary(syncResponse = syncResponse)
                         storeProfileData(syncResponse = syncResponse)
+                        // Treat absent network policies as known empty data to
+                        // distinguish between unknown null data.
                         authDiskSource.storePolicies(
                             userId = userId,
-                            policies = syncResponse.policies,
+                            policies = syncResponse.policies.orEmpty(),
                         )
                         settingsDiskSource.storeLastSyncTime(
                             userId = userId,
