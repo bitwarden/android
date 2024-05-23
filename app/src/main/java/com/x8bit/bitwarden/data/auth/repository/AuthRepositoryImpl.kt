@@ -70,6 +70,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokensFlow
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsList
 import com.x8bit.bitwarden.data.auth.repository.util.userOrganizationsListFlow
+import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
@@ -99,11 +100,13 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -188,9 +191,9 @@ class AuthRepositoryImpl(
 
     /**
      * The password that needs to be checked against any organization policies before
-     * the user can complete the login flow.
+     * the user can complete the login flow. This value is stored using the user ID.
      */
-    private var passwordToCheck: String? = null
+    private var passwordsToCheckMap = mutableMapOf<String, String>()
 
     override var twoFactorResponse: GetTokenResponseJson.TwoFactorRequired? = null
 
@@ -331,6 +334,9 @@ class AuthRepositoryImpl(
             .onEach { policies ->
                 val userId = activeUserId ?: return@onEach
 
+                // If the user is logging on without a password, the check should complete.
+                val passwordToCheck = passwordsToCheckMap.remove(key = userId) ?: return@onEach
+
                 // If the password already has to be reset for some other reason, there's no
                 // need to check the password policies.
                 if (passwordResetReason != null) return@onEach
@@ -339,12 +345,33 @@ class AuthRepositoryImpl(
                 // clear the force reset reason accordingly.
                 storeUserResetPasswordReason(
                     userId = userId,
-                    reason = ForcePasswordResetReason.WEAK_MASTER_PASSWORD_ON_LOGIN
+                    reason = ForcePasswordResetReason
+                        .WEAK_MASTER_PASSWORD_ON_LOGIN
                         .takeIf {
-                            !passwordPassesPolicies(policies)
+                            !passwordPassesPolicies(
+                                password = passwordToCheck,
+                                policies = policies,
+                            )
                         },
                 )
             }
+            .launchIn(unconfinedScope)
+
+        // Clear the cached password whenever the user is no longer active
+        // or the vault is locked for that user.
+        merge(
+            authDiskSource
+                .userSwitchingChangesFlow
+                .mapNotNull { it.previousActiveUserId },
+            vaultRepository
+                .vaultUnlockDataStateFlow
+                .filter { vaultUnlockDataList ->
+                    // Clear if the active user is not currently unlocking or unlocked
+                    vaultUnlockDataList.none { it.userId == activeUserId }
+                }
+                .mapNotNull { activeUserId },
+        )
+            .onEach { userId -> passwordsToCheckMap.remove(key = userId) }
             .launchIn(unconfinedScope)
     }
 
@@ -1102,16 +1129,13 @@ class AuthRepositoryImpl(
      * Return true if there are any [PolicyInformation.MasterPassword] policies that the user's
      * master password has failed to pass.
      */
-    @Suppress("ReturnCount")
-    private suspend fun passwordPassesPolicies(policies: List<SyncResponseJson.Policy>?): Boolean {
-        // If the user is logging on without a password or if there are no policies,
-        // the check should complete.
-        val password = passwordToCheck ?: return true
-        val policyList = policies ?: return true
-
+    private suspend fun passwordPassesPolicies(
+        password: String,
+        policies: List<SyncResponseJson.Policy>,
+    ): Boolean {
         // If there are no master password policies that are enabled and should be
         // enforced on login, the check should complete.
-        val passwordPolicies = policyList
+        val passwordPolicies = policies
             .mapNotNull { it.policyInformation as? PolicyInformation.MasterPassword }
             .filter { it.enforceOnLogin == true }
 
@@ -1351,7 +1375,7 @@ class AuthRepositoryImpl(
                 }
 
             // Cache the password to verify against any password policies after the sync completes.
-            passwordToCheck = it
+            passwordsToCheckMap.put(userId, it)
         }
 
         // Attempt to unlock the vault with auth request if possible.
