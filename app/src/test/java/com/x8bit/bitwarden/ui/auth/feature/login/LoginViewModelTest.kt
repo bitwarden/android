@@ -37,9 +37,6 @@ import org.junit.jupiter.api.Test
 
 class LoginViewModelTest : BaseViewModelTest() {
 
-    private val savedStateHandle = SavedStateHandle().also {
-        it["email_address"] = EMAIL
-    }
     private val mutableCaptchaTokenResultFlow =
         bufferedMutableSharedFlow<CaptchaCallbackTokenResult>()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
@@ -149,8 +146,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             passwordInput = "input",
             isLoginButtonEnabled = true,
         )
-        savedStateHandle["state"] = expectedState
-        val viewModel = createViewModel()
+        val viewModel = createViewModel(expectedState)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -447,12 +443,15 @@ class LoginViewModelTest : BaseViewModelTest() {
         }
     }
 
-    private fun createViewModel(): LoginViewModel =
+    private fun createViewModel(state: LoginState? = null): LoginViewModel =
         LoginViewModel(
             authRepository = authRepository,
             environmentRepository = fakeEnvironmentRepository,
             vaultRepository = vaultRepository,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = SavedStateHandle().also {
+                it["email_address"] = EMAIL
+                it["state"] = state
+            }
         )
 
     companion object {

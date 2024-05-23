@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -39,6 +40,7 @@ class LoginViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(
+    // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
         ?: LoginState(
             emailAddress = LoginArgs(savedStateHandle).emailAddress,
@@ -53,10 +55,6 @@ class LoginViewModel @Inject constructor(
 ) {
 
     init {
-        // As state updates, write to saved state handle:
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
         authRepository.captchaTokenResultFlow
             .onEach {
                 sendAction(
@@ -273,7 +271,8 @@ class LoginViewModel @Inject constructor(
  */
 @Parcelize
 data class LoginState(
-    val passwordInput: String,
+    // We never want this saved since the input is sensitive data.
+    @IgnoredOnParcel val passwordInput: String = "",
     val emailAddress: String,
     val captchaToken: String?,
     val environmentLabel: String,
