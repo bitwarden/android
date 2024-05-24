@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.base.MainDispatcherExtension
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -53,6 +54,9 @@ class UserLogoutManagerTest {
     private val vaultDiskSource: VaultDiskSource = mockk {
         coEvery { deleteVaultData(any()) } just runs
     }
+    private val vaultSdkSource: VaultSdkSource = mockk {
+        every { clearCrypto(userId = any()) } just runs
+    }
     private val context: Context = mockk()
 
     private val userLogoutManager: UserLogoutManager =
@@ -64,6 +68,7 @@ class UserLogoutManagerTest {
             pushDiskSource = pushDiskSource,
             settingsDiskSource = settingsDiskSource,
             vaultDiskSource = vaultDiskSource,
+            vaultSdkSource = vaultSdkSource,
             dispatcherManager = FakeDispatcherManager(),
         )
 
@@ -153,6 +158,7 @@ class UserLogoutManagerTest {
     }
 
     private fun assertDataCleared(userId: String) {
+        verify { vaultSdkSource.clearCrypto(userId = userId) }
         verify { authDiskSource.clearData(userId = userId) }
         verify { generatorDiskSource.clearData(userId = userId) }
         verify { pushDiskSource.clearData(userId = userId) }
