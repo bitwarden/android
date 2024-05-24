@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.manager
 
+import app.cash.turbine.test
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
@@ -22,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import io.mockk.awaits
@@ -85,6 +87,56 @@ class VaultLockManagerTest {
         dispatcherManager = FakeDispatcherManager(),
         elapsedRealtimeMillisProvider = { elapsedRealtimeMillis },
     )
+
+    @Test
+    fun `vaultStateEventFlow should emit Locked event when vault state changes to locked`() =
+        runTest {
+            // Ensure the vault is unlocked
+            verifyUnlockedVault(userId = USER_ID)
+
+            vaultLockManager.vaultStateEventFlow.test {
+                vaultLockManager.lockVault(userId = USER_ID)
+                assertEquals(VaultStateEvent.Locked(userId = USER_ID), awaitItem())
+            }
+        }
+
+    @Test
+    fun `vaultStateEventFlow should not emit Locked event when vault state remains locked`() =
+        runTest {
+            // Ensure the vault is locked
+            vaultLockManager.lockVault(userId = USER_ID)
+
+            vaultLockManager.vaultStateEventFlow.test {
+                vaultLockManager.lockVault(userId = USER_ID)
+                expectNoEvents()
+            }
+        }
+
+    @Test
+    fun `vaultStateEventFlow should emit Unlocked event when vault state changes to unlocked`() =
+        runTest {
+            // Ensure the vault is locked
+            vaultLockManager.lockVault(userId = USER_ID)
+
+            vaultLockManager.vaultStateEventFlow.test {
+                verifyUnlockedVault(userId = USER_ID)
+                assertEquals(VaultStateEvent.Unlocked(userId = USER_ID), awaitItem())
+            }
+        }
+
+    @Test
+    fun `vaultStateEventFlow should not emit Unlocked event when vault state remains unlocked`() =
+        runTest {
+            // Ensure the vault is unlocked
+            verifyUnlockedVault(userId = USER_ID)
+
+            vaultLockManager.vaultStateEventFlow.test {
+                // There is no great way to directly call the internal setVaultToUnlocked
+                // but that will be called internally again when syncing.
+                vaultLockManager.syncVaultState(userId = USER_ID)
+                expectNoEvents()
+            }
+        }
 
     @Test
     fun `app going into background should update the current user's last active time`() {

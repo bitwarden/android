@@ -5,20 +5,28 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
+import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -29,12 +37,16 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
 /**
  * A view model that helps launch actions for the [MainActivity].
  */
+@Suppress("LongParameterList")
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
+    private val garbageCollectionManager: GarbageCollectionManager,
     private val intentManager: IntentManager,
+    authRepository: AuthRepository,
     settingsRepository: SettingsRepository,
+    vaultRepository: VaultRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
@@ -72,6 +84,36 @@ class MainViewModel @Inject constructor(
                 sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
             }
             .launchIn(viewModelScope)
+
+        authRepository
+            .userStateFlow
+            .drop(count = 1)
+            // Trigger an action whenever the current user changes or we go into/out of a pending
+            // account state (which acts like switching to a temporary user).
+            .map { it?.activeUserId to it?.hasPendingAccountAddition }
+            .distinctUntilChanged()
+            .onEach {
+                // Switching between account states often involves some kind of animation (ex:
+                // account switcher) that we might want to give time to finish before triggering
+                // a refresh.
+                @Suppress("MagicNumber")
+                delay(500)
+                trySendAction(MainAction.Internal.CurrentUserStateChange)
+            }
+            .launchIn(viewModelScope)
+
+        vaultRepository
+            .vaultStateEventFlow
+            .onEach {
+                when (it) {
+                    is VaultStateEvent.Locked -> {
+                        trySendAction(MainAction.Internal.VaultUnlockStateChange)
+                    }
+
+                    is VaultStateEvent.Unlocked -> Unit
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: MainAction) {
@@ -80,7 +122,9 @@ class MainViewModel @Inject constructor(
                 handleAutofillSelectionReceive(action)
             }
 
+            is MainAction.Internal.CurrentUserStateChange -> handleCurrentUserStateChange()
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
+            is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
             is MainAction.ReceiveNewIntent -> handleNewIntentReceived(action)
         }
@@ -92,8 +136,16 @@ class MainViewModel @Inject constructor(
         sendEvent(MainEvent.CompleteAutofill(cipherView = action.cipherView))
     }
 
+    private fun handleCurrentUserStateChange() {
+        recreateUiAndGarbageCollect()
+    }
+
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
         mutableStateFlow.update { it.copy(theme = action.theme) }
+    }
+
+    private fun handleVaultUnlockStateChange() {
+        recreateUiAndGarbageCollect()
     }
 
     private fun handleFirstIntentReceived(action: MainAction.ReceiveFirstIntent) {
@@ -168,6 +220,11 @@ class MainViewModel @Inject constructor(
             }
         }
     }
+
+    private fun recreateUiAndGarbageCollect() {
+        sendEvent(MainEvent.Recreate)
+        garbageCollectionManager.tryCollect()
+    }
 }
 
 /**
@@ -204,11 +261,21 @@ sealed class MainAction {
         ) : Internal()
 
         /**
+         * Indicates a relevant change in the current user state.
+         */
+        data object CurrentUserStateChange : Internal()
+
+        /**
          * Indicates that the app theme has changed.
          */
         data class ThemeUpdate(
             val theme: AppTheme,
         ) : Internal()
+
+        /**
+         * Indicates a relevant change in the current vault lock state.
+         */
+        data object VaultUnlockStateChange : Internal()
     }
 }
 
@@ -226,4 +293,9 @@ sealed class MainEvent {
      * Event indicating a change in the screen capture setting.
      */
     data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
+
+    /**
+     * Event indicating that the UI should recreate itself.
+     */
+    data object Recreate : MainEvent()
 }
