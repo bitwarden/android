@@ -497,7 +497,7 @@
                                 AutomationId="MinNumberValueLabel" />
                             <controls:ExtendedStepper
                                 Value="{Binding MinNumber}"
-                                Maximum="5"
+                                Maximum="9"
                                 Minimum="0"
                                 Increment="1"
                                 AutomationId="MinNumberStepper" />
@@ -519,7 +519,7 @@
                                 AutomationId="MinSpecialValueLabel" />
                             <controls:ExtendedStepper
                                 Value="{Binding MinSpecial}"
-                                Maximum="5"
+                                Maximum="9"
                                 Minimum="0"
                                 Increment="1"
                                 AutomationId="MinSpecialStepper" />
