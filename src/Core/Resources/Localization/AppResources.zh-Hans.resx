@@ -2820,7 +2820,7 @@
     <value>附加选项</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>前往网页 App 吗？</value>
+    <value>前往网页应用吗？</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
     <value>前往 {0} 吗？</value>
@@ -2852,7 +2852,7 @@
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>在帮助中心了解更多如何使用 Bitwarden 的信息。</value>
+    <value>访问帮助中心了解更多如何使用 Bitwarden 的信息。</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>找不到您想要的吗？请在 bitwarden.com 上联系 Bitwarden 支持。</value>
@@ -2864,7 +2864,7 @@
     <value>在网页应用上探索您的 Bitwarden 账户的更多功能。</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站以了解更多。</value>
+    <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站了解更多信息。</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
     <value>帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</value>
