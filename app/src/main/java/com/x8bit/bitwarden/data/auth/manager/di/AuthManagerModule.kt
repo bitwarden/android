@@ -94,6 +94,7 @@ object AuthManagerModule {
         pushDiskSource: PushDiskSource,
         settingsDiskSource: SettingsDiskSource,
         vaultDiskSource: VaultDiskSource,
+        vaultSdkSource: VaultSdkSource,
         dispatcherManager: DispatcherManager,
     ): UserLogoutManager =
         UserLogoutManagerImpl(
@@ -104,6 +105,7 @@ object AuthManagerModule {
             pushDiskSource = pushDiskSource,
             settingsDiskSource = settingsDiskSource,
             vaultDiskSource = vaultDiskSource,
+            vaultSdkSource = vaultSdkSource,
             dispatcherManager = dispatcherManager,
         )
 }

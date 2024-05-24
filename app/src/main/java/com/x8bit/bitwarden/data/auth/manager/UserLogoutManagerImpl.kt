@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -27,6 +28,7 @@ class UserLogoutManagerImpl(
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultDiskSource: VaultDiskSource,
     private val dispatcherManager: DispatcherManager,
+    private val vaultSdkSource: VaultSdkSource,
 ) : UserLogoutManager {
     private val scope = CoroutineScope(dispatcherManager.unconfined)
     private val mainScope = CoroutineScope(dispatcherManager.main)
@@ -96,6 +98,7 @@ class UserLogoutManagerImpl(
     }
 
     private fun clearData(userId: String) {
+        vaultSdkSource.clearCrypto(userId = userId)
         authDiskSource.clearData(userId = userId)
         generatorDiskSource.clearData(userId = userId)
         pushDiskSource.clearData(userId = userId)
