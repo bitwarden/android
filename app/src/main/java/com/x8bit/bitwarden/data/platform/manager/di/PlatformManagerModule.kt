@@ -33,6 +33,8 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
+import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
@@ -96,6 +98,14 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun provideBitwardenDispatchers(): DispatcherManager = DispatcherManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideGarbageCollectionManager(
+        dispatcherManager: DispatcherManager,
+    ): GarbageCollectionManager = GarbageCollectionManagerImpl(
+        dispatcherManager = dispatcherManager,
+    )
 
     @Provides
     @Singleton

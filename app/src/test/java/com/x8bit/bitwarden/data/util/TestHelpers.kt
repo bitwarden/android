@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.data.util
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import io.mockk.MockKMatcherScope
 import io.mockk.every
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 
@@ -46,4 +49,14 @@ inline fun <reified T : Any> mockBuilder(crossinline block: MockKMatcherScope.(T
     every { block(anyConstructed<T>()) } answers {
         this.self as T
     }
+}
+
+/**
+ * A helper method that calls both [TestCoroutineScheduler.advanceTimeBy] and
+ * [TestCoroutineScheduler.runCurrent].
+ */
+@OptIn(ExperimentalCoroutinesApi::class)
+fun TestDispatcher.advanceTimeByAndRunCurrent(delayTimeMillis: Long) {
+    scheduler.advanceTimeBy(delayTimeMillis = delayTimeMillis)
+    scheduler.runCurrent()
 }
