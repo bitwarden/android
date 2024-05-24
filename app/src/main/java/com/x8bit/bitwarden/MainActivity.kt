@@ -94,6 +94,8 @@ class MainActivity : AppCompatActivity() {
                         handleCompleteAutofill(event)
                     }
 
+                    MainEvent.Recreate -> handleRecreate()
+
                     is MainEvent.ScreenCaptureSettingChange -> {
                         handleScreenCaptureSettingChange(event)
                     }
@@ -115,5 +117,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
+    }
+
+    private fun handleRecreate() {
+        recreate()
     }
 }

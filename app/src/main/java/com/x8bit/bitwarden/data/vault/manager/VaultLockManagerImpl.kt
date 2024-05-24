@@ -18,10 +18,12 @@ import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeout
 import com.x8bit.bitwarden.data.platform.repository.model.VaultTimeoutAction
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
@@ -29,8 +31,10 @@ import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -74,9 +78,13 @@ class VaultLockManagerImpl(
 
     private val mutableVaultUnlockDataStateFlow =
         MutableStateFlow<List<VaultUnlockData>>(emptyList())
+    private val mutableVaultStateEventSharedFlow = bufferedMutableSharedFlow<VaultStateEvent>()
 
     override val vaultUnlockDataStateFlow: StateFlow<List<VaultUnlockData>>
         get() = mutableVaultUnlockDataStateFlow.asStateFlow()
+
+    override val vaultStateEventFlow: Flow<VaultStateEvent>
+        get() = mutableVaultStateEventSharedFlow.asSharedFlow()
 
     init {
         observeAppForegroundChanges()
@@ -230,15 +238,20 @@ class VaultLockManagerImpl(
     }
 
     private fun setVaultToUnlocked(userId: String) {
+        val wasVaultUnlocked = isVaultUnlocked(userId = userId)
         mutableVaultUnlockDataStateFlow.update {
             it.update(userId, VaultUnlockData.Status.UNLOCKED)
         }
         // If we are unlocking an account with a timeout of Never, we should make sure to store the
         // auto-unlock key.
         storeUserAutoUnlockKeyIfNecessary(userId = userId)
+        if (!wasVaultUnlocked) {
+            mutableVaultStateEventSharedFlow.tryEmit(VaultStateEvent.Unlocked(userId = userId))
+        }
     }
 
     private fun setVaultToLocked(userId: String) {
+        val wasVaultLocked = !isVaultUnlocked(userId = userId) && !isVaultUnlocking(userId = userId)
         vaultSdkSource.clearCrypto(userId = userId)
         mutableVaultUnlockDataStateFlow.update {
             it.update(userId, null)
@@ -247,6 +260,9 @@ class VaultLockManagerImpl(
             userId = userId,
             userAutoUnlockKey = null,
         )
+        if (!wasVaultLocked) {
+            mutableVaultStateEventSharedFlow.tryEmit(VaultStateEvent.Locked(userId = userId))
+        }
     }
 
     private fun setVaultToUnlocking(userId: String) {

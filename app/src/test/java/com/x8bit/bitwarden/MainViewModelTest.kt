@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -12,17 +14,23 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppTheme
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
 import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,12 +44,23 @@ import org.junit.jupiter.api.Test
 class MainViewModelTest : BaseViewModelTest() {
 
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
+    private val authRepository = mockk<AuthRepository> {
+        every { userStateFlow } returns mutableUserStateFlow
+    }
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
+    }
+    private val mutableVaultStateEventFlow = bufferedMutableSharedFlow<VaultStateEvent>()
+    private val vaultRepository = mockk<VaultRepository> {
+        every { vaultStateEventFlow } returns mutableVaultStateEventFlow
+    }
+    private val garbageCollectionManager = mockk<GarbageCollectionManager> {
+        every { tryCollect() } just runs
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val intentManager: IntentManager = mockk {
@@ -90,6 +109,77 @@ class MainViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance,
         )
     }
+
+    @Test
+    fun `user state updates should emit Recreate event and trigger garbage collection`() = runTest {
+        val userId1 = "userId1"
+        val userId2 = "userId12"
+        val viewModel = createViewModel()
+
+        viewModel.eventFlow.test {
+            // Ignore initial screen capture event
+            awaitItem()
+
+            mutableUserStateFlow.value = UserState(
+                activeUserId = userId1,
+                accounts = listOf(
+                    mockk<UserState.Account> {
+                        every { userId } returns userId1
+                    },
+                ),
+                hasPendingAccountAddition = false,
+            )
+            assertEquals(MainEvent.Recreate, awaitItem())
+
+            mutableUserStateFlow.value = UserState(
+                activeUserId = userId1,
+                accounts = listOf(
+                    mockk<UserState.Account> {
+                        every { userId } returns userId1
+                    },
+                ),
+                hasPendingAccountAddition = true,
+            )
+            assertEquals(MainEvent.Recreate, awaitItem())
+
+            mutableUserStateFlow.value = UserState(
+                activeUserId = userId2,
+                accounts = listOf(
+                    mockk<UserState.Account> {
+                        every { userId } returns userId1
+                    },
+                    mockk<UserState.Account> {
+                        every { userId } returns userId2
+                    },
+                ),
+                hasPendingAccountAddition = true,
+            )
+            assertEquals(MainEvent.Recreate, awaitItem())
+        }
+        verify(exactly = 3) {
+            garbageCollectionManager.tryCollect()
+        }
+    }
+
+    @Test
+    fun `vault state lock events should emit Recreate event and trigger garbage collection`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                // Ignore initial screen capture event
+                awaitItem()
+
+                mutableVaultStateEventFlow.tryEmit(VaultStateEvent.Unlocked(userId = "userId"))
+                expectNoEvents()
+
+                mutableVaultStateEventFlow.tryEmit(VaultStateEvent.Locked(userId = "userId"))
+                assertEquals(MainEvent.Recreate, awaitItem())
+            }
+            verify(exactly = 1) {
+                garbageCollectionManager.tryCollect()
+            }
+        }
 
     @Test
     fun `autofill selection updates should emit CompleteAutofill events`() = runTest {
@@ -441,7 +531,10 @@ class MainViewModelTest : BaseViewModelTest() {
     ) = MainViewModel(
         autofillSelectionManager = autofillSelectionManager,
         specialCircumstanceManager = specialCircumstanceManager,
+        garbageCollectionManager = garbageCollectionManager,
+        authRepository = authRepository,
         settingsRepository = settingsRepository,
+        vaultRepository = vaultRepository,
         intentManager = intentManager,
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
