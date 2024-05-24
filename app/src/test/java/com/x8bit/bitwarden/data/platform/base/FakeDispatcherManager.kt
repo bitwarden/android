@@ -13,14 +13,12 @@ import kotlinx.coroutines.test.setMain
  * A faked implementation of [DispatcherManager] that uses [UnconfinedTestDispatcher].
  */
 @OptIn(ExperimentalCoroutinesApi::class)
-class FakeDispatcherManager : DispatcherManager {
-    override val default: CoroutineDispatcher = UnconfinedTestDispatcher()
-
+class FakeDispatcherManager(
+    override val default: CoroutineDispatcher = UnconfinedTestDispatcher(),
+    override val io: CoroutineDispatcher = UnconfinedTestDispatcher(),
+    override val unconfined: CoroutineDispatcher = UnconfinedTestDispatcher(),
+) : DispatcherManager {
     override val main: MainCoroutineDispatcher = Dispatchers.Main
-
-    override val io: CoroutineDispatcher = UnconfinedTestDispatcher()
-
-    override val unconfined: CoroutineDispatcher = UnconfinedTestDispatcher()
 
     /**
      * Updates the main dispatcher to use the provided [dispatcher]. Used in conjunction with
