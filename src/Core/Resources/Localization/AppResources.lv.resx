@@ -2853,7 +2853,7 @@ Vai pārslēgties uz šo kontu?</value>
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>Par to, kā izmantot Bitwarden, vairāk var uzzināt palīdzības centrā.</value>
+    <value>Vairāk par to, kā izmantot Bitwarden, var uzzināt palīdzības centrā.</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>Meklējamais nav atrodams? Ir iespēja sazināties ar Bitwarden atbalstu bitwarden.com.</value>
@@ -2865,7 +2865,7 @@ Vai pārslēgties uz šo kontu?</value>
     <value>Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt bitwarden.com tīmekļvietnē.</value>
+    <value>Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt tīmekļvietnē bitwarden.com.</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
     <value>Var palīdzēt citiem noskaidrot, vai Bitwarden tiem der. To var izdarīt lietotņu veikalā, atstājot vērtējumu.</value>
