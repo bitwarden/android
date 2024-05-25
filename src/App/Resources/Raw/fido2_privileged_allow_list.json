@@ -127,6 +127,18 @@
       {
         "type": "android",
         "info": {
+          "package_name": "org.mozilla.fenix",
+          "signatures": [
+            {
+              "build": "release",
+              "cert_fingerprint_sha256": "50:04:77:90:88:e7:f9:88:d5:bc:5c:c5:f8:79:8f:eb:f4:f8:cd:08:4a:1b:2a:46:ef:d4:c8:ee:4a:ea:f2:11"
+            }
+          ]
+        }
+      },
+      {
+        "type": "android",
+        "info": {
           "package_name": "org.mozilla.focus",
           "signatures": [
             {
