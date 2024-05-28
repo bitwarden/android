@@ -1,5 +1,6 @@
 package com.bitwarden.authenticator.data.platform.repository
 
+import com.bitwarden.authenticator.BuildConfig
 import com.bitwarden.authenticator.data.auth.datasource.disk.AuthDiskSource
 import com.bitwarden.authenticator.data.authenticator.datasource.sdk.AuthenticatorSdkSource
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
@@ -14,6 +15,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+
+private val DEFAULT_IS_SCREEN_CAPTURE_ALLOWED = BuildConfig.DEBUG
 
 /**
  * Primary implementation of [SettingsRepository].
@@ -73,6 +76,25 @@ class SettingsRepositoryImpl(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
                 initialValue = hasSeenWelcomeTutorial,
+            )
+
+    override var isScreenCaptureAllowed: Boolean
+        get() = settingsDiskSource.getScreenCaptureAllowed()
+            ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED
+        set(value) {
+            settingsDiskSource.storeScreenCaptureAllowed(
+                isScreenCaptureAllowed = value,
+            )
+        }
+
+    override val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
+        get() = settingsDiskSource.getScreenCaptureAllowedFlow()
+            .map { isAllowed -> isAllowed ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED }
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Lazily,
+                initialValue = settingsDiskSource.getScreenCaptureAllowed()
+                    ?: DEFAULT_IS_SCREEN_CAPTURE_ALLOWED,
             )
 
     override suspend fun setupBiometricsKey(): BiometricsKeyResult {

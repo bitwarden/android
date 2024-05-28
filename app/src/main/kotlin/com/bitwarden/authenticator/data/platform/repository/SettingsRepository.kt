@@ -52,6 +52,16 @@ interface SettingsRepository {
     val hasSeenWelcomeTutorialFlow: StateFlow<Boolean>
 
     /**
+     * Sets whether or not screen capture is allowed for the current user.
+     */
+    var isScreenCaptureAllowed: Boolean
+
+    /**
+     * Whether or not screen capture is allowed for the current user.
+     */
+    val isScreenCaptureAllowedStateFlow: StateFlow<Boolean>
+
+    /**
      * Clears any previously stored encrypted user key used with biometrics for the current user.
      */
     fun clearBiometricsKey()

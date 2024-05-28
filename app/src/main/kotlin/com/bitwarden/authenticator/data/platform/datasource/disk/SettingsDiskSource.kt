@@ -81,4 +81,19 @@ interface SettingsDiskSource {
         systemBioIntegrityState: String,
         value: Boolean?,
     )
+
+    /**
+     * Gets whether or not the user has enabled screen capture.
+     */
+    fun getScreenCaptureAllowed(): Boolean?
+
+    /**
+     * Emits updates that track [getScreenCaptureAllowed].
+     */
+    fun getScreenCaptureAllowedFlow(): Flow<Boolean?>
+
+    /**
+     * Stores whether or not [isScreenCaptureAllowed].
+     */
+    fun storeScreenCaptureAllowed(isScreenCaptureAllowed: Boolean?)
 }

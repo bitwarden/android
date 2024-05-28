@@ -6,7 +6,6 @@ import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutable
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 
 private const val APP_THEME_KEY = "$BASE_KEY:theme"
@@ -16,6 +15,7 @@ private const val ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY = "$BASE_KEY:accountBiom
 private const val ALERT_THRESHOLD_SECONDS_KEY = "$BASE_KEY:alertThresholdSeconds"
 private const val FIRST_LAUNCH_KEY = "$BASE_KEY:hasSeenWelcomeTutorial"
 private const val CRASH_LOGGING_ENABLED_KEY = "$BASE_KEY:crashLoggingEnabled"
+private const val SCREEN_CAPTURE_ALLOW_KEY = "screenCaptureAllowed"
 
 /**
  * Primary implementation of [SettingsDiskSource].
@@ -27,8 +27,8 @@ class SettingsDiskSourceImpl(
     private val mutableAppThemeFlow =
         bufferedMutableSharedFlow<AppTheme>(replay = 1)
 
-    private val mutableScreenCaptureAllowedFlowMap =
-        mutableMapOf<String, MutableSharedFlow<Boolean?>>()
+    private val mutableScreenCaptureAllowedFlow =
+        bufferedMutableSharedFlow<Boolean?>()
 
     private val mutableAlertThresholdSecondsFlow =
         bufferedMutableSharedFlow<Int>()
@@ -126,5 +126,22 @@ class SettingsDiskSourceImpl(
             key = "${ACCOUNT_BIOMETRIC_INTEGRITY_VALID_KEY}_$systemBioIntegrityState",
             value = value,
         )
+    }
+
+    override fun getScreenCaptureAllowed(): Boolean? {
+        return getBoolean(key = SCREEN_CAPTURE_ALLOW_KEY)
+    }
+
+    override fun getScreenCaptureAllowedFlow(): Flow<Boolean?> = mutableScreenCaptureAllowedFlow
+        .onSubscription { emit(getScreenCaptureAllowed()) }
+
+    override fun storeScreenCaptureAllowed(
+        isScreenCaptureAllowed: Boolean?,
+    ) {
+        putBoolean(
+            key = SCREEN_CAPTURE_ALLOW_KEY,
+            value = isScreenCaptureAllowed,
+        )
+        mutableScreenCaptureAllowedFlow.tryEmit(isScreenCaptureAllowed)
     }
 }

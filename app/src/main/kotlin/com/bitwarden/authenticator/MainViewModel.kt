@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+/**
+ * A view model that helps launch actions for the [MainActivity].
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     settingsRepository: SettingsRepository,
@@ -26,6 +29,13 @@ class MainViewModel @Inject constructor(
         settingsRepository
             .appThemeStateFlow
             .onEach { trySendAction(MainAction.Internal.ThemeUpdate(it)) }
+            .launchIn(viewModelScope)
+
+        settingsRepository
+            .isScreenCaptureAllowedStateFlow
+            .onEach { isAllowed ->
+                sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
+            }
             .launchIn(viewModelScope)
     }
 
