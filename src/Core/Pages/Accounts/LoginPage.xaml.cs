@@ -25,6 +25,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>();
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
+            _vm.FromIosExtension = _appOptions?.IosExtension ?? false;
             _vm.StartTwoFactorAction = () => MainThread.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => MainThread.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.LogInWithDeviceAction = () => StartLoginWithDeviceAsync().FireAndForget();

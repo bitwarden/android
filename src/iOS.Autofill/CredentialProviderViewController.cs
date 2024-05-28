@@ -617,8 +617,9 @@ namespace Bit.iOS.Autofill
 
         private void LaunchRegisterFlow()
         {
-            var registerPage = new RegisterPage(null);
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var registerPage = new RegisterPage(null, appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
@@ -696,8 +697,9 @@ namespace Bit.iOS.Autofill
 
         private void LaunchTwoFactorFlow(bool authingWithSso)
         {
-            var twoFactorPage = new TwoFactorPage(authingWithSso);
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var twoFactorPage = new TwoFactorPage(authingWithSso, appOptions);
+            var app = new App.App(appOptions);
             ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesTo(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)

@@ -422,7 +422,7 @@
     <value>自动填充服务</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>在设备设置中将 Bitwarden 设置为您的通行密钥提供程序。</value>
+    <value>在设备的设置中将 Bitwarden 设置为您的通行密钥提供程序。</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>避免易混淆的字符</value>
@@ -1195,7 +1195,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>我们无法为您自动打开 Android 凭据提供者设置菜单。您可以通过“Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务”手动定位到凭据提供者设置菜单。</value>
+    <value>我们无法为您自动打开 Android 凭据提供程序设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务手动定位到凭据提供程序设置菜单。</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</value>
@@ -2820,7 +2820,7 @@
     <value>附加选项</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
-    <value>前往网页 App 吗？</value>
+    <value>前往网页应用吗？</value>
   </data>
   <data name="ContinueToX" xml:space="preserve">
     <value>前往 {0} 吗？</value>
@@ -2852,7 +2852,7 @@
     <comment>The parameter is an URL, like vault.bitwarden.com.</comment>
   </data>
   <data name="LearnMoreAboutHowToUseBitwardenOnTheHelpCenter" xml:space="preserve">
-    <value>在帮助中心了解更多如何使用 Bitwarden 的信息。</value>
+    <value>访问帮助中心了解更多如何使用 Bitwarden 的信息。</value>
   </data>
   <data name="ContactSupportDescriptionLong" xml:space="preserve">
     <value>找不到您想要的吗？请在 bitwarden.com 上联系 Bitwarden 支持。</value>
@@ -2864,7 +2864,7 @@
     <value>在网页应用上探索您的 Bitwarden 账户的更多功能。</value>
   </data>
   <data name="LearnAboutOrganizationsDescriptionLong" xml:space="preserve">
-    <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站以了解更多。</value>
+    <value>Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站了解更多信息。</value>
   </data>
   <data name="RateAppDescriptionLong" xml:space="preserve">
     <value>帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</value>
@@ -2938,7 +2938,7 @@
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>读取 {0} 的通行密钥时。请稍后再试。</value>
+    <value>读取 {0} 的通行密钥时出错。请稍后再试。</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">

@@ -422,7 +422,7 @@
     <value>Servicio de autocompletado</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>Establece Bitwarden como tu proveedor de claves de acceso en los ajustes del dispositivo.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar caracteres ambiguos</value>
@@ -1195,7 +1195,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenCredentialProviderGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</value>
+    <value>No hemos podido abrir automáticamente el menú de ajustes del proveedor de credenciales de Android. Puedes navegar al menú de ajustes del proveedor de credenciales de Android manualmente desde Ajustes &gt; Sistema &gt; Contraseñas y cuentas &gt; Contraseñas, claves de acceso y servicios de datos.</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>No hemos podido abrir automáticamente las opciones de autorellenado de Android. Puedes ir al menú de opciones de autorellenado manualmente desde Ajustes de Android &gt; Sistema &gt; Idiomas y entradas &gt; Avanzado &gt; Servicio autocompletar.</value>
@@ -1822,7 +1822,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Bitwarden necesita atención - Activar "Sobrescribir" en "Servicios de Auto-llenado" desde la configuración de Bitwarden</value>
   </data>
   <data name="PasskeyManagement" xml:space="preserve">
-    <value>Passkey management</value>
+    <value>Gestión de claves de acceso</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Servicios de Autollenado</value>
@@ -1867,19 +1867,19 @@ El escaneo se realizará automáticamente.</value>
     <value>Una política de organización está afectando sus opciones de propiedad.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Envío</value>
+    <value>Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>Todos los Envíos</value>
+    <value>Todos los Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Envíos</value>
+    <value>Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>Un nombre amigable para describir este Envío.</value>
+    <value>Un nombre amigable para describir este Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
@@ -1972,15 +1972,15 @@ El escaneo se realizará automáticamente.</value>
     <value>La contraseña ha sido eliminada.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Notas privadas sobre este Envío.</value>
+    <value>Notas privadas sobre este Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Desactivar este Envío para que nadie pueda acceder a él.</value>
+    <value>Desactivar este Send para que nadie pueda acceder a él</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>No hay Envíos en tu cuenta.</value>
+    <value>No hay Sends en tu cuenta.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
@@ -1994,35 +1994,35 @@ El escaneo se realizará automáticamente.</value>
     <value>Compartir enlace</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Enviar enlace</value>
+    <value>Enlace Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Buscar Envíos</value>
+    <value>Buscar Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Editar Envío</value>
+    <value>Editar Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Añadir Envío</value>
+    <value>Nuevo Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>¿Seguro que quieres eliminar este Envío?</value>
+    <value>¿Seguro que quieres eliminar este Send?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>El Envío se ha eliminado.</value>
+    <value>Send eliminado</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Envío actualizado.</value>
+    <value>Send guardado</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Nuevo Envío creado.</value>
+    <value>Send creado</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2044,7 +2044,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Personalizado</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Compartir este Envío al guardarlo.</value>
+    <value>Compartir este Send al guardarlo</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2203,7 +2203,7 @@ El escaneo se realizará automáticamente.</value>
     <value>Enviando</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copiar enlace Enviar al guardar</value>
+    <value>Copiar enlace del Send al guardar</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>Enviando código...</value>
@@ -2810,7 +2810,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>{0} horas</value>
   </data>
   <data name="PasskeyManagementExplanationLong" xml:space="preserve">
-    <value>Use Bitwarden to save new passkeys and log in with passkeys stored in your vault.</value>
+    <value>Usa Bitwarden para guardar nuevas claves de acceso e iniciar sesión con las claves de acceso almacenadas en tu caja fuerte.</value>
   </data>
   <data name="AutofillServicesExplanationLong" xml:space="preserve">
     <value>El Framework de Autofill de Android se utiliza para ayudar a rellenar información de inicio de sesión en otras aplicaciones en tu dispositivo.</value>
@@ -2841,7 +2841,7 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>¿Continuar a la App Store?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>¿Continuar a los ajustes del dispositivo?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Haz tu cuenta más segura al configurar el inicio de sesión en dos pasos en la aplicación web de Bitwarden.</value>
@@ -2894,25 +2894,25 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Configura una opción de desbloqueo para cambiar tu acción de tiempo de espera de tu caja fuerte.</value>
   </data>
   <data name="ChooseALoginToSaveThisPasskeyTo" xml:space="preserve">
-    <value>Choose a login to save this passkey to</value>
+    <value>Escoge un inicio de sesión para guardar esta clave de acceso</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Guardar clave de acceso como un nuevo inicio de sesión</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Guardar clave de acceso</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Claves de acceso para {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Contraseñas para {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>¿Sobreescribir clave de acceso?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
-    <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
+    <value>Este elemento ya contiene una clave de acceso. ¿Estás seguro de que quieres sobreescribir la clave de acceso actual?</value>
   </data>
   <data name="DuoTwoStepLoginIsRequiredForYourAccount" xml:space="preserve">
     <value>Se requiere el inicio de sesión en dos pasos Duo para su cuenta. </value>
@@ -2924,86 +2924,86 @@ seleccione Agregar TOTP para almacenar la clave de forma segura</value>
     <value>Iniciar Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Verificación requerida por {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
-    <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
+    <value>Verificación requerida para esta acción. Establece un método de desbloqueo en Bitwarden para continuar.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Error creando clave de acceso</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Error leyendo clave de acceso</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>Hubo un problema creando la clave de acceso para {0}. Inténtalo de nuevo más tarde.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>Hubo un problema leyendo la clave de acceso para {0}. Inténtalo de nuevo más tarde.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Verificando identidad...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
-    <value>Passwords</value>
+    <value>Contraseñas</value>
   </data>
   <data name="UnknownAccount" xml:space="preserve">
-    <value>Unknown account</value>
+    <value>Cuenta desconocida</value>
   </data>
   <data name="SetUpAutofill" xml:space="preserve">
-    <value>Set up auto-fill</value>
+    <value>Establecer autocompletar</value>
   </data>
   <data name="GetInstantAccessToYourPasswordsAndPasskeys" xml:space="preserve">
-    <value>Get instant access to your passwords and passkeys!</value>
+    <value>¡Consigue acceso instantáneo a tus contraseñas y claves de acceso!</value>
   </data>
   <data name="SetUpAutoFillDescriptionLong" xml:space="preserve">
-    <value>To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</value>
+    <value>Para configurar el autocompletado y la administración de claves de acceso, establezca Bitwarden como su proveedor preferido en los ajustes de iOS.</value>
   </data>
   <data name="FirstDotGoToYourDeviceSettingsPasswordsPasswordOptions" xml:space="preserve">
-    <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
+    <value>1. Ve a los Ajustes de tu dispositivo &gt; Contraseñas &gt; Opciones de Contraseña</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Habilita el autocompletado</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Selecciona "Bitwarden" para usar contraseñas y claves de acceso</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Tu clave de acceso se guardará en tu caja fuerte de Bitwarden</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Tu clave de acceso se guardará en tu caja fuerte de Bitwarden para {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
-    <value>Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+    <value>Los elementos de organización sin asignar ya no están visibles en la vista Todas las cajas fuertes y solo se puede acceder a ellos a través de la consola de administrador. Asigne estos elementos a una colección desde la Consola de Administrador para hacerlos visibles.</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
-    <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+    <value>El 16 de mayo de 2024, los elementos de organización no asignados ya no serán visibles en la vista Todas las cajas fuertes y solo serán accesibles a través de la Consola de Administrador. Asigna estos objetos a una colección desde la Consola de Administrador para hacerlos visibles.</value>
   </data>
   <data name="RemindMeLater" xml:space="preserve">
-    <value>Remind me later</value>
+    <value>Recuérdamelo más tarde</value>
   </data>
   <data name="Notice" xml:space="preserve">
-    <value>Notice</value>
+    <value>Aviso</value>
   </data>
   <data name="PasskeysNotSupportedForThisApp" xml:space="preserve">
-    <value>Passkeys not supported for this app</value>
+    <value>Claves de acceso no soportadas para esta aplicación</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
-    <value>Passkey operation failed because browser is not privileged</value>
+    <value>Falló la operación de la clave de acceso porque el navegador no tiene privilegios</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
-    <value>Passkey operation failed because browser signature does not match</value>
+    <value>Falló la operación de la clave de acceso porque la firma del navegador no coincide</value>
   </data>
   <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
-    <value>Passkey operation failed because of missing asset links</value>
+    <value>Falló la operación de la clave de acceso porque faltan enlaces de recursos</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
-    <value>Passkey operation failed because app not found in asset links</value>
+    <value>Falló la operación de la clave de acceso porque la aplicación no encontró los enlaces de recursos</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
-    <value>Passkey operation failed because app could not be verified</value>
+    <value>Falló la operación de la clave de acceso porque la aplicación no pudo ser verificada</value>
   </data>
 </root>

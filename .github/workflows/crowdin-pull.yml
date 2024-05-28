@@ -15,7 +15,7 @@ jobs:
       _CROWDIN_PROJECT_ID: "269690"
     steps:
       - name: Checkout repo
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
       - name: Login to Azure - CI Subscription
         uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
@@ -30,7 +30,7 @@ jobs:
           secrets: "crowdin-api-token, github-gpg-private-key, github-gpg-private-key-passphrase"
 
       - name: Download translations
-        uses: crowdin/github-action@8c663f791efc0498270241e9923a8853c99a3a8e # v1.20.3
+        uses: crowdin/github-action@30849777a3cba6ee9a09e24e195272b8287a0a5b # v1.20.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
