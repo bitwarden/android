@@ -576,10 +576,10 @@ namespace Bit.Core.Services
             var attachmentTasks = new List<Task>();
             Cipher cipher = null;
             //If the cipher doesn't have a key, we update it 
-            if(cipherView.Key == null)
+            if(await ShouldUseCipherKeyEncryptionAsync() && cipherView.Key == null)
             {
                 cipher = await EncryptAsync(cipherView);
-                await UpdateAndUpsertAsync(async () => await _apiService.PutCipherAsync(cipherView.Id, new CipherRequest(cipher)));
+                await UpdateAndUpsertAsync(() => _apiService.PutCipherAsync(cipherView.Id, new CipherRequest(cipher)));
                 cipher = await GetAsync(cipherView.Id);
                 cipherView = await cipher.DecryptAsync();
             }
@@ -597,7 +597,7 @@ namespace Bit.Core.Services
             cipherView.OrganizationId = organizationId;
             cipherView.CollectionIds = collectionIds;
             cipher = await EncryptAsync(cipherView);
-            await UpdateAndUpsertAsync(async () => await _apiService.PutShareCipherAsync(cipherView.Id, new CipherShareRequest(cipher)), collectionIds);
+            await UpdateAndUpsertAsync(() => _apiService.PutShareCipherAsync(cipherView.Id, new CipherShareRequest(cipher)), collectionIds);
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -1360,9 +1360,9 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task UpdateAndUpsertAsync(Func<Task<CipherResponse>> func, HashSet<string> collectionIds = null)
+        private async Task UpdateAndUpsertAsync(Func<Task<CipherResponse>> callPutCipherApi, HashSet<string> collectionIds = null)
         {
-            var response = await func();
+            var response = await callPutCipherApi();
             var data = new CipherData(response, await _stateService.GetActiveUserIdAsync(), collectionIds);
             await UpsertAsync(data);
         }
