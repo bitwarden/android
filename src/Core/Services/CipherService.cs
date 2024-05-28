@@ -579,34 +579,25 @@ namespace Bit.Core.Services
             if(cipherView.Key == null)
             {
                 cipher = await EncryptAsync(cipherView);
-                var putCipherRequest = new CipherRequest(cipher);
-                var putCipherResponse = await _apiService.PutCipherAsync(cipherView.Id, putCipherRequest);
-                var cipherData = new CipherData(putCipherResponse, await _stateService.GetActiveUserIdAsync());
-                await UpsertAsync(cipherData);
+                await UpdateAndUpsertAsync(async () => await _apiService.PutCipherAsync(cipherView.Id, new CipherRequest(cipher)));
                 cipher = await GetAsync(cipherView.Id);
                 cipherView = await cipher.DecryptAsync();
             }
-
             if (cipherView.Attachments != null)
             {
                 foreach (var attachment in cipherView.Attachments)
                 {
                     if (attachment.Key == null)
                     {
-                        attachmentTasks.Add(ShareAttachmentWithServerAsync(attachment, cipherView.Id, organizationId, cipherView.Key, cipher?.Key));
-                        attachment.CipherKey = cipherView.Key;
+                        attachmentTasks.Add(ShareAttachmentWithServerAsync(attachment, cipherView.Id, organizationId));
                     }
                 }
             }
             await Task.WhenAll(attachmentTasks);
             cipherView.OrganizationId = organizationId;
             cipherView.CollectionIds = collectionIds;
-            var encCipher = await EncryptAsync(cipherView);
-            var request = new CipherShareRequest(encCipher);
-            var response = await _apiService.PutShareCipherAsync(cipherView.Id, request);
-            var userId = await _stateService.GetActiveUserIdAsync();
-            var data = new CipherData(response, userId, collectionIds);
-            await UpsertAsync(data);
+            cipher = await EncryptAsync(cipherView);
+            await UpdateAndUpsertAsync(async () => await _apiService.PutShareCipherAsync(cipherView.Id, new CipherShareRequest(cipher)), collectionIds);
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -869,13 +860,12 @@ namespace Bit.Core.Services
 
         // Helpers
 
-        private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId, Cipher cipher = null, CipherView cipherView = null, SymmetricCryptoKey cipherKey = null)
+        private async Task<Tuple<SymmetricCryptoKey, EncString, SymmetricCryptoKey>> MakeAttachmentKeyAsync(string organizationId, Cipher cipher = null, CipherView cipherView = null)
         {
             var orgKey = await _cryptoService.GetOrgKeyAsync(organizationId);
 
-            //We give priority to the use of cipher.key if it exists
-            SymmetricCryptoKey encryptionKey = cipherKey ?? orgKey;
-            if (cipher != null && cipherView != null && cipher.Key == null)
+            SymmetricCryptoKey encryptionKey = orgKey;
+            if (cipher != null && cipherView != null)
             {
                 encryptionKey = await UpdateCipherAndGetCipherKeyAsync(cipher, cipherView, orgKey, false);
             }
@@ -887,7 +877,7 @@ namespace Bit.Core.Services
         }
 
         private async Task ShareAttachmentWithServerAsync(AttachmentView attachmentView, string cipherId,
-            string organizationId, SymmetricCryptoKey cipherKey = null, EncString cipherKeyProtected = null)
+            string organizationId)
         {
             var attachmentResponse = await _httpClient.GetAsync(attachmentView.Url);
             if (!attachmentResponse.IsSuccessStatusCode)
@@ -898,7 +888,7 @@ namespace Bit.Core.Services
             var bytes = await attachmentResponse.Content.ReadAsByteArrayAsync();
             var decBytes = await _cryptoService.DecryptFromBytesAsync(bytes, null);
 
-            var (attachmentKey, protectedAttachmentKey, encKey) = await MakeAttachmentKeyAsync(organizationId, cipherKey:cipherKey);
+            var (attachmentKey, protectedAttachmentKey, encKey) = await MakeAttachmentKeyAsync(organizationId);
 
             var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, encKey);
             var encFileData = await _cryptoService.EncryptToBytesAsync(decBytes, attachmentKey);
@@ -907,10 +897,6 @@ namespace Bit.Core.Services
             var fd = new MultipartFormDataContent(boundary);
             fd.Add(new StringContent(protectedAttachmentKey.EncryptedString), "key");
             fd.Add(new StreamContent(new MemoryStream(encFileData.Buffer)), "data", encFileName.EncryptedString);
-            if(cipherKey != null && cipherKeyProtected != null)
-            {
-                fd.Add(new StringContent(cipherKeyProtected.EncryptedString), "cipherKey");
-            }
             await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
         }
 
@@ -1372,6 +1358,13 @@ namespace Bit.Core.Services
                 var totpCode = await _totpService.GetCodeAsync(cipher.Login.Totp);
                 await _clipboardService.CopyTextAsync(totpCode);
             }
+        }
+
+        private async Task UpdateAndUpsertAsync(Func<Task<CipherResponse>> func, HashSet<string> collectionIds = null)
+        {
+            var response = await func();
+            var data = new CipherData(response, await _stateService.GetActiveUserIdAsync(), collectionIds);
+            await UpsertAsync(data);
         }
 
         private class CipherLocaleComparer : IComparer<CipherView>
