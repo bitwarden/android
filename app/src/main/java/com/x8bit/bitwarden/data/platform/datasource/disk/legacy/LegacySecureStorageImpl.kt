@@ -158,6 +158,7 @@ class LegacySecureStorageImpl(
 }
 
 @Suppress("MagicNumber")
+@OmitFromCoverage
 private class AndroidKeyStore(
     private val legacySecureStorage: LegacySecureStorage,
     private val sharedPreferences: SharedPreferences,
