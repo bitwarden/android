@@ -190,39 +190,56 @@ detekt {
 }
 
 kover {
-    excludeJavaCode()
-}
-
-koverReport {
-    filters {
-        excludes {
-            annotatedBy(
-                // Compose previews
-                "androidx.compose.ui.tooling.preview.Preview",
-                // Manually excluded classes/files/etc.
-                "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage"
-            )
-            classes(
-                // Navigation helpers
-                "*.*NavigationKt*",
-                // Composable singletons
-                "*.*ComposableSingletons*",
-                // Generated classes related to interfaces with default values
-                "*.*DefaultImpls*",
-                // Databases
-                "*.database.*Database*",
-                "*.dao.*Dao*",
-            )
-            packages(
-                // Dependency injection
-                "*.di",
-                // Models
-                "*.model",
-                // Custom UI components
-                "com.x8bit.bitwarden.ui.platform.components",
-                // Theme-related code
-                "com.x8bit.bitwarden.ui.platform.theme",
-            )
+    currentProject {
+        sources {
+            excludeJava = true
+        }
+    }
+    reports {
+        filters {
+            excludes {
+                androidGeneratedClasses()
+                annotatedBy(
+                    // Compose previews
+                    "androidx.compose.ui.tooling.preview.Preview",
+                    // Manually excluded classes/files/etc.
+                    "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage",
+                )
+                classes(
+                    // Navigation helpers
+                    "*.*NavigationKt*",
+                    // Composable singletons
+                    "*.*ComposableSingletons*",
+                    // Generated classes related to interfaces with default values
+                    "*.*DefaultImpls*",
+                    // Databases
+                    "*.database.*Database*",
+                    "*.dao.*Dao*",
+                    // Dagger Hilt
+                    "dagger.hilt.*",
+                    "hilt_aggregated_deps.*",
+                    "*_Factory",
+                    "*_Factory\$*",
+                    "*_*Factory",
+                    "*_*Factory\$*",
+                    "*.Hilt_*",
+                    "*_HiltModules",
+                    "*_HiltModules\$*",
+                    "*_Impl",
+                    "*_Impl\$*",
+                    "*_MembersInjector",
+                )
+                packages(
+                    // Dependency injection
+                    "*.di",
+                    // Models
+                    "*.model",
+                    // Custom UI components
+                    "com.x8bit.bitwarden.ui.platform.components",
+                    // Theme-related code
+                    "com.x8bit.bitwarden.ui.platform.theme",
+                )
+            }
         }
     }
 }

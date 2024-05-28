@@ -68,5 +68,6 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
 /**
  * This function helps us prepare the byte buffer to be read.
  */
+@OmitFromCoverage
 private fun ByteBuffer.toByteArray(): ByteArray =
     ByteArray(rewind().remaining()).also { get(it) }
