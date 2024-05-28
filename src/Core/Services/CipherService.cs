@@ -578,8 +578,7 @@ namespace Bit.Core.Services
             //If the cipher doesn't have a key, we update it 
             if(await ShouldUseCipherKeyEncryptionAsync() && cipherView.Key == null)
             {
-                cipher = await EncryptAsync(cipherView);
-                await UpdateAndUpsertAsync(() => _apiService.PutCipherAsync(cipherView.Id, new CipherRequest(cipher)));
+                await UpdateAndUpsertAsync(cipherView, cipher => _apiService.PutCipherAsync(cipherView.Id, new CipherRequest(cipher)));
                 cipher = await GetAsync(cipherView.Id);
                 cipherView = await cipher.DecryptAsync();
             }
@@ -596,8 +595,15 @@ namespace Bit.Core.Services
             await Task.WhenAll(attachmentTasks);
             cipherView.OrganizationId = organizationId;
             cipherView.CollectionIds = collectionIds;
-            cipher = await EncryptAsync(cipherView);
-            await UpdateAndUpsertAsync(() => _apiService.PutShareCipherAsync(cipherView.Id, new CipherShareRequest(cipher)), collectionIds);
+            await UpdateAndUpsertAsync(cipherView, cipher => _apiService.PutShareCipherAsync(cipherView.Id, new CipherShareRequest(cipher)), collectionIds);
+
+            async Task UpdateAndUpsertAsync(CipherView cipherView, Func<Cipher,Task<CipherResponse>> callPutCipherApi, HashSet<string> collectionIds = null)
+            {
+                var cipher = await EncryptAsync(cipherView);
+                var response = await callPutCipherApi(cipher);
+                var data = new CipherData(response, await _stateService.GetActiveUserIdAsync(), collectionIds);
+                await UpsertAsync(data);
+            }
         }
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, CipherView cipherView, string filename, byte[] data)
@@ -1358,13 +1364,6 @@ namespace Bit.Core.Services
                 var totpCode = await _totpService.GetCodeAsync(cipher.Login.Totp);
                 await _clipboardService.CopyTextAsync(totpCode);
             }
-        }
-
-        private async Task UpdateAndUpsertAsync(Func<Task<CipherResponse>> callPutCipherApi, HashSet<string> collectionIds = null)
-        {
-            var response = await callPutCipherApi();
-            var data = new CipherData(response, await _stateService.GetActiveUserIdAsync(), collectionIds);
-            await UpsertAsync(data);
         }
 
         private class CipherLocaleComparer : IComparer<CipherView>
