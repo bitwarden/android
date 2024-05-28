@@ -22,7 +22,8 @@ namespace Bit.iOS.Core.Views
             nfloat? height = null,
             ButtonsConfig buttonsConfig = ButtonsConfig.None,
             bool useLabelAsPlaceholder = false,
-            float leadingConstant = 15f)
+            float leadingConstant = 15f,
+            bool empty = false)
             : base(UITableViewCellStyle.Default, nameof(FormEntryTableViewCell))
         {
             var descriptor = UIFontDescriptor.PreferredBody;
@@ -86,7 +87,7 @@ namespace Bit.iOS.Core.Views
                     ValueChanged?.Invoke(sender, e);
                 };
             }
-            else
+            else if( !empty )
             {
                 TextField = new UITextField
                 {
@@ -128,16 +129,16 @@ namespace Bit.iOS.Core.Views
                         NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Top, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Top, 1f, 10f));
                 }
 
-                if (height.HasValue)
-                {
-                    ContentView.AddConstraint(
-                        NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Height, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, height.Value));
-                }
-
                 TextField.AddTarget((object sender, EventArgs e) =>
                 {
                     ValueChanged?.Invoke(sender, e);
                 }, UIControlEvent.EditingChanged);
+            }
+
+            if (empty && height.HasValue)
+            {
+                ContentView.AddConstraint(
+                    NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Height, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, height.Value));
             }
 
             if (labelName != null && !useLabelAsPlaceholder)

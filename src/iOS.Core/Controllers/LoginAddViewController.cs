@@ -15,6 +15,9 @@ using Foundation;
 using Microsoft.Maui.Controls.Compatibility;
 using UIKit;
 using Microsoft.Maui.Platform;
+using CollectionView = Bit.Core.Models.View.CollectionView;
+using Bit.Core.Models.Domain;
+using Bit.Core.Enums;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -23,7 +26,19 @@ namespace Bit.iOS.Core.Controllers
         private ICipherService _cipherService;
         private IFolderService _folderService;
         private IStorageService _storageService;
+        private IOrganizationService _organizationService;
+        private ICollectionService _collectionService;
+        private IPolicyService _policyService;
         private IEnumerable<FolderView> _folders;
+        private IEnumerable<CollectionView> _collections;
+        private IEnumerable<CollectionView> _writeableCollections;
+        private IEnumerable<Organization> _organizations;
+
+        private bool _personalOwnershipPolicyApplies;
+        //Here we have the different sizes dependent of the _personalOwnershipPolicyApplies
+        private readonly int[] _personalVault = { 3, 1, 2, 1 };
+        private readonly int[] _groupVault = { 1, 3, 1, 2, 1, 2 };
+        private ExtendedUITableViewCell[][] _tableViewCell;
 
         protected LoginAddViewController(IntPtr handle)
             : base(handle)
@@ -38,6 +53,10 @@ namespace Bit.iOS.Core.Controllers
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(
             useTextView: true, height: 180);
         public PickerTableViewCell FolderCell { get; set; } = new PickerTableViewCell(AppResources.Folder);
+        public PickerTableViewCell OrganizationCell { get; set; } = new PickerTableViewCell(AppResources.Organization);
+        public PickerTableViewCell CollectionCell { get; set; } = new PickerTableViewCell(AppResources.Collections);
+
+        public FormEntryTableViewCell PersonalOwnershipPolicyCell { get; set; } = new FormEntryTableViewCell(empty: true);
 
         public abstract UINavigationItem BaseNavItem { get; }
         public abstract UIBarButtonItem BaseCancelButton { get; }
@@ -51,6 +70,9 @@ namespace Bit.iOS.Core.Controllers
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
+            _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
 
             BaseNavItem.Title = AppResources.AddItem;
             BaseCancelButton.Title = AppResources.Cancel;
@@ -113,12 +135,61 @@ namespace Bit.iOS.Core.Controllers
             folderNames.Insert(0, AppResources.FolderNone);
             FolderCell.Items = folderNames;
 
+            _personalOwnershipPolicyApplies = _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership).GetAwaiter().GetResult();
+            var index = 0;
+            if (_personalOwnershipPolicyApplies)
+            {
+
+                _organizations = _organizationService.GetAllAsync().GetAwaiter().GetResult().OrderBy(o => o.Name).ToList();
+
+                OrganizationCell.Items = _organizations.Select(o => o.Name).ToList();
+                OrganizationCell.ValueChanged += Type_ValueChanged;
+
+                _collections = _collectionService.GetAllDecryptedAsync().GetAwaiter().GetResult();
+                _writeableCollections = _collections.Where(c => !c.ReadOnly).OrderBy(c => c.Name).ToList();
+                var collectionsNames = _writeableCollections.Where(c => c.OrganizationId == _organizations.ElementAt(OrganizationCell.SelectedIndex).Id).Select(s => s.Name).ToList();
+                if (collectionsNames.Count == 0)
+                {
+                    collectionsNames.Insert(0, AppResources.NoCollectionsToList);
+                }
+
+                CollectionCell.Items = collectionsNames;
+
+                _tableViewCell = new ExtendedUITableViewCell[_groupVault.Length][];
+                _tableViewCell[0] = new ExtendedUITableViewCell[] { PersonalOwnershipPolicyCell };
+                _tableViewCell[5] = new ExtendedUITableViewCell[] { OrganizationCell, CollectionCell };
+
+                index = 1;
+            }
+            else
+            {
+                _tableViewCell = new ExtendedUITableViewCell[_personalVault.Length][];
+            }
+
+            _tableViewCell[index] = new ExtendedUITableViewCell[] { NameCell, UsernameCell, PasswordCell };
+            _tableViewCell[++index] = new ExtendedUITableViewCell[] { UriCell };
+            _tableViewCell[++index] = new ExtendedUITableViewCell[] { FolderCell, FavoriteCell };
+            _tableViewCell[++index] = new ExtendedUITableViewCell[] { NotesCell };
+
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 70;
             TableView.Source = new TableSource(this);
             TableView.AllowsSelection = true;
 
             base.ViewDidLoad();
+        }
+
+        private void Type_ValueChanged(object sender, EventArgs e)
+        {
+            var organizationList = _organizations.OrderBy(o => o.Name).ToList();
+            var collectionsNames = _writeableCollections.Where(c => c.OrganizationId == _organizations.ElementAt(OrganizationCell.SelectedIndex).Id).Select(s => s.Name).ToList();
+            if (collectionsNames.Count == 0)
+            {
+                collectionsNames.Insert(0, AppResources.NoCollectionsToList);
+            }
+
+            CollectionCell.Items = collectionsNames;
+            _tableViewCell[5][1].ReloadInputViews();
         }
 
         public override void ViewDidAppear(bool animated)
@@ -167,7 +238,10 @@ namespace Bit.iOS.Core.Controllers
                             null : UsernameCell.TextField.Text,
                         Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ?
                             null : PasswordCell.TextField.Text,
-                    }
+                    },
+                    CollectionIds = CollectionCell.SelectedItem.ToString() == AppResources.NoCollectionsToList ?
+                            null : new HashSet<string> { _collections.ElementAtOrDefault(CollectionCell.SelectedIndex)?.Id },
+                    OrganizationId = OrganizationCell.SelectedItem != null ? _organizations.ElementAtOrDefault(CollectionCell.SelectedIndex)?.Id : null,
                 };
 
                 if (!string.IsNullOrWhiteSpace(UriCell?.TextField?.Text))
@@ -272,42 +346,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
-                if (indexPath.Section == 0)
-                {
-                    if (indexPath.Row == 0)
-                    {
-                        return _controller.NameCell;
-                    }
-                    else if (indexPath.Row == 1)
-                    {
-                        return _controller.UsernameCell;
-                    }
-                    else if (indexPath.Row == 2)
-                    {
-                        return _controller.PasswordCell;
-                    }
-                }
-                else if (indexPath.Section == 1)
-                {
-                    return _controller.UriCell;
-                }
-                else if (indexPath.Section == 2)
-                {
-                    if (indexPath.Row == 0)
-                    {
-                        return _controller.FolderCell;
-                    }
-                    else if (indexPath.Row == 1)
-                    {
-                        return _controller.FavoriteCell;
-                    }
-                }
-                else if (indexPath.Section == 3)
-                {
-                    return _controller.NotesCell;
-                }
-
-                return new ExtendedUITableViewCell();
+                return _controller._tableViewCell[indexPath.Section][indexPath.Row];
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -317,43 +356,71 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint NumberOfSections(UITableView tableView)
             {
-                return 4;
+                if (_controller._personalOwnershipPolicyApplies)
+                {
+                    return _controller._groupVault.Length;
+                }
+                else
+                {
+                    return _controller._personalVault.Length;
+                }
             }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                if (section == 0)
+                if (_controller._personalOwnershipPolicyApplies)
                 {
-                    return 3;
-                }
-                else if (section == 1)
-                {
-                    return 1;
-                }
-                else if (section == 2)
-                {
-                    return 2;
+                    return _controller._groupVault[section];
                 }
                 else
                 {
-                    return 1;
+                    return _controller._personalVault[section];
                 }
             }
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
-                return section == 0 || section == 3 ? UITableView.AutomaticDimension : 0.00001f;
+                if (_controller._personalOwnershipPolicyApplies)
+                {
+                    return section == 0 || section == 1 || section == 4 || section == 5 ? UITableView.AutomaticDimension : 0.00001f;
+                }
+                else
+                {
+                    return section == 0 || section == 3 ? UITableView.AutomaticDimension : 0.00001f;
+                }
             }
 
             public override string TitleForHeader(UITableView tableView, nint section)
             {
-                if (section == 0)
+                if (_controller._personalOwnershipPolicyApplies)
                 {
-                    return AppResources.ItemInformation;
+                    if (section == 0)
+                    {
+                        return AppResources.PersonalOwnershipPolicyInEffect;
+                    }
+                    if (section == 1)
+                    {
+                        return AppResources.ItemInformation;
+                    }
+                    else if (section == 4)
+                    {
+                        return AppResources.Notes;
+                    }
+                    else if (section == 5)
+                    {
+                        return AppResources.WhoOwnsThisItem;
+                    }
                 }
-                else if (section == 3)
+                else
                 {
-                    return AppResources.Notes;
+                    if (section == 0)
+                    {
+                        return AppResources.ItemInformation;
+                    }
+                    else if (section == 3)
+                    {
+                        return AppResources.Notes;
+                    }
                 }
 
                 return string.Empty;
