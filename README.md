@@ -83,9 +83,9 @@ The following is a list of all third-party dependencies included as part of the 
     - License: Apache 2.0
 
 - **AndroidX Compose**
-  - https://developer.android.com/jetpack/androidx/releases/compose
-  - Purpose: A Kotlin-based declarative UI framework.
-  - License: Apache 2.0
+    - https://developer.android.com/jetpack/androidx/releases/compose
+    - Purpose: A Kotlin-based declarative UI framework.
+    - License: Apache 2.0
 
 - **AndroidX Core SplashScreen**
     - https://developer.android.com/jetpack/androidx/releases/core
