@@ -31,8 +31,14 @@ interface TotpCodeManager {
         const val PERIOD_PARAM = "period"
         const val SECRET_PARAM = "secret"
         const val ISSUER_PARAM = "issuer"
+
+        /**
+         * URI query parameter containing export data from Google Authenticator.
+         */
+        const val DATA_PARAM = "data"
         const val TOTP_CODE_PREFIX = "otpauth://totp"
         const val STEAM_CODE_PREFIX = "steam://"
+        const val GOOGLE_EXPORT_PREFIX = "otpauth-migration://"
         const val TOTP_DIGITS_DEFAULT = 6
         const val STEAM_DIGITS_DEFAULT = 5
         const val PERIOD_SECONDS_DEFAULT = 30

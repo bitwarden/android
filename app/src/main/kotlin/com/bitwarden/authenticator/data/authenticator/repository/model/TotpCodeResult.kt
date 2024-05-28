@@ -6,9 +6,14 @@ package com.bitwarden.authenticator.data.authenticator.repository.model
 sealed class TotpCodeResult {
 
     /**
-     * Code has been successfully added.
+     * Code containing an OTP URI has been successfully scanned.
      */
-    data class Success(val code: String) : TotpCodeResult()
+    data class TotpCodeScan(val code: String) : TotpCodeResult()
+
+    /**
+     * Code containing exported data from Google Authenticator was scanned.
+     */
+    data class GoogleExportScan(val data: String) : TotpCodeResult()
 
     /**
      * There was an error scanning the code.

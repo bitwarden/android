@@ -43,17 +43,22 @@ class QrCodeScanViewModel @Inject constructor(
         )
     }
 
-    // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
     private fun handleQrCodeScanReceive(action: QrCodeScanAction.QrCodeScanReceive) {
-        var result: TotpCodeResult = TotpCodeResult.Success(action.qrCode)
         val scannedCode = action.qrCode
-
-        if (scannedCode.isBlank() || !scannedCode.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
+        if (scannedCode.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
+            handleTotpUriReceive(scannedCode)
+        } else if (scannedCode.startsWith(TotpCodeManager.GOOGLE_EXPORT_PREFIX)) {
+            handleGoogleExportUriReceive(scannedCode)
+        } else {
             authenticatorRepository.emitTotpCodeResult(TotpCodeResult.CodeScanningError)
             sendEvent(QrCodeScanEvent.NavigateBack)
             return
         }
+    }
 
+    // For more information: https://bitwarden.com/help/authenticator-keys/#support-for-more-parameters
+    private fun handleTotpUriReceive(scannedCode: String) {
+        var result: TotpCodeResult = TotpCodeResult.TotpCodeScan(scannedCode)
         val scannedCodeUri = Uri.parse(scannedCode)
         val secretValue = scannedCodeUri
             .getQueryParameter(TotpCodeManager.SECRET_PARAM)
@@ -70,7 +75,18 @@ class QrCodeScanViewModel @Inject constructor(
         if (!areParametersValid(scannedCode, values)) {
             result = TotpCodeResult.CodeScanningError
         }
+        authenticatorRepository.emitTotpCodeResult(result)
+        sendEvent(QrCodeScanEvent.NavigateBack)
+    }
 
+    private fun handleGoogleExportUriReceive(scannedCode: String) {
+        val uri = Uri.parse(scannedCode)
+        val encodedData = uri.getQueryParameter(TotpCodeManager.DATA_PARAM)
+        val result: TotpCodeResult = if (encodedData.isNullOrEmpty()) {
+            TotpCodeResult.CodeScanningError
+        } else {
+            TotpCodeResult.GoogleExportScan(encodedData)
+        }
         authenticatorRepository.emitTotpCodeResult(result)
         sendEvent(QrCodeScanEvent.NavigateBack)
     }

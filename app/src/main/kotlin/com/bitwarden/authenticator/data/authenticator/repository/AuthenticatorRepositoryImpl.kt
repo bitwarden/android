@@ -204,6 +204,15 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun addItems(vararg items: AuthenticatorItemEntity): CreateItemResult {
+        return try {
+            authenticatorDiskSource.saveItem(*items)
+            CreateItemResult.Success
+        } catch (e: Exception) {
+            CreateItemResult.Error
+        }
+    }
+
     override suspend fun hardDeleteItem(itemId: String): DeleteItemResult {
         return try {
             authenticatorDiskSource.deleteItem(itemId)

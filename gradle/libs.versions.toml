@@ -32,6 +32,9 @@ espresso = "3.5.1"
 fastlaneScreengrab = "2.1.1"
 firebaseBom = "33.0.0"
 glide = "1.0.0-beta01"
+googleGuava = "33.0.0-android"
+googleProtoBufJava = "3.25.1"
+googleProtoBufPlugin = "0.9.4"
 googleServices = "4.4.1"
 hilt = "2.51.1"
 junit5 = "5.10.2"
@@ -94,20 +97,24 @@ androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", vers
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "androidxWork" }
 bitwarden-sdk = { module = "com.bitwarden:sdk-android", version.ref = "bitwardenSdk" }
 bumptech-glide = { module = "com.github.bumptech.glide:compose", version.ref = "glide" }
-fastlane-screengrab = { module = "tools.fastlane:screengrab", version.ref = "fastlaneScreengrab"}
+fastlane-screengrab = { module = "tools.fastlane:screengrab", version.ref = "fastlaneScreengrab" }
 google-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 google-firebase-cloud-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 google-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+google-guava = { module = "com.google.guava:guava", version.ref = "googleGuava" }
 google-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 google-hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 google-hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+google-protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "googleProtoBufJava" }
+# Included so that Renovate tracks updates since protoc is not referenced directly in `dependency {}` blocks.
+google-protobuf-protoc = { module = "com.google.protobuf:protoc", version.ref = "googleProtoBufJava" }
 jakewharton-retrofit-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerialization" }
 junit-junit5 = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit5" }
 junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5" }
 kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 mockk-mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 robolectric-robolectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
@@ -121,6 +128,7 @@ zxing-zxing-core = { module = "com.google.zxing:core", version.ref = "zxing" }
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
+google-protobuf = { id = "com.google.protobuf", version.ref = "googleProtoBufPlugin" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

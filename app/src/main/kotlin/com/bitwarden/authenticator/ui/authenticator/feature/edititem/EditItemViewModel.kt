@@ -87,7 +87,7 @@ class EditItemViewModel @Inject constructor(
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.name),
+                        message = R.string.validation_field_required.asText(R.string.name.asText()),
                     )
                 )
             }
@@ -97,7 +97,7 @@ class EditItemViewModel @Inject constructor(
                 it.copy(
                     dialog = EditItemState.DialogState.Generic(
                         title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required.asText(R.string.key),
+                        message = R.string.validation_field_required.asText(R.string.key.asText()),
                     )
                 )
             }

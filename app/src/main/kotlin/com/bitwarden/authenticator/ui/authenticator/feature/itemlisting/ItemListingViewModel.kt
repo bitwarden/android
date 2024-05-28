@@ -7,12 +7,15 @@ import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
+import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.VerificationCodeItem
 import com.bitwarden.authenticator.data.authenticator.repository.AuthenticatorRepository
 import com.bitwarden.authenticator.data.authenticator.repository.model.CreateItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.DeleteItemResult
 import com.bitwarden.authenticator.data.authenticator.repository.model.TotpCodeResult
+import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
 import com.bitwarden.authenticator.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.bitwarden.authenticator.data.platform.manager.imports.model.GoogleAuthenticatorProtos
 import com.bitwarden.authenticator.data.platform.repository.SettingsRepository
 import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.ui.authenticator.feature.itemlisting.model.VerificationCodeDisplayItem
@@ -39,6 +42,7 @@ import javax.inject.Inject
 class ItemListingViewModel @Inject constructor(
     private val authenticatorRepository: AuthenticatorRepository,
     private val clipboardManager: BitwardenClipboardManager,
+    private val encodingManager: BitwardenEncodingManager,
     settingsRepository: SettingsRepository,
 ) : BaseViewModel<ItemListingState, ItemListingEvent, ItemListingAction>(
     initialState = ItemListingState(
@@ -261,30 +265,118 @@ class ItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             when (val totpResult = action.totpResult) {
                 TotpCodeResult.CodeScanningError -> {
-                    sendAction(
-                        action = ItemListingAction.Internal.CreateItemResultReceive(
-                            result = CreateItemResult.Error,
-                        ),
-                    )
+                    handleCodeScanningErrorReceive()
                 }
 
-                is TotpCodeResult.Success -> {
+                is TotpCodeResult.TotpCodeScan -> {
+                    handleTotpCodeScanReceive(totpResult)
+                }
 
-                    val item = totpResult.code.toAuthenticatorEntityOrNull()
-                        ?: run {
-                            sendAction(
-                                action = ItemListingAction.Internal.CreateItemResultReceive(
-                                    result = CreateItemResult.Error,
-                                ),
-                            )
-                            return@launch
-                        }
-
-                    val result = authenticatorRepository.createItem(item)
-                    sendAction(ItemListingAction.Internal.CreateItemResultReceive(result))
+                is TotpCodeResult.GoogleExportScan -> {
+                    handleGoogleExportScan(totpResult)
                 }
             }
         }
+    }
+
+    private suspend fun handleTotpCodeScanReceive(
+        totpResult: TotpCodeResult.TotpCodeScan,
+    ) {
+        val item = totpResult.code.toAuthenticatorEntityOrNull()
+            ?: run {
+                handleCodeScanningErrorReceive()
+                return
+            }
+
+        val result = authenticatorRepository.createItem(item)
+        sendAction(ItemListingAction.Internal.CreateItemResultReceive(result))
+    }
+
+    private suspend fun handleGoogleExportScan(
+        totpResult: TotpCodeResult.GoogleExportScan,
+    ) {
+        val base64EncodedMigrationData = encodingManager.uriDecode(
+            value = totpResult.data,
+        )
+
+        val decodedMigrationData = encodingManager.base64Decode(
+            value = base64EncodedMigrationData,
+        )
+
+        val payload = GoogleAuthenticatorProtos.MigrationPayload
+            .parseFrom(decodedMigrationData)
+
+        val entries = payload
+            .otpParametersList
+            .mapNotNull { otpParam ->
+                val secret = encodingManager.base32Encode(
+                    byteArray = otpParam.secret.toByteArray()
+                )
+
+                // Google Authenticator only supports TOTP and HOTP codes. We do not support HOTP
+                // codes so we skip over codes that are not TOTP.
+                val type = when (otpParam.type) {
+                    GoogleAuthenticatorProtos.MigrationPayload.OtpType.OTP_TOTP -> {
+                        AuthenticatorItemType.TOTP
+                    }
+
+                    else -> return@mapNotNull null
+                }
+
+                // Google Authenticator does not always provide a valid digits value so we double
+                // check it and fallback to the default value if it is not within our valid range.
+                val digits = if (otpParam.digits in 5..10) {
+                    otpParam.digits
+                } else {
+                    TotpCodeManager.TOTP_DIGITS_DEFAULT
+                }
+
+                // Google Authenticator only supports SHA1 algorithms.
+                val algorithm = AuthenticatorItemAlgorithm.SHA1
+
+                // Google Authenticator ignores period so we always set it to our default.
+                val period = TotpCodeManager.PERIOD_SECONDS_DEFAULT
+
+                val accountName: String = when {
+                    otpParam.issuer.isNullOrEmpty().not() &&
+                        otpParam.name.startsWith("${otpParam.issuer}:") -> {
+                        otpParam.name.replace("${otpParam.issuer}:", "")
+                    }
+
+                    else -> otpParam.name
+                }
+
+                // If the issuer is not provided fallback to the token name since issuer is required
+                // in our database
+                val issuer = when {
+                    otpParam.issuer.isNullOrEmpty() -> otpParam.name
+                    else -> otpParam.issuer
+                }
+
+                AuthenticatorItemEntity(
+                    id = UUID.randomUUID().toString(),
+                    key = secret,
+                    type = type,
+                    algorithm = algorithm,
+                    period = period,
+                    digits = digits,
+                    issuer = issuer,
+                    accountName = accountName,
+                    userId = null,
+                    favorite = false,
+                )
+            }
+
+        val result = authenticatorRepository.addItems(*entries.toTypedArray())
+        sendAction(ItemListingAction.Internal.CreateItemResultReceive(result))
+    }
+
+    private suspend fun handleCodeScanningErrorReceive() {
+        sendAction(
+            action = ItemListingAction.Internal.CreateItemResultReceive(
+                result = CreateItemResult.Error,
+            ),
+        )
     }
 
     private fun handleAlertThresholdSecondsReceive(

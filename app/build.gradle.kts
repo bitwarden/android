@@ -1,3 +1,5 @@
+import com.google.protobuf.gradle.proto
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.crashlytics)
@@ -7,6 +9,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.google.protobuf)
     alias(libs.plugins.google.services)
     alias(libs.plugins.sonarqube)
 }
@@ -65,6 +68,13 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1,LICENSE*.md}"
         }
     }
+    sourceSets {
+        getByName("main") {
+            proto {
+                srcDir("src/main/proto")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -103,10 +113,12 @@ dependencies {
     implementation(libs.google.firebase.crashlytics)
     implementation(libs.google.hilt.android)
     ksp(libs.google.hilt.compiler)
+    implementation(libs.google.guava)
+    implementation(libs.google.protobuf.javalite)
     implementation(libs.jakewharton.retrofit.kotlinx.serialization)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.square.okhttp)
     implementation(libs.square.okhttp.logging)
     implementation(libs.square.retrofit)
@@ -129,6 +141,19 @@ dependencies {
     androidTestImplementation(libs.bundles.tests.instrumented)
 }
 
+protobuf {
+    protoc {
+        artifact = libs.google.protobuf.protoc.get().toString()
+    }
+    generateProtoTasks {
+        this.all().forEach { task ->
+            task.builtins.create("java") {
+                option("lite")
+            }
+        }
+    }
+}
+
 sonar {
     properties {
         property("sonar.projectKey", "bitwarden_authenticator-android")
@@ -140,7 +165,10 @@ sonar {
 }
 
 tasks {
+    withType<Test> {
+        useJUnitPlatform()
+    }
     getByName("sonar") {
         dependsOn("check")
     }
-} 
+}

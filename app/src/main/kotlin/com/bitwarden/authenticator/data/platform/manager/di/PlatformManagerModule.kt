@@ -5,6 +5,8 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.Authentica
 import com.bitwarden.authenticator.data.platform.datasource.disk.SettingsDiskSource
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManager
 import com.bitwarden.authenticator.data.platform.manager.BiometricsEncryptionManagerImpl
+import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManager
+import com.bitwarden.authenticator.data.platform.manager.BitwardenEncodingManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.CrashLogsManager
 import com.bitwarden.authenticator.data.platform.manager.CrashLogsManagerImpl
 import com.bitwarden.authenticator.data.platform.manager.DispatcherManager
@@ -67,4 +69,8 @@ object PlatformManagerModule {
     fun provideImportManager(
         authenticatorDiskSource: AuthenticatorDiskSource,
     ): ImportManager = ImportManagerImpl(authenticatorDiskSource)
+
+    @Provides
+    @Singleton
+    fun provideEncodingManager(): BitwardenEncodingManager = BitwardenEncodingManagerImpl()
 }

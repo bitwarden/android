@@ -73,6 +73,11 @@ interface AuthenticatorRepository {
     suspend fun createItem(item: AuthenticatorItemEntity): CreateItemResult
 
     /**
+     * Attempt to add provided [items].
+     */
+    suspend fun addItems(vararg items: AuthenticatorItemEntity): CreateItemResult
+
+    /**
      * Attempt to delete a cipher.
      */
     suspend fun hardDeleteItem(itemId: String): DeleteItemResult

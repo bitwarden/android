@@ -31,7 +31,7 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
 
         val source = PlanarYUVLuminanceSource(
             image.planes[0].buffer.toByteArray(),
-            image.width,
+            image.planes[0].rowStride,
             image.height,
             0,
             0,
@@ -39,24 +39,22 @@ class QrCodeAnalyzerImpl : QrCodeAnalyzer {
             image.height,
             false,
         )
+
         val binaryBitmap = BinaryBitmap(HybridBinarizer(source))
         try {
-            val result = MultiFormatReader()
-                .apply {
-                    setHints(
-                        mapOf(
-                            DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
-                                BarcodeFormat.QR_CODE,
-                            ),
-                        ),
-                    )
-                }
-                .decode(binaryBitmap)
+            val result = MultiFormatReader().decode(
+                /* image = */ binaryBitmap,
+                /* hints = */
+                mapOf(
+                    DecodeHintType.POSSIBLE_FORMATS to arrayListOf(BarcodeFormat.QR_CODE),
+                    DecodeHintType.ALSO_INVERTED to true
+                ),
+            )
 
             qrCodeRead = true
             onQrCodeScanned(result.text)
-        } catch (e: NotFoundException) {
-            return
+        } catch (ignored: NotFoundException) {
+
         } finally {
             image.close()
         }
