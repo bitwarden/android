@@ -576,7 +576,7 @@ namespace Bit.Core.Services
             var attachmentTasks = new List<Task>();
             Cipher cipher = null;
             //If the cipher doesn't have a key, we update it 
-            if(await ShouldUseCipherKeyEncryptionAsync() && cipherView.Key == null)
+            if(cipherView.Key == null && await ShouldUseCipherKeyEncryptionAsync())
             {
                 await UpdateAndUpsertAsync(cipherView, cipher => _apiService.PutCipherAsync(cipherView.Id, new CipherRequest(cipher)));
                 cipher = await GetAsync(cipherView.Id);
