@@ -2500,7 +2500,7 @@
     <value>在 {1} 上以 {0} 身份登录</value>
   </data>
   <data name="NotYou" xml:space="preserve">
-    <value>不是你？</value>
+    <value>不是您吗？</value>
   </data>
   <data name="LogInWithMasterPassword" xml:space="preserve">
     <value>使用主密码登录</value>

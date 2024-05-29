@@ -2897,19 +2897,19 @@ Vill du byta till detta konto?</value>
     <value>Choose a login to save this passkey to</value>
   </data>
   <data name="SavePasskeyAsNewLogin" xml:space="preserve">
-    <value>Save passkey as new login</value>
+    <value>Spara passkey som ny inloggning</value>
   </data>
   <data name="SavePasskey" xml:space="preserve">
-    <value>Save passkey</value>
+    <value>Spara passkey</value>
   </data>
   <data name="PasskeysForX" xml:space="preserve">
-    <value>Passkeys for {0}</value>
+    <value>Passkeys för {0}</value>
   </data>
   <data name="PasswordsForX" xml:space="preserve">
-    <value>Passwords for {0}</value>
+    <value>Lösenord för {0}</value>
   </data>
   <data name="OverwritePasskey" xml:space="preserve">
-    <value>Overwrite passkey?</value>
+    <value>Skriv över passkey?</value>
   </data>
   <data name="ThisItemAlreadyContainsAPasskeyAreYouSureYouWantToOverwriteTheCurrentPasskey" xml:space="preserve">
     <value>This item already contains a passkey. Are you sure you want to overwrite the current passkey?</value>
@@ -2924,16 +2924,16 @@ Vill du byta till detta konto?</value>
     <value>Starta Duo</value>
   </data>
   <data name="VerificationRequiredByX" xml:space="preserve">
-    <value>Verification required by {0}</value>
+    <value>Verifiering krävs av {0}</value>
   </data>
   <data name="VerificationRequiredForThisActionSetUpAnUnlockMethodInBitwardenToContinue" xml:space="preserve">
     <value>Verification required for this action. Set up an unlock method in Bitwarden to continue.</value>
   </data>
   <data name="ErrorCreatingPasskey" xml:space="preserve">
-    <value>Error creating passkey</value>
+    <value>Fel vid skapande av passkey</value>
   </data>
   <data name="ErrorReadingPasskey" xml:space="preserve">
-    <value>Error reading passkey</value>
+    <value>Fel vid läsning av passkey</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
     <value>There was a problem creating a passkey for {0}. Try again later.</value>
@@ -2944,7 +2944,7 @@ Vill du byta till detta konto?</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
-    <value>Verifying identity...</value>
+    <value>Verifierar identitet...</value>
   </data>
   <data name="Passwords" xml:space="preserve">
     <value>Lösenord</value>
@@ -2965,22 +2965,22 @@ Vill du byta till detta konto?</value>
     <value>1. Gå till din enhets Inställningar &gt; Lösenord &gt; Lösenordsalternativ</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>2. Slå på AutoFyll</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>3. Välj att använda "Bitwarden" för lösenord och passkeys</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
     <value>Your passkey will be saved to your Bitwarden vault</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>Din passkey kommer att sparas i ditt Bitwarden-valv för {0}</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong" xml:space="preserve">
-    <value>On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
+    <value>Den 16 maj 2024 kommer otilldelade organisationsobjekt inte längre att synas i alla valvs-vyn och endast nås via administratörskonsollen. Tilldela dessa objekt till en samling från administratörskonsollen för att göra dem synliga.</value>
   </data>
   <data name="RemindMeLater" xml:space="preserve">
     <value>Påminn mig senare</value>
