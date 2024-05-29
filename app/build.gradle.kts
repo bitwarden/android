@@ -1,6 +1,7 @@
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
@@ -10,6 +11,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinx.kover)
@@ -90,15 +92,9 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
     }
     packaging {
         resources {
@@ -110,6 +106,12 @@ android {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 
