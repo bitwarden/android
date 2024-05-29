@@ -85,6 +85,13 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    override fun onStop() {
+        super.onStop()
+        // In some scenarios on an emulator the Activity can leak when recreated
+        // if we don't first clear focus anytime we exit and return to the app.
+        currentFocus?.clearFocus()
+    }
+
     private fun observeViewModelEvents() {
         mainViewModel
             .eventFlow
