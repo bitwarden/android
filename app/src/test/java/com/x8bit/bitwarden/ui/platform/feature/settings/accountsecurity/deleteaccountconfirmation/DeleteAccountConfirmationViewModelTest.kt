@@ -119,11 +119,11 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `on DeleteAccountClick with DeleteAccountResult Error should set dialog to Error`() =
+    fun `on DeleteAccountClick with DeleteAccountResult Error should set dialog to Error with message`() =
         runTest {
             coEvery {
                 authRepo.deleteAccountWithOneTimePassword("123456")
-            } returns DeleteAccountResult.Error
+            } returns DeleteAccountResult.Error(message = "Delete account error")
             val initialState = DEFAULT_STATE.copy(
                 verificationCode = "123456",
             )
@@ -144,7 +144,7 @@ class DeleteAccountConfirmationViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     initialState.copy(
                         dialog = DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = "Delete account error".asText(),
                         ),
                     ),
                     awaitItem(),

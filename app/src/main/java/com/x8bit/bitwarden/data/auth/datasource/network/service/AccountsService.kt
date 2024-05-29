@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
+import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
@@ -18,7 +19,10 @@ interface AccountsService {
     /**
      * Make delete account request.
      */
-    suspend fun deleteAccount(masterPasswordHash: String?, oneTimePassword: String?): Result<Unit>
+    suspend fun deleteAccount(
+        masterPasswordHash: String?,
+        oneTimePassword: String?,
+    ): Result<DeleteAccountResponseJson>
 
     /**
      * Request a one-time passcode that is sent to the user's email.

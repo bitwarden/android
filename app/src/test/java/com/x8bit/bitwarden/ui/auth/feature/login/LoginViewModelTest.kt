@@ -451,7 +451,7 @@ class LoginViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle().also {
                 it["email_address"] = EMAIL
                 it["state"] = state
-            }
+            },
         )
 
     companion object {
