@@ -126,7 +126,7 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         val masterPassword = "ckasb kcs ja"
         coEvery {
             authRepo.deleteAccountWithMasterPassword(masterPassword)
-        } returns DeleteAccountResult.Error
+        } returns DeleteAccountResult.Error(message = null)
 
         viewModel.trySendAction(DeleteAccountAction.DeleteAccountConfirmDialogClick(masterPassword))
 

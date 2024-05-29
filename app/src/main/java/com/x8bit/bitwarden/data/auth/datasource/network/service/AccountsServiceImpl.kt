@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
@@ -34,13 +35,26 @@ class AccountsServiceImpl(
     override suspend fun deleteAccount(
         masterPasswordHash: String?,
         oneTimePassword: String?,
-    ): Result<Unit> =
-        authenticatedAccountsApi.deleteAccount(
-            DeleteAccountRequestJson(
-                masterPasswordHash = masterPasswordHash,
-                oneTimePassword = oneTimePassword,
-            ),
-        )
+    ): Result<DeleteAccountResponseJson> =
+        authenticatedAccountsApi
+            .deleteAccount(
+                DeleteAccountRequestJson(
+                    masterPasswordHash = masterPasswordHash,
+                    oneTimePassword = oneTimePassword,
+                ),
+            )
+            .map {
+                DeleteAccountResponseJson.Success
+            }
+            .recoverCatching { throwable ->
+                throwable
+                    .toBitwardenError()
+                    .parseErrorBodyOrNull<DeleteAccountResponseJson.Invalid>(
+                        code = 400,
+                        json = json,
+                    )
+                    ?: throw throwable
+            }
 
     override suspend fun requestOneTimePasscode(): Result<Unit> =
         authenticatedAccountsApi.requestOtp()
