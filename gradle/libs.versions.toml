@@ -33,16 +33,13 @@ googleServices = "4.4.1"
 hilt = "2.51.1"
 junit5 = "5.10.2"
 jvmTarget = "17"
-# kotlin and kotlinCompileExtensions **must** use compatible versions. Do not update either without
-# first checking the Compose to Kotlin Compatibility Map.
-# https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-kotlin = "1.9.24"
-kotlinCompilerExtensionVersion = "1.5.14"
+# kotlin and ksp **must** use compatible versions, do not update either without the other.
+kotlin = "2.0.0"
 kotlinxCollectionsImmutable = "0.3.7"
 kotlinxCoroutines = "1.8.1"
 kotlinxSerialization = "1.6.3"
 kotlinxKover = "0.8.0"
-ksp = "1.9.24-1.0.20"
+ksp = "2.0.0-1.0.21"
 mockk = "1.13.11"
 okhttp = "4.12.0"
 retrofitBom = "2.11.0"
@@ -120,6 +117,7 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kotlinxKover" }

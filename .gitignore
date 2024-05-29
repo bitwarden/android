@@ -7,6 +7,9 @@ fastlane/README.md
 .DS_Store
 Thumbs.db
 
+# Kotlin
+.kotlin/
+
 # Gradle build cache
 /build-cache/
 
