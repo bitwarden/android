@@ -1,30 +1,40 @@
----
-name: Run Check
+name: Test
 
 on:
-  pull_request:
+  push:
+    branches:
+      - "main"
+      - "rc"
+      - "hotfix-rc"
+  pull_request_target:
+    types: [opened, synchronize]
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
 
 jobs:
+  check-run:
+    name: Check PR run
+    uses: bitwarden/gh-actions/.github/workflows/check-run.yml@main
+
   test:
     name: Test
     runs-on: ubuntu-22.04
+    needs: check-run
+    permissions:
+      contents: read
+      pull-requests: write
+
     steps:
-      - name: Checkout
+      - name: Check out repo
         uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
         with:
-          fetch-depth: 0
-          # Allow subsequent steps to trigger GitHub Actions via git push
-          # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
-          persist-credentials: false
+          ref: ${{  github.event.pull_request.head.sha }}
 
-      - name: Validate Gradle Wrapper
+      - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@b5418f5a58f5fd2eb486dd7efb368fe7be7eae45 # v2.1.3
 
-      - name: Cache Gradle Files
+      - name: Cache Gradle files
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
@@ -43,10 +53,10 @@ jobs:
       - name: Configure JDK
         uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Build and Run Check
+      - name: Build and test
         # Run checks on standard variant only because release and beta builds are not configured to
         # work properly with the Compose testing library. F-Droid related tasks are also skipped as
         # there is no significant code difference between the builds.
