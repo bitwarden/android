@@ -58,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
+import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
@@ -268,6 +269,7 @@ private fun LandingScreenContent(
         Spacer(modifier = Modifier.height(2.dp))
 
         EnvironmentSelector(
+            labelText = stringResource(id = R.string.logging_in_on),
             selectedOption = state.selectedEnvironmentType,
             onOptionSelected = onEnvironmentTypeSelect,
             modifier = Modifier
@@ -324,84 +326,5 @@ private fun LandingScreenContent(
 
         Spacer(modifier = Modifier.height(58.dp))
         Spacer(modifier = Modifier.navigationBarsPadding())
-    }
-}
-
-/**
- * A dropdown selector UI component specific to region url selection on the Landing screen.
- *
- * This composable displays a dropdown menu allowing users to select a region
- * from a list of options. When an option is selected, it invokes the provided callback
- * and displays the currently selected region on the UI.
- *
- * @param selectedOption The currently selected environment option.
- * @param onOptionSelected A callback that gets invoked when an environment option is selected
- * and passes the selected option as an argument.
- * @param modifier A [Modifier] for the composable.
- *
- */
-@Composable
-private fun EnvironmentSelector(
-    selectedOption: Environment.Type,
-    onOptionSelected: (Environment.Type) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val options = Environment.Type.entries.toTypedArray()
-    var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
-
-    Box(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(28.dp))
-                .clickable(
-                    indication = rememberRipple(
-                        bounded = true,
-                        color = MaterialTheme.colorScheme.primary,
-                    ),
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClick = { shouldShowDialog = !shouldShowDialog },
-                )
-                .padding(
-                    vertical = 8.dp,
-                    horizontal = 16.dp,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(id = R.string.logging_in_on),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(end = 12.dp),
-            )
-            Text(
-                text = selectedOption.displayLabel(),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(end = 8.dp),
-            )
-            Icon(
-                painter = rememberVectorPainter(id = R.drawable.ic_region_select_dropdown),
-                contentDescription = stringResource(id = R.string.region),
-                tint = MaterialTheme.colorScheme.primary,
-            )
-        }
-
-        if (shouldShowDialog) {
-            BitwardenSelectionDialog(
-                title = stringResource(id = R.string.logging_in_on),
-                onDismissRequest = { shouldShowDialog = false },
-            ) {
-                options.forEach {
-                    BitwardenSelectionRow(
-                        text = it.displayLabel,
-                        onClick = {
-                            onOptionSelected.invoke(it)
-                            shouldShowDialog = false
-                        },
-                        isSelected = it == selectedOption,
-                    )
-                }
-            }
-        }
     }
 }
