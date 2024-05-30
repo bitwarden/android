@@ -23,6 +23,8 @@ import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHint
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.setPasswordDestination
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.navigateToStartRegistration
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.startRegistrationDestination
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.navigateToTwoFactorLogin
 import com.x8bit.bitwarden.ui.auth.feature.twofactorlogin.twoFactorLoginDestination
 
@@ -49,6 +51,14 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 )
             },
         )
+        startRegistrationDestination(
+            onNavigateBack = { navController.popBackStack() },
+            // TODO check necessary parameters
+            onNavigateToCompleteRegistration = { emailAddress, verificationToken, captchaToken ->
+                navController.popBackStack()
+            },
+            onNavigateToEnvironment = { navController.navigateToEnvironment() }
+        )
         enterpriseSignOnDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToSetPassword = { navController.navigateToSetPassword() },
@@ -71,6 +81,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             onNavigateToEnvironment = {
                 navController.navigateToEnvironment()
             },
+            onNavigateToStartRegistration = { navController.navigateToStartRegistration()}
         )
         loginDestination(
             onNavigateBack = { navController.popBackStack() },

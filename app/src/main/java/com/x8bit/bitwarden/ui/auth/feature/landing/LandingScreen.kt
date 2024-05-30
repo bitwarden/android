@@ -76,6 +76,7 @@ fun LandingScreen(
     onNavigateToCreateAccount: () -> Unit,
     onNavigateToLogin: (emailAddress: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
+    onNavigateToStartRegistration: () -> Unit,
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -87,6 +88,7 @@ fun LandingScreen(
             )
 
             LandingEvent.NavigateToEnvironment -> onNavigateToEnvironment()
+            LandingEvent.NavigateToStartRegistration -> onNavigateToStartRegistration()
         }
     }
 
