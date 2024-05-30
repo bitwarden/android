@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
@@ -116,6 +118,10 @@ fun RootNavScreen(
         return
     }
     previousStateReference.set(state)
+
+    // In some scenarios on an emulator the Activity can leak when recreated
+    // if we don't first clear focus anytime we change the root destination.
+    (LocalContext.current as? Activity)?.currentFocus?.clearFocus()
 
     // When state changes, navigate to different root navigation state
     val rootNavOptions = navOptions {
