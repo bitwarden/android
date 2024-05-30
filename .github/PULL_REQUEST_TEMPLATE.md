@@ -10,10 +10,6 @@
 
 <!-- Required for any UI changes; delete if not applicable. Use fixed width images for better display. -->
 
-| Before | After |
-| --- | --- |
-|  |  |
-
 ## ⏰ Reminders before review
 
 - Contributor guidelines followed
