@@ -27,7 +27,7 @@ class UserLogoutManagerImpl(
     private val pushDiskSource: PushDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultDiskSource: VaultDiskSource,
-    private val dispatcherManager: DispatcherManager,
+    dispatcherManager: DispatcherManager,
     private val vaultSdkSource: VaultSdkSource,
 ) : UserLogoutManager {
     private val scope = CoroutineScope(dispatcherManager.unconfined)

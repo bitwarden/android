@@ -43,9 +43,9 @@ class SendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepo: EnvironmentRepository,
-    private val settingsRepo: SettingsRepository,
+    settingsRepo: SettingsRepository,
     private val vaultRepo: VaultRepository,
-    private val policyManager: PolicyManager,
+    policyManager: PolicyManager,
 ) : BaseViewModel<SendState, SendEvent, SendAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]

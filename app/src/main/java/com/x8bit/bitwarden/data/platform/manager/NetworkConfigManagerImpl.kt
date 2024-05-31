@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.onEach
  * Primary implementation of [NetworkConfigManager].
  */
 class NetworkConfigManagerImpl(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     private val authTokenInterceptor: AuthTokenInterceptor,
-    private val environmentRepository: EnvironmentRepository,
+    environmentRepository: EnvironmentRepository,
     private val baseUrlInterceptors: BaseUrlInterceptors,
     refreshAuthenticator: RefreshAuthenticator,
     dispatcherManager: DispatcherManager,

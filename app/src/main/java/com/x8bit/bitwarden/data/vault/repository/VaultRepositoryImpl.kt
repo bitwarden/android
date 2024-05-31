@@ -150,7 +150,7 @@ class VaultRepositoryImpl(
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     private val userLogoutManager: UserLogoutManager,
-    private val pushManager: PushManager,
+    pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,

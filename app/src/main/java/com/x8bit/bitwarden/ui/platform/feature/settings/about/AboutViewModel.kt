@@ -32,7 +32,7 @@ private const val KEY_STATE = "state"
 class AboutViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val clipboardManager: BitwardenClipboardManager,
-    private val clock: Clock,
+    clock: Clock,
     private val crashLogsManager: CrashLogsManager,
     private val environmentRepository: EnvironmentRepository,
 ) : BaseViewModel<AboutState, AboutEvent, AboutAction>(

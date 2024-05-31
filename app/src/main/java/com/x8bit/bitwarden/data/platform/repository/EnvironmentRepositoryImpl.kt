@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.stateIn
  */
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
-    private val authDiskSource: AuthDiskSource,
+    authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
 

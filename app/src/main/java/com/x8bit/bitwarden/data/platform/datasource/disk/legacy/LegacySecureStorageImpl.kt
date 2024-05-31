@@ -163,7 +163,7 @@ private class AndroidKeyStore(
     private val legacySecureStorage: LegacySecureStorage,
     private val sharedPreferences: SharedPreferences,
     private val context: Context,
-    private val keystoreAlias: String,
+    keystoreAlias: String,
     alwaysUseAsymmetricKeyStorage: Boolean,
 ) {
     private val alwaysUseAsymmetricKey: Boolean = alwaysUseAsymmetricKeyStorage

@@ -38,7 +38,7 @@ class PasswordHistoryViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
-    private val vaultRepository: VaultRepository,
+    vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
     initialState = savedStateHandle[KEY_STATE]

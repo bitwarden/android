@@ -40,7 +40,7 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
 @Suppress("LongParameterList")
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val autofillSelectionManager: AutofillSelectionManager,
+    autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
     private val intentManager: IntentManager,
