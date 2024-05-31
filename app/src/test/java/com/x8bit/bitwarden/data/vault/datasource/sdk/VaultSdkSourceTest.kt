@@ -29,6 +29,7 @@ import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientExporters
 import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
+import com.bitwarden.sdk.ClientSends
 import com.bitwarden.sdk.ClientVault
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -54,6 +55,7 @@ class VaultSdkSourceTest {
     private val clientCrypto = mockk<ClientCrypto>()
     private val clientPlatform = mockk<ClientPlatform>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
+    private val clientSends = mockk<ClientSends>()
     private val clientVault = mockk<ClientVault> {
         every { passwordHistory() } returns clientPasswordHistory
     }
@@ -62,6 +64,7 @@ class VaultSdkSourceTest {
     }
     private val client = mockk<Client> {
         every { auth() } returns clientAuth
+        every { sends() } returns clientSends
         every { vault() } returns clientVault
         every { platform() } returns clientPlatform
         every { crypto() } returns clientCrypto
@@ -567,11 +570,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockSend = mockk<Send>()
             val expectedResult = mockk<SendView>()
-            coEvery {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
-            } returns expectedResult
+            coEvery { clientSends.decrypt(send = mockSend) } returns expectedResult
             val result = vaultSdkSource.decryptSendList(
                 userId = userId,
                 sendList = listOf(mockSend),
@@ -581,11 +580,9 @@ class VaultSdkSourceTest {
                 result,
             )
             coVerify {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
+                clientSends.decrypt(send = mockSend)
+                sdkClientManager.getOrCreateClient(userId = userId)
             }
-            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -626,7 +623,7 @@ class VaultSdkSourceTest {
         val userId = "userId"
         val expectedResult = mockk<Send>()
         val mockSendView = mockk<SendView>()
-        coEvery { clientVault.sends().encrypt(send = mockSendView) } returns expectedResult
+        coEvery { clientSends.encrypt(send = mockSendView) } returns expectedResult
 
         val result = vaultSdkSource.encryptSend(
             userId = userId,
@@ -635,7 +632,7 @@ class VaultSdkSourceTest {
 
         assertEquals(expectedResult.asSuccess(), result)
         coVerify {
-            clientVault.sends().encrypt(send = mockSendView)
+            clientSends.encrypt(send = mockSendView)
         }
     }
 
@@ -645,11 +642,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockSend = mockk<Send>()
             val expectedResult = mockk<SendView>()
-            coEvery {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
-            } returns expectedResult
+            coEvery { clientSends.decrypt(send = mockSend) } returns expectedResult
             val result = vaultSdkSource.decryptSend(
                 userId = userId,
                 send = mockSend,
@@ -658,11 +651,9 @@ class VaultSdkSourceTest {
                 expectedResult.asSuccess(), result,
             )
             coVerify {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
+                clientSends.decrypt(send = mockSend)
+                sdkClientManager.getOrCreateClient(userId = userId)
             }
-            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
