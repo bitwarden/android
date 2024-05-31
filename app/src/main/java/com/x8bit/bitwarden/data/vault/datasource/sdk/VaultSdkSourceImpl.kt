@@ -144,7 +144,6 @@ class VaultSdkSourceImpl(
     ): Result<Send> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .encrypt(sendView)
         }
@@ -156,7 +155,6 @@ class VaultSdkSourceImpl(
     ): Result<ByteArray> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .encryptBuffer(
                     send = send,
@@ -172,7 +170,6 @@ class VaultSdkSourceImpl(
     ): Result<File> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .encryptFile(
                     send = send,
@@ -272,7 +269,6 @@ class VaultSdkSourceImpl(
     ): Result<SendView> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .decrypt(send)
         }
@@ -284,7 +280,6 @@ class VaultSdkSourceImpl(
         runCatching {
             sendList.map {
                 getClient(userId = userId)
-                    .vault()
                     .sends()
                     .decrypt(it)
             }
