@@ -80,7 +80,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
     private val vaultRepository: VaultRepository,
-    private val generatorRepository: GeneratorRepository,
+    generatorRepository: GeneratorRepository,
     private val settingsRepository: SettingsRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val resourceManager: ResourceManager,

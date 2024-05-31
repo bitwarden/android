@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val specialCircumstanceManager: SpecialCircumstanceManager,
+    specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {

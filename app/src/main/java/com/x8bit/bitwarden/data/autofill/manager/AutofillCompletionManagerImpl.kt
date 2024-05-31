@@ -32,7 +32,7 @@ class AutofillCompletionManagerImpl(
     private val authRepository: AuthRepository,
     private val autofillParser: AutofillParser,
     private val clipboardManager: BitwardenClipboardManager,
-    private val dispatcherManager: DispatcherManager,
+    dispatcherManager: DispatcherManager,
     private val filledDataBuilderProvider: (CipherView) -> FilledDataBuilder =
         { createSingleItemFilledDataBuilder(cipherView = it) },
     private val settingsRepository: SettingsRepository,
