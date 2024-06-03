@@ -237,7 +237,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
             assertEquals(GeneratorEvent.NavigateBack, eventTurbine.awaitItem())
             assertEquals(
-                GeneratorResult.Username(username = "-"),
+                GeneratorResult.Username(username = "email+abcd1234@address.com"),
                 generatorResultTurbine.awaitItem(),
             )
         }
