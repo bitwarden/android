@@ -261,7 +261,10 @@ class GeneratorViewModel @Inject constructor(
     private fun loadOptions() {
         when (val selectedType = state.selectedType) {
             is Passcode -> loadPasscodeOptions(selectedType = selectedType, usePolicyDefault = true)
-            is Username -> loadUsernameOptions(selectedType = selectedType)
+            is Username -> loadUsernameOptions(
+                selectedType = selectedType,
+                forceRegeneration = selectedType.selectedType !is ForwardedEmailAlias,
+            )
         }
     }
 
