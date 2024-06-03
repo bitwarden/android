@@ -1,35 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "github>bitwarden/renovate-config"
-  ],
-  "enabledManagers": [
-    "github-actions",
-    "gradle",
-    "bundler"
-  ],
-  "commitMessagePrefix": "[deps]:",
-  "commitMessageTopic": "{{depName}}",
+  "extends": ["github>bitwarden/renovate-config"],
+  "enabledManagers": ["bundler", "github-actions", "gradle"],
   "packageRules": [
     {
+      "groupName": "bundler minor",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": ["bundler"]
+    },
+    {
       "groupName": "gh minor",
-      "matchManagers": [
-        "github-actions"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ]
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"]
     },
     {
       "groupName": "gradle minor",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchManagers": [
-        "gradle"
-      ]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchManagers": ["gradle"]
     },
     {
       "groupName": "kotlin",
@@ -41,19 +28,7 @@
         "com.google.devtools.ksp",
         "org.jetbrains.kotlin.*"
       ],
-      "matchManagers": [
-        "gradle"
-      ]
-    },
-    {
-      "groupName": "bundler minor",
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "matchManagers": [
-        "bundler"
-      ]
+      "matchManagers": ["gradle"]
     }
   ]
 }
