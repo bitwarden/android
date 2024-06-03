@@ -55,15 +55,26 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-
 
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@0cde4689ba33c09f1b890c1725572ad96751a3fc # v1.178.0
+        with:
+          bundler-cache: true
+
       - name: Configure JDK
         uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
         with:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+
       - name: Build and test
         run: |
-          ./gradlew testDebug lintDebug
+          bundle exec fastlane check
 
       - name: Upload to codecov.io
         uses: codecov/codecov-action@125fc84a9a348dbcf27191600683ec096ec9021c # v4.4.1
