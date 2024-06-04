@@ -137,8 +137,9 @@ interface VaultSdkSource {
         userId: String,
         cipher: Cipher,
         attachmentView: AttachmentView,
-        fileBuffer: ByteArray,
-    ): Result<AttachmentEncryptResult>
+        decryptedFilePath: String,
+        encryptedFilePath: String,
+    ): Result<Attachment>
 
     /**
      * Encrypts a [CipherView] for the user with the given [userId], returning a [Cipher] wrapped

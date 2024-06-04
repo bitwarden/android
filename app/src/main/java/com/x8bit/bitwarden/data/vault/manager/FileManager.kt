@@ -17,9 +17,9 @@ interface FileManager {
     val filesDirectory: String
 
     /**
-     * Deletes a [file] from the system.
+     * Deletes [files] from disk.
      */
-    suspend fun deleteFile(file: File)
+    suspend fun delete(vararg files: File)
 
     /**
      * Downloads a file temporarily to cache from [url]. A successful [DownloadResult] will contain

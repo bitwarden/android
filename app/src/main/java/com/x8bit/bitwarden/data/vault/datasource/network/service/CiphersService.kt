@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRe
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import java.io.File
 
 /**
  * Provides an API for querying ciphers endpoints.
@@ -31,7 +32,7 @@ interface CiphersService {
      */
     suspend fun uploadAttachment(
         attachmentJsonResponse: AttachmentJsonResponse,
-        encryptedFile: ByteArray,
+        encryptedFile: File,
     ): Result<SyncResponseJson.Cipher>
 
     /**

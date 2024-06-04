@@ -32,9 +32,9 @@ class FileManagerImpl(
     override val filesDirectory: String
         get() = context.filesDir.absolutePath
 
-    override suspend fun deleteFile(file: File) {
+    override suspend fun delete(vararg files: File) {
         withContext(dispatcherManager.io) {
-            file.delete()
+            files.forEach { it.delete() }
         }
     }
 
