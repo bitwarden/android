@@ -260,6 +260,7 @@ interface VaultRepository : VaultLockManager {
      */
     suspend fun shareCipher(
         cipherId: String,
+        organizationId: String,
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult

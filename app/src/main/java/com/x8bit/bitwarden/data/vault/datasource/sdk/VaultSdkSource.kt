@@ -356,6 +356,15 @@ interface VaultSdkSource {
     ): Result<TotpResponse>
 
     /**
+     * Re-encrypts the [cipherView] with the organizations encryption key.
+     */
+    suspend fun moveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherView: CipherView,
+    ): Result<Cipher>
+
+    /**
      * Validates that the given password matches the password hash.
      */
     suspend fun validatePassword(

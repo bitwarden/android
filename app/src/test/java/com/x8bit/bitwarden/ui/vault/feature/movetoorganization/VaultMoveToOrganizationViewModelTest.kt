@@ -240,6 +240,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         coEvery {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
+                organizationId = "mockOrganizationId-1",
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
@@ -284,6 +285,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         coVerify {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
+                organizationId = "mockOrganizationId-1",
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
@@ -298,6 +300,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         coEvery {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
+                organizationId = "mockOrganizationId-1",
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
@@ -344,6 +347,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         coVerify {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
+                organizationId = "mockOrganizationId-1",
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
@@ -358,6 +362,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         coEvery {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
+                organizationId = "mockOrganizationId-1",
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )
@@ -381,6 +386,7 @@ class VaultMoveToOrganizationViewModelTest : BaseViewModelTest() {
         coVerify {
             vaultRepository.shareCipher(
                 cipherId = "mockCipherId",
+                organizationId = "mockOrganizationId-1",
                 cipherView = createMockCipherView(number = 1),
                 collectionIds = listOf("mockId-1"),
             )

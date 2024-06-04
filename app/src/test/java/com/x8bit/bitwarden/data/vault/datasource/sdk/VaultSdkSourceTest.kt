@@ -24,6 +24,7 @@ import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.ClientCiphers
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientExporters
 import com.bitwarden.sdk.ClientPasswordHistory
@@ -847,6 +848,29 @@ class VaultSdkSourceTest {
         }
 
         coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
+    }
+
+    @Test
+    fun `moveToOrganization should call SDK and a Result with correct data`() = runTest {
+        val userId = "userId"
+        val organizationId = "organizationId"
+        val mockCipher = mockk<CipherView>()
+        val expectedResult = mockk<Cipher>()
+        val clientCipher = mockk<ClientCiphers> {
+            coEvery {
+                moveToOrganization(cipher = mockCipher, organizationId = organizationId)
+            } returns mockCipher
+            coEvery { encrypt(cipherView = mockCipher) } returns expectedResult
+        }
+        every { clientVault.ciphers() } returns clientCipher
+
+        val result = vaultSdkSource.moveToOrganization(
+            userId = userId,
+            organizationId = organizationId,
+            cipherView = mockCipher,
+        )
+
+        assertEquals(expectedResult.asSuccess(), result)
     }
 
     @Test
