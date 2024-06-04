@@ -67,7 +67,7 @@ jobs:
 
       - name: Download all artifacts
         if: ${{ inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
+        uses: bitwarden/gh-actions/download-artifacts@main
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -75,7 +75,7 @@ jobs:
 
       - name: Dry Run - Download all artifacts
         if: ${{ inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
+        uses: bitwarden/gh-actions/download-artifacts@main
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -129,7 +129,7 @@ jobs:
 
       - name: Download F-Droid .apk artifact
         if: ${{ inputs.release_type != 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
+        uses: bitwarden/gh-actions/download-artifacts@main
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -138,7 +138,7 @@ jobs:
 
       - name: Dry Run - Download F-Droid .apk artifact
         if: ${{ inputs.release_type == 'Dry Run' }}
-        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
+        uses: bitwarden/gh-actions/download-artifacts@main
         with:
           workflow: build.yml
           workflow_conclusion: success
