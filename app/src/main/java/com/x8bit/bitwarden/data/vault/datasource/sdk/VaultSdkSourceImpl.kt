@@ -25,6 +25,7 @@ import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import java.io.File
 
@@ -370,6 +371,18 @@ class VaultSdkSourceImpl(
                 time = time,
             )
     }
+
+    override suspend fun moveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherView: CipherView,
+    ): Result<Cipher> = runCatching {
+        getClient(userId = userId)
+            .vault()
+            .ciphers()
+            .moveToOrganization(cipher = cipherView, organizationId = organizationId)
+    }
+        .flatMap { encryptCipher(userId = userId, cipherView = it) }
 
     override suspend fun validatePassword(
         userId: String,

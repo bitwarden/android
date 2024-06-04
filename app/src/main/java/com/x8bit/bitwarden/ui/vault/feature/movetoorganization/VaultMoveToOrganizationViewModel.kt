@@ -298,9 +298,8 @@ class VaultMoveToOrganizationViewModel @Inject constructor(
                     VaultMoveToOrganizationAction.Internal.ShareCipherResultReceive(
                         shareCipherResult = vaultRepository.shareCipher(
                             cipherId = state.vaultItemId,
-                            cipherView = cipherView.copy(
-                                organizationId = contentState.selectedOrganizationId,
-                            ),
+                            organizationId = contentState.selectedOrganizationId,
+                            cipherView = cipherView,
                             collectionIds = collectionIds,
                         ),
                         successToast = R.string.moved_item_to_org.asText(

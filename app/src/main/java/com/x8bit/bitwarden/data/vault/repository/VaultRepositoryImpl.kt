@@ -811,13 +811,15 @@ class VaultRepositoryImpl(
 
     override suspend fun shareCipher(
         cipherId: String,
+        organizationId: String,
         cipherView: CipherView,
         collectionIds: List<String>,
     ): ShareCipherResult {
         val userId = activeUserId ?: return ShareCipherResult.Error
         return vaultSdkSource
-            .encryptCipher(
+            .moveToOrganization(
                 userId = userId,
+                organizationId = organizationId,
                 cipherView = cipherView,
             )
             .flatMap { cipher ->
