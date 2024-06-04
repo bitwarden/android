@@ -368,7 +368,7 @@ jobs:
           bundle exec fastlane run validate_play_store_json_key
 
       - name: Publish Play Store bundle
-        if: ${{ matrix.variant == 'prod' && inputs.publish-to-play-store }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && inputs.publish-to-play-store }}
         run: bundle exec fastlane publishForInternalTesting
 
   publish_fdroid:
