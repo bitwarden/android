@@ -12,28 +12,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <!--
-        The CredentialProviderService name below refers to the legacy Xamarin app's service name.
-        This must always match in order for the app to properly query if it is providing credential
-        services.
-        -->
-        <!--suppress AndroidDomInspection -->
-        <service
-            android:name="com.x8bit.bitwarden.Autofill.CredentialProviderService"
-            android:enabled="true"
-            android:exported="true"
-            android:label="@string/bitwarden"
-            android:permission="android.permission.BIND_CREDENTIAL_PROVIDER_SERVICE"
-            tools:ignore="MissingClass">
-            <intent-filter>
-                <action android:name="android.service.credentials.CredentialProviderService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.credentials.provider"
-                android:resource="@xml/provider" />
-        </service>
-
         <!-- Disable Crashlytics for debug builds -->
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
