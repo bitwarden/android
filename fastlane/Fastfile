@@ -131,10 +131,6 @@ platform :android do
         nextVersionName = options[:versionName].to_s
     end
 
-    # Append "-native" to the builds so they are easily distinguished from MAUI builds while both
-    # are being distributed.
-    nextVersionName = nextVersionName + "-native"
-
     # Replace version information.
     puts "Setting version code to #{options[:versionCode]}."
     buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
