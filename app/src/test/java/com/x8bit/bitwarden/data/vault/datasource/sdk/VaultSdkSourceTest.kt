@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.core.Attachment
-import com.bitwarden.core.AttachmentEncryptResult
 import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
@@ -589,15 +588,15 @@ class VaultSdkSourceTest {
     fun `encryptAttachment should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
             val userId = "userId"
-            val expectedResult = mockk<AttachmentEncryptResult>()
+            val expectedResult = mockk<Attachment>()
             val mockCipher = mockk<Cipher>()
             val mockAttachmentView = mockk<AttachmentView>()
-            val fileBuffer = byteArrayOf(1, 2)
             coEvery {
-                clientVault.attachments().encryptBuffer(
+                clientVault.attachments().encryptFile(
                     cipher = mockCipher,
                     attachment = mockAttachmentView,
-                    buffer = fileBuffer,
+                    decryptedFilePath = "",
+                    encryptedFilePath = "",
                 )
             } returns expectedResult
 
@@ -605,15 +604,17 @@ class VaultSdkSourceTest {
                 userId = userId,
                 cipher = mockCipher,
                 attachmentView = mockAttachmentView,
-                fileBuffer = fileBuffer,
+                decryptedFilePath = "",
+                encryptedFilePath = "",
             )
 
             assertEquals(expectedResult.asSuccess(), result)
             coVerify {
-                clientVault.attachments().encryptBuffer(
+                clientVault.attachments().encryptFile(
                     cipher = mockCipher,
                     attachment = mockAttachmentView,
-                    buffer = fileBuffer,
+                    decryptedFilePath = "",
+                    encryptedFilePath = "",
                 )
             }
         }

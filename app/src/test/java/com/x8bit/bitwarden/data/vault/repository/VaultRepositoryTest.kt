@@ -49,7 +49,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherColle
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentEncryptResult
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
@@ -74,6 +73,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockAttachmentV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkCollection
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFolder
@@ -158,7 +158,9 @@ class VaultRepositoryTest {
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
     }
-    private val fileManager: FileManager = mockk()
+    private val fileManager: FileManager = mockk {
+        coEvery { delete(*anyVararg()) } just runs
+    }
     private val fakeAuthDiskSource = FakeAuthDiskSource()
     private val settingsDiskSource = mockk<SettingsDiskSource> {
         every { getLastSyncTime(userId = any()) } returns clock.instant()
@@ -2692,7 +2694,6 @@ class VaultRepositoryTest {
             } returns mockSendView.asSuccess()
             every { fileManager.filesDirectory } returns "mockFilesDirectory"
             coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
-            coEvery { fileManager.deleteFile(any()) } returns Unit
             coEvery {
                 vaultSdkSource.encryptFile(
                     userId = userId,
@@ -2768,7 +2769,6 @@ class VaultRepositoryTest {
             } returns mockSdkSend.asSuccess()
 
             every { fileManager.filesDirectory } returns "mockFilesDirectory"
-            coEvery { fileManager.deleteFile(any()) } returns Unit
             coEvery { fileManager.writeUriToCache(any()) } returns decryptedFile.asSuccess()
             coEvery {
                 vaultSdkSource.encryptFile(
@@ -3392,6 +3392,7 @@ class VaultRepositoryTest {
             val mockUri = setupMockUri(url = "www.test.com")
             val mockCipherView = createMockCipherView(number = 1)
             val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockFile = File.createTempFile("mockFile", "temp")
             val mockFileName = "mockFileName-1"
             val mockFileSize = "1"
             val mockAttachmentView = createMockAttachmentView(number = 1).copy(
@@ -3400,19 +3401,19 @@ class VaultRepositoryTest {
                 url = null,
                 key = null,
             )
-            val mockByteArray = byteArrayOf(1, 2)
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
-                fileManager.uriToByteArray(fileUri = mockUri)
-            } returns mockByteArray.asSuccess()
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
                     cipher = mockCipher,
                     attachmentView = mockAttachmentView,
-                    fileBuffer = mockByteArray,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
             } returns Throwable("Fail").asFailure()
 
@@ -3443,7 +3444,7 @@ class VaultRepositoryTest {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
-                fileManager.uriToByteArray(fileUri = mockUri)
+                fileManager.writeUriToCache(fileUri = mockUri)
             } returns Throwable("Fail").asFailure()
 
             val result = vaultRepository.createAttachment(
@@ -3475,22 +3476,23 @@ class VaultRepositoryTest {
                 url = null,
                 key = null,
             )
-            val mockByteArray = byteArrayOf(1, 2)
-            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockFile = File.createTempFile("mockFile", "temp")
+            val mockAttachment = createMockSdkAttachment(number = 1)
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
-                fileManager.uriToByteArray(fileUri = mockUri)
-            } returns mockByteArray.asSuccess()
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
                     cipher = mockCipher,
                     attachmentView = mockAttachmentView,
-                    fileBuffer = mockByteArray,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
-            } returns mockAttachmentEncryptResult.asSuccess()
+            } returns mockAttachment.asSuccess()
             coEvery {
                 ciphersService.createAttachment(
                     cipherId = cipherId,
@@ -3531,23 +3533,24 @@ class VaultRepositoryTest {
                 url = null,
                 key = null,
             )
-            val mockByteArray = byteArrayOf(1, 2)
-            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockFile = File.createTempFile("mockFile", "temp")
+            val mockAttachment = createMockSdkAttachment(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
             coEvery {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
-                fileManager.uriToByteArray(fileUri = mockUri)
-            } returns mockByteArray.asSuccess()
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
                     cipher = mockCipher,
                     attachmentView = mockAttachmentView,
-                    fileBuffer = mockByteArray,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
-            } returns mockAttachmentEncryptResult.asSuccess()
+            } returns mockAttachment.asSuccess()
             coEvery {
                 ciphersService.createAttachment(
                     cipherId = cipherId,
@@ -3561,7 +3564,7 @@ class VaultRepositoryTest {
             coEvery {
                 ciphersService.uploadAttachment(
                     attachmentJsonResponse = mockAttachmentJsonResponse,
-                    encryptedFile = mockAttachmentEncryptResult.contents,
+                    encryptedFile = File("${mockFile.absoluteFile}.enc"),
                 )
             } returns Throwable("Fail").asFailure()
 
@@ -3594,8 +3597,8 @@ class VaultRepositoryTest {
                 url = null,
                 key = null,
             )
-            val mockByteArray = byteArrayOf(1, 2)
-            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockFile = File.createTempFile("mockFile", "temp")
+            val mockAttachment = createMockSdkAttachment(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
             val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
             val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
@@ -3605,16 +3608,17 @@ class VaultRepositoryTest {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
-                fileManager.uriToByteArray(fileUri = mockUri)
-            } returns mockByteArray.asSuccess()
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
                     cipher = mockCipher,
                     attachmentView = mockAttachmentView,
-                    fileBuffer = mockByteArray,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
-            } returns mockAttachmentEncryptResult.asSuccess()
+            } returns mockAttachment.asSuccess()
             coEvery {
                 ciphersService.createAttachment(
                     cipherId = cipherId,
@@ -3628,7 +3632,7 @@ class VaultRepositoryTest {
             coEvery {
                 ciphersService.uploadAttachment(
                     attachmentJsonResponse = mockAttachmentJsonResponse,
-                    encryptedFile = mockAttachmentEncryptResult.contents,
+                    encryptedFile = File("${mockFile.absoluteFile}.enc"),
                 )
             } returns mockCipherResponse.asSuccess()
             coEvery {
@@ -3670,8 +3674,8 @@ class VaultRepositoryTest {
                 url = null,
                 key = null,
             )
-            val mockByteArray = byteArrayOf(1, 2)
-            val mockAttachmentEncryptResult = createMockAttachmentEncryptResult(number = 1)
+            val mockFile = File.createTempFile("mockFile", "temp")
+            val mockAttachment = createMockSdkAttachment(number = 1)
             val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
             val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
             val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
@@ -3681,16 +3685,17 @@ class VaultRepositoryTest {
                 vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns mockCipher.asSuccess()
             coEvery {
-                fileManager.uriToByteArray(fileUri = mockUri)
-            } returns mockByteArray.asSuccess()
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
             coEvery {
                 vaultSdkSource.encryptAttachment(
                     userId = userId,
                     cipher = mockCipher,
                     attachmentView = mockAttachmentView,
-                    fileBuffer = mockByteArray,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
                 )
-            } returns mockAttachmentEncryptResult.asSuccess()
+            } returns mockAttachment.asSuccess()
             coEvery {
                 ciphersService.createAttachment(
                     cipherId = cipherId,
@@ -3704,7 +3709,7 @@ class VaultRepositoryTest {
             coEvery {
                 ciphersService.uploadAttachment(
                     attachmentJsonResponse = mockAttachmentJsonResponse,
-                    encryptedFile = mockAttachmentEncryptResult.contents,
+                    encryptedFile = File("${mockFile.absolutePath}.enc"),
                 )
             } returns mockCipherResponse.asSuccess()
             coEvery {
@@ -3727,6 +3732,151 @@ class VaultRepositoryTest {
 
             assertEquals(CreateAttachmentResult.Success(mockCipherView), result)
         }
+
+    @Test
+    fun `createAttachment should delete temp files after upload success`() {
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockFile = File.createTempFile("mockFile", "temp")
+            val mockAttachment = createMockSdkAttachment(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            val mockCipherResponse = createMockCipher(number = 1).copy(collectionIds = null)
+            val mockUpdatedCipherResponse = createMockCipher(number = 1).copy(
+                collectionIds = listOf("mockId-1"),
+            )
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            coEvery {
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
+                )
+            } returns mockAttachment.asSuccess()
+            coEvery {
+                ciphersService.createAttachment(
+                    cipherId = cipherId,
+                    body = AttachmentJsonRequest(
+                        fileName = mockFileName,
+                        key = "mockKey-1",
+                        fileSize = mockFileSize,
+                    ),
+                )
+            } returns mockAttachmentJsonResponse.asSuccess()
+            coEvery {
+                ciphersService.uploadAttachment(
+                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    encryptedFile = File("${mockFile.absolutePath}.enc"),
+                )
+            } returns mockCipherResponse.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = userId, cipher = mockUpdatedCipherResponse)
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = mockUpdatedCipherResponse.toEncryptedSdkCipher(),
+                )
+            } returns mockCipherView.asSuccess()
+
+            vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            coVerify {
+                fileManager.delete(*anyVararg())
+            }
+        }
+    }
+
+    @Test
+    fun `createAttachment should delete temp files after upload failure`() {
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val cipherId = "cipherId-1"
+            val mockUri = setupMockUri(url = "www.test.com")
+            val mockCipherView = createMockCipherView(number = 1)
+            val mockCipher = createMockSdkCipher(number = 1, clock = clock)
+            val mockFileName = "mockFileName-1"
+            val mockFileSize = "1"
+            val mockAttachmentView = createMockAttachmentView(number = 1).copy(
+                sizeName = null,
+                id = null,
+                url = null,
+                key = null,
+            )
+            val mockFile = File.createTempFile("mockFile", "temp")
+            val mockAttachment = createMockSdkAttachment(number = 1)
+            val mockAttachmentJsonResponse = createMockAttachmentJsonResponse(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns mockCipher.asSuccess()
+            coEvery {
+                fileManager.writeUriToCache(fileUri = mockUri)
+            } returns mockFile.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = mockAttachmentView,
+                    decryptedFilePath = mockFile.absolutePath,
+                    encryptedFilePath = "${mockFile.absolutePath}.enc",
+                )
+            } returns mockAttachment.asSuccess()
+            coEvery {
+                ciphersService.createAttachment(
+                    cipherId = cipherId,
+                    body = AttachmentJsonRequest(
+                        fileName = mockFileName,
+                        key = "mockKey-1",
+                        fileSize = mockFileSize,
+                    ),
+                )
+            } returns mockAttachmentJsonResponse.asSuccess()
+            coEvery {
+                ciphersService.uploadAttachment(
+                    attachmentJsonResponse = mockAttachmentJsonResponse,
+                    encryptedFile = File("${mockFile.absolutePath}.enc"),
+                )
+            } returns Throwable("Fail").asFailure()
+
+            vaultRepository.createAttachment(
+                cipherId = cipherId,
+                cipherView = mockCipherView,
+                fileSizeBytes = mockFileSize,
+                fileName = mockFileName,
+                fileUri = mockUri,
+            )
+
+            coVerify {
+                fileManager.delete(*anyVararg())
+            }
+        }
+    }
 
     @Test
     fun `downloadAttachment with missing attachment should return Failure`() = runTest {

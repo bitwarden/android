@@ -353,7 +353,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleNoAttachmentFileLocationReceive() {
         viewModelScope.launch {
-            temporaryAttachmentData?.let { fileManager.deleteFile(it) }
+            temporaryAttachmentData?.let { fileManager.delete(it) }
         }
 
         mutableStateFlow.update {
@@ -932,7 +932,7 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.AttachmentFinishedSavingToDisk,
     ) {
         viewModelScope.launch {
-            fileManager.deleteFile(action.file)
+            fileManager.delete(action.file)
         }
 
         if (action.isSaved) {

@@ -17,7 +17,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherRespo
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -48,7 +49,7 @@ class CiphersServiceImpl(
 
     override suspend fun uploadAttachment(
         attachmentJsonResponse: AttachmentJsonResponse,
-        encryptedFile: ByteArray,
+        encryptedFile: File,
     ): Result<SyncResponseJson.Cipher> {
         val cipher = attachmentJsonResponse.cipherResponse
         return when (attachmentJsonResponse.fileUploadType) {
@@ -62,7 +63,7 @@ class CiphersServiceImpl(
                         )
                         .addPart(
                             part = MultipartBody.Part.createFormData(
-                                body = encryptedFile.toRequestBody(
+                                body = encryptedFile.asRequestBody(
                                     contentType = "application/octet-stream".toMediaType(),
                                 ),
                                 name = "data",
@@ -83,7 +84,7 @@ class CiphersServiceImpl(
                         .RFC_1123_DATE_TIME
                         .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
                     version = attachmentJsonResponse.url.toUri().getQueryParameter("sv"),
-                    body = encryptedFile.toRequestBody(),
+                    body = encryptedFile.asRequestBody(),
                 )
             }
         }

@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.create
+import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -103,7 +104,7 @@ class CiphersServiceTest : BaseServiceTest() {
             number = 1,
             fileUploadType = FileUploadType.AZURE,
         )
-        val encryptedFile = byteArrayOf()
+        val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
@@ -121,7 +122,7 @@ class CiphersServiceTest : BaseServiceTest() {
             number = 1,
             fileUploadType = FileUploadType.DIRECT,
         )
-        val encryptedFile = byteArrayOf()
+        val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(

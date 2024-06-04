@@ -871,6 +871,7 @@ class VaultRepositoryImpl(
             )
     }
 
+    @Suppress("LongMethod")
     override suspend fun createAttachment(
         cipherId: String,
         cipherView: CipherView,
@@ -894,34 +895,52 @@ class VaultRepositoryImpl(
             )
             .flatMap { cipher ->
                 fileManager
-                    .uriToByteArray(fileUri = fileUri)
-                    .flatMap {
-                        vaultSdkSource.encryptAttachment(
-                            userId = userId,
-                            cipher = cipher,
-                            attachmentView = attachmentView,
-                            fileBuffer = it,
-                        )
-                    }
-            }
-            .flatMap { attachmentEncryptResult ->
-                ciphersService
-                    .createAttachment(
-                        cipherId = cipherId,
-                        body = AttachmentJsonRequest(
-                            // We know these values are present because
-                            // - the filename/size are passed into the function
-                            // - the SDK call fills in the key
-                            fileName = requireNotNull(attachmentEncryptResult.attachment.fileName),
-                            key = requireNotNull(attachmentEncryptResult.attachment.key),
-                            fileSize = requireNotNull(attachmentEncryptResult.attachment.size),
-                        ),
-                    )
-                    .flatMap { attachmentJsonResponse ->
-                        ciphersService.uploadAttachment(
-                            attachmentJsonResponse = attachmentJsonResponse,
-                            encryptedFile = attachmentEncryptResult.contents,
-                        )
+                    .writeUriToCache(fileUri = fileUri)
+                    .flatMap { cacheFile ->
+                        vaultSdkSource
+                            .encryptAttachment(
+                                userId = userId,
+                                cipher = cipher,
+                                attachmentView = attachmentView,
+                                decryptedFilePath = cacheFile.absolutePath,
+                                encryptedFilePath = "${cacheFile.absolutePath}.enc",
+                            )
+                            .flatMap { attachment ->
+                                ciphersService
+                                    .createAttachment(
+                                        cipherId = cipherId,
+                                        body = AttachmentJsonRequest(
+                                            // We know these values are present because
+                                            // - the filename/size are passed into the function
+                                            // - the SDK call fills in the key
+                                            fileName = requireNotNull(attachment.fileName),
+                                            key = requireNotNull(attachment.key),
+                                            fileSize = requireNotNull(attachment.size),
+                                        ),
+                                    )
+                                    .flatMap { attachmentJsonResponse ->
+                                        val encryptedFile = File("${cacheFile.absolutePath}.enc")
+                                        ciphersService
+                                            .uploadAttachment(
+                                                attachmentJsonResponse = attachmentJsonResponse,
+                                                encryptedFile = encryptedFile,
+                                            )
+                                            .onSuccess {
+                                                fileManager
+                                                    .delete(
+                                                        cacheFile,
+                                                        encryptedFile,
+                                                    )
+                                            }
+                                            .onFailure {
+                                                fileManager
+                                                    .delete(
+                                                        cacheFile,
+                                                        encryptedFile,
+                                                    )
+                                            }
+                                    }
+                            }
                     }
             }
             .map { it.copy(collectionIds = cipherView.collectionIds) }
@@ -1658,7 +1677,7 @@ class VaultRepositoryImpl(
                                     )
                                     .also {
                                         // Delete encrypted file once it has been uploaded.
-                                        fileManager.deleteFile(encryptedFile)
+                                        fileManager.delete(encryptedFile)
                                     }
                                     .map { CreateSendJsonResponse.Success(it) }
                             }

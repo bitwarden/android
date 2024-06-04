@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
 import com.bitwarden.core.Attachment
-import com.bitwarden.core.AttachmentEncryptResult
 import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherListView
@@ -183,16 +182,18 @@ class VaultSdkSourceImpl(
         userId: String,
         cipher: Cipher,
         attachmentView: AttachmentView,
-        fileBuffer: ByteArray,
-    ): Result<AttachmentEncryptResult> =
+        decryptedFilePath: String,
+        encryptedFilePath: String,
+    ): Result<Attachment> =
         runCatching {
             getClient(userId = userId)
                 .vault()
                 .attachments()
-                .encryptBuffer(
+                .encryptFile(
                     cipher = cipher,
                     attachment = attachmentView,
-                    buffer = fileBuffer,
+                    decryptedFilePath = decryptedFilePath,
+                    encryptedFilePath = encryptedFilePath,
                 )
         }
 

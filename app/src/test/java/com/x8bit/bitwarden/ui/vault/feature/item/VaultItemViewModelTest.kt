@@ -1399,7 +1399,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
 
                 coEvery {
-                    mockFileManager.deleteFile(any())
+                    mockFileManager.delete(any())
                 } just runs
 
                 val uri = mockk<Uri>()
@@ -1424,7 +1424,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
 
                 coVerify(exactly = 1) {
-                    mockFileManager.deleteFile(file)
+                    mockFileManager.delete(file)
                     mockFileManager.fileToUri(uri, file)
                 }
             }
@@ -1437,7 +1437,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
 
                 coEvery {
-                    mockFileManager.deleteFile(any())
+                    mockFileManager.delete(any())
                 } just runs
 
                 val uri = mockk<Uri>()
@@ -1466,7 +1466,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
 
                 coVerify(exactly = 1) {
-                    mockFileManager.deleteFile(file)
+                    mockFileManager.delete(file)
                     mockFileManager.fileToUri(uri, file)
                 }
             }
@@ -1477,7 +1477,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
 
             coEvery {
-                mockFileManager.deleteFile(any())
+                mockFileManager.delete(any())
             } just runs
 
             viewModel.trySendAction(VaultItemAction.Common.NoAttachmentFileLocationReceive)
@@ -1491,7 +1491,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
 
-            coVerify { mockFileManager.deleteFile(file) }
+            coVerify { mockFileManager.delete(file) }
         }
     }
 
