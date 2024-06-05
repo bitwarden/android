@@ -334,7 +334,7 @@ A leitura será feita automaticamente.</string>
   <string name="use_face_id_to_unlock">Usar o Face ID para Desbloquear</string>
   <string name="verify_face_id">Verificar o Face ID</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_credential_provider_go_to_settings">We were unable to automatically open the Android credential provider settings menu for you. You can navigate to the credential provider settings menu manually from Android Settings &gt; System &gt; Passwords &amp; accounts &gt; Passwords, passkeys and data services.</string>
+  <string name="bitwarden_credential_provider_go_to_settings">Não foi possível abrir automaticamente o menu de configurações do provedor de credenciais do Android para você. Você pode navegar para o menu de configurações do provedor de credenciais manualmente a partir de Configurações do Android &gt; Sistema &gt; Senhas e Contas &gt; Senhas chaves e serviços de dados.</string>
   <string name="bitwarden_autofill_go_to_settings">Não foi possível abrir automaticamente o menu de configurações de autopreenchimento do Android para você. Você pode navegar para o menu de configurações de autopreenchimento manualmente a partir de Configurações do Android &gt; Sistema &gt; Idiomas e Entrada &gt; Avançado &gt; Serviço de autopreenchimento.</string>
   <string name="custom_field_name">Nome do campo personalizado</string>
   <string name="field_type_boolean">Booleano</string>

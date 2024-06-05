@@ -86,7 +86,7 @@
   <string name="app_extension">Uygulama uzantısı</string>
   <string name="autofill_accessibility_description">Uygulamalarda ve web\'de giriş bilgilerinizi otomatik doldurmak için Bitwarden erişilebilirlik hizmetini kullanabilirsiniz.</string>
   <string name="autofill_service">Otomatik doldurma hizmeti</string>
-  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Cihaz ayarlarınızdan Bitwarden\'ı geçiş anahtarı sağlayıcınız olarak ayarlayın.</string>
   <string name="avoid_ambiguous_characters">Okurken karışabilecek karakterleri kullanma</string>
   <string name="bitwarden_app_extension">Bitwarden uygulama uzantısı</string>
   <string name="bitwarden_app_extension_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden uygulama uzantısıdır. Bitwarden uygulama uzantısı hakkında daha fazla bilgi almak için \"Ayarlar\" ekranına bakabilirsiniz.</string>
@@ -875,7 +875,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Kuruluş izinleriniz güncellendi ve bir ana parola belirlemeniz gerekiyor.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Kuruluşunuz bir ana parola belirlemenizi gerektiriyor.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</string>
-  <string name="choose_a_login_to_save_this_passkey_to">Choose a login to save this passkey to</string>
+  <string name="choose_a_login_to_save_this_passkey_to">Bu geçiş anahtarının kaydedileceği hesabı seçin</string>
   <string name="save_passkey_as_new_login">Geçiş anahtarını yeni hesap olarak kaydet</string>
   <string name="save_passkey">Geçiş anahtarını kaydet</string>
   <string name="passkeys_for_x">%1$s geçiş anahtarları</string>
