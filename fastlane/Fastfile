@@ -196,9 +196,16 @@ platform :android do
   desc "Publish PlayStore bundle to Google Play Store Internal testing track"
   lane :publishForInternalTesting do
     upload_to_play_store(
+      package_name: "com.x8bit.bitwarden",
       track: "internal",
       release_status: "draft",
       aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab"
+    )
+    upload_to_play_store(
+      package_name: "com.x8bit.bitwarden.beta",
+      track: "internal",
+      release_status: "draft",
+      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab"
     )
   end
 end
