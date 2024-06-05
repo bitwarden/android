@@ -880,7 +880,7 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="save_passkey_as_new_login">Save passkey as new login</string>
   <string name="save_passkey">Enregistrer la clé d\'accès</string>
   <string name="passkeys_for_x">Clés d\'accès pour %1$s</string>
-  <string name="passwords_for_x">Passwords for %1$s</string>
+  <string name="passwords_for_x">Mots de passe pour %1$s</string>
   <string name="overwrite_passkey">Overwrite passkey?</string>
   <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">This item already contains a passkey. Are you sure you want to overwrite the current passkey?</string>
   <string name="duo_two_step_login_is_required_for_your_account">L\'authentification à deux facteurs Duo est requise pour votre compte.</string>
@@ -893,7 +893,7 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Un problème est survenu lors de la création d\'une clé d\'accès pour %1$s. Réessayez plus tard.</string>
   <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Un problème est survenu lors de la lecture de votre clé d\'accès pour %1$s. Réessayez plus tard.</string>
   <string name="verifying_identity_ellipsis">Verifying identity...</string>
-  <string name="passwords">Passwords</string>
+  <string name="passwords">Mots de passe</string>
   <string name="unknown_account">Unknown account</string>
   <string name="set_up_autofill">Set up auto-fill</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Obtenez un accès instantané à vos mots de passe et vos clés d\'accès !</string>

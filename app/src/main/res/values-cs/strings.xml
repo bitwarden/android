@@ -112,7 +112,7 @@
   <string name="extension_setup">Vaše přihlašovací údaje jsou nyní snadno přístupné ze Safari, Chromu a dalších podporovaných aplikací.</string>
   <string name="extension_setup2">V Safari a Chromu najdete Bitwarden pomocí ikony sdílení (nápověda: nachází se vpravo dole v menu).</string>
   <string name="extension_tap_icon">Pro spuštění rozšíření klepněte  na ikonu Bitwardenu v menu.</string>
-  <string name="extension_turn_on">Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu \"Další“ v dolní části menu.</string>
+  <string name="extension_turn_on">Pro zapnutí Bitwardenu v prohlížeči Safari a dalších aplikacích klepněte na ikonu \"Další\" v dolní části menu.</string>
   <string name="favorite">Oblíbené</string>
   <string name="fingerprint">Otisk prstu</string>
   <string name="generate_password">Vygenerovat heslo</string>

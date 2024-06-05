@@ -481,7 +481,7 @@ Nolasīšana notiks automātiski.</string>
   <string name="send_verification_code_to_email">Sūtīt apstiprinājuma kodu uz e-pastu</string>
   <string name="code_sent">Kods nosūtīts</string>
   <string name="confirm_your_identity">Jāapstiprina identitāte, lai turpinātu.</string>
-  <string name="export_vault_warning">Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</string>
+  <string name="export_vault_warning">Šī izguve satur glabātavas datus nešifrētā veidā. Izgūto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Tā ir jāizdzēš uzreiz pēc izmantošanas.</string>
   <string name="enc_export_key_warning">Šī izguve šifrē datus ar konta šifrēšanas atslēgu. Ja tā jebkad tiks mainīta, izvadi vajadzētu veikt vēlreiz, jo vairs nebūs iespējams atšifrēt šo datni.</string>
   <string name="enc_export_account_warning">Katram Bitwarden kontam ir neatkārtojamas šifrēšanas atslēgas, tādēļ nav iespējams ievietot šifrētu izguvi citā kontā.</string>
   <string name="export_vault_confirmation_title">Apstiprināt glabātavas satura izgūšanu</string>
@@ -863,11 +863,11 @@ Vai pārslēgties uz šo kontu?</string>
   <string name="two_step_login_description_long">Savu kontu var padarīt drošāku ar divpakāpju pieteikšanās uzstādīšanu Bitwarden tīmekļa lietotnē.</string>
   <string name="change_master_password_description_long">Savu galveno paroli var mainīt Bitwarden tīmekļa lietotnē.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Ievietot datus savā glabātavā var %1$s.</string>
-  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Par to, kā izmantot Bitwarden, vairāk var uzzināt palīdzības centrā.</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">Vairāk par to, kā izmantot Bitwarden, var uzzināt palīdzības centrā.</string>
   <string name="contact_support_description_long">Meklējamais nav atrodams? Ir iespēja sazināties ar Bitwarden atbalstu bitwarden.com.</string>
   <string name="privacy_policy_description_long">Mūsu privātuma nosacījumi ir pārskatāmi bitwarden.com.</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">Vairāk sava Bitwarden konta iespēju var izpētīt tīmekļa vietnē.</string>
-  <string name="learn_about_organizations_description_long">Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt bitwarden.com tīmekļvietnē.</string>
+  <string name="learn_about_organizations_description_long">Bitwarden nodrošina iespēju kopīgot savas glabātavas vienumus ar citiem, kad tiek izmantota apvienība. Vairāk var uzzināt tīmekļvietnē bitwarden.com.</string>
   <string name="rate_app_description_long">Var palīdzēt citiem noskaidrot, vai Bitwarden tiem der. To var izdarīt lietotņu veikalā, atstājot vērtējumu.</string>
   <string name="default_dark_theme_description_long">Izvēlēties izmantot tumšo izskatu, kad tiek izmantots ierīces tumšais izskats</string>
   <string name="created_xy">Izveidots %1$s, %2$s</string>

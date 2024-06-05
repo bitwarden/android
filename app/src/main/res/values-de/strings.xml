@@ -911,5 +911,5 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="passkey_operation_failed_because_browser_signature_does_not_match">Der Passkey-Vorgang ist fehlgeschlagen, da die Browser-Signatur nicht übereinstimmt</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Der Passkey-Vorgang ist wegen fehlender Asset-Links fehlgeschlagen</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht in den Asset-Links gefunden wurde</string>
-  <string name="passkey_operation_failed_because_app_could_not_be_verified">Der Passwort-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</string>
 </resources>
