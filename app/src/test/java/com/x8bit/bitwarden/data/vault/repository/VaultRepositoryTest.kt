@@ -3112,12 +3112,16 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val organizationId = "organizationId"
+            val mockCipherView = createMockCipherView(number = 1)
             coEvery {
                 vaultSdkSource.moveToOrganization(
                     userId = userId,
                     organizationId = organizationId,
                     cipherView = createMockCipherView(number = 1),
                 )
+            } returns mockCipherView.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.shareCipher(
@@ -3156,12 +3160,16 @@ class VaultRepositoryTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val userId = "mockId-1"
             val organizationId = "organizationId"
+            val mockCipherView = createMockCipherView(number = 1)
             coEvery {
                 vaultSdkSource.moveToOrganization(
                     userId = userId,
                     organizationId = organizationId,
                     cipherView = createMockCipherView(number = 1),
                 )
+            } returns mockCipherView.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
             } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
             coEvery {
                 ciphersService.shareCipher(

@@ -822,6 +822,7 @@ class VaultRepositoryImpl(
                 organizationId = organizationId,
                 cipherView = cipherView,
             )
+            .flatMap { vaultSdkSource.encryptCipher(userId = userId, cipherView = it) }
             .flatMap { cipher ->
                 ciphersService.shareCipher(
                     cipherId = cipherId,
