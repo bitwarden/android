@@ -362,7 +362,7 @@ interface VaultSdkSource {
         userId: String,
         organizationId: String,
         cipherView: CipherView,
-    ): Result<Cipher>
+    ): Result<CipherView>
 
     /**
      * Validates that the given password matches the password hash.

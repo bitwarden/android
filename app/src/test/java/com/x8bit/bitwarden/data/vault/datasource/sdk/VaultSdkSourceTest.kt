@@ -855,12 +855,11 @@ class VaultSdkSourceTest {
         val userId = "userId"
         val organizationId = "organizationId"
         val mockCipher = mockk<CipherView>()
-        val expectedResult = mockk<Cipher>()
+        val expectedResult = mockk<CipherView>()
         val clientCipher = mockk<ClientCiphers> {
             coEvery {
                 moveToOrganization(cipher = mockCipher, organizationId = organizationId)
-            } returns mockCipher
-            coEvery { encrypt(cipherView = mockCipher) } returns expectedResult
+            } returns expectedResult
         }
         every { clientVault.ciphers() } returns clientCipher
 
