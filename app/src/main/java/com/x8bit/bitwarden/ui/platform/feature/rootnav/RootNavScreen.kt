@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -105,6 +106,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForAutofillSelection,
         is RootNavState.VaultUnlockedForNewSend,
         is RootNavState.VaultUnlockedForAuthRequest,
+        is RootNavState.VaultUnlockedForFido2Save,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -179,6 +181,14 @@ fun RootNavScreen(
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToLoginApproval(
                     fingerprint = null,
+                    navOptions = rootNavOptions,
+                )
+            }
+
+            is RootNavState.VaultUnlockedForFido2Save -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToVaultItemListingAsRoot(
+                    vaultItemListingType = VaultItemListingType.Login,
                     navOptions = rootNavOptions,
                 )
             }

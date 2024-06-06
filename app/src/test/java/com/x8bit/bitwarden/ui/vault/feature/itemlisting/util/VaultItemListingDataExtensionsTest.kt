@@ -393,6 +393,7 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             autofillSelectionData = null,
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 
@@ -467,6 +468,7 @@ class VaultItemListingDataExtensionsTest {
                 type = AutofillSelectionData.Type.LOGIN,
                 uri = null,
             ),
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 
@@ -518,6 +520,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -536,6 +539,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -552,6 +556,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -571,6 +576,7 @@ class VaultItemListingDataExtensionsTest {
                     type = AutofillSelectionData.Type.LOGIN,
                     uri = "https://www.test.com",
                 ),
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -710,6 +716,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("1"),
             vaultFilterType = VaultFilterType.AllVaults,
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 
@@ -750,6 +757,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 

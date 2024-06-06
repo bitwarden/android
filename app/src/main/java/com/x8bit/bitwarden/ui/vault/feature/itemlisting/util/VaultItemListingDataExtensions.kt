@@ -11,6 +11,7 @@ import com.bitwarden.core.FolderView
 import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -99,6 +100,7 @@ fun VaultData.toViewState(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
+    fido2CreationData: Fido2CredentialRequest?,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
         .filter { cipherView ->
@@ -126,6 +128,7 @@ fun VaultData.toViewState(
                 hasMasterPassword = hasMasterPassword,
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = autofillSelectionData != null,
+                isFido2Creation = fido2CreationData != null,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -251,6 +254,7 @@ private fun List<CipherView>.toDisplayItemList(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isFido2Creation: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -258,6 +262,7 @@ private fun List<CipherView>.toDisplayItemList(
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
+            isFido2Creation = isFido2Creation,
         )
     }
 
@@ -277,6 +282,7 @@ private fun CipherView.toDisplayItem(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isFido2Creation: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -293,6 +299,7 @@ private fun CipherView.toDisplayItem(
         overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
+        isFido2Creation = isFido2Creation,
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
 
@@ -344,6 +351,7 @@ private fun SendView.toDisplayItem(
         optionsTestTag = "SendOptionsButton",
         isAutofill = false,
         shouldShowMasterPasswordReprompt = false,
+        isFido2Creation = false,
     )
 
 @get:DrawableRes

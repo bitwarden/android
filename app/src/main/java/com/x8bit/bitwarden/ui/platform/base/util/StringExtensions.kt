@@ -26,6 +26,11 @@ import kotlin.math.floor
 const val ZERO_WIDTH_CHARACTER: String = "\u200B"
 
 /**
+ * URI scheme for a native Android application.
+ */
+private const val ANDROID_APP_URI_SCHEME: String = "androidapp://"
+
+/**
  * Returns the original [String] only if:
  *
  * - it is non-null
@@ -66,6 +71,13 @@ fun String.toHostOrPathOrNull(): String? {
         return null
     }
     return uri.host ?: uri.path
+}
+
+/**
+ * Returns the original [String] prefixed with `androidapp://` if it doesn't already contain.
+ */
+fun String.toAndroidAppUriString(): String {
+    return if (this.startsWith(ANDROID_APP_URI_SCHEME)) this else "$ANDROID_APP_URI_SCHEME$this"
 }
 
 /**

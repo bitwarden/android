@@ -1,12 +1,18 @@
 package com.x8bit.bitwarden
 
 import android.content.Intent
+import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -18,6 +24,7 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.model.PasswordlessRequestData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.manager.model.VaultStateEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -26,6 +33,7 @@ import com.x8bit.bitwarden.ui.platform.feature.settings.appearance.model.AppThem
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.util.isMyVaultShortcut
 import com.x8bit.bitwarden.ui.platform.util.isPasswordGeneratorShortcut
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -45,15 +53,18 @@ class MainViewModelTest : BaseViewModelTest() {
 
     private val autofillSelectionManager: AutofillSelectionManager = AutofillSelectionManagerImpl()
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
-    private val authRepository = mockk<AuthRepository> {
-        every { userStateFlow } returns mutableUserStateFlow
-    }
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
+    private val fido2CredentialManager = mockk<Fido2CredentialManager>()
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
+    }
+    private val authRepository = mockk<AuthRepository> {
+        every { activeUserId } returns DEFAULT_USER_STATE.activeUserId
+        every { userStateFlow } returns mutableUserStateFlow
+        every { switchAccount(any()) } returns SwitchAccountResult.NoChange
     }
     private val mutableVaultStateEventFlow = bufferedMutableSharedFlow<VaultStateEvent>()
     private val vaultRepository = mockk<VaultRepository> {
@@ -74,6 +85,7 @@ class MainViewModelTest : BaseViewModelTest() {
             Intent::getPasswordlessRequestDataIntentOrNull,
             Intent::getAutofillSaveItemOrNull,
             Intent::getAutofillSelectionDataOrNull,
+            Intent::getFido2CredentialRequestOrNull,
         )
         mockkStatic(
             Intent::isMyVaultShortcut,
@@ -351,6 +363,111 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with fido2 request data should set the special circumstance to Fido2Save`() {
+        val viewModel = createViewModel()
+        val fido2CredentialRequest = Fido2CredentialRequest(
+            userId = DEFAULT_USER_STATE.activeUserId,
+            requestJson = """{"mockRequestJson":1}""",
+            packageName = "com.x8bit.bitwarden",
+            signingInfo = SigningInfo(),
+            origin = "mockOrigin",
+        )
+        val mockIntent = mockk<Intent> {
+            every { getFido2CredentialRequestOrNull() } returns fido2CredentialRequest
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        coEvery {
+            fido2CredentialManager.validateOrigin(any())
+        } returns Fido2ValidateOriginResult.Success
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = fido2CredentialRequest,
+            ),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with fido2 request data should switch users if active user is not selected`() {
+        mutableUserStateFlow.value = DEFAULT_USER_STATE
+        val viewModel = createViewModel()
+        val fido2CredentialRequest = Fido2CredentialRequest(
+            userId = "selectedUserId",
+            requestJson = """{"mockRequestJson":1}""",
+            packageName = "com.x8bit.bitwarden",
+            signingInfo = SigningInfo(),
+            origin = "mockOrigin",
+        )
+        val mockIntent = mockk<Intent> {
+            every { getFido2CredentialRequestOrNull() } returns fido2CredentialRequest
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        coEvery {
+            fido2CredentialManager.validateOrigin(any())
+        } returns Fido2ValidateOriginResult.Success
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        verify(exactly = 1) { authRepository.switchAccount(fido2CredentialRequest.userId) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with fido2 request data should not switch users if active user is selected`() {
+        val viewModel = createViewModel()
+        val fido2CredentialRequest = Fido2CredentialRequest(
+            userId = DEFAULT_USER_STATE.activeUserId,
+            requestJson = """{"mockRequestJson":1}""",
+            packageName = "com.x8bit.bitwarden",
+            signingInfo = SigningInfo(),
+            origin = "mockOrigin",
+        )
+        val mockIntent = mockk<Intent> {
+            every { getFido2CredentialRequestOrNull() } returns fido2CredentialRequest
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        coEvery {
+            fido2CredentialManager.validateOrigin(any())
+        } returns Fido2ValidateOriginResult.Success
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        verify(exactly = 0) { authRepository.switchAccount(fido2CredentialRequest.userId) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
@@ -532,10 +649,10 @@ class MainViewModelTest : BaseViewModelTest() {
         autofillSelectionManager = autofillSelectionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
-        authRepository = authRepository,
+        intentManager = intentManager,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
-        intentManager = intentManager,
+        authRepository = authRepository,
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
@@ -543,3 +660,23 @@ class MainViewModelTest : BaseViewModelTest() {
 }
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
+private val DEFAULT_ACCOUNT = UserState.Account(
+    userId = "activeUserId",
+    name = "Active User",
+    email = "active@bitwarden.com",
+    environment = Environment.Us,
+    avatarColorHex = "#aa00aa",
+    isPremium = true,
+    isLoggedIn = true,
+    isVaultUnlocked = true,
+    needsPasswordReset = false,
+    isBiometricsEnabled = false,
+    organizations = emptyList(),
+    needsMasterPassword = false,
+    trustedDevice = null,
+)
+
+private val DEFAULT_USER_STATE = UserState(
+    activeUserId = "activeUserId",
+    accounts = listOf(DEFAULT_ACCOUNT),
+)

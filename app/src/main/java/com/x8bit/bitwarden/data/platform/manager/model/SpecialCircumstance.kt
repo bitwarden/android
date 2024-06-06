@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -45,6 +46,15 @@ sealed class SpecialCircumstance : Parcelable {
     data class PasswordlessRequest(
         val passwordlessRequestData: PasswordlessRequestData,
         val shouldFinishWhenComplete: Boolean,
+    ) : SpecialCircumstance()
+
+    /**
+     * The app was launched via the credential manager framework in order to allow the user to
+     * manually save a passkey to their vault.
+     */
+    @Parcelize
+    data class Fido2Save(
+        val fido2CredentialRequest: Fido2CredentialRequest,
     ) : SpecialCircumstance()
 
     /**

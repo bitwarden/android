@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.base
 
 import com.x8bit.bitwarden.data.platform.datasource.network.core.ResultCallAdapterFactory
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
+import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.jupiter.api.AfterEach
@@ -17,10 +18,12 @@ abstract class BaseServiceTest {
 
     protected val server = MockWebServer().apply { start() }
 
+    protected val url: HttpUrl = server.url("/")
+
     protected val urlPrefix: String get() = "http://${server.hostName}:${server.port}"
 
     protected val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(server.url("/").toString())
+        .baseUrl(url.toString())
         .addCallAdapterFactory(ResultCallAdapterFactory())
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()

@@ -49,7 +49,7 @@ private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
  *
  * @see IntentManager.createFido2CreationPendingIntent
  */
-private const val EXTRA_KEY_USER_ID: String = "EXTRA_KEY_USER_ID"
+const val EXTRA_KEY_USER_ID: String = "user_id"
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android

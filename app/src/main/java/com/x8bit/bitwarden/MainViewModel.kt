@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
@@ -37,16 +38,16 @@ private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
 /**
  * A view model that helps launch actions for the [MainActivity].
  */
-@Suppress("LongParameterList")
+@Suppress("LongParameterList", "TooManyFunctions")
 @HiltViewModel
 class MainViewModel @Inject constructor(
     autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
     private val intentManager: IntentManager,
-    authRepository: AuthRepository,
     settingsRepository: SettingsRepository,
     vaultRepository: VaultRepository,
+    private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     MainState(
@@ -172,6 +173,7 @@ class MainViewModel @Inject constructor(
         val shareData = intentManager.getShareDataFromIntent(intent)
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
+        val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 specialCircumstanceManager.specialCircumstance =
@@ -208,6 +210,20 @@ class MainViewModel @Inject constructor(
                         // Send task when this is not the first intent.
                         shouldFinishWhenComplete = isFirstIntent,
                     )
+            }
+
+            fido2CredentialRequestData != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.Fido2Save(
+                        fido2CredentialRequest = fido2CredentialRequestData,
+                    )
+
+                // Switch accounts if the selected user is not the active user.
+                if (authRepository.activeUserId != null &&
+                    authRepository.activeUserId != fido2CredentialRequestData.userId
+                ) {
+                    authRepository.switchAccount(fido2CredentialRequestData.userId)
+                }
             }
 
             hasGeneratorShortcut -> {

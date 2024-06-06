@@ -13,6 +13,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlI
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.AssetManager
+import com.x8bit.bitwarden.data.platform.manager.AssetManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
@@ -176,5 +178,15 @@ object PlatformManagerModule {
     ): CrashLogsManager = CrashLogsManagerImpl(
         settingsRepository = settingsRepository,
         legacyAppCenterMigrator = legacyAppCenterMigrator,
+    )
+
+    @Provides
+    @Singleton
+    fun provideAssetManager(
+        @ApplicationContext context: Context,
+        dispatcherManager: DispatcherManager,
+    ): AssetManager = AssetManagerImpl(
+        context = context,
+        dispatcherManager = dispatcherManager,
     )
 }
