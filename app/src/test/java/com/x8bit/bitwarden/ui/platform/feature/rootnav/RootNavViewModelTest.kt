@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
+import android.content.pm.SigningInfo
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -399,6 +401,50 @@ class RootNavViewModelTest : BaseViewModelTest() {
             RootNavState.VaultUnlockedForAutofillSelection(
                 activeUserId = "activeUserId",
                 type = AutofillSelectionData.Type.LOGIN,
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when the active user has an unlocked vault but there is a Fido2Save special circumstance the nav state should be VaultUnlockedForFido2Save`() {
+        val fido2CredentialRequest = Fido2CredentialRequest(
+            userId = "activeUserId",
+            requestJson = "{}",
+            packageName = "com.x8bit.bitwarden",
+            signingInfo = SigningInfo(),
+            origin = "mockOrigin",
+        )
+        specialCircumstanceManager.specialCircumstance =
+            SpecialCircumstance.Fido2Save(fido2CredentialRequest)
+        mutableUserStateFlow.tryEmit(
+            UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(
+                    UserState.Account(
+                        userId = "activeUserId",
+                        name = "name",
+                        email = "email",
+                        avatarColorHex = "avatarHexColor",
+                        environment = Environment.Us,
+                        isPremium = true,
+                        isLoggedIn = true,
+                        isVaultUnlocked = true,
+                        needsPasswordReset = false,
+                        isBiometricsEnabled = false,
+                        organizations = emptyList(),
+                        needsMasterPassword = false,
+                        trustedDevice = null,
+                    ),
+                ),
+            ),
+        )
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.VaultUnlockedForFido2Save(
+                activeUserId = "activeUserId",
+                fido2CredentialRequest = fido2CredentialRequest,
             ),
             viewModel.stateFlow.value,
         )

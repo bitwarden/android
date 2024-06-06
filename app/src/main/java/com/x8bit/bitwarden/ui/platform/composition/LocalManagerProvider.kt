@@ -9,6 +9,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerImpl
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
@@ -33,6 +35,7 @@ fun LocalManagerProvider(content: @Composable () -> Unit) {
         LocalExitManager provides ExitManagerImpl(activity),
         LocalBiometricsManager provides BiometricsManagerImpl(activity),
         LocalNfcManager provides NfcManagerImpl(activity),
+        LocalFido2CompletionManager provides Fido2CompletionManagerImpl(activity),
     ) {
         content()
     }
@@ -72,3 +75,8 @@ val LocalPermissionsManager: ProvidableCompositionLocal<PermissionsManager> = co
 val LocalNfcManager: ProvidableCompositionLocal<NfcManager> = compositionLocalOf {
     error("CompositionLocal NfcManager not present")
 }
+
+val LocalFido2CompletionManager: ProvidableCompositionLocal<Fido2CompletionManager> =
+    compositionLocalOf {
+        error("CompositionLocal Fido2CompletionManager not present")
+    }
