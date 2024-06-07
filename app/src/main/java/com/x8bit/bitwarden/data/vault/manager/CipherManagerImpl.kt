@@ -2,8 +2,10 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import com.bitwarden.core.AttachmentView
+import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
@@ -128,8 +130,23 @@ class CipherManagerImpl(
         cipherId: String,
         attachmentId: String,
         cipherView: CipherView,
-    ): DeleteAttachmentResult {
-        val userId = activeUserId ?: return DeleteAttachmentResult.Error
+    ): DeleteAttachmentResult =
+        deleteCipherAttachmentForResult(
+            cipherId = cipherId,
+            attachmentId = attachmentId,
+            cipherView = cipherView,
+        )
+            .fold(
+                onSuccess = { DeleteAttachmentResult.Success },
+                onFailure = { DeleteAttachmentResult.Error },
+            )
+
+    private suspend fun deleteCipherAttachmentForResult(
+        cipherId: String,
+        attachmentId: String,
+        cipherView: CipherView,
+    ): Result<Cipher> {
+        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
         return ciphersService
             .deleteCipherAttachment(
                 cipherId = cipherId,
@@ -151,10 +168,6 @@ class CipherManagerImpl(
                     cipher = cipher.toEncryptedNetworkCipherResponse(),
                 )
             }
-            .fold(
-                onSuccess = { DeleteAttachmentResult.Success },
-                onFailure = { DeleteAttachmentResult.Error },
-            )
     }
 
     override suspend fun restoreCipher(
@@ -283,15 +296,34 @@ class CipherManagerImpl(
             )
     }
 
-    @Suppress("LongMethod")
     override suspend fun createAttachment(
         cipherId: String,
         cipherView: CipherView,
         fileSizeBytes: String,
         fileName: String,
         fileUri: Uri,
-    ): CreateAttachmentResult {
-        val userId = activeUserId ?: return CreateAttachmentResult.Error
+    ): CreateAttachmentResult =
+        createAttachmentForResult(
+            cipherId = cipherId,
+            cipherView = cipherView,
+            fileSizeBytes = fileSizeBytes,
+            fileName = fileName,
+            fileUri = fileUri,
+        )
+            .fold(
+                onFailure = { CreateAttachmentResult.Error },
+                onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
+            )
+
+    @Suppress("LongMethod")
+    private suspend fun createAttachmentForResult(
+        cipherId: String,
+        cipherView: CipherView,
+        fileSizeBytes: String,
+        fileName: String,
+        fileUri: Uri,
+    ): Result<CipherView> {
+        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
         val attachmentView = AttachmentView(
             id = null,
             url = null,
@@ -358,18 +390,27 @@ class CipherManagerImpl(
                     cipher = it.toEncryptedSdkCipher(),
                 )
             }
-            .fold(
-                onFailure = { CreateAttachmentResult.Error },
-                onSuccess = { CreateAttachmentResult.Success(cipherView = it) },
-            )
     }
 
-    @Suppress("ReturnCount")
     override suspend fun downloadAttachment(
         cipherView: CipherView,
         attachmentId: String,
-    ): DownloadAttachmentResult {
-        val userId = activeUserId ?: return DownloadAttachmentResult.Failure
+    ): DownloadAttachmentResult =
+        downloadAttachmentForResult(
+            cipherView = cipherView,
+            attachmentId = attachmentId,
+        )
+            .fold(
+                onSuccess = { DownloadAttachmentResult.Success(file = it) },
+                onFailure = { DownloadAttachmentResult.Failure },
+            )
+
+    @Suppress("ReturnCount")
+    private suspend fun downloadAttachmentForResult(
+        cipherView: CipherView,
+        attachmentId: String,
+    ): Result<File> {
+        val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
 
         val cipher = vaultSdkSource
             .encryptCipher(
@@ -378,10 +419,10 @@ class CipherManagerImpl(
             )
             .fold(
                 onSuccess = { it },
-                onFailure = { return DownloadAttachmentResult.Failure },
+                onFailure = { return it.asFailure() },
             )
         val attachment = cipher.attachments?.find { it.id == attachmentId }
-            ?: return DownloadAttachmentResult.Failure
+            ?: return IllegalStateException("No attachment to download").asFailure()
 
         val attachmentData = ciphersService
             .getCipherAttachment(
@@ -390,13 +431,14 @@ class CipherManagerImpl(
             )
             .fold(
                 onSuccess = { it },
-                onFailure = { return DownloadAttachmentResult.Failure },
+                onFailure = { return it.asFailure() },
             )
 
-        val url = attachmentData.url ?: return DownloadAttachmentResult.Failure
+        val url = attachmentData.url
+            ?: return IllegalStateException("Attachment does not have a url").asFailure()
 
         val encryptedFile = when (val result = fileManager.downloadFileToCache(url)) {
-            DownloadResult.Failure -> return DownloadAttachmentResult.Failure
+            DownloadResult.Failure -> return IllegalStateException("Download failed").asFailure()
             is DownloadResult.Success -> result.file
         }
 
@@ -411,9 +453,6 @@ class CipherManagerImpl(
             )
             .onSuccess { fileManager.delete(encryptedFile) }
             .onFailure { fileManager.delete(encryptedFile) }
-            .fold(
-                onSuccess = { DownloadAttachmentResult.Success(file = decryptedFile) },
-                onFailure = { DownloadAttachmentResult.Failure },
-            )
+            .map { decryptedFile }
     }
 }
