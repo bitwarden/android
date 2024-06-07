@@ -10,26 +10,19 @@ import com.bitwarden.core.SendType
 import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
+import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
-import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
-import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
-import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -42,7 +35,7 @@ import kotlinx.coroutines.flow.StateFlow
  * Responsible for managing vault data inside the network layer.
  */
 @Suppress("TooManyFunctions")
-interface VaultRepository : VaultLockManager {
+interface VaultRepository : CipherManager, VaultLockManager {
 
     /**
      * The [VaultFilterType] for the current user.
@@ -194,87 +187,6 @@ interface VaultRepository : VaultLockManager {
     ): VaultUnlockResult
 
     /**
-     * Attempt to create a cipher.
-     */
-    suspend fun createCipher(cipherView: CipherView): CreateCipherResult
-
-    /**
-     * Attempt to create a cipher that belongs to an organization.
-     */
-    suspend fun createCipherInOrganization(
-        cipherView: CipherView,
-        collectionIds: List<String>,
-    ): CreateCipherResult
-
-    /**
-     * Attempt to create an attachment for the given [cipherView].
-     */
-    suspend fun createAttachment(
-        cipherId: String,
-        cipherView: CipherView,
-        fileSizeBytes: String,
-        fileName: String,
-        fileUri: Uri,
-    ): CreateAttachmentResult
-
-    /**
-     * Attempt to download an attachment file, specified by [attachmentId], for the given
-     * [cipherView].
-     */
-    suspend fun downloadAttachment(
-        cipherView: CipherView,
-        attachmentId: String,
-    ): DownloadAttachmentResult
-
-    /**
-     * Attempt to delete a cipher.
-     */
-    suspend fun hardDeleteCipher(cipherId: String): DeleteCipherResult
-
-    /**
-     * Attempt to soft delete a cipher.
-     */
-    suspend fun softDeleteCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): DeleteCipherResult
-
-    /**
-     * Attempt to restore a cipher.
-     */
-    suspend fun restoreCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): RestoreCipherResult
-
-    /**
-     * Attempt to update a cipher.
-     */
-    suspend fun updateCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): UpdateCipherResult
-
-    /**
-     * Attempt to share a cipher to the collections with the given collectionIds.
-     */
-    suspend fun shareCipher(
-        cipherId: String,
-        organizationId: String,
-        cipherView: CipherView,
-        collectionIds: List<String>,
-    ): ShareCipherResult
-
-    /**
-     * Attempt to update a cipher with the given collectionIds.
-     */
-    suspend fun updateCipherCollections(
-        cipherId: String,
-        cipherView: CipherView,
-        collectionIds: List<String>,
-    ): ShareCipherResult
-
-    /**
      * Attempt to create a send. The [fileUri] _must_ be present when the given [SendView] has a
      * [SendView.type] of [SendType.FILE].
      */
@@ -302,15 +214,6 @@ interface VaultRepository : VaultLockManager {
      * Attempt to delete a send.
      */
     suspend fun deleteSend(sendId: String): DeleteSendResult
-
-    /**
-     * Attempt to delete an attachment from a send.
-     */
-    suspend fun deleteCipherAttachment(
-        cipherId: String,
-        attachmentId: String,
-        cipherView: CipherView,
-    ): DeleteAttachmentResult
 
     /**
      * Attempt to create a folder.
