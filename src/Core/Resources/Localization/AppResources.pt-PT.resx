@@ -961,7 +961,7 @@ A leitura será efetuada automaticamente.</value>
     <value>Ambiente personalizado</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Para utilizadores avançados. Pode especificar o URL de base de cada serviço independentemente.</value>
+    <value>Para utilizadores avançados. Pode especificar o URL de base de cada serviço de forma independente.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>Os URLs de ambiente foram guardados.</value>

@@ -422,7 +422,7 @@
     <value>خدمة التعبئة التلقائية</value>
   </data>
   <data name="SetBitwardenAsPasskeyManagerDescription" xml:space="preserve">
-    <value>Set Bitwarden as your passkey provider in device settings.</value>
+    <value>تعيين Bitwarden كموفر مفتاح المرور الخاص بك في إعدادات الجهاز.</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>تجنب الأحرف الغامضة</value>
