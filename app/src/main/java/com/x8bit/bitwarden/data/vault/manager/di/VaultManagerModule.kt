@@ -8,8 +8,12 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
+import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.DownloadService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.CipherManager
+import com.x8bit.bitwarden.data.vault.manager.CipherManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.FileManagerImpl
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -30,6 +34,24 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object VaultManagerModule {
+
+    @Provides
+    @Singleton
+    fun provideCipherManager(
+        ciphersService: CiphersService,
+        vaultDiskSource: VaultDiskSource,
+        vaultSdkSource: VaultSdkSource,
+        authDiskSource: AuthDiskSource,
+        fileManager: FileManager,
+        clock: Clock,
+    ): CipherManager = CipherManagerImpl(
+        fileManager = fileManager,
+        authDiskSource = authDiskSource,
+        ciphersService = ciphersService,
+        vaultDiskSource = vaultDiskSource,
+        vaultSdkSource = vaultSdkSource,
+        clock = clock,
+    )
 
     @Provides
     @Singleton
