@@ -4,7 +4,6 @@ import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.CipherRepromptType
 import com.bitwarden.core.CipherType
 import com.bitwarden.core.CipherView
-import com.bitwarden.core.Fido2Credential
 import com.bitwarden.core.FieldType
 import com.bitwarden.core.FieldView
 import com.bitwarden.core.IdentityView
@@ -12,6 +11,7 @@ import com.bitwarden.core.LoginUriView
 import com.bitwarden.core.LoginView
 import com.bitwarden.core.PasswordHistoryView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
@@ -46,23 +46,7 @@ fun createLoginView(isEmpty: Boolean): LoginView =
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example"
             .takeUnless { isEmpty },
         autofillOnPageLoad = false,
-        fido2Credentials = listOf(
-            Fido2Credential(
-                credentialId = "mockCredentialId",
-                keyType = "mockKeyType",
-                keyAlgorithm = "mockKeyAlgorithm",
-                keyCurve = "mockKeyCurve",
-                keyValue = "mockKeyValue",
-                rpId = "mockRpId",
-                userHandle = "mockUserHandle",
-                userName = "mockUserName",
-                counter = "mockCounter",
-                rpName = "mockRpName",
-                userDisplayName = "mockUserDisplayName",
-                discoverable = "mockDiscoverable",
-                creationDate = Instant.ofEpochSecond(1_000L),
-            ),
-        ).takeUnless { isEmpty },
+        fido2Credentials = createMockSdkFido2CredentialList(number = 1).takeUnless { isEmpty },
     )
 
 @Suppress("CyclomaticComplexMethod")
@@ -253,10 +237,8 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
             totpCode = "testCode",
         )
             .takeUnless { isEmpty },
-        fido2CredentialCreationDateText = R.string.created_xy.asText(
-            "1/1/70",
-            "12:16 AM",
-        )
+        fido2CredentialCreationDateText = R.string.created_xy
+            .asText("10/27/23", "12:00 PM")
             .takeUnless { isEmpty },
     )
 

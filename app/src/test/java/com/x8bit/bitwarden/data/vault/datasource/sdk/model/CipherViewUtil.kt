@@ -102,13 +102,21 @@ fun createMockLoginView(
         fido2Credentials = createMockSdkFido2CredentialList(number, clock),
     )
 
-fun createMockSdkFido2CredentialList(number: Int, clock: Clock = FIXED_CLOCK) =
-    listOf(createMockSdkFido2CredentialView(number, clock))
-
-fun createMockSdkFido2CredentialView(
+/**
+ * Create a list of mock [Fido2Credential] with a given [number].
+ */
+fun createMockSdkFido2CredentialList(
     number: Int,
     clock: Clock = FIXED_CLOCK,
-) = Fido2Credential(
+): List<Fido2Credential> = listOf(createMockSdkFido2Credential(number, clock))
+
+/**
+ * Create a mock [Fido2Credential] with a given [number].
+ */
+fun createMockSdkFido2Credential(
+    number: Int,
+    clock: Clock = FIXED_CLOCK,
+): Fido2Credential = Fido2Credential(
     credentialId = "mockCredentialId-$number",
     keyType = "mockKeyType-$number",
     keyAlgorithm = "mockKeyAlgorithm-$number",
