@@ -7,11 +7,6 @@
 # Default file owners
 * @bitwarden/dept-development-mobile
 
-src/App/Platforms/Android/AndroidManifest.xml
-src/iOS.Autofill/Info.plist
-src/iOS.Extension/Info.plist
-src/iOS.ShareExtension/Info.plist
-src/App/Platforms/iOS/Info.plist
 
 ## Auth team files ##
 
@@ -39,9 +34,6 @@ store/google/en
 
 ## Utils ##
 store/google/Publisher
-
-# BRE for release workflow changes
-.github/workflows/release.yml @bitwarden/dept-bre
 
 # BRE for release workflow changes
 .github/workflows/release.yml @bitwarden/dept-bre
