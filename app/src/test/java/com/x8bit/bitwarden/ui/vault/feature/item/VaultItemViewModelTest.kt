@@ -377,25 +377,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         fun `ConfirmRestoreClick with RestoreCipherResult Success should should ShowToast and NavigateBack`() =
             runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
-                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-                mutableAuthCodeItemFlow.value =
-                    DataState.Loaded(data = createVerificationCodeItem())
-
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
-                    vaultRepo.restoreCipher(
-                        cipherId = VAULT_ITEM_ID,
-                        cipherView = createMockCipherView(number = 1),
-                    )
+                    vaultRepo.restoreCipher(cipherId = VAULT_ITEM_ID)
                 } returns RestoreCipherResult.Success
 
                 viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
@@ -414,40 +398,23 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         @Suppress("MaxLineLength")
-        fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() =
-            runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
-                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-                mutableAuthCodeItemFlow.value =
-                    DataState.Loaded(data = createVerificationCodeItem())
-                val viewModel = createViewModel(state = DEFAULT_STATE)
-                coEvery {
-                    vaultRepo.restoreCipher(
-                        cipherId = VAULT_ITEM_ID,
-                        cipherView = createMockCipherView(number = 1),
-                    )
-                } returns RestoreCipherResult.Error
+        fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() {
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            coEvery {
+                vaultRepo.restoreCipher(cipherId = VAULT_ITEM_ID)
+            } returns RestoreCipherResult.Error
 
-                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
 
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        viewState = DEFAULT_VIEW_STATE,
-                        dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
                     ),
-                    viewModel.stateFlow.value,
-                )
-            }
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
         @Test
         fun `on EditClick should do nothing when ViewState is not Content`() = runTest {

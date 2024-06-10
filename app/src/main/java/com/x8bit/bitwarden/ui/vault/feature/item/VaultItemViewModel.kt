@@ -486,22 +486,14 @@ class VaultItemViewModel @Inject constructor(
                 ),
             )
         }
-        onContent { content ->
-            content
-                .common
-                .currentCipher
-                ?.let { cipher ->
-                    viewModelScope.launch {
-                        trySendAction(
-                            VaultItemAction.Internal.RestoreCipherReceive(
-                                result = vaultRepository.restoreCipher(
-                                    cipherId = state.vaultItemId,
-                                    cipherView = cipher,
-                                ),
-                            ),
-                        )
-                    }
-                }
+        viewModelScope.launch {
+            trySendAction(
+                VaultItemAction.Internal.RestoreCipherReceive(
+                    result = vaultRepository.restoreCipher(
+                        cipherId = state.vaultItemId,
+                    ),
+                ),
+            )
         }
     }
 

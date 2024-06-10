@@ -80,7 +80,6 @@ interface CipherManager {
      */
     suspend fun restoreCipher(
         cipherId: String,
-        cipherView: CipherView,
     ): RestoreCipherResult
 
     /**
