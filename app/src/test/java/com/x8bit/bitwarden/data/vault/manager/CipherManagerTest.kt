@@ -603,10 +603,7 @@ class CipherManagerTest {
     fun `restoreCipher with no active user should return RestoreCipherResult Error`() = runTest {
         fakeAuthDiskSource.userState = null
 
-        val result = cipherManager.restoreCipher(
-            cipherId = "cipherId",
-            cipherView = mockk(),
-        )
+        val result = cipherManager.restoreCipher(cipherId = "cipherId")
 
         assertEquals(RestoreCipherResult.Error, result)
     }
@@ -621,10 +618,7 @@ class CipherManagerTest {
                 ciphersService.restoreCipher(cipherId = cipherId)
             } returns Throwable("Fail").asFailure()
 
-            val result = cipherManager.restoreCipher(
-                cipherId = cipherId,
-                cipherView = createMockCipherView(number = 1),
-            )
+            val result = cipherManager.restoreCipher(cipherId = cipherId)
 
             assertEquals(RestoreCipherResult.Error, result)
         }
@@ -633,35 +627,14 @@ class CipherManagerTest {
     @Test
     fun `restoreCipher with ciphersService restoreCipher success should return RestoreCipherResult success`() =
         runTest {
-            mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
-            every {
-                createMockSdkCipher(number = 1, clock = clock).toEncryptedNetworkCipherResponse()
-            } returns createMockCipher(number = 1)
-            val fixedInstant = Instant.parse("2021-01-01T00:00:00Z")
             val userId = "mockId-1"
             val cipherId = "mockId-1"
-            coEvery {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = createMockCipherView(number = 1).copy(deletedDate = null),
-                )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            val cipher = createMockCipher(number = 1)
             fakeAuthDiskSource.userState = MOCK_USER_STATE
-            coEvery { ciphersService.restoreCipher(cipherId = cipherId) } returns Unit.asSuccess()
-            coEvery {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = createMockCipher(number = 1),
-                )
-            } just runs
-            val cipherView = createMockCipherView(number = 1)
-            mockkStatic(Instant::class)
-            every { Instant.now() } returns fixedInstant
+            coEvery { ciphersService.restoreCipher(cipherId = cipherId) } returns cipher.asSuccess()
+            coEvery { vaultDiskSource.saveCipher(userId = userId, cipher = cipher) } just runs
 
-            val result = cipherManager.restoreCipher(
-                cipherId = cipherId,
-                cipherView = cipherView,
-            )
+            val result = cipherManager.restoreCipher(cipherId = cipherId)
 
             assertEquals(RestoreCipherResult.Success, result)
         }

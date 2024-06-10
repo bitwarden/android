@@ -58,7 +58,7 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `createCipher should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.createCipher(
             body = createMockCipherJsonRequest(number = 1),
         )
@@ -70,7 +70,7 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `createCipherInOrganization should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.createCipherInOrganization(
             body = CreateCipherInOrganizationJsonRequest(
                 cipher = createMockCipherJsonRequest(number = 1),
@@ -136,7 +136,7 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `updateCipher with success response should return a Success with the correct cipher`() =
         runTest {
-            server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+            server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
             val result = ciphersService.updateCipher(
                 cipherId = "cipher-id-1",
                 body = createMockCipherJsonRequest(number = 1),
@@ -199,7 +199,7 @@ class CiphersServiceTest : BaseServiceTest() {
         server.enqueue(
             MockResponse()
                 .setResponseCode(200)
-                .setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON),
+                .setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON),
         )
 
         val result = ciphersService.shareCipher(
@@ -233,15 +233,15 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `restoreCipher should execute the restoreCipher API`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val cipherId = "cipherId"
         val result = ciphersService.restoreCipher(cipherId = cipherId)
-        assertEquals(Unit, result.getOrThrow())
+        assertEquals(createMockCipher(number = 1), result.getOrThrow())
     }
 
     @Test
     fun `getCipher should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.getCipher(cipherId = "mockId-1")
         assertEquals(
             createMockCipher(number = 1),
@@ -398,7 +398,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
 }
 """
 
-private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
+private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
 {
   "notes": "mockNotes-1",
   "attachments": [

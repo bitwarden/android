@@ -112,7 +112,7 @@ interface CiphersApi {
     @PUT("ciphers/{cipherId}/restore")
     suspend fun restoreCipher(
         @Path("cipherId") cipherId: String,
-    ): Result<Unit>
+    ): Result<SyncResponseJson.Cipher>
 
     /**
      * Gets a cipher.

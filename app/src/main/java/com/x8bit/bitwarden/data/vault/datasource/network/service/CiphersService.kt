@@ -88,7 +88,7 @@ interface CiphersService {
     /**
      * Attempt to restore a cipher.
      */
-    suspend fun restoreCipher(cipherId: String): Result<Unit>
+    suspend fun restoreCipher(cipherId: String): Result<SyncResponseJson.Cipher>
 
     /**
      * Attempt to retrieve a cipher.
