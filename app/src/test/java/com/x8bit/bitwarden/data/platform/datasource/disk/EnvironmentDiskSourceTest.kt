@@ -5,7 +5,6 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.Test
 class EnvironmentDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
 
-    @OptIn(ExperimentalSerializationApi::class)
     private val json = Json {
         ignoreUnknownKeys = true
         explicitNulls = false

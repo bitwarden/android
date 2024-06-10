@@ -2,13 +2,11 @@ package com.x8bit.bitwarden.data.auth.repository.util
 
 import com.x8bit.bitwarden.data.auth.repository.model.JwtTokenDataJson
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlDecodeOrNull
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
 /**
  * Internal, generally basic [Json] instance for JWT parsing purposes.
  */
-@OptIn(ExperimentalSerializationApi::class)
 private val json: Json by lazy {
     Json {
         ignoreUnknownKeys = true
