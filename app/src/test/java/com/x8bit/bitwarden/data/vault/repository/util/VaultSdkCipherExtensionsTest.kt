@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FieldTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCard
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
@@ -71,6 +72,17 @@ class VaultSdkCipherExtensionsTest {
                 hasNullUri = true,
             ),
             syncCipher,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toNetworkAttachmentRequest should convert an Sdk Attachment to a Network Attachment Request`() {
+        val sdkAttachment = createMockSdkAttachment(number = 1)
+        val attachmentRequest = sdkAttachment.toNetworkAttachmentRequest()
+        assertEquals(
+            createMockAttachmentJsonRequest(number = 1),
+            attachmentRequest,
         )
     }
 

@@ -18,6 +18,7 @@ import com.bitwarden.core.PasswordHistory
 import com.bitwarden.core.SecureNote
 import com.bitwarden.core.SecureNoteType
 import com.bitwarden.core.UriMatchType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
@@ -37,6 +38,9 @@ import java.util.Locale
 fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
     CipherJsonRequest(
         notes = notes,
+        attachments = attachments
+            ?.filter { it.id != null }
+            ?.associate { requireNotNull(it.id) to it.toNetworkAttachmentRequest() },
         reprompt = reprompt.toNetworkRepromptType(),
         passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
         lastKnownRevisionDate = ZonedDateTime.ofInstant(revisionDate, ZoneOffset.UTC),
@@ -215,6 +219,16 @@ private fun Attachment.toNetworkAttachment(): SyncResponseJson.Cipher.Attachment
         sizeName = sizeName,
         id = id,
         url = url,
+        key = key,
+    )
+
+/**
+ * Converts a Bitwarden SDK [Attachment] object to a corresponding [AttachmentJsonRequest] object.
+ */
+fun Attachment.toNetworkAttachmentRequest(): AttachmentJsonRequest =
+    AttachmentJsonRequest(
+        fileName = fileName,
+        fileSize = size,
         key = key,
     )
 

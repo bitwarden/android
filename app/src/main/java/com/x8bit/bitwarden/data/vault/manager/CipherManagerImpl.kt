@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
@@ -28,6 +27,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
+import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
 import java.io.File
 import java.time.Clock
 
@@ -345,14 +345,7 @@ class CipherManagerImpl(
                                 ciphersService
                                     .createAttachment(
                                         cipherId = cipherId,
-                                        body = AttachmentJsonRequest(
-                                            // We know these values are present because
-                                            // - the filename/size are passed into the function
-                                            // - the SDK call fills in the key
-                                            fileName = requireNotNull(attachment.fileName),
-                                            key = requireNotNull(attachment.key),
-                                            fileSize = requireNotNull(attachment.size),
-                                        ),
+                                        body = attachment.toNetworkAttachmentRequest(),
                                     )
                                     .flatMap { attachmentJsonResponse ->
                                         val encryptedFile = File("${cacheFile.absolutePath}.enc")
