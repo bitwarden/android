@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.core.AttachmentView
 import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherView
@@ -28,6 +29,9 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import java.io.File
 import java.time.Clock
 
@@ -237,12 +241,14 @@ class CipherManagerImpl(
         collectionIds: List<String>,
     ): ShareCipherResult {
         val userId = activeUserId ?: return ShareCipherResult.Error
-        return vaultSdkSource
-            .moveToOrganization(
-                userId = userId,
-                organizationId = organizationId,
-                cipherView = cipherView,
-            )
+        return migrateAttachments(cipherView = cipherView)
+            .flatMap {
+                vaultSdkSource.moveToOrganization(
+                    userId = userId,
+                    organizationId = organizationId,
+                    cipherView = cipherView,
+                )
+            }
             .flatMap { vaultSdkSource.encryptCipher(userId = userId, cipherView = it) }
             .flatMap { cipher ->
                 ciphersService.shareCipher(
@@ -317,8 +323,8 @@ class CipherManagerImpl(
     private suspend fun createAttachmentForResult(
         cipherId: String,
         cipherView: CipherView,
-        fileSizeBytes: String,
-        fileName: String,
+        fileSizeBytes: String?,
+        fileName: String?,
         fileUri: Uri,
     ): Result<CipherView> {
         val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
@@ -478,4 +484,51 @@ class CipherManagerImpl(
         } else {
             vaultSdkSource.encryptCipher(userId = userId, cipherView = this)
         }
+
+    @Suppress("ReturnCount")
+    private suspend fun migrateAttachments(cipherView: CipherView): Result<CipherView> {
+        // Only run the migrations if we have attachments that do not have their own 'key'
+        val attachmentsToMigrate = cipherView.attachments.orEmpty().filter { it.key == null }
+        if (attachmentsToMigrate.none()) return cipherView.asSuccess()
+
+        val cipherViewId = cipherView.id
+            ?: return IllegalStateException("CipherView must have an ID").asFailure()
+        val migrations = coroutineScope {
+            attachmentsToMigrate.map { attachmentView ->
+                async {
+                    attachmentView
+                        .id
+                        ?.let { attachmentId ->
+                            this@CipherManagerImpl
+                                .downloadAttachmentForResult(
+                                    cipherView = cipherView,
+                                    attachmentId = attachmentId,
+                                )
+                                .flatMap {
+                                    createAttachmentForResult(
+                                        cipherId = cipherViewId,
+                                        cipherView = cipherView,
+                                        fileSizeBytes = attachmentView.size,
+                                        fileName = attachmentView.fileName,
+                                        fileUri = it.toUri(),
+                                    )
+                                }
+                                .flatMap {
+                                    deleteCipherAttachmentForResult(
+                                        cipherId = cipherViewId,
+                                        attachmentId = attachmentId,
+                                        cipherView = cipherView,
+                                    )
+                                }
+                                .map { cipherView }
+                        }
+                        ?: IllegalStateException("AttachmentView must have an ID").asFailure()
+                }
+            }
+        }
+
+        return awaitAll(*migrations.toTypedArray())
+            .firstOrNull { it.isFailure }
+            ?: cipherView.asSuccess()
+    }
 }
