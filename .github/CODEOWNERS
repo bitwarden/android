@@ -7,5 +7,3 @@
 # Default file owners
 * @bitwarden/dept-development-mobile
 
-# DevOps for Actions and other workflow changes
-.github/workflows @bitwarden/dept-devops
