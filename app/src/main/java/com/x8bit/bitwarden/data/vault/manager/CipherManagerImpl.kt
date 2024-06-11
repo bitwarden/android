@@ -6,6 +6,7 @@ import com.bitwarden.core.Cipher
 import com.bitwarden.core.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
@@ -105,20 +106,24 @@ class CipherManagerImpl(
         cipherView: CipherView,
     ): DeleteCipherResult {
         val userId = activeUserId ?: return DeleteCipherResult.Error
-        return ciphersService
-            .softDeleteCipher(cipherId = cipherId)
+        return cipherView
+            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
+            .flatMap { cipher ->
+                ciphersService
+                    .softDeleteCipher(cipherId = cipherId)
+                    .flatMap { vaultSdkSource.decryptCipher(userId = userId, cipher = cipher) }
+            }
+            .flatMap {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = it.copy(deletedDate = clock.instant()),
+                )
+            }
             .onSuccess {
-                vaultSdkSource
-                    .encryptCipher(
-                        userId = userId,
-                        cipherView = cipherView.copy(deletedDate = clock.instant()),
-                    )
-                    .onSuccess { cipher ->
-                        vaultDiskSource.saveCipher(
-                            userId = userId,
-                            cipher = cipher.toEncryptedNetworkCipherResponse(),
-                        )
-                    }
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.toEncryptedNetworkCipherResponse(),
+                )
             }
             .fold(
                 onSuccess = { DeleteCipherResult.Success },
@@ -153,14 +158,13 @@ class CipherManagerImpl(
                 attachmentId = attachmentId,
             )
             .flatMap {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = cipherView.copy(
+                cipherView
+                    .copy(
                         attachments = cipherView.attachments?.mapNotNull {
                             if (it.id == attachmentId) null else it
                         },
-                    ),
-                )
+                    )
+                    .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherId)
             }
             .onSuccess { cipher ->
                 vaultDiskSource.saveCipher(
@@ -320,10 +324,10 @@ class CipherManagerImpl(
             fileName = fileName,
             key = null,
         )
-        return vaultSdkSource
-            .encryptCipher(
+        return cipherView
+            .encryptCipherAndCheckForMigration(
                 userId = userId,
-                cipherView = cipherView,
+                cipherId = requireNotNull(cipherView.id),
             )
             .flatMap { cipher ->
                 fileManager
@@ -400,10 +404,10 @@ class CipherManagerImpl(
     ): Result<File> {
         val userId = activeUserId ?: return IllegalStateException("No active user").asFailure()
 
-        val cipher = vaultSdkSource
-            .encryptCipher(
+        val cipher = cipherView
+            .encryptCipherAndCheckForMigration(
                 userId = userId,
-                cipherView = cipherView,
+                cipherId = requireNotNull(cipherView.id),
             )
             .fold(
                 onSuccess = { it },
@@ -443,4 +447,36 @@ class CipherManagerImpl(
             .onFailure { fileManager.delete(encryptedFile) }
             .map { decryptedFile }
     }
+
+    /**
+     * A helper method to check if the [CipherView] needs to be migrated when you encrypt it.
+     */
+    private suspend fun CipherView.encryptCipherAndCheckForMigration(
+        userId: String,
+        cipherId: String,
+    ): Result<Cipher> =
+        if (this.key == null) {
+            vaultSdkSource
+                .encryptCipher(userId = userId, cipherView = this)
+                .flatMap {
+                    ciphersService.updateCipher(
+                        cipherId = cipherId,
+                        body = it.toEncryptedNetworkCipher(),
+                    )
+                }
+                .flatMap { response ->
+                    when (response) {
+                        is UpdateCipherResponseJson.Invalid -> {
+                            IllegalStateException(response.message).asFailure()
+                        }
+
+                        is UpdateCipherResponseJson.Success -> {
+                            vaultDiskSource.saveCipher(userId = userId, cipher = response.cipher)
+                            response.cipher.toEncryptedSdkCipher().asSuccess()
+                        }
+                    }
+                }
+        } else {
+            vaultSdkSource.encryptCipher(userId = userId, cipherView = this)
+        }
 }
