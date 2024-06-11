@@ -9,11 +9,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AttachmentJsonRequest(
     @SerialName("fileName")
-    val fileName: String,
+    val fileName: String?,
 
     @SerialName("key")
-    val key: String,
+    val key: String?,
 
     @SerialName("fileSize")
-    val fileSize: String,
+    val fileSize: String?,
 )

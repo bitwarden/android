@@ -7,6 +7,13 @@ import java.time.ZonedDateTime
  */
 fun createMockCipherJsonRequest(number: Int, hasNullUri: Boolean = false): CipherJsonRequest =
     CipherJsonRequest(
+        attachments = mapOf(
+            "mockId-$number" to AttachmentJsonRequest(
+                fileName = "mockFileName-$number",
+                key = "mockKey-$number",
+                fileSize = "1"
+            ),
+        ),
         organizationId = "mockOrganizationId-$number",
         folderId = "mockFolderId-$number",
         name = "mockName-$number",
