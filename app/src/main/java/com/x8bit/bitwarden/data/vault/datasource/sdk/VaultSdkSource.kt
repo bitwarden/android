@@ -147,6 +147,10 @@ interface VaultSdkSource {
      *
      * This should only be called after a successful call to [initializeCrypto] for the associated
      * user.
+     *
+     * Note that this function will always add a [CipherView.key] to a cipher if it is missing,
+     * it is important to ensure that any [CipherView] being encrypted is pushed to the cloud if
+     * it was previously missing a `key` to ensure synchronization and prevent data-loss.
      */
     suspend fun encryptCipher(
         userId: String,

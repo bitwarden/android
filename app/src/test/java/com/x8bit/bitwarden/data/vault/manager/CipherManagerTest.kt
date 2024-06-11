@@ -34,6 +34,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
+import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import io.mockk.coEvery
@@ -69,7 +70,7 @@ class CipherManagerTest {
     private val vaultDiskSource: VaultDiskSource = mockk()
     private val vaultSdkSource: VaultSdkSource = mockk()
 
-    private val cipherManager: CipherManagerImpl = CipherManagerImpl(
+    private val cipherManager: CipherManager = CipherManagerImpl(
         ciphersService = ciphersService,
         vaultDiskSource = vaultDiskSource,
         vaultSdkSource = vaultSdkSource,
@@ -464,14 +465,20 @@ class CipherManagerTest {
     fun `softDeleteCipher with ciphersService softDeleteCipher failure should return DeleteCipherResult Error`() =
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = MOCK_USER_STATE.activeUserId
             val cipherId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
+            val cipher = createMockSdkCipher(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns cipher.asSuccess()
             coEvery {
                 ciphersService.softDeleteCipher(cipherId = cipherId)
             } returns Throwable("Fail").asFailure()
 
             val result = cipherManager.softDeleteCipher(
                 cipherId = cipherId,
-                cipherView = createMockCipherView(number = 1),
+                cipherView = cipherView,
             )
 
             assertEquals(DeleteCipherResult.Error, result)
@@ -481,30 +488,31 @@ class CipherManagerTest {
     @Test
     fun `softDeleteCipher with ciphersService softDeleteCipher success should return DeleteCipherResult success`() =
         runTest {
-            mockkStatic(Cipher::toEncryptedNetworkCipherResponse)
-            every {
-                createMockSdkCipher(number = 1, clock = clock).toEncryptedNetworkCipherResponse()
-            } returns createMockCipher(number = 1)
             val fixedInstant = Instant.parse("2023-10-27T12:00:00Z")
             val userId = "mockId-1"
             val cipherId = "mockId-1"
+            val cipher = createMockSdkCipher(number = 1, clock = clock)
+            val cipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns cipher.asSuccess()
             coEvery {
                 vaultSdkSource.encryptCipher(
                     userId = userId,
-                    cipherView = createMockCipherView(number = 1).copy(deletedDate = fixedInstant),
+                    cipherView = cipherView.copy(deletedDate = fixedInstant),
                 )
-            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            } returns cipher.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipher(userId = userId, cipher = cipher)
+            } returns cipherView.asSuccess()
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.softDeleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
             coEvery {
                 vaultDiskSource.saveCipher(
                     userId = userId,
-                    cipher = createMockCipher(number = 1),
+                    cipher = cipher.toEncryptedNetworkCipherResponse(),
                 )
             } just runs
-            val cipherView = createMockCipherView(number = 1)
-            mockkStatic(Instant::class)
-            every { Instant.now() } returns fixedInstant
 
             val result = cipherManager.softDeleteCipher(
                 cipherId = cipherId,
@@ -512,8 +520,67 @@ class CipherManagerTest {
             )
 
             assertEquals(DeleteCipherResult.Success, result)
-            unmockkStatic(Instant::class)
-            unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softDeleteCipher with cipher migration success should return DeleteCipherResult success`() =
+        runTest {
+            val fixedInstant = Instant.parse("2023-10-27T12:00:00Z")
+            val userId = "mockId-1"
+            val cipherId = "mockId-1"
+            val cipher = createMockSdkCipher(number = 1, clock = clock)
+            val cipherView = createMockCipherView(number = 1).copy(key = null)
+            val networkCipher = createMockCipher(number = 1).copy(key = null)
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
+            } returns cipher.asSuccess()
+            coEvery {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = cipher.toEncryptedNetworkCipher(),
+                )
+            } returns UpdateCipherResponseJson.Success(networkCipher).asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
+            } just runs
+            coEvery {
+                vaultSdkSource.decryptCipher(
+                    userId = userId,
+                    cipher = networkCipher.toEncryptedSdkCipher(),
+                )
+            } returns cipherView.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptCipher(
+                    userId = userId,
+                    cipherView = cipherView.copy(deletedDate = fixedInstant),
+                )
+            } returns cipher.asSuccess()
+            coEvery {
+                vaultSdkSource.decryptCipher(userId = userId, cipher = cipher)
+            } returns cipherView.asSuccess()
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            coEvery { ciphersService.softDeleteCipher(cipherId = cipherId) } returns Unit.asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.toEncryptedNetworkCipherResponse(),
+                )
+            } just runs
+
+            val result = cipherManager.softDeleteCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
+
+            assertEquals(DeleteCipherResult.Success, result)
+            coVerify(exactly = 1) {
+                ciphersService.updateCipher(
+                    cipherId = cipherId,
+                    body = cipher.toEncryptedNetworkCipher(),
+                )
+                vaultDiskSource.saveCipher(userId = userId, cipher = networkCipher)
+            }
         }
 
     @Test
