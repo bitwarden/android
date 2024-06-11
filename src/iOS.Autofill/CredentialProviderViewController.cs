@@ -152,17 +152,17 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        //public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
-        //{
-        //    try
-        //    {
-        //        await ProvideCredentialWithoutUserInteractionAsync(credentialIdentity);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OnProvidingCredentialException(ex);
-        //    }
-        //}
+        public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
+        {
+           try
+           {
+               await ProvideCredentialWithoutUserInteractionAsync(credentialIdentity);
+           }
+           catch (Exception ex)
+           {
+               OnProvidingCredentialException(ex);
+           }
+        }
 
         [Export("prepareInterfaceToProvideCredentialForRequest:")]
         public override async void PrepareInterfaceToProvideCredential(IASCredentialRequest credentialRequest)
@@ -197,17 +197,17 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        //public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
-        //{
-        //    try
-        //    {
-        //        await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialIdentity);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        OnProvidingCredentialException(ex);
-        //    }
-        //}
+        public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
+        {
+           try
+           {
+               await PrepareInterfaceToProvideCredentialAsync(c => c.PasswordCredentialIdentity = credentialIdentity);
+           }
+           catch (Exception ex)
+           {
+               OnProvidingCredentialException(ex);
+           }
+        }
 
         public override async void PrepareInterfaceForExtensionConfiguration()
         {

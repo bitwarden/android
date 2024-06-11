@@ -1662,7 +1662,7 @@ Nolasīšana notiks automātiski.</value>
     <value>Jāapstiprina identitāte, lai turpinātu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</value>
+    <value>Šī izguve satur glabātavas datus nešifrētā veidā. Izgūto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Tā ir jāizdzēš uzreiz pēc izmantošanas.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
     <value>Šī izguve šifrē datus ar konta šifrēšanas atslēgu. Ja tā jebkad tiks mainīta, izvadi vajadzētu veikt vēlreiz, jo vairs nebūs iespējams atšifrēt šo datni.</value>
