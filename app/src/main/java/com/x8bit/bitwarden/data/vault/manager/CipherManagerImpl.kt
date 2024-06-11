@@ -176,11 +176,17 @@ class CipherManagerImpl(
 
     override suspend fun restoreCipher(
         cipherId: String,
+        cipherView: CipherView,
     ): RestoreCipherResult {
         val userId = activeUserId ?: return RestoreCipherResult.Error
         return ciphersService
             .restoreCipher(cipherId = cipherId)
-            .onSuccess { vaultDiskSource.saveCipher(userId = userId, cipher = it) }
+            .onSuccess {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = it.copy(collectionIds = cipherView.collectionIds),
+                )
+            }
             .fold(
                 onSuccess = { RestoreCipherResult.Success },
                 onFailure = { RestoreCipherResult.Error },

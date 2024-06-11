@@ -377,9 +377,26 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         fun `ConfirmRestoreClick with RestoreCipherResult Success should should ShowToast and NavigateBack`() =
             runTest {
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            hasMasterPassword = true,
+                            totpCodeItemData = createTotpCodeData(),
+                        )
+                    } returns DEFAULT_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(
+                    data = createVerificationCodeItem(),
+                )
+
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
-                    vaultRepo.restoreCipher(cipherId = VAULT_ITEM_ID)
+                    vaultRepo.restoreCipher(
+                        cipherId = VAULT_ITEM_ID,
+                        cipherView = createMockCipherView(number = 1),
+                    )
                 } returns RestoreCipherResult.Success
 
                 viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
@@ -399,15 +416,31 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         @Test
         @Suppress("MaxLineLength")
         fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                    )
+                } returns DEFAULT_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+
             val viewModel = createViewModel(state = DEFAULT_STATE)
             coEvery {
-                vaultRepo.restoreCipher(cipherId = VAULT_ITEM_ID)
+                vaultRepo.restoreCipher(
+                    cipherId = VAULT_ITEM_ID,
+                    cipherView = createMockCipherView(number = 1),
+                )
             } returns RestoreCipherResult.Error
 
             viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
 
             assertEquals(
                 DEFAULT_STATE.copy(
+                    viewState = DEFAULT_VIEW_STATE,
                     dialog = VaultItemState.DialogState.Generic(
                         message = R.string.generic_error_message.asText(),
                     ),

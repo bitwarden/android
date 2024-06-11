@@ -670,7 +670,10 @@ class CipherManagerTest {
     fun `restoreCipher with no active user should return RestoreCipherResult Error`() = runTest {
         fakeAuthDiskSource.userState = null
 
-        val result = cipherManager.restoreCipher(cipherId = "cipherId")
+        val result = cipherManager.restoreCipher(
+            cipherId = "cipherId",
+            cipherView = createMockCipherView(number = 1),
+        )
 
         assertEquals(RestoreCipherResult.Error, result)
     }
@@ -681,11 +684,15 @@ class CipherManagerTest {
         runTest {
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             val cipherId = "mockId-1"
+            val cipherView = createMockCipherView(number = 1)
             coEvery {
                 ciphersService.restoreCipher(cipherId = cipherId)
             } returns Throwable("Fail").asFailure()
 
-            val result = cipherManager.restoreCipher(cipherId = cipherId)
+            val result = cipherManager.restoreCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
 
             assertEquals(RestoreCipherResult.Error, result)
         }
@@ -697,11 +704,20 @@ class CipherManagerTest {
             val userId = "mockId-1"
             val cipherId = "mockId-1"
             val cipher = createMockCipher(number = 1)
+            val cipherView = createMockCipherView(number = 1)
             fakeAuthDiskSource.userState = MOCK_USER_STATE
             coEvery { ciphersService.restoreCipher(cipherId = cipherId) } returns cipher.asSuccess()
-            coEvery { vaultDiskSource.saveCipher(userId = userId, cipher = cipher) } just runs
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = cipher.copy(collectionIds = cipherView.collectionIds),
+                )
+            } just runs
 
-            val result = cipherManager.restoreCipher(cipherId = cipherId)
+            val result = cipherManager.restoreCipher(
+                cipherId = cipherId,
+                cipherView = cipherView,
+            )
 
             assertEquals(RestoreCipherResult.Success, result)
         }
