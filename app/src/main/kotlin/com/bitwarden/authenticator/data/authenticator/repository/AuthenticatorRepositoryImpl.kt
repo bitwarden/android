@@ -2,9 +2,7 @@ package com.bitwarden.authenticator.data.authenticator.repository
 
 import android.net.Uri
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
-import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
-import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.manager.FileManager
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
@@ -24,8 +22,6 @@ import com.bitwarden.authenticator.data.platform.repository.model.DataState
 import com.bitwarden.authenticator.data.platform.repository.util.bufferedMutableSharedFlow
 import com.bitwarden.authenticator.data.platform.repository.util.combineDataStates
 import com.bitwarden.authenticator.data.platform.repository.util.map
-import com.bitwarden.authenticator.data.platform.util.asSuccess
-import com.bitwarden.authenticator.data.platform.util.flatMap
 import com.bitwarden.authenticator.ui.platform.feature.settings.export.model.ExportFormat
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
@@ -44,11 +40,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import java.io.ByteArrayInputStream
 import javax.inject.Inject
 
 /**
@@ -259,7 +252,7 @@ class AuthenticatorRepositoryImpl @Inject constructor(
     ): ImportDataResult = fileManager.uriToByteArray(fileData.uri)
         .map { importManager.import(importFileFormat = format, byteArray = it) }
         .fold(
-            onSuccess = { ImportDataResult.Success },
+            onSuccess = { it },
             onFailure = { ImportDataResult.Error }
         )
 
@@ -321,106 +314,4 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         ),
         favorite = false,
     )
-
-    @OptIn(ExperimentalSerializationApi::class)
-    private suspend fun decodeVaultDataFromJson(fileUri: IntentManager.FileData): ImportDataResult {
-        val importJson = Json {
-            ignoreUnknownKeys = true
-            isLenient = true
-            explicitNulls = false
-        }
-        return try {
-            fileManager.uriToByteArray(fileUri.uri)
-                .flatMap {
-                    importJson
-                        .decodeFromStream<ExportJsonData>(ByteArrayInputStream(it))
-                        .asSuccess()
-                }
-                .map { exportData ->
-                    exportData
-                        .items
-                        .toAuthenticatorItemEntities()
-                }
-                .fold(
-                    onSuccess = {
-                        authenticatorDiskSource.saveItem(*it.toTypedArray())
-                        ImportDataResult.Success
-                    },
-                    onFailure = {
-                        ImportDataResult.Error
-                    },
-                )
-        } catch (e: IllegalArgumentException) {
-            ImportDataResult.Error
-        }
-    }
-
-    private fun List<ExportJsonData.ExportItem>.toAuthenticatorItemEntities() =
-        map { it.toAuthenticatorItemEntity() }
-
-    private fun ExportJsonData.ExportItem.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
-        val otpString = login.totp
-        val otpUri = Uri.parse(otpString)
-        val type = if (otpString.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
-            AuthenticatorItemType.TOTP
-        } else if (otpString.startsWith(TotpCodeManager.STEAM_CODE_PREFIX)) {
-            AuthenticatorItemType.STEAM
-        } else {
-            throw IllegalArgumentException("Unsupported OTP type.")
-        }
-
-        val key = when (type) {
-            AuthenticatorItemType.TOTP -> {
-                requireNotNull(otpUri.getQueryParameter(TotpCodeManager.SECRET_PARAM))
-            }
-
-            AuthenticatorItemType.STEAM -> {
-                requireNotNull(otpUri.authority)
-            }
-        }
-
-        val algorithm = otpUri.getQueryParameter(TotpCodeManager.ALGORITHM_PARAM)
-            ?: TotpCodeManager.ALGORITHM_DEFAULT.name
-
-        val period = otpUri.getQueryParameter(TotpCodeManager.PERIOD_PARAM)
-            ?.toIntOrNull()
-            ?: TotpCodeManager.PERIOD_SECONDS_DEFAULT
-
-        val digits = when (type) {
-            AuthenticatorItemType.TOTP -> {
-                otpUri.getQueryParameter(TotpCodeManager.DIGITS_PARAM)
-                    ?.toIntOrNull()
-                    ?: TotpCodeManager.TOTP_DIGITS_DEFAULT
-            }
-
-            AuthenticatorItemType.STEAM -> {
-                TotpCodeManager.STEAM_DIGITS_DEFAULT
-            }
-        }
-        val issuer = otpUri.getQueryParameter(TotpCodeManager.ISSUER_PARAM)
-            ?: name
-
-        val label = when (type) {
-            AuthenticatorItemType.TOTP -> {
-                otpUri.pathSegments
-                    .firstOrNull()
-                    .orEmpty()
-                    .removePrefix("$issuer:")
-            }
-
-            AuthenticatorItemType.STEAM -> null
-        }
-
-        return AuthenticatorItemEntity(
-            id = id,
-            key = key,
-            type = type,
-            algorithm = algorithm.let { AuthenticatorItemAlgorithm.valueOf(it) },
-            period = period,
-            digits = digits,
-            issuer = issuer,
-            accountName = label,
-            favorite = favorite,
-        )
-    }
 }

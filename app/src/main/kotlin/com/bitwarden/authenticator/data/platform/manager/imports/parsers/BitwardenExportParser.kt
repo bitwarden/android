@@ -41,6 +41,7 @@ class BitwardenExportParser(
                 .mapCatching { exportData ->
                     exportData
                         .items
+                        .filter { it.login?.totp != null }
                         .toAuthenticatorItemEntities()
                 }
         } catch (e: SerializationException) {
@@ -56,11 +57,27 @@ class BitwardenExportParser(
         map { it.toAuthenticatorItemEntity() }
 
     private fun ExportJsonData.ExportItem.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
-        val otpString = login.totp
-        val otpUri = Uri.parse(otpString)
-        val type = if (otpString.startsWith(TotpCodeManager.TOTP_CODE_PREFIX)) {
+        val otpString = requireNotNull(login?.totp)
+
+        val otpUri = when {
+            otpString.startsWith(TotpCodeManager.TOTP_CODE_PREFIX) -> {
+                Uri.parse(otpString)
+            }
+
+            otpString.startsWith(TotpCodeManager.STEAM_CODE_PREFIX) -> {
+                Uri.parse(otpString)
+            }
+
+            else -> {
+                val uriString =
+                    "${TotpCodeManager.TOTP_CODE_PREFIX}/$name?${TotpCodeManager.SECRET_PARAM}=$otpString"
+                Uri.parse(uriString)
+            }
+        }
+
+        val type = if (otpUri.scheme == "otpauth" && otpUri.authority == "totp") {
             AuthenticatorItemType.TOTP
-        } else if (otpString.startsWith(TotpCodeManager.STEAM_CODE_PREFIX)) {
+        } else if (otpUri.scheme == "steam") {
             AuthenticatorItemType.STEAM
         } else {
             throw IllegalArgumentException("Unsupported OTP type.")

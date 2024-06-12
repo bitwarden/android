@@ -27,7 +27,7 @@ data class ExportJsonData(
         val collectionIds: List<String>?,
         val notes: String?,
         val type: Int,
-        val login: ItemLoginData,
+        val login: ItemLoginData?,
         val favorite: Boolean,
     ) {
         /**
@@ -39,7 +39,7 @@ data class ExportJsonData(
          */
         @Serializable
         data class ItemLoginData(
-            val totp: String,
+            val totp: String?,
         )
     }
 }
