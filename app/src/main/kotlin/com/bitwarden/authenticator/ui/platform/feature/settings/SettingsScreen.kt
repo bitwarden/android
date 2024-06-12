@@ -50,8 +50,6 @@ import com.bitwarden.authenticator.ui.platform.base.util.Text
 import com.bitwarden.authenticator.ui.platform.base.util.asText
 import com.bitwarden.authenticator.ui.platform.base.util.mirrorIfRtl
 import com.bitwarden.authenticator.ui.platform.components.appbar.BitwardenMediumTopAppBar
-import com.bitwarden.authenticator.ui.platform.components.dialog.BasicDialogState
-import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenBasicDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.bitwarden.authenticator.ui.platform.components.dialog.BitwardenSelectionRow
 import com.bitwarden.authenticator.ui.platform.components.header.BitwardenListHeaderText
@@ -60,7 +58,6 @@ import com.bitwarden.authenticator.ui.platform.components.row.BitwardenTextRow
 import com.bitwarden.authenticator.ui.platform.components.scaffold.BitwardenScaffold
 import com.bitwarden.authenticator.ui.platform.components.toggle.BitwardenWideSwitch
 import com.bitwarden.authenticator.ui.platform.components.util.rememberVectorPainter
-import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppLanguage
 import com.bitwarden.authenticator.ui.platform.feature.settings.appearance.model.AppTheme
 import com.bitwarden.authenticator.ui.platform.manager.biometrics.BiometricsManager
 import com.bitwarden.authenticator.ui.platform.manager.intent.IntentManager
@@ -156,11 +153,6 @@ fun SettingsScreen(
             Spacer(modifier = Modifier.height(16.dp))
             AppearanceSettings(
                 state = state,
-                onLanguageSelection = remember(viewModel) {
-                    {
-                        viewModel.trySendAction(SettingsAction.AppearanceChange.LanguageChange(it))
-                    }
-                },
                 onThemeSelection = remember(viewModel) {
                     {
                         viewModel.trySendAction(SettingsAction.AppearanceChange.ThemeChange(it))
@@ -341,7 +333,6 @@ private fun UnlockWithBiometricsRow(
 @Composable
 private fun AppearanceSettings(
     state: SettingsState,
-    onLanguageSelection: (language: AppLanguage) -> Unit,
     onThemeSelection: (theme: AppTheme) -> Unit,
 ) {
     BitwardenListHeaderText(
@@ -355,69 +346,6 @@ private fun AppearanceSettings(
             .semantics { testTag = "ThemeChooser" }
             .fillMaxWidth(),
     )
-
-    LanguageSelectionRow(
-        currentSelection = state.appearance.language,
-        onLanguageSelection = onLanguageSelection,
-        modifier = Modifier
-            .semantics { testTag = "LanguageChooser" }
-            .fillMaxWidth(),
-    )
-}
-
-@Composable
-private fun LanguageSelectionRow(
-    currentSelection: AppLanguage,
-    onLanguageSelection: (AppLanguage) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var languageChangedDialogState: BasicDialogState by rememberSaveable {
-        mutableStateOf(BasicDialogState.Hidden)
-    }
-    var shouldShowLanguageSelectionDialog by rememberSaveable { mutableStateOf(false) }
-
-    BitwardenBasicDialog(
-        visibilityState = languageChangedDialogState,
-        onDismissRequest = { languageChangedDialogState = BasicDialogState.Hidden },
-    )
-
-    BitwardenTextRow(
-        text = stringResource(id = R.string.language),
-        onClick = { shouldShowLanguageSelectionDialog = true },
-        modifier = modifier,
-        withDivider = true,
-    ) {
-        Icon(
-            modifier = Modifier
-                .mirrorIfRtl()
-                .size(24.dp),
-            painter = painterResource(id = R.drawable.ic_navigate_next),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface,
-        )
-    }
-
-    if (shouldShowLanguageSelectionDialog) {
-        BitwardenSelectionDialog(
-            title = stringResource(id = R.string.language),
-            onDismissRequest = { shouldShowLanguageSelectionDialog = false },
-        ) {
-            AppLanguage.entries.forEach { option ->
-                BitwardenSelectionRow(
-                    text = option.text,
-                    isSelected = option == currentSelection,
-                    onClick = {
-                        shouldShowLanguageSelectionDialog = false
-                        onLanguageSelection(option)
-                        languageChangedDialogState = BasicDialogState.Shown(
-                            title = R.string.language.asText(),
-                            message = R.string.language_change_x_description.asText(option.text),
-                        )
-                    },
-                )
-            }
-        }
-    }
 }
 
 @Composable
