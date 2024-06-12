@@ -1,11 +1,12 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
+import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.TwoFasJsonExport
-import com.bitwarden.authenticator.data.platform.util.asFailure
-import com.bitwarden.authenticator.data.platform.util.asSuccess
+import com.bitwarden.authenticator.ui.platform.base.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -21,12 +22,12 @@ private const val TOKEN_TYPE_HOTP = "HOTP"
  * items.
  */
 class TwoFasExportParser : ExportParser {
-    override fun parse(byteArray: ByteArray): Result<List<AuthenticatorItemEntity>> {
+    override fun parse(byteArray: ByteArray): ExportParseResult {
         return import2fasJson(byteArray)
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    private fun import2fasJson(byteArray: ByteArray): Result<List<AuthenticatorItemEntity>> {
+    private fun import2fasJson(byteArray: ByteArray): ExportParseResult {
         val importJson = Json {
             ignoreUnknownKeys = true
             isLenient = true
@@ -34,20 +35,24 @@ class TwoFasExportParser : ExportParser {
         }
 
         return try {
-            importJson
+            val exportData = importJson
                 .decodeFromStream<TwoFasJsonExport>(ByteArrayInputStream(byteArray))
-                .asSuccess()
-                .mapCatching { exportData ->
-                    exportData
-                        .services
-                        .toAuthenticatorItemEntities()
-                }
+
+            if (!exportData.servicesEncrypted.isNullOrEmpty()) {
+                ExportParseResult.Error(
+                    message = R.string.import_2fas_password_protected_not_supported.asText(),
+                )
+            } else {
+                ExportParseResult.Success(
+                    items = exportData.services.toAuthenticatorItemEntities()
+                )
+            }
         } catch (e: SerializationException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IllegalArgumentException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IOException) {
-            e.asFailure()
+            ExportParseResult.Error()
         }
     }
 

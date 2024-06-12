@@ -3,9 +3,8 @@ package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.LastPassJsonExport
-import com.bitwarden.authenticator.data.platform.util.asFailure
-import com.bitwarden.authenticator.data.platform.util.asSuccess
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -21,7 +20,7 @@ import java.util.UUID
 class LastPassExportParser : ExportParser {
 
     @OptIn(ExperimentalSerializationApi::class)
-    override fun parse(byteArray: ByteArray): Result<List<AuthenticatorItemEntity>> {
+    override fun parse(byteArray: ByteArray): ExportParseResult {
         val importJson = Json {
             ignoreUnknownKeys = true
             isLenient = true
@@ -29,20 +28,19 @@ class LastPassExportParser : ExportParser {
         }
 
         return try {
-            importJson
-                .decodeFromStream<LastPassJsonExport>(ByteArrayInputStream(byteArray))
-                .asSuccess()
-                .mapCatching { exportData ->
-                    exportData
-                        .accounts
-                        .toAuthenticatorItemEntities()
-                }
+            val exportData =
+                importJson.decodeFromStream<LastPassJsonExport>(ByteArrayInputStream(byteArray))
+            ExportParseResult.Success(
+                items = exportData
+                    .accounts
+                    .toAuthenticatorItemEntities(),
+            )
         } catch (e: SerializationException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IllegalArgumentException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IOException) {
-            e.asFailure()
+            ExportParseResult.Error()
         }
     }
 

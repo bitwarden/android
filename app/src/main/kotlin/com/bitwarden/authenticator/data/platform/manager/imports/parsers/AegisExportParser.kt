@@ -4,8 +4,7 @@ import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.Aut
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.platform.manager.imports.model.AegisJsonExport
-import com.bitwarden.authenticator.data.platform.util.asFailure
-import com.bitwarden.authenticator.data.platform.util.asSuccess
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -16,7 +15,7 @@ import java.util.UUID
 
 class AegisExportParser : ExportParser {
     @OptIn(ExperimentalSerializationApi::class)
-    override fun parse(byteArray: ByteArray): Result<List<AuthenticatorItemEntity>> {
+    override fun parse(byteArray: ByteArray): ExportParseResult {
         val importJson = Json {
             ignoreUnknownKeys = true
             isLenient = true
@@ -24,21 +23,20 @@ class AegisExportParser : ExportParser {
         }
 
         return try {
-            importJson
+            val exportData = importJson
                 .decodeFromStream<AegisJsonExport>(ByteArrayInputStream(byteArray))
-                .asSuccess()
-                .mapCatching { exportData ->
-                    exportData
-                        .db
-                        .entries
-                        .toAuthenticatorItemEntities()
-                }
+            ExportParseResult.Success(
+                items = exportData
+                    .db
+                    .entries
+                    .toAuthenticatorItemEntities(),
+            )
         } catch (e: SerializationException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IllegalArgumentException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IOException) {
-            e.asFailure()
+            ExportParseResult.Error()
         }
     }
 

@@ -1,6 +1,7 @@
 package com.bitwarden.authenticator.data.platform.manager.imports
 
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.AuthenticatorDiskSource
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportDataResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
 import com.bitwarden.authenticator.data.platform.manager.imports.parsers.AegisExportParser
@@ -29,14 +30,18 @@ class ImportManagerImpl(
         }
 
         return try {
-            parser.parse(byteArray)
-                .mapCatching { authenticatorDiskSource.saveItem(*it.toTypedArray()) }
-                .fold(
-                    onSuccess = { ImportDataResult.Success },
-                    onFailure = { ImportDataResult.Error }
-                )
+            when (val parseResult = parser.parse(byteArray)) {
+                is ExportParseResult.Error -> {
+                    ImportDataResult.Error(parseResult.message)
+                }
+
+                is ExportParseResult.Success -> {
+                    authenticatorDiskSource.saveItem(*parseResult.items.toTypedArray())
+                    ImportDataResult.Success
+                }
+            }
         } catch (e: Throwable) {
-            ImportDataResult.Error
+            ImportDataResult.Error()
         }
     }
 }

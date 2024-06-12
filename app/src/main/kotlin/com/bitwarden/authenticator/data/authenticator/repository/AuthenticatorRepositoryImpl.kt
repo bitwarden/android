@@ -250,10 +250,16 @@ class AuthenticatorRepositoryImpl @Inject constructor(
         format: ImportFileFormat,
         fileData: IntentManager.FileData,
     ): ImportDataResult = fileManager.uriToByteArray(fileData.uri)
-        .map { importManager.import(importFileFormat = format, byteArray = it) }
+        .map {
+            importManager
+                .import(
+                    importFileFormat = format,
+                    byteArray = it
+                )
+        }
         .fold(
             onSuccess = { it },
-            onFailure = { ImportDataResult.Error }
+            onFailure = { ImportDataResult.Error() }
         )
 
     private suspend fun encodeVaultDataToCsv(fileUri: Uri): ExportDataResult {

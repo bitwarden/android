@@ -74,7 +74,8 @@ class ImportingViewModel @Inject constructor(
     private fun handleImportLocationReceive(action: ImportAction.ImportLocationReceive) {
         mutableStateFlow.update { it.copy(dialogState = ImportState.DialogState.Loading()) }
         viewModelScope.launch {
-            val result = authenticatorRepository.importVaultData(state.importFileFormat, action.fileUri)
+            val result =
+                authenticatorRepository.importVaultData(state.importFileFormat, action.fileUri)
             sendAction(ImportAction.Internal.SaveImportDataToUriResultReceive(result))
         }
     }
@@ -89,12 +90,13 @@ class ImportingViewModel @Inject constructor(
 
     private fun handleSaveImportDataToUriResultReceive(result: ImportDataResult) {
         when (result) {
-            ImportDataResult.Error -> {
+            is ImportDataResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = ImportState.DialogState.Error(
                             title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.import_vault_failure.asText(),
+                            message = result.message
+                                ?: R.string.import_vault_failure.asText(),
                         )
                     )
                 }

@@ -8,6 +8,7 @@ data class TwoFasJsonExport(
     val appVersionCode: Int,
     val appOrigin: String,
     val services: List<Service>,
+    val servicesEncrypted: String?,
     val groups: List<Group>,
 ) {
     @Serializable

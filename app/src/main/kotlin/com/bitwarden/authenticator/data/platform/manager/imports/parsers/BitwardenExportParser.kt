@@ -1,14 +1,15 @@
 package com.bitwarden.authenticator.data.platform.manager.imports.parsers
 
 import android.net.Uri
+import com.bitwarden.authenticator.R
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemAlgorithm
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemEntity
 import com.bitwarden.authenticator.data.authenticator.datasource.disk.entity.AuthenticatorItemType
 import com.bitwarden.authenticator.data.authenticator.manager.TotpCodeManager
 import com.bitwarden.authenticator.data.authenticator.manager.model.ExportJsonData
+import com.bitwarden.authenticator.data.platform.manager.imports.model.ExportParseResult
 import com.bitwarden.authenticator.data.platform.manager.imports.model.ImportFileFormat
-import com.bitwarden.authenticator.data.platform.util.asFailure
-import com.bitwarden.authenticator.data.platform.util.asSuccess
+import com.bitwarden.authenticator.ui.platform.base.util.asText
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -19,15 +20,15 @@ import java.io.IOException
 class BitwardenExportParser(
     private val fileFormat: ImportFileFormat,
 ) : ExportParser {
-    override fun parse(byteArray: ByteArray): Result<List<AuthenticatorItemEntity>> {
+    override fun parse(byteArray: ByteArray): ExportParseResult {
         return when (fileFormat) {
             ImportFileFormat.BITWARDEN_JSON -> importJsonFile(byteArray)
-            else -> IllegalArgumentException("Unsupported file format.").asFailure()
+            else -> ExportParseResult.Error(R.string.import_bitwarden_unsupported_format.asText())
         }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
-    private fun importJsonFile(byteArray: ByteArray): Result<List<AuthenticatorItemEntity>> {
+    private fun importJsonFile(byteArray: ByteArray): ExportParseResult {
         val importJson = Json {
             ignoreUnknownKeys = true
             isLenient = true
@@ -35,21 +36,20 @@ class BitwardenExportParser(
         }
 
         return try {
-            importJson
+            val exportData = importJson
                 .decodeFromStream<ExportJsonData>(ByteArrayInputStream(byteArray))
-                .asSuccess()
-                .mapCatching { exportData ->
-                    exportData
-                        .items
-                        .filter { it.login?.totp != null }
-                        .toAuthenticatorItemEntities()
-                }
+            ExportParseResult.Success(
+                items = exportData
+                    .items
+                    .filter { it.login?.totp != null }
+                    .toAuthenticatorItemEntities()
+            )
         } catch (e: SerializationException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IllegalArgumentException) {
-            e.asFailure()
+            ExportParseResult.Error()
         } catch (e: IOException) {
-            e.asFailure()
+            ExportParseResult.Error()
         }
     }
 
