@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.util
 
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.platform.util.subtitle

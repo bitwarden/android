@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
-import com.bitwarden.core.FolderView
+import com.bitwarden.vault.FolderView
 
 private const val FOLDER_DIVIDER: String = "/"
 

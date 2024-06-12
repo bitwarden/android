@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
 import android.app.Activity
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 
 /**
  * A manager for completing the autofill process after the user has made a selection.

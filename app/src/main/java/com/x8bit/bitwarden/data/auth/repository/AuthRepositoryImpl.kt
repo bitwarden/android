@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
-import com.bitwarden.core.AuthRequestMethod
-import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.bitwarden.AuthRequestMethod
+import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource

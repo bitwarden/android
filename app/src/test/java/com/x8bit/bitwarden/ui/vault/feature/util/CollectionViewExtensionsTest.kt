@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
-import com.bitwarden.core.CollectionView
+import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

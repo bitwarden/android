@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
 
-import com.bitwarden.core.SendType
+import com.bitwarden.bitwarden.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
 import org.junit.jupiter.api.Assertions.assertEquals

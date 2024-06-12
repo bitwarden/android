@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon

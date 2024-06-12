@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.os.SystemClock
-import com.bitwarden.core.InitOrgCryptoRequest
-import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.bitwarden.InitOrgCryptoRequest
+import com.bitwarden.bitwarden.InitUserCryptoMethod
+import com.bitwarden.bitwarden.InitUserCryptoRequest
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource

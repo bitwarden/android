@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.platform.util
 
-import com.bitwarden.core.CardView
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CardView
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
 
 /**
  * If someone has multiple AMEX cards, they tend to have the same last 4 digits. So we provide a

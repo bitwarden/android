@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
-import com.bitwarden.core.AuthRequestMethod
-import com.bitwarden.core.AuthRequestResponse
-import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.RegisterKeyResponse
-import com.bitwarden.core.RegisterTdeKeyResponse
-import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.bitwarden.AuthRequestMethod
+import com.bitwarden.bitwarden.AuthRequestResponse
+import com.bitwarden.bitwarden.InitUserCryptoMethod
+import com.bitwarden.bitwarden.RegisterKeyResponse
+import com.bitwarden.bitwarden.RegisterTdeKeyResponse
+import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair

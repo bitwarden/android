@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.core.CipherListView
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
 import java.time.ZonedDateTime
 
 /**

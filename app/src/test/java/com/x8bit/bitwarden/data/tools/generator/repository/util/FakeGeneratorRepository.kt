@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.tools.generator.repository.util
 
-import com.bitwarden.core.PasswordHistoryView
 import com.bitwarden.generators.PassphraseGeneratorRequest
 import com.bitwarden.generators.PasswordGeneratorRequest
 import com.bitwarden.generators.UsernameGeneratorRequest
+import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 import com.x8bit.bitwarden.data.platform.repository.model.LocalDataState
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow

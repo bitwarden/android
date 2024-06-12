@@ -28,27 +28,27 @@ class UriMatchTypeExtensionsTest {
     @Test
     fun `toSdkUriMatchType should return the correct value for each type`() {
         assertEquals(
-            com.bitwarden.core.UriMatchType.DOMAIN,
+            com.bitwarden.vault.UriMatchType.DOMAIN,
             UriMatchType.DOMAIN.toSdkUriMatchType(),
         )
         assertEquals(
-            com.bitwarden.core.UriMatchType.EXACT,
+            com.bitwarden.vault.UriMatchType.EXACT,
             UriMatchType.EXACT.toSdkUriMatchType(),
         )
         assertEquals(
-            com.bitwarden.core.UriMatchType.HOST,
+            com.bitwarden.vault.UriMatchType.HOST,
             UriMatchType.HOST.toSdkUriMatchType(),
         )
         assertEquals(
-            com.bitwarden.core.UriMatchType.NEVER,
+            com.bitwarden.vault.UriMatchType.NEVER,
             UriMatchType.NEVER.toSdkUriMatchType(),
         )
         assertEquals(
-            com.bitwarden.core.UriMatchType.REGULAR_EXPRESSION,
+            com.bitwarden.vault.UriMatchType.REGULAR_EXPRESSION,
             UriMatchType.REGULAR_EXPRESSION.toSdkUriMatchType(),
         )
         assertEquals(
-            com.bitwarden.core.UriMatchType.STARTS_WITH,
+            com.bitwarden.vault.UriMatchType.STARTS_WITH,
             UriMatchType.STARTS_WITH.toSdkUriMatchType(),
         )
     }

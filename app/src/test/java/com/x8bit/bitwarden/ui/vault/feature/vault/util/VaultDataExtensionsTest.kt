@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.LoginUriView
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.LoginUriView
+import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl

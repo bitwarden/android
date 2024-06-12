@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.core.FolderView
+import com.bitwarden.vault.FolderView
 import java.time.ZonedDateTime
 
 /**

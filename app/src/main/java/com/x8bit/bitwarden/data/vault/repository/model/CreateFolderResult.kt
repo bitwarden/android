@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
-import com.bitwarden.core.FolderView
+import com.bitwarden.vault.FolderView
 
 /**
  * Models result of creating a folder.

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import kotlinx.coroutines.flow.Flow
 
 /**

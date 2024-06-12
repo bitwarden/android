@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.core.Folder
+import com.bitwarden.vault.Folder
 import java.time.ZonedDateTime
 
 /**

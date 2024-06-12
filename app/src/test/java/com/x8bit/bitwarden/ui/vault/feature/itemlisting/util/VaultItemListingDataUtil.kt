@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.SendType
+import com.bitwarden.bitwarden.SendType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData

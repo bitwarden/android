@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity
 
-import com.bitwarden.core.PasswordHistory
+import com.bitwarden.vault.PasswordHistory
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import java.time.Instant

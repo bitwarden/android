@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
-import com.bitwarden.core.Attachment
-import com.bitwarden.core.Cipher
+import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.Cipher
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson

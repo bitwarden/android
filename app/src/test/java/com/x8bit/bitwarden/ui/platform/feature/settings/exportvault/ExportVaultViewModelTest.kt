@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.ExportFormat
+import com.bitwarden.bitwarden.ExportFormat
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository

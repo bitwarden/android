@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
-import com.bitwarden.core.CipherType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemState
 import com.x8bit.bitwarden.ui.vault.feature.item.model.TotpCodeItemData
 import org.junit.jupiter.api.Assertions.assertEquals

@@ -1,14 +1,14 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
+import com.bitwarden.bitwarden.ExportFormat
+import com.bitwarden.bitwarden.SendType
+import com.bitwarden.bitwarden.SendView
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.ExportFormat
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.SendType
-import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager

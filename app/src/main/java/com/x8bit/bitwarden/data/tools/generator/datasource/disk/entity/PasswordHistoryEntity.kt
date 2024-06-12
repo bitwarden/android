@@ -3,7 +3,7 @@ package com.x8bit.bitwarden.data.tools.generator.datasource.disk.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bitwarden.core.PasswordHistory
+import com.bitwarden.vault.PasswordHistory
 import java.time.Instant
 
 /**

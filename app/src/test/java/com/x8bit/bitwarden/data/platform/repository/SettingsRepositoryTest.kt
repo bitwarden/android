@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.repository
 
 import android.view.autofill.AutofillManager
 import app.cash.turbine.test
-import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.bitwarden.DerivePinKeyResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson

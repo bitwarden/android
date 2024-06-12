@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager.model
 
-import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.bitwarden.AuthRequestResponse
 
 /**
  * Models result of creating a new login approval request.
