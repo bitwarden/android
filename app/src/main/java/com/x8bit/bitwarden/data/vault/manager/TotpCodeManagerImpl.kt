@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager
 
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherView
 import com.bitwarden.core.DateTime
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource

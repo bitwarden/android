@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import app.cash.turbine.test
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.TotpResponse
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState

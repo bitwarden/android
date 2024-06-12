@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.provider.CallingAppInfo
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService

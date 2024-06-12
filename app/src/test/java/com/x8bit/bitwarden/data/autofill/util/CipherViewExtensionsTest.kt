@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.util
 
-import com.bitwarden.core.CipherType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import kotlinx.coroutines.test.runTest

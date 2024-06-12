@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.attachments.util
 
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.ui.vault.feature.attachments.AttachmentsState
 
 /**

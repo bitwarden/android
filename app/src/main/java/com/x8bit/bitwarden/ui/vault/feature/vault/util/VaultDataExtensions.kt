@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault.util
 
 import android.net.Uri
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.LoginUriView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText

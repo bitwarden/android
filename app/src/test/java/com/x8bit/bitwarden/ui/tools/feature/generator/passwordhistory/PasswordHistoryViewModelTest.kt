@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.PasswordHistoryView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState

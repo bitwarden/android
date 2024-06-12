@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.ui.vault.feature.movetoorganization
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.Organization

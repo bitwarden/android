@@ -1,15 +1,15 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.util
 
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.FieldView
-import com.bitwarden.core.IdentityView
-import com.bitwarden.core.LoginUriView
-import com.bitwarden.core.LoginView
-import com.bitwarden.core.PasswordHistoryView
+import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.FieldView
+import com.bitwarden.vault.IdentityView
+import com.bitwarden.vault.LoginUriView
+import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.base.util.asText

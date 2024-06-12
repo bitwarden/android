@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.provider
 
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager

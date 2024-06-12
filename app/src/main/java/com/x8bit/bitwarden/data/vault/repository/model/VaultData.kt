@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.SendView
+import com.bitwarden.bitwarden.SendView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
 
 /**
  * Represents decrypted vault data.

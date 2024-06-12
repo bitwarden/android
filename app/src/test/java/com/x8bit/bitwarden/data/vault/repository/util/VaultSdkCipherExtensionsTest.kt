@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FieldTypeJson

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriMatchDisplayType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

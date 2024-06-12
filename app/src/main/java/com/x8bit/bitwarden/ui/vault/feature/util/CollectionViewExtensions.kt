@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.util
 
-import com.bitwarden.core.CollectionView
+import com.bitwarden.vault.CollectionView
 
 private const val COLLECTION_DIVIDER: String = "/"
 

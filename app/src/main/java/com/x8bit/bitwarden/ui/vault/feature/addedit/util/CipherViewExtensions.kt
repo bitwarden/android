@@ -2,15 +2,15 @@
 
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
-import com.bitwarden.core.Fido2Credential
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.FieldView
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.LoginUriView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.FieldView
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.LoginUriView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.ui.platform.base.util.asText

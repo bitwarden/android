@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.bitwarden.core.Collection
-import com.bitwarden.core.CollectionView
+import com.bitwarden.vault.Collection
+import com.bitwarden.vault.CollectionView
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import java.util.Locale
 

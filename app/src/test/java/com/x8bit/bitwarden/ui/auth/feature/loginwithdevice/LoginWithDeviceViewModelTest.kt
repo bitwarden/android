@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.loginwithdevice
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.bitwarden.AuthRequestResponse
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequest
 import com.x8bit.bitwarden.data.auth.manager.model.AuthRequestType

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
-import com.bitwarden.core.AuthRequestResponse
-import com.bitwarden.core.MasterPasswordPolicyOptions
-import com.bitwarden.core.RegisterKeyResponse
-import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.bitwarden.AuthRequestResponse
+import com.bitwarden.bitwarden.MasterPasswordPolicyOptions
+import com.bitwarden.bitwarden.RegisterKeyResponse
+import com.bitwarden.bitwarden.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength

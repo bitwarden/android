@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.item.model
 
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 
 /**
  * The state containing totp code item information and the cipher for the item.

@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import androidx.core.net.toUri
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.Cipher
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess

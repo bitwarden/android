@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.model
 
 import android.os.Parcelable
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.UriMatchType
 import kotlinx.parcelize.Parcelize
 
 /**

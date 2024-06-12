@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.exportvault.model
 
-import com.bitwarden.core.ExportFormat
+import com.bitwarden.bitwarden.ExportFormat
 
 /**
  * Represents the file formats a user can select to export the vault.

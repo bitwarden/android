@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
 
-import com.bitwarden.core.SendFileView
-import com.bitwarden.core.SendTextView
-import com.bitwarden.core.SendType
-import com.bitwarden.core.SendView
+import com.bitwarden.bitwarden.SendFileView
+import com.bitwarden.bitwarden.SendTextView
+import com.bitwarden.bitwarden.SendType
+import com.bitwarden.bitwarden.SendView
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState
 import java.time.Clock

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.core.Send
-import com.bitwarden.core.SendFile
-import com.bitwarden.core.SendText
-import com.bitwarden.core.SendType
+import com.bitwarden.bitwarden.Send
+import com.bitwarden.bitwarden.SendFile
+import com.bitwarden.bitwarden.SendText
+import com.bitwarden.bitwarden.SendType
 import java.time.ZonedDateTime
 
 /**

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.util
 
-import com.bitwarden.core.CardView
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.IdentityView
+import com.bitwarden.vault.CardView
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.IdentityView
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import io.mockk.every
 import io.mockk.mockk

@@ -3,11 +3,11 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.SendView
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.bitwarden.SendView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult

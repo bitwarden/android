@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 
 import android.net.Uri
 import app.cash.turbine.test
-import com.bitwarden.core.CipherRepromptType
+import com.bitwarden.vault.CipherRepromptType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
