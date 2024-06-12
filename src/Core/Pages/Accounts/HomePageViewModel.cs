@@ -25,7 +25,6 @@ namespace Bit.App.Pages
         private bool _rememberEmail;
         private string _email;
         private string _selectedEnvironmentName;
-        private bool _displayEuEnvironment;
 
         public HomeViewModel()
         {
@@ -116,7 +115,6 @@ namespace Bit.App.Pages
         {
             Email = await _stateService.GetRememberedEmailAsync();
             RememberEmail = !string.IsNullOrEmpty(Email);
-            _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(Constants.DisplayEuEnvironmentFlag, forceRefresh: true);
         }
 
         public async Task ContinueToLoginStepAsync()
@@ -158,11 +156,7 @@ namespace Bit.App.Pages
 
         public async Task ShowEnvironmentPickerAsync()
         {
-            _displayEuEnvironment = await _configService.GetFeatureFlagBoolAsync(Constants.DisplayEuEnvironmentFlag);
-            var options = _displayEuEnvironment
-                    ? new string[] { BwRegion.US.Domain(), BwRegion.EU.Domain(), AppResources.SelfHosted }
-                    : new string[] { BwRegion.US.Domain(), AppResources.SelfHosted };
-
+            var options = new string[] { BwRegion.US.Domain(), BwRegion.EU.Domain(), AppResources.SelfHosted };
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 var result = await _deviceActionService.Value.DisplayActionSheetAsync(AppResources.LoggingInOn, AppResources.Cancel, null, options);
