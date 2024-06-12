@@ -45,7 +45,6 @@ namespace Bit.Core
         public const string PasswordlessLoginRequestKey = "passwordlessLoginRequest";
         public const string PreLoginEmailKey = "preLoginEmailKey";
         public const string ConfigsKey = "configsKey";
-        public const string DisplayEuEnvironmentFlag = "display-eu-environment";
         public const string UnassignedItemsBannerFlag = "unassigned-items-banner";
         public const string RegionEnvironment = "regionEnvironment";
         public const string DuoCallback = "bitwarden://duo-callback";
