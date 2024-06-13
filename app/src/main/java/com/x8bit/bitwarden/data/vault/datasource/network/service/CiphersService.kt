@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
+import com.bitwarden.vault.Attachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
@@ -58,6 +59,16 @@ interface CiphersService {
         cipherId: String,
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to share an attachment.
+     */
+    suspend fun shareAttachment(
+        cipherId: String,
+        attachment: Attachment,
+        organizationId: String,
+        encryptedFile: File,
+    ): Result<Unit>
 
     /**
      * Attempt to update a cipher's collections.
