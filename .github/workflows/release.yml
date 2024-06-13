@@ -81,6 +81,9 @@ jobs:
           workflow_conclusion: success
           branch: main
 
+      - name: ls
+        run: ls -lR
+
       - name: Prep Bitwarden iOS release asset
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
