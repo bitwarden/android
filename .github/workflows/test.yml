@@ -8,6 +8,7 @@ on:
       - "hotfix-rc"
   pull_request_target:
     types: [opened, synchronize]
+  workflow_dispatch:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
