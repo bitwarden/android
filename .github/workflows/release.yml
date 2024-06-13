@@ -91,9 +91,6 @@ jobs:
           unzip com.x8bit.bitwarden.aab.zip -d com.x8bit.bitwarden.aab
           unzip com.x8bit.bitwarden.apk.zip -d com.x8bit.bitwarden.apk
 
-      - name: ls
-        run: ls -lR
-
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@2c591bcc8ecdcd2db72b97d6147f871fcd833ba5 # v1.14.0
