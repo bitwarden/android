@@ -83,9 +83,6 @@ jobs:
           branch: main
           skip_unpack: true
 
-      - name: ls
-        run: ls -lR
-
       - name: Unzip release assets
         run: |
           unzip bw-android-apk-sha256.txt.zip -d bw-android-apk-sha256.txt
@@ -93,6 +90,9 @@ jobs:
           unzip com.x8bit.bitwarden-fdroid.apk.zip -d com.x8bit.bitwarden-fdroid.apk
           unzip com.x8bit.bitwarden.aab.zip -d com.x8bit.bitwarden.aab
           unzip com.x8bit.bitwarden.apk.zip -d com.x8bit.bitwarden.apk
+
+      - name: ls
+        run: ls -lR
 
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
