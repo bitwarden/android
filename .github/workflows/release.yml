@@ -88,12 +88,11 @@ jobs:
 
       - name: Unzip release assets
         run: |
-          for file in $(ls *.zip -I "Bitwarden iOS.zip"); do
-            echo "Unzipping $file"
-            $BASENAME=$(basename "$file" .zip)
-            echo "Unzipping $file to $BASENAME"
-            unzip -o "$file" -d $BASENAME
-          done
+          unzip bw-android-apk-sha256.txt.zip -d bw-android-apk-sha256.txt
+          unzip bw-fdroid-apk-sha256.txt.zip -d bw-fdroid-apk-sha256.txt
+          unzip com.x8bit.bitwarden-fdroid.apk.zip -d com.x8bit.bitwarden-fdroid.apk
+          unzip com.x8bit.bitwarden.aab.zip -d com.x8bit.bitwarden.aab
+          unzip com.x8bit.bitwarden.apk.zip -d com.x8bit.bitwarden.apk
 
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
