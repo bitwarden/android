@@ -32,6 +32,7 @@ class TwoFasExportParser : ExportParser {
             ignoreUnknownKeys = true
             isLenient = true
             explicitNulls = false
+            encodeDefaults = true
         }
 
         return try {
@@ -59,7 +60,7 @@ class TwoFasExportParser : ExportParser {
     private fun List<TwoFasJsonExport.Service>.toAuthenticatorItemEntities() =
         mapNotNull { it.toAuthenticatorItemEntityOrNull() }
 
-    private fun TwoFasJsonExport.Service.toAuthenticatorItemEntityOrNull(): AuthenticatorItemEntity? {
+    private fun TwoFasJsonExport.Service.toAuthenticatorItemEntityOrNull(): AuthenticatorItemEntity {
 
         val type = otp.tokenType
             ?.let { tokenType ->
@@ -87,9 +88,9 @@ class TwoFasExportParser : ExportParser {
             key = secret,
             type = type,
             algorithm = algorithm,
-            period = otp.period,
-            digits = otp.digits,
-            issuer = otp.issuer ?: name,
+            period = otp.period ?: 30,
+            digits = otp.digits ?: 6,
+            issuer = otp.issuer.takeUnless { it.isNullOrEmpty() } ?: name.orEmpty(),
             userId = null,
             accountName = otp.account,
             favorite = false,

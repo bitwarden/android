@@ -4,30 +4,30 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TwoFasJsonExport(
-    val schemaVersion: Int,
-    val appVersionCode: Int,
-    val appOrigin: String,
+    val schemaVersion: Int?,
+    val appVersionCode: Int?,
+    val appOrigin: String?,
     val services: List<Service>,
     val servicesEncrypted: String?,
-    val groups: List<Group>,
+    val groups: List<Group>?,
 ) {
     @Serializable
     data class Service(
         val otp: Otp,
-        val order: Order,
-        val updatedAt: Long,
-        val name: String,
+        val order: Order?,
+        val updatedAt: Long?,
+        val name: String?,
         val icon: Icon?,
         val secret: String,
-        val badge: Badge,
+        val badge: Badge?,
         val serviceTypeId: String?,
     ) {
         @Serializable
         data class Otp(
-            val counter: Int,
-            val period: Int,
-            val digits: Int,
-            val account: String,
+            val counter: Int?,
+            val period: Int?,
+            val digits: Int?,
+            val account: String?,
             val source: String?,
             val tokenType: String?,
             val algorithm: String?,
@@ -37,24 +37,24 @@ data class TwoFasJsonExport(
 
         @Serializable
         data class Order(
-            val position: Int,
+            val position: Int?,
         )
 
         @Serializable
         data class Icon(
-            val iconCollection: IconCollection,
-            val label: Label,
-            val selected: String,
+            val iconCollection: IconCollection?,
+            val label: Label?,
+            val selected: String?,
         ) {
             @Serializable
             data class IconCollection(
-                val id: String,
+                val id: String?,
             )
 
             @Serializable
             data class Label(
-                val backgroundColor: String,
-                val text: String,
+                val backgroundColor: String?,
+                val text: String?,
             )
         }
 
@@ -68,6 +68,6 @@ data class TwoFasJsonExport(
     data class Group(
         val id: String,
         val name: String,
-        val isExpanded: Boolean,
+        val isExpanded: Boolean?,
     )
 }
