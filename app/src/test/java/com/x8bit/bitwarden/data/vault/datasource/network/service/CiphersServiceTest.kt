@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachm
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -191,6 +192,58 @@ class CiphersServiceTest : BaseServiceTest() {
             cipherId = cipherId,
             attachmentId = attachmentId,
         )
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
+    fun `shareAttachment without attachment ID should return an error`() = runTest {
+        val cipherId = "cipherId"
+        val organizationId = "organizationId"
+        val attachment = createMockSdkAttachment(number = 1).copy(id = null)
+        val encryptedFile = File.createTempFile("mockFile", "temp")
+
+        val result = ciphersService.shareAttachment(
+            cipherId = cipherId,
+            attachment = attachment,
+            organizationId = organizationId,
+            encryptedFile = encryptedFile,
+        )
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `shareAttachment without attachment key should return an error`() = runTest {
+        val cipherId = "cipherId"
+        val organizationId = "organizationId"
+        val attachment = createMockSdkAttachment(number = 1, key = null)
+        val encryptedFile = File.createTempFile("mockFile", "temp")
+
+        val result = ciphersService.shareAttachment(
+            cipherId = cipherId,
+            attachment = attachment,
+            organizationId = organizationId,
+            encryptedFile = encryptedFile,
+        )
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `shareAttachment should execute the share attachment API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val organizationId = "organizationId"
+        val attachment = createMockSdkAttachment(number = 1)
+        val encryptedFile = File.createTempFile("mockFile", "temp")
+
+        val result = ciphersService.shareAttachment(
+            cipherId = cipherId,
+            attachment = attachment,
+            organizationId = organizationId,
+            encryptedFile = encryptedFile,
+        )
+
         assertEquals(Unit, result.getOrThrow())
     }
 

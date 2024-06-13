@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
 import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
@@ -16,6 +17,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRe
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
@@ -774,6 +776,107 @@ class CipherManagerTest {
                 cipherId = "mockId-1",
                 organizationId = organizationId,
                 cipherView = createMockCipherView(number = 1),
+                collectionIds = listOf("mockId-1"),
+            )
+
+            assertEquals(ShareCipherResult.Success, result)
+        }
+
+    @Test
+    fun `shareCipher with attachment migration success should return ShareCipherResultSuccess`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val userId = "mockId-1"
+            val organizationId = "organizationId"
+            val mockAttachmentView = createMockAttachmentView(number = 1, key = null)
+            val initialCipherView = createMockCipherView(number = 1).copy(
+                attachments = listOf(mockAttachmentView),
+            )
+            val mockAttachment = createMockSdkAttachment(number = 1, key = null)
+            val mockCipher = createMockSdkCipher(number = 1).copy(
+                attachments = listOf(mockAttachment),
+            )
+            val attachment = createMockAttachment(number = 1)
+            val encryptedFile = File("path/to/encrypted/file")
+            val decryptedFile = File("path/to/encrypted/file_decrypted")
+            val mockCipherView = createMockCipherView(number = 1)
+
+            coEvery {
+                vaultSdkSource.moveToOrganization(
+                    userId = userId,
+                    organizationId = organizationId,
+                    cipherView = initialCipherView,
+                )
+            } returns mockCipherView.asSuccess()
+
+            // Handle mocks for migration
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = initialCipherView)
+            } returns mockCipher.asSuccess()
+            coEvery {
+                ciphersService.getCipherAttachment(cipherId = "mockId-1", attachmentId = "mockId-1")
+            } returns attachment.asSuccess()
+            coEvery {
+                fileManager.downloadFileToCache(url = "mockUrl-1")
+            } returns DownloadResult.Success(file = encryptedFile)
+            coEvery {
+                vaultSdkSource.decryptFile(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachment = mockAttachment,
+                    encryptedFilePath = encryptedFile.path,
+                    decryptedFilePath = decryptedFile.path,
+                )
+            } returns Unit.asSuccess()
+            coEvery {
+                vaultSdkSource.encryptAttachment(
+                    userId = userId,
+                    cipher = mockCipher,
+                    attachmentView = AttachmentView(
+                        id = null,
+                        url = null,
+                        size = "1",
+                        sizeName = null,
+                        fileName = "mockFileName-1",
+                        key = null,
+                    ),
+                    decryptedFilePath = any(),
+                    encryptedFilePath = any(),
+                )
+            } returns mockAttachment.asSuccess()
+            coEvery {
+                ciphersService.shareAttachment(
+                    cipherId = "mockId-1",
+                    attachment = mockAttachment,
+                    organizationId = organizationId,
+                    encryptedFile = any(),
+                )
+            } returns Unit.asSuccess()
+            // Done with mocks for migration
+
+            coEvery {
+                vaultSdkSource.encryptCipher(userId = userId, cipherView = mockCipherView)
+            } returns createMockSdkCipher(number = 1, clock = clock).asSuccess()
+            coEvery {
+                ciphersService.shareCipher(
+                    cipherId = "mockId-1",
+                    body = ShareCipherJsonRequest(
+                        cipher = createMockCipherJsonRequest(number = 1, hasNullUri = true),
+                        collectionIds = listOf("mockId-1"),
+                    ),
+                )
+            } returns createMockCipher(number = 1).asSuccess()
+            coEvery {
+                vaultDiskSource.saveCipher(
+                    userId = userId,
+                    cipher = createMockCipher(number = 1).copy(collectionIds = listOf("mockId-1")),
+                )
+            } just runs
+
+            val result = cipherManager.shareCipher(
+                cipherId = "mockId-1",
+                organizationId = organizationId,
+                cipherView = initialCipherView,
                 collectionIds = listOf("mockId-1"),
             )
 

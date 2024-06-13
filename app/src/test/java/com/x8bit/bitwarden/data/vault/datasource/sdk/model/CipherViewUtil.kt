@@ -145,14 +145,14 @@ fun createMockUriView(number: Int): LoginUriView =
 /**
  * Create a mock [AttachmentView] with a given [number].
  */
-fun createMockAttachmentView(number: Int): AttachmentView =
+fun createMockAttachmentView(number: Int, key: String? = "mockKey-$number"): AttachmentView =
     AttachmentView(
         fileName = "mockFileName-$number",
         size = "1",
         sizeName = "mockSizeName-$number",
         id = "mockId-$number",
         url = "mockUrl-$number",
-        key = "mockKey-$number",
+        key = key,
     )
 
 /**

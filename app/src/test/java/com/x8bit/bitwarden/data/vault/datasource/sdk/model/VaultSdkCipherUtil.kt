@@ -128,14 +128,14 @@ fun createMockSdkCard(number: Int): Card =
 /**
  * Create a mock [Attachment] with a given [number].
  */
-fun createMockSdkAttachment(number: Int): Attachment =
+fun createMockSdkAttachment(number: Int, key: String? = "mockKey-$number"): Attachment =
     Attachment(
         fileName = "mockFileName-$number",
         size = "1",
         sizeName = "mockSizeName-$number",
         id = "mockId-$number",
         url = "mockUrl-$number",
-        key = "mockKey-$number",
+        key = key,
     )
 
 /**
