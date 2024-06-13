@@ -72,6 +72,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ steps.branch.outputs.branch-name }}
+          skip_unpack: true
 
       - name: Dry Run - Download all artifacts
         if: ${{ inputs.release_type == 'Dry Run' }}
@@ -80,12 +81,16 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
+          skip_unpack: true
 
       - name: ls
         run: ls -lR
 
-      - name: Prep Bitwarden iOS release asset
-        run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
+      - name: Unzip release assets
+        run: |
+          for file in $(ls *.zip); do
+            unzip -o $file -d $(basename $file .zip)
+          done
 
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
