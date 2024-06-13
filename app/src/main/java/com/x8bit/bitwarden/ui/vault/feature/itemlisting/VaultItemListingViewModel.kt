@@ -24,7 +24,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.map
-import com.x8bit.bitwarden.data.platform.util.getFido2RpOrNull
+import com.x8bit.bitwarden.data.platform.util.getFido2RpIdOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
@@ -920,7 +920,7 @@ data class VaultItemListingState(
             ?.let { R.string.items_for_uri.asText(it) }
             ?: fido2CredentialRequest
                 ?.callingAppInfo
-                ?.getFido2RpOrNull()
+                ?.getFido2RpIdOrNull()
                 ?.let { R.string.items_for_uri.asText(it) }
             ?: itemListingType.titleText
 

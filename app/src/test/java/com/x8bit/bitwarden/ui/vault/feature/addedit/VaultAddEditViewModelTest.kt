@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
+import android.content.pm.SigningInfo
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -14,6 +15,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -45,6 +48,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -113,6 +117,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns emptyList()
     }
+    private val fido2CredentialManager = mockk<Fido2CredentialManager>()
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
@@ -277,6 +282,43 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             vaultAddEditType = vaultAddEditType,
             commonContentViewState = autofillContentState.common,
             typeContentViewState = autofillContentState.type,
+        )
+        val viewModel = createAddVaultItemViewModel(
+            savedStateHandle = createSavedStateHandleWithState(
+                state = initState,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        assertEquals(
+            initState,
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            vaultRepository.vaultDataStateFlow
+        }
+    }
+
+    @Test
+    fun `initial add state should be correct when fido2 save`() = runTest {
+        val fido2CredentialRequest = Fido2CredentialRequest(
+            userId = "mockUserId-1",
+            requestJson = "mockRequestJson-1",
+            packageName = "mockPackageName-1",
+            signingInfo = SigningInfo(),
+            origin = null,
+        )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+            fido2CredentialRequest = fido2CredentialRequest,
+        )
+        val fido2ContentState = fido2CredentialRequest.toDefaultAddTypeContent(
+            creationOptions = createMockPublicKeyCredentialCreationOptions(number = 1),
+            isIndividualVaultDisabled = false,
+        )
+        val vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN)
+        val initState = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = fido2ContentState.common,
+            typeContentViewState = fido2ContentState.type,
         )
         val viewModel = createAddVaultItemViewModel(
             savedStateHandle = createSavedStateHandleWithState(
@@ -1889,6 +1931,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 policyManager = policyManager,
                 resourceManager = resourceManager,
                 authRepository = authRepository,
+                fido2CredentialManager = fido2CredentialManager,
                 settingsRepository = settingsRepository,
                 clock = fixedClock,
             )
@@ -2467,6 +2510,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             policyManager = policyManager,
             resourceManager = bitwardenResourceManager,
+            fido2CredentialManager = fido2CredentialManager,
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             clock = clock,
@@ -2702,7 +2746,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(action)
         assertEquals(expectedState, viewModel.stateFlow.value.viewState)
     }
-
     //endregion Helper functions
 }
 

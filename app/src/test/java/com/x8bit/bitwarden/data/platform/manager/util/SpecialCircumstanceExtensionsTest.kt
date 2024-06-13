@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.util
 
+import android.content.pm.SigningInfo
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -37,6 +39,9 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
@@ -77,11 +82,59 @@ class SpecialCircumstanceExtensionsTest {
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
             ),
+            SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = mockk(),
+            ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
                 assertNull(specialCircumstance.toAutofillSelectionDataOrNull())
             }
+    }
+
+    @Test
+    fun `toFido2RequestOrNull should return a null value for other types`() {
+        listOf(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = mockk(),
+            ),
+            SpecialCircumstance.ShareNewSend(
+                data = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
+        )
+            .forEach { specialCircumstance ->
+                assertNull(specialCircumstance.toFido2RequestOrNull())
+            }
+    }
+
+    @Test
+    fun `toFido2RequestOrNull should return a non-null value for Fido2Save`() {
+        val fido2CredentialRequest = Fido2CredentialRequest(
+            userId = "mockUserId",
+            requestJson = "mockRequestJson",
+            packageName = "mockPackageName",
+            signingInfo = SigningInfo(),
+            origin = "mockOrigin",
+        )
+        assertEquals(
+            fido2CredentialRequest,
+            SpecialCircumstance
+                .Fido2Save(
+                    fido2CredentialRequest = fido2CredentialRequest,
+                )
+                .toFido2RequestOrNull(),
+        )
     }
 }

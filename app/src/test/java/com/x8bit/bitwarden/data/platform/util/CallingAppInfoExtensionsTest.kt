@@ -37,7 +37,7 @@ class CallingAppInfoExtensionsTest {
             every { origin } returns "invalidUri9685%^$^&(*"
         }
 
-        assertNull(mockCallingAppInfo.getFido2RpOrNull())
+        assertNull(mockCallingAppInfo.getFido2RpIdOrNull())
     }
 
     @Test
@@ -47,7 +47,7 @@ class CallingAppInfoExtensionsTest {
             every { origin } returns "mockUri"
         }
 
-        assertEquals("mockUri", mockCallingAppInfo.getFido2RpOrNull())
+        assertEquals("mockUri", mockCallingAppInfo.getFido2RpIdOrNull())
     }
 
     @Test
@@ -57,7 +57,7 @@ class CallingAppInfoExtensionsTest {
             every { origin } returns null
         }
 
-        assertNull(mockCallingAppInfo.getFido2RpOrNull())
+        assertNull(mockCallingAppInfo.getFido2RpIdOrNull())
     }
 
     @Test
@@ -67,7 +67,7 @@ class CallingAppInfoExtensionsTest {
             every { packageName } returns "mockPackageName"
         }
 
-        assertEquals("mockPackageName", mockCallingAppInfo.getFido2RpOrNull())
+        assertEquals("mockPackageName", mockCallingAppInfo.getFido2RpIdOrNull())
     }
 
     @Test

@@ -10,13 +10,12 @@ import java.security.MessageDigest
  * returned. If this [CallingAppInfo] is a native RP application the package name will be returned.
  * Otherwise, `null` is returned.
  */
-fun CallingAppInfo.getFido2RpOrNull(): String? {
-    return if (isOriginPopulated()) {
+fun CallingAppInfo.getFido2RpIdOrNull(): String? =
+    if (isOriginPopulated()) {
         origin?.toHostOrPathOrNull()
     } else {
         packageName
     }
-}
 
 /**
  * Returns the signing certificate hash formatted as a hex string.
