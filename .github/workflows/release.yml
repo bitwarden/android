@@ -89,7 +89,7 @@ jobs:
       - name: Unzip release assets
         run: |
           for file in $(ls *.zip); do
-            unzip -o $file -d $(basename $file .zip)
+            unzip -o "$file" -d $(basename "$file" .zip)
           done
 
       - name: Create release
