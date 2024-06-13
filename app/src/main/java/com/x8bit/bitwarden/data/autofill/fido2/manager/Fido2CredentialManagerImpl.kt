@@ -40,6 +40,17 @@ class Fido2CredentialManagerImpl(
         }
     }
 
+    override fun getPasskeyCreateOptionsOrNull(
+        requestJson: String,
+    ): PublicKeyCredentialCreationOptions? =
+        try {
+            json.decodeFromString<PublicKeyCredentialCreationOptions>(requestJson)
+        } catch (e: SerializationException) {
+            null
+        } catch (e: IllegalArgumentException) {
+            null
+        }
+
     @Suppress("ReturnCount")
     private suspend fun validateCallingApplicationAssetLinks(
         fido2CredentialRequest: Fido2CredentialRequest,

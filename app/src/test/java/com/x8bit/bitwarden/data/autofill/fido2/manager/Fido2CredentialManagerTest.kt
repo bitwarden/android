@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -23,6 +24,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -40,18 +42,10 @@ class Fido2CredentialManagerTest {
             getDigitalAssetLinkForRp(relyingParty = any())
         } returns DEFAULT_STATEMENT_LIST.asSuccess()
     }
-    private val mockCreateOptions = mockk<PublicKeyCredentialCreationOptions> {
-        every {
-            relyingParty
-        } returns PublicKeyCredentialCreationOptions.PublicKeyCredentialRpEntity(
-            name = "mockRpName",
-            id = "www.bitwarden.com",
-        )
-    }
     private val json = mockk<Json> {
         every {
             decodeFromString<PublicKeyCredentialCreationOptions>(any())
-        } returns mockCreateOptions
+        } returns createMockPublicKeyCredentialCreationOptions(number = 1)
     }
     private val mockPrivilegedCallingAppInfo = mockk<CallingAppInfo> {
         every { packageName } returns "com.x8bit.bitwarden"
@@ -252,6 +246,44 @@ class Fido2CredentialManagerTest {
             assertEquals(
                 Fido2ValidateOriginResult.Error.ApplicationNotVerified,
                 fido2CredentialManager.validateOrigin(mockUnprivilegedAppRequest),
+            )
+        }
+
+    @Test
+    fun `getPasskeyCreateOptionsOrNull should return passkey options when deserialized`() =
+        runTest {
+            assertEquals(
+                createMockPublicKeyCredentialCreationOptions(number = 1),
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                    requestJson = "",
+                ),
+            )
+        }
+
+    @Test
+    fun `getPasskeyCreateOptionsOrNull should return null when deserialization fails`() =
+        runTest {
+            every {
+                json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+            } throws SerializationException()
+            assertNull(
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                    requestJson = "",
+                ),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPasskeyCreateOptionsOrNull should return null when IllegalArgumentException is thrown`() =
+        runTest {
+            every {
+                json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+            } throws IllegalArgumentException()
+            assertNull(
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                    requestJson = "",
+                ),
             )
         }
 

@@ -8,11 +8,13 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
+import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.takeUntilLoaded
@@ -80,6 +82,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
     private val vaultRepository: VaultRepository,
+    private val fido2CredentialManager: Fido2CredentialManager,
     generatorRepository: GeneratorRepository,
     private val settingsRepository: SettingsRepository,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
@@ -102,6 +105,16 @@ class VaultAddEditViewModel @Inject constructor(
                 .specialCircumstance
                 ?.toAutofillSelectionDataOrNull()
 
+            val fido2CreationRequest = specialCircumstanceManager
+                .specialCircumstance
+                ?.toFido2RequestOrNull()
+
+            val fido2CreationOptions = fido2CreationRequest
+                ?.let { request ->
+                    fido2CredentialManager
+                        .getPasskeyCreateOptionsOrNull(request.requestJson)
+                }
+
             val dialogState =
                 if (!settingsRepository.initialAutofillDialogShown &&
                     vaultAddEditType is VaultAddEditType.AddItem &&
@@ -120,6 +133,11 @@ class VaultAddEditViewModel @Inject constructor(
                             ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: autofillSaveItem
                                 ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
+                            ?: fido2CreationRequest
+                                ?.toDefaultAddTypeContent(
+                                    creationOptions = fido2CreationOptions,
+                                    isIndividualVaultDisabled = isIndividualVaultDisabled,
+                                )
                             ?: VaultAddEditState.ViewState.Content(
                                 common = VaultAddEditState.ViewState.Content.Common(),
                                 isIndividualVaultDisabled = isIndividualVaultDisabled,
@@ -131,9 +149,9 @@ class VaultAddEditViewModel @Inject constructor(
                     is VaultAddEditType.CloneItem -> VaultAddEditState.ViewState.Loading
                 },
                 dialog = dialogState,
-                // Set special conditions for autofill save
-                shouldShowCloseButton = autofillSaveItem == null,
-                shouldExitOnSave = autofillSaveItem != null,
+                // Set special conditions for autofill and fido2 save
+                shouldShowCloseButton = autofillSaveItem == null && fido2CreationOptions == null,
+                shouldExitOnSave = autofillSaveItem != null || fido2CreationOptions != null,
             )
         },
 ) {
