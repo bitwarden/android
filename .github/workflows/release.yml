@@ -72,6 +72,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ steps.branch.outputs.branch-name }}
+          skip_unpack: true
 
       - name: Dry Run - Download all artifacts
         if: ${{ inputs.release_type == 'Dry Run' }}
@@ -80,9 +81,15 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
+          skip_unpack: true
 
-      - name: Prep Bitwarden iOS release asset
-        run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
+      - name: Unzip release assets
+        run: |
+          unzip bw-android-apk-sha256.txt.zip -d bw-android-apk-sha256.txt
+          unzip bw-fdroid-apk-sha256.txt.zip -d bw-fdroid-apk-sha256.txt
+          unzip com.x8bit.bitwarden-fdroid.apk.zip -d com.x8bit.bitwarden-fdroid.apk
+          unzip com.x8bit.bitwarden.aab.zip -d com.x8bit.bitwarden.aab
+          unzip com.x8bit.bitwarden.apk.zip -d com.x8bit.bitwarden.apk
 
       - name: Create release
         if: ${{ inputs.release_type != 'Dry Run' }}
