@@ -89,6 +89,7 @@ jobs:
       - name: Unzip release assets
         run: |
           for file in $(ls *.zip -I "Bitwarden iOS.zip"); do
+            echo "Unzipping $file"
             $BASENAME=$(basename "$file" .zip)
             echo "Unzipping $file to $BASENAME"
             unzip -o "$file" -d $BASENAME
