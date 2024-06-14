@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.bitwarden.bitwarden.Send
-import com.bitwarden.bitwarden.SendFile
-import com.bitwarden.bitwarden.SendText
-import com.bitwarden.bitwarden.SendType
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendFile
+import com.bitwarden.send.SendText
+import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson

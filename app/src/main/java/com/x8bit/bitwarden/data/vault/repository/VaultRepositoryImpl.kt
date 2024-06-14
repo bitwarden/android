@@ -4,11 +4,11 @@ import android.net.Uri
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoMethod
-import com.bitwarden.bitwarden.Send
-import com.bitwarden.bitwarden.SendType
-import com.bitwarden.bitwarden.SendView
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendType
+import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView

@@ -4,8 +4,6 @@ import com.bitwarden.bitwarden.DerivePinKeyResponse
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoRequest
-import com.bitwarden.bitwarden.Send
-import com.bitwarden.bitwarden.SendView
 import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
@@ -19,6 +17,8 @@ import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
 import com.bitwarden.sdk.ClientSends
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher

@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
-import com.bitwarden.bitwarden.SendView
+import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView

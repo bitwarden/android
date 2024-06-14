@@ -5,11 +5,11 @@ import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.bitwarden.InitUserCryptoRequest
-import com.bitwarden.bitwarden.Send
-import com.bitwarden.bitwarden.SendView
 import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
 import com.bitwarden.vault.AttachmentEncryptResult
 import com.bitwarden.vault.AttachmentView

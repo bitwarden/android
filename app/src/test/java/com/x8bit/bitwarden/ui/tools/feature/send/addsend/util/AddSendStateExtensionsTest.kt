@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.addsend.util
 
-import com.bitwarden.bitwarden.SendType
+import com.bitwarden.send.SendType
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFileView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.ui.tools.feature.send.addsend.AddSendState

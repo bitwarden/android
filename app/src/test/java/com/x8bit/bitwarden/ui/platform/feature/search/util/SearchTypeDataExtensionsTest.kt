@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import android.net.Uri
-import com.bitwarden.bitwarden.SendView
+import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
