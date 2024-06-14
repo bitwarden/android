@@ -2838,7 +2838,7 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>App Store'a gitmek ister misiniz?</value>
   </data>
   <data name="ContinueToDeviceSettings" xml:space="preserve">
-    <value>Continue to device Settings?</value>
+    <value>Cihaz ayarlarına gidilsin mi?</value>
   </data>
   <data name="TwoStepLoginDescriptionLong" xml:space="preserve">
     <value>Bitwarden web uygulamasında iki aşamalı girişi ayarlayarak hesabınızın güvenliğini artırabilirsiniz.</value>
@@ -2933,11 +2933,11 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Geçiş anahtarı okuma hatası</value>
   </data>
   <data name="ThereWasAProblemCreatingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem creating a passkey for {0}. Try again later.</value>
+    <value>{0} için geçiş anahtarı oluşturulamadı. Daha sonra tekrar deneyin.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="ThereWasAProblemReadingAPasskeyForXTryAgainLater" xml:space="preserve">
-    <value>There was a problem reading your passkey for {0}. Try again later.</value>
+    <value>{0} için geçiş anahtarı okunamadı. Daha sonra tekrar deneyin.</value>
     <comment>The parameter is the RpId</comment>
   </data>
   <data name="VerifyingIdentityEllipsis" xml:space="preserve">
@@ -2962,16 +2962,16 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>1. Go to your device's Settings &gt; Passwords &gt; Password Options</value>
   </data>
   <data name="SecondDotTurnOnAutoFill" xml:space="preserve">
-    <value>2. Turn on AutoFill</value>
+    <value>Oto-Doldurma'yı Etkinleştir</value>
   </data>
   <data name="ThirdDotSelectBitwardenToUseForPasswordsAndPasskeys" xml:space="preserve">
-    <value>3. Select "Bitwarden" to use for passwords and passkeys</value>
+    <value>Parolalarınızı ve geçiş anahtarlarını kullanmak için "Bitwarden" seçin</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVault" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault</value>
+    <value>Geçiş anahtarınız Bitwarden kasasına kaydedilecektir</value>
   </data>
   <data name="YourPasskeyWillBeSavedToYourBitwardenVaultForX" xml:space="preserve">
-    <value>Your passkey will be saved to your Bitwarden vault for {0}</value>
+    <value>{0} için geçiş anahtarınız Bitwarden kasasına kaydedilecektir</value>
   </data>
   <data name="OrganizationUnassignedItemsMessageUSEUDescriptionLong" xml:space="preserve">
     <value>Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</value>
@@ -2989,18 +2989,18 @@ Bu hesaba geçmek ister misiniz?</value>
     <value>Bu uygulamada geçiş anahtarları desteklenmiyor</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserIsNotPrivileged" xml:space="preserve">
-    <value>Passkey operation failed because browser is not privileged</value>
+    <value>Geçiş anahtarı eylemi başarısız oldu çünkü tarayıcı ayrıcalıklı değil</value>
   </data>
   <data name="PasskeyOperationFailedBecauseBrowserSignatureDoesNotMatch" xml:space="preserve">
-    <value>Passkey operation failed because browser signature does not match</value>
+    <value>Geçiş anahtarı eylemi başarısız oldu çünkü tarayıcı imzası uyumsuz</value>
   </data>
   <data name="PasskeyOperationFailedBecauseOfMissingAssetLinks" xml:space="preserve">
-    <value>Passkey operation failed because of missing asset links</value>
+    <value>Geçiş anahtarı eylemi başarısız oldu çünkü varlık bağlantıları eksik</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppNotFoundInAssetLinks" xml:space="preserve">
-    <value>Passkey operation failed because app not found in asset links</value>
+    <value>Geçiş anahtarı eylemi başarısız oldu çünkü uygulama varlık bağlantılarında bulunamadı</value>
   </data>
   <data name="PasskeyOperationFailedBecauseAppCouldNotBeVerified" xml:space="preserve">
-    <value>Passkey operation failed because app could not be verified</value>
+    <value>Geçiş anahtarı eylemi başarısız oldu çünkü uygulama doğrulanamadı</value>
   </data>
 </root>
