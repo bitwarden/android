@@ -26,3 +26,4 @@ local.properties
 # Fastlane
 fastlane/report.xml
 fastlane/README.md
+/.kotlin/
