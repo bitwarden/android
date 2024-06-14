@@ -45,13 +45,25 @@ class AegisExportParser : ExportParser {
 
     private fun AegisJsonExport.Database.Entry.toAuthenticatorItemEntity(): AuthenticatorItemEntity {
 
-        // Lastpass only supports TOTP codes.
+        // Aegis only supports TOTP codes.
         val type = AuthenticatorItemType.fromStringOrNull(type)
             ?: throw IllegalArgumentException("Unsupported OTP type")
 
         val algorithmEnum = AuthenticatorItemAlgorithm
             .fromStringOrNull(info.algo)
             ?: throw IllegalArgumentException("Unsupported algorithm.")
+
+        val issuer = issuer
+            .takeUnless { it.isEmpty() }
+        // If issuer is not provided we fallback to the account name.
+            ?: name
+                .split(":")
+                .first()
+        val accountName = name
+            .split(":")
+            .last()
+            // If the account name matches the derived issuer we ignore it to prevent redundancy.
+            .takeUnless { it == issuer }
 
         return AuthenticatorItemEntity(
             id = UUID.randomUUID().toString(),
@@ -62,7 +74,7 @@ class AegisExportParser : ExportParser {
             digits = info.digits,
             issuer = issuer,
             userId = null,
-            accountName = name,
+            accountName = accountName,
             favorite = favorite,
         )
     }
