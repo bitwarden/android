@@ -2695,7 +2695,7 @@
     <value>批准后，您将收到通知。 </value>
   </data>
   <data name="TroubleLoggingIn" xml:space="preserve">
-    <value>登录遇到问题？</value>
+    <value>登录遇到问题吗？</value>
   </data>
   <data name="LoggingInAsX" xml:space="preserve">
     <value>正登录为 {0}</value>

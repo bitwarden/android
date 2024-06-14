@@ -2818,7 +2818,7 @@ Haluatko vaihtaa tähän tiliin?</value>
     <value>Tekstinsisäistä automattitäyttöä käytetään, jos aktiivinen näppäimistö tukee sitä. Muussa tapauksessa käytetään ponnahdusvalintaa.</value>
   </data>
   <data name="AdditionalOptions" xml:space="preserve">
-    <value>Lisäasetukset</value>
+    <value>Lisävalinnat</value>
   </data>
   <data name="ContinueToWebApp" xml:space="preserve">
     <value>Avataanko verkkosovellus?</value>
