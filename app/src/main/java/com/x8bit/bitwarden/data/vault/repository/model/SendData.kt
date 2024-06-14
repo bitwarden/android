@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
-import com.bitwarden.bitwarden.SendView
+import com.bitwarden.send.SendView
 
 /**
  * Represents decrypted send data.

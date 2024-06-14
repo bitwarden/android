@@ -3,8 +3,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
-import com.bitwarden.bitwarden.SendType
-import com.bitwarden.bitwarden.SendView
+import com.bitwarden.send.SendType
+import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView

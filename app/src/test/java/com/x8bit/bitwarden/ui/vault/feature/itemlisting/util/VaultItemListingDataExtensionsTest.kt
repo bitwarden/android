@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import android.net.Uri
-import com.bitwarden.bitwarden.SendType
+import com.bitwarden.send.SendType
 import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
