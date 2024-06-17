@@ -852,7 +852,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="passkey_management_explanation_long">Käytä Bitwardeniin suojausavainten tallennukseen ja kirjaudu holviisi aiemmin tallennetuilla suojausavaimilla.</string>
   <string name="autofill_services_explanation_long">Android Autofill Framework -rajapintaa käytetään täytettäessä kirjautumistietoja laitteen muihin sovelluksiin.</string>
   <string name="use_inline_autofill_explanation_long">Tekstinsisäistä automattitäyttöä käytetään, jos aktiivinen näppäimistö tukee sitä. Muussa tapauksessa käytetään ponnahdusvalintaa.</string>
-  <string name="additional_options">Lisäasetukset</string>
+  <string name="additional_options">Lisävalinnat</string>
   <string name="continue_to_web_app">Avataanko verkkosovellus?</string>
   <string name="continue_to_x">Avataanko osoite %1$s?</string>
   <string name="continue_to_help_center">Avataanko Tukikeskus?</string>

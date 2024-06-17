@@ -257,7 +257,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="learn_more">Saber mais</string>
   <string name="api_url">URL do servidor da API</string>
   <string name="custom_environment">Ambiente personalizado</string>
-  <string name="custom_environment_footer">Para utilizadores avançados. Pode especificar o URL de base de cada serviço independentemente.</string>
+  <string name="custom_environment_footer">Para utilizadores avançados. Pode especificar o URL de base de cada serviço de forma independente.</string>
   <string name="environment_saved">Os URLs de ambiente foram guardados.</string>
   <string name="formatted_incorrectly">%1$s não está corretamente formatado.</string>
   <string name="identity_url">URL do servidor de identidade</string>
