@@ -913,5 +913,10 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
-  <string name="creating_on">Creating on</string>
+  <string name="creating_on">Creating on:</string>
+  <string name="follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account">Follow the instructions in the email sent to %1$s to continue creating your account.</string>
+  <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the Terms of Service and Privacy Policy</string>
+  <string name="set_password">Set password</string>
+  <string name="unsubscribe">Unsubscribe</string>
+  <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.</string>
 </resources>
