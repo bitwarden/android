@@ -1,0 +1,50 @@
+name: Crowdin Sync
+
+on:
+  workflow_dispatch:
+    inputs: {}
+  schedule:
+    - cron: '0 0 * * 5'
+
+jobs:
+  crowdin-sync:
+    name: Autosync
+    runs-on: ubuntu-20.04
+    env:
+      _CROWDIN_PROJECT_ID: "673718"
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
+
+      - name: Log in to Azure - CI Subscription
+        uses: Azure/login@e15b166166a8746d1a47596803bd8c1b595455cf # v1.6.0
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: "bitwarden-ci"
+          secrets: "crowdin-api-token, github-gpg-private-key, github-gpg-private-key-passphrase"
+
+      - name: Download translations
+        uses: crowdin/github-action@67705afb6985401459cd143d5f5f00c9dc212f23 # v1.20.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: main
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          github_user_name: "bitwarden-devops-bot"
+          github_user_email: "106330231+bitwarden-devops-bot@users.noreply.github.com"
+          commit_message: "Autosync the updated translations"
+          localization_branch_name: crowdin-auto-sync
+          create_pull_request: true
+          pull_request_title: "Autosync Crowdin Translations"
+          pull_request_body: "Autosync the updated translations"
+          gpg_private_key: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key }}
+          gpg_passphrase: ${{ steps.retrieve-secrets.outputs.github-gpg-private-key-passphrase }}

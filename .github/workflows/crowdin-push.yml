@@ -1,0 +1,43 @@
+name: Crowdin Push
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - "main"
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  JAVA_VERSION: 17
+
+jobs:
+  crowdin-push:
+    name: Crowdin Push
+    runs-on: ubuntu-22.04
+    env:
+      _CROWDIN_PROJECT_ID: "673718"
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+
+      - name: Log in to Azure
+        uses: Azure/login@cb79c773a3cfa27f31f25eb3f677781210c9ce3d # v1.6.1
+        with:
+          creds: ${{ secrets.AZURE_KV_CI_SERVICE_PRINCIPAL }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: bitwarden/gh-actions/get-keyvault-secrets@main
+        with:
+          keyvault: "bitwarden-ci"
+          secrets: "crowdin-api-token"
+
+      - name: Upload sources
+        uses: crowdin/github-action@67705afb6985401459cd143d5f5f00c9dc212f23 # v1.20.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: main
+          upload_sources: true
+          upload_translations: false
