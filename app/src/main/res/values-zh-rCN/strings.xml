@@ -812,7 +812,7 @@
   <string name="admin_approval_requested">已请求管理员批准</string>
   <string name="your_request_has_been_sent_to_your_admin">您的请求已发送给您的管理员。</string>
   <string name="you_will_be_notified_once_approved">批准后，您将收到通知。</string>
-  <string name="trouble_logging_in">登录遇到问题？</string>
+  <string name="trouble_logging_in">登录遇到问题吗？</string>
   <string name="logging_in_as_x">正登录为 %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">密码库超时动作已更改为注销</string>
   <string name="block_auto_fill">阻止自动填充</string>

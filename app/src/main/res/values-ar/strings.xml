@@ -86,7 +86,7 @@
   <string name="app_extension">امتداد التطبيق</string>
   <string name="autofill_accessibility_description">استخدم خدمة الوصول إلى Bitwarden لملء تسجيلات الدخول الخاصة بك تلقائياً عبر التطبيقات و الويب.</string>
   <string name="autofill_service">خدمة التعبئة التلقائية</string>
-  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
+  <string name="set_bitwarden_as_passkey_manager_description">تعيين Bitwarden كموفر مفتاح المرور الخاص بك في إعدادات الجهاز.</string>
   <string name="avoid_ambiguous_characters">تجنب الأحرف الغامضة</string>
   <string name="bitwarden_app_extension">ملحق تطبيق Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">أسهل طريقة لإضافة تسجيلات دخول جديدة إلى المخزن الخاص بك هي من امتداد تطبيق Bitwarden . تعلم المزيد حول استخدام ملحق تطبيق Bitwarden عن طريق الانتقال إلى شاشة \"إعدادات\".</string>
