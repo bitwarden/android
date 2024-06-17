@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.manager
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
@@ -28,9 +29,6 @@ import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toNetworkAttachmentRequest
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import java.io.File
 import java.time.Clock
 
@@ -240,19 +238,15 @@ class CipherManagerImpl(
         collectionIds: List<String>,
     ): ShareCipherResult {
         val userId = activeUserId ?: return ShareCipherResult.Error
-        return vaultSdkSource
-            .moveToOrganization(
-                userId = userId,
-                organizationId = organizationId,
-                cipherView = cipherView,
-            )
+        return migrateAttachments(userId = userId, cipherView = cipherView)
             .flatMap {
-                migrateAttachments(
+                vaultSdkSource.moveToOrganization(
                     userId = userId,
-                    cipherView = it,
                     organizationId = organizationId,
+                    cipherView = it,
                 )
             }
+            .flatMap { vaultSdkSource.encryptCipher(userId = userId, cipherView = it) }
             .flatMap { cipher ->
                 ciphersService.shareCipher(
                     cipherId = cipherId,
@@ -492,71 +486,58 @@ class CipherManagerImpl(
     private suspend fun migrateAttachments(
         userId: String,
         cipherView: CipherView,
-        organizationId: String,
-    ): Result<Cipher> {
+    ): Result<CipherView> {
         // Only run the migrations if we have attachments that do not have their own 'key'
         val attachmentViewsToMigrate = cipherView.attachments.orEmpty().filter { it.key == null }
-        if (attachmentViewsToMigrate.none()) {
-            return vaultSdkSource.encryptCipher(userId = userId, cipherView = cipherView)
-        }
+        if (attachmentViewsToMigrate.none()) return cipherView.asSuccess()
 
         val cipherViewId = cipherView.id
             ?: return IllegalStateException("CipherView must have an ID").asFailure()
-        val cipher = vaultSdkSource
-            .encryptCipher(userId = userId, cipherView = cipherView)
+        var migratedCipherView = cipherView
+            .encryptCipherAndCheckForMigration(userId = userId, cipherId = cipherViewId)
+            .flatMap { vaultSdkSource.decryptCipher(userId = userId, cipher = it) }
             .getOrElse { return it.asFailure() }
 
-        // Gets a list of all the attachments that do not require migration
-        // We will combine this with all migrated attachments at the end
-        val attachmentsWithKeys = cipher.attachments.orEmpty().filter { it.key != null }
-
-        val migrations = coroutineScope {
-            attachmentViewsToMigrate.map { attachmentView ->
-                async {
-                    attachmentView
-                        .id
-                        ?.let { attachmentId ->
-                            this@CipherManagerImpl
-                                .downloadAttachmentForResult(
+        attachmentViewsToMigrate
+            .map { attachmentView ->
+                attachmentView
+                    .id
+                    ?.let { attachmentId ->
+                        // This process downloads the attachment file and creates an entirely
+                        // new attachment before deleting the original one
+                        this@CipherManagerImpl
+                            .downloadAttachmentForResult(
+                                cipherView = migratedCipherView,
+                                attachmentId = attachmentId,
+                            )
+                            .flatMap { file ->
+                                this@CipherManagerImpl
+                                    .createAttachmentForResult(
+                                        cipherId = cipherViewId,
+                                        cipherView = migratedCipherView,
+                                        fileSizeBytes = attachmentView.size,
+                                        fileName = attachmentView.fileName,
+                                        fileUri = file.toUri(),
+                                    )
+                                    .onSuccess { fileManager.delete(file) }
+                            }
+                            .flatMap { cipherView ->
+                                deleteCipherAttachmentForResult(
                                     cipherView = cipherView,
                                     attachmentId = attachmentId,
+                                    cipherId = cipherViewId,
                                 )
-                                .flatMap { decryptedFile ->
-                                    val encryptedFile = File("${decryptedFile.absolutePath}.enc")
-                                    // Re-encrypting the attachment will generate the `key` and
-                                    // we need to encrypt the associated file with that `key`
-                                    vaultSdkSource
-                                        .encryptAttachment(
-                                            userId = userId,
-                                            cipher = cipher,
-                                            attachmentView = attachmentView,
-                                            decryptedFilePath = decryptedFile.absolutePath,
-                                            encryptedFilePath = encryptedFile.absolutePath,
-                                        )
-                                        .onSuccess { fileManager.delete(decryptedFile) }
-                                        .flatMap { attachment ->
-                                            ciphersService
-                                                .shareAttachment(
-                                                    cipherId = cipherViewId,
-                                                    attachment = attachment,
-                                                    organizationId = organizationId,
-                                                    encryptedFile = encryptedFile,
-                                                )
-                                                .onSuccess { fileManager.delete(encryptedFile) }
-                                                .map { attachment }
-                                        }
-                                }
-                        }
-                        ?: IllegalStateException("AttachmentView must have an ID").asFailure()
-                }
+                            }
+                            .flatMap { vaultSdkSource.decryptCipher(userId = userId, cipher = it) }
+                            .onSuccess { migratedCipherView = it }
+                    }
+                    ?: IllegalStateException("AttachmentView must have an ID").asFailure()
             }
-        }
-
-        // We are collecting the migrated attachments to combine with the un-migrated attachments
-        // If anything fails, we consider the entire process to be a failure
-        val migratedAttachments = awaitAll(*migrations.toTypedArray()).map {
-            it.getOrElse { error -> return error.asFailure() }
-        }
-        return cipher.copy(attachments = attachmentsWithKeys + migratedAttachments).asSuccess()
+            .onEach { result ->
+                // If anything fails, we consider the entire process to be a failure
+                // The attachments will be partially migrated and that is OK
+                result.onFailure { return it.asFailure() }
+            }
+        return migratedCipherView.asSuccess()
     }
 }
