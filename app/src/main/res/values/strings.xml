@@ -68,7 +68,7 @@
     <string name="use_your_device_camera_to_scan_codes">Use your device camera to scan codes</string>
     <string name="scan_the_qr_code_in_your_2_step_verification_settings_for_any_account">Scan the QR code in your 2-step verification settings for any account.</string>
     <string name="sign_in_using_unique_codes">Sign in using unique codes</string>
-    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you’ll enter your username and password and a code generated in this app.</string>
+    <string name="when_using_2_step_verification_youll_enter_your_username_and_password_and_a_code_generated_in_this_app">When using 2-step verification, you\'ll enter your username and password and a code generated in this app.</string>
     <string name="continue_button">Continue</string>
     <string name="skip">Skip</string>
     <string name="get_started">Get started</string>
@@ -86,7 +86,7 @@
     <string name="export_confirmation_title">Confirm export</string>
     <string name="export_vault_warning">This export contains your data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
     <string name="file_format">File format</string>
-    <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\\\'ll need to export from the web vault.</string>
+    <string name="export_vault_failure">There was a problem exporting your vault. If the problem persists, you\'ll need to export from the web vault.</string>
     <string name="export_success">Data exported successfully</string>
     <string name="unlock_with">Unlock with %1$s</string>
     <string name="biometrics">Biometrics</string>
