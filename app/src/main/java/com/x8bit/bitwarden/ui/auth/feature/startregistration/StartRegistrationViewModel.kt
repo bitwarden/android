@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
@@ -45,7 +44,8 @@ class StartRegistrationViewModel @Inject constructor(
         ?: StartRegistrationState(
             emailInput = "",
             nameInput = "",
-            isAcceptPoliciesToggled = false,
+            isReceiveMarketingEmailsToggled = environmentRepository.environment.type == Environment.Type.US,
+            isContinueButtonEnabled = false,
             selectedEnvironmentType = environmentRepository.environment.type,
             dialog = null,
         ),
@@ -85,9 +85,10 @@ class StartRegistrationViewModel @Inject constructor(
             is NameInputChange -> handleNameInputChanged(action)
             is CloseClick -> handleCloseClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
-            is AcceptPoliciesToggle -> handleAcceptPoliciesToggle(action)
+            is StartRegistrationAction.ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(action)
             is PrivacyPolicyClick -> handlePrivacyPolicyClick()
             is TermsClick -> handleTermsClick()
+            is StartRegistrationAction.UnsubscribeMarketingEmailsClick -> handleUnsubscribeMarketingEmailsClick()
             is StartRegistrationAction.Internal.ReceiveRegisterResult -> {
                 // handleReceiveRegisterAccountResult(action)
             }
@@ -159,9 +160,11 @@ class StartRegistrationViewModel @Inject constructor(
 
     private fun handleTermsClick() = sendEvent(StartRegistrationEvent.NavigateToTerms)
 
-    private fun handleAcceptPoliciesToggle(action: AcceptPoliciesToggle) {
+    private fun handleUnsubscribeMarketingEmailsClick() = sendEvent(StartRegistrationEvent.NavigateToUnsubscribe)
+
+    private fun handleReceiveMarketingEmailsToggle(action: StartRegistrationAction.ReceiveMarketingEmailsToggle) {
         mutableStateFlow.update {
-            it.copy(isAcceptPoliciesToggled = action.newState)
+            it.copy(isReceiveMarketingEmailsToggled = action.newState)
         }
     }
 
@@ -176,11 +179,21 @@ class StartRegistrationViewModel @Inject constructor(
     }
 
     private fun handleEmailInputChanged(action: EmailInputChange) {
-        mutableStateFlow.update { it.copy(emailInput = action.input) }
+        mutableStateFlow.update {
+            it.copy(
+                emailInput = action.input,
+                isContinueButtonEnabled = action.input.isNotBlank() && state.nameInput.isNotBlank()
+            )
+        }
     }
 
     private fun handleNameInputChanged(action: NameInputChange) {
-        mutableStateFlow.update { it.copy(nameInput = action.input) }
+        mutableStateFlow.update {
+            it.copy(
+                nameInput = action.input,
+                isContinueButtonEnabled = action.input.isNotBlank() && state.emailInput.isNotBlank()
+            )
+        }
     }
 
     private fun handleContinueClick() = when {
@@ -210,14 +223,6 @@ class StartRegistrationViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = StartRegistrationDialog.Error(dialog)) }
         }
 
-        !state.isAcceptPoliciesToggled -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.accept_policies_error.asText(),
-            )
-            mutableStateFlow.update { it.copy(dialog = StartRegistrationDialog.Error(dialog)) }
-        }
-
         else -> {
             // TODO Call to send verification email
            /*
@@ -227,6 +232,14 @@ class StartRegistrationViewModel @Inject constructor(
                 captchaToken = null,
             )
             */
+
+            viewModelScope.launch {
+                sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
+                    email = state.emailInput,
+                    verificationToken = "",
+                    captchaToken = ""
+                ))
+            }
         }
     }
 
@@ -261,7 +274,8 @@ class StartRegistrationViewModel @Inject constructor(
 data class StartRegistrationState(
     val emailInput: String,
     val nameInput: String,
-    val isAcceptPoliciesToggled: Boolean,
+    val isReceiveMarketingEmailsToggled: Boolean,
+    val isContinueButtonEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
     val dialog: StartRegistrationDialog?
 ) : Parcelable {
@@ -325,6 +339,11 @@ sealed class StartRegistrationEvent {
     data object NavigateToPrivacyPolicy : StartRegistrationEvent()
 
     /**
+     * Navigate to unsubscribe to marketing emails.
+     */
+    data object NavigateToUnsubscribe: StartRegistrationEvent()
+
+    /**
      * Navigates to the self-hosted/custom environment screen.
      */
     data object NavigateToEnvironment : StartRegistrationEvent()
@@ -367,9 +386,9 @@ sealed class StartRegistrationAction {
     data object ErrorDialogDismiss : StartRegistrationAction()
 
     /**
-     * User tapped accept policies toggle.
+     * User tapped receive marketing emails toggle.
      */
-    data class AcceptPoliciesToggle(val newState: Boolean) : StartRegistrationAction()
+    data class ReceiveMarketingEmailsToggle(val newState: Boolean) : StartRegistrationAction()
 
     /**
      * User tapped privacy policy link.
@@ -380,6 +399,11 @@ sealed class StartRegistrationAction {
      * User tapped terms link.
      */
     data object TermsClick : StartRegistrationAction()
+
+    /**
+     * User tapped the unsubscribe link.
+     */
+    data object UnsubscribeMarketingEmailsClick : StartRegistrationAction()
 
     /**
      * Models actions that the [StartRegistrationViewModel] itself might send.

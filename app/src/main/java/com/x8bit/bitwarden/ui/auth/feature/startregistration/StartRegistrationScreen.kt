@@ -6,8 +6,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,14 +15,13 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -40,32 +37,33 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.toggleableState
 import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
-import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.dropdown.EnvironmentSelector
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
-import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -96,6 +94,10 @@ fun StartRegistrationScreen(
 
             is NavigateToTerms -> {
                 intentManager.launchUri("https://bitwarden.com/terms/".toUri())
+            }
+
+            is StartRegistrationEvent.NavigateToUnsubscribe -> {
+                intentManager.launchUri("https://bitwarden.com/email-preferences/".toUri())
             }
 
             is StartRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
@@ -152,16 +154,7 @@ fun StartRegistrationScreen(
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(CloseClick) }
-                },
-                actions = {
-                    BitwardenTextButton(
-                        label = stringResource(id = R.string.continue_text),
-                        onClick = remember(viewModel) {
-                            { viewModel.trySendAction(StartRegistrationAction.ContinueClick) }
-                        },
-                        modifier = Modifier.testTag("ContinueButton"),
-                    )
-                },
+                }
             )
         },
     ) { innerPadding ->
@@ -186,7 +179,6 @@ fun StartRegistrationScreen(
                 keyboardType = KeyboardType.Email,
             )
             Spacer(modifier = Modifier.height(2.dp))
-
             EnvironmentSelector(
                 labelText = stringResource(id = R.string.creating_on),
                 selectedOption = state.selectedEnvironmentType,
@@ -198,7 +190,6 @@ fun StartRegistrationScreen(
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
             )
-
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenTextField(
                 label = stringResource(id = R.string.name),
@@ -212,11 +203,29 @@ fun StartRegistrationScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            TermsAndPrivacySwitch(
-                isChecked = state.isAcceptPoliciesToggled,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AcceptPoliciesToggle(it)) }
+            ReceiveMarketingEmailsSwitch(
+                isChecked = state.isReceiveMarketingEmailsToggled,
+                onCheckedChange =  remember(viewModel) {
+                    { viewModel.trySendAction(StartRegistrationAction.ReceiveMarketingEmailsToggle(it)) }
                 },
+                onUnsubscribeClick = remember(viewModel) {
+                    { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
+                }
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            BitwardenFilledButton(
+                label = stringResource(id = R.string.continue_text),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(StartRegistrationAction.ContinueClick) }
+                },
+                isEnabled = state.isContinueButtonEnabled,
+                modifier = Modifier
+                    .testTag("ContinueButton")
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            TermsAndPrivacyText(
                 onTermsClick = remember(viewModel) {
                     { viewModel.trySendAction(TermsClick) }
                 },
@@ -232,18 +241,131 @@ fun StartRegistrationScreen(
 @OptIn(ExperimentalLayoutApi::class)
 @Suppress("LongMethod")
 @Composable
-private fun TermsAndPrivacySwitch(
-    isChecked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
+private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
 ) {
+    val annotatedLinkString: AnnotatedString = buildAnnotatedString {
+        val strTermsAndPrivacy = stringResource(id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy)
+        val strTerms = stringResource(id = R.string.terms_of_service)
+        val strPrivacy = stringResource(id = R.string.privacy_policy)
+        val startIndexTerms = strTermsAndPrivacy.indexOf(strTerms)
+        val endIndexTerms = startIndexTerms + strTerms.length
+        val startIndexPrivacy = strTermsAndPrivacy.indexOf(strPrivacy)
+        val endIndexPrivacy = startIndexPrivacy + strPrivacy.length
+        append(strTermsAndPrivacy)
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            ),
+            start = 0,
+            end = strTermsAndPrivacy.length
+        )
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            ),
+            start = startIndexTerms,
+            end = endIndexTerms
+        )
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            ),
+            start = startIndexPrivacy,
+            end = endIndexPrivacy
+        )
+
+        // attach a string annotation that stores a URL to the text "link"
+        addStringAnnotation(
+            tag = "URL",
+            annotation = strTerms,
+            start = startIndexTerms,
+            end = endIndexTerms
+        )
+        addStringAnnotation(
+            tag = "URL",
+            annotation = strPrivacy,
+            start = startIndexPrivacy,
+            end = endIndexPrivacy
+        )
+
+    }
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                testTag = "AcceptPoliciesToggle"
+                testTag = "AcceptPoliciesText"
+            }
+            .fillMaxWidth(),
+    ) {
+        val termsUrl = stringResource(id = R.string.terms_of_service)
+        Column(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
+            ClickableText(
+                text = annotatedLinkString,
+                style = MaterialTheme.typography.bodyMedium,
+                onClick = {
+                    annotatedLinkString
+                        .getStringAnnotations("URL", it, it)
+                        .firstOrNull()?.let { stringAnnotation ->
+                            if (stringAnnotation.item == termsUrl)
+                                onTermsClick()
+                            else
+                                onPrivacyPolicyClick()
+                        }
+                }
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Suppress("LongMethod")
+@Composable
+private fun ReceiveMarketingEmailsSwitch(
+    isChecked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    onUnsubscribeClick: () -> Unit,
+) {
+    val annotatedLinkString: AnnotatedString = buildAnnotatedString {
+        val strMarketingEmail = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
+        val strUnsubscribe = stringResource(id = R.string.unsubscribe)
+        val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe)
+        val endIndexUnsubscribe = startIndexUnsubscribe + strUnsubscribe.length
+        append(strMarketingEmail)
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            ),
+            start = 0,
+            end = strMarketingEmail.length
+        )
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.primary,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+            ),
+            start = startIndexUnsubscribe,
+            end = endIndexUnsubscribe
+        )
+        addStringAnnotation(
+            tag = "URL",
+            annotation = strUnsubscribe,
+            start = startIndexUnsubscribe,
+            end = endIndexUnsubscribe
+        )
+    }
+    Row(
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .semantics(mergeDescendants = true) {
+                testTag = "ReceiveMarketingEmailsToggle"
                 toggleableState = ToggleableState(isChecked)
             }
             .clickable(
@@ -262,40 +384,19 @@ private fun TermsAndPrivacySwitch(
             onCheckedChange = null,
         )
         Column(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
-            Text(
-                text = stringResource(id = R.string.accept_policies),
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+            ClickableText(
+                text = annotatedLinkString,
+                style = MaterialTheme.typography.bodyMedium,
+                onClick = {
+                    annotatedLinkString
+                        .getStringAnnotations("URL", it, it)
+                        .firstOrNull()?.let {
+                            onUnsubscribeClick()
+                        }
+                }
             )
-            FlowRow(
-                horizontalArrangement = Arrangement.Start,
-                modifier = Modifier
-                    .padding(end = 16.dp)
-                    .fillMaxWidth()
-                    .wrapContentHeight(),
-            ) {
-                BitwardenClickableText(
-                    label = stringResource(id = R.string.terms_of_service),
-                    onClick = onTermsClick,
-                    style = MaterialTheme.typography.bodyMedium,
-                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = ",",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(vertical = 4.dp),
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                BitwardenClickableText(
-                    label = stringResource(id = R.string.privacy_policy),
-                    onClick = onPrivacyPolicyClick,
-                    style = MaterialTheme.typography.bodyMedium,
-                    innerPadding = PaddingValues(vertical = 4.dp, horizontal = 0.dp),
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
         }
     }
 }
+
+
