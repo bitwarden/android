@@ -1,8 +1,5 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-
 /**
  * Represents a Bitwarden push notification.
  *
@@ -11,9 +8,8 @@ import kotlinx.serialization.Serializable
  * @property notificationType The type of notification.
  * @property payload Data associated with the push notification.
  */
-@Serializable
 data class BitwardenNotification(
-    @SerialName("contextId") val contextId: String?,
-    @SerialName("type") val notificationType: NotificationType,
-    @SerialName("payload") val payload: String,
+    val contextId: String?,
+    val notificationType: NotificationType,
+    val payload: String,
 )

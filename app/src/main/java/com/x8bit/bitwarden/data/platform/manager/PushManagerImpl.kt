@@ -107,11 +107,6 @@ class PushManagerImpl @Inject constructor(
             .launchIn(unconfinedScope)
     }
 
-    override fun onMessageReceived(data: String) {
-        val notification = json.decodeFromStringOrNull<BitwardenNotification>(data) ?: return
-        onMessageReceived(notification)
-    }
-
     override fun onMessageReceived(data: Map<String, String>) {
         val notificationType = data["type"]
             ?.let { json.decodeFromStringOrNull<NotificationType>(string = it) }
