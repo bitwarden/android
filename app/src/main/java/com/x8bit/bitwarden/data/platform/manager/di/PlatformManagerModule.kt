@@ -4,12 +4,14 @@ import android.app.Application
 import android.content.Context
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.RefreshAuthenticator
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthTokenInterceptor
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
+import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManagerImpl
@@ -35,6 +37,8 @@ import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardMan
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
@@ -61,6 +65,24 @@ object PlatformManagerModule {
     @Singleton
     fun provideAppForegroundManager(): AppForegroundManager =
         AppForegroundManagerImpl()
+
+    @Provides
+    @Singleton
+    fun provideOrganizationEventManager(
+        authRepository: AuthRepository,
+        vaultRepository: VaultRepository,
+        clock: Clock,
+        dispatcherManager: DispatcherManager,
+        eventDiskSource: EventDiskSource,
+        eventService: EventService,
+    ): OrganizationEventManager = OrganizationEventManagerImpl(
+        authRepository = authRepository,
+        vaultRepository = vaultRepository,
+        clock = clock,
+        dispatcherManager = dispatcherManager,
+        eventDiskSource = eventDiskSource,
+        eventService = eventService,
+    )
 
     @Provides
     @Singleton

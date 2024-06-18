@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
 import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.platform.datasource.network.authenticator.AuthenticatorProvider
+import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -122,6 +123,11 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * The reason for resetting the password.
      */
     val passwordResetReason: ForcePasswordResetReason?
+
+    /**
+     * The organization for the active user.
+     */
+    val organizations: List<SyncResponseJson.Profile.Organization>
 
     /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.

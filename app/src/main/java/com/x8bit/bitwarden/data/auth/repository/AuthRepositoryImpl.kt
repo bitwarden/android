@@ -312,6 +312,9 @@ class AuthRepositoryImpl(
             ?.profile
             ?.forcePasswordResetReason
 
+    override val organizations: List<SyncResponseJson.Profile.Organization>
+        get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
+
     init {
         pushManager
             .syncOrgKeysFlow
