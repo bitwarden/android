@@ -739,7 +739,7 @@ namespace Bit.App.Pages
                 }
 
                 var message = _environmentService.SelectedRegion == Core.Enums.Region.SelfHosted
-                    ? AppResources.OrganizationUnassignedItemsMessageSelfHost041624DescriptionLong
+                    ? AppResources.OrganizationUnassignedItemsMessageSelfHostDescriptionLong
                     : AppResources.OrganizationUnassignedItemsMessageUSEUDescriptionLong;
 
                 var response = await _deviceActionService.DisplayAlertAsync(AppResources.Notice,
