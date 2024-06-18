@@ -106,14 +106,34 @@ class PushManagerImpl @Inject constructor(
             .launchIn(unconfinedScope)
     }
 
-    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
     override fun onMessageReceived(data: String) {
         val notification = try {
             json.decodeFromString<BitwardenNotification>(data)
         } catch (exception: IllegalArgumentException) {
             return
         }
+        onMessageReceived(notification)
+    }
 
+    @Suppress("ReturnCount")
+    override fun onMessageReceived(data: Map<String, String>) {
+        val type = data["type"] ?: return
+        val payload = data["payload"] ?: return
+        val notificationType = try {
+            json.decodeFromString<NotificationType>(string = type)
+        } catch (exception: IllegalArgumentException) {
+            return
+        }
+        val notification = BitwardenNotification(
+            contextId = data["contextId"],
+            notificationType = notificationType,
+            payload = payload,
+        )
+        onMessageReceived(notification)
+    }
+
+    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
+    private fun onMessageReceived(notification: BitwardenNotification) {
         if (authDiskSource.uniqueAppId == notification.contextId) return
 
         val userId = activeUserId ?: return
