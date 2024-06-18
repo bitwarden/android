@@ -82,45 +82,48 @@ class PushManagerTest {
         }
 
         @Test
-        fun `onMessageReceived json invalid JSON does not crash`() {
+        fun `onMessageReceived for raw data with invalid JSON does not crash`() {
             pushManager.onMessageReceived(INVALID_NOTIFICATION_JSON)
         }
 
         @Test
-        fun `onMessageReceived map invalid JSON does not crash`() {
+        fun `onMessageReceived for map data with invalid JSON does not crash`() {
             pushManager.onMessageReceived(INVALID_NOTIFICATION_MAP)
         }
 
         @Test
-        fun `onMessageReceived json auth request emits to passwordlessRequestFlow`() = runTest {
-            pushManager.passwordlessRequestFlow.test {
-                pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_JSON)
-                assertEquals(
-                    PasswordlessRequestData(
-                        loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                        userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
-                    ),
-                    awaitItem(),
-                )
+        fun `onMessageReceived for raw data with auth request emits to passwordlessRequestFlow`() =
+            runTest {
+                pushManager.passwordlessRequestFlow.test {
+                    pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_JSON)
+                    assertEquals(
+                        PasswordlessRequestData(
+                            loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        ),
+                        awaitItem(),
+                    )
+                }
             }
-        }
 
         @Test
-        fun `onMessageReceived map auth request emits to passwordlessRequestFlow`() = runTest {
-            pushManager.passwordlessRequestFlow.test {
-                pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_MAP)
-                assertEquals(
-                    PasswordlessRequestData(
-                        loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                        userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
-                    ),
-                    awaitItem(),
-                )
+        fun `onMessageReceived for map data with auth request emits to passwordlessRequestFlow`() =
+            runTest {
+                pushManager.passwordlessRequestFlow.test {
+                    pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_MAP)
+                    assertEquals(
+                        PasswordlessRequestData(
+                            loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        ),
+                        awaitItem(),
+                    )
+                }
             }
-        }
 
+        @Suppress("MaxLineLength")
         @Test
-        fun `onMessageReceived json auth request response emits to passwordlessRequestFlow`() =
+        fun `onMessageReceived for raw data with auth request response emits to passwordlessRequestFlow`() =
             runTest {
                 pushManager.passwordlessRequestFlow.test {
                     pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON)
@@ -134,8 +137,9 @@ class PushManagerTest {
                 }
             }
 
+        @Suppress("MaxLineLength")
         @Test
-        fun `onMessageReceived map auth request response emits to passwordlessRequestFlow`() =
+        fun `onMessageReceived for map data with auth request response emits to passwordlessRequestFlow`() =
             runTest {
                 pushManager.passwordlessRequestFlow.test {
                     pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_MAP)
@@ -150,7 +154,7 @@ class PushManagerTest {
             }
 
         @Test
-        fun `onMessageReceived json logout should emit to logoutFlow`() = runTest {
+        fun `onMessageReceived for raw data with logout should emit to logoutFlow`() = runTest {
             val accountTokens = AccountTokensJson(
                 accessToken = "accessToken",
                 refreshToken = "refreshToken",
@@ -168,7 +172,7 @@ class PushManagerTest {
         }
 
         @Test
-        fun `onMessageReceived map logout should emit to logoutFlow`() = runTest {
+        fun `onMessageReceived for map data with logout should emit to logoutFlow`() = runTest {
             val accountTokens = AccountTokensJson(
                 accessToken = "accessToken",
                 refreshToken = "refreshToken",
@@ -196,7 +200,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json logout emits to logoutFlow`() = runTest {
+            fun `onMessageReceived for raw data with logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
                     assertEquals(
@@ -207,7 +211,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map logout emits to logoutFlow`() = runTest {
+            fun `onMessageReceived for map data with logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                     assertEquals(
@@ -218,18 +222,19 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync ciphers emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for raw data with sync ciphers emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived map ciphers emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived for map data with ciphers emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
@@ -240,7 +245,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync org keys does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync org keys does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -248,7 +253,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync org keys does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync org keys does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -256,29 +261,31 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync settings emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for raw data with sync settings emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived map sync settings emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync settings emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived json sync vault emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived for raw data with sync vault emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
                     assertEquals(
@@ -289,7 +296,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map vault emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived for map data with vault emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
@@ -314,8 +321,9 @@ class PushManagerTest {
                 authDiskSource.userState = UserStateJson(userId, mapOf(userId to account))
             }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync cipher create emits to syncCipherUpsertFlow`() =
+            fun `onMessageReceived for raw data with sync cipher create emits to syncCipherUpsertFlow`() =
                 runTest {
                     pushManager.syncCipherUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_JSON)
@@ -332,8 +340,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync cipher create emits to syncCipherUpsertFlow`() =
+            fun `onMessageReceived for map data with sync cipher create emits to syncCipherUpsertFlow`() =
                 runTest {
                     pushManager.syncCipherUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
@@ -350,8 +359,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync cipher delete emits to syncCipherDeleteFlow`() =
+            fun `onMessageReceived for raw data with sync cipher delete emits to syncCipherDeleteFlow`() =
                 runTest {
                     pushManager.syncCipherDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_JSON)
@@ -364,8 +374,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync cipher delete emits to syncCipherDeleteFlow`() =
+            fun `onMessageReceived for map data with sync cipher delete emits to syncCipherDeleteFlow`() =
                 runTest {
                     pushManager.syncCipherDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
@@ -378,8 +389,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync cipher update emits to syncCipherUpsertFlow`() =
+            fun `onMessageReceived for raw data with sync cipher update emits to syncCipherUpsertFlow`() =
                 runTest {
                     pushManager.syncCipherUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_JSON)
@@ -396,8 +408,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync cipher update emits to syncCipherUpsertFlow`() =
+            fun `onMessageReceived for map data with sync cipher update emits to syncCipherUpsertFlow`() =
                 runTest {
                     pushManager.syncCipherUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
@@ -414,8 +427,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync folder create emits to syncFolderUpsertFlow`() =
+            fun `onMessageReceived for raw data with sync folder create emits to syncFolderUpsertFlow`() =
                 runTest {
                     pushManager.syncFolderUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_JSON)
@@ -430,8 +444,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync folder create emits to syncFolderUpsertFlow`() =
+            fun `onMessageReceived for map data with sync folder create emits to syncFolderUpsertFlow`() =
                 runTest {
                     pushManager.syncFolderUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_MAP)
@@ -446,8 +461,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync folder delete emits to syncFolderDeleteFlow`() =
+            fun `onMessageReceived for raw data with sync folder delete emits to syncFolderDeleteFlow`() =
                 runTest {
                     pushManager.syncFolderDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_JSON)
@@ -460,8 +476,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync folder delete emits to syncFolderDeleteFlow`() =
+            fun `onMessageReceived for map data with sync folder delete emits to syncFolderDeleteFlow`() =
                 runTest {
                     pushManager.syncFolderDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
@@ -474,8 +491,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync folder update emits to syncFolderUpsertFlow`() =
+            fun `onMessageReceived for raw data with sync folder update emits to syncFolderUpsertFlow`() =
                 runTest {
                     pushManager.syncFolderUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_JSON)
@@ -490,8 +508,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync folder update emits to syncFolderUpsertFlow`() =
+            fun `onMessageReceived for map data with sync folder update emits to syncFolderUpsertFlow`() =
                 runTest {
                     pushManager.syncFolderUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_MAP)
@@ -506,8 +525,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync login delete emits to syncCipherDeleteFlow`() =
+            fun `onMessageReceived for raw data with sync login delete emits to syncCipherDeleteFlow`() =
                 runTest {
                     pushManager.syncCipherDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_JSON)
@@ -520,8 +540,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync login delete emits to syncCipherDeleteFlow`() =
+            fun `onMessageReceived for map data with sync login delete emits to syncCipherDeleteFlow`() =
                 runTest {
                     pushManager.syncCipherDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
@@ -534,8 +555,9 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync send create emits to syncSendUpsertFlow`() =
+            fun `onMessageReceived for raw data with sync send create emits to syncSendUpsertFlow`() =
                 runTest {
                     pushManager.syncSendUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_JSON)
@@ -550,23 +572,26 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync send create emits to syncSendUpsertFlow`() = runTest {
-                pushManager.syncSendUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
-                    assertEquals(
-                        SyncSendUpsertData(
-                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
-                            isUpdate = false,
-                        ),
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync send create emits to syncSendUpsertFlow`() =
+                runTest {
+                    pushManager.syncSendUpsertFlow.test {
+                        pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncSendUpsertData(
+                                sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                isUpdate = false,
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync send delete emits to syncSendDeleteFlow`() =
+            fun `onMessageReceived for raw data with sync send delete emits to syncSendDeleteFlow`() =
                 runTest {
                     pushManager.syncSendDeleteFlow.test {
                         pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_JSON)
@@ -579,21 +604,24 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync send delete emits to syncSendDeleteFlow`() = runTest {
-                pushManager.syncSendDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
-                    assertEquals(
-                        SyncSendDeleteData(
-                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                        ),
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync send delete emits to syncSendDeleteFlow`() =
+                runTest {
+                    pushManager.syncSendDeleteFlow.test {
+                        pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncSendDeleteData(
+                                sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived json sync send update emits to syncSendUpsertFlow`() =
+            fun `onMessageReceived for raw data with sync send update emits to syncSendUpsertFlow`() =
                 runTest {
                     pushManager.syncSendUpsertFlow.test {
                         pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_JSON)
@@ -608,20 +636,22 @@ class PushManagerTest {
                     }
                 }
 
+            @Suppress("MaxLineLength")
             @Test
-            fun `onMessageReceived map sync send update emits to syncSendUpsertFlow`() = runTest {
-                pushManager.syncSendUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
-                    assertEquals(
-                        SyncSendUpsertData(
-                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
-                            isUpdate = true,
-                        ),
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync send update emits to syncSendUpsertFlow`() =
+                runTest {
+                    pushManager.syncSendUpsertFlow.test {
+                        pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
+                        assertEquals(
+                            SyncSendUpsertData(
+                                sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                                isUpdate = true,
+                            ),
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
         }
 
         @Nested
@@ -639,7 +669,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync cipher create does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync cipher create does nothing`() = runTest {
                 pushManager.syncCipherUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -647,7 +677,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync cipher create does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync cipher create does nothing`() = runTest {
                 pushManager.syncCipherUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -655,7 +685,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync cipher delete does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync cipher delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -663,7 +693,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync cipher delete does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync cipher delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -671,7 +701,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync cipher update does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync cipher update does nothing`() = runTest {
                 pushManager.syncCipherUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -679,7 +709,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync cipher update does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync cipher update does nothing`() = runTest {
                 pushManager.syncCipherUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -687,7 +717,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync folder create does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync folder create does nothing`() = runTest {
                 pushManager.syncFolderUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -695,7 +725,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync folder create does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync folder create does nothing`() = runTest {
                 pushManager.syncFolderUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -703,7 +733,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync folder delete does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync folder delete does nothing`() = runTest {
                 pushManager.syncFolderDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -711,7 +741,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync folder delete does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync folder delete does nothing`() = runTest {
                 pushManager.syncFolderDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -719,7 +749,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync folder update does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync folder update does nothing`() = runTest {
                 pushManager.syncFolderDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -727,7 +757,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync folder update does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync folder update does nothing`() = runTest {
                 pushManager.syncFolderDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -735,7 +765,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync login delete does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync login delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -743,7 +773,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync login delete does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync login delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -751,7 +781,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync send create does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync send create does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -759,7 +789,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync send create does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync send create does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -767,7 +797,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync send delete does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync send delete does nothing`() = runTest {
                 pushManager.syncSendDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -775,7 +805,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync send delete does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync send delete does nothing`() = runTest {
                 pushManager.syncSendDeleteFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -783,7 +813,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync send update does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync send update does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -791,7 +821,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync send update does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync send update does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
                     pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -807,7 +837,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json logout does nothing`() = runTest {
+            fun `onMessageReceived for raw data with logout does nothing`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -815,7 +845,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map logout does nothing`() = runTest {
+            fun `onMessageReceived for map data with logout does nothing`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -823,7 +853,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync ciphers does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync ciphers does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -831,7 +861,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync ciphers does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync ciphers does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -839,7 +869,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync org keys does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync org keys does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -847,7 +877,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync org keys does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync org keys does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -855,7 +885,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync settings does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync settings does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -863,7 +893,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync settings does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync settings does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -871,7 +901,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync vault does nothing`() = runTest {
+            fun `onMessageReceived for raw data with sync vault does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
                     expectNoEvents()
@@ -879,7 +909,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync vault does nothing`() = runTest {
+            fun `onMessageReceived for map data with sync vault does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     expectNoEvents()
@@ -902,7 +932,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json logout emits to logoutFlow`() = runTest {
+            fun `onMessageReceived for raw data with logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
                     assertEquals(
@@ -913,7 +943,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map logout emits to logoutFlow`() = runTest {
+            fun `onMessageReceived for map data with logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
                     pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                     assertEquals(
@@ -924,73 +954,79 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived json sync ciphers emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for raw data with sync ciphers emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived map sync ciphers emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync ciphers emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived json sync org keys emits to syncOrgKeysFlow`() = runTest {
-                pushManager.syncOrgKeysFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for raw data with sync org keys emits to syncOrgKeysFlow`() =
+                runTest {
+                    pushManager.syncOrgKeysFlow.test {
+                        pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived map sync org keys emits to syncOrgKeysFlow`() = runTest {
-                pushManager.syncOrgKeysFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync org keys emits to syncOrgKeysFlow`() =
+                runTest {
+                    pushManager.syncOrgKeysFlow.test {
+                        pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived json sync settings emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for raw data with sync settings emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived map sync settings emits to fullSyncFlow`() = runTest {
-                pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
-                    assertEquals(
-                        Unit,
-                        awaitItem(),
-                    )
+            fun `onMessageReceived for map data with sync settings emits to fullSyncFlow`() =
+                runTest {
+                    pushManager.fullSyncFlow.test {
+                        pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
+                        assertEquals(
+                            Unit,
+                            awaitItem(),
+                        )
+                    }
                 }
-            }
 
             @Test
-            fun `onMessageReceived json sync vault emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived for raw data with sync vault emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
                     assertEquals(
@@ -1001,7 +1037,7 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived map sync vault emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived for map data with sync vault emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
                     pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(

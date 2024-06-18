@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -107,23 +108,15 @@ class PushManagerImpl @Inject constructor(
     }
 
     override fun onMessageReceived(data: String) {
-        val notification = try {
-            json.decodeFromString<BitwardenNotification>(data)
-        } catch (exception: IllegalArgumentException) {
-            return
-        }
+        val notification = json.decodeFromStringOrNull<BitwardenNotification>(data) ?: return
         onMessageReceived(notification)
     }
 
-    @Suppress("ReturnCount")
     override fun onMessageReceived(data: Map<String, String>) {
-        val type = data["type"] ?: return
+        val notificationType = data["type"]
+            ?.let { json.decodeFromStringOrNull<NotificationType>(string = it) }
+            ?: return
         val payload = data["payload"] ?: return
-        val notificationType = try {
-            json.decodeFromString<NotificationType>(string = type)
-        } catch (exception: IllegalArgumentException) {
-            return
-        }
         val notification = BitwardenNotification(
             contextId = data["contextId"],
             notificationType = notificationType,
