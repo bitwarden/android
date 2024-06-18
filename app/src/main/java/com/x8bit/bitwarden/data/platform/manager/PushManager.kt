@@ -65,14 +65,7 @@ interface PushManager {
     val syncSendUpsertFlow: Flow<SyncSendUpsertData>
 
     /**
-     * Handles the necessary steps to take when a push notification with a legacy FCM [data]
-     * payload is received.
-     */
-    fun onMessageReceived(data: String)
-
-    /**
-     * Handles the necessary steps to take when a push notification with FCM v1 payload is
-     * received.
+     * Handles the necessary steps to take when a push notification payload is received.
      */
     fun onMessageReceived(data: Map<String, String>)
 

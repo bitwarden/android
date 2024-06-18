@@ -17,10 +17,7 @@ class BitwardenFirebaseMessagingService : FirebaseMessagingService() {
     lateinit var pushManager: PushManager
 
     override fun onMessageReceived(message: RemoteMessage) {
-        message
-            .data["data"]
-            ?.let { pushManager.onMessageReceived(it) }
-            ?: pushManager.onMessageReceived(message.data)
+        pushManager.onMessageReceived(message.data)
     }
 
     override fun onNewToken(token: String) {
