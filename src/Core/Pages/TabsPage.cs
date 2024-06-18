@@ -33,7 +33,7 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _stateService = ServiceContainer.Resolve<IStateService>();
 
-            _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage, appOptions: appOptions))
+            _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
                 Title = AppResources.MyVault,
                 IconImageSource = "lock.png"

@@ -1384,16 +1384,6 @@ namespace Bit.Core.Services
             await _storageMediatorService.SaveAsync(Constants.RegionEnvironment, value);
         }
 
-        public async Task<bool> GetShouldCheckOrganizationUnassignedItemsAsync(string userId = null)
-        {
-            return await _storageMediatorService.GetAsync<bool?>(await ComposeKeyAsync(Constants.ShouldCheckOrganizationUnassignedItemsKey, userId)) ?? true;
-        }
-
-        public async Task SetShouldCheckOrganizationUnassignedItemsAsync(bool shouldCheck, string userId = null)
-        {
-            await _storageMediatorService.SaveAsync<bool?>(await ComposeKeyAsync(Constants.ShouldCheckOrganizationUnassignedItemsKey, userId), shouldCheck);
-        }
-
         // Helpers
 
         [Obsolete("Use IStorageMediatorService instead")]

@@ -46,8 +46,6 @@ namespace Bit.App.Pages
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
         private readonly IPolicyService _policyService;
-        private readonly IConfigService _configService;
-        private readonly IEnvironmentService _environmentService;
         private readonly ILogger _logger;
 
         public GroupingsPageViewModel()
@@ -64,8 +62,6 @@ namespace Bit.App.Pages
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            _configService = ServiceContainer.Resolve<IConfigService>();
-            _environmentService = ServiceContainer.Resolve<IEnvironmentService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Loading = true;
@@ -109,7 +105,6 @@ namespace Bit.App.Pages
         public List<Core.Models.View.CollectionView> Collections { get; set; }
         public List<TreeNode<Core.Models.View.CollectionView>> NestedCollections { get; set; }
 
-        public AppOptions AppOptions { get; internal set; }
         protected override ICipherService cipherService => _cipherService;
         protected override IPolicyService policyService => _policyService;
         protected override IOrganizationService organizationService => _organizationService;
@@ -704,60 +699,6 @@ namespace Bit.App.Pages
         {
             var folders = decFolders.Where(f => _allCiphers.Any(c => c.FolderId == f.Id)).ToList();
             return folders.Any() ? folders : null;
-        }
-
-        internal async Task CheckOrganizationUnassignedItemsAsync()
-        {
-            try
-            {
-                if (AppOptions?.HasJustLoggedInOrUnlocked != true)
-                {
-                    return;
-                }
-
-                AppOptions.HasJustLoggedInOrUnlocked = false;
-
-                if (!await _configService.GetFeatureFlagBoolAsync(Core.Constants.UnassignedItemsBannerFlag)
-                    ||
-                    !await _stateService.GetShouldCheckOrganizationUnassignedItemsAsync())
-                {
-                    return;
-                }
-
-                var waitSyncTask = Task.Run(async () =>
-                {
-                    while (_syncService.SyncInProgress)
-                    {
-                        await Task.Delay(100);
-                    }
-                });
-                await waitSyncTask.WaitAsync(TimeSpan.FromMinutes(5));
-
-                if (!await _cipherService.VerifyOrganizationHasUnassignedItemsAsync())
-                {
-                    return;
-                }
-
-                var message = _environmentService.SelectedRegion == Core.Enums.Region.SelfHosted
-                    ? AppResources.OrganizationUnassignedItemsMessageSelfHostDescriptionLong
-                    : AppResources.OrganizationUnassignedItemsMessageUSEUDescriptionLong;
-
-                var response = await _deviceActionService.DisplayAlertAsync(AppResources.Notice,
-                    message,
-                    null,
-                    AppResources.RemindMeLater,
-                    AppResources.Ok);
-
-                if (response == AppResources.Ok)
-                {
-                    await _stateService.SetShouldCheckOrganizationUnassignedItemsAsync(false);
-                }
-            }
-            catch (TimeoutException) { }
-            catch (Exception ex)
-            {
-                _logger.Exception(ex);
-            }
         }
     }
 }

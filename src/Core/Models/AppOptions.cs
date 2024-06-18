@@ -27,7 +27,6 @@ namespace Bit.App.Models
         public bool HideAccountSwitcher { get; set; }
         public OtpData? OtpData { get; set; }
         public bool HasUnlockedInThisTransaction { get; set; }
-        public bool HasJustLoggedInOrUnlocked { get; set; }
 
         public void SetAllFrom(AppOptions o)
         {

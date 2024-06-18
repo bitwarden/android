@@ -334,11 +334,6 @@ namespace Bit.Core.Services
             return SendAsync<object, CipherResponse>(HttpMethod.Put, string.Concat("/ciphers/", id, "/restore"), null, true, true);
         }
 
-        public Task<bool> HasUnassignedCiphersAsync()
-        {
-            return SendAsync<object, bool>(HttpMethod.Get, "/ciphers/has-unassigned-ciphers", null, true, true);
-        }
-
         #endregion
 
         #region Attachments APIs
