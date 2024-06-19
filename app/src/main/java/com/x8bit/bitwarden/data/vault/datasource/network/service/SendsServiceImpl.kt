@@ -93,6 +93,7 @@ class SendsServiceImpl(
                         .Builder(
                             boundary = "--BWMobileFormBoundary${clock.instant().toEpochMilli()}",
                         )
+                        .setType(type = MultipartBody.FORM)
                         .addPart(
                             part = MultipartBody.Part.createFormData(
                                 body = encryptedFile.asRequestBody(
