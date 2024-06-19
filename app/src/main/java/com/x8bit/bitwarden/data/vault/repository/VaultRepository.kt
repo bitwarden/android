@@ -234,15 +234,4 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * Attempt to get the user's vault data for export.
      */
     suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult
-
-    /**
-     * Checks if the user should see the unassigned items message.
-     */
-    suspend fun shouldShowUnassignedItemsInfo(): Boolean
-
-    /**
-     * Sets the value indicating that the user has or has not acknowledged that their organization
-     * has unassigned items.
-     */
-    fun acknowledgeUnassignedItemsInfo(hasAcknowledged: Boolean)
 }

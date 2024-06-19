@@ -122,11 +122,6 @@ class VaultViewModel @Inject constructor(
                 sendAction(VaultAction.Internal.UserStateUpdateReceive(userState = it))
             }
             .launchIn(viewModelScope)
-
-        viewModelScope.launch {
-            val result = vaultRepository.shouldShowUnassignedItemsInfo()
-            sendAction(VaultAction.Internal.ReceiveUnassignedItemsResult(result))
-        }
     }
 
     override fun handleAction(action: VaultAction) {
@@ -159,7 +154,6 @@ class VaultViewModel @Inject constructor(
                 handleMasterPasswordRepromptSubmit(action)
             }
 
-            VaultAction.UnassignedItemsAcknowledgeClick -> handleUnassignedItemsAcknowledgeClick()
             is VaultAction.Internal -> handleInternalAction(action)
         }
     }
@@ -356,11 +350,6 @@ class VaultViewModel @Inject constructor(
         }
     }
 
-    private fun handleUnassignedItemsAcknowledgeClick() {
-        vaultRepository.acknowledgeUnassignedItemsInfo(hasAcknowledged = true)
-        mutableStateFlow.update { it.copy(dialog = null) }
-    }
-
     private fun handleCopyNoteClick(action: ListingItemOverflowAction.VaultAction.CopyNoteClick) {
         clipboardManager.setText(action.notes)
     }
@@ -420,10 +409,6 @@ class VaultViewModel @Inject constructor(
                 handlePullToRefreshEnableReceive(action)
             }
 
-            is VaultAction.Internal.ReceiveUnassignedItemsResult -> {
-                handleReceiveUnassignedItemsResult(action)
-            }
-
             is VaultAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
             is VaultAction.Internal.VaultDataReceive -> handleVaultDataReceive(action)
             is VaultAction.Internal.IconLoadingSettingReceive -> handleIconLoadingSettingReceive(
@@ -452,14 +437,6 @@ class VaultViewModel @Inject constructor(
     ) {
         mutableStateFlow.update {
             it.copy(isPullToRefreshSettingEnabled = action.isPullToRefreshEnabled)
-        }
-    }
-
-    private fun handleReceiveUnassignedItemsResult(
-        action: VaultAction.Internal.ReceiveUnassignedItemsResult,
-    ) {
-        if (action.result) {
-            mutableStateFlow.update { it.copy(dialog = VaultState.DialogState.UnassignedItems) }
         }
     }
 
@@ -541,13 +518,7 @@ class VaultViewModel @Inject constructor(
                     hasMasterPassword = state.hasMasterPassword,
                     vaultFilterType = vaultFilterTypeOrDefault,
                 ),
-                dialog = when (it.dialog) {
-                    VaultState.DialogState.UnassignedItems -> VaultState.DialogState.UnassignedItems
-                    is VaultState.DialogState.Error,
-                    VaultState.DialogState.Syncing,
-                    null,
-                    -> null
-                },
+                dialog = null,
             )
         }
         sendEvent(VaultEvent.DismissPullToRefresh)
@@ -929,12 +900,6 @@ data class VaultState(
             val title: Text,
             val message: Text,
         ) : DialogState()
-
-        /**
-         * Represents a dialog indicating that the user has unassigned items.
-         */
-        @Parcelize
-        data object UnassignedItems : DialogState()
     }
 }
 
@@ -1150,11 +1115,6 @@ sealed class VaultAction {
     ) : VaultAction()
 
     /**
-     * The user has acknowledged the unassigned items and we do not want to show the message again.
-     */
-    data object UnassignedItemsAcknowledgeClick : VaultAction()
-
-    /**
      * Models actions that the [VaultViewModel] itself might send.
      */
     sealed class Internal : VaultAction() {
@@ -1177,14 +1137,6 @@ sealed class VaultAction {
          * Indicates that the pull to refresh feature toggle has changed.
          */
         data class PullToRefreshEnableReceive(val isPullToRefreshEnabled: Boolean) : Internal()
-
-        /**
-         * Indicates that we have received the data concerning whether we should display the
-         * unassigned items dialog.
-         */
-        data class ReceiveUnassignedItemsResult(
-            val result: Boolean,
-        ) : Internal()
 
         /**
          * Indicates a change in user state has been received.

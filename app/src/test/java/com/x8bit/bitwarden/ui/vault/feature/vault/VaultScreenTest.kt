@@ -497,60 +497,6 @@ class VaultScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithContentDescription(fabDescription).assertIsDisplayed()
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `unassigned items dialog should be shown or hidden according to the state`() {
-        val title = "Notice"
-        val message =
-            "Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible."
-        composeTestRule.assertNoDialogExists()
-        composeTestRule.onNodeWithText(title).assertDoesNotExist()
-        composeTestRule.onNodeWithText(message).assertDoesNotExist()
-
-        mutableStateFlow.update { it.copy(dialog = VaultState.DialogState.UnassignedItems) }
-
-        composeTestRule
-            .onAllNodesWithText(title)
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText(message)
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-        composeTestRule
-            .onAllNodesWithText("Remind me later")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-    }
-
-    @Test
-    fun `OK button click in unassigned items dialog should send UnassignedItemsAcknowledgeClick`() {
-        mutableStateFlow.update { it.copy(dialog = VaultState.DialogState.UnassignedItems) }
-
-        composeTestRule
-            .onAllNodesWithText("Ok")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify { viewModel.trySendAction(VaultAction.UnassignedItemsAcknowledgeClick) }
-    }
-
-    @Test
-    fun `Remind me later button click in unassigned items dialog should send DialogDismiss`() {
-        mutableStateFlow.update { it.copy(dialog = VaultState.DialogState.UnassignedItems) }
-
-        composeTestRule
-            .onAllNodesWithText("Remind me later")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-
-        verify { viewModel.trySendAction(VaultAction.DialogDismiss) }
-    }
-
     @Test
     fun `error dialog should be shown or hidden according to the state`() {
         val errorTitle = "Error title"
