@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.ui.auth.feature.createaccount
+package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState

@@ -31,7 +31,7 @@ import javax.inject.Inject
 private const val KEY_STATE = "state"
 
 /**
- * Models logic for the create account screen.
+ * Models logic for the start registration screen.
  */
 @Suppress("TooManyFunctions")
 @HiltViewModel
@@ -98,8 +98,8 @@ class StartRegistrationViewModel @Inject constructor(
 
             is StartRegistrationAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
             is StartRegistrationAction.Internal.UpdatedEnvironmentReceive -> {
-            handleUpdatedEnvironmentReceive(action)
-        }
+                handleUpdatedEnvironmentReceive(action)
+            }
         }
     }
 
@@ -234,11 +234,16 @@ class StartRegistrationViewModel @Inject constructor(
             */
 
             viewModelScope.launch {
-                sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
-                    email = state.emailInput,
-                    verificationToken = "",
-                    captchaToken = ""
-                ))
+                if (environmentRepository.environment.type == Environment.Type.US || environmentRepository.environment.type == Environment.Type.EU)
+                    sendEvent(StartRegistrationEvent.NavigateToCheckEmail(
+                        email = state.emailInput
+                    ))
+                else
+                    sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
+                        email = state.emailInput,
+                        verificationToken = "",
+                        captchaToken = ""
+                    ))
             }
         }
     }
@@ -268,7 +273,7 @@ class StartRegistrationViewModel @Inject constructor(
 }
 
 /**
- * UI state for the create account screen.
+ * UI state for the start registration screen.
  */
 @Parcelize
 data class StartRegistrationState(
@@ -283,7 +288,7 @@ data class StartRegistrationState(
 }
 
 /**
- * Models dialogs that can be displayed on the create account screen.
+ * Models dialogs that can be displayed on the start registration screen.
  */
 sealed class StartRegistrationDialog : Parcelable {
     /**
@@ -300,7 +305,7 @@ sealed class StartRegistrationDialog : Parcelable {
 }
 
 /**
- * Models events for the create account screen.
+ * Models events for the start registration screen.
  */
 sealed class StartRegistrationEvent {
 
@@ -329,6 +334,13 @@ sealed class StartRegistrationEvent {
     ) : StartRegistrationEvent()
 
     /**
+     * Navigates to the complete registration screen.
+     */
+    data class NavigateToCheckEmail(
+        val email: String
+    ) : StartRegistrationEvent()
+
+    /**
      * Navigate to terms and conditions.
      */
     data object NavigateToTerms : StartRegistrationEvent()
@@ -350,7 +362,7 @@ sealed class StartRegistrationEvent {
 }
 
 /**
- * Models actions for the create account screen.
+ * Models actions for the start registration screen.
  */
 sealed class StartRegistrationAction {
     /**

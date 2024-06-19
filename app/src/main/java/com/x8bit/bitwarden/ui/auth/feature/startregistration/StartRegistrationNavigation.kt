@@ -24,6 +24,7 @@ fun NavGraphBuilder.startRegistrationDestination(
         verificationToken: String,
         captchaToken: String
     ) -> Unit,
+    onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
 ) {
     composableWithSlideTransitions(
@@ -32,6 +33,7 @@ fun NavGraphBuilder.startRegistrationDestination(
         StartRegistrationScreen(
             onNavigateBack = onNavigateBack,
             onNavigateToCompleteRegistration = onNavigateToCompleteRegistration,
+            onNavigateToCheckEmail = onNavigateToCheckEmail,
             onNavigateToEnvironment = onNavigateToEnvironment,
         )
     }

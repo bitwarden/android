@@ -69,7 +69,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
- * Top level composable for the create account screen.
+ * Top level composable for the start registration screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
@@ -80,6 +80,7 @@ fun StartRegistrationScreen(
         emailAddress: String,
         verificationToken: String,
         captchaToken: String) -> Unit,
+    onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: StartRegistrationViewModel = hiltViewModel(),
@@ -114,6 +115,12 @@ fun StartRegistrationScreen(
                     event.email,
                     event.verificationToken,
                     event.captchaToken,
+                )
+            }
+
+            is StartRegistrationEvent.NavigateToCheckEmail -> {
+                onNavigateToCheckEmail(
+                    event.email
                 )
             }
 
@@ -278,8 +285,6 @@ private fun TermsAndPrivacyText(
             start = startIndexPrivacy,
             end = endIndexPrivacy
         )
-
-        // attach a string annotation that stores a URL to the text "link"
         addStringAnnotation(
             tag = "URL",
             annotation = strTerms,
@@ -292,7 +297,6 @@ private fun TermsAndPrivacyText(
             start = startIndexPrivacy,
             end = endIndexPrivacy
         )
-
     }
     Row(
         horizontalArrangement = Arrangement.Start,
@@ -323,7 +327,6 @@ private fun TermsAndPrivacyText(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Suppress("LongMethod")
 @Composable
 private fun ReceiveMarketingEmailsSwitch(
@@ -334,7 +337,7 @@ private fun ReceiveMarketingEmailsSwitch(
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
         val strMarketingEmail = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
         val strUnsubscribe = stringResource(id = R.string.unsubscribe)
-        val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe)
+        val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe, ignoreCase = true)
         val endIndexUnsubscribe = startIndexUnsubscribe + strUnsubscribe.length
         append(strMarketingEmail)
         addStyle(
