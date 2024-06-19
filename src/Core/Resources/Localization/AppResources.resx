@@ -2769,7 +2769,7 @@ Do you want to switch to this account?</value>
     <value>Account security</value>
   </data>
   <data name="BitwardenHelpCenter" xml:space="preserve">
-    <value>Bitwarden Help Center</value>
+    <value>Bitwarden help center</value>
   </data>
   <data name="ContactBitwardenSupport" xml:space="preserve">
     <value>Contact Bitwarden support</value>

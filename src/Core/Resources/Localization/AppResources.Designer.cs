@@ -1328,7 +1328,7 @@ namespace Bit.Core.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bitwarden Help Center.
+        ///   Looks up a localized string similar to Bitwarden help center.
         /// </summary>
         public static string BitwardenHelpCenter {
             get {
