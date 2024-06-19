@@ -39,7 +39,6 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.PasswordStrengthIndicator
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
