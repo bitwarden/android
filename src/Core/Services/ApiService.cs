@@ -58,7 +58,7 @@ namespace Bit.Core.Services
         public void SetUrls(EnvironmentUrlData urls)
         {
             UrlsSet = true;
-            if (!string.IsNullOrWhiteSpace(urls.Base))
+            if (urls?.Region == Enums.Region.SelfHosted && !string.IsNullOrWhiteSpace(urls.Base))
             {
                 ApiBaseUrl = urls.Base + "/api";
                 IdentityBaseUrl = urls.Base + "/identity";
