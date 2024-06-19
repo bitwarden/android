@@ -81,7 +81,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             setupMockUri()
 
             val validCode =
-                "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&algorithm=sha256&digits=8&period=60"
+                "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&algorithm=sha256&digits=8&period=60"
             val viewModel = createViewModel()
             val result = TotpCodeResult.Success(validCode)
 
@@ -99,8 +99,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
             queryParameterNames = setOf(SECRET),
         )
 
-        val validCode =
-            "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP"
+        val validCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP"
         val viewModel = createViewModel()
         val result = TotpCodeResult.Success(validCode)
 
@@ -119,8 +118,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
             val viewModel = createViewModel()
             val result = TotpCodeResult.CodeScanningError
-            val invalidCode =
-                "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&algorithm=sha224"
+            val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&algorithm=sha224"
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
@@ -136,8 +134,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         val result = TotpCodeResult.CodeScanningError
-        val invalidCode =
-            "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&digits=11"
+        val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&digits=11"
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
@@ -153,8 +150,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         val result = TotpCodeResult.CodeScanningError
-        val invalidCode =
-            "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP&period=0"
+        val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP&period=0"
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
@@ -169,8 +165,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel()
         val result = TotpCodeResult.CodeScanningError
-        val invalidCode =
-            "nototpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP"
+        val invalidCode = "nototpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP"
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
@@ -182,12 +177,11 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `QrCodeScan should emit failure result with non base32 secret`() = runTest {
-        setupMockUri(secret = "JBSWY3DPEHPK3PXP1")
+        setupMockUri(secret = "JBSWY3dpeHPK3PXP1")
 
         val viewModel = createViewModel()
         val result = TotpCodeResult.CodeScanningError
-        val invalidCode =
-            "otpauth://totp/Test:me?secret=JBSWY3DPEHPK3PXP1"
+        val invalidCode = "otpauth://totp/Test:me?secret=JBSWY3dpeHPK3PXP1"
 
         viewModel.eventFlow.test {
             viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(invalidCode))
@@ -244,7 +238,7 @@ class QrCodeScanViewModelTest : BaseViewModelTest() {
     }
 
     private fun setupMockUri(
-        secret: String? = "JBSWY3DPEHPK3PXP",
+        secret: String? = "JBSWY3dpeHPK3PXP",
         algorithm: String = "SHA256",
         digits: String = "8",
         period: String = "60",
