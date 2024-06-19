@@ -1,35 +1,36 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.Attachment
-import com.bitwarden.core.AttachmentEncryptResult
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.Cipher
-import com.bitwarden.core.CipherListView
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.Collection
-import com.bitwarden.core.CollectionView
+import com.bitwarden.bitwarden.DerivePinKeyResponse
+import com.bitwarden.bitwarden.ExportFormat
+import com.bitwarden.bitwarden.InitOrgCryptoRequest
+import com.bitwarden.bitwarden.InitUserCryptoRequest
+import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.DerivePinKeyResponse
-import com.bitwarden.core.ExportFormat
-import com.bitwarden.core.Folder
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitOrgCryptoRequest
-import com.bitwarden.core.InitUserCryptoRequest
-import com.bitwarden.core.PasswordHistory
-import com.bitwarden.core.PasswordHistoryView
-import com.bitwarden.core.Send
-import com.bitwarden.core.SendView
-import com.bitwarden.core.TotpResponse
-import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
+import com.bitwarden.sdk.ClientCiphers
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientExporters
 import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
+import com.bitwarden.sdk.ClientSends
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendView
+import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.Collection
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Folder
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.PasswordHistory
+import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -54,6 +55,7 @@ class VaultSdkSourceTest {
     private val clientCrypto = mockk<ClientCrypto>()
     private val clientPlatform = mockk<ClientPlatform>()
     private val clientPasswordHistory = mockk<ClientPasswordHistory>()
+    private val clientSends = mockk<ClientSends>()
     private val clientVault = mockk<ClientVault> {
         every { passwordHistory() } returns clientPasswordHistory
     }
@@ -62,6 +64,7 @@ class VaultSdkSourceTest {
     }
     private val client = mockk<Client> {
         every { auth() } returns clientAuth
+        every { sends() } returns clientSends
         every { vault() } returns clientVault
         every { platform() } returns clientPlatform
         every { crypto() } returns clientCrypto
@@ -567,11 +570,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockSend = mockk<Send>()
             val expectedResult = mockk<SendView>()
-            coEvery {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
-            } returns expectedResult
+            coEvery { clientSends.decrypt(send = mockSend) } returns expectedResult
             val result = vaultSdkSource.decryptSendList(
                 userId = userId,
                 sendList = listOf(mockSend),
@@ -581,26 +580,24 @@ class VaultSdkSourceTest {
                 result,
             )
             coVerify {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
+                clientSends.decrypt(send = mockSend)
+                sdkClientManager.getOrCreateClient(userId = userId)
             }
-            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
     fun `encryptAttachment should call SDK and return correct data wrapped in a Result`() =
         runBlocking {
             val userId = "userId"
-            val expectedResult = mockk<AttachmentEncryptResult>()
+            val expectedResult = mockk<Attachment>()
             val mockCipher = mockk<Cipher>()
             val mockAttachmentView = mockk<AttachmentView>()
-            val fileBuffer = byteArrayOf(1, 2)
             coEvery {
-                clientVault.attachments().encryptBuffer(
+                clientVault.attachments().encryptFile(
                     cipher = mockCipher,
                     attachment = mockAttachmentView,
-                    buffer = fileBuffer,
+                    decryptedFilePath = "",
+                    encryptedFilePath = "",
                 )
             } returns expectedResult
 
@@ -608,15 +605,17 @@ class VaultSdkSourceTest {
                 userId = userId,
                 cipher = mockCipher,
                 attachmentView = mockAttachmentView,
-                fileBuffer = fileBuffer,
+                decryptedFilePath = "",
+                encryptedFilePath = "",
             )
 
             assertEquals(expectedResult.asSuccess(), result)
             coVerify {
-                clientVault.attachments().encryptBuffer(
+                clientVault.attachments().encryptFile(
                     cipher = mockCipher,
                     attachment = mockAttachmentView,
-                    buffer = fileBuffer,
+                    decryptedFilePath = "",
+                    encryptedFilePath = "",
                 )
             }
         }
@@ -626,7 +625,7 @@ class VaultSdkSourceTest {
         val userId = "userId"
         val expectedResult = mockk<Send>()
         val mockSendView = mockk<SendView>()
-        coEvery { clientVault.sends().encrypt(send = mockSendView) } returns expectedResult
+        coEvery { clientSends.encrypt(send = mockSendView) } returns expectedResult
 
         val result = vaultSdkSource.encryptSend(
             userId = userId,
@@ -635,7 +634,7 @@ class VaultSdkSourceTest {
 
         assertEquals(expectedResult.asSuccess(), result)
         coVerify {
-            clientVault.sends().encrypt(send = mockSendView)
+            clientSends.encrypt(send = mockSendView)
         }
     }
 
@@ -645,11 +644,7 @@ class VaultSdkSourceTest {
             val userId = "userId"
             val mockSend = mockk<Send>()
             val expectedResult = mockk<SendView>()
-            coEvery {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
-            } returns expectedResult
+            coEvery { clientSends.decrypt(send = mockSend) } returns expectedResult
             val result = vaultSdkSource.decryptSend(
                 userId = userId,
                 send = mockSend,
@@ -658,11 +653,9 @@ class VaultSdkSourceTest {
                 expectedResult.asSuccess(), result,
             )
             coVerify {
-                clientVault.sends().decrypt(
-                    send = mockSend,
-                )
+                clientSends.decrypt(send = mockSend)
+                sdkClientManager.getOrCreateClient(userId = userId)
             }
-            coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
         }
 
     @Test
@@ -855,6 +848,28 @@ class VaultSdkSourceTest {
         }
 
         coVerify { sdkClientManager.getOrCreateClient(userId = userId) }
+    }
+
+    @Test
+    fun `moveToOrganization should call SDK and a Result with correct data`() = runTest {
+        val userId = "userId"
+        val organizationId = "organizationId"
+        val mockCipher = mockk<CipherView>()
+        val expectedResult = mockk<CipherView>()
+        val clientCipher = mockk<ClientCiphers> {
+            coEvery {
+                moveToOrganization(cipher = mockCipher, organizationId = organizationId)
+            } returns expectedResult
+        }
+        every { clientVault.ciphers() } returns clientCipher
+
+        val result = vaultSdkSource.moveToOrganization(
+            userId = userId,
+            organizationId = organizationId,
+            cipherView = mockCipher,
+        )
+
+        assertEquals(expectedResult.asSuccess(), result)
     }
 
     @Test

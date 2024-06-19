@@ -86,7 +86,7 @@
   <string name="app_extension">应用程序扩展</string>
   <string name="autofill_accessibility_description">使用 Bitwarden 无障碍服务在应用和网站自动填充您的登录项目。</string>
   <string name="autofill_service">自动填充服务</string>
-  <string name="set_bitwarden_as_passkey_manager_description">在设备设置中将 Bitwarden 设置为您的通行密钥提供程序。</string>
+  <string name="set_bitwarden_as_passkey_manager_description">在设备的设置中将 Bitwarden 设置为您的通行密钥提供程序。</string>
   <string name="avoid_ambiguous_characters">避免易混淆的字符</string>
   <string name="bitwarden_app_extension">Bitwarden 应用程序扩展</string>
   <string name="bitwarden_app_extension_alert2">向您的密码库中添加新登录项目的最简单方法，就是通过 Bitwarden 应用程序扩展。转到「设置」界面了解更多有关使用 Bitwarden 应用程序扩展的方法。</string>
@@ -334,7 +334,7 @@
   <string name="use_face_id_to_unlock">使用面容 ID 解锁</string>
   <string name="verify_face_id">验证面容 ID</string>
   <string name="windows_hello">Windows Hello</string>
-  <string name="bitwarden_credential_provider_go_to_settings">我们无法为您自动打开 Android 凭据提供者设置菜单。您可以通过“Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务”手动定位到凭据提供者设置菜单。</string>
+  <string name="bitwarden_credential_provider_go_to_settings">我们无法为您自动打开 Android 凭据提供程序设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 密码和账户 &gt; 密码、通行密钥和数据服务手动定位到凭据提供程序设置菜单。</string>
   <string name="bitwarden_autofill_go_to_settings">我们无法为您自动打开 Android 自动填充设置菜单。您可以通过 Android 设置 &gt; 系统 &gt; 语言和输入 &gt; 高级 &gt; 自动填充服务，来手动导航到自动填充设置。</string>
   <string name="custom_field_name">自定义字段名称</string>
   <string name="field_type_boolean">布尔型</string>
@@ -747,7 +747,7 @@
   <string name="new_around_here">初来乍到吗？</string>
   <string name="get_master_passwordword_hint">获取主密码提示</string>
   <string name="logging_in_as_x_on_y">在 %2$s 上以 %1$s 身份登录</string>
-  <string name="not_you">不是你？</string>
+  <string name="not_you">不是您吗？</string>
   <string name="log_in_with_master_password">使用主密码登录</string>
   <string name="log_in_with_another_device">使用其他设备登录</string>
   <string name="log_in_initiated">登录已发起</string>
@@ -812,7 +812,7 @@
   <string name="admin_approval_requested">已请求管理员批准</string>
   <string name="your_request_has_been_sent_to_your_admin">您的请求已发送给您的管理员。</string>
   <string name="you_will_be_notified_once_approved">批准后，您将收到通知。</string>
-  <string name="trouble_logging_in">登录遇到问题？</string>
+  <string name="trouble_logging_in">登录遇到问题吗？</string>
   <string name="logging_in_as_x">正登录为 %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">密码库超时动作已更改为注销</string>
   <string name="block_auto_fill">阻止自动填充</string>
@@ -853,7 +853,7 @@
   <string name="autofill_services_explanation_long">Android 自动填充框架用于帮助将登录信息填充到您设备上的其他应用。</string>
   <string name="use_inline_autofill_explanation_long">如果您所选的键盘支持，请使用内联自动填充。否则，请使用默认叠加层。</string>
   <string name="additional_options">附加选项</string>
-  <string name="continue_to_web_app">前往网页 App 吗？</string>
+  <string name="continue_to_web_app">前往网页应用吗？</string>
   <string name="continue_to_x">前往 %1$s 吗？</string>
   <string name="continue_to_help_center">前往帮助中心吗？</string>
   <string name="continue_to_contact_support">要联系支持吗？</string>
@@ -863,11 +863,11 @@
   <string name="two_step_login_description_long">通过在 Bitwarden 网页应用中设置两步登录，可以使您的账户更加安全。</string>
   <string name="change_master_password_description_long">您可以在 Bitwarden 网页应用上更改您的主密码。</string>
   <string name="you_can_import_data_to_your_vault_on_x">您可以将数据导入到 %1$s 上的密码库。</string>
-  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">在帮助中心了解更多如何使用 Bitwarden 的信息。</string>
+  <string name="learn_more_about_how_to_use_bitwarden_on_the_help_center">访问帮助中心了解更多如何使用 Bitwarden 的信息。</string>
   <string name="contact_support_description_long">找不到您想要的吗？请在 bitwarden.com 上联系 Bitwarden 支持。</string>
   <string name="privacy_policy_description_long">在 bitwarden.com 上查看我们的隐私政策。</string>
   <string name="explore_more_features_of_your_bitwarden_account_on_the_web_app">在网页应用上探索您的 Bitwarden 账户的更多功能。</string>
-  <string name="learn_about_organizations_description_long">Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站以了解更多。</string>
+  <string name="learn_about_organizations_description_long">Bitwarden 允许您使用组织与他人共享您的密码库项目。访问 bitwarden.com 网站了解更多信息。</string>
   <string name="rate_app_description_long">帮助别人了解 Bitwarden 是否适合他们。立即访问 App Store 并留下评分。</string>
   <string name="default_dark_theme_description_long">当设备的深色模式启用时，选择要使用的深色主题。</string>
   <string name="created_xy">创建于 %1$s, %2$s</string>
@@ -891,7 +891,7 @@
   <string name="error_creating_passkey">创建通行密钥时出错</string>
   <string name="error_reading_passkey">读取通行密钥时出错</string>
   <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">为 %1$s 创建通行密钥时出错。请稍后再试。</string>
-  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">读取 %1$s 的通行密钥时。请稍后再试。</string>
+  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">读取 %1$s 的通行密钥时出错。请稍后再试。</string>
   <string name="verifying_identity_ellipsis">正在验证身份...</string>
   <string name="passwords">密码</string>
   <string name="unknown_account">未知账户</string>

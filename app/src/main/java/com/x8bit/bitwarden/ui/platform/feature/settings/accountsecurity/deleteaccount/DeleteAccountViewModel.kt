@@ -95,18 +95,19 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleDeleteAccountComplete(
         action: DeleteAccountAction.Internal.DeleteAccountComplete,
     ) {
-        when (action.result) {
+        when (val result = action.result) {
             DeleteAccountResult.Success -> {
                 mutableStateFlow.update {
                     it.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
                 }
             }
 
-            DeleteAccountResult.Error -> {
+            is DeleteAccountResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = DeleteAccountState.DeleteAccountDialog.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = result.message?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         ),
                     )
                 }

@@ -29,6 +29,9 @@ data class CipherJsonRequest(
     @SerialName("notes")
     val notes: String?,
 
+    @SerialName("attachments2")
+    val attachments: Map<String, AttachmentJsonRequest>?,
+
     @SerialName("reprompt")
     val reprompt: CipherRepromptTypeJson,
 

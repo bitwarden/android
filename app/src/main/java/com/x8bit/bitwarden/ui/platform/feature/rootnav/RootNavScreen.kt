@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
+import android.app.Activity
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
@@ -44,6 +46,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.navigateToVaultAddEdit
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListingAsRoot
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
+import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
@@ -103,6 +106,7 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForAutofillSelection,
         is RootNavState.VaultUnlockedForNewSend,
         is RootNavState.VaultUnlockedForAuthRequest,
+        is RootNavState.VaultUnlockedForFido2Save,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -116,6 +120,10 @@ fun RootNavScreen(
         return
     }
     previousStateReference.set(state)
+
+    // In some scenarios on an emulator the Activity can leak when recreated
+    // if we don't first clear focus anytime we change the root destination.
+    (LocalContext.current as? Activity)?.currentFocus?.clearFocus()
 
     // When state changes, navigate to different root navigation state
     val rootNavOptions = navOptions {
@@ -173,6 +181,14 @@ fun RootNavScreen(
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToLoginApproval(
                     fingerprint = null,
+                    navOptions = rootNavOptions,
+                )
+            }
+
+            is RootNavState.VaultUnlockedForFido2Save -> {
+                navController.navigateToVaultUnlockedGraph(rootNavOptions)
+                navController.navigateToVaultItemListingAsRoot(
+                    vaultItemListingType = VaultItemListingType.Login,
                     navOptions = rootNavOptions,
                 )
             }

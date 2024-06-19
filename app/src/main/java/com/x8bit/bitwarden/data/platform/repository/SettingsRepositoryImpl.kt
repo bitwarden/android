@@ -49,8 +49,8 @@ class SettingsRepositoryImpl(
     private val settingsDiskSource: SettingsDiskSource,
     private val vaultSdkSource: VaultSdkSource,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
-    private val policyManager: PolicyManager,
-    private val dispatcherManager: DispatcherManager,
+    policyManager: PolicyManager,
+    dispatcherManager: DispatcherManager,
 ) : SettingsRepository {
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
 

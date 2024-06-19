@@ -713,7 +713,7 @@ turvallisesti valitsemalla \"Lisää TOTP\"</string>
   <string name="username_type">Käyttäjätunnuksen tyyppi</string>
   <string name="plus_addressed_email">Plus+merkkinen sähköposti</string>
   <string name="catch_all_email">Catch-all-sähköposti</string>
-  <string name="forwarded_email_alias">Sähköpostialias välitykseen</string>
+  <string name="forwarded_email_alias">Sähköpostialias ohjaukseen</string>
   <string name="random_word">Satunnainen sana</string>
   <string name="email_required_parenthesis">Sähköpostiosoite (pakollinen)</string>
   <string name="domain_name_required_parenthesis">Verkkotunnus (pakollinen)</string>
@@ -852,7 +852,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="passkey_management_explanation_long">Käytä Bitwardeniin suojausavainten tallennukseen ja kirjaudu holviisi aiemmin tallennetuilla suojausavaimilla.</string>
   <string name="autofill_services_explanation_long">Android Autofill Framework -rajapintaa käytetään täytettäessä kirjautumistietoja laitteen muihin sovelluksiin.</string>
   <string name="use_inline_autofill_explanation_long">Tekstinsisäistä automattitäyttöä käytetään, jos aktiivinen näppäimistö tukee sitä. Muussa tapauksessa käytetään ponnahdusvalintaa.</string>
-  <string name="additional_options">Lisäasetukset</string>
+  <string name="additional_options">Lisävalinnat</string>
   <string name="continue_to_web_app">Avataanko verkkosovellus?</string>
   <string name="continue_to_x">Avataanko osoite %1$s?</string>
   <string name="continue_to_help_center">Avataanko Tukikeskus?</string>
@@ -908,9 +908,9 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="remind_me_later">Muistuta myöhemmin</string>
   <string name="notice">Huomautus</string>
   <string name="passkeys_not_supported_for_this_app">Suojausavaimia ei tueta tässä sovelluksessa</string>
-  <string name="passkey_operation_failed_because_browser_is_not_privileged">Suojausavaintoiminto epäonnistui, koska selainta ei ole korotettu</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Suojausavaintoiminto epäonnistui, koska selainta ei ole hyväksytty</string>
   <string name="passkey_operation_failed_because_browser_signature_does_not_match">Suojausavaintoiminto epäonnistui, koska selaimen allekirjoitus ei täsmää</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Suojausavaintoiminto epäonnistui, koska asset-liitoksia puuttuu</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Suojausavaintoiminto epäonnistui, koska sovellusta ei löytynyt asset-liitoksista</string>
-  <string name="passkey_operation_failed_because_app_could_not_be_verified">Suojausavaintoiminto epäonnistui, koska sovellusta ei voitu vahvistaa</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Suojausavaintoiminto epäonnistui, koska sovellusta ei voitu varmentaa</string>
 </resources>

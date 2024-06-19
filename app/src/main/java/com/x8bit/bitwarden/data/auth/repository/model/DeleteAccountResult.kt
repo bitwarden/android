@@ -12,5 +12,5 @@ sealed class DeleteAccountResult {
     /**
      * There was an error deleting the account.
      */
-    data object Error : DeleteAccountResult()
+    data class Error(val message: String?) : DeleteAccountResult()
 }

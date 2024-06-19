@@ -1,52 +1,74 @@
----
-name: Run Check
+name: Test
 
 on:
-  pull_request:
+  push:
+    branches:
+      - "main"
+      - "rc"
+      - "hotfix-rc"
+  pull_request_target:
+    types: [opened, synchronize]
+  workflow_dispatch:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
 
 jobs:
+  check-run:
+    name: Check PR run
+    uses: bitwarden/gh-actions/.github/workflows/check-run.yml@main
+
   test:
     name: Test
     runs-on: ubuntu-22.04
+    needs: check-run
+    permissions:
+      contents: read
+      issues: write
+      packages: read
+      pull-requests: write
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
+      - name: Check out repo
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
-          fetch-depth: 0
-          # Allow subsequent steps to trigger GitHub Actions via git push
-          # https://github.community/t/push-from-action-even-with-pat-does-not-trigger-action/17622
-          persist-credentials: false
+          ref: ${{  github.event.pull_request.head.sha }}
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@b5418f5a58f5fd2eb486dd7efb368fe7be7eae45 # v2.1.3
+      - name: Validate Gradle wrapper
+        uses: gradle/actions/wrapper-validation@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3.4.2
 
-      - name: Cache Gradle Files
+      - name: Cache Gradle files
         uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
         with:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            ${{ github.workspace }}/build-cache
           key: ${{ runner.os }}-gradle-v2-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/libs.versions.toml') }}
           restore-keys: |
             ${{ runner.os }}-gradle-v2-
 
+      - name: Cache build output
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.0.2
+        with:
+          path: |
+            ${{ github.workspace }}/build-cache
+          key: ${{ runner.os }}-build-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
       - name: Configure Ruby
-        uses: ruby/setup-ruby@cacc9f1c0b3f4eb8a16a6bb0ed10897b43b9de49 # v1.176.0
+        uses: ruby/setup-ruby@3783f195e29b74ae398d7caca108814bbafde90e # v1.180.1
         with:
           bundler-cache: true
 
       - name: Configure JDK
         uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4.2.1
         with:
-          distribution: 'temurin'
+          distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Build and Run Check
+      - name: Build and test
         # Run checks on standard variant only because release and beta builds are not configured to
         # work properly with the Compose testing library. F-Droid related tasks are also skipped as
         # there is no significant code difference between the builds.

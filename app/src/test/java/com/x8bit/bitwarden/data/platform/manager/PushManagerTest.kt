@@ -82,14 +82,14 @@ class PushManagerTest {
         }
 
         @Test
-        fun `onMessageReceived invalid JSON does not crash`() {
-            pushManager.onMessageReceived(INVALID_NOTIFICATION_JSON)
+        fun `onMessageReceived with invalid JSON does not crash`() {
+            pushManager.onMessageReceived(INVALID_NOTIFICATION_MAP)
         }
 
         @Test
-        fun `onMessageReceived auth request emits to passwordlessRequestFlow`() = runTest {
+        fun `onMessageReceived with auth request emits to passwordlessRequestFlow`() = runTest {
             pushManager.passwordlessRequestFlow.test {
-                pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_JSON)
+                pushManager.onMessageReceived(AUTH_REQUEST_NOTIFICATION_MAP)
                 assertEquals(
                     PasswordlessRequestData(
                         loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -101,21 +101,22 @@ class PushManagerTest {
         }
 
         @Test
-        fun `onMessageReceived auth request response emits to passwordlessRequestFlow`() = runTest {
-            pushManager.passwordlessRequestFlow.test {
-                pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON)
-                assertEquals(
-                    PasswordlessRequestData(
-                        loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                        userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
-                    ),
-                    awaitItem(),
-                )
+        fun `onMessageReceived with auth request response emits to passwordlessRequestFlow`() =
+            runTest {
+                pushManager.passwordlessRequestFlow.test {
+                    pushManager.onMessageReceived(AUTH_REQUEST_RESPONSE_NOTIFICATION_MAP)
+                    assertEquals(
+                        PasswordlessRequestData(
+                            loginRequestId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            userId = "078966a2-93c2-4618-ae2a-0a2394c88d37",
+                        ),
+                        awaitItem(),
+                    )
+                }
             }
-        }
 
         @Test
-        fun `onMessageReceived logout should emit to logoutFlow`() = runTest {
+        fun `onMessageReceived with logout should emit to logoutFlow`() = runTest {
             val accountTokens = AccountTokensJson(
                 accessToken = "accessToken",
                 refreshToken = "refreshToken",
@@ -124,7 +125,7 @@ class PushManagerTest {
             authDiskSource.userState = UserStateJson(userId, mapOf(userId to mockk<AccountJson>()))
 
             pushManager.logoutFlow.test {
-                pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
+                pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                 assertEquals(
                     NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
                     awaitItem(),
@@ -143,9 +144,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived logout emits to logoutFlow`() = runTest {
+            fun `onMessageReceived with logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
-                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                     assertEquals(
                         NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
                         awaitItem(),
@@ -154,9 +155,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync ciphers emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with ciphers emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -165,17 +166,17 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync org keys does nothing`() = runTest {
+            fun `onMessageReceived with sync org keys does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync settings emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with sync settings emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -184,9 +185,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync vault emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with vault emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -210,10 +211,10 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync cipher create emits to syncCipherUpsertFlow`() =
+            fun `onMessageReceived with sync cipher create emits to syncCipherUpsertFlow`() =
                 runTest {
                     pushManager.syncCipherUpsertFlow.test {
-                        pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherUpsertData(
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -228,10 +229,10 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync cipher delete emits to syncCipherDeleteFlow`() =
+            fun `onMessageReceived with sync cipher delete emits to syncCipherDeleteFlow`() =
                 runTest {
                     pushManager.syncCipherDeleteFlow.test {
-                        pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -242,10 +243,10 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync cipher update emits to syncCipherUpsertFlow`() =
+            fun `onMessageReceived with sync cipher update emits to syncCipherUpsertFlow`() =
                 runTest {
                     pushManager.syncCipherUpsertFlow.test {
-                        pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherUpsertData(
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -260,10 +261,10 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync folder create emits to syncFolderUpsertFlow`() =
+            fun `onMessageReceived with sync folder create emits to syncFolderUpsertFlow`() =
                 runTest {
                     pushManager.syncFolderUpsertFlow.test {
-                        pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderUpsertData(
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -276,10 +277,10 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync folder delete emits to syncFolderDeleteFlow`() =
+            fun `onMessageReceived with sync folder delete emits to syncFolderDeleteFlow`() =
                 runTest {
                     pushManager.syncFolderDeleteFlow.test {
-                        pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderDeleteData(
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -290,10 +291,10 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync folder update emits to syncFolderUpsertFlow`() =
+            fun `onMessageReceived with sync folder update emits to syncFolderUpsertFlow`() =
                 runTest {
                     pushManager.syncFolderUpsertFlow.test {
-                        pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncFolderUpsertData(
                                 folderId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -306,10 +307,10 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync login delete emits to syncCipherDeleteFlow`() =
+            fun `onMessageReceived with sync login delete emits to syncCipherDeleteFlow`() =
                 runTest {
                     pushManager.syncCipherDeleteFlow.test {
-                        pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_JSON)
+                        pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
                         assertEquals(
                             SyncCipherDeleteData(
                                 cipherId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
@@ -320,50 +321,47 @@ class PushManagerTest {
                 }
 
             @Test
-            fun `onMessageReceived sync send create emits to syncSendUpsertFlow`() =
-                runTest {
-                    pushManager.syncSendUpsertFlow.test {
-                        pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_JSON)
-                        assertEquals(
-                            SyncSendUpsertData(
-                                sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
-                                isUpdate = false,
-                            ),
-                            awaitItem(),
-                        )
-                    }
+            fun `onMessageReceived with sync send create emits to syncSendUpsertFlow`() = runTest {
+                pushManager.syncSendUpsertFlow.test {
+                    pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
+                    assertEquals(
+                        SyncSendUpsertData(
+                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                            isUpdate = false,
+                        ),
+                        awaitItem(),
+                    )
                 }
+            }
 
             @Test
-            fun `onMessageReceived sync send delete emits to syncSendDeleteFlow`() =
-                runTest {
-                    pushManager.syncSendDeleteFlow.test {
-                        pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_JSON)
-                        assertEquals(
-                            SyncSendDeleteData(
-                                sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                            ),
-                            awaitItem(),
-                        )
-                    }
+            fun `onMessageReceived with sync send delete emits to syncSendDeleteFlow`() = runTest {
+                pushManager.syncSendDeleteFlow.test {
+                    pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
+                    assertEquals(
+                        SyncSendDeleteData(
+                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                        ),
+                        awaitItem(),
+                    )
                 }
+            }
 
             @Test
-            fun `onMessageReceived sync send update emits to syncSendUpsertFlow`() =
-                runTest {
-                    pushManager.syncSendUpsertFlow.test {
-                        pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_JSON)
-                        assertEquals(
-                            SyncSendUpsertData(
-                                sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
-                                revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
-                                isUpdate = true,
-                            ),
-                            awaitItem(),
-                        )
-                    }
+            fun `onMessageReceived with sync send update emits to syncSendUpsertFlow`() = runTest {
+                pushManager.syncSendUpsertFlow.test {
+                    pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
+                    assertEquals(
+                        SyncSendUpsertData(
+                            sendId = "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+                            revisionDate = ZonedDateTime.parse("2023-10-27T12:00:00.000Z"),
+                            isUpdate = true,
+                        ),
+                        awaitItem(),
+                    )
                 }
+            }
         }
 
         @Nested
@@ -381,81 +379,81 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync cipher create does nothing`() = runTest {
+            fun `onMessageReceived with sync cipher create does nothing`() = runTest {
                 pushManager.syncCipherUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_CIPHER_CREATE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync cipher delete does nothing`() = runTest {
+            fun `onMessageReceived with sync cipher delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_CIPHER_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync cipher update does nothing`() = runTest {
+            fun `onMessageReceived with sync cipher update does nothing`() = runTest {
                 pushManager.syncCipherUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_CIPHER_UPDATE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync folder create does nothing`() = runTest {
+            fun `onMessageReceived with sync folder create does nothing`() = runTest {
                 pushManager.syncFolderUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_FOLDER_CREATE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync folder delete does nothing`() = runTest {
+            fun `onMessageReceived with sync folder delete does nothing`() = runTest {
                 pushManager.syncFolderDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_FOLDER_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync folder update does nothing`() = runTest {
+            fun `onMessageReceived with sync folder update does nothing`() = runTest {
                 pushManager.syncFolderDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_FOLDER_UPDATE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync login delete does nothing`() = runTest {
+            fun `onMessageReceived with sync login delete does nothing`() = runTest {
                 pushManager.syncCipherDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_LOGIN_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync send create does nothing`() = runTest {
+            fun `onMessageReceived with sync send create does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_SEND_CREATE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync send delete does nothing`() = runTest {
+            fun `onMessageReceived with sync send delete does nothing`() = runTest {
                 pushManager.syncSendDeleteFlow.test {
-                    pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_SEND_DELETE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync send update does nothing`() = runTest {
+            fun `onMessageReceived with sync send update does nothing`() = runTest {
                 pushManager.syncSendUpsertFlow.test {
-                    pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_SEND_UPDATE_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
@@ -469,41 +467,41 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived logout does nothing`() = runTest {
+            fun `onMessageReceived with logout does nothing`() = runTest {
                 pushManager.logoutFlow.test {
-                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync ciphers does nothing`() = runTest {
+            fun `onMessageReceived with sync ciphers does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync org keys does nothing`() = runTest {
+            fun `onMessageReceived with sync org keys does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync settings does nothing`() = runTest {
+            fun `onMessageReceived with sync settings does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
 
             @Test
-            fun `onMessageReceived sync vault does nothing`() = runTest {
+            fun `onMessageReceived with sync vault does nothing`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     expectNoEvents()
                 }
             }
@@ -524,9 +522,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived logout emits to logoutFlow`() = runTest {
+            fun `onMessageReceived with logout emits to logoutFlow`() = runTest {
                 pushManager.logoutFlow.test {
-                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(LOGOUT_NOTIFICATION_MAP)
                     assertEquals(
                         NotificationLogoutData(userId = "078966a2-93c2-4618-ae2a-0a2394c88d37"),
                         awaitItem(),
@@ -535,9 +533,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync ciphers emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with sync ciphers emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_CIPHERS_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -546,9 +544,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync org keys emits to syncOrgKeysFlow`() = runTest {
+            fun `onMessageReceived with sync org keys emits to syncOrgKeysFlow`() = runTest {
                 pushManager.syncOrgKeysFlow.test {
-                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_ORG_KEYS_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -557,9 +555,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync settings emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with sync settings emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_SETTINGS_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -568,9 +566,9 @@ class PushManagerTest {
             }
 
             @Test
-            fun `onMessageReceived sync vault emits to fullSyncFlow`() = runTest {
+            fun `onMessageReceived with sync vault emits to fullSyncFlow`() = runTest {
                 pushManager.fullSyncFlow.test {
-                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_JSON)
+                    pushManager.onMessageReceived(SYNC_VAULT_NOTIFICATION_MAP)
                     assertEquals(
                         Unit,
                         awaitItem(),
@@ -795,211 +793,175 @@ class PushManagerTest {
     }
 }
 
-private const val AUTH_REQUEST_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 15,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\"
-      }"
-    }
-"""
+private val AUTH_REQUEST_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "15",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
+    }""",
+)
 
-private const val AUTH_REQUEST_RESPONSE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 16,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\"
-      }"
-    }
-"""
+private val AUTH_REQUEST_RESPONSE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "16",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37"
+    }""",
+)
 
-private const val INVALID_NOTIFICATION_JSON = """
-    {}
-"""
+private val INVALID_NOTIFICATION_MAP = emptyMap<String, String>()
 
-private const val LOGOUT_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 11,
-      "payload": "{
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"Date\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val LOGOUT_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "11",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_CIPHER_CREATE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 1,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
-        \"CollectionIds\": [],
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_CIPHER_CREATE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "1",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "OrganizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
+      "CollectionIds": [],
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_CIPHER_DELETE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 9,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
-        \"CollectionIds\": [],
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_CIPHER_DELETE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "9",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "OrganizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
+      "CollectionIds": [],
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_CIPHER_UPDATE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 0,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
-        \"CollectionIds\": [],
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_CIPHER_UPDATE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "0",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "OrganizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
+      "CollectionIds": [],
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_CIPHERS_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 4,
-      "payload": "{
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"Date\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_CIPHERS_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "4",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_FOLDER_CREATE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 7,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_FOLDER_CREATE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "7",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_FOLDER_DELETE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 3,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_FOLDER_DELETE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "3",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_FOLDER_UPDATE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 8,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_FOLDER_UPDATE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "8",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_LOGIN_DELETE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 2,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"OrganizationId\": \"6a41d965-ed95-4eae-98c3-5f1ec609c2c1\",
-        \"CollectionIds\": [],
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_LOGIN_DELETE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "2",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "OrganizationId": "6a41d965-ed95-4eae-98c3-5f1ec609c2c1",
+      "CollectionIds": [],
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_ORG_KEYS_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 6,
-      "payload": "{
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"Date\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_ORG_KEYS_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "6",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_SEND_CREATE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 12,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_SEND_CREATE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "12",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_SEND_DELETE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 14,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_SEND_DELETE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "14",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_SEND_UPDATE_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 13,
-      "payload": "{
-        \"Id\": \"aab5cdcc-f4a7-4e65-bf6d-5e0eab052321\",
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"RevisionDate\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_SEND_UPDATE_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "13",
+    "payload" to """{
+      "Id": "aab5cdcc-f4a7-4e65-bf6d-5e0eab052321",
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "RevisionDate": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_SETTINGS_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 10,
-      "payload": "{
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"Date\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_SETTINGS_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "10",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)
 
-private const val SYNC_VAULT_NOTIFICATION_JSON = """
-    {
-      "contextId": "801f459d-8e51-47d0-b072-3f18c9f66f64",
-      "type": 5,
-      "payload": "{
-        \"UserId\": \"078966a2-93c2-4618-ae2a-0a2394c88d37\",
-        \"Date\": \"2023-10-27T12:00:00.000Z\"
-      }"
-    }
-"""
+private val SYNC_VAULT_NOTIFICATION_MAP = mapOf(
+    "contextId" to "801f459d-8e51-47d0-b072-3f18c9f66f64",
+    "type" to "5",
+    "payload" to """{
+      "UserId": "078966a2-93c2-4618-ae2a-0a2394c88d37",
+      "Date": "2023-10-27T12:00:00.000Z"
+    }""",
+)

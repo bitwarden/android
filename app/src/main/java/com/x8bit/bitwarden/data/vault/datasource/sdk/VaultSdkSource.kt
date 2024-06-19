@@ -1,28 +1,28 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.Attachment
-import com.bitwarden.core.AttachmentEncryptResult
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.Cipher
-import com.bitwarden.core.CipherListView
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.Collection
-import com.bitwarden.core.CollectionView
+import com.bitwarden.bitwarden.DerivePinKeyResponse
+import com.bitwarden.bitwarden.ExportFormat
+import com.bitwarden.bitwarden.InitOrgCryptoRequest
+import com.bitwarden.bitwarden.InitUserCryptoMethod
+import com.bitwarden.bitwarden.InitUserCryptoRequest
+import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.DerivePinKeyResponse
-import com.bitwarden.core.ExportFormat
-import com.bitwarden.core.Folder
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitOrgCryptoRequest
-import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.InitUserCryptoRequest
-import com.bitwarden.core.PasswordHistory
-import com.bitwarden.core.PasswordHistoryView
-import com.bitwarden.core.Send
-import com.bitwarden.core.SendView
-import com.bitwarden.core.TotpResponse
-import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendView
+import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.AttachmentEncryptResult
+import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.Collection
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Folder
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.PasswordHistory
+import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import java.io.File
 
@@ -137,8 +137,9 @@ interface VaultSdkSource {
         userId: String,
         cipher: Cipher,
         attachmentView: AttachmentView,
-        fileBuffer: ByteArray,
-    ): Result<AttachmentEncryptResult>
+        decryptedFilePath: String,
+        encryptedFilePath: String,
+    ): Result<Attachment>
 
     /**
      * Encrypts a [CipherView] for the user with the given [userId], returning a [Cipher] wrapped
@@ -146,6 +147,10 @@ interface VaultSdkSource {
      *
      * This should only be called after a successful call to [initializeCrypto] for the associated
      * user.
+     *
+     * Note that this function will always add a [CipherView.key] to a cipher if it is missing,
+     * it is important to ensure that any [CipherView] being encrypted is pushed to the cloud if
+     * it was previously missing a `key` to ensure synchronization and prevent data-loss.
      */
     suspend fun encryptCipher(
         userId: String,
@@ -353,6 +358,15 @@ interface VaultSdkSource {
         totp: String,
         time: DateTime,
     ): Result<TotpResponse>
+
+    /**
+     * Re-encrypts the [cipherView] with the organizations encryption key.
+     */
+    suspend fun moveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherView: CipherView,
+    ): Result<CipherView>
 
     /**
      * Validates that the given password matches the password hash.

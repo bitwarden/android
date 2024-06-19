@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.fido2
 import android.os.Build
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
+import androidx.annotation.Keep
 import androidx.annotation.RequiresApi
 import androidx.credentials.exceptions.ClearCredentialException
 import androidx.credentials.exceptions.CreateCredentialException
@@ -24,6 +25,7 @@ import javax.inject.Inject
  */
 @OmitFromCoverage
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+@Keep
 @AndroidEntryPoint
 class BitwardenFido2ProviderService : CredentialProviderService() {
 

@@ -2,22 +2,23 @@
 
 package com.x8bit.bitwarden.data.vault.repository.util
 
-import com.bitwarden.core.Attachment
-import com.bitwarden.core.Card
-import com.bitwarden.core.Cipher
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.Fido2Credential
-import com.bitwarden.core.Field
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.Identity
-import com.bitwarden.core.Login
-import com.bitwarden.core.LoginUri
-import com.bitwarden.core.PasswordHistory
-import com.bitwarden.core.SecureNote
-import com.bitwarden.core.SecureNoteType
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.Card
+import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.Field
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.Identity
+import com.bitwarden.vault.Login
+import com.bitwarden.vault.LoginUri
+import com.bitwarden.vault.PasswordHistory
+import com.bitwarden.vault.SecureNote
+import com.bitwarden.vault.SecureNoteType
+import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherTypeJson
@@ -37,6 +38,9 @@ import java.util.Locale
 fun Cipher.toEncryptedNetworkCipher(): CipherJsonRequest =
     CipherJsonRequest(
         notes = notes,
+        attachments = attachments
+            ?.filter { it.id != null }
+            ?.associate { requireNotNull(it.id) to it.toNetworkAttachmentRequest() },
         reprompt = reprompt.toNetworkRepromptType(),
         passwordHistory = passwordHistory?.toEncryptedNetworkPasswordHistoryList(),
         lastKnownRevisionDate = ZonedDateTime.ofInstant(revisionDate, ZoneOffset.UTC),
@@ -215,6 +219,16 @@ private fun Attachment.toNetworkAttachment(): SyncResponseJson.Cipher.Attachment
         sizeName = sizeName,
         id = id,
         url = url,
+        key = key,
+    )
+
+/**
+ * Converts a Bitwarden SDK [Attachment] object to a corresponding [AttachmentJsonRequest] object.
+ */
+fun Attachment.toNetworkAttachmentRequest(): AttachmentJsonRequest =
+    AttachmentJsonRequest(
+        fileName = fileName,
+        fileSize = size,
         key = key,
     )
 

@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachm
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockAttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipher
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockCipherJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkAttachment
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import retrofit2.create
+import java.io.File
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -57,7 +59,7 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `createCipher should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.createCipher(
             body = createMockCipherJsonRequest(number = 1),
         )
@@ -69,7 +71,7 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `createCipherInOrganization should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.createCipherInOrganization(
             body = CreateCipherInOrganizationJsonRequest(
                 cipher = createMockCipherJsonRequest(number = 1),
@@ -103,7 +105,7 @@ class CiphersServiceTest : BaseServiceTest() {
             number = 1,
             fileUploadType = FileUploadType.AZURE,
         )
-        val encryptedFile = byteArrayOf()
+        val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
@@ -121,7 +123,7 @@ class CiphersServiceTest : BaseServiceTest() {
             number = 1,
             fileUploadType = FileUploadType.DIRECT,
         )
-        val encryptedFile = byteArrayOf()
+        val encryptedFile = File.createTempFile("mockFile", "temp")
         server.enqueue(MockResponse().setResponseCode(201))
 
         val result = ciphersService.uploadAttachment(
@@ -135,7 +137,7 @@ class CiphersServiceTest : BaseServiceTest() {
     @Test
     fun `updateCipher with success response should return a Success with the correct cipher`() =
         runTest {
-            server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+            server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
             val result = ciphersService.updateCipher(
                 cipherId = "cipher-id-1",
                 body = createMockCipherJsonRequest(number = 1),
@@ -194,11 +196,63 @@ class CiphersServiceTest : BaseServiceTest() {
     }
 
     @Test
+    fun `shareAttachment without attachment ID should return an error`() = runTest {
+        val cipherId = "cipherId"
+        val organizationId = "organizationId"
+        val attachment = createMockSdkAttachment(number = 1).copy(id = null)
+        val encryptedFile = File.createTempFile("mockFile", "temp")
+
+        val result = ciphersService.shareAttachment(
+            cipherId = cipherId,
+            attachment = attachment,
+            organizationId = organizationId,
+            encryptedFile = encryptedFile,
+        )
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `shareAttachment without attachment key should return an error`() = runTest {
+        val cipherId = "cipherId"
+        val organizationId = "organizationId"
+        val attachment = createMockSdkAttachment(number = 1, key = null)
+        val encryptedFile = File.createTempFile("mockFile", "temp")
+
+        val result = ciphersService.shareAttachment(
+            cipherId = cipherId,
+            attachment = attachment,
+            organizationId = organizationId,
+            encryptedFile = encryptedFile,
+        )
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `shareAttachment should execute the share attachment API`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(200))
+        val cipherId = "cipherId"
+        val organizationId = "organizationId"
+        val attachment = createMockSdkAttachment(number = 1)
+        val encryptedFile = File.createTempFile("mockFile", "temp")
+
+        val result = ciphersService.shareAttachment(
+            cipherId = cipherId,
+            attachment = attachment,
+            organizationId = organizationId,
+            encryptedFile = encryptedFile,
+        )
+
+        assertEquals(Unit, result.getOrThrow())
+    }
+
+    @Test
     fun `shareCipher should execute the share cipher API`() = runTest {
         server.enqueue(
             MockResponse()
                 .setResponseCode(200)
-                .setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON),
+                .setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON),
         )
 
         val result = ciphersService.shareCipher(
@@ -232,15 +286,15 @@ class CiphersServiceTest : BaseServiceTest() {
 
     @Test
     fun `restoreCipher should execute the restoreCipher API`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val cipherId = "cipherId"
         val result = ciphersService.restoreCipher(cipherId = cipherId)
-        assertEquals(Unit, result.getOrThrow())
+        assertEquals(createMockCipher(number = 1), result.getOrThrow())
     }
 
     @Test
     fun `getCipher should return the correct response`() = runTest {
-        server.enqueue(MockResponse().setBody(CREATE_UPDATE_CIPHER_SUCCESS_JSON))
+        server.enqueue(MockResponse().setBody(CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON))
         val result = ciphersService.getCipher(cipherId = "mockId-1")
         assertEquals(
             createMockCipher(number = 1),
@@ -397,7 +451,7 @@ private const val CREATE_ATTACHMENT_SUCCESS_JSON = """
 }
 """
 
-private const val CREATE_UPDATE_CIPHER_SUCCESS_JSON = """
+private const val CREATE_RESTORE_UPDATE_CIPHER_SUCCESS_JSON = """
 {
   "notes": "mockNotes-1",
   "attachments": [

@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
+import com.bitwarden.vault.Attachment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
@@ -8,6 +9,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRe
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
+import java.io.File
 
 /**
  * Provides an API for querying ciphers endpoints.
@@ -31,7 +33,7 @@ interface CiphersService {
      */
     suspend fun uploadAttachment(
         attachmentJsonResponse: AttachmentJsonResponse,
-        encryptedFile: ByteArray,
+        encryptedFile: File,
     ): Result<SyncResponseJson.Cipher>
 
     /**
@@ -57,6 +59,16 @@ interface CiphersService {
         cipherId: String,
         body: ShareCipherJsonRequest,
     ): Result<SyncResponseJson.Cipher>
+
+    /**
+     * Attempt to share an attachment.
+     */
+    suspend fun shareAttachment(
+        cipherId: String,
+        attachment: Attachment,
+        organizationId: String,
+        encryptedFile: File,
+    ): Result<Unit>
 
     /**
      * Attempt to update a cipher's collections.
@@ -87,7 +99,7 @@ interface CiphersService {
     /**
      * Attempt to restore a cipher.
      */
-    suspend fun restoreCipher(cipherId: String): Result<Unit>
+    suspend fun restoreCipher(cipherId: String): Result<SyncResponseJson.Cipher>
 
     /**
      * Attempt to retrieve a cipher.

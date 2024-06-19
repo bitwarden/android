@@ -1,6 +1,7 @@
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.InjectMappingFileIdTask
 import com.google.firebase.crashlytics.buildtools.gradle.tasks.UploadMappingFileTask
 import com.google.gms.googleservices.GoogleServicesTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
@@ -10,6 +11,7 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose.compiler)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlinx.kover)
@@ -26,7 +28,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
-        versionName = "2024.05.0"
+        versionName = "2024.06.00"
 
         setProperty("archivesBaseName", "com.x8bit.bitwarden")
 
@@ -90,15 +92,9 @@ android {
         sourceCompatibility(libs.versions.jvmTarget.get())
         targetCompatibility(libs.versions.jvmTarget.get())
     }
-    kotlinOptions {
-        jvmTarget = libs.versions.jvmTarget.get()
-    }
     buildFeatures {
         buildConfig = true
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.kotlinCompilerExtensionVersion.get()
     }
     packaging {
         resources {
@@ -110,6 +106,12 @@ android {
         // Required for Robolectric
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
+    }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.fromTarget(libs.versions.jvmTarget.get()))
     }
 }
 
@@ -190,39 +192,56 @@ detekt {
 }
 
 kover {
-    excludeJavaCode()
-}
-
-koverReport {
-    filters {
-        excludes {
-            annotatedBy(
-                // Compose previews
-                "androidx.compose.ui.tooling.preview.Preview",
-                // Manually excluded classes/files/etc.
-                "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage"
-            )
-            classes(
-                // Navigation helpers
-                "*.*NavigationKt*",
-                // Composable singletons
-                "*.*ComposableSingletons*",
-                // Generated classes related to interfaces with default values
-                "*.*DefaultImpls*",
-                // Databases
-                "*.database.*Database*",
-                "*.dao.*Dao*",
-            )
-            packages(
-                // Dependency injection
-                "*.di",
-                // Models
-                "*.model",
-                // Custom UI components
-                "com.x8bit.bitwarden.ui.platform.components",
-                // Theme-related code
-                "com.x8bit.bitwarden.ui.platform.theme",
-            )
+    currentProject {
+        sources {
+            excludeJava = true
+        }
+    }
+    reports {
+        filters {
+            excludes {
+                androidGeneratedClasses()
+                annotatedBy(
+                    // Compose previews
+                    "androidx.compose.ui.tooling.preview.Preview",
+                    // Manually excluded classes/files/etc.
+                    "com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage",
+                )
+                classes(
+                    // Navigation helpers
+                    "*.*NavigationKt*",
+                    // Composable singletons
+                    "*.*ComposableSingletons*",
+                    // Generated classes related to interfaces with default values
+                    "*.*DefaultImpls*",
+                    // Databases
+                    "*.database.*Database*",
+                    "*.dao.*Dao*",
+                    // Dagger Hilt
+                    "dagger.hilt.*",
+                    "hilt_aggregated_deps.*",
+                    "*_Factory",
+                    "*_Factory\$*",
+                    "*_*Factory",
+                    "*_*Factory\$*",
+                    "*.Hilt_*",
+                    "*_HiltModules",
+                    "*_HiltModules\$*",
+                    "*_Impl",
+                    "*_Impl\$*",
+                    "*_MembersInjector",
+                )
+                packages(
+                    // Dependency injection
+                    "*.di",
+                    // Models
+                    "*.model",
+                    // Custom UI components
+                    "com.x8bit.bitwarden.ui.platform.components",
+                    // Theme-related code
+                    "com.x8bit.bitwarden.ui.platform.theme",
+                )
+            }
         }
     }
 }

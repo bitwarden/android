@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.SendType
+import com.bitwarden.send.SendType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData

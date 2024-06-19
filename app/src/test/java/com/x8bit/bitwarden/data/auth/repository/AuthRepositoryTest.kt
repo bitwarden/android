@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
-import com.bitwarden.core.AuthRequestMethod
-import com.bitwarden.core.AuthRequestResponse
-import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.RegisterKeyResponse
-import com.bitwarden.core.RegisterTdeKeyResponse
-import com.bitwarden.core.UpdatePasswordResponse
+import com.bitwarden.bitwarden.AuthRequestMethod
+import com.bitwarden.bitwarden.AuthRequestResponse
+import com.bitwarden.bitwarden.InitUserCryptoMethod
+import com.bitwarden.bitwarden.RegisterKeyResponse
+import com.bitwarden.bitwarden.RegisterTdeKeyResponse
+import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetRea
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -601,7 +602,7 @@ class AuthRepositoryTest {
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
             )
-        } returns Unit.asSuccess()
+        } returns DeleteAccountResponseJson.Success.asSuccess()
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
 
         repository.userStateFlow.test {
@@ -625,7 +626,7 @@ class AuthRepositoryTest {
     fun `delete account fails if not logged in`() = runTest {
         val masterPassword = "hello world"
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
-        assertEquals(DeleteAccountResult.Error, result)
+        assertEquals(DeleteAccountResult.Error(message = null), result)
     }
 
     @Test
@@ -639,7 +640,7 @@ class AuthRepositoryTest {
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
-        assertEquals(DeleteAccountResult.Error, result)
+        assertEquals(DeleteAccountResult.Error(message = null), result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
         }
@@ -663,7 +664,7 @@ class AuthRepositoryTest {
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
-        assertEquals(DeleteAccountResult.Error, result)
+        assertEquals(DeleteAccountResult.Error(message = null), result)
         coVerify {
             authSdkSource.hashPassword(EMAIL, masterPassword, kdf, HashPurpose.SERVER_AUTHORIZATION)
             accountsService.deleteAccount(
@@ -687,7 +688,7 @@ class AuthRepositoryTest {
                 masterPasswordHash = hashedMasterPassword,
                 oneTimePassword = null,
             )
-        } returns Unit.asSuccess()
+        } returns DeleteAccountResponseJson.Success.asSuccess()
 
         val result = repository.deleteAccountWithMasterPassword(masterPassword = masterPassword)
 
@@ -710,7 +711,7 @@ class AuthRepositoryTest {
                 masterPasswordHash = null,
                 oneTimePassword = oneTimePassword,
             )
-        } returns Unit.asSuccess()
+        } returns DeleteAccountResponseJson.Success.asSuccess()
 
         val result = repository.deleteAccountWithOneTimePassword(
             oneTimePassword = oneTimePassword,

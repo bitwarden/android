@@ -14,6 +14,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 /**
  * Defines raw calls under the /ciphers API with authentication applied.
@@ -73,6 +74,17 @@ interface CiphersApi {
     ): Result<SyncResponseJson.Cipher>
 
     /**
+     * Shares an attachment.
+     */
+    @POST("ciphers/{cipherId}/attachment/{attachmentId}/share")
+    suspend fun shareAttachment(
+        @Path("cipherId") cipherId: String,
+        @Path("attachmentId") attachmentId: String,
+        @Query("organizationId") organizationId: String?,
+        @Body body: MultipartBody,
+    ): Result<Unit>
+
+    /**
      * Updates a cipher's collections.
      */
     @PUT("ciphers/{cipherId}/collections")
@@ -112,7 +124,7 @@ interface CiphersApi {
     @PUT("ciphers/{cipherId}/restore")
     suspend fun restoreCipher(
         @Path("cipherId") cipherId: String,
-    ): Result<Unit>
+    ): Result<SyncResponseJson.Cipher>
 
     /**
      * Gets a cipher.

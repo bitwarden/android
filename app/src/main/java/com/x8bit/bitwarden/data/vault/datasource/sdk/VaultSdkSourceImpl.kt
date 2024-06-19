@@ -1,30 +1,29 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.core.Attachment
-import com.bitwarden.core.AttachmentEncryptResult
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.Cipher
-import com.bitwarden.core.CipherListView
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.Collection
-import com.bitwarden.core.CollectionView
+import com.bitwarden.bitwarden.DerivePinKeyResponse
+import com.bitwarden.bitwarden.ExportFormat
+import com.bitwarden.bitwarden.InitOrgCryptoRequest
+import com.bitwarden.bitwarden.InitUserCryptoRequest
+import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.DerivePinKeyResponse
-import com.bitwarden.core.ExportFormat
-import com.bitwarden.core.Folder
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitOrgCryptoRequest
-import com.bitwarden.core.InitUserCryptoRequest
-import com.bitwarden.core.PasswordHistory
-import com.bitwarden.core.PasswordHistoryView
-import com.bitwarden.core.Send
-import com.bitwarden.core.SendView
-import com.bitwarden.core.TotpResponse
-import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendView
+import com.bitwarden.vault.Attachment
+import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.Cipher
+import com.bitwarden.vault.CipherListView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.Collection
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Folder
+import com.bitwarden.vault.FolderView
+import com.bitwarden.vault.PasswordHistory
+import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import java.io.File
@@ -144,7 +143,6 @@ class VaultSdkSourceImpl(
     ): Result<Send> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .encrypt(sendView)
         }
@@ -156,7 +154,6 @@ class VaultSdkSourceImpl(
     ): Result<ByteArray> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .encryptBuffer(
                     send = send,
@@ -172,7 +169,6 @@ class VaultSdkSourceImpl(
     ): Result<File> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .encryptFile(
                     send = send,
@@ -186,16 +182,18 @@ class VaultSdkSourceImpl(
         userId: String,
         cipher: Cipher,
         attachmentView: AttachmentView,
-        fileBuffer: ByteArray,
-    ): Result<AttachmentEncryptResult> =
+        decryptedFilePath: String,
+        encryptedFilePath: String,
+    ): Result<Attachment> =
         runCatching {
             getClient(userId = userId)
                 .vault()
                 .attachments()
-                .encryptBuffer(
+                .encryptFile(
                     cipher = cipher,
                     attachment = attachmentView,
-                    buffer = fileBuffer,
+                    decryptedFilePath = decryptedFilePath,
+                    encryptedFilePath = encryptedFilePath,
                 )
         }
 
@@ -272,7 +270,6 @@ class VaultSdkSourceImpl(
     ): Result<SendView> =
         runCatching {
             getClient(userId = userId)
-                .vault()
                 .sends()
                 .decrypt(send)
         }
@@ -284,7 +281,6 @@ class VaultSdkSourceImpl(
         runCatching {
             sendList.map {
                 getClient(userId = userId)
-                    .vault()
                     .sends()
                     .decrypt(it)
             }
@@ -373,6 +369,17 @@ class VaultSdkSourceImpl(
                 key = totp,
                 time = time,
             )
+    }
+
+    override suspend fun moveToOrganization(
+        userId: String,
+        organizationId: String,
+        cipherView: CipherView,
+    ): Result<CipherView> = runCatching {
+        getClient(userId = userId)
+            .vault()
+            .ciphers()
+            .moveToOrganization(cipher = cipherView, organizationId = organizationId)
     }
 
     override suspend fun validatePassword(

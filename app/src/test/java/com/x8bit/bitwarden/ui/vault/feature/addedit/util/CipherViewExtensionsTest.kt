@@ -1,18 +1,17 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.bitwarden.core.CardView
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.Fido2Credential
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.FieldView
-import com.bitwarden.core.IdentityView
-import com.bitwarden.core.LoginUriView
-import com.bitwarden.core.LoginView
-import com.bitwarden.core.PasswordHistoryView
-import com.bitwarden.core.SecureNoteType
-import com.bitwarden.core.SecureNoteView
+import com.bitwarden.vault.CardView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.FieldView
+import com.bitwarden.vault.IdentityView
+import com.bitwarden.vault.LoginUriView
+import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.SecureNoteType
+import com.bitwarden.vault.SecureNoteView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -21,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.manager.resource.ResourceManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -556,23 +556,7 @@ private val DEFAULT_LOGIN_CIPHER_VIEW: CipherView = DEFAULT_BASE_CIPHER_VIEW.cop
         ),
         totp = "otpauth://totp/Example:alice@google.com?secret=JBSWY3DPEHPK3PXP&issuer=Example",
         autofillOnPageLoad = false,
-        fido2Credentials = listOf(
-            Fido2Credential(
-                credentialId = "mockCredentialId",
-                keyType = "mockKeyType",
-                keyAlgorithm = "mockKeyAlgorithm",
-                keyCurve = "mockKeyCurve",
-                keyValue = "mockKeyValue",
-                rpId = "mockRpId",
-                userHandle = "mockUserHandle",
-                userName = "mockUserName",
-                counter = "mockCounter",
-                rpName = "mockRpName",
-                userDisplayName = "mockUserDisplayName",
-                discoverable = "mockDiscoverable",
-                creationDate = FIXED_CLOCK.instant(),
-            ),
-        ),
+        fido2Credentials = createMockSdkFido2CredentialList(number = 1, clock = FIXED_CLOCK),
     ),
 )
 

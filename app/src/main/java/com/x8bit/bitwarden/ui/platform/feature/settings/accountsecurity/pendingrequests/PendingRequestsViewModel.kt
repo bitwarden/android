@@ -31,7 +31,7 @@ private const val KEY_STATE = "state"
 class PendingRequestsViewModel @Inject constructor(
     private val clock: Clock,
     private val authRepository: AuthRepository,
-    private val settingsRepository: SettingsRepository,
+    settingsRepository: SettingsRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PendingRequestsState, PendingRequestsEvent, PendingRequestsAction>(
     initialState = savedStateHandle[KEY_STATE] ?: PendingRequestsState(

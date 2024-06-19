@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.settings.folders
 
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.FolderView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository

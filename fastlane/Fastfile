@@ -131,10 +131,6 @@ platform :android do
         nextVersionName = options[:versionName].to_s
     end
 
-    # Append "-native" to the builds so they are easily distinguished from MAUI builds while both
-    # are being distributed.
-    nextVersionName = nextVersionName + "-native"
-
     # Replace version information.
     puts "Setting version code to #{options[:versionCode]}."
     buildConfigText.gsub!("versionCode = #{currentVersionCode}", "versionCode = #{options[:versionCode]}")
@@ -200,9 +196,16 @@ platform :android do
   desc "Publish PlayStore bundle to Google Play Store Internal testing track"
   lane :publishForInternalTesting do
     upload_to_play_store(
+      package_name: "com.x8bit.bitwarden",
       track: "internal",
       release_status: "draft",
       aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab"
+    )
+    upload_to_play_store(
+      package_name: "com.x8bit.bitwarden.beta",
+      track: "internal",
+      release_status: "draft",
+      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab"
     )
   end
 end

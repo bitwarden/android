@@ -7,5 +7,5 @@ fun createMockAttachmentJsonRequest(number: Int): AttachmentJsonRequest =
     AttachmentJsonRequest(
         fileName = "mockFileName-$number",
         key = "mockKey-$number",
-        fileSize = "1000",
+        fileSize = "1",
     )

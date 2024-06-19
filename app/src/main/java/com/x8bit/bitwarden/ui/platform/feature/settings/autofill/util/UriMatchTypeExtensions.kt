@@ -22,12 +22,12 @@ val UriMatchType.displayLabel: Text
 /**
  * Convert this internal [UriMatchType] to the sdk model.
  */
-fun UriMatchType.toSdkUriMatchType(): com.bitwarden.core.UriMatchType =
+fun UriMatchType.toSdkUriMatchType(): com.bitwarden.vault.UriMatchType =
     when (this) {
-        UriMatchType.DOMAIN -> com.bitwarden.core.UriMatchType.DOMAIN
-        UriMatchType.EXACT -> com.bitwarden.core.UriMatchType.EXACT
-        UriMatchType.HOST -> com.bitwarden.core.UriMatchType.HOST
-        UriMatchType.NEVER -> com.bitwarden.core.UriMatchType.NEVER
-        UriMatchType.REGULAR_EXPRESSION -> com.bitwarden.core.UriMatchType.REGULAR_EXPRESSION
-        UriMatchType.STARTS_WITH -> com.bitwarden.core.UriMatchType.STARTS_WITH
+        UriMatchType.DOMAIN -> com.bitwarden.vault.UriMatchType.DOMAIN
+        UriMatchType.EXACT -> com.bitwarden.vault.UriMatchType.EXACT
+        UriMatchType.HOST -> com.bitwarden.vault.UriMatchType.HOST
+        UriMatchType.NEVER -> com.bitwarden.vault.UriMatchType.NEVER
+        UriMatchType.REGULAR_EXPRESSION -> com.bitwarden.vault.UriMatchType.REGULAR_EXPRESSION
+        UriMatchType.STARTS_WITH -> com.bitwarden.vault.UriMatchType.STARTS_WITH
     }

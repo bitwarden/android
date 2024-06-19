@@ -27,6 +27,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountActionItem
 import com.x8bit.bitwarden.ui.platform.components.account.BitwardenAccountSwitcher
@@ -43,6 +44,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -69,6 +71,7 @@ fun VaultItemListingScreen(
     onNavigateToEditSendItem: (sendId: String) -> Unit,
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
+    fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
@@ -130,6 +133,10 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.NavigateToCollectionItem -> {
                 onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
+
+            is VaultItemListingEvent.CompleteFido2Create -> {
+                fido2CompletionManager.completeFido2Create(event.result)
+            }
         }
     }
 
@@ -137,6 +144,13 @@ fun VaultItemListingScreen(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(VaultItemListingsAction.DismissDialogClick) }
+        },
+        onDismissFido2ErrorDialog = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.DismissFido2CreationErrorDialogClick,
+                )
+            }
         },
     )
 
@@ -153,6 +167,7 @@ fun VaultItemListingScreen(
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
     onDismissRequest: () -> Unit,
+    onDismissFido2ErrorDialog: () -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -165,6 +180,14 @@ private fun VaultItemListingDialogs(
 
         is VaultItemListingState.DialogState.Loading -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(dialogState.message),
+        )
+
+        is VaultItemListingState.DialogState.Fido2CreationFail -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissFido2ErrorDialog,
         )
 
         null -> Unit

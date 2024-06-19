@@ -86,7 +86,7 @@
   <string name="app_extension">Uygulama uzantısı</string>
   <string name="autofill_accessibility_description">Uygulamalarda ve web\'de giriş bilgilerinizi otomatik doldurmak için Bitwarden erişilebilirlik hizmetini kullanabilirsiniz.</string>
   <string name="autofill_service">Otomatik doldurma hizmeti</string>
-  <string name="set_bitwarden_as_passkey_manager_description">Set Bitwarden as your passkey provider in device settings.</string>
+  <string name="set_bitwarden_as_passkey_manager_description">Cihaz ayarlarınızdan Bitwarden\'ı geçiş anahtarı sağlayıcınız olarak ayarlayın.</string>
   <string name="avoid_ambiguous_characters">Okurken karışabilecek karakterleri kullanma</string>
   <string name="bitwarden_app_extension">Bitwarden uygulama uzantısı</string>
   <string name="bitwarden_app_extension_alert2">Kasanıza yeni hesaplar eklemenin en kolay yolu Bitwarden uygulama uzantısıdır. Bitwarden uygulama uzantısı hakkında daha fazla bilgi almak için \"Ayarlar\" ekranına bakabilirsiniz.</string>
@@ -858,7 +858,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="continue_to_contact_support">Destek ekibiyle iletişim kurmak ister misiniz?</string>
   <string name="continue_to_privacy_policy">Gizlilik ilkelerine gidilsin mi?</string>
   <string name="continue_to_app_store">App Store\'a gitmek ister misiniz?</string>
-  <string name="continue_to_device_settings">Continue to device Settings?</string>
+  <string name="continue_to_device_settings">Cihaz ayarlarına gidilsin mi?</string>
   <string name="two_step_login_description_long">Bitwarden web uygulamasında iki aşamalı girişi ayarlayarak hesabınızın güvenliğini artırabilirsiniz.</string>
   <string name="change_master_password_description_long">Ana parolanızı Bitwarden web uygulamasında değiştirebilirsiniz.</string>
   <string name="you_can_import_data_to_your_vault_on_x">Verilerinizi %1$s adresinden kasanıza aktarabilirsiniz.</string>
@@ -875,7 +875,7 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="your_organization_permissions_were_updated_requering_you_to_set_a_master_password">Kuruluş izinleriniz güncellendi ve bir ana parola belirlemeniz gerekiyor.</string>
   <string name="your_organization_requires_you_to_set_a_master_password">Kuruluşunuz bir ana parola belirlemenizi gerektiriyor.</string>
   <string name="set_up_an_unlock_option_to_change_your_vault_timeout_action">Kasa zaman aşımı eyleminizi değiştirmek için bir kilit açma yöntemi ayarlayın.</string>
-  <string name="choose_a_login_to_save_this_passkey_to">Choose a login to save this passkey to</string>
+  <string name="choose_a_login_to_save_this_passkey_to">Bu geçiş anahtarının kaydedileceği hesabı seçin</string>
   <string name="save_passkey_as_new_login">Geçiş anahtarını yeni hesap olarak kaydet</string>
   <string name="save_passkey">Geçiş anahtarını kaydet</string>
   <string name="passkeys_for_x">%1$s geçiş anahtarları</string>
@@ -889,8 +889,8 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">Verification required for this action. Set up an unlock method in Bitwarden to continue.</string>
   <string name="error_creating_passkey">Geçiş anahtarı oluşturma hatası</string>
   <string name="error_reading_passkey">Geçiş anahtarı okuma hatası</string>
-  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">There was a problem creating a passkey for %1$s. Try again later.</string>
-  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">There was a problem reading your passkey for %1$s. Try again later.</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">%1$s için geçiş anahtarı oluşturulamadı. Daha sonra tekrar deneyin.</string>
+  <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">%1$s için geçiş anahtarı okunamadı. Daha sonra tekrar deneyin.</string>
   <string name="verifying_identity_ellipsis">Kimlik doğrulanıyor...</string>
   <string name="passwords">Parolalar</string>
   <string name="unknown_account">Bilinmeyen hesap</string>
@@ -898,18 +898,18 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="get_instant_access_to_your_passwords_and_passkeys">Parolalarınıza ve geçiş anahtarlarınıza anında erişin!</string>
   <string name="set_up_auto_fill_description_long">To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
-  <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
-  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
-  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
-  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
+  <string name="second_dot_turn_on_auto_fill">Oto-Doldurma\'yı Etkinleştir</string>
+  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">Parolalarınızı ve geçiş anahtarlarını kullanmak için \"Bitwarden\" seçin</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Geçiş anahtarınız Bitwarden kasasına kaydedilecektir</string>
+  <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">%1$s için geçiş anahtarınız Bitwarden kasasına kaydedilecektir</string>
   <string name="organization_unassigned_items_message_useu_description_long">Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
   <string name="organization_unassigned_items_message_self_host_041624_description_long">On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
   <string name="remind_me_later">Daha sonra hatırlat</string>
   <string name="notice">Dikkat</string>
   <string name="passkeys_not_supported_for_this_app">Bu uygulamada geçiş anahtarları desteklenmiyor</string>
-  <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
-  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
-  <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
-  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
-  <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Geçiş anahtarı eylemi başarısız oldu çünkü tarayıcı ayrıcalıklı değil</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Geçiş anahtarı eylemi başarısız oldu çünkü tarayıcı imzası uyumsuz</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">Geçiş anahtarı eylemi başarısız oldu çünkü varlık bağlantıları eksik</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Geçiş anahtarı eylemi başarısız oldu çünkü uygulama varlık bağlantılarında bulunamadı</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Geçiş anahtarı eylemi başarısız oldu çünkü uygulama doğrulanamadı</string>
 </resources>

@@ -1,14 +1,15 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import android.os.SystemClock
-import com.bitwarden.core.AuthRequestMethod
-import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.bitwarden.AuthRequestMethod
+import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeviceDataModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
@@ -383,7 +384,7 @@ class AuthRepositoryImpl(
         masterPassword: String,
     ): DeleteAccountResult {
         val profile = authDiskSource.userState?.activeAccount?.profile
-            ?: return DeleteAccountResult.Error
+            ?: return DeleteAccountResult.Error(message = null)
         mutableHasPendingAccountDeletionStateFlow.value = true
         return authSdkSource
             .hashPassword(
@@ -398,12 +399,7 @@ class AuthRepositoryImpl(
                     oneTimePassword = null,
                 )
             }
-            .onSuccess { logout() }
-            .onFailure { clearPendingAccountDeletion() }
-            .fold(
-                onFailure = { DeleteAccountResult.Error },
-                onSuccess = { DeleteAccountResult.Success },
-            )
+            .finalizeDeleteAccount()
     }
 
     override suspend fun deleteAccountWithOneTimePassword(
@@ -415,13 +411,34 @@ class AuthRepositoryImpl(
                 masterPasswordHash = null,
                 oneTimePassword = oneTimePassword,
             )
-            .onSuccess { logout() }
-            .onFailure { clearPendingAccountDeletion() }
-            .fold(
-                onFailure = { DeleteAccountResult.Error },
-                onSuccess = { DeleteAccountResult.Success },
-            )
+            .finalizeDeleteAccount()
     }
+
+    private fun Result<DeleteAccountResponseJson>.finalizeDeleteAccount(): DeleteAccountResult =
+        fold(
+            onFailure = {
+                clearPendingAccountDeletion()
+                DeleteAccountResult.Error(message = null)
+            },
+            onSuccess = { response ->
+                when (response) {
+                    is DeleteAccountResponseJson.Invalid -> {
+                        clearPendingAccountDeletion()
+                        DeleteAccountResult.Error(
+                            message = response.validationErrors
+                                ?.values
+                                ?.firstOrNull()
+                                ?.firstOrNull(),
+                        )
+                    }
+
+                    DeleteAccountResponseJson.Success -> {
+                        logout()
+                        DeleteAccountResult.Success
+                    }
+                }
+            },
+        )
 
     @Suppress("ReturnCount")
     override suspend fun createNewSsoUser(): NewSsoUserResult {

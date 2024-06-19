@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.autofill.manager
 
 import app.cash.turbine.test
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals

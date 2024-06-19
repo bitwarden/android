@@ -96,7 +96,6 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { syncIfNecessary() } just runs
             every { lockVaultForCurrentUser() } just runs
             every { lockVault(any()) } just runs
-            coEvery { shouldShowUnassignedItemsInfo() } returns false
         }
 
     @Test
@@ -1098,48 +1097,6 @@ class VaultViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultAction.TryAgainClick)
 
         verify { vaultRepository.sync() }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `UnassignedItemsAcknowledgeClick should acknowledge the message and clear the dialog state`() {
-        coEvery { vaultRepository.shouldShowUnassignedItemsInfo() } returns true
-        every { vaultRepository.acknowledgeUnassignedItemsInfo(hasAcknowledged = true) } just runs
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(VaultAction.UnassignedItemsAcknowledgeClick)
-
-        verify(exactly = 1) {
-            vaultRepository.acknowledgeUnassignedItemsInfo(hasAcknowledged = true)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ReceiveUnassignedItemsResult should display the unassigned items dialog when result is true`() {
-        val initialState = DEFAULT_STATE
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(VaultAction.Internal.ReceiveUnassignedItemsResult(result = true))
-
-        assertEquals(
-            initialState.copy(dialog = VaultState.DialogState.UnassignedItems),
-            viewModel.stateFlow.value,
-        )
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `ReceiveUnassignedItemsResult should not display the unassigned items dialog when result is false`() {
-        val initialState = DEFAULT_STATE
-        val viewModel = createViewModel()
-
-        viewModel.trySendAction(VaultAction.Internal.ReceiveUnassignedItemsResult(result = false))
-
-        assertEquals(
-            initialState.copy(dialog = null),
-            viewModel.stateFlow.value,
-        )
     }
 
     @Test

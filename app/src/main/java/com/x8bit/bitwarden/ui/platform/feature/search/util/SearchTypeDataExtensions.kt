@@ -3,13 +3,13 @@
 package com.x8bit.bitwarden.ui.platform.feature.search.util
 
 import androidx.annotation.DrawableRes
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.SendType
-import com.bitwarden.core.SendView
+import com.bitwarden.send.SendType
+import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.base.util.asText

@@ -3,8 +3,8 @@ package com.x8bit.bitwarden.ui.tools.feature.generator.passwordhistory
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.PasswordHistoryView
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.PasswordHistoryView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -38,7 +38,7 @@ class PasswordHistoryViewModel @Inject constructor(
     private val clock: Clock,
     private val clipboardManager: BitwardenClipboardManager,
     private val generatorRepository: GeneratorRepository,
-    private val vaultRepository: VaultRepository,
+    vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<PasswordHistoryState, PasswordHistoryEvent, PasswordHistoryAction>(
     initialState = savedStateHandle[KEY_STATE]

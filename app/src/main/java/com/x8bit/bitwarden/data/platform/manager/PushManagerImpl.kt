@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SyncFolderUpsertData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendDeleteData
 import com.x8bit.bitwarden.data.platform.manager.model.SyncSendUpsertData
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -106,14 +107,21 @@ class PushManagerImpl @Inject constructor(
             .launchIn(unconfinedScope)
     }
 
-    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
-    override fun onMessageReceived(data: String) {
-        val notification = try {
-            json.decodeFromString<BitwardenNotification>(data)
-        } catch (exception: IllegalArgumentException) {
-            return
-        }
+    override fun onMessageReceived(data: Map<String, String>) {
+        val notificationType = data["type"]
+            ?.let { json.decodeFromStringOrNull<NotificationType>(string = it) }
+            ?: return
+        val payload = data["payload"] ?: return
+        val notification = BitwardenNotification(
+            contextId = data["contextId"],
+            notificationType = notificationType,
+            payload = payload,
+        )
+        onMessageReceived(notification)
+    }
 
+    @Suppress("LongMethod", "CyclomaticComplexMethod", "ReturnCount")
+    private fun onMessageReceived(notification: BitwardenNotification) {
         if (authDiskSource.uniqueAppId == notification.contextId) return
 
         val userId = activeUserId ?: return

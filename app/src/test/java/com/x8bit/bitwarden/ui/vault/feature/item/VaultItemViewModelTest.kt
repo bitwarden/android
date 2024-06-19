@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -387,8 +387,9 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     } returns DEFAULT_VIEW_STATE
                 }
                 mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-                mutableAuthCodeItemFlow.value =
-                    DataState.Loaded(data = createVerificationCodeItem())
+                mutableAuthCodeItemFlow.value = DataState.Loaded(
+                    data = createVerificationCodeItem(),
+                )
 
                 val viewModel = createViewModel(state = DEFAULT_STATE)
                 coEvery {
@@ -414,40 +415,39 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
         @Test
         @Suppress("MaxLineLength")
-        fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() =
-            runTest {
-                val mockCipherView = mockk<CipherView> {
-                    every {
-                        toViewState(
-                            isPremiumUser = true,
-                            hasMasterPassword = true,
-                            totpCodeItemData = createTotpCodeData(),
-                        )
-                    } returns DEFAULT_VIEW_STATE
-                }
-                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
-                mutableAuthCodeItemFlow.value =
-                    DataState.Loaded(data = createVerificationCodeItem())
-                val viewModel = createViewModel(state = DEFAULT_STATE)
-                coEvery {
-                    vaultRepo.restoreCipher(
-                        cipherId = VAULT_ITEM_ID,
-                        cipherView = createMockCipherView(number = 1),
+        fun `ConfirmRestoreClick with RestoreCipherResult Failure should should Show generic error`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
                     )
-                } returns RestoreCipherResult.Error
-
-                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
-
-                assertEquals(
-                    DEFAULT_STATE.copy(
-                        viewState = DEFAULT_VIEW_STATE,
-                        dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    ),
-                    viewModel.stateFlow.value,
-                )
+                } returns DEFAULT_VIEW_STATE
             }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+
+            val viewModel = createViewModel(state = DEFAULT_STATE)
+            coEvery {
+                vaultRepo.restoreCipher(
+                    cipherId = VAULT_ITEM_ID,
+                    cipherView = createMockCipherView(number = 1),
+                )
+            } returns RestoreCipherResult.Error
+
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    viewState = DEFAULT_VIEW_STATE,
+                    dialog = VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
 
         @Test
         fun `on EditClick should do nothing when ViewState is not Content`() = runTest {
@@ -1399,7 +1399,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
 
                 coEvery {
-                    mockFileManager.deleteFile(any())
+                    mockFileManager.delete(any())
                 } just runs
 
                 val uri = mockk<Uri>()
@@ -1424,7 +1424,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
 
                 coVerify(exactly = 1) {
-                    mockFileManager.deleteFile(file)
+                    mockFileManager.delete(file)
                     mockFileManager.fileToUri(uri, file)
                 }
             }
@@ -1437,7 +1437,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
 
                 coEvery {
-                    mockFileManager.deleteFile(any())
+                    mockFileManager.delete(any())
                 } just runs
 
                 val uri = mockk<Uri>()
@@ -1466,7 +1466,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 }
 
                 coVerify(exactly = 1) {
-                    mockFileManager.deleteFile(file)
+                    mockFileManager.delete(file)
                     mockFileManager.fileToUri(uri, file)
                 }
             }
@@ -1477,7 +1477,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(state = DEFAULT_STATE, tempAttachmentFile = file)
 
             coEvery {
-                mockFileManager.deleteFile(any())
+                mockFileManager.delete(any())
             } just runs
 
             viewModel.trySendAction(VaultItemAction.Common.NoAttachmentFileLocationReceive)
@@ -1491,7 +1491,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
 
-            coVerify { mockFileManager.deleteFile(file) }
+            coVerify { mockFileManager.delete(file) }
         }
     }
 

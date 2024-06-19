@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -23,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val specialCircumstanceManager: SpecialCircumstanceManager,
+    specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
 ) {
@@ -91,6 +92,13 @@ class RootNavViewModel @Inject constructor(
 
                     is SpecialCircumstance.PasswordlessRequest -> {
                         RootNavState.VaultUnlockedForAuthRequest
+                    }
+
+                    is SpecialCircumstance.Fido2Save -> {
+                        RootNavState.VaultUnlockedForFido2Save(
+                            activeUserId = userState.activeUserId,
+                            fido2CredentialRequest = specialCircumstance.fido2CredentialRequest,
+                        )
                     }
 
                     SpecialCircumstance.GeneratorShortcut,
@@ -170,6 +178,20 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlockedForAutofillSelection(
         val activeUserId: String,
         val type: AutofillSelectionData.Type,
+    ) : RootNavState()
+
+    /**
+     * App should show an add item screen for a user to complete the saving of data collected by
+     * the fido2 credential manager framework
+     *
+     * @param activeUserId ID of the active user. Indirectly used to notify [RootNavViewModel] the
+     * active user has changed.
+     * @param fido2CredentialRequest System request containing FIDO credential data.
+     */
+    @Parcelize
+    data class VaultUnlockedForFido2Save(
+        val activeUserId: String,
+        val fido2CredentialRequest: Fido2CredentialRequest,
     ) : RootNavState()
 
     /**

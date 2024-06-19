@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.manager
 
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import kotlinx.coroutines.flow.StateFlow

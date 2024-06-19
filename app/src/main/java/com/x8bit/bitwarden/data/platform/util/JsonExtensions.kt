@@ -14,6 +14,6 @@ inline fun <reified T> Json.decodeFromStringOrNull(
         decodeFromString(string = string)
     } catch (e: SerializationException) {
         null
-    } catch (e: IllegalStateException) {
+    } catch (e: IllegalArgumentException) {
         null
     }

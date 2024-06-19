@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.SendType
+import com.bitwarden.send.SendType
+import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
@@ -63,6 +63,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
+                isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "LoginCipherIcon",
             )
@@ -100,6 +101,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
+                isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
             )
@@ -142,6 +144,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
+                isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "CardCipherIcon",
             )
@@ -176,6 +179,7 @@ fun createMockDisplayItemForCipher(
                 ),
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
+                isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "IdentityCipherIcon",
             )
@@ -224,6 +228,7 @@ fun createMockDisplayItemForSend(
                 ),
                 optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
+                isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
             )
@@ -262,6 +267,7 @@ fun createMockDisplayItemForSend(
                 ),
                 optionsTestTag = "SendOptionsButton",
                 isAutofill = false,
+                isFido2Creation = false,
                 shouldShowMasterPasswordReprompt = false,
                 iconTestTag = null,
             )

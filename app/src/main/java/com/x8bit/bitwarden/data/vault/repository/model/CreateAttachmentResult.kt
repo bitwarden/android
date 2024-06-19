@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.repository.model
 
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 
 /**
  * Models result of creating an attachment.

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
 import android.content.Context
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.LoginUriView
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.LoginUriView
+import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull

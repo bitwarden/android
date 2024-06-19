@@ -36,7 +36,7 @@ private const val KEY_STATE = "state"
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private val environmentRepository: EnvironmentRepository,
+    environmentRepository: EnvironmentRepository,
     private val vaultRepository: VaultRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LoginState, LoginEvent, LoginAction>(

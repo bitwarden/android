@@ -1,19 +1,18 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.CollectionView
+import com.bitwarden.bitwarden.ExportFormat
+import com.bitwarden.bitwarden.InitOrgCryptoRequest
+import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
-import com.bitwarden.core.ExportFormat
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.InitOrgCryptoRequest
-import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.core.Send
-import com.bitwarden.core.SendType
-import com.bitwarden.core.SendView
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.send.Send
+import com.bitwarden.send.SendType
+import com.bitwarden.send.SendView
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
@@ -40,14 +39,9 @@ import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
-import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateCipherInOrganizationJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
-import com.x8bit.bitwarden.data.vault.datasource.network.model.ShareCipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherCollectionsJsonRequest
-import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateFolderResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateSendResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.service.CiphersService
@@ -55,37 +49,27 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
-import com.x8bit.bitwarden.data.vault.manager.model.DownloadResult
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
-import com.x8bit.bitwarden.data.vault.repository.model.CreateAttachmentResult
-import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteAttachmentResult
-import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
-import com.x8bit.bitwarden.data.vault.repository.model.DownloadAttachmentResult
 import com.x8bit.bitwarden.data.vault.repository.model.ExportVaultDataResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
-import com.x8bit.bitwarden.data.vault.repository.model.RestoreCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.SendData
-import com.x8bit.bitwarden.data.vault.repository.model.ShareCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
-import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.sortAlphabetically
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipher
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkFolder
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkSend
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
@@ -122,9 +106,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
-import java.io.File
 import java.time.Clock
-import java.time.Instant
 import java.time.temporal.ChronoUnit
 
 /**
@@ -146,14 +128,16 @@ class VaultRepositoryImpl(
     private val vaultSdkSource: VaultSdkSource,
     private val authDiskSource: AuthDiskSource,
     private val settingsDiskSource: SettingsDiskSource,
+    private val cipherManager: CipherManager,
     private val fileManager: FileManager,
     private val vaultLockManager: VaultLockManager,
     private val totpCodeManager: TotpCodeManager,
     private val userLogoutManager: UserLogoutManager,
-    private val pushManager: PushManager,
+    pushManager: PushManager,
     private val clock: Clock,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
+    CipherManager by cipherManager,
     VaultLockManager by vaultLockManager {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
@@ -617,387 +601,6 @@ class VaultRepositoryImpl(
             organizationKeys = organizationKeys,
         )
 
-    override suspend fun createCipher(cipherView: CipherView): CreateCipherResult {
-        val userId = activeUserId ?: return CreateCipherResult.Error
-        return vaultSdkSource
-            .encryptCipher(
-                userId = userId,
-                cipherView = cipherView,
-            )
-            .flatMap { cipher ->
-                ciphersService
-                    .createCipher(
-                        body = cipher.toEncryptedNetworkCipher(),
-                    )
-            }
-            .fold(
-                onFailure = {
-                    CreateCipherResult.Error
-                },
-                onSuccess = {
-                    vaultDiskSource.saveCipher(userId = userId, cipher = it)
-                    CreateCipherResult.Success
-                },
-            )
-    }
-
-    override suspend fun createCipherInOrganization(
-        cipherView: CipherView,
-        collectionIds: List<String>,
-    ): CreateCipherResult {
-        val userId = activeUserId ?: return CreateCipherResult.Error
-        return vaultSdkSource
-            .encryptCipher(
-                userId = userId,
-                cipherView = cipherView,
-            )
-            .flatMap { cipher ->
-                ciphersService
-                    .createCipherInOrganization(
-                        body = CreateCipherInOrganizationJsonRequest(
-                            cipher = cipher.toEncryptedNetworkCipher(),
-                            collectionIds = collectionIds,
-                        ),
-                    )
-            }
-            .onSuccess {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = it.copy(collectionIds = collectionIds),
-                )
-            }
-            .fold(
-                onFailure = { CreateCipherResult.Error },
-                onSuccess = { CreateCipherResult.Success },
-            )
-    }
-
-    override suspend fun hardDeleteCipher(cipherId: String): DeleteCipherResult {
-        val userId = activeUserId ?: return DeleteCipherResult.Error
-        return ciphersService
-            .hardDeleteCipher(cipherId)
-            .onSuccess { vaultDiskSource.deleteCipher(userId, cipherId) }
-            .fold(
-                onSuccess = { DeleteCipherResult.Success },
-                onFailure = { DeleteCipherResult.Error },
-            )
-    }
-
-    override suspend fun softDeleteCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): DeleteCipherResult {
-        val userId = activeUserId ?: return DeleteCipherResult.Error
-        return ciphersService
-            .softDeleteCipher(cipherId)
-            .fold(
-                onSuccess = {
-                    vaultSdkSource
-                        .encryptCipher(
-                            userId = userId,
-                            cipherView = cipherView.copy(
-                                deletedDate = Instant.now(),
-                            ),
-                        )
-                        .onSuccess { cipher ->
-                            vaultDiskSource.saveCipher(
-                                userId = userId,
-                                cipher = cipher.toEncryptedNetworkCipherResponse(),
-                            )
-                        }
-                    DeleteCipherResult.Success
-                },
-                onFailure = { DeleteCipherResult.Error },
-            )
-    }
-
-    override suspend fun deleteCipherAttachment(
-        cipherId: String,
-        attachmentId: String,
-        cipherView: CipherView,
-    ): DeleteAttachmentResult {
-        val userId = activeUserId ?: return DeleteAttachmentResult.Error
-        return ciphersService
-            .deleteCipherAttachment(
-                cipherId = cipherId,
-                attachmentId = attachmentId,
-            )
-            .flatMap {
-                vaultSdkSource
-                    .encryptCipher(
-                        userId = userId,
-                        cipherView = cipherView.copy(
-                            attachments = cipherView.attachments?.mapNotNull {
-                                if (it.id == attachmentId) null else it
-                            },
-                        ),
-                    )
-            }
-            .onSuccess { cipher ->
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = cipher.toEncryptedNetworkCipherResponse(),
-                )
-            }
-            .fold(
-                onSuccess = { DeleteAttachmentResult.Success },
-                onFailure = { DeleteAttachmentResult.Error },
-            )
-    }
-
-    override suspend fun restoreCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): RestoreCipherResult {
-        val userId = activeUserId ?: return RestoreCipherResult.Error
-        return ciphersService
-            .restoreCipher(cipherId)
-            .flatMap {
-                vaultSdkSource.encryptCipher(
-                    userId = userId,
-                    cipherView = cipherView.copy(
-                        deletedDate = null,
-                    ),
-                )
-            }
-            .onSuccess { cipher ->
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = cipher.toEncryptedNetworkCipherResponse(),
-                )
-            }
-            .fold(
-                onSuccess = { RestoreCipherResult.Success },
-                onFailure = { RestoreCipherResult.Error },
-            )
-    }
-
-    override suspend fun updateCipher(
-        cipherId: String,
-        cipherView: CipherView,
-    ): UpdateCipherResult {
-        val userId = activeUserId ?: return UpdateCipherResult.Error(null)
-        return vaultSdkSource
-            .encryptCipher(
-                userId = userId,
-                cipherView = cipherView,
-            )
-            .flatMap { cipher ->
-                ciphersService.updateCipher(
-                    cipherId = cipherId,
-                    body = cipher.toEncryptedNetworkCipher(),
-                )
-            }
-            .fold(
-                onFailure = { UpdateCipherResult.Error(errorMessage = null) },
-                onSuccess = { response ->
-                    when (response) {
-                        is UpdateCipherResponseJson.Invalid -> {
-                            UpdateCipherResult.Error(errorMessage = response.message)
-                        }
-
-                        is UpdateCipherResponseJson.Success -> {
-                            vaultDiskSource.saveCipher(
-                                userId = userId,
-                                cipher = response.cipher
-                                    .copy(collectionIds = cipherView.collectionIds),
-                            )
-                            UpdateCipherResult.Success
-                        }
-                    }
-                },
-            )
-    }
-
-    override suspend fun shareCipher(
-        cipherId: String,
-        cipherView: CipherView,
-        collectionIds: List<String>,
-    ): ShareCipherResult {
-        val userId = activeUserId ?: return ShareCipherResult.Error
-        return vaultSdkSource
-            .encryptCipher(
-                userId = userId,
-                cipherView = cipherView,
-            )
-            .flatMap { cipher ->
-                ciphersService.shareCipher(
-                    cipherId = cipherId,
-                    body = ShareCipherJsonRequest(
-                        cipher = cipher.toEncryptedNetworkCipher(),
-                        collectionIds = collectionIds,
-                    ),
-                )
-            }
-            .onSuccess {
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = it.copy(collectionIds = collectionIds),
-                )
-            }
-            .fold(
-                onFailure = { ShareCipherResult.Error },
-                onSuccess = { ShareCipherResult.Success },
-            )
-    }
-
-    override suspend fun updateCipherCollections(
-        cipherId: String,
-        cipherView: CipherView,
-        collectionIds: List<String>,
-    ): ShareCipherResult {
-        val userId = activeUserId ?: return ShareCipherResult.Error
-        return ciphersService
-            .updateCipherCollections(
-                cipherId = cipherId,
-                body = UpdateCipherCollectionsJsonRequest(collectionIds = collectionIds),
-            )
-            .flatMap {
-                vaultSdkSource
-                    .encryptCipher(
-                        userId = userId,
-                        cipherView = cipherView.copy(collectionIds = collectionIds),
-                    )
-            }
-            .onSuccess { cipher ->
-                vaultDiskSource.saveCipher(
-                    userId = userId,
-                    cipher = cipher.toEncryptedNetworkCipherResponse(),
-                )
-            }
-            .fold(
-                onSuccess = { ShareCipherResult.Success },
-                onFailure = { ShareCipherResult.Error },
-            )
-    }
-
-    override suspend fun createAttachment(
-        cipherId: String,
-        cipherView: CipherView,
-        fileSizeBytes: String,
-        fileName: String,
-        fileUri: Uri,
-    ): CreateAttachmentResult {
-        val userId = activeUserId ?: return CreateAttachmentResult.Error
-        val attachmentView = AttachmentView(
-            id = null,
-            url = null,
-            size = fileSizeBytes,
-            sizeName = null,
-            fileName = fileName,
-            key = null,
-        )
-        return vaultSdkSource
-            .encryptCipher(
-                userId = userId,
-                cipherView = cipherView,
-            )
-            .flatMap { cipher ->
-                fileManager
-                    .uriToByteArray(fileUri = fileUri)
-                    .flatMap {
-                        vaultSdkSource.encryptAttachment(
-                            userId = userId,
-                            cipher = cipher,
-                            attachmentView = attachmentView,
-                            fileBuffer = it,
-                        )
-                    }
-            }
-            .flatMap { attachmentEncryptResult ->
-                ciphersService
-                    .createAttachment(
-                        cipherId = cipherId,
-                        body = AttachmentJsonRequest(
-                            // We know these values are present because
-                            // - the filename/size are passed into the function
-                            // - the SDK call fills in the key
-                            fileName = requireNotNull(attachmentEncryptResult.attachment.fileName),
-                            key = requireNotNull(attachmentEncryptResult.attachment.key),
-                            fileSize = requireNotNull(attachmentEncryptResult.attachment.size),
-                        ),
-                    )
-                    .flatMap { attachmentJsonResponse ->
-                        ciphersService.uploadAttachment(
-                            attachmentJsonResponse = attachmentJsonResponse,
-                            encryptedFile = attachmentEncryptResult.contents,
-                        )
-                    }
-            }
-            .map { it.copy(collectionIds = cipherView.collectionIds) }
-            .onSuccess {
-                // Save the send immediately, regardless of whether the decrypt succeeds
-                vaultDiskSource.saveCipher(userId = userId, cipher = it)
-            }
-            .flatMap {
-                vaultSdkSource.decryptCipher(
-                    userId = userId,
-                    cipher = it.toEncryptedSdkCipher(),
-                )
-            }
-            .fold(
-                onFailure = { CreateAttachmentResult.Error },
-                onSuccess = { CreateAttachmentResult.Success(it) },
-            )
-    }
-
-    @Suppress("ReturnCount")
-    override suspend fun downloadAttachment(
-        cipherView: CipherView,
-        attachmentId: String,
-    ): DownloadAttachmentResult {
-        val userId = requireNotNull(authDiskSource.userState?.activeUserId)
-
-        val cipher = vaultSdkSource
-            .encryptCipher(
-                userId = userId,
-                cipherView = cipherView,
-            )
-            .fold(
-                onSuccess = { it },
-                onFailure = { return DownloadAttachmentResult.Failure },
-            )
-        val attachment = cipher.attachments?.find { it.id == attachmentId }
-            ?: return DownloadAttachmentResult.Failure
-
-        val attachmentData = ciphersService
-            .getCipherAttachment(
-                cipherId = requireNotNull(cipher.id),
-                attachmentId = attachmentId,
-            )
-            .fold(
-                onSuccess = { it },
-                onFailure = { return DownloadAttachmentResult.Failure },
-            )
-
-        val url = attachmentData.url ?: return DownloadAttachmentResult.Failure
-
-        val encryptedFile = when (val result = fileManager.downloadFileToCache(url)) {
-            DownloadResult.Failure -> return DownloadAttachmentResult.Failure
-            is DownloadResult.Success -> result.file
-        }
-
-        val decryptedFile = File(encryptedFile.path + "_decrypted")
-        return vaultSdkSource
-            .decryptFile(
-                userId = userId,
-                cipher = cipher,
-                attachment = attachment,
-                encryptedFilePath = encryptedFile.path,
-                decryptedFilePath = decryptedFile.path,
-            )
-            .fold(
-                onSuccess = {
-                    encryptedFile.delete()
-                    DownloadAttachmentResult.Success(decryptedFile)
-                },
-                onFailure = {
-                    encryptedFile.delete()
-                    DownloadAttachmentResult.Failure
-                },
-            )
-    }
-
     @Suppress("ReturnCount")
     override suspend fun createSend(
         sendView: SendView,
@@ -1258,26 +861,6 @@ class VaultRepositoryImpl(
                 onSuccess = { ExportVaultDataResult.Success(it) },
                 onFailure = { ExportVaultDataResult.Error },
             )
-    }
-
-    @Suppress("ReturnCount")
-    override suspend fun shouldShowUnassignedItemsInfo(): Boolean {
-        val userId = activeUserId ?: return false
-        if (settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId) == false) {
-            return false
-        }
-        return ciphersService.hasUnassignedCiphers().fold(
-            onFailure = { false },
-            onSuccess = { it },
-        )
-    }
-
-    override fun acknowledgeUnassignedItemsInfo(hasAcknowledged: Boolean) {
-        val userId = activeUserId ?: return
-        settingsDiskSource.storeShouldCheckOrgUnassignedItems(
-            userId = userId,
-            shouldCheckOrgUnassignedItems = !hasAcknowledged,
-        )
     }
 
     /**
@@ -1658,7 +1241,7 @@ class VaultRepositoryImpl(
                                     )
                                     .also {
                                         // Delete encrypted file once it has been uploaded.
-                                        fileManager.deleteFile(encryptedFile)
+                                        fileManager.delete(encryptedFile)
                                     }
                                     .map { CreateSendJsonResponse.Success(it) }
                             }

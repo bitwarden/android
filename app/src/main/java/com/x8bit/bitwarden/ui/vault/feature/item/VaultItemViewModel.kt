@@ -4,7 +4,7 @@ import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.core.CipherView
+import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
@@ -353,7 +353,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleNoAttachmentFileLocationReceive() {
         viewModelScope.launch {
-            temporaryAttachmentData?.let { fileManager.deleteFile(it) }
+            temporaryAttachmentData?.let { fileManager.delete(it) }
         }
 
         mutableStateFlow.update {
@@ -932,7 +932,7 @@ class VaultItemViewModel @Inject constructor(
         action: VaultItemAction.Internal.AttachmentFinishedSavingToDisk,
     ) {
         viewModelScope.launch {
-            fileManager.deleteFile(action.file)
+            fileManager.delete(action.file)
         }
 
         if (action.isSaved) {

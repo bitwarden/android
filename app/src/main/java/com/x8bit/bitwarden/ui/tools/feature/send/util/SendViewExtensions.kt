@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.ui.tools.feature.send.util
 
-import com.bitwarden.core.SendView
+import com.bitwarden.send.SendView
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.tools.feature.send.model.SendStatusIcon
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction

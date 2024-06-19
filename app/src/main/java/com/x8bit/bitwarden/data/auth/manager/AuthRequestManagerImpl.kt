@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.bitwarden.AuthRequestResponse
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.AuthRequestTypeJson

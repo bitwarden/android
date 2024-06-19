@@ -1,20 +1,20 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import com.bitwarden.core.AttachmentView
-import com.bitwarden.core.CardView
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.Fido2Credential
-import com.bitwarden.core.FieldType
-import com.bitwarden.core.FieldView
-import com.bitwarden.core.IdentityView
-import com.bitwarden.core.LoginUriView
-import com.bitwarden.core.LoginView
-import com.bitwarden.core.PasswordHistoryView
-import com.bitwarden.core.SecureNoteType
-import com.bitwarden.core.SecureNoteView
-import com.bitwarden.core.UriMatchType
+import com.bitwarden.vault.AttachmentView
+import com.bitwarden.vault.CardView
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.Fido2Credential
+import com.bitwarden.vault.FieldType
+import com.bitwarden.vault.FieldView
+import com.bitwarden.vault.IdentityView
+import com.bitwarden.vault.LoginUriView
+import com.bitwarden.vault.LoginView
+import com.bitwarden.vault.PasswordHistoryView
+import com.bitwarden.vault.SecureNoteType
+import com.bitwarden.vault.SecureNoteView
+import com.bitwarden.vault.UriMatchType
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -102,13 +102,21 @@ fun createMockLoginView(
         fido2Credentials = createMockSdkFido2CredentialList(number, clock),
     )
 
-fun createMockSdkFido2CredentialList(number: Int, clock: Clock = FIXED_CLOCK) =
-    listOf(createMockSdkFido2CredentialView(number, clock))
-
-fun createMockSdkFido2CredentialView(
+/**
+ * Create a list of mock [Fido2Credential] with a given [number].
+ */
+fun createMockSdkFido2CredentialList(
     number: Int,
     clock: Clock = FIXED_CLOCK,
-) = Fido2Credential(
+): List<Fido2Credential> = listOf(createMockSdkFido2Credential(number, clock))
+
+/**
+ * Create a mock [Fido2Credential] with a given [number].
+ */
+fun createMockSdkFido2Credential(
+    number: Int,
+    clock: Clock = FIXED_CLOCK,
+): Fido2Credential = Fido2Credential(
     credentialId = "mockCredentialId-$number",
     keyType = "mockKeyType-$number",
     keyAlgorithm = "mockKeyAlgorithm-$number",
@@ -137,14 +145,14 @@ fun createMockUriView(number: Int): LoginUriView =
 /**
  * Create a mock [AttachmentView] with a given [number].
  */
-fun createMockAttachmentView(number: Int): AttachmentView =
+fun createMockAttachmentView(number: Int, key: String? = "mockKey-$number"): AttachmentView =
     AttachmentView(
         fileName = "mockFileName-$number",
         size = "1",
         sizeName = "mockSizeName-$number",
         id = "mockId-$number",
         url = "mockUrl-$number",
-        key = "mockKey-$number",
+        key = key,
     )
 
 /**

@@ -134,19 +134,19 @@ fun BitwardenTwoButtonDialog(
             ) {
                 BitwardenTextButton(
                     modifier = Modifier
-                        .testTag("AcceptAlertButton")
-                        .padding(horizontal = 4.dp),
-                    label = confirmButtonText,
-                    labelTextColor = confirmTextColor,
-                    onClick = onConfirmClick,
-                )
-                BitwardenTextButton(
-                    modifier = Modifier
                         .testTag("DismissAlertButton")
                         .padding(horizontal = 4.dp),
                     label = dismissButtonText,
                     labelTextColor = dismissTextColor,
                     onClick = onDismissClick,
+                )
+                BitwardenTextButton(
+                    modifier = Modifier
+                        .testTag("AcceptAlertButton")
+                        .padding(horizontal = 4.dp),
+                    label = confirmButtonText,
+                    labelTextColor = confirmTextColor,
+                    onClick = onConfirmClick,
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))

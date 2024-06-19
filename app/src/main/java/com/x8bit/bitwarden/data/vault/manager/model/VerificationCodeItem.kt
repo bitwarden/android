@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.vault.manager.model
 
-import com.bitwarden.core.LoginUriView
+import com.bitwarden.vault.LoginUriView
 
 /**
  * Models the items returned by the TotpCodeManager.

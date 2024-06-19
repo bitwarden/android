@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import android.net.Uri
-import com.bitwarden.core.CipherRepromptType
-import com.bitwarden.core.CipherType
-import com.bitwarden.core.CipherView
-import com.bitwarden.core.FolderView
-import com.bitwarden.core.SendType
+import com.bitwarden.send.SendType
+import com.bitwarden.vault.CipherRepromptType
+import com.bitwarden.vault.CipherType
+import com.bitwarden.vault.CipherView
+import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -393,6 +393,7 @@ class VaultItemListingDataExtensionsTest {
             isIconLoadingDisabled = false,
             baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
             autofillSelectionData = null,
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 
@@ -467,6 +468,7 @@ class VaultItemListingDataExtensionsTest {
                 type = AutofillSelectionData.Type.LOGIN,
                 uri = null,
             ),
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 
@@ -518,6 +520,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -536,6 +539,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -552,6 +556,7 @@ class VaultItemListingDataExtensionsTest {
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
                 autofillSelectionData = null,
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -571,6 +576,7 @@ class VaultItemListingDataExtensionsTest {
                     type = AutofillSelectionData.Type.LOGIN,
                     uri = "https://www.test.com",
                 ),
+                fido2CreationData = null,
                 hasMasterPassword = true,
             ),
         )
@@ -710,6 +716,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("1"),
             vaultFilterType = VaultFilterType.AllVaults,
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 
@@ -750,6 +757,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             itemListingType = VaultItemListingState.ItemListingType.Vault.Collection("mockId-1"),
             vaultFilterType = VaultFilterType.AllVaults,
+            fido2CreationData = null,
             hasMasterPassword = true,
         )
 

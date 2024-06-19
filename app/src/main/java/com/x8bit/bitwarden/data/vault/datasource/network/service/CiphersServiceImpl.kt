@@ -1,8 +1,10 @@
 package com.x8bit.bitwarden.data.vault.datasource.network.service
 
 import androidx.core.net.toUri
+import com.bitwarden.vault.Attachment
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
+import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.vault.datasource.network.api.AzureApi
 import com.x8bit.bitwarden.data.vault.datasource.network.api.CiphersApi
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
@@ -17,7 +19,8 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.UpdateCipherRespo
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.time.Clock
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
@@ -48,7 +51,7 @@ class CiphersServiceImpl(
 
     override suspend fun uploadAttachment(
         attachmentJsonResponse: AttachmentJsonResponse,
-        encryptedFile: ByteArray,
+        encryptedFile: File,
     ): Result<SyncResponseJson.Cipher> {
         val cipher = attachmentJsonResponse.cipherResponse
         return when (attachmentJsonResponse.fileUploadType) {
@@ -56,21 +59,13 @@ class CiphersServiceImpl(
                 ciphersApi.uploadAttachment(
                     cipherId = requireNotNull(cipher.id),
                     attachmentId = attachmentJsonResponse.attachmentId,
-                    body = MultipartBody
-                        .Builder(
-                            boundary = "--BWMobileFormBoundary${clock.instant().toEpochMilli()}",
-                        )
-                        .addPart(
-                            part = MultipartBody.Part.createFormData(
-                                body = encryptedFile.toRequestBody(
-                                    contentType = "application/octet-stream".toMediaType(),
-                                ),
-                                name = "data",
-                                filename = cipher
-                                    .attachments
-                                    ?.find { it.id == attachmentJsonResponse.attachmentId }
-                                    ?.fileName,
-                            ),
+                    body = this
+                        .createMultipartBodyBuilder(
+                            encryptedFile = encryptedFile,
+                            filename = cipher
+                                .attachments
+                                ?.find { it.id == attachmentJsonResponse.attachmentId }
+                                ?.fileName,
                         )
                         .build(),
                 )
@@ -83,7 +78,7 @@ class CiphersServiceImpl(
                         .RFC_1123_DATE_TIME
                         .format(ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC)),
                     version = attachmentJsonResponse.url.toUri().getQueryParameter("sv"),
-                    body = encryptedFile.toRequestBody(),
+                    body = encryptedFile.asRequestBody(),
                 )
             }
         }
@@ -109,6 +104,36 @@ class CiphersServiceImpl(
                     )
                     ?: throw throwable
             }
+
+    @Suppress("ReturnCount")
+    override suspend fun shareAttachment(
+        cipherId: String,
+        attachment: Attachment,
+        organizationId: String,
+        encryptedFile: File,
+    ): Result<Unit> {
+        val attachmentId = attachment.id
+            ?: return IllegalStateException("Attachment must have ID").asFailure()
+        val attachmentKey = attachment.key
+            ?: return IllegalStateException("Attachment must have Key").asFailure()
+        return ciphersApi.shareAttachment(
+            cipherId = cipherId,
+            attachmentId = attachmentId,
+            organizationId = organizationId,
+            body = this
+                .createMultipartBodyBuilder(
+                    encryptedFile = encryptedFile,
+                    filename = attachment.fileName,
+                )
+                .addPart(
+                    part = MultipartBody.Part.createFormData(
+                        name = "key",
+                        value = attachmentKey,
+                    ),
+                )
+                .build(),
+        )
+    }
 
     override suspend fun shareCipher(
         cipherId: String,
@@ -143,7 +168,7 @@ class CiphersServiceImpl(
             attachmentId = attachmentId,
         )
 
-    override suspend fun restoreCipher(cipherId: String): Result<Unit> =
+    override suspend fun restoreCipher(cipherId: String): Result<SyncResponseJson.Cipher> =
         ciphersApi.restoreCipher(cipherId = cipherId)
 
     override suspend fun getCipher(
@@ -162,4 +187,21 @@ class CiphersServiceImpl(
 
     override suspend fun hasUnassignedCiphers(): Result<Boolean> =
         ciphersApi.hasUnassignedCiphers()
+
+    private fun createMultipartBodyBuilder(
+        encryptedFile: File,
+        filename: String?,
+    ): MultipartBody.Builder =
+        MultipartBody
+            .Builder(boundary = "--BWMobileFormBoundary${clock.instant().toEpochMilli()}")
+            .setType(type = MultipartBody.FORM)
+            .addPart(
+                part = MultipartBody.Part.createFormData(
+                    body = encryptedFile.asRequestBody(
+                        contentType = "application/octet-stream".toMediaType(),
+                    ),
+                    name = "data",
+                    filename = filename,
+                ),
+            )
 }

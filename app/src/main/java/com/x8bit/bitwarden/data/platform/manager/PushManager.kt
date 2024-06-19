@@ -65,9 +65,9 @@ interface PushManager {
     val syncSendUpsertFlow: Flow<SyncSendUpsertData>
 
     /**
-     * Handles the necessary steps to take when a push notification with payload [data] is received.
+     * Handles the necessary steps to take when a push notification payload is received.
      */
-    fun onMessageReceived(data: String)
+    fun onMessageReceived(data: Map<String, String>)
 
     /**
      * Registers a [token] for the current user with Bitwarden's server if needed.

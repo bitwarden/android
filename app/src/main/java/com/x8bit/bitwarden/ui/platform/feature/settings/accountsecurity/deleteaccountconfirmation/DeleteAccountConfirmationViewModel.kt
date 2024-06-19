@@ -151,10 +151,11 @@ class DeleteAccountConfirmationViewModel @Inject constructor(
     ) {
         mutableStateFlow.update { currentState ->
             currentState.copy(
-                dialog = when (action.deleteAccountResult) {
-                    DeleteAccountResult.Error -> {
+                dialog = when (val result = action.deleteAccountResult) {
+                    is DeleteAccountResult.Error -> {
                         DeleteAccountConfirmationState.DeleteAccountConfirmationDialog.Error(
-                            message = R.string.generic_error_message.asText(),
+                            message = result.message?.asText()
+                                ?: R.string.generic_error_message.asText(),
                         )
                     }
 

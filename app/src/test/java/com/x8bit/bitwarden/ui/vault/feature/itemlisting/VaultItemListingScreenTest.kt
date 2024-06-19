@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
@@ -80,6 +81,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         every { shareText(any()) } just runs
         every { launchUri(any()) } just runs
     }
+    private val fido2CompletionManager: Fido2CompletionManager = mockk {
+        every { completeFido2Create(any()) } just runs
+    }
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultItemListingViewModel>(relaxed = true) {
@@ -95,6 +99,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             VaultItemListingScreen(
                 viewModel = viewModel,
                 intentManager = intentManager,
+                fido2CompletionManager = fido2CompletionManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItem = { onNavigateToVaultItemId = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
@@ -1555,6 +1560,7 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         ),
         optionsTestTag = "SendOptionsButton",
         isAutofill = false,
+        isFido2Creation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
     )
@@ -1576,6 +1582,7 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         ),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = false,
+        isFido2Creation = false,
         shouldShowMasterPasswordReprompt = false,
         iconTestTag = null,
     )
