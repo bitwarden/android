@@ -102,6 +102,36 @@ class RetrofitsTest {
     }
 
     @Test
+    fun `authenticatedEventsRetrofit should not invoke the RefreshAuthenticator on success`() =
+        runBlocking {
+            val testApi = retrofits
+                .authenticatedEventsRetrofit
+                .createMockRetrofit()
+                .create<TestApi>()
+
+            server.enqueue(MockResponse().setBody("""{}"""))
+
+            testApi.test()
+
+            assertFalse(isRefreshAuthenticatorCalled)
+        }
+
+    @Test
+    fun `authenticatedEventsRetrofit should invoke the RefreshAuthenticator on 401`() =
+        runBlocking {
+            val testApi = retrofits
+                .authenticatedEventsRetrofit
+                .createMockRetrofit()
+                .create<TestApi>()
+
+            server.enqueue(MockResponse().setResponseCode(401).setBody("""{}"""))
+
+            testApi.test()
+
+            assertTrue(isRefreshAuthenticatorCalled)
+        }
+
+    @Test
     fun `unauthenticatedApiRetrofit should not invoke the RefreshAuthenticator`() = runBlocking {
         val testApi = retrofits
             .unauthenticatedApiRetrofit
@@ -131,6 +161,24 @@ class RetrofitsTest {
         assertTrue(isheadersInterceptorCalled)
         assertFalse(isIdentityInterceptorCalled)
         assertFalse(isEventsInterceptorCalled)
+    }
+
+    @Test
+    fun `authenticatedEventsRetrofit should invoke the correct interceptors`() = runBlocking {
+        val testApi = retrofits
+            .authenticatedEventsRetrofit
+            .createMockRetrofit()
+            .create<TestApi>()
+
+        server.enqueue(MockResponse().setBody("""{}"""))
+
+        testApi.test()
+
+        assertTrue(isAuthInterceptorCalled)
+        assertFalse(isApiInterceptorCalled)
+        assertTrue(isheadersInterceptorCalled)
+        assertFalse(isIdentityInterceptorCalled)
+        assertTrue(isEventsInterceptorCalled)
     }
 
     @Test
