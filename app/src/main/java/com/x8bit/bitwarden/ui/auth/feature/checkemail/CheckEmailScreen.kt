@@ -130,7 +130,9 @@ fun CheckEmailScreen(
                     mainText = stringResource(id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account, state.email),
                     highlightText = state.email,
                     highlightSpanStyle = SpanStyle(
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
+                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                        fontWeight = FontWeight.Bold
                     )
                 )
                 Text(

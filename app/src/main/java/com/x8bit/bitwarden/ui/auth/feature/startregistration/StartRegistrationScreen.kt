@@ -40,6 +40,7 @@ import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
@@ -272,7 +273,8 @@ private fun TermsAndPrivacyText(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontWeight = FontWeight.Bold
             ),
             start = startIndexTerms,
             end = endIndexTerms
@@ -280,7 +282,8 @@ private fun TermsAndPrivacyText(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontWeight = FontWeight.Bold
             ),
             start = startIndexPrivacy,
             end = endIndexPrivacy
@@ -351,7 +354,8 @@ private fun ReceiveMarketingEmailsSwitch(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                fontWeight = FontWeight.Bold
             ),
             start = startIndexUnsubscribe,
             end = endIndexUnsubscribe
