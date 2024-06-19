@@ -3,21 +3,28 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.room.Room
 import com.x8bit.bitwarden.data.platform.datasource.di.EncryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.di.UnencryptedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSourceImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSourceImpl
+import com.x8bit.bitwarden.data.platform.datasource.disk.dao.OrganizationEventDao
+import com.x8bit.bitwarden.data.platform.datasource.disk.database.PlatformDatabase
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigrator
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacyAppCenterMigratorImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorage
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageImpl
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigratorImpl
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.vault.datasource.disk.convertor.ZonedDateTimeTypeConverter
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +48,38 @@ object PlatformDiskModule {
     ): EnvironmentDiskSource =
         EnvironmentDiskSourceImpl(
             sharedPreferences = sharedPreferences,
+            json = json,
+        )
+
+    @Provides
+    @Singleton
+    fun provideEventDatabase(app: Application): PlatformDatabase =
+        Room
+            .databaseBuilder(
+                context = app,
+                klass = PlatformDatabase::class.java,
+                name = "platform_database",
+            )
+            .fallbackToDestructiveMigration()
+            .addTypeConverter(ZonedDateTimeTypeConverter())
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideOrganizationEventDao(
+        database: PlatformDatabase,
+    ): OrganizationEventDao = database.organizationEventDao()
+
+    @Provides
+    @Singleton
+    fun provideEventDiskSource(
+        organizationEventDao: OrganizationEventDao,
+        dispatcherManager: DispatcherManager,
+        json: Json,
+    ): EventDiskSource =
+        EventDiskSourceImpl(
+            organizationEventDao = organizationEventDao,
+            dispatcherManager = dispatcherManager,
             json = json,
         )
 
