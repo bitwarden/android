@@ -187,8 +187,6 @@ namespace Bit.Core.Abstractions
         Task<BwRegion?> GetPreAuthRegionAsync();
         Task SetPreAuthRegionAsync(BwRegion value);
         Task ReloadStateAsync();
-        Task<bool> GetShouldCheckOrganizationUnassignedItemsAsync(string userId = null);
-        Task SetShouldCheckOrganizationUnassignedItemsAsync(bool shouldCheck, string userId = null);
         [Obsolete("Use GetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]
         Task<string> GetPinProtectedAsync(string userId = null);
         [Obsolete("Use SetPinKeyEncryptedUserKeyAsync instead, left for migration purposes")]

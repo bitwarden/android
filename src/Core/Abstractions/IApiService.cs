@@ -41,7 +41,6 @@ namespace Bit.Core.Abstractions
         Task<CipherResponse> PutShareCipherAsync(string id, CipherShareRequest request);
         Task PutDeleteCipherAsync(string id);
         Task<CipherResponse> PutRestoreCipherAsync(string id);
-        Task<bool> HasUnassignedCiphersAsync();
         Task RefreshIdentityTokenAsync();
         Task<SsoPrevalidateResponse> PreValidateSsoAsync(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
