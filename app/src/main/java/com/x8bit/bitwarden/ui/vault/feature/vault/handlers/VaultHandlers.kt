@@ -34,7 +34,6 @@ data class VaultHandlers(
     val dialogDismiss: () -> Unit,
     val overflowOptionClick: (ListingItemOverflowAction.VaultAction) -> Unit,
     val masterPasswordRepromptSubmit: (ListingItemOverflowAction.VaultAction, String) -> Unit,
-    val unassignedItemsAcknowledgeClick: () -> Unit,
 ) {
     companion object {
         /**
@@ -88,9 +87,6 @@ data class VaultHandlers(
                             password = password,
                         ),
                     )
-                },
-                unassignedItemsAcknowledgeClick = {
-                    viewModel.trySendAction(VaultAction.UnassignedItemsAcknowledgeClick)
                 },
             )
     }

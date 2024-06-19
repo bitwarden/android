@@ -116,7 +116,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -4160,99 +4159,6 @@ class VaultRepositoryTest {
                 result,
             )
         }
-
-    @Test
-    fun `shouldShowUnassignedItemsInfo should return false if there is no active user`() = runTest {
-        val result = vaultRepository.shouldShowUnassignedItemsInfo()
-        assertFalse(result)
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `shouldShowUnassignedItemsInfo should return false if getShouldCheckOrgUnassignedItems is false`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            every {
-                settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId)
-            } returns false
-            val result = vaultRepository.shouldShowUnassignedItemsInfo()
-            assertFalse(result)
-            verify(exactly = 1) {
-                settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId)
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `shouldShowUnassignedItemsInfo should return true if getShouldCheckOrgUnassignedItems is true and hasUnassignedCiphers is true`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            every {
-                settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId)
-            } returns true
-            coEvery { ciphersService.hasUnassignedCiphers() } returns true.asSuccess()
-            val result = vaultRepository.shouldShowUnassignedItemsInfo()
-            assertTrue(result)
-            verify(exactly = 1) {
-                settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId)
-            }
-            coVerify(exactly = 1) {
-                ciphersService.hasUnassignedCiphers()
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `shouldShowUnassignedItemsInfo should return false if getShouldCheckOrgUnassignedItems is true and hasUnassignedCiphers is an error`() =
-        runTest {
-            val userId = MOCK_USER_STATE.activeUserId
-            fakeAuthDiskSource.userState = MOCK_USER_STATE
-            every {
-                settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId)
-            } returns true
-            coEvery { ciphersService.hasUnassignedCiphers() } returns Throwable().asFailure()
-            val result = vaultRepository.shouldShowUnassignedItemsInfo()
-            assertFalse(result)
-            verify(exactly = 1) {
-                settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId)
-            }
-            coVerify(exactly = 1) {
-                ciphersService.hasUnassignedCiphers()
-            }
-        }
-
-    @Test
-    fun `acknowledgeUnassignedItemsInfo should do nothing if there is no active user`() {
-        val hasAcknowledged = true
-        vaultRepository.acknowledgeUnassignedItemsInfo(hasAcknowledged = hasAcknowledged)
-        verify(exactly = 0) {
-            settingsDiskSource.storeShouldCheckOrgUnassignedItems(
-                userId = any(),
-                shouldCheckOrgUnassignedItems = !hasAcknowledged,
-            )
-        }
-    }
-
-    @Test
-    fun `acknowledgeUnassignedItemsInfo should do store the appropriate value`() {
-        val hasAcknowledged = true
-        every {
-            settingsDiskSource.storeShouldCheckOrgUnassignedItems(
-                userId = MOCK_USER_STATE.activeUserId,
-                shouldCheckOrgUnassignedItems = !hasAcknowledged,
-            )
-        } just runs
-        fakeAuthDiskSource.userState = MOCK_USER_STATE
-        vaultRepository.acknowledgeUnassignedItemsInfo(hasAcknowledged = hasAcknowledged)
-        verify(exactly = 1) {
-            settingsDiskSource.storeShouldCheckOrgUnassignedItems(
-                userId = MOCK_USER_STATE.activeUserId,
-                shouldCheckOrgUnassignedItems = !hasAcknowledged,
-            )
-        }
-    }
 
     //region Helper functions
 

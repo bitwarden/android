@@ -142,10 +142,6 @@ class SettingsDiskSourceTest {
             systemBioIntegrityState = systemBioIntegrityState,
             value = true,
         )
-        settingsDiskSource.storeShouldCheckOrgUnassignedItems(
-            userId = userId,
-            shouldCheckOrgUnassignedItems = true,
-        )
 
         settingsDiskSource.clearData(userId = userId)
 
@@ -169,7 +165,6 @@ class SettingsDiskSourceTest {
                 systemBioIntegrityState = systemBioIntegrityState,
             ),
         )
-        assertNull(settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = userId))
     }
 
     @Suppress("MaxLineLength")
@@ -954,40 +949,6 @@ class SettingsDiskSourceTest {
         assertEquals(
             expectedValue,
             settingsDiskSource.getClearClipboardFrequencySeconds(mockUserId),
-        )
-    }
-
-    @Test
-    fun `storeShouldCheckOrgUnassignedItems should update shared preferences`() {
-        val baseKey = "bwPreferencesStorage:shouldCheckOrganizationUnassignedItems"
-        val mockUserId = "mockUserId"
-        val key = "${baseKey}_$mockUserId"
-
-        assertNull(settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = mockUserId))
-
-        // Updating the disk source updates shared preferences
-        settingsDiskSource.storeShouldCheckOrgUnassignedItems(
-            userId = mockUserId,
-            shouldCheckOrgUnassignedItems = true,
-        )
-
-        assertTrue(fakeSharedPreferences.contains(key))
-    }
-
-    @Test
-    fun `getShouldCheckOrgUnassignedItems should pull from SharedPreferences`() {
-        val baseKey = "bwPreferencesStorage:shouldCheckOrganizationUnassignedItems"
-        val mockUserId = "mockUserId"
-        val expectedValue = true
-        val key = "${baseKey}_$mockUserId"
-
-        assertNull(settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = mockUserId))
-
-        // Update SharedPreferences updates the disk source
-        fakeSharedPreferences.edit { putBoolean(key, expectedValue) }
-        assertEquals(
-            expectedValue,
-            settingsDiskSource.getShouldCheckOrgUnassignedItems(userId = mockUserId),
         )
     }
 
