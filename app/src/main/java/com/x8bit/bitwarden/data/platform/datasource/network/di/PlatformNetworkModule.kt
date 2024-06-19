@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.retrofit.RetrofitsIm
 import com.x8bit.bitwarden.data.platform.datasource.network.serializer.ZonedDateTimeSerializer
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigServiceImpl
+import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
+import com.x8bit.bitwarden.data.platform.datasource.network.service.EventServiceImpl
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushService
 import com.x8bit.bitwarden.data.platform.datasource.network.service.PushServiceImpl
 import dagger.Module
@@ -35,6 +37,14 @@ object PlatformNetworkModule {
     fun providesConfigService(
         retrofits: Retrofits,
     ): ConfigService = ConfigServiceImpl(retrofits.unauthenticatedApiRetrofit.create())
+
+    @Provides
+    @Singleton
+    fun providesEventService(
+        retrofits: Retrofits,
+    ): EventService = EventServiceImpl(
+        eventApi = retrofits.authenticatedEventsRetrofit.create(),
+    )
 
     @Provides
     @Singleton

@@ -36,6 +36,12 @@ class RetrofitsImpl(
         )
     }
 
+    override val authenticatedEventsRetrofit: Retrofit by lazy {
+        createAuthenticatedRetrofit(
+            baseUrlInterceptor = baseUrlInterceptors.eventsInterceptor,
+        )
+    }
+
     //endregion Authenticated Retrofits
 
     //region Unauthenticated Retrofits
