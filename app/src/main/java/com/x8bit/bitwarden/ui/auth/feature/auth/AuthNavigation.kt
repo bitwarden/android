@@ -6,6 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
+import com.x8bit.bitwarden.ui.auth.feature.checkemail.checkEmailDestination
+import com.x8bit.bitwarden.ui.auth.feature.checkemail.navigateToCheckEmail
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.completeRegistrationDestination
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.createAccountDestination
@@ -59,8 +61,16 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             onNavigateToCompleteRegistration = { emailAddress, verificationToken, captchaToken ->
                 navController.navigateToCompleteRegistration()
             },
+            onNavigateToCheckEmail = {emailAddress ->
+                navController.navigateToCheckEmail(emailAddress)
+            },
             onNavigateToEnvironment = { navController.navigateToEnvironment() }
         )
+        checkEmailDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateBackToLanding = {
+                navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
+            })
         completeRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToLogin = { emailAddress, captchaToken ->

@@ -918,5 +918,10 @@ Do you want to switch to this account?</string>
   <string name="by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy">By continuing, you agree to the Terms of Service and Privacy Policy</string>
   <string name="set_password">Set password</string>
   <string name="unsubscribe">Unsubscribe</string>
+  <string name="check_your_email">Check your email</string>
+  <string name="open_email_app">Open email app</string>
+  <string name="go_back">Go back</string>
+  <string name="no_email_go_back_to_edit_your_email_address">No email? Go back to edit your email address.</string>
+  <string name="or_log_in_you_may_already_have_an_account">Or log in, you may already have an account.</string>
   <string name="get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time">Get emails from Bitwarden for announcements, advice, and research opportunities. Unsubscribe at any time.</string>
 </resources>

@@ -57,7 +57,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
- * Top level composable for the create account screen.
+ * Top level composable for the complete registration screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")

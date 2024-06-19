@@ -350,7 +350,7 @@ class CompleteRegistrationViewModel @Inject constructor(
 }
 
 /**
- * UI state for the create account screen.
+ * UI state for the complete registration screen.
  */
 @Parcelize
 data class CompleteRegistrationState(
@@ -394,7 +394,7 @@ data class CompleteRegistrationState(
 }
 
 /**
- * Models dialogs that can be displayed on the create account screen.
+ * Models dialogs that can be displayed on the complete registration screen.
  */
 sealed class CompleteRegistrationDialog : Parcelable {
     /**
@@ -423,7 +423,7 @@ sealed class CompleteRegistrationDialog : Parcelable {
 }
 
 /**
- * Models events for the create account screen.
+ * Models events for the complete registration screen.
  */
 sealed class CompleteRegistrationEvent {
 
@@ -452,7 +452,7 @@ sealed class CompleteRegistrationEvent {
 }
 
 /**
- * Models actions for the create account screen.
+ * Models actions for the complete registration screen.
  */
 sealed class CompleteRegistrationAction {
     /**
