@@ -23,6 +23,8 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -126,6 +128,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         SpecialCircumstanceManagerImpl()
 
     private val generatorRepository: GeneratorRepository = FakeGeneratorRepository()
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
+    }
 
     @BeforeEach
     fun setup() {
@@ -178,6 +183,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         verify(exactly = 1) {
             vaultRepository.vaultDataStateFlow
+        }
+        verify(exactly = 0) {
+            organizationEventManager.trackEvent(event = any())
         }
     }
 
@@ -351,6 +359,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         verify(exactly = 1) {
             vaultRepository.vaultDataStateFlow
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientViewed(cipherId = DEFAULT_EDIT_ITEM_ID),
+            )
         }
     }
 
@@ -370,6 +381,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         )
         verify(exactly = 1) {
             vaultRepository.vaultDataStateFlow
+        }
+        verify(exactly = 0) {
+            organizationEventManager.trackEvent(event = any())
         }
     }
 
@@ -1934,6 +1948,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager = fido2CredentialManager,
                 settingsRepository = settingsRepository,
                 clock = fixedClock,
+                organizationEventManager = organizationEventManager,
             )
         }
 
@@ -2514,6 +2529,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             authRepository = authRepository,
             settingsRepository = settingsRepository,
             clock = clock,
+            organizationEventManager = organizationEventManager,
         )
 
     private fun createVaultData(

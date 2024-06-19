@@ -581,6 +581,7 @@ class SearchScreenTest : BaseComposeTest() {
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = "mockPassword-1",
                         requiresPasswordReprompt = true,
+                        cipherId = "mockId-1",
                     ),
                 ),
             )

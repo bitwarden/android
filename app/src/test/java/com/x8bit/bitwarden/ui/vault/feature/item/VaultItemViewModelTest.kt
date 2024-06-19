@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -68,6 +70,10 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
     private val mockFileManager: FileManager = mockk()
 
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
+    }
+
     @BeforeEach
     fun setup() {
         mockkStatic(CipherView::toViewState)
@@ -82,6 +88,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct when not set`() {
         val viewModel = createViewModel(state = null)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+        verify(exactly = 1) {
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientViewed(cipherId = VAULT_ITEM_ID),
+            )
+        }
     }
 
     @Test
@@ -98,6 +109,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         val state = DEFAULT_STATE.copy(vaultItemId = differentVaultItemId)
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+        verify(exactly = 1) {
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientViewed(cipherId = differentVaultItemId),
+            )
+        }
     }
 
     @Nested
@@ -764,6 +780,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     hasMasterPassword = true,
                     totpCodeItemData = null,
                 )
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedHiddenField(
+                        cipherId = VAULT_ITEM_ID,
+                    ),
+                )
             }
         }
 
@@ -887,6 +908,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
+                    )
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
+                            cipherId = VAULT_ITEM_ID,
+                        ),
                     )
                 }
             }
@@ -1855,6 +1881,11 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
                     )
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientToggledPasswordVisible(
+                            cipherId = VAULT_ITEM_ID,
+                        ),
+                    )
                 }
             }
     }
@@ -2187,6 +2218,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         authRepository: AuthRepository = authRepo,
         vaultRepository: VaultRepository = vaultRepo,
         fileManager: FileManager = mockFileManager,
+        eventManager: OrganizationEventManager = organizationEventManager,
         tempAttachmentFile: File? = null,
     ): VaultItemViewModel = VaultItemViewModel(
         savedStateHandle = SavedStateHandle().apply {
@@ -2198,6 +2230,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         authRepository = authRepository,
         vaultRepository = vaultRepository,
         fileManager = fileManager,
+        organizationEventManager = eventManager,
     )
 
     private fun createViewState(

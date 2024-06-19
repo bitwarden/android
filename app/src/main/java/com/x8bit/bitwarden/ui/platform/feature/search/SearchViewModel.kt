@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -65,6 +67,7 @@ class SearchViewModel @Inject constructor(
     private val clipboardManager: BitwardenClipboardManager,
     private val policyManager: PolicyManager,
     private val autofillSelectionManager: AutofillSelectionManager,
+    private val organizationEventManager: OrganizationEventManager,
     private val vaultRepo: VaultRepository,
     private val authRepo: AuthRepository,
     environmentRepo: EnvironmentRepository,
@@ -343,12 +346,18 @@ class SearchViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
         clipboardManager.setText(action.password)
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
+        )
     }
 
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
         clipboardManager.setText(action.securityCode)
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
+        )
     }
 
     private fun handleCopyUsernameClick(
