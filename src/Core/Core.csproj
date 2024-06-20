@@ -25,42 +25,42 @@
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
   <ItemGroup>
-		<PackageReference Include="Camera.MAUI" Version="1.4.4" />
+		<PackageReference Include="Camera.MAUI" Version="1.5.1" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	  <PackageReference Include="MessagePack" Version="2.5.124" />
-	  <PackageReference Include="CsvHelper" Version="30.0.1" />
-	  <PackageReference Include="LiteDB" Version="5.0.17" />
+	  <PackageReference Include="MessagePack" Version="2.5.168" />
+	  <PackageReference Include="CsvHelper" Version="30.1.0" />
+	  <PackageReference Include="LiteDB" Version="5.0.20" />
 	  <PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
 	  <PackageReference Include="System.Formats.Cbor" Version="8.0.0" />
 	  <PackageReference Include="zxcvbn-core" Version="7.0.92" />
-	  <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.5.124">
+	  <PackageReference Include="MessagePack.MSBuild.Tasks" Version="2.5.168">
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	    <PrivateAssets>all</PrivateAssets>
 	  </PackageReference>		
-		<PackageReference Include="CommunityToolkit.Maui" Version="5.2.0" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.3.0" />
 		<PackageReference Include="Plugin.Fingerprint" Version="3.0.0-beta.1" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
-		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.8" />
+		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.8" />
 		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
 		<!-- HACK: When running Unit Tests we cannot load FFImageLoading because it doesn't support "raw" net8.0 -->
 		<PackageReference Condition="!$(CustomConstants.Contains(UT))" Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">
-	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.18" />
-	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.7.2.1" />
+	  <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.25" />
+	  <PackageReference Include="Xamarin.AndroidX.Activity.Ktx" Version="1.9.0.3" />
       <PackageReference Include="Xamarin.AndroidX.Credentials" Version="1.0.0" />
 	</ItemGroup>
 	<ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android' AND !$(DefineConstants.Contains(FDROID))">
-	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.5" />
-	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.1.2.2" />
+	  <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet" Version="118.0.1.11" />
+	  <PackageReference Include="Xamarin.Firebase.Messaging" Version="123.4.1.2" />
 	</ItemGroup>
 	<ItemGroup Condition="!$(DefineConstants.Contains(FDROID))">
-		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.3" />
+		<PackageReference Include="Microsoft.AppCenter.Crashes" Version="5.0.5" />
 	</ItemGroup>
   <ItemGroup>
     <Folder Include="Services\Logging\" />
