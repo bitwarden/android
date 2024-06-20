@@ -58,28 +58,31 @@ class OrganizationEventManagerImpl(
     }
 
     @Suppress("ReturnCount")
-    override suspend fun trackEvent(eventType: OrganizationEventType, cipherId: String?) {
+    override fun trackEvent(eventType: OrganizationEventType, cipherId: String?) {
         val userId = authRepository.activeUserId ?: return
         if (authRepository.authStateFlow.value !is AuthState.Authenticated) return
         val organizations = authRepository.organizations.filter { it.shouldUseEvents }
         if (organizations.none()) return
-        cipherId?.let { id ->
-            val cipherOrganizationId = vaultRepository
-                .getVaultItemStateFlow(itemId = id)
-                .first { it.data != null }
-                .data
-                ?.organizationId
-                ?: return
-            if (organizations.none { it.id == cipherOrganizationId }) return
+
+        ioScope.launch {
+            cipherId?.let { id ->
+                val cipherOrganizationId = vaultRepository
+                    .getVaultItemStateFlow(itemId = id)
+                    .first { it.data != null }
+                    .data
+                    ?.organizationId
+                    ?: return@launch
+                if (organizations.none { it.id == cipherOrganizationId }) return@launch
+            }
+            eventDiskSource.addOrganizationEvent(
+                userId = userId,
+                event = OrganizationEvent(
+                    type = eventType,
+                    cipherId = cipherId,
+                    date = ZonedDateTime.now(clock),
+                ),
+            )
         }
-        eventDiskSource.addOrganizationEvent(
-            userId = userId,
-            event = OrganizationEvent(
-                type = eventType,
-                cipherId = cipherId,
-                date = ZonedDateTime.now(clock),
-            ),
-        )
     }
 
     private suspend fun uploadEvents() {
