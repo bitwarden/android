@@ -8,6 +8,12 @@ import com.bitwarden.bitwarden.InitUserCryptoRequest
 import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.fido.CheckUserOptions
+import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.sdk.CheckUserResult
+import com.bitwarden.sdk.CipherViewWrapper
+import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -18,12 +24,14 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
 import java.io.File
 
 /**
@@ -405,4 +413,25 @@ interface VaultSdkSource {
         ciphers: List<Cipher>,
         format: ExportFormat,
     ): Result<String>
+
+    /**
+     * Register a new FIDO 2 credential to a cipher.
+     */
+    @Suppress("LongParameterList")
+    suspend fun registerFido2Credential(
+        userId: String,
+        origin: String,
+        requestJson: String,
+        clientData: ClientData,
+        selectedCipherView: CipherView,
+        cipherViews: List<CipherView>,
+        isVerificationSupported: Boolean,
+        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
+        checkUserAndPickCredentialForCreation: suspend (
+            options: CheckUserOptions,
+            newCredential: Fido2CredentialNewView,
+        ) -> CipherViewWrapper,
+        findCredentials: suspend (ids: List<ByteArray>, rpId: String) -> List<CipherView>,
+        saveCredential: suspend (Cipher) -> SaveCredentialResult,
+    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse>
 }

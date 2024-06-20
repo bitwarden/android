@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import com.bitwarden.bitwarden.DerivePinKeyResponse
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
@@ -7,9 +8,17 @@ import com.bitwarden.bitwarden.InitUserCryptoRequest
 import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.fido.CheckUserOptions
+import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
+import com.bitwarden.sdk.CheckUserResult
+import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.sdk.Fido2CredentialStore
+import com.bitwarden.sdk.Fido2UserInterface
+import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -19,13 +28,20 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import java.io.File
 
 /**
@@ -431,6 +447,95 @@ class VaultSdkSourceImpl(
                 format = format,
             )
     }
+
+    @Suppress("MaxLineLength")
+    override suspend fun registerFido2Credential(
+        userId: String,
+        origin: String,
+        requestJson: String,
+        clientData: ClientData,
+        selectedCipherView: CipherView,
+        cipherViews: List<CipherView>,
+        isVerificationSupported: Boolean,
+        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
+        checkUserAndPickCredentialForCreation: suspend (
+            options: CheckUserOptions,
+            newCredential: Fido2CredentialNewView,
+        ) -> CipherViewWrapper,
+        findCredentials: suspend (
+            credentialIds: List<ByteArray>,
+            relyingPartyId: String,
+        ) -> List<CipherView>,
+        saveCredential: suspend (Cipher) -> SaveCredentialResult,
+    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> =
+        callbackFlow {
+            try {
+                val client = getClient(userId)
+                    .platform()
+                    .fido2()
+                    .client(
+                        userInterface = object : Fido2UserInterface {
+                            override suspend fun checkUser(
+                                options: CheckUserOptions,
+                                hint: UiHint,
+                            ): CheckUserResult = checkUser(options, hint)
+
+                            override suspend fun checkUserAndPickCredentialForCreation(
+                                options: CheckUserOptions,
+                                newCredential: Fido2CredentialNewView,
+                            ): CipherViewWrapper {
+                                // TODO [PM-8137]: Trigger user verification if required
+                                return CipherViewWrapper(selectedCipherView)
+                            }
+
+                            override suspend fun isVerificationEnabled() = isVerificationSupported
+
+                            override suspend fun pickCredentialForAuthentication(
+                                availableCredentials: List<CipherView>,
+                            ): CipherViewWrapper {
+                                // This delegate should never be invoked during credential
+                                // registration. If it is we throw an exception to the SDK so that
+                                // a spec compliant error can be returned from `register`.
+                                throw UnsupportedOperationException(
+                                    "Pick Credential not supported during passkey registration.",
+                                )
+                            }
+                        },
+                        credentialStore = object : Fido2CredentialStore {
+                            override suspend fun findCredentials(
+                                ids: List<ByteArray>?,
+                                ripId: String,
+                            ): List<CipherView> = findCredentials(ids.orEmpty(), ripId)
+
+                            override suspend fun saveCredential(cred: Cipher) {
+                                if (saveCredential(cred) is SaveCredentialResult.Error) {
+                                    // This exception is caught and handled by the SDK, which uses
+                                    // it to produce a FIDO 2 spec compliant attestation error.
+                                    throw CreateCredentialUnknownException()
+                                }
+                            }
+
+                            override suspend fun allCredentials(): List<CipherView> = cipherViews
+                        },
+                    )
+
+                val result = client
+                    .register(
+                        origin = origin,
+                        request = requestJson,
+                        clientData = clientData,
+                    )
+                    .asSuccess()
+
+                send(result)
+            } catch (e: BitwardenException) {
+                e.asFailure()
+            } finally {
+                close()
+            }
+            awaitClose()
+        }
+            .first()
 
     private suspend fun getClient(
         userId: String,

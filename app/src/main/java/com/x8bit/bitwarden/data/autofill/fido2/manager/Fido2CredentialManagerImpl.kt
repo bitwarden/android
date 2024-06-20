@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
-import com.x8bit.bitwarden.data.platform.util.getCallingAppApkFingerprint
+import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
@@ -75,7 +75,7 @@ class Fido2CredentialManagerImpl(
             .map { matchingStatements ->
                 matchingStatements
                     .filterMatchingAppSignaturesOrNull(
-                        signature = callingAppInfo.getCallingAppApkFingerprint(),
+                        signature = callingAppInfo.getSignatureFingerprintAsHexString(),
                     )
                     ?: return Fido2ValidateOriginResult.Error.ApplicationNotVerified
             }
