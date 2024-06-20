@@ -100,7 +100,7 @@
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls" Version="2.88.4-preview.84" />
 		<PackageReference Include="SkiaSharp.Views.Maui.Controls.Compatibility" Version="2.88.4-preview.84" />
 		<PackageReference Include="FFImageLoadingCompat.Maui" Version="0.1.1" />
-		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.6" />
+		<PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="7.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="PCLCrypto" Version="2.1.40-alpha" />
 		<PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
