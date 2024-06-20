@@ -40,3 +40,37 @@ jobs:
           base_uri: https://ast.checkmarx.net/
           cx_client_id: ${{ secrets.CHECKMARX_CLIENT_ID }}
           cx_client_secret: ${{ secrets.CHECKMARX_SECRET }}
+          additional_params: |
+            --report-format sarif \
+            --filter "state=TO_VERIFY;PROPOSED_NOT_EXPLOITABLE;CONFIRMED;URGENT" \
+            --output-path . ${{ env.INCREMENTAL }}
+
+      - name: Upload Checkmarx results to GitHub
+        uses: github/codeql-action/upload-sarif@9fdb3e49720b44c48891d036bb502feb25684276 # v3.25.6
+        with:
+          sarif_file: cx_result.sarif
+
+  quality:
+    name: Quality scan
+    runs-on: ubuntu-22.04
+    needs: check-run
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        with:
+          fetch-depth: 0
+          ref: ${{  github.event.pull_request.head.sha }}
+
+      - name: Scan with SonarCloud
+        uses: sonarsource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216 # v2.2.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
