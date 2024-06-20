@@ -121,7 +121,7 @@ class OrganizationEventManagerTest {
     }
 
     @Test
-    fun `trackEvent should do nothing if there is no active user`() = runTest {
+    fun `trackEvent should do nothing if there is no active user`() {
         every { authRepository.activeUserId } returns null
 
         organizationEventManager.trackEvent(
@@ -135,7 +135,7 @@ class OrganizationEventManagerTest {
     }
 
     @Test
-    fun `trackEvent should do nothing if the active user is not authenticated`() = runTest {
+    fun `trackEvent should do nothing if the active user is not authenticated`() {
         organizationEventManager.trackEvent(
             eventType = OrganizationEventType.CIPHER_UPDATED,
             cipherId = CIPHER_ID,
@@ -147,71 +147,69 @@ class OrganizationEventManagerTest {
     }
 
     @Test
-    fun `trackEvent should do nothing if the active user has no organizations that use events`() =
-        runTest {
-            mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-            val organization = createMockOrganization(number = 1)
-            every { authRepository.organizations } returns listOf(organization)
+    fun `trackEvent should do nothing if the active user has no organizations that use events`() {
+        mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
+        val organization = createMockOrganization(number = 1)
+        every { authRepository.organizations } returns listOf(organization)
 
-            organizationEventManager.trackEvent(
-                eventType = OrganizationEventType.CIPHER_UPDATED,
-                cipherId = CIPHER_ID,
-            )
+        organizationEventManager.trackEvent(
+            eventType = OrganizationEventType.CIPHER_UPDATED,
+            cipherId = CIPHER_ID,
+        )
 
-            coVerify(exactly = 0) {
-                eventDiskSource.addOrganizationEvent(userId = any(), event = any())
-            }
+        coVerify(exactly = 0) {
+            eventDiskSource.addOrganizationEvent(userId = any(), event = any())
         }
+    }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `trackEvent should do nothing if the cipher does not belong to an organization that uses events`() =
-        runTest {
-            mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-            val organization = createMockOrganization(number = 1).copy(shouldUseEvents = true)
-            every { authRepository.organizations } returns listOf(organization)
-            val cipherView = createMockCipherView(number = 1)
-            mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
+    fun `trackEvent should do nothing if the cipher does not belong to an organization that uses events`() {
+        mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
+        val organization = createMockOrganization(number = 1).copy(shouldUseEvents = true)
+        every { authRepository.organizations } returns listOf(organization)
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
 
-            organizationEventManager.trackEvent(
-                eventType = OrganizationEventType.CIPHER_UPDATED,
-                cipherId = CIPHER_ID,
-            )
+        organizationEventManager.trackEvent(
+            eventType = OrganizationEventType.CIPHER_UPDATED,
+            cipherId = CIPHER_ID,
+        )
 
-            coVerify(exactly = 0) {
-                eventDiskSource.addOrganizationEvent(userId = any(), event = any())
-            }
+        coVerify(exactly = 0) {
+            eventDiskSource.addOrganizationEvent(userId = any(), event = any())
         }
+    }
 
     @Test
-    fun `trackEvent should add the event to disk if the ciphers organization allows it`() =
-        runTest {
-            mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
-            val organization = createMockOrganization(number = 1).copy(
-                id = "mockOrganizationId-1",
-                shouldUseEvents = true,
-            )
-            every { authRepository.organizations } returns listOf(organization)
-            val cipherView = createMockCipherView(number = 1)
-            mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
-            val eventType = OrganizationEventType.CIPHER_UPDATED
+    fun `trackEvent should add the event to disk if the ciphers organization allows it`() {
+        mutableAuthStateFlow.value = AuthState.Authenticated(accessToken = "access-token")
+        val organization = createMockOrganization(number = 1).copy(
+            id = "mockOrganizationId-1",
+            shouldUseEvents = true,
+        )
+        every { authRepository.organizations } returns listOf(organization)
+        val cipherView = createMockCipherView(number = 1)
+        mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
+        val eventType = OrganizationEventType.CIPHER_UPDATED
 
-            organizationEventManager.trackEvent(
-                eventType = eventType,
-                cipherId = CIPHER_ID,
-            )
+        organizationEventManager.trackEvent(
+            eventType = eventType,
+            cipherId = CIPHER_ID,
+        )
 
-            coVerify(exactly = 1) {
-                eventDiskSource.addOrganizationEvent(
-                    userId = USER_ID,
-                    event = OrganizationEvent(
-                        type = eventType,
-                        cipherId = CIPHER_ID,
-                        date = ZonedDateTime.now(fixedClock),
-                    ),
-                )
-            }
+        dispatcher.scheduler.runCurrent()
+        coVerify(exactly = 1) {
+            eventDiskSource.addOrganizationEvent(
+                userId = USER_ID,
+                event = OrganizationEvent(
+                    type = eventType,
+                    cipherId = CIPHER_ID,
+                    date = ZonedDateTime.now(fixedClock),
+                ),
+            )
         }
+    }
 }
 
 private const val CIPHER_ID: String = "mockId-1"

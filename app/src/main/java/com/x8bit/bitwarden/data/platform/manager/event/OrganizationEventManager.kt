@@ -9,5 +9,5 @@ interface OrganizationEventManager {
     /**
      * Tracks a specific event to be uploaded at a different time.
      */
-    suspend fun trackEvent(eventType: OrganizationEventType, cipherId: String? = null)
+    fun trackEvent(eventType: OrganizationEventType, cipherId: String? = null)
 }
