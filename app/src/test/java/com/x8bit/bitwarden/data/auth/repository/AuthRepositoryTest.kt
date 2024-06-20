@@ -572,6 +572,21 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `organizations should return an empty list when there is no active user`() = runTest {
+        assertEquals(emptyList<SyncResponseJson.Profile.Organization>(), repository.organizations)
+    }
+
+    @Test
+    fun `organizations should pull from the organizations in the AuthDiskSource`() = runTest {
+        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
+        fakeAuthDiskSource.storeOrganizations(
+            userId = USER_ID_1,
+            organizations = ORGANIZATIONS,
+        )
+        assertEquals(ORGANIZATIONS, repository.organizations)
+    }
+
+    @Test
     fun `clear Pending Account Deletion should unblock userState updates`() = runTest {
         val masterPassword = "hello world"
         val hashedMasterPassword = "dlrow olleh"
