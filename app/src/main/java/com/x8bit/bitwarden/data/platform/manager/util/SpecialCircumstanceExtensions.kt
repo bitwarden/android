@@ -17,6 +17,7 @@ fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
         SpecialCircumstance.GeneratorShortcut -> null
         SpecialCircumstance.VaultShortcut -> null
         is SpecialCircumstance.Fido2Save -> null
+        is SpecialCircumstance.CompleteRegistration -> null
     }
 
 /**
@@ -31,6 +32,7 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
         SpecialCircumstance.GeneratorShortcut -> null
         SpecialCircumstance.VaultShortcut -> null
         is SpecialCircumstance.Fido2Save -> null
+        is SpecialCircumstance.CompleteRegistration -> null
     }
 
 /**

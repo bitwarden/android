@@ -18,6 +18,7 @@ private const val CHECK_EMAIL_ROUTE: String = "check_email/{$EMAIL_ADDRESS}"
 fun NavController.navigateToCheckEmail(emailAddress: String, navOptions: NavOptions? = null) {
     this.navigate("check_email/$emailAddress", navOptions)
 }
+
 /**
  * Class to retrieve check email arguments from the [SavedStateHandle].
  */

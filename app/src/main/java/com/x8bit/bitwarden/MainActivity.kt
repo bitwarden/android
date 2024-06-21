@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
+import android.net.Uri
 
 /**
  * Primary entry point for the application.
@@ -73,6 +74,15 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
+        }
+
+        val appLinkData: Uri? = intent.data
+        if (appLinkData != null && appLinkData.isHierarchical) {
+            mainViewModel.trySendAction(
+                action = MainAction.ReceiveNewIntent(
+                    intent = intent,
+                ),
+            )
         }
     }
 

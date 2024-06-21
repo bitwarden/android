@@ -306,7 +306,7 @@ private fun TermsAndPrivacyText(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .semantics(mergeDescendants = true) {
-                testTag = "AcceptPoliciesText"
+                testTag = "DisclaimerText"
             }
             .fillMaxWidth(),
     ) {
