@@ -10,6 +10,7 @@ import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.CheckUserResult
@@ -37,6 +38,7 @@ import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
 import kotlinx.coroutines.channels.awaitClose
@@ -465,7 +467,7 @@ class VaultSdkSourceImpl(
         findCredentials: suspend (
             credentialIds: List<ByteArray>,
             relyingPartyId: String,
-        ) -> List<CipherView>,
+        ) -> FindFido2CredentialsResult,
         saveCredential: suspend (Cipher) -> SaveCredentialResult,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> =
         callbackFlow {
@@ -484,7 +486,7 @@ class VaultSdkSourceImpl(
                                 options: CheckUserOptions,
                                 newCredential: Fido2CredentialNewView,
                             ): CipherViewWrapper {
-                                // TODO [PM-8137]: Trigger user verification if required
+                                checkUserAndPickCredentialForCreation(options, newCredential)
                                 return CipherViewWrapper(selectedCipherView)
                             }
 
@@ -505,7 +507,19 @@ class VaultSdkSourceImpl(
                             override suspend fun findCredentials(
                                 ids: List<ByteArray>?,
                                 ripId: String,
-                            ): List<CipherView> = findCredentials(ids.orEmpty(), ripId)
+                            ): List<CipherView> =
+                                when (val result = findCredentials(ids.orEmpty(), ripId)) {
+                                    is FindFido2CredentialsResult.Error -> {
+                                        // This exception is caught and handled by the SDK, which
+                                        // uses it to produce a FIDO 2 spec compliant attestation
+                                        // error.
+                                        throw CreateCredentialUnknownException()
+                                    }
+
+                                    is FindFido2CredentialsResult.Success -> {
+                                        result.cipherViews
+                                    }
+                                }
 
                             override suspend fun saveCredential(cred: Cipher) {
                                 if (saveCredential(cred) is SaveCredentialResult.Error) {
@@ -536,6 +550,18 @@ class VaultSdkSourceImpl(
             awaitClose()
         }
             .first()
+
+    override suspend fun decryptFido2CredentialAutofillViews(
+        userId: String,
+        vararg cipherViews: CipherView,
+    ): Result<List<Fido2CredentialAutofillView>> = runCatching {
+        cipherViews.flatMap {
+            getClient(userId)
+                .platform()
+                .fido2()
+                .decryptFido2AutofillCredentials(it)
+        }
+    }
 
     private suspend fun getClient(
         userId: String,

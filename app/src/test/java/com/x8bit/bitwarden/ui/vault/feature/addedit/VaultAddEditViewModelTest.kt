@@ -668,6 +668,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `in add mode during fido2, SaveClick should show dialog, register credential, show toast once an item is saved, and emit ExitApp`() =
         runTest {
@@ -731,7 +732,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithDialog, stateTurbine.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                    eventTurbine.awaitItem()
+                    eventTurbine.awaitItem(),
                 )
                 assertEquals(
                     VaultAddEditEvent.CompleteFido2Create(result = mockCreateResult),

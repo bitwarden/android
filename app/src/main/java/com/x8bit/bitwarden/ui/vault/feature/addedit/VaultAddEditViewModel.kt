@@ -375,16 +375,16 @@ class VaultAddEditViewModel @Inject constructor(
         content: VaultAddEditState.ViewState.Content,
     ) {
         viewModelScope.launch {
-            val result = vaultRepository
+            val result: Fido2CreateCredentialResult = vaultRepository
                 .registerFido2Credential(
                     fido2CredentialRequest = request,
                     selectedCipherView = content.toCipherView(),
                     // TODO: [PM-8137] Check if user verification can be performed
-                    isVerificationSupported = true,
-                    checkUser = { options, uiHint ->
+                    isVerificationSupported = false,
+                    checkUser = { options, _ ->
                         if (options.requireVerification != Verification.DISCOURAGED) {
                             // TODO [PM-8137]: Perform user verification
-                        } /* else return the new cipher content*/
+                        } /* else return the new cipher content */
 
                         CheckUserResult(
                             userPresent = true,

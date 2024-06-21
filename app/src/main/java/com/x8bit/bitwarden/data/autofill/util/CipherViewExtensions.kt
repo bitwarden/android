@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.util
 
+import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
@@ -44,3 +45,9 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
             )
         }
     }
+
+val CipherView.isActiveWithFido2Credentials: Boolean
+    get() = deletedDate == null &&
+        type == CipherType.LOGIN &&
+        login?.fido2Credentials?.isNotEmpty()
+        ?: false

@@ -10,6 +10,7 @@ import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
@@ -30,6 +31,7 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
 import java.io.File
@@ -431,7 +433,19 @@ interface VaultSdkSource {
             options: CheckUserOptions,
             newCredential: Fido2CredentialNewView,
         ) -> CipherViewWrapper,
-        findCredentials: suspend (ids: List<ByteArray>, rpId: String) -> List<CipherView>,
+        findCredentials: suspend (ids: List<ByteArray>, rpId: String) -> FindFido2CredentialsResult,
         saveCredential: suspend (Cipher) -> SaveCredentialResult,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse>
+
+    /**
+     * Decrypt a list of FIDO 2 credential autofill view items associated with the given
+     * [cipherViews].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun decryptFido2CredentialAutofillViews(
+        userId: String,
+        vararg cipherViews: CipherView,
+    ): Result<List<Fido2CredentialAutofillView>>
 }

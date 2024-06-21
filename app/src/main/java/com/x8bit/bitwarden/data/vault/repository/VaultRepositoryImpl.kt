@@ -27,6 +27,7 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -60,6 +61,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
@@ -902,6 +904,10 @@ class VaultRepositoryImpl(
         val origin = fido2CredentialRequest.origin
             ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
 
+        val ciphersWithCredentials = ciphersStateFlow.value.data
+            ?.filter { it.isActiveWithFido2Credentials }
+            .orEmpty()
+
         val registerResult = vaultSdkSource
             .registerFido2Credential(
                 userId = userId,
@@ -909,7 +915,7 @@ class VaultRepositoryImpl(
                 requestJson = "{\"publicKey\": ${fido2CredentialRequest.requestJson}}",
                 clientData = clientData,
                 selectedCipherView = selectedCipherView,
-                cipherViews = ciphersStateFlow.value.data.orEmpty(),
+                cipherViews = ciphersWithCredentials,
                 isVerificationSupported = isVerificationSupported,
                 checkUser = checkUser,
                 checkUserAndPickCredentialForCreation = { options, _ ->
@@ -923,17 +929,30 @@ class VaultRepositoryImpl(
                     // We force a sync so that the SDK has the latest version of any ciphers that
                     // contain a matching credential.
                     sync()
-                    mutableCiphersStateFlow.value.data
-                        ?.filter { cipherView ->
-                            cipherView.login
-                                ?.fido2Credentials
-                                ?.any {
-                                    it.rpId == rpId ||
-                                        credentialIds.contains(it.credentialId.toByteArray())
-                                }
-                                ?: false
+                    vaultSdkSource
+                        .decryptFido2CredentialAutofillViews(
+                            userId = userId,
+                            cipherViews = ciphersWithCredentials.toTypedArray(),
+                        )
+                        .map { decryptedFido2CredentialViews ->
+                            decryptedFido2CredentialViews.filter { fido2CredentialView ->
+                                fido2CredentialView.rpId == rpId ||
+                                    credentialIds.contains(fido2CredentialView.credentialId)
+                            }
                         }
-                        .orEmpty()
+                        .map { matchingFido2Credentials ->
+                            ciphersWithCredentials.filter { cipherView ->
+                                matchingFido2Credentials.any { it.cipherId == cipherView.id }
+                            }
+                        }
+                        .fold(
+                            onSuccess = { matchingCipherViews ->
+                                FindFido2CredentialsResult.Success(
+                                    cipherViews = matchingCipherViews,
+                                )
+                            },
+                            onFailure = { FindFido2CredentialsResult.Error },
+                        )
                 },
                 saveCredential = { cipher ->
                     vaultSdkSource

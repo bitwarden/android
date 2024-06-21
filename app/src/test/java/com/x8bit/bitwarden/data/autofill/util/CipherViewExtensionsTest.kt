@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class CipherViewExtensionsTest {
@@ -132,5 +133,50 @@ class CipherViewExtensionsTest {
                         autofillCipherProvider.getLoginAutofillCiphers(uri = "uri"),
                     )
                 }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isActiveWithFido2Credentials should return true when type is login, deleted date is null, and fido2 credentials are not null`() =
+        runTest {
+            assertTrue(
+                createMockCipherView(number = 1)
+                    .isActiveWithFido2Credentials,
+            )
+        }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when deleted date is not null`() =
+        runTest {
+            assertFalse(
+                createMockCipherView(number = 1, isDeleted = true)
+                    .isActiveWithFido2Credentials,
+            )
+        }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when type is not login`() = runTest {
+        assertFalse(
+            createMockCipherView(number = 1, cipherType = CipherType.CARD)
+                .isActiveWithFido2Credentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when login is null`() = runTest {
+        assertFalse(
+            createMockCipherView(number = 1)
+                .copy(login = null)
+                .isActiveWithFido2Credentials,
+        )
+    }
+
+    @Test
+    fun `isActiveWithFido2Credentials should return false when fido2Credentials is null`() =
+        runTest {
+            assertFalse(
+                createMockCipherView(number = 1, fido2Credentials = null)
+                    .isActiveWithFido2Credentials,
+            )
         }
 }

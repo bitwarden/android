@@ -44,6 +44,7 @@ import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -1030,7 +1031,7 @@ class VaultSdkSourceTest {
                     checkUserAndPickCredentialForCreation = { _, _ ->
                         CipherViewWrapper(mockCipherView)
                     },
-                    findCredentials = { _, _ -> emptyList() },
+                    findCredentials = { _, _ -> FindFido2CredentialsResult.Success(emptyList()) },
                     saveCredential = { SaveCredentialResult.Success },
                 )
 
@@ -1062,11 +1063,11 @@ class VaultSdkSourceTest {
         coEvery { fido2.register(any(), any(), any()) } coAnswers {
             mockUserInterface.checkUser(
                 mockCheckUserOptions,
-                UiHint.InformNoCredentialsFound
+                UiHint.InformNoCredentialsFound,
             )
             mockAttestation
         }
-        val result = vaultSdkSource.registerFido2Credential(
+        vaultSdkSource.registerFido2Credential(
             userId = "mockUserId",
             origin = "www.bitwarden.com",
             requestJson = "requestJson",
@@ -1074,13 +1075,9 @@ class VaultSdkSourceTest {
             selectedCipherView = mockCipherView,
             cipherViews = emptyList(),
             isVerificationSupported = true,
-            checkUser = { _, _ ->
-                checkUserResult
-            },
-            checkUserAndPickCredentialForCreation = { _, _ ->
-                CipherViewWrapper(mockCipherView)
-            },
-            findCredentials = { _, _ -> emptyList() },
+            checkUser = { _, _ -> checkUserResult },
+            checkUserAndPickCredentialForCreation = { _, _ -> CipherViewWrapper(mockCipherView) },
+            findCredentials = { _, _ -> FindFido2CredentialsResult.Success(emptyList()) },
             saveCredential = { SaveCredentialResult.Success },
         )
 
