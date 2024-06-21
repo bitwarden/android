@@ -7,8 +7,10 @@ import com.bitwarden.bitwarden.InitUserCryptoRequest
 import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.fido.Verification
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
@@ -23,6 +25,8 @@ import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
 import com.bitwarden.sdk.ClientSends
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.sdk.Fido2UserInterface
+import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -52,6 +56,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -1035,6 +1040,62 @@ class VaultSdkSourceTest {
                 )
             }
         }
+
+    @Test
+    fun `registerFido2Credential should invoke checkUser when called by the SDK`() = runTest {
+        val checkUserResult = CheckUserResult(true, true)
+
+        val checkUserOptionsSlot = slot<CheckUserOptions>()
+        val uiHintSlot = slot<UiHint>()
+        val mockUserInterface = mockk<Fido2UserInterface> {
+            coEvery {
+                checkUser(
+                    capture(checkUserOptionsSlot),
+                    capture(uiHintSlot),
+                )
+            } returns checkUserResult
+        }
+
+        val mockCipherView = createMockCipherView(number = 1)
+        val mockAttestation = mockk<PublicKeyCredentialAuthenticatorAttestationResponse>()
+        val mockCheckUserOptions = CheckUserOptions(true, Verification.REQUIRED)
+        coEvery { fido2.register(any(), any(), any()) } coAnswers {
+            mockUserInterface.checkUser(
+                mockCheckUserOptions,
+                UiHint.InformNoCredentialsFound
+            )
+            mockAttestation
+        }
+        val result = vaultSdkSource.registerFido2Credential(
+            userId = "mockUserId",
+            origin = "www.bitwarden.com",
+            requestJson = "requestJson",
+            clientData = ClientData.DefaultWithCustomHash(DEFAULT_SIGNATURE.toByteArray()),
+            selectedCipherView = mockCipherView,
+            cipherViews = emptyList(),
+            isVerificationSupported = true,
+            checkUser = { _, _ ->
+                checkUserResult
+            },
+            checkUserAndPickCredentialForCreation = { _, _ ->
+                CipherViewWrapper(mockCipherView)
+            },
+            findCredentials = { _, _ -> emptyList() },
+            saveCredential = { SaveCredentialResult.Success },
+        )
+
+        coVerify { mockUserInterface.checkUser(any(), any()) }
+
+        assertEquals(
+            mockCheckUserOptions,
+            checkUserOptionsSlot.captured,
+        )
+
+        assertEquals(
+            UiHint.InformNoCredentialsFound,
+            uiHintSlot.captured,
+        )
+    }
 }
 
 private const val DEFAULT_SIGNATURE = "0987654321ABCDEF"

@@ -1312,15 +1312,9 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleFido2RegisterCredentialResultReceive(
         action: VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
-        when (val result = action.result) {
-            is Fido2CreateCredentialResult.Error -> {
-            }
-
-            is Fido2CreateCredentialResult.Success -> {
-                sendEvent(VaultAddEditEvent.ShowToast("Passkey created".asText()))
-                sendEvent(VaultAddEditEvent.CompleteFido2Create(result))
-            }
-        }
+        mutableStateFlow.update { it.copy(dialog = null) }
+        sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+        sendEvent(VaultAddEditEvent.CompleteFido2Create(action.result))
     }
 
     //endregion Internal Type Handlers
