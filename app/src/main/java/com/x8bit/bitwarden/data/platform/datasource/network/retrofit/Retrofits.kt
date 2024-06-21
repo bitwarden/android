@@ -15,6 +15,13 @@ interface Retrofits {
     val authenticatedApiRetrofit: Retrofit
 
     /**
+     * Allows access to "/events" calls that must be authenticated.
+     *
+     * The base URL can be dynamically determined via the [BaseUrlInterceptors].
+     */
+    val authenticatedEventsRetrofit: Retrofit
+
+    /**
      * Allows access to "/api" calls that do not require authentication.
      *
      * The base URL can be dynamically determined via the [BaseUrlInterceptors].

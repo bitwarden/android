@@ -165,6 +165,6 @@ sealed class QrCodeScanAction {
  * Checks if a string is using base32 digits.
  */
 private fun String.isBase32(): Boolean {
-    val regex = ("^[A-Z2-7]+=*$").toRegex()
+    val regex = ("^[A-Za-z2-7]+=*$").toRegex()
     return regex.matches(this)
 }

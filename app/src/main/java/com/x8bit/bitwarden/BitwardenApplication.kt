@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.manager.AuthRequestNotificationManager
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -24,4 +25,7 @@ class BitwardenApplication : Application() {
 
     @Inject
     lateinit var authRequestNotificationManager: AuthRequestNotificationManager
+
+    @Inject
+    lateinit var organizationEventManager: OrganizationEventManager
 }
