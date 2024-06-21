@@ -5,7 +5,9 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
+import com.google.firebase.Timestamp
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
@@ -174,6 +176,7 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
+        val completeRegistrationData = intent.getCompleteRegistrationDataIntentOrNull()
         when {
             passwordlessRequestData != null -> {
                 specialCircumstanceManager.specialCircumstance =
@@ -182,6 +185,14 @@ class MainViewModel @Inject constructor(
                         // Allow users back into the already-running app when completing the
                         // autofill task when this is not the first intent.
                         shouldFinishWhenComplete = isFirstIntent,
+                    )
+            }
+
+            completeRegistrationData != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.CompleteRegistration(
+                        completeRegistrationData = completeRegistrationData,
+                        timestamp = Timestamp.now()
                     )
             }
 
