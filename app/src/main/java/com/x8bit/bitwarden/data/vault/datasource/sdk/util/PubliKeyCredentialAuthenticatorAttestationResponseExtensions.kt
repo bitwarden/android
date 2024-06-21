@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Converts the SDK attestation response to a [Fido2AttestationResponse] that can be serialized into
- * the the expected system JSON.
+ * the expected system JSON.
  */
 @Suppress("MaxLineLength")
 fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResponse(): Fido2AttestationResponse =
