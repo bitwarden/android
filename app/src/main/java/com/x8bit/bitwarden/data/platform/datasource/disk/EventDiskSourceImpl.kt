@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.OrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.entity.OrganizationEventEntity
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import kotlinx.coroutines.withContext
@@ -22,7 +22,7 @@ class EventDiskSourceImpl(
         organizationEventDao.deleteOrganizationEvents(userId = userId)
     }
 
-    override suspend fun addOrganizationEvent(userId: String, event: OrganizationEvent) {
+    override suspend fun addOrganizationEvent(userId: String, event: OrganizationEventJson) {
         organizationEventDao.insertOrganizationEvent(
             event = OrganizationEventEntity(
                 userId = userId,
@@ -37,11 +37,11 @@ class EventDiskSourceImpl(
 
     override suspend fun getOrganizationEvents(
         userId: String,
-    ): List<OrganizationEvent> =
+    ): List<OrganizationEventJson> =
         organizationEventDao
             .getOrganizationEvents(userId = userId)
             .map {
-                OrganizationEvent(
+                OrganizationEventJson(
                     type = withContext(context = dispatcherManager.default) {
                         json.decodeFromString<OrganizationEventType>(
                             string = it.organizationEventType,

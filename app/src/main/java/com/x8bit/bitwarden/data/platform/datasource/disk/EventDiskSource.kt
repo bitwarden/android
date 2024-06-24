@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 
 /**
  * Primary access point for disk information related to event data.
@@ -14,10 +14,10 @@ interface EventDiskSource {
     /**
      * Adds a new organization event associated with the given [userId].
      */
-    suspend fun addOrganizationEvent(userId: String, event: OrganizationEvent)
+    suspend fun addOrganizationEvent(userId: String, event: OrganizationEventJson)
 
     /**
      * Retrieves all organization events associated with the given [userId].
      */
-    suspend fun getOrganizationEvents(userId: String): List<OrganizationEvent>
+    suspend fun getOrganizationEvents(userId: String): List<OrganizationEventJson>
 }

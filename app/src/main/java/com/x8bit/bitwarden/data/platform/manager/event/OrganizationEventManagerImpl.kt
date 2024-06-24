@@ -6,7 +6,7 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
@@ -76,7 +76,7 @@ class OrganizationEventManagerImpl(
             }
             eventDiskSource.addOrganizationEvent(
                 userId = userId,
-                event = OrganizationEvent(
+                event = OrganizationEventJson(
                     type = eventType,
                     cipherId = cipherId,
                     date = ZonedDateTime.now(clock),

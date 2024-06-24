@@ -5,7 +5,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
@@ -69,7 +69,7 @@ class OrganizationEventManagerTest {
     @Test
     fun `onLifecycleStart should upload events after 2 minutes and again after 5 more minutes`() =
         runTest {
-            val organizationEvent = OrganizationEvent(
+            val organizationEvent = OrganizationEventJson(
                 type = OrganizationEventType.CIPHER_UPDATED,
                 cipherId = CIPHER_ID,
                 date = ZonedDateTime.now(fixedClock),
@@ -100,7 +100,7 @@ class OrganizationEventManagerTest {
 
     @Test
     fun `onLifecycleStop should upload events immediately`() = runTest {
-        val organizationEvent = OrganizationEvent(
+        val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_UPDATED,
             cipherId = CIPHER_ID,
             date = ZonedDateTime.now(fixedClock),
@@ -202,7 +202,7 @@ class OrganizationEventManagerTest {
         coVerify(exactly = 1) {
             eventDiskSource.addOrganizationEvent(
                 userId = USER_ID,
-                event = OrganizationEvent(
+                event = OrganizationEventJson(
                     type = eventType,
                     cipherId = CIPHER_ID,
                     date = ZonedDateTime.now(fixedClock),
