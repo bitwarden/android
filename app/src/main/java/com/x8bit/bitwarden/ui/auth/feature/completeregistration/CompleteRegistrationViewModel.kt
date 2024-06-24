@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
+import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
@@ -45,7 +46,8 @@ private const val MIN_PASSWORD_LENGTH = 12
 @HiltViewModel
 class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val specialCircumstance: SpecialCircumstanceManager
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: CompleteRegistrationState(
@@ -81,6 +83,12 @@ class CompleteRegistrationViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        // clean the specialCircumstance after being handled
+        specialCircumstance.specialCircumstance = null
+        super.onCleared()
     }
 
     override fun handleAction(action: CompleteRegistrationAction) {

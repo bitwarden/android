@@ -75,15 +75,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-        val appLinkData: Uri? = intent.data
-        if (appLinkData != null && appLinkData.isHierarchical) {
-            mainViewModel.trySendAction(
-                action = MainAction.ReceiveNewIntent(
-                    intent = intent,
-                ),
-            )
-        }
     }
 
     override fun onNewIntent(intent: Intent) {
