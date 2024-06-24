@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -125,8 +126,9 @@ class OrganizationEventManagerTest {
         every { authRepository.activeUserId } returns null
 
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -137,8 +139,9 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should do nothing if the active user is not authenticated`() {
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -153,8 +156,9 @@ class OrganizationEventManagerTest {
         every { authRepository.organizations } returns listOf(organization)
 
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -172,8 +176,9 @@ class OrganizationEventManagerTest {
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
 
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -191,11 +196,9 @@ class OrganizationEventManagerTest {
         every { authRepository.organizations } returns listOf(organization)
         val cipherView = createMockCipherView(number = 1)
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
-        val eventType = OrganizationEventType.CIPHER_UPDATED
 
         organizationEventManager.trackEvent(
-            eventType = eventType,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(cipherId = CIPHER_ID),
         )
 
         dispatcher.scheduler.runCurrent()
@@ -203,7 +206,7 @@ class OrganizationEventManagerTest {
             eventDiskSource.addOrganizationEvent(
                 userId = USER_ID,
                 event = OrganizationEventJson(
-                    type = eventType,
+                    type = OrganizationEventType.CIPHER_CLIENT_AUTO_FILLED,
                     cipherId = CIPHER_ID,
                     date = ZonedDateTime.now(fixedClock),
                 ),
