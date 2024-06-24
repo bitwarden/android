@@ -15,6 +15,9 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCardExpirationMonth
  * @property onExpirationMonthSelected Handles the action when an expiration month is selected.
  * @property onExpirationYearTextChange Handles the action when the expiration year text is changed.
  * @property onSecurityCodeTextChange Handles the action when the expiration year text is changed.
+ * @property onSecurityCodeVisibilityChange Handles the action when the security code visibility
+ * changes.
+ * @property onNumberVisibilityChange Handles the action when the number visibility changes.
  */
 @Suppress("MaxLineLength")
 data class VaultAddEditCardTypeHandlers(
@@ -24,8 +27,9 @@ data class VaultAddEditCardTypeHandlers(
     val onExpirationMonthSelected: (VaultCardExpirationMonth) -> Unit,
     val onExpirationYearTextChange: (String) -> Unit,
     val onSecurityCodeTextChange: (String) -> Unit,
-
-    ) {
+    val onSecurityCodeVisibilityChange: (Boolean) -> Unit,
+    val onNumberVisibilityChange: (Boolean) -> Unit,
+) {
     companion object {
 
         /**
@@ -74,6 +78,18 @@ data class VaultAddEditCardTypeHandlers(
                         VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange(
                             securityCode = newSecurityCode,
                         ),
+                    )
+                },
+                onSecurityCodeVisibilityChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange(
+                            isVisible = it,
+                        ),
+                    )
+                },
+                onNumberVisibilityChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.CardType.NumberVisibilityChange(isVisible = it),
                     )
                 },
             )

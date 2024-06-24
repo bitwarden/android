@@ -37,6 +37,7 @@ data class VaultAddEditCommonHandlers(
     val onCustomFieldValueChange: (VaultAddEditState.Custom) -> Unit,
     val onCustomFieldActionSelect: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
     val onCollectionSelect: (VaultCollection) -> Unit,
+    val onHiddenFieldVisibilityChange: (Boolean) -> Unit,
 ) {
     companion object {
 
@@ -114,6 +115,11 @@ data class VaultAddEditCommonHandlers(
                         VaultAddEditAction.Common.CollectionSelect(
                             collection = selectedCollection,
                         ),
+                    )
+                },
+                onHiddenFieldVisibilityChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.HiddenFieldVisibilityChange(isVisible = it),
                     )
                 },
             )
