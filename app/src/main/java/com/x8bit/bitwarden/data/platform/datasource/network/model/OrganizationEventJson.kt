@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
  * Represents an individual organization event including the type and time.
  */
 @Serializable
-data class OrganizationEvent(
+data class OrganizationEventJson(
     @SerialName("type") val type: OrganizationEventType,
     @SerialName("cipherId") val cipherId: String?,
     @SerialName("date") @Contextual val date: ZonedDateTime,

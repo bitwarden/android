@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.service
 
 import com.x8bit.bitwarden.data.platform.base.BaseServiceTest
 import com.x8bit.bitwarden.data.platform.datasource.network.api.EventApi
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -31,7 +31,7 @@ class EventServiceTest : BaseServiceTest() {
         server.enqueue(MockResponse())
         val result = eventService.sendOrganizationEvents(
             events = listOf(
-                OrganizationEvent(
+                OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_CREATED,
                     cipherId = "cipher-id",
                     date = ZonedDateTime.now(fixedClock),
