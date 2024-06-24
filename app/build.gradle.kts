@@ -216,8 +216,9 @@ sonar {
         property("sonar.projectKey", "bitwarden_authenticator-android")
         property("sonar.organization", "bitwarden")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "src/main/,src/debug/")
-        property("sonar.tests", "src/test/")
+        property("sonar.sources", "app/src/")
+        property("sonar.tests", "app/src/")
+        property("sonar.test.inclusions", "app/src/test/")
     }
 }
 
