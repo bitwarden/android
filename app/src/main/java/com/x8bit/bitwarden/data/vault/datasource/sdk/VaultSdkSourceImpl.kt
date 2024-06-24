@@ -37,7 +37,6 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
-import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
@@ -469,7 +468,7 @@ class VaultSdkSourceImpl(
             relyingPartyId: String,
         ) -> FindFido2CredentialsResult,
         saveCredential: suspend (Cipher) -> SaveCredentialResult,
-    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> =
+    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
         callbackFlow {
             try {
                 val client = getClient(userId)
@@ -539,7 +538,6 @@ class VaultSdkSourceImpl(
                         request = requestJson,
                         clientData = clientData,
                     )
-                    .asSuccess()
 
                 send(result)
             } catch (e: BitwardenException) {
@@ -550,6 +548,7 @@ class VaultSdkSourceImpl(
             awaitClose()
         }
             .first()
+    }
 
     override suspend fun decryptFido2CredentialAutofillViews(
         userId: String,

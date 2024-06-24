@@ -1321,7 +1321,15 @@ class VaultAddEditViewModel @Inject constructor(
         action: VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
         mutableStateFlow.update { it.copy(dialog = null) }
-        sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+        when (action.result) {
+            is Fido2CreateCredentialResult.Error -> {
+                sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+            }
+
+            is Fido2CreateCredentialResult.Success -> {
+                sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+            }
+        }
         sendEvent(VaultAddEditEvent.CompleteFido2Create(action.result))
     }
 
