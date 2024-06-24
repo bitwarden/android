@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
@@ -53,6 +55,7 @@ class VaultItemViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val fileManager: FileManager,
+    private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
@@ -72,6 +75,9 @@ class VaultItemViewModel @Inject constructor(
 
     //region Initialization and Overrides
     init {
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientViewed(cipherId = state.vaultItemId),
+        )
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
@@ -244,6 +250,11 @@ class VaultItemViewModel @Inject constructor(
                 return@onContent
             }
             clipboardManager.setText(text = action.field)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientCopiedHiddenField(
+                    cipherId = state.vaultItemId,
+                ),
+            )
         }
     }
 
@@ -282,6 +293,13 @@ class VaultItemViewModel @Inject constructor(
                                 }
                             },
                         ),
+                    ),
+                )
+            }
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
+                        cipherId = state.vaultItemId,
                     ),
                 )
             }
@@ -572,6 +590,9 @@ class VaultItemViewModel @Inject constructor(
                 return@onLoginContent
             }
             clipboardManager.setText(text = password)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientCopiedPassword(cipherId = state.vaultItemId),
+            )
         }
     }
 
@@ -642,6 +663,13 @@ class VaultItemViewModel @Inject constructor(
                     ),
                 )
             }
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledPasswordVisible(
+                        cipherId = state.vaultItemId,
+                    ),
+                )
+            }
         }
     }
 
@@ -651,14 +679,58 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleCardTypeActions(action: VaultItemAction.ItemType.Card) {
         when (action) {
+            is VaultItemAction.ItemType.Card.CodeVisibilityClick -> {
+                handleCodeVisibilityClick(action)
+            }
+
             VaultItemAction.ItemType.Card.CopyNumberClick -> handleCopyNumberClick()
             VaultItemAction.ItemType.Card.CopySecurityCodeClick -> handleCopySecurityCodeClick()
+            is VaultItemAction.ItemType.Card.NumberVisibilityClick -> {
+                handleNumberVisibilityClick(action)
+            }
+        }
+    }
+
+    private fun handleCodeVisibilityClick(
+        action: VaultItemAction.ItemType.Card.CodeVisibilityClick,
+    ) {
+        onCardContent { content, card ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.ViewCodeClick(
+                                isVisible = action.isVisible,
+                            ),
+                        ),
+                    )
+                }
+                return@onCardContent
+            }
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        type = card.copy(
+                            securityCode = card.securityCode?.copy(
+                                isVisible = action.isVisible,
+                            ),
+                        ),
+                    ),
+                )
+            }
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardCodeVisible(
+                        cipherId = state.vaultItemId,
+                    ),
+                )
+            }
         }
     }
 
     private fun handleCopyNumberClick() {
         onCardContent { content, card ->
-            val number = requireNotNull(card.number)
+            val number = requireNotNull(card.number).number
             if (content.common.requiresReprompt) {
                 mutableStateFlow.update {
                     it.copy(
@@ -675,7 +747,7 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleCopySecurityCodeClick() {
         onCardContent { content, card ->
-            val securityCode = requireNotNull(card.securityCode)
+            val securityCode = requireNotNull(card.securityCode).code
             if (content.common.requiresReprompt) {
                 mutableStateFlow.update {
                     it.copy(
@@ -687,6 +759,43 @@ class VaultItemViewModel @Inject constructor(
                 return@onCardContent
             }
             clipboardManager.setText(text = securityCode)
+        }
+    }
+
+    private fun handleNumberVisibilityClick(
+        action: VaultItemAction.ItemType.Card.NumberVisibilityClick,
+    ) {
+        onCardContent { content, card ->
+            if (content.common.requiresReprompt) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.ViewNumberClick(
+                                isVisible = action.isVisible,
+                            ),
+                        ),
+                    )
+                }
+                return@onCardContent
+            }
+            mutableStateFlow.update { currentState ->
+                currentState.copy(
+                    viewState = content.copy(
+                        type = card.copy(
+                            number = card.number?.copy(
+                                isVisible = action.isVisible,
+                            ),
+                        ),
+                    ),
+                )
+            }
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardNumberVisible(
+                        cipherId = state.vaultItemId,
+                    ),
+                )
+            }
         }
     }
 
@@ -1248,11 +1357,36 @@ data class VaultItemState(
                  */
                 data class Card(
                     val cardholderName: String?,
-                    val number: String?,
+                    val number: NumberData?,
                     val brand: VaultCardBrand?,
                     val expiration: String?,
-                    val securityCode: String?,
-                ) : ItemType()
+                    val securityCode: CodeData?,
+                ) : ItemType() {
+
+                    /**
+                     * A wrapper for the number data.
+                     *
+                     * @property number The card number itself.
+                     * @property isVisible Whether or not it is currently visible.
+                     */
+                    @Parcelize
+                    data class NumberData(
+                        val number: String,
+                        val isVisible: Boolean,
+                    ) : Parcelable
+
+                    /**
+                     * A wrapper for the code data.
+                     *
+                     * @property code The security code itself.
+                     * @property isVisible Whether or not it is currently visible.
+                     */
+                    @Parcelize
+                    data class CodeData(
+                        val code: String,
+                        val isVisible: Boolean,
+                    ) : Parcelable
+                }
             }
         }
     }
@@ -1554,6 +1688,11 @@ sealed class VaultItemAction {
         sealed class Card : ItemType() {
 
             /**
+             * The user has clicked to display the code.
+             */
+            data class CodeVisibilityClick(val isVisible: Boolean) : Card()
+
+            /**
              * The user has clicked the copy button for the number.
              */
             data object CopyNumberClick : Card()
@@ -1562,6 +1701,11 @@ sealed class VaultItemAction {
              * The user has clicked the copy button for the security code.
              */
             data object CopySecurityCodeClick : Card()
+
+            /**
+             * The user has clicked to display the Number.
+             */
+            data class NumberVisibilityClick(val isVisible: Boolean) : Card()
         }
     }
 
@@ -1725,6 +1869,30 @@ sealed class PasswordRepromptAction : Parcelable {
             get() = VaultItemAction.Internal.CopyValue(
                 value = value,
             )
+    }
+
+    /**
+     * Indicates that we should launch the [VaultItemAction.ItemType.Card.CodeVisibilityClick]
+     * upon password validation.
+     */
+    @Parcelize
+    data class ViewCodeClick(
+        val isVisible: Boolean,
+    ) : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.ItemType.Card.CodeVisibilityClick(isVisible = isVisible)
+    }
+
+    /**
+     * Indicates that we should launch the [VaultItemAction.ItemType.Card.NumberVisibilityClick]
+     * upon password validation.
+     */
+    @Parcelize
+    data class ViewNumberClick(
+        val isVisible: Boolean,
+    ) : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = isVisible)
     }
 
     /**

@@ -44,6 +44,7 @@ class CipherViewExtensionsTest {
                 ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                     password = password,
                     requiresPasswordReprompt = false,
+                    cipherId = id,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
@@ -140,6 +141,7 @@ class CipherViewExtensionsTest {
                 ),
                 ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                     securityCode = securityCode,
+                    cipherId = id,
                     requiresPasswordReprompt = true,
                 ),
             ),

@@ -17,6 +17,7 @@ plugins {
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.ksp)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.sonarqube)
 }
 
 android {
@@ -276,3 +277,20 @@ afterEvaluate {
         .filter { it.name.contains("Fdroid") }
         .forEach { it.enabled = false }
 }
+
+sonar {
+    properties {
+        property("sonar.projectKey", "bitwarden_android")
+        property("sonar.organization", "bitwarden")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.sources", "app/src/")
+        property("sonar.tests", "app/src/")
+        property("sonar.test.inclusions", "app/src/test/")
+    }
+}
+
+tasks {
+    getByName("sonar") {
+        dependsOn("check")
+    }
+} 

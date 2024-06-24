@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -52,11 +54,12 @@ import javax.inject.Inject
 /**
  * Manages [VaultState], handles [VaultAction], and launches [VaultEvent] for the [VaultScreen].
  */
-@Suppress("TooManyFunctions")
+@Suppress("TooManyFunctions", "LongParameterList")
 @HiltViewModel
 class VaultViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
+    private val organizationEventManager: OrganizationEventManager,
     private val clock: Clock,
     private val policyManager: PolicyManager,
     private val settingsRepository: SettingsRepository,
@@ -364,12 +367,18 @@ class VaultViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
         clipboardManager.setText(action.password)
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
+        )
     }
 
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
         clipboardManager.setText(action.securityCode)
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
+        )
     }
 
     private fun handleCopyTotpClick(

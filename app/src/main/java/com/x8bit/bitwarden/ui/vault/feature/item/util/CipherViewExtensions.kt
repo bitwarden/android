@@ -115,10 +115,20 @@ fun CipherView.toViewState(
             CipherType.CARD -> {
                 VaultItemState.ViewState.Content.ItemType.Card(
                     cardholderName = card?.cardholderName,
-                    number = card?.number,
+                    number = card?.number?.let {
+                        VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                            number = it,
+                            isVisible = false,
+                        )
+                    },
                     brand = card?.cardBrand,
                     expiration = card?.expiration,
-                    securityCode = card?.code,
+                    securityCode = card?.code?.let {
+                        VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                            code = it,
+                            isVisible = false,
+                        )
+                    },
                 )
             }
 
