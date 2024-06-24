@@ -10,6 +10,8 @@ import com.x8bit.bitwarden.ui.vault.feature.item.VaultItemViewModel
 data class VaultCardItemTypeHandlers(
     val onCopyNumberClick: () -> Unit,
     val onCopySecurityCodeClick: () -> Unit,
+    val onShowNumberClick: (Boolean) -> Unit,
+    val onShowSecurityCodeClick: (Boolean) -> Unit,
 ) {
     companion object {
 
@@ -23,6 +25,14 @@ data class VaultCardItemTypeHandlers(
                 },
                 onCopySecurityCodeClick = {
                     viewModel.trySendAction(VaultItemAction.ItemType.Card.CopySecurityCodeClick)
+                },
+                onShowNumberClick = {
+                    viewModel.trySendAction(
+                        VaultItemAction.ItemType.Card.NumberVisibilityClick(it),
+                    )
+                },
+                onShowSecurityCodeClick = {
+                    viewModel.trySendAction(VaultItemAction.ItemType.Card.CodeVisibilityClick(it))
                 },
             )
     }
