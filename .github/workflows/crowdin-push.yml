@@ -7,7 +7,6 @@ on:
       - "main"
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  JAVA_VERSION: 17
 
 jobs:
   crowdin-push:
