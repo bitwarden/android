@@ -388,7 +388,7 @@ class VaultAddEditViewModel @Inject constructor(
                     fido2CredentialRequest = request,
                     selectedCipherView = content.toCipherView(),
                     // TODO: [PM-8137] Check if user verification can be performed
-                    isVerificationSupported = false,
+                    isVerificationSupported = true,
                     checkUser = { options, _ ->
                         if (options.requireVerification != Verification.DISCOURAGED) {
                             // TODO [PM-8137]: Perform user verification
