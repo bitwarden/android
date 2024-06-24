@@ -22,6 +22,8 @@ import com.x8bit.bitwarden.data.autofill.util.getAutofillAssistStructureOrNull
 import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -54,7 +56,9 @@ class AutofillCompletionManagerTest {
     }
     private val autofillAppInfo: AutofillAppInfo = mockk()
     private val autofillParser: AutofillParser = mockk()
-    private val cipherView: CipherView = mockk()
+    private val cipherView: CipherView = mockk {
+        every { id } returns "cipherId"
+    }
     private val clipboardManager: BitwardenClipboardManager = mockk {
         every { setText(any<String>()) } just runs
     }
@@ -70,6 +74,9 @@ class AutofillCompletionManagerTest {
         every { show() } just runs
     }
     private val vaultRepository: VaultRepository = mockk()
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
+    }
 
     private val autofillCompletionManager: AutofillCompletionManager =
         AutofillCompletionManagerImpl(
@@ -80,6 +87,7 @@ class AutofillCompletionManagerTest {
             filledDataBuilderProvider = { filledDataBuilder },
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
+            organizationEventManager = organizationEventManager,
         )
 
     @BeforeEach
@@ -290,6 +298,9 @@ class AutofillCompletionManagerTest {
                 Toast.LENGTH_LONG,
             )
             toast.show()
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientAutoFilled(cipherId = "cipherId"),
+            )
         }
         coVerify {
             filledDataBuilder.build(autofillRequest = fillableRequest)
@@ -358,6 +369,9 @@ class AutofillCompletionManagerTest {
             )
             settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientAutoFilled(cipherId = "cipherId"),
+            )
         }
         coVerify {
             filledDataBuilder.build(autofillRequest = fillableRequest)
@@ -421,6 +435,9 @@ class AutofillCompletionManagerTest {
             )
             settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientAutoFilled(cipherId = "cipherId"),
+            )
         }
         coVerify {
             filledDataBuilder.build(autofillRequest = fillableRequest)
@@ -479,6 +496,9 @@ class AutofillCompletionManagerTest {
             )
             settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientAutoFilled(cipherId = "cipherId"),
+            )
         }
         coVerify {
             filledDataBuilder.build(autofillRequest = fillableRequest)
@@ -537,6 +557,9 @@ class AutofillCompletionManagerTest {
             )
             settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientAutoFilled(cipherId = "cipherId"),
+            )
         }
         coVerify {
             filledDataBuilder.build(autofillRequest = fillableRequest)

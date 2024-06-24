@@ -17,6 +17,8 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -82,6 +84,7 @@ class VaultItemListingViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val policyManager: PolicyManager,
     private val fido2CredentialManager: Fido2CredentialManager,
+    private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultItemListingState, VaultItemListingEvent, VaultItemListingsAction>(
     initialState = run {
         val userState = requireNotNull(authRepository.userStateFlow.value)
@@ -342,12 +345,18 @@ class VaultItemListingViewModel @Inject constructor(
         action: ListingItemOverflowAction.VaultAction.CopyPasswordClick,
     ) {
         clipboardManager.setText(action.password)
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientCopiedPassword(cipherId = action.cipherId),
+        )
     }
 
     private fun handleCopySecurityCodeClick(
         action: ListingItemOverflowAction.VaultAction.CopySecurityCodeClick,
     ) {
         clipboardManager.setText(action.securityCode)
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = action.cipherId),
+        )
     }
 
     private fun handleCopyTotpClick(

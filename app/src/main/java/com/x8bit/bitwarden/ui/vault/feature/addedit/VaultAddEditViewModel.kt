@@ -12,6 +12,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toAutofillSelectionDataOrNull
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
@@ -88,6 +90,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val resourceManager: ResourceManager,
     private val clock: Clock,
+    private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -159,6 +162,11 @@ class VaultAddEditViewModel @Inject constructor(
     //region Initialization and Overrides
 
     init {
+        onEdit {
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientViewed(cipherId = it.vaultItemId),
+            )
+        }
         vaultRepository
             .vaultDataStateFlow
             .takeUntilLoaded()

@@ -11,6 +11,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.combineDataStates
 import com.x8bit.bitwarden.data.platform.repository.util.mapNullable
@@ -53,6 +55,7 @@ class VaultItemViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val fileManager: FileManager,
+    private val organizationEventManager: OrganizationEventManager,
 ) : BaseViewModel<VaultItemState, VaultItemEvent, VaultItemAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE] ?: VaultItemState(
@@ -72,6 +75,9 @@ class VaultItemViewModel @Inject constructor(
 
     //region Initialization and Overrides
     init {
+        organizationEventManager.trackEvent(
+            event = OrganizationEvent.CipherClientViewed(cipherId = state.vaultItemId),
+        )
         combine(
             vaultRepository.getVaultItemStateFlow(state.vaultItemId),
             authRepository.userStateFlow,
@@ -244,6 +250,11 @@ class VaultItemViewModel @Inject constructor(
                 return@onContent
             }
             clipboardManager.setText(text = action.field)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientCopiedHiddenField(
+                    cipherId = state.vaultItemId,
+                ),
+            )
         }
     }
 
@@ -282,6 +293,13 @@ class VaultItemViewModel @Inject constructor(
                                 }
                             },
                         ),
+                    ),
+                )
+            }
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
+                        cipherId = state.vaultItemId,
                     ),
                 )
             }
@@ -572,6 +590,9 @@ class VaultItemViewModel @Inject constructor(
                 return@onLoginContent
             }
             clipboardManager.setText(text = password)
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientCopiedPassword(cipherId = state.vaultItemId),
+            )
         }
     }
 
@@ -639,6 +660,13 @@ class VaultItemViewModel @Inject constructor(
                                 isVisible = action.isVisible,
                             ),
                         ),
+                    ),
+                )
+            }
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledPasswordVisible(
+                        cipherId = state.vaultItemId,
                     ),
                 )
             }
