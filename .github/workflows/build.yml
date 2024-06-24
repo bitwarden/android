@@ -21,11 +21,6 @@ on:
         required: false
         default: false
         type: boolean
-      distribution-track:
-        description: "Optional. Play Store track build will be published to."
-        required: false
-        default: "internal"
-        type: string
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

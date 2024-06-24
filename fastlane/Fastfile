@@ -126,7 +126,30 @@ platform :android do
     currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
 
     if options[:versionName].nil? or options[:versionName].to_s.empty?
+        puts "Getting latest version name from Public Beta track"
+        googlePlayVersionNames = google_play_track_release_names(
+          package_name: "com.x8bit.bitwarden.beta",
+          json_key: options[:serviceCredentialsFile],
+          track: "Public",
+        )
+        publicBetaVersion = googlePlayVersionNames[0]
+        puts "Latest version name from Public Beta track: #{publicBetaVersion}"
         nextVersionName = currentVersionName
+
+        versionParts = publicBetaVersion.split(".")
+        currentMajor = versionParts[0]
+        currentMinor = versionParts[1]
+        currentRevision = versionParts[2]
+
+        currentDate = Time.new
+        major = currentDate.year.to_s
+        minor = currentDate.strftime "%-m"
+
+        revision = 0
+        if currentMajor == major and currentMinor == minor
+            revision = currentRevision.to_i + 1
+        end
+        nextVersionName = "#{major}.#{minor}.#{revision}"
     else
         nextVersionName = options[:versionName].to_s
     end
