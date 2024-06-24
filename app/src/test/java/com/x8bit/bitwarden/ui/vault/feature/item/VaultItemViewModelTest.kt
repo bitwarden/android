@@ -1925,7 +1925,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     cardState.copy(
                         dialog = VaultItemState.DialogState.MasterPasswordDialog(
                             action = PasswordRepromptAction.CopyClick(
-                                value = requireNotNull(DEFAULT_CARD_TYPE.number),
+                                value = requireNotNull(DEFAULT_CARD_TYPE.number).number,
                             ),
                         ),
                     ),
@@ -1973,6 +1973,81 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         }
 
         @Test
+        fun `on NumberVisibilityClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            hasMasterPassword = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns CARD_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                assertEquals(cardState, viewModel.stateFlow.value)
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
+                )
+                assertEquals(
+                    cardState.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.ViewNumberClick(isVisible = true),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on NumberVisibilityClick should call trackEvent on the OrganizationEventManager and update the ViewState when re-prompt is not required`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
+                )
+            }
+            every { clipboardManager.setText(text = "12345436") } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
+            )
+
+            verify(exactly = 1) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardNumberVisible(
+                        cipherId = VAULT_ITEM_ID,
+                    ),
+                )
+                mockCipherView.toViewState(
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                )
+            }
+        }
+
+        @Test
         fun `on CopySecurityCodeClick should show password dialog when re-prompt is required`() =
             runTest {
                 val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
@@ -1994,7 +2069,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     cardState.copy(
                         dialog = VaultItemState.DialogState.MasterPasswordDialog(
                             action = PasswordRepromptAction.CopyClick(
-                                value = requireNotNull(DEFAULT_CARD_TYPE.securityCode),
+                                value = requireNotNull(DEFAULT_CARD_TYPE.securityCode).code,
                             ),
                         ),
                     ),
@@ -2033,6 +2108,81 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 clipboardManager.setText(text = "987")
+                mockCipherView.toViewState(
+                    isPremiumUser = true,
+                    hasMasterPassword = true,
+                    totpCodeItemData = null,
+                )
+            }
+        }
+
+        @Test
+        fun `on CodeVisibilityClick should show password dialog when re-prompt is required`() =
+            runTest {
+                val cardState = DEFAULT_STATE.copy(viewState = CARD_VIEW_STATE)
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            isPremiumUser = true,
+                            hasMasterPassword = true,
+                            totpCodeItemData = null,
+                        )
+                    } returns CARD_VIEW_STATE
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+                assertEquals(cardState, viewModel.stateFlow.value)
+                viewModel.trySendAction(
+                    VaultItemAction.ItemType.Card.CodeVisibilityClick(isVisible = true),
+                )
+                assertEquals(
+                    cardState.copy(
+                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                            action = PasswordRepromptAction.ViewCodeClick(isVisible = true),
+                        ),
+                    ),
+                    viewModel.stateFlow.value,
+                )
+
+                verify(exactly = 1) {
+                    mockCipherView.toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on CodeVisibilityClick should call trackEvent on the OrganizationEventManager and update the ViewState when re-prompt is not required`() {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                } returns createViewState(
+                    common = DEFAULT_COMMON.copy(requiresReprompt = false),
+                    type = DEFAULT_CARD_TYPE,
+                )
+            }
+            every { clipboardManager.setText(text = "987") } just runs
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = null)
+
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Card.CodeVisibilityClick(isVisible = true),
+            )
+
+            verify(exactly = 1) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardCodeVisible(
+                        cipherId = VAULT_ITEM_ID,
+                    ),
+                )
                 mockCipherView.toViewState(
                     isPremiumUser = true,
                     hasMasterPassword = true,
@@ -2313,10 +2463,16 @@ class VaultItemViewModelTest : BaseViewModelTest() {
         private val DEFAULT_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
             VaultItemState.ViewState.Content.ItemType.Card(
                 cardholderName = "mockName",
-                number = "12345436",
+                number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                    number = "12345436",
+                    isVisible = false,
+                ),
                 brand = VaultCardBrand.VISA,
                 expiration = "03/2027",
-                securityCode = "987",
+                securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                    code = "987",
+                    isVisible = false,
+                ),
             )
 
         private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =
