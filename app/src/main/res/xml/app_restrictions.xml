@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<restrictions xmlns:android="http://schemas.android.com/apk/res/android">
+    <restriction
+        android:defaultValue="@null"
+        android:description="@string/server_url"
+        android:key="baseEnvironmentUrl"
+        android:restrictionType="string"
+        android:title="@string/self_hosted_server_url" />
+</restrictions>
