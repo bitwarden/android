@@ -15,18 +15,22 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
+import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.landing.LandingEvent
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
+import com.x8bit.bitwarden.ui.tools.feature.send.SendEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -47,19 +51,24 @@ private const val MIN_PASSWORD_LENGTH = 12
 class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
+    private val environmentRepository: EnvironmentRepository,
     private val specialCircumstance: SpecialCircumstanceManager
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE]
-        ?: CompleteRegistrationState(
-            userEmail = "",
-            emailVerificationToken = "",
-            passwordInput = "",
-            confirmPasswordInput = "",
-            passwordHintInput = "",
-            isCheckDataBreachesToggled = true,
-            dialog = null,
-            passwordStrengthState = PasswordStrengthState.NONE,
-        ),
+        ?: run {
+            val args = CompleteRegistrationArgs(savedStateHandle)
+            CompleteRegistrationState(
+                userEmail = args.emailAddress,
+                emailVerificationToken = args.verificationToken,
+                region = args.region,
+                passwordInput = "",
+                confirmPasswordInput = "",
+                passwordHintInput = "",
+                isCheckDataBreachesToggled = true,
+                dialog = null,
+                passwordStrengthState = PasswordStrengthState.NONE,
+            )
+               },
 ) {
 
     /**
@@ -69,6 +78,8 @@ class CompleteRegistrationViewModel @Inject constructor(
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
+        updateCurrentRegion()
+        verifyEmailAddress()
         // As state updates, write to saved state handle:
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
@@ -83,6 +94,38 @@ class CompleteRegistrationViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+    }
+
+    // Update region when coming from an AppLink to complete the registration
+    private fun updateCurrentRegion() {
+        if (state.region == null) {
+            return
+        }
+        val environment = when (state.region) {
+            Environment.Type.US -> Environment.Us
+            Environment.Type.EU -> Environment.Eu
+            Environment.Type.SELF_HOSTED -> {
+                // Self-host does not have email confirmation
+                return
+            }
+        }
+
+        // Update the environment in the repo; the VM state will update accordingly because it is
+        // listening for changes.
+        environmentRepository.environment = environment
+    }
+
+    private fun verifyEmailAddress() {
+        mutableStateFlow.update {
+            it.copy(dialog = CompleteRegistrationDialog.Loading)
+        }
+
+        // TODO Add call to service to verify email
+        sendEvent(CompleteRegistrationEvent.ShowToast(message = R.string.email_verified.asText()))
+
+        mutableStateFlow.update {
+            it.copy(dialog = null)
+        }
     }
 
     override fun onCleared() {
@@ -365,6 +408,7 @@ class CompleteRegistrationViewModel @Inject constructor(
 data class CompleteRegistrationState(
     val userEmail: String,
     val emailVerificationToken: String,
+    val region: Environment.Type,
     val passwordInput: String,
     val confirmPasswordInput: String,
     val passwordHintInput: String,
@@ -442,9 +486,11 @@ sealed class CompleteRegistrationEvent {
     data object NavigateBack : CompleteRegistrationEvent()
 
     /**
-     * Placeholder event for showing a toast. Can be removed once there are real events.
+     * Show a toast with the given message.
      */
-    data class ShowToast(val text: String) : CompleteRegistrationEvent()
+    data class ShowToast(
+        val message: Text,
+    ) : CompleteRegistrationEvent()
 
     /**
      * Navigates to the captcha verification screen.

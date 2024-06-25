@@ -79,8 +79,7 @@ fun StartRegistrationScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCompleteRegistration: (
         emailAddress: String,
-        verificationToken: String,
-        captchaToken: String) -> Unit,
+        verificationToken: String) -> Unit,
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -114,8 +113,7 @@ fun StartRegistrationScreen(
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
                 onNavigateToCompleteRegistration(
                     event.email,
-                    event.verificationToken,
-                    event.captchaToken,
+                    event.verificationToken
                 )
             }
 

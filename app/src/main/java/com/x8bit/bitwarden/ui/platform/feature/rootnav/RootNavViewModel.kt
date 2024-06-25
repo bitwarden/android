@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
@@ -80,6 +81,7 @@ class RootNavViewModel @Inject constructor(
                 RootNavState.CompleteOngoingRegistration(
                     email = specialCircumstance.completeRegistrationData.email,
                     verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
+                    region = specialCircumstance.completeRegistrationData.region,
                     timestamp = specialCircumstance.timestamp
                 )
             }
@@ -125,6 +127,7 @@ class RootNavViewModel @Inject constructor(
                         RootNavState.CompleteOngoingRegistration (
                             email = specialCircumstance.completeRegistrationData.email,
                             verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
+                            region = specialCircumstance.completeRegistrationData.region,
                             timestamp = specialCircumstance.timestamp
                         )
                 }
@@ -229,6 +232,7 @@ sealed class RootNavState : Parcelable {
     data class CompleteOngoingRegistration (
         val email: String,
         val verificationToken: String,
+        val region: Environment.Type,
         val timestamp: Timestamp
     ) : RootNavState()
 

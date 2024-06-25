@@ -197,7 +197,11 @@ fun RootNavScreen(
 
             is RootNavState.CompleteOngoingRegistration -> {
                 navController.navigateToAuthGraph(rootNavOptions)
-                navController.navigateToCompleteRegistration()
+                navController.navigateToCompleteRegistration(
+                    emailAddress = currentState.email,
+                    verificationToken = currentState.verificationToken,
+                    region = currentState.region
+                )
             }
         }
     }

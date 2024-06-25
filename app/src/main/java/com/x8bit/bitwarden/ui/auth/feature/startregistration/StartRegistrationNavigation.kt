@@ -21,8 +21,7 @@ fun NavGraphBuilder.startRegistrationDestination(
     onNavigateBack: () -> Unit,
     onNavigateToCompleteRegistration: (
         emailAddress: String,
-        verificationToken: String,
-        captchaToken: String
+        verificationToken: String
     ) -> Unit,
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,

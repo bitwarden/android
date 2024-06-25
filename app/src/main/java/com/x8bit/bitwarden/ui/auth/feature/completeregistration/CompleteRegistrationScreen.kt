@@ -73,7 +73,7 @@ fun CompleteRegistrationScreen(
         when (event) {
             is CompleteRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
             is CompleteRegistrationEvent.ShowToast -> {
-                Toast.makeText(context, event.text, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
 
             is CompleteRegistrationEvent.NavigateToCaptcha -> {
