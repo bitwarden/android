@@ -626,9 +626,9 @@ Scanning will happen automatically.</string>
   <string name="fido2_return_to_app">Return to app</string>
   <string name="fido2_check_browser">Please make sure your default browser supports WebAuthn and try again.</string>
   <string name="reset_password_auto_enroll_invite_warning">This organisation has an enterprise policy that will automatically enrol you in password reset. Enrolment will allow organisation administrators to change your master password.</string>
-  <string name="vault_timeout_policy_in_effect">Your organisation policies are affecting your vault timeout. Maximum allowed vault timeout is %1$s hour(s) and %2$s minute(s)</string>
-  <string name="vault_timeout_policy_with_action_in_effect">Your organisation policies are affecting your vault timeout. Maximum allowed vault timeout is %1$s hour(s) and %2$s minute(s). Your vault timeout action is set to %3$s.</string>
-  <string name="vault_timeout_action_policy_in_effect">Your organisation policies have set your vault timeout action to %1$s.</string>
+  <string name="vault_timeout_policy_in_effect">Your organization policies have set your maximum allowed vault timeout to %1$s hour(s) and %2$s minute(s).</string>
+  <string name="vault_timeout_policy_with_action_in_effect">Your organization policies are affecting your vault timeout. Maximum allowed vault timeout is %1$s hour(s) and %2$s minute(s). Your vault timeout action is set to %3$s.</string>
+  <string name="vault_timeout_action_policy_in_effect">Your organization policies have set your vault timeout action to %1$s.</string>
   <string name="vault_timeout_to_large">Your vault timeout exceeds the restrictions set by your organisation.</string>
   <string name="disable_personal_vault_export_policy_in_effect">One or more organisation policies prevents your from exporting your individual vault.</string>
   <string name="add_account">Add account</string>
@@ -675,7 +675,7 @@ Scanning will happen automatically.</string>
   <string name="verification_codes">Verification codes</string>
   <string name="premium_subscription_required">Premium subscription required</string>
   <string name="cannot_add_authenticator_key">Cannot add authenticator key?</string>
-  <string name="scan_qr_code">Scan QR Code</string>
+  <string name="scan_qr_code">Scan QR code</string>
   <string name="cannot_scan_qr_code">Cannot scan QR Code?</string>
   <string name="authenticator_key_scanner">Authenticator key</string>
   <string name="enter_key_manually">Enter key manually</string>
@@ -831,12 +831,12 @@ Do you want to switch to this account?</string>
   <string name="cannot_edit_multiple_ur_is_at_once">Cannot edit multiple URIs at once</string>
   <string name="login_approved">Login approved</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
-  <string name="log_in_with_device">Log in with device</string>
+  <string name="log_in_with_device">Log in with another device</string>
   <string name="logging_in_on">Logging in on</string>
   <string name="vault">Vault</string>
   <string name="appearance">Appearance</string>
   <string name="account_security">Account security</string>
-  <string name="bitwarden_help_center">Bitwarden Help Centre</string>
+  <string name="bitwarden_help_center">Bitwarden Help Center</string>
   <string name="contact_bitwarden_support">Contact Bitwarden support</string>
   <string name="copy_app_information">Copy app information</string>
   <string name="sync_now">Sync now</string>
@@ -903,8 +903,8 @@ Do you want to switch to this account?</string>
   <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
-  <string name="organization_unassigned_items_message_useu_description_long">Unassigned organisation items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
-  <string name="organization_unassigned_items_message_self_host_041624_description_long">On May 16, 2024, unassigned organisation items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
+  <string name="organization_unassigned_items_message_useu_description_long">Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
+  <string name="organization_unassigned_items_message_self_host_041624_description_long">On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
   <string name="remind_me_later">Remind me later</string>
   <string name="notice">Notice</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys not supported for this app</string>
