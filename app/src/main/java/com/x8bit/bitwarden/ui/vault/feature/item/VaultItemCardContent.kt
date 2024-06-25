@@ -75,13 +75,15 @@ fun VaultItemCardContent(
                 )
             }
         }
-        cardState.number?.let { number ->
+        cardState.number?.let { numberData ->
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenPasswordFieldWithActions(
                     label = stringResource(id = R.string.number),
-                    value = number,
+                    value = numberData.number,
                     onValueChange = {},
+                    showPassword = numberData.isVisible,
+                    showPasswordChange = vaultCardItemTypeHandlers.onShowNumberClick,
                     readOnly = true,
                     singleLine = false,
                     actions = {
@@ -137,13 +139,15 @@ fun VaultItemCardContent(
             }
         }
 
-        cardState.securityCode?.let { securityCode ->
+        cardState.securityCode?.let { securityCodeData ->
             item {
                 Spacer(modifier = Modifier.height(8.dp))
                 BitwardenPasswordFieldWithActions(
                     label = stringResource(id = R.string.security_code),
-                    value = securityCode,
+                    value = securityCodeData.code,
                     onValueChange = {},
+                    showPassword = securityCodeData.isVisible,
+                    showPasswordChange = vaultCardItemTypeHandlers.onShowSecurityCodeClick,
                     readOnly = true,
                     singleLine = false,
                     actions = {

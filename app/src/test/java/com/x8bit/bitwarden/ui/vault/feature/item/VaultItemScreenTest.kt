@@ -1837,14 +1837,17 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in card state the number should be displayed according to state`() {
+    fun `in card state, on show number click should send NumberVisibilityClick`() {
         composeTestRule.assertScrollableNodeDoesNotExist("Number")
 
         mutableStateFlow.update {
             it.copy(
                 viewState = EMPTY_CARD_VIEW_STATE.copy(
                     type = EMPTY_CARD_TYPE.copy(
-                        number = "number",
+                        number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                            number = "number",
+                            isVisible = false,
+                        ),
                     ),
                 ),
             )
@@ -1861,6 +1864,54 @@ class VaultItemScreenTest : BaseComposeTest() {
             .onNodeWithContentDescription("Show")
             .assertIsDisplayed()
             .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Card.NumberVisibilityClick(isVisible = true),
+            )
+        }
+    }
+
+    @Test
+    fun `in card state the number should be displayed according to state`() {
+        composeTestRule.assertScrollableNodeDoesNotExist("Number")
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                            number = "number",
+                            isVisible = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Number")
+            .assertTextEquals("Number", "••••••")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Copy number")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithContentDescription("Show")
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                            number = "number",
+                            isVisible = true,
+                        ),
+                    ),
+                ),
+            )
+        }
 
         composeTestRule
             .onNodeWithText("Number")
@@ -1881,7 +1932,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             currentState.copy(
                 viewState = EMPTY_CARD_VIEW_STATE.copy(
                     type = EMPTY_CARD_TYPE.copy(
-                        number = number,
+                        number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                            number = number,
+                            isVisible = false,
+                        ),
                         expiration = "test",
                     ),
                 ),
@@ -1927,14 +1981,17 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `in card state the security code should be displayed according to state`() {
+    fun `in card state, on show code click should send CodeVisibilityClick`() {
         composeTestRule.assertScrollableNodeDoesNotExist("Security code")
 
         mutableStateFlow.update {
             it.copy(
                 viewState = EMPTY_CARD_VIEW_STATE.copy(
                     type = EMPTY_CARD_TYPE.copy(
-                        securityCode = "123",
+                        securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                            code = "123",
+                            isVisible = false,
+                        ),
                     ),
                 ),
             )
@@ -1953,6 +2010,55 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
 
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultItemAction.ItemType.Card.CodeVisibilityClick(isVisible = true),
+            )
+        }
+    }
+
+    @Test
+    fun `in card state the security code should be displayed according to state`() {
+        composeTestRule.assertScrollableNodeDoesNotExist("Security code")
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                            code = "123",
+                            isVisible = false,
+                        ),
+                    ),
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Security code")
+            .assertTextEquals("Security code", "•••")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Copy security code")
+            .assertIsDisplayed()
+        composeTestRule
+            .onAllNodesWithContentDescription("Show")
+            .onLast()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = EMPTY_CARD_VIEW_STATE.copy(
+                    type = EMPTY_CARD_TYPE.copy(
+                        securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                            code = "123",
+                            isVisible = true,
+                        ),
+                    ),
+                ),
+            )
+        }
+
         composeTestRule
             .onNodeWithText("Security code")
             .assertTextEquals("Security code", "123")
@@ -1967,12 +2073,15 @@ class VaultItemScreenTest : BaseComposeTest() {
 
     @Test
     fun `in card state, on copy security code click should send CopySecurityCodeClick`() {
-        val number = "1234"
+        val code = "1234"
         mutableStateFlow.update { currentState ->
             currentState.copy(
                 viewState = EMPTY_CARD_VIEW_STATE.copy(
                     type = EMPTY_CARD_TYPE.copy(
-                        securityCode = number,
+                        securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                            code = code,
+                            isVisible = false,
+                        ),
                     ),
                 ),
             )
@@ -2167,10 +2276,16 @@ private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity
 private val DEFAULT_CARD: VaultItemState.ViewState.Content.ItemType.Card =
     VaultItemState.ViewState.Content.ItemType.Card(
         cardholderName = "the cardholder name",
-        number = "the number",
+        number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+            number = "the number",
+            isVisible = false,
+        ),
         brand = VaultCardBrand.VISA,
         expiration = "the expiration",
-        securityCode = "the security code",
+        securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+            code = "the security code",
+            isVisible = false,
+        ),
     )
 
 private val EMPTY_COMMON: VaultItemState.ViewState.Content.Common =
@@ -2212,10 +2327,16 @@ private val EMPTY_IDENTITY_TYPE: VaultItemState.ViewState.Content.ItemType.Ident
 private val EMPTY_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =
     VaultItemState.ViewState.Content.ItemType.Card(
         cardholderName = "",
-        number = "",
+        number = VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+            number = "",
+            isVisible = false,
+        ),
         brand = VaultCardBrand.SELECT,
         expiration = "",
-        securityCode = "",
+        securityCode = VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+            code = "",
+            isVisible = false,
+        ),
     )
 
 private val EMPTY_LOGIN_VIEW_STATE: VaultItemState.ViewState.Content =

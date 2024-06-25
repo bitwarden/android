@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
@@ -59,6 +60,7 @@ object AutofillModule {
         dispatcherManager: DispatcherManager,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
+        organizationEventManager: OrganizationEventManager,
     ): AutofillCompletionManager =
         AutofillCompletionManagerImpl(
             authRepository = authRepository,
@@ -67,6 +69,7 @@ object AutofillModule {
             dispatcherManager = dispatcherManager,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
+            organizationEventManager = organizationEventManager,
         )
 
     @Provides

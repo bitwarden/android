@@ -18,6 +18,8 @@ import com.x8bit.bitwarden.data.autofill.util.toAutofillAppInfo
 import com.x8bit.bitwarden.data.autofill.util.toAutofillCipherProvider
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
@@ -37,6 +39,7 @@ class AutofillCompletionManagerImpl(
         { createSingleItemFilledDataBuilder(cipherView = it) },
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
+    private val organizationEventManager: OrganizationEventManager,
 ) : AutofillCompletionManager {
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
@@ -85,6 +88,11 @@ class AutofillCompletionManagerImpl(
             )
             val resultIntent = createAutofillSelectionResultIntent(dataset)
             activity.setResultAndFinish(resultIntent = resultIntent)
+            cipherView.id?.let {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientAutoFilled(cipherId = it),
+                )
+            }
         }
     }
 

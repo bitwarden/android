@@ -76,15 +76,13 @@ class FillResponseBuilderImpl : FillResponseBuilder {
  */
 private fun FilledPartition.toAuthIntentSenderOrNull(
     autofillAppInfo: AutofillAppInfo,
-): IntentSender? {
-    val isTotpEnabled = this.autofillCipher.isTotpEnabled
-    val cipherId = this.autofillCipher.cipherId
-    return if (isTotpEnabled && cipherId != null) {
-        createTotpCopyIntentSender(
-            cipherId = cipherId,
-            context = autofillAppInfo.context,
-        )
-    } else {
-        null
-    }
-}
+): IntentSender? =
+    autofillCipher
+        .cipherId
+        ?.let { cipherId ->
+            // We always do this even if there is no TOTP code because we want to log the events
+            createTotpCopyIntentSender(
+                cipherId = cipherId,
+                context = autofillAppInfo.context,
+            )
+        }

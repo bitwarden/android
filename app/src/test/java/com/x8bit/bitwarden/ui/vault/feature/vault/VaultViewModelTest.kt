@@ -9,6 +9,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -97,6 +99,10 @@ class VaultViewModelTest : BaseViewModelTest() {
             every { lockVaultForCurrentUser() } just runs
             every { lockVault(any()) } just runs
         }
+
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
+    }
 
     @Test
     fun `initial state should be correct and should trigger a syncIfNecessary call`() {
@@ -1204,17 +1210,22 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
         runTest {
             val password = "passTheWord"
+            val cipherId = "cipherId"
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = password,
                         requiresPasswordReprompt = true,
+                        cipherId = cipherId,
                     ),
                 ),
             )
             verify(exactly = 1) {
                 clipboardManager.setText(password)
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                )
             }
         }
 
@@ -1268,17 +1279,22 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopySecurityCodeClick should call setText on the ClipboardManager`() =
         runTest {
             val securityCode = "234"
+            val cipherId = "cipherId"
             val viewModel = createViewModel()
             viewModel.trySendAction(
                 VaultAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
+                        cipherId = cipherId,
                         requiresPasswordReprompt = true,
                     ),
                 ),
             )
             verify(exactly = 1) {
                 clipboardManager.setText(securityCode)
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
+                )
             }
         }
 
@@ -1365,6 +1381,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                             password = password,
                             requiresPasswordReprompt = true,
+                            cipherId = "cipherId",
                         ),
                         password = password,
                     ),
@@ -1403,6 +1420,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                         overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                             password = password,
                             requiresPasswordReprompt = true,
+                            cipherId = "cipherId",
                         ),
                         password = password,
                     ),
@@ -1425,6 +1443,7 @@ class VaultViewModelTest : BaseViewModelTest() {
     fun `MasterPasswordRepromptSubmit for a request Success with a valid password should continue the action`() =
         runTest {
             val password = "password"
+            val cipherId = "cipherId"
             coEvery {
                 authRepository.validatePassword(password = password)
             } returns ValidatePasswordResult.Success(isValid = true)
@@ -1436,6 +1455,7 @@ class VaultViewModelTest : BaseViewModelTest() {
                     overflowAction = ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = password,
                         requiresPasswordReprompt = true,
+                        cipherId = cipherId,
                     ),
                     password = password,
                 ),
@@ -1443,6 +1463,9 @@ class VaultViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 clipboardManager.setText(password)
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                )
             }
         }
 
@@ -1454,6 +1477,7 @@ class VaultViewModelTest : BaseViewModelTest() {
             clock = clock,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
+            organizationEventManager = organizationEventManager,
         )
 }
 
