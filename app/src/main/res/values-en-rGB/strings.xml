@@ -222,7 +222,7 @@
   <string name="use_another_two_step_method">Use another two-step login method</string>
   <string name="verification_email_not_sent">Could not send verification email. Try again.</string>
   <string name="verification_email_sent">Verification email sent</string>
-  <string name="yubi_key_instruction">To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device\'s USB port, then touch its button.</string>
+  <string name="yubi_key_instruction">To continue, hold your YubiKey against the back of the device or insert your YubiKey into your device\'s USB port, then touch its button.</string>
   <string name="yubi_key_title">YubiKey security key</string>
   <string name="add_new_attachment">Add new attachment</string>
   <string name="attachments">Attachments</string>
@@ -357,7 +357,7 @@ Scanning will happen automatically.</string>
   <string name="yes_and_save">Yes, and save</string>
   <string name="autofill_and_save">Auto-fill and save</string>
   <string name="organization">Organisation</string>
-  <string name="hold_yubikey_near_top">Hold your Yubikey near the top of the device.</string>
+  <string name="hold_yubikey_near_top">Hold your YubiKey near the top of the device.</string>
   <string name="try_again">Try again</string>
   <string name="yubi_key_instruction_ios">To continue, hold your YubiKey NEO against the back of the device.</string>
   <string name="bitwarden_autofill_accessibility_service_description2">The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</string>
@@ -371,8 +371,8 @@ Scanning will happen automatically.</string>
   <string name="autofill_turn_on">To set up password auto-fill on your device, follow these instructions:</string>
   <string name="autofill_turn_on1">1. Go to the iOS \"Settings\" app</string>
   <string name="autofill_turn_on2">2. Tap \"Passwords\"</string>
-  <string name="autofill_turn_on3">3. Tap \"AutoFill Passwords\"</string>
-  <string name="autofill_turn_on4">4. Turn on AutoFill</string>
+  <string name="autofill_turn_on3">3. Tap \"Password Options\"</string>
+  <string name="autofill_turn_on4">4. Turn on AutoFill Passwords and Passkeys</string>
   <string name="autofill_turn_on5">5. Select \"Bitwarden\"</string>
   <string name="password_autofill">Password auto-fill</string>
   <string name="bitwarden_autofill_alert2">The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the \"Settings\" screen.</string>
@@ -453,7 +453,7 @@ Scanning will happen automatically.</string>
   <string name="pin_require_master_password_restart">Do you want to require unlocking with your master password when the application is restarted?</string>
   <string name="black">Black</string>
   <string name="nord">Nord</string>
-  <string name="solarized_dark">Solarized Dark</string>
+  <string name="solarized_dark">Solarised Dark</string>
   <string name="autofill_blocked_uris">Auto-fill blocked URIs</string>
   <string name="ask_to_add_login">Ask to add login</string>
   <string name="ask_to_add_login_description">Ask to add an item if one isn\'t found in your vault.</string>
@@ -535,14 +535,14 @@ Scanning will happen automatically.</string>
   <string name="inline_autofill">Use inline autofill</string>
   <string name="inline_autofill_description">Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is turned off), the default Autofill overlay will be used.</string>
   <string name="accessibility">Use accessibility</string>
-  <string name="accessibility_description">Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When set up, we\'ll display a popup when login fields are selected.</string>
+  <string name="accessibility_description">Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When set up, we\'ll display a pop-up when login fields are selected.</string>
   <string name="accessibility_description2">Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be turned on as well)</string>
   <string name="accessibility_description3">Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if turned on).</string>
   <string name="accessibility_description4">Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if turned on).</string>
   <string name="draw_over">Use draw-over</string>
-  <string name="draw_over_description">Allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</string>
-  <string name="draw_over_description2">If turned on, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</string>
-  <string name="draw_over_description3">If turned on, accessibility will show a popup to augment the Autofill Service for older apps that don\'t support the Android Autofill Framework.</string>
+  <string name="draw_over_description">Allows the Bitwarden Accessibility Service to display a pop-up when login fields are selected.</string>
+  <string name="draw_over_description2">If turned on, the Bitwarden Accessibility Service will display a pop-up when login fields are selected to assist with auto-filling your logins.</string>
+  <string name="draw_over_description3">If turned on, accessibility will show a pop-up to augment the Autofill Service for older apps that don\'t support the Android Autofill Framework.</string>
   <string name="personal_ownership_submit_error">Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organisation and choose from available collections.</string>
   <string name="personal_ownership_policy_in_effect">An organisation policy is affecting your ownership options.</string>
   <string name="send">Send</string>
@@ -900,7 +900,7 @@ Do you want to switch to this account?</string>
   <string name="set_up_auto_fill_description_long">To set up password auto-fill and passkey management, set Bitwarden as your preferred provider in the iOS Settings.</string>
   <string name="first_dot_go_to_your_device_settings_passwords_password_options">1. Go to your device\'s Settings &gt; Passwords &gt; Password Options</string>
   <string name="second_dot_turn_on_auto_fill">2. Turn on AutoFill</string>
-  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for passwords and passkeys</string>
+  <string name="third_dot_select_bitwarden_to_use_for_passwords_and_passkeys">3. Select \"Bitwarden\" to use for Passwords and Passkeys</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault">Your passkey will be saved to your Bitwarden vault</string>
   <string name="your_passkey_will_be_saved_to_your_bitwarden_vault_for_x">Your passkey will be saved to your Bitwarden vault for %1$s</string>
   <string name="organization_unassigned_items_message_useu_description_long">Unassigned organisation items are no longer visible in the All Vaults view and only accessible via the Admin Console. Assign these items to a collection from the Admin Console to make them visible.</string>
