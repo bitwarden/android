@@ -37,6 +37,7 @@ import kotlinx.collections.immutable.toImmutableList
  * @param onCustomFieldAction Invoked when the user chooses an action.
  * @param modifier Modifier for the UI elements.
  * @param supportedLinkedTypes The supported linked types for the vault item.
+ * @param onHiddenVisibilityChanged Emits when the visibility of a hidden custom field changes.
  */
 @Composable
 @Suppress("LongMethod")
@@ -46,6 +47,7 @@ fun VaultAddEditCustomField(
     onCustomFieldAction: (CustomFieldAction, VaultAddEditState.Custom) -> Unit,
     modifier: Modifier = Modifier,
     supportedLinkedTypes: ImmutableList<VaultLinkedFieldType> = persistentListOf(),
+    onHiddenVisibilityChanged: (Boolean) -> Unit,
 ) {
     var shouldShowChooserDialog by remember { mutableStateOf(false) }
     var shouldShowEditDialog by remember { mutableStateOf(false) }
@@ -91,11 +93,12 @@ fun VaultAddEditCustomField(
 
         is VaultAddEditState.Custom.HiddenField -> {
             CustomFieldHiddenField(
-                customField.name,
-                customField.value,
+                label = customField.name,
+                value = customField.value,
                 onValueChanged = {
                     onCustomFieldValueChange(customField.copy(value = it))
                 },
+                onVisibilityChanged = onHiddenVisibilityChanged,
                 onEditValue = { shouldShowChooserDialog = true },
                 modifier = modifier,
             )
@@ -175,12 +178,19 @@ private fun CustomFieldHiddenField(
     value: String,
     onValueChanged: (String) -> Unit,
     onEditValue: () -> Unit,
+    onVisibilityChanged: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var shouldShowPassword by remember { mutableStateOf(value = false) }
     BitwardenPasswordFieldWithActions(
         label = label,
         value = value,
         onValueChange = onValueChanged,
+        showPassword = shouldShowPassword,
+        showPasswordChange = {
+            shouldShowPassword = !shouldShowPassword
+            onVisibilityChanged(shouldShowPassword)
+        },
         singleLine = true,
         modifier = modifier,
         actions = {

@@ -22,6 +22,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * @property onCopyTotpKeyClick Handles the action when the copy TOTP text button is clicked.
  * @property onClearTotpKeyClick Handles the action when the clear TOTP text button is clicked.
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
+ * @property onPasswordVisibilityChange Handles the action when the password visibility button is
+ * clicked.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditLoginTypeHandlers(
@@ -36,6 +38,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onCopyTotpKeyClick: (String) -> Unit,
     val onClearTotpKeyClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
+    val onPasswordVisibilityChange: (Boolean) -> Unit,
 ) {
     companion object {
 
@@ -104,6 +107,11 @@ data class VaultAddEditLoginTypeHandlers(
                 onClearTotpKeyClick = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick,
+                    )
+                },
+                onPasswordVisibilityChange = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange(it),
                     )
                 },
             )

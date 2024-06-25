@@ -45,15 +45,9 @@ class FillResponseBuilderTest {
     )
     private val autofillCipherValid: AutofillCipher = mockk {
         every { cipherId } returns CIPHER_ID
-        every { isTotpEnabled } returns true
     }
     private val autofillCipherNoId: AutofillCipher = mockk {
         every { cipherId } returns null
-        every { isTotpEnabled } returns true
-    }
-    private val autofillCipherTotpDisabled: AutofillCipher = mockk {
-        every { cipherId } returns CIPHER_ID
-        every { isTotpEnabled } returns false
     }
     private val filledPartitionOne: FilledPartition = mockk {
         every { this@mockk.filledItems } returns listOf(mockk())
@@ -65,10 +59,6 @@ class FillResponseBuilderTest {
     private val filledPartitionThree: FilledPartition = mockk {
         every { this@mockk.filledItems } returns listOf(mockk())
         every { this@mockk.autofillCipher } returns autofillCipherNoId
-    }
-    private val filledPartitionFour: FilledPartition = mockk {
-        every { this@mockk.filledItems } returns listOf(mockk())
-        every { this@mockk.autofillCipher } returns autofillCipherTotpDisabled
     }
     private val saveInfo: SaveInfo = mockk()
 
@@ -141,7 +131,6 @@ class FillResponseBuilderTest {
             filledPartitionOne,
             filledPartitionTwo,
             filledPartitionThree,
-            filledPartitionFour,
         )
         val filledData = FilledData(
             filledPartitions = filledPartitions,
@@ -171,12 +160,6 @@ class FillResponseBuilderTest {
         } returns dataset
         every {
             filledPartitionThree.buildDataset(
-                authIntentSender = null,
-                autofillAppInfo = appInfo,
-            )
-        } returns dataset
-        every {
-            filledPartitionFour.buildDataset(
                 authIntentSender = null,
                 autofillAppInfo = appInfo,
             )
@@ -219,10 +202,6 @@ class FillResponseBuilderTest {
                 authIntentSender = null,
                 autofillAppInfo = appInfo,
             )
-            filledPartitionFour.buildDataset(
-                authIntentSender = null,
-                autofillAppInfo = appInfo,
-            )
             filledData.buildVaultItemDataset(
                 autofillAppInfo = appInfo,
             )
@@ -233,7 +212,7 @@ class FillResponseBuilderTest {
             )
             anyConstructed<FillResponse.Builder>().setSaveInfo(saveInfo)
         }
-        verify(exactly = 3) {
+        verify(exactly = 2) {
             anyConstructed<FillResponse.Builder>().addDataset(dataset)
         }
     }
@@ -252,7 +231,6 @@ class FillResponseBuilderTest {
             filledPartitionOne,
             filledPartitionTwo,
             filledPartitionThree,
-            filledPartitionFour,
         )
         val filledData = FilledData(
             filledPartitions = filledPartitions,
@@ -282,12 +260,6 @@ class FillResponseBuilderTest {
         } returns dataset
         every {
             filledPartitionThree.buildDataset(
-                authIntentSender = null,
-                autofillAppInfo = appInfo,
-            )
-        } returns dataset
-        every {
-            filledPartitionFour.buildDataset(
                 authIntentSender = null,
                 autofillAppInfo = appInfo,
             )
@@ -327,10 +299,6 @@ class FillResponseBuilderTest {
                 authIntentSender = null,
                 autofillAppInfo = appInfo,
             )
-            filledPartitionFour.buildDataset(
-                authIntentSender = null,
-                autofillAppInfo = appInfo,
-            )
             filledData.buildVaultItemDataset(
                 autofillAppInfo = appInfo,
             )
@@ -340,7 +308,7 @@ class FillResponseBuilderTest {
                 ignoredAutofillIdTwo,
             )
         }
-        verify(exactly = 3) {
+        verify(exactly = 2) {
             anyConstructed<FillResponse.Builder>().addDataset(dataset)
         }
     }
