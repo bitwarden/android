@@ -102,15 +102,18 @@ private fun CipherView.filterBySearchType(
     searchTypeData: SearchTypeData.Vault,
 ): Boolean =
     when (searchTypeData) {
-        SearchTypeData.Vault.All -> true
-        is SearchTypeData.Vault.Cards -> type == CipherType.CARD
-        is SearchTypeData.Vault.Collection -> searchTypeData.collectionId in this.collectionIds
-        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId
-        SearchTypeData.Vault.NoFolder -> folderId == null
-        is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY
-        is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN
-        is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE
-        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null
+        SearchTypeData.Vault.All -> deletedDate == null
+        is SearchTypeData.Vault.Cards -> type == CipherType.CARD && deletedDate == null
+        is SearchTypeData.Vault.Collection -> {
+            searchTypeData.collectionId in this.collectionIds && deletedDate == null
+        }
+
+        is SearchTypeData.Vault.Folder -> folderId == searchTypeData.folderId && deletedDate == null
+        SearchTypeData.Vault.NoFolder -> folderId == null && deletedDate == null
+        is SearchTypeData.Vault.Identities -> type == CipherType.IDENTITY && deletedDate == null
+        is SearchTypeData.Vault.Logins -> type == CipherType.LOGIN && deletedDate == null
+        is SearchTypeData.Vault.SecureNotes -> type == CipherType.SECURE_NOTE && deletedDate == null
+        is SearchTypeData.Vault.VerificationCodes -> login?.totp != null && deletedDate == null
         is SearchTypeData.Vault.Trash -> deletedDate != null
     }
 
