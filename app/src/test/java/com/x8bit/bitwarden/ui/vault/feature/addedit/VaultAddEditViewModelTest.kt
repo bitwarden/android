@@ -2547,7 +2547,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     organizationEventManager.trackEvent(
                         event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
                             cipherId = "vault_item_id",
-                        )
+                        ),
                     )
                 }
             }

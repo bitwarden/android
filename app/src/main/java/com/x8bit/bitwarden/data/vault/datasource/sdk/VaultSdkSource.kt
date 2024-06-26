@@ -418,6 +418,28 @@ interface VaultSdkSource {
 
     /**
      * Register a new FIDO 2 credential to a cipher.
+     *
+     * @param userId Active user's ID.
+     * @param origin Origin of the relying party request.
+     * @param requestJson JSON provided by the relying party.
+     * @param clientData Client metadata about the relying party or calling application.
+     * @param selectedCipherView [CipherView] the new credential will be registered to.
+     * @param cipherViews All existing cipher views in the users vault.
+     * @param isVerificationSupported Whether user verification can be performed on this device.
+     * @param checkUser Receives [CheckUserOptions] and [UiHint] indicating what interactions and
+     * prompts must be presented to the user for registration to complete. A [CheckUserResult] is
+     * expected when interactions are completed.
+     * @param checkUserAndPickCredentialForCreation Receives [CheckUserOptions] indicating user
+     * verification requirements and a [Fido2CredentialNewView] representing the newly registered
+     * credential. A [CipherViewWrapper] containing the [selectedCipherView] updated with the
+     * [Fido2CredentialNewView] in response.
+     * @param findCredentials Receives a relying party ID and an optional collection of credential
+     * ID's to search for. Returns a collection of matching [CipherView]s.
+     * @param saveCredential Receives an updated encrypted [Cipher] containing the newly registered
+     * credential for saving. A [SaveCredentialResult] is expected when the cipher has been saved.
+     *
+     * @return Result of the FIDO 2 credential registration. If successful, a
+     * [PublicKeyCredentialAuthenticatorAttestationResponse] is provided.
      */
     @Suppress("LongParameterList")
     suspend fun registerFido2Credential(
