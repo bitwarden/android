@@ -5,13 +5,13 @@ GEM
       base64
       nkf
       rexml
-    addressable (2.8.6)
-      public_suffix (>= 2.0.2, < 6.0)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     artifactory (3.0.17)
     atomos (0.1.3)
     aws-eventstream (1.3.0)
-    aws-partitions (1.944.0)
-    aws-sdk-core (3.197.0)
+    aws-partitions (1.946.0)
+    aws-sdk-core (3.197.2)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.8)
@@ -95,7 +95,7 @@ GEM
     faraday_middleware (1.2.0)
       faraday (~> 1.0)
     fastimage (2.3.1)
-    fastlane (2.221.0)
+    fastlane (2.221.1)
       CFPropertyList (>= 2.3, < 4.0.0)
       addressable (>= 2.8, < 3.0.0)
       artifactory (~> 3.0)
@@ -189,7 +189,7 @@ GEM
     httpclient (2.8.3)
     jmespath (1.6.2)
     json (2.7.2)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     kramdown (2.4.0)
       rexml
@@ -215,7 +215,7 @@ GEM
     optparse (0.5.0)
     os (1.1.4)
     plist (3.7.1)
-    public_suffix (5.1.1)
+    public_suffix (6.0.0)
     racc (1.8.0)
     rake (13.2.1)
     rchardet (1.8.0)
