@@ -47,7 +47,7 @@ class OrganizationEventManagerTest {
         every { organizations } returns emptyList()
     }
     private val mutableVaultItemStateFlow = MutableStateFlow<DataState<CipherView?>>(
-        value = DataState.Loading
+        value = DataState.Loading,
     )
     private val vaultRepository = mockk<VaultRepository> {
         every { getVaultItemStateFlow(itemId = any()) } returns mutableVaultItemStateFlow
