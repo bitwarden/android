@@ -831,7 +831,7 @@ Wil u na die rekening omskakel?</string>
   <string name="cannot_edit_multiple_ur_is_at_once">Cannot edit multiple URIs at once</string>
   <string name="login_approved">Login approved</string>
   <string name="log_in_with_device_must_be_set_up_in_the_settings_of_the_bitwarden_app_need_another_option">Log in with device must be set up in the settings of the Bitwarden app. Need another option?</string>
-  <string name="log_in_with_device">Log in with device</string>
+  <string name="log_in_with_device">Teken Aan met \'n ander toestel</string>
   <string name="logging_in_on">Logging in on</string>
   <string name="vault">Vault</string>
   <string name="appearance">Appearance</string>

@@ -9,6 +9,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -70,10 +74,16 @@ fun LazyListScope.vaultAddEditCardItems(
     }
     item {
         Spacer(modifier = Modifier.height(8.dp))
+        var showNumber by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
             label = stringResource(id = R.string.number),
             value = cardState.number,
             onValueChange = cardHandlers.onNumberTextChange,
+            showPassword = showNumber,
+            showPasswordChange = {
+                showNumber = !showNumber
+                cardHandlers.onNumberVisibilityChange(showNumber)
+            },
             modifier = Modifier
                 .testTag("CardNumberEntry")
                 .fillMaxWidth()
@@ -140,10 +150,16 @@ fun LazyListScope.vaultAddEditCardItems(
     }
     item {
         Spacer(modifier = Modifier.height(8.dp))
+        var showSecurityCode by rememberSaveable { mutableStateOf(value = false) }
         BitwardenPasswordField(
             label = stringResource(id = R.string.security_code),
             value = cardState.securityCode,
             onValueChange = cardHandlers.onSecurityCodeTextChange,
+            showPassword = showSecurityCode,
+            showPasswordChange = {
+                showSecurityCode = !showSecurityCode
+                cardHandlers.onSecurityCodeVisibilityChange(showSecurityCode)
+            },
             keyboardType = KeyboardType.NumberPassword,
             modifier = Modifier
                 .testTag("CardSecurityCodeEntry")
@@ -259,7 +275,7 @@ fun LazyListScope.vaultAddEditCardItems(
 
     items(commonState.customFieldData) { customItem ->
         VaultAddEditCustomField(
-            customItem,
+            customField = customItem,
             onCustomFieldValueChange = commonHandlers.onCustomFieldValueChange,
             onCustomFieldAction = commonHandlers.onCustomFieldActionSelect,
             modifier = Modifier
@@ -273,6 +289,7 @@ fun LazyListScope.vaultAddEditCardItems(
                 VaultLinkedFieldType.BRAND,
                 VaultLinkedFieldType.NUMBER,
             ),
+            onHiddenVisibilityChanged = commonHandlers.onHiddenFieldVisibilityChange,
         )
     }
 

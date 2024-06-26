@@ -404,7 +404,7 @@ Načtení proběhne automaticky.</string>
   <string name="ownership">Vlastnictví</string>
   <string name="who_owns_this_item">Kdo vlastní tuto položku?</string>
   <string name="no_collections_to_list">Žádné kolekce k zobrazení.</string>
-  <string name="moved_item_to_org">Položka %1$s přesunuta do %2$s.</string>
+  <string name="moved_item_to_org">Položka %1$s byla přesunuta do %2$s.</string>
   <string name="item_shared">Položka byla sdílena.</string>
   <string name="select_one_collection">Musíte vybrat alespoň jednu kolekci.</string>
   <string name="share">Sdílet</string>
@@ -674,7 +674,7 @@ Načtení proběhne automaticky.</string>
   <string name="totp">TOTP</string>
   <string name="verification_codes">Ověřovací kódy</string>
   <string name="premium_subscription_required">Je vyžadováno předplatné Premium</string>
-  <string name="cannot_add_authenticator_key">Nelze přidat autentizační klíč?</string>
+  <string name="cannot_add_authenticator_key">Nelze přidat ověřovací klíč?</string>
   <string name="scan_qr_code">Naskenovat QR kód</string>
   <string name="cannot_scan_qr_code">Nelze naskenovat QR kód?</string>
   <string name="authenticator_key_scanner">Autentizační klíč</string>

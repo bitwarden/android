@@ -836,7 +836,7 @@ Do you want to switch to this account?</string>
   <string name="vault">Vault</string>
   <string name="appearance">Appearance</string>
   <string name="account_security">Account security</string>
-  <string name="bitwarden_help_center">Bitwarden Help Center</string>
+  <string name="bitwarden_help_center">Bitwarden help center</string>
   <string name="contact_bitwarden_support">Contact Bitwarden support</string>
   <string name="copy_app_information">Copy app information</string>
   <string name="sync_now">Sync now</string>

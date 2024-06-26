@@ -20,6 +20,7 @@ import androidx.compose.ui.test.isDialog
 import androidx.compose.ui.test.isPopup
 import androidx.compose.ui.test.onAllNodesWithContentDescription
 import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -479,6 +480,24 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithContentDescription("Hide")
             .assertDoesNotExist()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in ItemType_Login state changing password visibility state should send PasswordVisibilityChange`() {
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Password")
+            .assertExists()
+        composeTestRule
+            .onNodeWithContentDescriptionAfterScroll(label = "Show")
+            .assertExists()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange(isVisible = true),
+            )
+        }
     }
 
     @Test
@@ -1687,6 +1706,30 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in ItemType_Card changing number visibility should trigger NumberVisibilityChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Card(number = "12345"),
+                isIndividualVaultDisabled = false,
+            ),
+        )
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Number")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Show"))
+            .assertExists()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.NumberVisibilityChange(isVisible = true),
+            )
+        }
+    }
+
+    @Test
     fun `in ItemType_Card the number text field should display the text provided by the state`() {
         mutableStateFlow.value = DEFAULT_STATE_CARD
         composeTestRule
@@ -1842,6 +1885,30 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange(
                     securityCode = "TestSecurityCode",
                 ),
+            )
+        }
+    }
+
+    @Test
+    fun `in ItemType_Card changing code visibility should trigger SecurityCodeVisibilityChange`() {
+        mutableStateFlow.value = DEFAULT_STATE_CARD.copy(
+            viewState = VaultAddEditState.ViewState.Content(
+                common = VaultAddEditState.ViewState.Content.Common(),
+                type = VaultAddEditState.ViewState.Content.ItemType.Card(number = "12345"),
+                isIndividualVaultDisabled = false,
+            ),
+        )
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Security code")
+            .assertExists()
+            .onChildren()
+            .filterToOne(hasContentDescription(value = "Show"))
+            .assertExists()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange(isVisible = true),
             )
         }
     }
@@ -2384,6 +2451,40 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                     customFieldType = CustomFieldType.HIDDEN,
                     name = "TestHidden",
                 ),
+            )
+        }
+    }
+
+    @Test
+    fun `changing hidden field visibility state should send HiddenFieldVisibilityChange`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(
+                        customFieldData = listOf(
+                            VaultAddEditState.Custom.HiddenField(
+                                itemId = "itemId",
+                                name = "Hidden item",
+                                value = "I am hiding",
+                            ),
+                        ),
+                    ),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(),
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+        composeTestRule
+            .onNodeWithTextAfterScroll(text = "Hidden item")
+            .assertExists()
+        composeTestRule
+            .onAllNodesWithContentDescriptionAfterScroll(label = "Show")
+            .onLast()
+            .performClick()
+
+        verify(exactly = 1) {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.HiddenFieldVisibilityChange(isVisible = true),
             )
         }
     }

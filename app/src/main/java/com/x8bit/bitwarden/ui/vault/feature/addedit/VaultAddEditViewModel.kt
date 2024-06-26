@@ -218,9 +218,9 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleCommonActions(action: VaultAddEditAction.Common) {
         when (action) {
-            is VaultAddEditAction.Common.CustomFieldValueChange -> handleCustomFieldValueChange(
-                action,
-            )
+            is VaultAddEditAction.Common.CustomFieldValueChange -> {
+                handleCustomFieldValueChange(action)
+            }
 
             is VaultAddEditAction.Common.FolderChange -> handleFolderTextInputChange(action)
             is VaultAddEditAction.Common.NameTextChange -> handleNameTextInputChange(action)
@@ -239,18 +239,22 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.DismissDialog -> handleDismissDialog()
             is VaultAddEditAction.Common.SaveClick -> handleSaveClick()
             is VaultAddEditAction.Common.TypeOptionSelect -> handleTypeOptionSelect(action)
-            is VaultAddEditAction.Common.AddNewCustomFieldClick -> handleAddNewCustomFieldClick(
-                action,
-            )
+            is VaultAddEditAction.Common.AddNewCustomFieldClick -> {
+                handleAddNewCustomFieldClick(action)
+            }
 
             is VaultAddEditAction.Common.TooltipClick -> handleTooltipClick()
-            is VaultAddEditAction.Common.CustomFieldActionSelect -> handleCustomFieldActionSelected(
-                action,
-            )
+            is VaultAddEditAction.Common.CustomFieldActionSelect -> {
+                handleCustomFieldActionSelected(action)
+            }
 
             is VaultAddEditAction.Common.CollectionSelect -> handleCollectionSelect(action)
             is VaultAddEditAction.Common.InitialAutofillDialogDismissed -> {
                 handleInitialAutofillDialogDismissed()
+            }
+
+            is VaultAddEditAction.Common.HiddenFieldVisibilityChange -> {
+                handleHiddenFieldVisibilityChange(action)
             }
         }
     }
@@ -458,6 +462,20 @@ class VaultAddEditViewModel @Inject constructor(
         settingsRepository.initialAutofillDialogShown = true
         mutableStateFlow.update {
             it.copy(dialog = null)
+        }
+    }
+
+    private fun handleHiddenFieldVisibilityChange(
+        action: VaultAddEditAction.Common.HiddenFieldVisibilityChange,
+    ) {
+        onEdit {
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
+                        cipherId = it.vaultItemId,
+                    ),
+                )
+            }
         }
     }
 
@@ -675,6 +693,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.LoginType.ClearTotpKeyClick -> {
                 handleLoginClearTotpKey()
             }
+
+            is VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange -> {
+                handlePasswordVisibilityChange(action)
+            }
         }
     }
 
@@ -772,6 +794,20 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleLoginClearTotpKey() {
         updateLoginContent { loginType ->
             loginType.copy(totp = null)
+        }
+    }
+
+    private fun handlePasswordVisibilityChange(
+        action: VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange,
+    ) {
+        onEdit {
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledPasswordVisible(
+                        cipherId = it.vaultItemId,
+                    ),
+                )
+            }
         }
     }
 
@@ -1000,8 +1036,16 @@ class VaultAddEditViewModel @Inject constructor(
                 handleCardNumberTextChange(action)
             }
 
+            is VaultAddEditAction.ItemType.CardType.NumberVisibilityChange -> {
+                handleNumberVisibilityChange(action)
+            }
+
             is VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange -> {
                 handleCardSecurityCodeTextChange(action)
+            }
+
+            is VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange -> {
+                handleSecurityCodeVisibilityChange(action)
             }
         }
     }
@@ -1036,10 +1080,38 @@ class VaultAddEditViewModel @Inject constructor(
         updateCardContent { it.copy(number = action.number) }
     }
 
+    private fun handleNumberVisibilityChange(
+        action: VaultAddEditAction.ItemType.CardType.NumberVisibilityChange,
+    ) {
+        onEdit {
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardNumberVisible(
+                        cipherId = it.vaultItemId,
+                    ),
+                )
+            }
+        }
+    }
+
     private fun handleCardSecurityCodeTextChange(
         action: VaultAddEditAction.ItemType.CardType.SecurityCodeTextChange,
     ) {
         updateCardContent { it.copy(securityCode = action.securityCode) }
+    }
+
+    private fun handleSecurityCodeVisibilityChange(
+        action: VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange,
+    ) {
+        onEdit {
+            if (action.isVisible) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardCodeVisible(
+                        cipherId = it.vaultItemId,
+                    ),
+                )
+            }
+        }
     }
 
     //endregion Card Type Handlers
@@ -1063,8 +1135,9 @@ class VaultAddEditViewModel @Inject constructor(
                 handleGeneratorResultReceive(action)
             }
 
-            is VaultAddEditAction.Internal.PasswordBreachReceive ->
+            is VaultAddEditAction.Internal.PasswordBreachReceive -> {
                 handlePasswordBreachReceive(action)
+            }
 
             is VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive -> {
                 handleFido2RegisterCredentialResultReceive(action)
@@ -2077,6 +2150,13 @@ sealed class VaultAddEditAction {
         data class CollectionSelect(
             val collection: VaultCollection,
         ) : Common()
+
+        /**
+         * The user has changed the visibility state of a hidden field.
+         *
+         * @property isVisible the new visibility state of the hidden field.
+         */
+        data class HiddenFieldVisibilityChange(val isVisible: Boolean) : Common()
     }
 
     /**
@@ -2153,6 +2233,13 @@ sealed class VaultAddEditAction {
              * Represents the action to add a new URI field.
              */
             data object AddNewUriClick : LoginType()
+
+            /**
+             * Fired when the password's visibility has changed.
+             *
+             * @property isVisible The new password visibility state.
+             */
+            data class PasswordVisibilityChange(val isVisible: Boolean) : LoginType()
         }
 
         /**
@@ -2309,6 +2396,13 @@ sealed class VaultAddEditAction {
             data class NumberTextChange(val number: String) : CardType()
 
             /**
+             * Fired when the number's visibility has changed.
+             *
+             * @property isVisible The new number visibility state.
+             */
+            data class NumberVisibilityChange(val isVisible: Boolean) : CardType()
+
+            /**
              * Fired when the brand input is selected.
              *
              * @property brand The selected brand.
@@ -2340,6 +2434,13 @@ sealed class VaultAddEditAction {
              * @property securityCode The new security code text.
              */
             data class SecurityCodeTextChange(val securityCode: String) : CardType()
+
+            /**
+             * Fired when the security code's visibility has changed.
+             *
+             * @property isVisible The new code visibility state.
+             */
+            data class SecurityCodeVisibilityChange(val isVisible: Boolean) : CardType()
         }
     }
 

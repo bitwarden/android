@@ -403,6 +403,7 @@ fun LazyListScope.vaultAddEditIdentityItems(
                 VaultLinkedFieldType.LAST_NAME,
                 VaultLinkedFieldType.FULL_NAME,
             ),
+            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
         )
     }
 

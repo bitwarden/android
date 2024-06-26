@@ -257,6 +257,32 @@ class SearchTypeDataExtensionsTest {
         assertEquals(listOf(match1, match2), result)
     }
 
+    @Test
+    fun `CipherViews filterAndOrganize should return list without deleted items`() {
+        val match1 = createMockCipherView(number = 1, isDeleted = true).copy(name = "match1")
+        val match2 = createMockCipherView(number = 2).copy(name = "match2")
+        val match3 = createMockCipherView(number = 3, isDeleted = true).copy(name = "match3")
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Logins,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match2), result)
+    }
+
+    @Test
+    fun `CipherViews filterAndOrganize should return list with only deleted items`() {
+        val match1 = createMockCipherView(number = 1, isDeleted = true).copy(name = "match1")
+        val match2 = createMockCipherView(number = 2).copy(name = "match2")
+        val match3 = createMockCipherView(number = 3, isDeleted = true).copy(name = "match3")
+        val ciphers = listOf(match1, match2, match3)
+        val result = ciphers.filterAndOrganize(
+            searchTypeData = SearchTypeData.Vault.Trash,
+            searchTerm = "match",
+        )
+        assertEquals(listOf(match1, match3), result)
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `CipherViews toViewState should return empty state with no message when search term is blank`() {

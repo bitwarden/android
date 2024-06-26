@@ -908,9 +908,9 @@ Wilt u naar dit account wisselen?</string>
   <string name="remind_me_later">Herinner me later</string>
   <string name="notice">Kennisgeving</string>
   <string name="passkeys_not_supported_for_this_app">Passkeys zijn niet ondersteund voor deze app</string>
-  <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey operation failed because browser is not privileged</string>
-  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey operation failed because browser signature does not match</string>
-  <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
-  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
-  <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
+  <string name="passkey_operation_failed_because_browser_is_not_privileged">Passkey-bewerking mislukt omdat de browser niet gemachtigd is</string>
+  <string name="passkey_operation_failed_because_browser_signature_does_not_match">Passkey-bewerking mislukt omdat de browserhandtekening niet overeenkomt</string>
+  <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey-bewerking mislukt omdat assets links ontbreken</string>
+  <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey-bewerking mislukt omdat de app niet is gevonden in asset links</string>
+  <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey-bewerking mislukt omdat de app niet geverifieerd kon worden</string>
 </resources>
