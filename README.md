@@ -210,16 +210,6 @@ The following is a list of additional third-party dependencies used as part of t
 
 The following is a list of additional third-party dependencies used as part of the CI/CD workflows. These are not present in the final packaged application.
 
-- **Danger**
-    - https://github.com/danger/danger
-    - Purpose: Provides a system for enforcing common Pull Request rules.
-    - License: MIT
-
-- **Danger Shroud**
-    - https://github.com/livefront/danger-shroud
-    - Purpose: A Danger plugin for enforcing code coverage via Kover / Jacoco.
-    - License: Apache 2.0
-
 - **Fastlane**
     - https://fastlane.tools/
     - Purpose: Automates building, signing, and distributing applications.
