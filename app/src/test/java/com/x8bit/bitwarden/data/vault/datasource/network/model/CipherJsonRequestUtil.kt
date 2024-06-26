@@ -11,7 +11,7 @@ fun createMockCipherJsonRequest(number: Int, hasNullUri: Boolean = false): Ciphe
             "mockId-$number" to AttachmentJsonRequest(
                 fileName = "mockFileName-$number",
                 key = "mockKey-$number",
-                fileSize = "1"
+                fileSize = "1",
             ),
         ),
         organizationId = "mockOrganizationId-$number",
