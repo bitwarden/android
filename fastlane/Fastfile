@@ -128,11 +128,9 @@ platform :android do
     if options[:versionName].nil? or options[:versionName].to_s.empty?
         puts "Getting latest version name from previous git tag..."
         latestTag = `git tag --sort=committerdate --list | tail -1`
-        puts "Using last tag (#{latestTag}) to calculate version name..."
+        puts "Using previous tag (#{latestTag}) to calculate version name..."
         latestTag.slice!(0)
-        puts "Current version name resolved to #{latestTag}"
-
-        nextVersionName = currentVersionName
+        puts "Current version name resolved to #{latestTag}."
 
         versionParts = latestTag.split(".")
         currentMajor = versionParts[0]
