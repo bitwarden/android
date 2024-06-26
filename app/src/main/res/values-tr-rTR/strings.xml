@@ -43,7 +43,7 @@
   <string name="log_in">Giriş yap</string>
   <string name="log_in_noun">Giriş</string>
   <string name="log_out">Çıkış yap</string>
-  <string name="logout_confirmation">Çıkmak istediğinize emin misiniz?</string>
+  <string name="logout_confirmation">Çıkmak istediğinizden emin misiniz?</string>
   <string name="remove_account">Hesabı kaldır</string>
   <string name="remove_account_confirmation">Bu hesabı kaldırmak istediğinizden emin misiniz?</string>
   <string name="account_already_added">Hesap zaten eklenmiş</string>

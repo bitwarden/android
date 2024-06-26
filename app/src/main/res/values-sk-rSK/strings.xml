@@ -71,7 +71,7 @@
   <string name="use_fingerprint_to_unlock">Použiť odtlačkov prsta na odomknutie</string>
   <string name="username">Používateľské meno</string>
   <string name="validation_field_required">%1$s je povinné.</string>
-  <string name="value_has_been_copied">%1$s bolo skopírované.</string>
+  <string name="value_has_been_copied">Skopírované: %1$s</string>
   <string name="verify_fingerprint">Overenie odtlačku prsta</string>
   <string name="verify_master_password">Overenie hlavného hesla</string>
   <string name="verify_pin">Overiť PIN</string>

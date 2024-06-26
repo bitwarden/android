@@ -70,8 +70,8 @@
   <string name="uri">URI</string>
   <string name="use_fingerprint_to_unlock">Kilidi barmaq izi ilə açın</string>
   <string name="username">İstifadəçi adı</string>
-  <string name="validation_field_required">%1$s sahəsi lazımlıdır.</string>
-  <string name="value_has_been_copied">%1$s kopyalandı.</string>
+  <string name="validation_field_required">%1$s xanası lazımlıdır.</string>
+  <string name="value_has_been_copied">%1$s kopyalandı</string>
   <string name="verify_fingerprint">Barmaq izini doğrula</string>
   <string name="verify_master_password">Ana parolu doğrula</string>
   <string name="verify_pin">PIN-i doğrula</string>
@@ -148,7 +148,7 @@
   <string name="no_favorites">Anbarınızda heç bir sevimli yoxdur.</string>
   <string name="no_items">Anbarınızda heç bir element yoxdur.</string>
   <string name="no_items_tap">Anbarınızda bu veb sayt/tətbiq üçün heç bir element yoxdur. Əlavə etmək üçün toxunun.</string>
-  <string name="no_username_password_configured">Bu hesaba aid istifadəçi adı və ya parol yoxdur.</string>
+  <string name="no_username_password_configured">Bu giriş üçün heç bir istifadəçi adı və ya parol yoxdur.</string>
   <string name="ok_got_it">Yaxşı, anladım!</string>
   <string name="option_defaults">İlkin seçim dəyərləri, əsas Bitwarden tətbiqinin parol yaratma alətindən ayarlanır.</string>
   <string name="options">Seçimlər</string>
@@ -177,7 +177,7 @@
   <string name="sync_vault_now">Anbarı indi sinxronlaşdır</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">İki mərhələli giriş</string>
-  <string name="unlock_with">%1$s ilə kilidi açın</string>
+  <string name="unlock_with">%1$s ilə kilidi aç</string>
   <string name="unlock_with_pin">PIN kod ilə kilidi açın</string>
   <string name="validating">Doğrulanır</string>
   <string name="verification_code">Doğrulama kodu</string>
@@ -259,7 +259,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="custom_environment">Özəl mühit</string>
   <string name="custom_environment_footer">Qabaqcıl istifadəçilər üçündür. Hər xidmətin baza URL-sini müstəqil olaraq müəyyənləşdirə bilərsiniz.</string>
   <string name="environment_saved">Mühit URL-ləri saxlanıldı.</string>
-  <string name="formatted_incorrectly">%1$s doğru format edilməyib.</string>
+  <string name="formatted_incorrectly">%1$s doğru formatlanmayıb.</string>
   <string name="identity_url">Kimlik server URL-si</string>
   <string name="self_hosted_environment">Öz-özünə sahiblik edən mühit</string>
   <string name="self_hosted_environment_footer">Öz-özünə sahiblik edən Bitwarden quraşdırmasının baza URL-sini müəyyənləşdirin.</string>
@@ -385,7 +385,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="ur_is">URI-lər</string>
   <string name="checking_password">Parol yoxlanılır...</string>
   <string name="check_password">Parolunuzun oğurlanıb oğurlanmadığını yoxlayın.</string>
-  <string name="password_exposed">Bu parol, məlumat pozuntularında %1$s dəfə üzə çıxıb. Dəyişdirməyi məsləhət görürük.</string>
+  <string name="password_exposed">Bu parol, məlumat pozuntularında %1$s dəfə üzə çıxıb. Dəyişdirməlisiniz.</string>
   <string name="password_safe">Bu parol, məlumat pozuntularında qeydə alınmayıb. Rahatlıqla istifadə edə bilərsiniz.</string>
   <string name="identity_name">Kimlik adı</string>
   <string name="value">Dəyər</string>
@@ -396,7 +396,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="search_collection">Kolleksiya axtar</string>
   <string name="search_file_sends">Fayl \"Send\"lərini axtar</string>
   <string name="search_text_sends">Mətn \"Send\"lərini axtar</string>
-  <string name="search_group">Axtar: %1$s</string>
+  <string name="search_group">%1$s axtar</string>
   <string name="type">Növ</string>
   <string name="move_down">Aşağı daşı</string>
   <string name="move_up">Yuxarı daşı</string>
@@ -404,7 +404,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="ownership">Sahiblik</string>
   <string name="who_owns_this_item">Bu elementin sahibi kimdir?</string>
   <string name="no_collections_to_list">Sadalanacaq heç bir kolleksiya yoxdur.</string>
-  <string name="moved_item_to_org">%1$s, %2$s ünvanına daşındı.</string>
+  <string name="moved_item_to_org">%1$s, bura daşındı: %2$s.</string>
   <string name="item_shared">Element paylaşıldı.</string>
   <string name="select_one_collection">Ən azı bir kolleksiya seçməlisiniz.</string>
   <string name="share">Paylaş</string>
@@ -428,7 +428,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="unlock_vault">Anbar kilidini aç</string>
   <string name="thirty_minutes">30 dəqiqə</string>
   <string name="set_pin_description">Bitwarden-in kilidini açmaq üçün PIN kodunuzu ayarlayın. Tətbiqdən tam çıxış etdikdə PIN ayarlarınız sıfırlanacaq.</string>
-  <string name="logged_in_as_on">%2$s saytında %1$s kimi giriş edildi.</string>
+  <string name="logged_in_as_on">%2$s üzərində %1$s kimi giriş edildi.</string>
   <string name="vault_locked_master_password">Anbarınız kilidlənib. Davam etmək üçün ana parolunuzu doğrulayın.</string>
   <string name="vault_locked_pin">Anbarınız kilidlənib. Davam etmək üçün PIN kodunuzu doğrulayın.</string>
   <string name="vault_locked_identity">Anbarınız kilidlənib. Davam etmək üçün kimliyinizi doğrulayın.</string>

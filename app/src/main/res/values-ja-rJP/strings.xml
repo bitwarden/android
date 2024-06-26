@@ -737,7 +737,7 @@
   <string name="random">ランダム</string>
   <string name="connect_to_watch">ウォッチに接続</string>
   <string name="accessibility_service_disclosure">アクセシビリティサービスの開示</string>
-  <string name="accessibility_disclosure_text">Bitwarden はアクセシビリティサービスを使ってアプリやウェブサイトのログインフィールドを検索します。 次に、アプリまたはサイトの一致が見つかったときにユーザー名とパスワードを入力するための適切なフィールド ID を確立します。 私たちは、サービスによって私たちに提示された情報のいずれも保存しません。 また、資格情報のテキスト入力以外の画面上の要素を制御しようとすることもありません。</string>
+  <string name="accessibility_disclosure_text">Bitwarden は、アプリやウェブサイトのログインフィールドを検索し、該当するアプリやサイトが見つかった場合にユーザー名とパスワードを入力するための適切なフィールドIDを確立するためにユーザー補助を使用しています。私たちはサービスから提供された情報を保存することはありませんし、資格情報のテキスト入力以外の画面要素の制御をしようとすることもありません。</string>
   <string name="accept">同意</string>
   <string name="decline">拒否</string>
   <string name="login_request_has_already_expired">ログインリクエストの有効期限が切れています。</string>
