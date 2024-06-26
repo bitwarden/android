@@ -81,6 +81,6 @@ jobs:
       - name: Upload to codecov.io
         uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
         with:
-          file: app/build/reports/kover/reportDebug.xml
+          file: app/build/reports/kover/reportStandardDebug.xml
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
