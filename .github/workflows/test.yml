@@ -68,17 +68,19 @@ jobs:
           distribution: "temurin"
           java-version: ${{ env.JAVA_VERSION }}
 
-      - name: Build and test
-        # Run checks on standard variant only because release and beta builds are not configured to
-        # work properly with the Compose testing library. F-Droid related tasks are also skipped as
-        # there is no significant code difference between the builds.
+      - name: Install Fastlane
         run: |
-          ./gradlew testStandardDebug \
-            lintStandardDebug \
-            detektStandardDebug \
-            koverXmlReportStandardDebug
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
-      - name: Danger
+      - name: Build and test
+        run: |
+          bundle exec fastlane check
+
+      - name: Upload to codecov.io
+        uses: codecov/codecov-action@e28ff129e5465c2c0dcc6f003fc735cb6ae0c673 # v4.5.0
+        with:
+          file: app/build/reports/kover/reportDebug.xml
         env:
-          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bundle exec danger
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
