@@ -4,21 +4,36 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJso
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import java.net.URI
 
+private const val DEFAULT_API_URL: String = "https://api.bitwarden.com"
+private const val DEFAULT_EVENTS_URL: String = "https://events.bitwarden.com"
 private const val DEFAULT_IDENTITY_URL: String = "https://identity.bitwarden.com"
 private const val DEFAULT_WEB_VAULT_URL: String = "https://vault.bitwarden.com"
 private const val DEFAULT_WEB_SEND_URL: String = "https://send.bitwarden.com/#"
-private const val DEFAULT_ICON_URL: String = "https://icons.bitwarden.net/"
+private const val DEFAULT_ICON_URL: String = "https://icons.bitwarden.net"
+
+/**
+ * Returns the base api URL or the default value if one is not present.
+ */
+val EnvironmentUrlDataJson.baseApiUrl: String
+    get() = this.base.sanitizeUrl?.let { "$it/api" }
+        ?: this.api.sanitizeUrl
+        ?: DEFAULT_API_URL
+
+/**
+ * Returns the base events URL or the default value if one is not present.
+ */
+val EnvironmentUrlDataJson.baseEventsUrl: String
+    get() = this.base.sanitizeUrl?.let { "$it/events" }
+        ?: this.events.sanitizeUrl
+        ?: DEFAULT_EVENTS_URL
 
 /**
  * Returns the base identity URL or the default value if one is not present.
  */
 val EnvironmentUrlDataJson.baseIdentityUrl: String
-    get() =
-        this
-            .identity
-            .takeIf { !it.isNullOrBlank() }
-            ?: base.takeIf { it.isNotBlank() }?.let { "$it/identity" }
-            ?: DEFAULT_IDENTITY_URL
+    get() = this.identity.sanitizeUrl
+        ?: this.base.sanitizeUrl?.let { "$it/identity" }
+        ?: DEFAULT_IDENTITY_URL
 
 /**
  * Returns the base web vault URL. This will check for a custom [EnvironmentUrlDataJson.webVault]
@@ -26,11 +41,8 @@ val EnvironmentUrlDataJson.baseIdentityUrl: String
  * null or blank.
  */
 val EnvironmentUrlDataJson.baseWebVaultUrlOrNull: String?
-    get() =
-        this
-            .webVault
-            .takeIf { !it.isNullOrBlank() }
-            ?: base.takeIf { it.isNotBlank() }
+    get() = this.webVault.sanitizeUrl
+        ?: this.base.sanitizeUrl
 
 /**
  * Returns the base web vault URL or the default value if one is not present.
@@ -63,12 +75,9 @@ val EnvironmentUrlDataJson.toBaseWebVaultImportUrl: String
  * Returns a base icon url based on the environment or the default value if values are missing.
  */
 val EnvironmentUrlDataJson.baseIconUrl: String
-    get() =
-        this
-            .icon
-            .takeIf { !it.isNullOrBlank() }
-            ?: base.takeIf { it.isNotBlank() }?.let { "$it/icons" }
-            ?: DEFAULT_ICON_URL
+    get() = this.icon.sanitizeUrl
+        ?: this.base.sanitizeUrl?.let { "$it/icons" }
+        ?: DEFAULT_ICON_URL
 
 /**
  * Returns the appropriate pre-defined labels for environments matching the known US/EU values.
@@ -98,13 +107,16 @@ val EnvironmentUrlDataJson.labelOrBaseUrlHost: String
  * all self-host environment URLs are null.
  */
 private fun EnvironmentUrlDataJson.getSelfHostedUrlOrNull(): String? =
-    webVault.takeIf { !it.isNullOrBlank() }
-        ?: base
-            .takeIf { it.isNotBlank() }
-        ?: api
-            .takeIf { !it.isNullOrBlank() }
-        ?: identity
-            .takeIf { !it.isNullOrBlank() }
+    this.webVault.sanitizeUrl
+        ?: this.base.sanitizeUrl
+        ?: this.api.sanitizeUrl
+        ?: this.identity.sanitizeUrl
+
+/**
+ * A helper method to filter out blank urls and remove any trailing forward slashes.
+ */
+private val String?.sanitizeUrl: String?
+    get() = this?.trimEnd('/').takeIf { !it.isNullOrBlank() }
 
 /**
  * Converts a raw [EnvironmentUrlDataJson] to an externally-consumable [Environment].
