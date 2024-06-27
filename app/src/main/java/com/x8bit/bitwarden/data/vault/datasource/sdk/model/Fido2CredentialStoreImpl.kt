@@ -4,10 +4,12 @@ import androidx.credentials.exceptions.CreateCredentialUnknownException
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Primary implementation of [Fido2CredentialStore].
  */
+@OmitFromCoverage
 class Fido2CredentialStoreImpl(
     private val cipherViews: List<CipherView>,
     private val findFido2Credentials: suspend (

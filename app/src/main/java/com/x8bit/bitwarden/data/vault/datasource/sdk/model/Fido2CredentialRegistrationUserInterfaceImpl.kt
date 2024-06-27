@@ -7,10 +7,12 @@ import com.bitwarden.sdk.Fido2UserInterface
 import com.bitwarden.sdk.UiHint
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Fido2CredentialNewView
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Implementation of [Fido2UserInterface] for registering new FIDO 2 credentials.
  */
+@OmitFromCoverage
 class Fido2CredentialRegistrationUserInterfaceImpl(
     private val isVerificationSupported: Boolean,
     private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
