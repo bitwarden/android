@@ -918,6 +918,7 @@ class VaultItemViewModel @Inject constructor(
         .data
         ?.cipher
         ?.toViewState(
+            previousState = state.viewState as? VaultItemState.ViewState.Content,
             isPremiumUser = account.isPremium,
             hasMasterPassword = account.hasMasterPassword,
             totpCodeItemData = this.data?.totpCodeItemData,

@@ -157,6 +157,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -179,6 +180,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -197,6 +199,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -239,6 +242,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -270,6 +274,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -312,6 +317,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -357,6 +363,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -396,6 +403,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -435,6 +443,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -483,6 +492,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = any(),
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -514,6 +524,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = any(),
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -527,6 +538,14 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(VaultItemAction.Common.EditClick)
+                verify {
+                    mockCipherView.toViewState(
+                        previousState = loginViewState,
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = null,
+                    )
+                }
                 assertEquals(
                     VaultItemEvent.NavigateToAddEdit(
                         itemId = VAULT_ITEM_ID,
@@ -547,6 +566,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = any(),
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -609,6 +629,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = any(),
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -661,6 +682,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = any(),
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -724,6 +746,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -746,6 +769,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -760,6 +784,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -776,6 +801,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(text = field)
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -814,6 +840,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -844,6 +871,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -875,6 +903,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -905,6 +934,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -924,6 +954,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -946,6 +977,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -964,6 +996,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -997,6 +1030,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -1021,6 +1055,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -1043,6 +1078,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -1090,6 +1126,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -1112,6 +1149,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -1130,6 +1168,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1160,6 +1199,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1182,6 +1222,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -1200,6 +1241,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1241,6 +1283,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = any(),
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1296,6 +1339,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = any(),
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1360,6 +1404,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = any(),
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1537,6 +1582,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1576,6 +1622,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
             verify(exactly = 1) {
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
@@ -1593,6 +1640,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -1618,6 +1666,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1631,6 +1680,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1648,6 +1698,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(text = DEFAULT_LOGIN_PASSWORD)
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
@@ -1687,6 +1738,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1702,6 +1754,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(text = DEFAULT_LOGIN_USERNAME)
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = createTotpCodeData(),
@@ -1725,6 +1778,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -1748,6 +1802,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1762,6 +1817,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -1787,6 +1843,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1802,6 +1859,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -1829,6 +1887,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1847,6 +1906,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = createTotpCodeData(),
@@ -1877,6 +1937,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = createTotpCodeData(),
@@ -1910,6 +1971,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -1934,6 +1996,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -1947,6 +2010,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -1965,6 +2029,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(text = "12345436")
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -1979,6 +2044,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -2003,6 +2069,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2016,6 +2083,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2040,6 +2108,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -2054,6 +2123,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -2078,6 +2148,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2091,6 +2162,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2109,6 +2181,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             verify(exactly = 1) {
                 clipboardManager.setText(text = "987")
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -2123,6 +2196,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 val mockCipherView = mockk<CipherView> {
                     every {
                         toViewState(
+                            previousState = null,
                             isPremiumUser = true,
                             hasMasterPassword = true,
                             totpCodeItemData = null,
@@ -2147,6 +2221,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
 
                 verify(exactly = 1) {
                     mockCipherView.toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2160,6 +2235,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val mockCipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2184,6 +2260,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     ),
                 )
                 mockCipherView.toViewState(
+                    previousState = null,
                     isPremiumUser = true,
                     hasMasterPassword = true,
                     totpCodeItemData = null,
@@ -2218,6 +2295,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val cipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2253,6 +2331,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val cipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2289,6 +2368,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val cipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,
@@ -2324,6 +2404,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             val cipherView = mockk<CipherView> {
                 every {
                     toViewState(
+                        previousState = null,
                         isPremiumUser = true,
                         hasMasterPassword = true,
                         totpCodeItemData = null,

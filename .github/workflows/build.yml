@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       version-name:
@@ -75,7 +78,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Check
-        run: bundle exec fastlane test
+        run: bundle exec fastlane check
 
       - name: Build
         run: bundle exec fastlane assembleDebugApks
