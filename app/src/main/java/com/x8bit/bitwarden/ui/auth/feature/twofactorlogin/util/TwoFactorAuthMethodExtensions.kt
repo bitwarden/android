@@ -39,7 +39,7 @@ fun TwoFactorAuthMethod.description(email: String): Text = when (this) {
     }
 
     TwoFactorAuthMethod.EMAIL -> R.string.enter_verification_code_email.asText(email)
-    TwoFactorAuthMethod.WEB_AUTH -> R.string.continue_to_complete_web_authn_verfication.asText()
+    TwoFactorAuthMethod.WEB_AUTH -> R.string.continue_to_complete_web_authn_verification.asText()
     TwoFactorAuthMethod.YUBI_KEY -> R.string.yubi_key_instruction.asText()
     else -> "".asText()
 }
