@@ -154,12 +154,13 @@ fun LazyListScope.vaultAddEditSecureNotesItems(
     }
     items(commonState.customFieldData) { customItem ->
         VaultAddEditCustomField(
-            customItem,
+            customField = customItem,
             onCustomFieldValueChange = commonTypeHandlers.onCustomFieldValueChange,
             onCustomFieldAction = commonTypeHandlers.onCustomFieldActionSelect,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
+            onHiddenVisibilityChanged = commonTypeHandlers.onHiddenFieldVisibilityChange,
         )
     }
 

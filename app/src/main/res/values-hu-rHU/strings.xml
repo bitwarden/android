@@ -70,8 +70,8 @@
   <string name="uri">URI</string>
   <string name="use_fingerprint_to_unlock">Ujjlenyomat használata feloldáshoz</string>
   <string name="username">Felhasználónév</string>
-  <string name="validation_field_required">A(z) %1$s mező megadása kötelező.</string>
-  <string name="value_has_been_copied">%1$s a vágólapra került.</string>
+  <string name="validation_field_required">%1$s mező megadása kötelező.</string>
+  <string name="value_has_been_copied">%1$s másolásra került.</string>
   <string name="verify_fingerprint">Ujjlenyomat megerősítése</string>
   <string name="verify_master_password">Mesterjelszó megerősítése</string>
   <string name="verify_pin">PIN megerősítése</string>
@@ -177,7 +177,7 @@
   <string name="sync_vault_now">Széf szinkronizálása most</string>
   <string name="touch_id">Touch ID</string>
   <string name="two_step_login">Kétlépcsős bejelentkezés</string>
-  <string name="unlock_with">Kinyitás ezzel: %1$s</string>
+  <string name="unlock_with">Feloldás: %1$s</string>
   <string name="unlock_with_pin">Kinyitás PIN-kóddal</string>
   <string name="validating">Hitelesítés</string>
   <string name="verification_code">Ellenőrzőkód</string>
@@ -189,7 +189,7 @@
   <string name="icons">Ikonok</string>
   <string name="translations">Fordítások</string>
   <string name="items_for_uri">%1$s elemei</string>
-  <string name="no_items_for_uri">Nincs elem a széfben %1$s oldalhoz.</string>
+  <string name="no_items_for_uri">Nincs elem a széfben: %1$s.</string>
   <string name="bitwarden_autofill_service_overlay">Egy beviteli mezőt kiválasztva és megjelenik a Bitwarden automatikus kitöltési ablaka, arra rákoppintva elindítható az automatikus kitöltési szolgáltatás.</string>
   <string name="bitwarden_autofill_service_notification_content">Erre az értesítésre koppintva automatikusan kitölthető egy elem a széfből.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Akadálymentesítési szolgáltatások megnyitása</string>
@@ -209,10 +209,10 @@
   <string name="search">Keresés</string>
   <string name="bitwarden_autofill_service_search">Automatikus kitöltési elem keresése folyik: \"%1$s\".</string>
   <string name="learn_org">Információ szervezetekről</string>
-  <string name="cannot_open_app">Nem lehet megnyitni a(z) \"%1$s\" alkalmazást.</string>
+  <string name="cannot_open_app">\"%1$s\" alkalmazás nem nyitható meg.</string>
   <string name="authenticator_app_title">Hitelesítő alkalmazás</string>
   <string name="enter_verification_code_app">Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</string>
-  <string name="enter_verification_code_email">Add meg a 6 számjegyű ellenőrző kódot ami a(z) %1$s e-mail címre lett küldve.</string>
+  <string name="enter_verification_code_email">6 számjegyű ellenőrző kód megadása, ami %1$s e-mail címre lett küldve.</string>
   <string name="login_unavailable">A bejelentkezés nem érhető el.</string>
   <string name="no_two_step_available">Ennél a fióknál engedélyezett a kétlépcsős bejelentkezés, de a beállított kétlépcsős bejelentkezési szolgáltatók egyike sem támogatott ezen az eszközön. Használjunk támogatott eszközt és/vagy olyan szolgáltatókat, amelyek jobban támogatják a több eszközzel történő használatot (ilyenek például a hitelesítőalkalmazások).</string>
   <string name="recovery_code_title">Helyreállító kód</string>
@@ -229,7 +229,7 @@
   <string name="unable_to_download_file">Nem lehet letölteni a fájlt.</string>
   <string name="unable_to_open_file">A készülék nem tudja megnyitni az ilyen típusú fájlt.</string>
   <string name="downloading">Letöltés...</string>
-  <string name="attachment_large_warning">Ez a melléklet %1$s méretű. Biztosan le akarod tölteni a készülékedre?</string>
+  <string name="attachment_large_warning">Ez a melléklet %1$s méretű. Biztosan letöltésre kerüljön az eszközre?</string>
   <string name="authenticator_key">Igazolókód (TOTP)</string>
   <string name="verification_code_totp">Ellenőrzőkód (TOTP)</string>
   <string name="authenticator_key_added">Hitelesítő kulcs hozzáadva.</string>
@@ -520,7 +520,7 @@
   <string name="policy_in_effect_uppercase">Egy vagy több nagybetűs karaktert tartalmaz</string>
   <string name="policy_in_effect_lowercase">Egy vagy több kisbetűs karaktert tartalmaz</string>
   <string name="policy_in_effect_numbers">Egy vagy több számot tartalmaz</string>
-  <string name="policy_in_effect_special">%1$s speciális karakterekből egyet vagy többet tartalmaz</string>
+  <string name="policy_in_effect_special">%1$s speciális karakterekből egyet vagy többet tartalmaz.</string>
   <string name="master_password_policy_validation_title">Érvénytelen jelszó.</string>
   <string name="master_password_policy_validation_message">A jelszó nem egyezik a szervezeti követelményekhez. Ellenőrizzük a szabály információt és próbáljuk újra.</string>
   <string name="loading">A betöltés folyamatban van.</string>

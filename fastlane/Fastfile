@@ -105,8 +105,8 @@ platform :android do
     )
   end
 
-  desc "Runs Standard Debug tests and generates Kover report."
-  lane :test do
+  desc "Runs Standard Debug tests and generates Kover report"
+  lane :check do
     gradle(
         tasks: ["testStandardDebug", "lintStandardDebug", "detektStandardDebug", "koverXmlReportStandardDebug"]
     )
@@ -126,7 +126,26 @@ platform :android do
     currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
 
     if options[:versionName].nil? or options[:versionName].to_s.empty?
-        nextVersionName = currentVersionName
+        puts "Getting latest version name from previous git tag..."
+        latestTag = `git tag --sort=committerdate --list | tail -1`
+        puts "Using previous tag (#{latestTag}) to calculate version name..."
+        latestTag.slice!(0)
+        puts "Current version name resolved to #{latestTag}."
+
+        versionParts = latestTag.split(".")
+        currentMajor = versionParts[0]
+        currentMinor = versionParts[1]
+        currentRevision = versionParts[2]
+
+        currentDate = Time.new
+        major = currentDate.year.to_s
+        minor = currentDate.strftime "%-m"
+
+        revision = 0
+        if currentMajor == major and currentMinor == minor
+            revision = currentRevision.to_i + 1
+        end
+        nextVersionName = "#{major}.#{minor}.#{revision}"
     else
         nextVersionName = options[:versionName].to_s
     end
@@ -193,19 +212,13 @@ platform :android do
     )
   end
 
-  desc "Publish PlayStore bundle to Google Play Store Internal testing track"
-  lane :publishForInternalTesting do
-    upload_to_play_store(
-      package_name: "com.x8bit.bitwarden",
-      track: "internal",
-      release_status: "draft",
-      aab: "app/build/outputs/bundle/standardRelease/com.x8bit.bitwarden-standard-release.aab"
-    )
+  desc "Publish Play Store Beta bundle to Google Play Store"
+  lane :publishBetaToPlayStore do
     upload_to_play_store(
       package_name: "com.x8bit.bitwarden.beta",
-      track: "internal",
+      track: "Public",
       release_status: "draft",
-      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab"
+      aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab",
     )
   end
 end

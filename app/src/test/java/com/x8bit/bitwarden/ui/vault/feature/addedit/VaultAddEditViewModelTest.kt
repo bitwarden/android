@@ -1207,6 +1207,32 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `PasswordVisibilityChange should log an event when in edit mode and password is visible`() =
+            runTest {
+                val vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "vault_item_id")
+                val viewModel = createAddVaultItemViewModel(
+                    savedStateHandle = loginInitialSavedStateHandle.apply {
+                        set("state", loginInitialState.copy(vaultAddEditType = vaultAddEditType))
+                        set("vault_add_edit_type", vaultAddEditType)
+                    },
+                )
+                viewModel.trySendAction(
+                    VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange(
+                        isVisible = true,
+                    ),
+                )
+
+                verify(exactly = 1) {
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientToggledPasswordVisible(
+                            cipherId = "vault_item_id",
+                        ),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `OpenUsernameGeneratorClick should emit NavigateToGeneratorModal with username GeneratorMode`() =
             runTest {
                 val viewModel = createAddVaultItemViewModel()
@@ -1920,6 +1946,53 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
     }
 
+    @Test
+    fun `NumberVisibilityChange should log an event when in edit mode and password is visible`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "vault_item_id")
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = loginInitialSavedStateHandle.apply {
+                    set("state", loginInitialState.copy(vaultAddEditType = vaultAddEditType))
+                    set("vault_add_edit_type", vaultAddEditType)
+                },
+            )
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.NumberVisibilityChange(isVisible = true),
+            )
+
+            verify(exactly = 1) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardNumberVisible(
+                        cipherId = "vault_item_id",
+                    ),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `SecurityCodeVisibilityChange should log an event when in edit mode and password is visible`() =
+        runTest {
+            val vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "vault_item_id")
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = loginInitialSavedStateHandle.apply {
+                    set("state", loginInitialState.copy(vaultAddEditType = vaultAddEditType))
+                    set("vault_add_edit_type", vaultAddEditType)
+                },
+            )
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.CardType.SecurityCodeVisibilityChange(isVisible = true),
+            )
+
+            verify(exactly = 1) {
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientToggledCardCodeVisible(
+                        cipherId = "vault_item_id",
+                    ),
+                )
+            }
+        }
+
     @Nested
     inner class VaultAddEditCommonActions {
         private lateinit var viewModel: VaultAddEditViewModel
@@ -2370,6 +2443,30 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value.viewState,
             )
         }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `HiddenFieldVisibilityChange should log an event when in edit mode and password is visible`() =
+            runTest {
+                val vaultAddEditType = VaultAddEditType.EditItem(vaultItemId = "vault_item_id")
+                val viewModel = createAddVaultItemViewModel(
+                    savedStateHandle = loginInitialSavedStateHandle.apply {
+                        set("state", loginInitialState.copy(vaultAddEditType = vaultAddEditType))
+                        set("vault_add_edit_type", vaultAddEditType)
+                    },
+                )
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.HiddenFieldVisibilityChange(isVisible = true),
+                )
+
+                verify(exactly = 1) {
+                    organizationEventManager.trackEvent(
+                        event = OrganizationEvent.CipherClientToggledHiddenFieldVisible(
+                            cipherId = "vault_item_id",
+                        ),
+                    )
+                }
+            }
 
         @Test
         fun `TooltipClick should emit NavigateToToolTipUri`() = runTest {
