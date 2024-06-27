@@ -925,7 +925,7 @@ class VaultRepositoryImpl(
                     }
                     CipherViewWrapper(cipher = selectedCipherView)
                 },
-                findCredentials = { credentialIds, rpId ->
+                findCredentials = { fido2CredentialIds, relayingPartyId ->
                     // We force a sync so that the SDK has the latest version of any ciphers that
                     // contain a matching credential.
                     sync()
@@ -936,8 +936,8 @@ class VaultRepositoryImpl(
                         )
                         .map { decryptedFido2CredentialViews ->
                             decryptedFido2CredentialViews.filter { fido2CredentialView ->
-                                fido2CredentialView.rpId == rpId ||
-                                    credentialIds.contains(fido2CredentialView.credentialId)
+                                fido2CredentialView.rpId == relayingPartyId ||
+                                    fido2CredentialIds.contains(fido2CredentialView.credentialId)
                             }
                         }
                         .map { matchingFido2Credentials ->
