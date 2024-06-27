@@ -904,7 +904,7 @@ class VaultRepositoryImpl(
         val origin = fido2CredentialRequest.origin
             ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
 
-        val ciphersWithCredentials = ciphersStateFlow.value.data
+        val ciphersWithFido2Credentials = ciphersStateFlow.value.data
             ?.filter { it.isActiveWithFido2Credentials }
             .orEmpty()
 
@@ -915,7 +915,7 @@ class VaultRepositoryImpl(
                 requestJson = "{\"publicKey\": ${fido2CredentialRequest.requestJson}}",
                 clientData = clientData,
                 selectedCipherView = selectedCipherView,
-                cipherViews = ciphersWithCredentials,
+                cipherViews = ciphersWithFido2Credentials,
                 isVerificationSupported = isVerificationSupported,
                 checkUser = checkUser,
                 checkUserAndPickCredentialForCreation = { options, _ ->
@@ -932,7 +932,7 @@ class VaultRepositoryImpl(
                     vaultSdkSource
                         .decryptFido2CredentialAutofillViews(
                             userId = userId,
-                            cipherViews = ciphersWithCredentials.toTypedArray(),
+                            cipherViews = ciphersWithFido2Credentials.toTypedArray(),
                         )
                         .map { decryptedFido2CredentialViews ->
                             decryptedFido2CredentialViews.filter { fido2CredentialView ->
@@ -941,7 +941,7 @@ class VaultRepositoryImpl(
                             }
                         }
                         .map { matchingFido2Credentials ->
-                            ciphersWithCredentials.filter { cipherView ->
+                            ciphersWithFido2Credentials.filter { cipherView ->
                                 matchingFido2Credentials.any { it.cipherId == cipherView.id }
                             }
                         }
