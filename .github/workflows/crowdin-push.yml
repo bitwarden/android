@@ -35,6 +35,5 @@ jobs:
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
         with:
           config: crowdin.yml
-          crowdin_branch_name: main
           upload_sources: true
           upload_translations: false
