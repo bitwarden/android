@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import com.bitwarden.bitwarden.DerivePinKeyResponse
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
@@ -11,14 +10,13 @@ import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
-import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.sdk.Fido2UserInterface
 import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
@@ -37,6 +35,9 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialStoreImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
@@ -467,7 +468,7 @@ class VaultSdkSourceImpl(
             credentialIds: List<ByteArray>,
             relyingPartyId: String,
         ) -> FindFido2CredentialsResult,
-        saveCredential: suspend (Cipher) -> SaveCredentialResult,
+        saveCipher: suspend (Cipher) -> SaveCredentialResult,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
         callbackFlow {
             try {
@@ -483,7 +484,7 @@ class VaultSdkSourceImpl(
                         credentialStore = Fido2CredentialStoreImpl(
                             cipherViews = cipherViews,
                             findFido2Credentials = findCredentials,
-                            saveCipher = saveCredential
+                            saveCipher = saveCipher,
                         ),
                     )
 
@@ -505,6 +506,58 @@ class VaultSdkSourceImpl(
             .first()
     }
 
+    @Suppress("MaxLineLength")
+    override suspend fun authenticateFido2Credential(
+        userId: String,
+        origin: String,
+        requestJson: String,
+        clientData: ClientData,
+        isVerificationSupported: Boolean,
+        cipherViews: List<CipherView>,
+        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
+        pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
+        findCredentials: suspend (
+            credentialIds: List<ByteArray>,
+            relyingPartyId: String,
+        ) -> FindFido2CredentialsResult,
+        saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
+    ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatching {
+        callbackFlow {
+            try {
+                val client = getClient(userId)
+                    .platform()
+                    .fido2()
+                    .client(
+                        userInterface = Fido2CredentialAuthenticationUserInterfaceImpl(
+                            isVerificationSupported = isVerificationSupported,
+                            checkUser = checkUser,
+                            pickCredentialForAuthentication = pickCredentialForAuthentication,
+                        ),
+                        credentialStore = Fido2CredentialStoreImpl(
+                            cipherViews = cipherViews,
+                            findFido2Credentials = findCredentials,
+                            saveCipher = saveCipher,
+                        ),
+                    )
+
+                val result = client.authenticate(
+                    origin = origin,
+                    request = requestJson,
+                    clientData = clientData,
+                )
+
+                send(result)
+            } catch (e: BitwardenException) {
+                e.asFailure()
+            } finally {
+                close()
+            }
+
+            awaitClose()
+        }
+            .first()
+    }
+
     override suspend fun decryptFido2CredentialAutofillViews(
         userId: String,
         vararg cipherViews: CipherView,
@@ -520,86 +573,4 @@ class VaultSdkSourceImpl(
     private suspend fun getClient(
         userId: String,
     ): Client = sdkClientManager.getOrCreateClient(userId = userId)
-}
-
-private class Fido2CredentialRegistrationUserInterfaceImpl(
-    private val isVerificationSupported: Boolean,
-    private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-    private val checkUserAndPickCredentialForCreation: suspend (options: CheckUserOptions, newCredential: Fido2CredentialNewView) -> CipherViewWrapper,
-) : Fido2UserInterface {
-    override suspend fun checkUser(
-        options: CheckUserOptions,
-        hint: UiHint,
-    ): CheckUserResult = checkUser.invoke(options, hint)
-
-    override suspend fun checkUserAndPickCredentialForCreation(
-        options: CheckUserOptions,
-        newCredential: Fido2CredentialNewView,
-    ): CipherViewWrapper = checkUserAndPickCredentialForCreation.invoke(options, newCredential)
-
-    override suspend fun isVerificationEnabled() : Boolean = isVerificationSupported
-
-    override suspend fun pickCredentialForAuthentication(
-        availableCredentials: List<CipherView>,
-    ): CipherViewWrapper = throw UnsupportedOperationException()
-}
-
-private class Fido2CredentialAuthenticationUserInterfaceImpl(
-    private val isVerificationSupported: Boolean,
-    private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-    private val checkUserAndPickCredentialForCreation: suspend (options: CheckUserOptions, newCredential: Fido2CredentialNewView) -> CipherViewWrapper,
-    private val pickCredentialForAuthentication: (List<CipherView>) -> CipherViewWrapper,
-) : Fido2UserInterface {
-    override suspend fun checkUser(
-        options: CheckUserOptions,
-        hint: UiHint,
-    ): CheckUserResult = checkUser.invoke(options, hint)
-
-    override suspend fun checkUserAndPickCredentialForCreation(
-        options: CheckUserOptions,
-        newCredential: Fido2CredentialNewView,
-    ): CipherViewWrapper = checkUserAndPickCredentialForCreation.invoke(options, newCredential)
-
-    override suspend fun isVerificationEnabled() : Boolean = isVerificationSupported
-
-    override suspend fun pickCredentialForAuthentication(
-        availableCredentials: List<CipherView>,
-    ): CipherViewWrapper = pickCredentialForAuthentication.invoke(availableCredentials)
-}
-
-private class Fido2CredentialStoreImpl(
-    private val cipherViews: List<CipherView>,
-    private val findFido2Credentials: suspend (
-        credentialIds: List<ByteArray>,
-        relyingPartyId: String,
-    ) -> FindFido2CredentialsResult,
-    private val saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
-) : Fido2CredentialStore {
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
-    override suspend fun findCredentials(
-        fido2CredentialIds: List<ByteArray>?,
-        relyingPartyId: String,
-    ): List<CipherView> =
-        when (val result = findFido2Credentials(fido2CredentialIds.orEmpty(), relyingPartyId)) {
-            is FindFido2CredentialsResult.Error -> {
-                // This exception is caught and handled by the SDK, which
-                // uses it to produce a FIDO 2 spec compliant attestation
-                // error.
-                throw CreateCredentialUnknownException()
-            }
-
-            is FindFido2CredentialsResult.Success -> {
-                result.cipherViews
-            }
-        }
-
-    override suspend fun saveCredential(cred: Cipher) {
-        if (saveCipher(cred) is SaveCredentialResult.Error) {
-            // This exception is caught and handled by the SDK, which uses
-            // it to produce a FIDO 2 spec compliant attestation error.
-            throw CreateCredentialUnknownException()
-        }
-    }
-
-    override suspend fun allCredentials(): List<CipherView> = cipherViews
 }

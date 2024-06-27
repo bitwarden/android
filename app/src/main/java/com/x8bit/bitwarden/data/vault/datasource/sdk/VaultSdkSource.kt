@@ -11,6 +11,7 @@ import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
@@ -435,7 +436,7 @@ interface VaultSdkSource {
      * [Fido2CredentialNewView] in response.
      * @param findCredentials Receives a relying party ID and an optional collection of credential
      * ID's to search for. Returns a collection of matching [CipherView]s.
-     * @param saveCredential Receives an updated encrypted [Cipher] containing the newly registered
+     * @param saveCipher Receives an updated encrypted [Cipher] containing the newly registered
      * credential for saving. A [SaveCredentialResult] is expected when the cipher has been saved.
      *
      * @return Result of the FIDO 2 credential registration. If successful, a
@@ -459,8 +460,47 @@ interface VaultSdkSource {
             fido2CredentialIds: List<ByteArray>,
             relyingPartyId: String,
         ) -> FindFido2CredentialsResult,
-        saveCredential: suspend (cipher: Cipher) -> SaveCredentialResult,
+        saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse>
+
+    /**
+     * Authenticate a user with a FIDO 2 credential.
+     *
+     * @param userId Active user's ID.
+     * @param origin Origin of the relying party request.
+     * @param requestJson JSON provided by the relying party.
+     * @param clientData Client metadata about the relying party or calling application.
+     * @param cipherViews All existing cipher views in the users vault.
+     * @param isVerificationSupported Whether user verification can be performed on this device.
+     * @param checkUser Receives [CheckUserOptions] and [UiHint] indicating what interactions and
+     * prompts must be presented to the user for registration to complete. A [CheckUserResult] is
+     * expected when interactions are completed.
+     * @param pickCredentialForAuthentication Receives a collection of [CipherView]s that can be
+     * chosen to perform authentication with.
+     * @param findCredentials Receives a relying party ID and an optional collection of credential
+     * ID's to search for. Returns a collection of matching [CipherView]s.
+     * @param saveCipher Receives an updated encrypted [Cipher] containing the newly registered
+     * credential for saving. A [SaveCredentialResult] is expected when the cipher has been saved.
+     *
+     * @return Result of the FIDO 2 credential registration. If successful, a
+     * [PublicKeyCredentialAuthenticatorAttestationResponse] is provided.
+     */
+    @Suppress("LongParameterList")
+    suspend fun authenticateFido2Credential(
+        userId: String,
+        origin: String,
+        requestJson: String,
+        clientData: ClientData,
+        isVerificationSupported: Boolean,
+        cipherViews: List<CipherView>,
+        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
+        pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
+        findCredentials: suspend (
+            credentialIds: List<ByteArray>,
+            relyingPartyId: String,
+        ) -> FindFido2CredentialsResult,
+        saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
+    ): Result<PublicKeyCredentialAuthenticatorAssertionResponse>
 
     /**
      * Decrypt a list of FIDO 2 credential autofill view items associated with the given

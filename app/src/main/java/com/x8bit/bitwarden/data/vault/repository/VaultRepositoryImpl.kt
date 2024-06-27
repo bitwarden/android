@@ -955,7 +955,7 @@ class VaultRepositoryImpl(
                             onFailure = { FindFido2CredentialsResult.Error },
                         )
                 },
-                saveCredential = { cipher ->
+                saveCipher = { cipher ->
                     vaultSdkSource
                         .decryptCipher(userId, cipher)
                         .map { createCipher(it) }
