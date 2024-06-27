@@ -17,7 +17,7 @@ body:
     attributes:
       label: Bitwarden Beta
       options:
-        - label: Using the new native Bitwarden Beta app. Note: Bugs found in the legacy .NET apps should be reported in [bitwarden/mobile](https://github.com/bitwarden/mobile)
+        - label: Using the new native Bitwarden Beta app. Note: Bugs found in the legacy .NET apps should be reported in bitwarden/mobile
   - type: textarea
     id: reproduce
     attributes:
