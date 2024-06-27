@@ -137,25 +137,23 @@ class CipherViewExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `isActiveWithFido2Credentials should return true when type is login, deleted date is null, and fido2 credentials are not null`() =
-        runTest {
-            assertTrue(
-                createMockCipherView(number = 1)
-                    .isActiveWithFido2Credentials,
-            )
-        }
+    fun `isActiveWithFido2Credentials should return true when type is login, deleted date is null, and fido2 credentials are not null`() {
+        assertTrue(
+            createMockCipherView(number = 1)
+                .isActiveWithFido2Credentials,
+        )
+    }
 
     @Test
-    fun `isActiveWithFido2Credentials should return false when deleted date is not null`() =
-        runTest {
-            assertFalse(
-                createMockCipherView(number = 1, isDeleted = true)
-                    .isActiveWithFido2Credentials,
-            )
-        }
+    fun `isActiveWithFido2Credentials should return false when deleted date is not null`() {
+        assertFalse(
+            createMockCipherView(number = 1, isDeleted = true)
+                .isActiveWithFido2Credentials,
+        )
+    }
 
     @Test
-    fun `isActiveWithFido2Credentials should return false when type is not login`() = runTest {
+    fun `isActiveWithFido2Credentials should return false when type is not login`() {
         assertFalse(
             createMockCipherView(number = 1, cipherType = CipherType.CARD)
                 .isActiveWithFido2Credentials,
@@ -163,7 +161,7 @@ class CipherViewExtensionsTest {
     }
 
     @Test
-    fun `isActiveWithFido2Credentials should return false when login is null`() = runTest {
+    fun `isActiveWithFido2Credentials should return false when login is null`() {
         assertFalse(
             createMockCipherView(number = 1)
                 .copy(login = null)
@@ -172,11 +170,10 @@ class CipherViewExtensionsTest {
     }
 
     @Test
-    fun `isActiveWithFido2Credentials should return false when fido2Credentials is null`() =
-        runTest {
-            assertFalse(
-                createMockCipherView(number = 1, fido2Credentials = null)
-                    .isActiveWithFido2Credentials,
-            )
-        }
+    fun `isActiveWithFido2Credentials should return false when fido2Credentials is null`() {
+        assertFalse(
+            createMockCipherView(number = 1, fido2Credentials = null)
+                .isActiveWithFido2Credentials,
+        )
+    }
 }
