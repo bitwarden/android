@@ -108,6 +108,9 @@ android {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
     }
+    lint {
+        disable.add("MissingTranslation")
+    }
 }
 
 kotlin {
