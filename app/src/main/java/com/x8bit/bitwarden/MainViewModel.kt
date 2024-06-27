@@ -2,6 +2,7 @@ package com.x8bit.bitwarden
 
 import android.content.Intent
 import android.os.Parcelable
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
@@ -108,6 +109,7 @@ class MainViewModel @Inject constructor(
             .onEach {
                 when (it) {
                     is VaultStateEvent.Locked -> {
+                        Log.d("PASSKEYS", "vaultState changed to locked() called")
                         trySendAction(MainAction.Internal.VaultUnlockStateChange)
                     }
 

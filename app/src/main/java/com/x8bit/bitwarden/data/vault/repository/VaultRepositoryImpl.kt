@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
+import android.util.Log
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
@@ -99,6 +100,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.util.toFilteredList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -920,13 +922,28 @@ class VaultRepositoryImpl(
                 isVerificationSupported = isVerificationSupported,
                 checkUser = checkUser,
                 checkUserAndPickCredentialForCreation = { options, _ ->
+                    Log.d("PASSKEYS", "checkUserAndPickCredForCreation")
                     if (options.requireVerification != Verification.DISCOURAGED) {
                         // TODO [PM-8137]: Trigger user verification as it is preferred|required.
+                        Log.d(
+                            "PASSKEYS",
+                            "Locking vault to force user verification.",
+                        )
+                        lockVault(userId)
+                        Log.d(
+                            "PASSKEYS",
+                            "Waiting for vault unlock",
+                        )
                         waitUntilUnlocked(userId)
+                        Log.d(
+                            "PASSKEYS",
+                            "Vault unlocked, responding to SDK",
+                        )
                     }
                     CipherViewWrapper(cipher = selectedCipherView)
                 },
                 findCredentials = { fido2CredentialIds, relayingPartyId ->
+                    Log.d("PASSKEYS", "findCredentials")
                     // We force a sync so that the SDK has the latest version of any ciphers that
                     // contain a matching credential.
                     sync()
