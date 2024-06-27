@@ -129,7 +129,7 @@ platform :android do
         puts "Fetching latest tags from origin..."
         `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
         puts "Getting latest version name from previous git tag..."
-        latestTag = `git tag --sort=committerdate --list | tail -1`.chomp()
+        latestTag = `git tag --sort=taggerdate --list | tail -1`.chomp()
         puts "Using tag #{latestTag} to calculate version name..."
         latestTag.slice!(0)
         puts "Current version name resolved to #{latestTag}."
