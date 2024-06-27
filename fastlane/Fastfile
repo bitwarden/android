@@ -220,7 +220,7 @@ platform :android do
       package_name: "com.x8bit.bitwarden.beta",
       track: "internal",
       release_status: "completed",
-      rollout: 1,
+      rollout: "1",
       aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab",
     )
   end
