@@ -50,8 +50,9 @@ class MainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
-    MainState(
+    initialState = MainState(
         theme = settingsRepository.appTheme,
+        isScreenCaptureAllowed = settingsRepository.isScreenCaptureAllowed,
     ),
 ) {
     private var specialCircumstance: SpecialCircumstance?
@@ -81,9 +82,8 @@ class MainViewModel @Inject constructor(
 
         settingsRepository
             .isScreenCaptureAllowedStateFlow
-            .onEach { isAllowed ->
-                sendEvent(MainEvent.ScreenCaptureSettingChange(isAllowed))
-            }
+            .map { MainAction.Internal.ScreenCaptureUpdate(it) }
+            .onEach(::trySendAction)
             .launchIn(viewModelScope)
 
         authRepository
@@ -124,6 +124,7 @@ class MainViewModel @Inject constructor(
             }
 
             is MainAction.Internal.CurrentUserStateChange -> handleCurrentUserStateChange()
+            is MainAction.Internal.ScreenCaptureUpdate -> handleScreenCaptureUpdate(action)
             is MainAction.Internal.ThemeUpdate -> handleAppThemeUpdated(action)
             is MainAction.Internal.VaultUnlockStateChange -> handleVaultUnlockStateChange()
             is MainAction.ReceiveFirstIntent -> handleFirstIntentReceived(action)
@@ -139,6 +140,10 @@ class MainViewModel @Inject constructor(
 
     private fun handleCurrentUserStateChange() {
         recreateUiAndGarbageCollect()
+    }
+
+    private fun handleScreenCaptureUpdate(action: MainAction.Internal.ScreenCaptureUpdate) {
+        mutableStateFlow.update { it.copy(isScreenCaptureAllowed = action.isScreenCaptureEnabled) }
     }
 
     private fun handleAppThemeUpdated(action: MainAction.Internal.ThemeUpdate) {
@@ -249,6 +254,7 @@ class MainViewModel @Inject constructor(
 @Parcelize
 data class MainState(
     val theme: AppTheme,
+    val isScreenCaptureAllowed: Boolean,
 ) : Parcelable
 
 /**
@@ -282,6 +288,13 @@ sealed class MainAction {
         data object CurrentUserStateChange : Internal()
 
         /**
+         * Indicates that the screen capture state has changed.
+         */
+        data class ScreenCaptureUpdate(
+            val isScreenCaptureEnabled: Boolean,
+        ) : Internal()
+
+        /**
          * Indicates that the app theme has changed.
          */
         data class ThemeUpdate(
@@ -304,11 +317,6 @@ sealed class MainEvent {
      * process is ready to complete.
      */
     data class CompleteAutofill(val cipherView: CipherView) : MainEvent()
-
-    /**
-     * Event indicating a change in the screen capture setting.
-     */
-    data class ScreenCaptureSettingChange(val isAllowed: Boolean) : MainEvent()
 
     /**
      * Event indicating that the UI should recreate itself.
