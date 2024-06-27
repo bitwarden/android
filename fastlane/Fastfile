@@ -159,7 +159,7 @@ platform :android do
     buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
 
     # Save changes
-#     File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
   end
   
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
