@@ -912,7 +912,7 @@ class VaultRepositoryImpl(
             .registerFido2Credential(
                 userId = userId,
                 origin = origin,
-                requestJson = "{\"publicKey\": ${fido2CredentialRequest.requestJson}}",
+                requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
                 clientData = clientData,
                 selectedCipherView = selectedCipherView,
                 cipherViews = ciphersWithFido2Credentials,
