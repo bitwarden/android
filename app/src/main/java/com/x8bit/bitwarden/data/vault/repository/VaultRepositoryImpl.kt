@@ -152,6 +152,7 @@ class VaultRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     pushManager: PushManager,
     private val clock: Clock,
+    private val json: Json,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
@@ -968,7 +969,7 @@ class VaultRepositoryImpl(
                 attestationResponse.toAndroidAttestationResponse()
             }
             .map { response ->
-                Json.encodeToString(response)
+                json.encodeToString(response)
             }
             .fold(
                 onSuccess = { Fido2CreateCredentialResult.Success(it) },
