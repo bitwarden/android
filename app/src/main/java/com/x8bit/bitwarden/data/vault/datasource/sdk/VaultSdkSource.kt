@@ -455,8 +455,11 @@ interface VaultSdkSource {
             options: CheckUserOptions,
             newCredential: Fido2CredentialNewView,
         ) -> CipherViewWrapper,
-        findCredentials: suspend (ids: List<ByteArray>, rpId: String) -> FindFido2CredentialsResult,
-        saveCredential: suspend (Cipher) -> SaveCredentialResult,
+        findCredentials: suspend (
+            fido2CredentialIds: List<ByteArray>,
+            relyingPartyId: String,
+        ) -> FindFido2CredentialsResult,
+        saveCredential: suspend (cipher: Cipher) -> SaveCredentialResult,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse>
 
     /**

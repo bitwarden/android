@@ -475,61 +475,16 @@ class VaultSdkSourceImpl(
                     .platform()
                     .fido2()
                     .client(
-                        userInterface = object : Fido2UserInterface {
-                            override suspend fun checkUser(
-                                options: CheckUserOptions,
-                                hint: UiHint,
-                            ): CheckUserResult = checkUser(options, hint)
-
-                            override suspend fun checkUserAndPickCredentialForCreation(
-                                options: CheckUserOptions,
-                                newCredential: Fido2CredentialNewView,
-                            ): CipherViewWrapper {
-                                checkUserAndPickCredentialForCreation(options, newCredential)
-                                return CipherViewWrapper(selectedCipherView)
-                            }
-
-                            override suspend fun isVerificationEnabled() = isVerificationSupported
-
-                            override suspend fun pickCredentialForAuthentication(
-                                availableCredentials: List<CipherView>,
-                            ): CipherViewWrapper {
-                                // This delegate should never be invoked during credential
-                                // registration. If it is we throw an exception to the SDK so that
-                                // a spec compliant error can be returned from `register`.
-                                throw UnsupportedOperationException(
-                                    "Pick Credential not supported during passkey registration.",
-                                )
-                            }
-                        },
-                        credentialStore = object : Fido2CredentialStore {
-                            override suspend fun findCredentials(
-                                ids: List<ByteArray>?,
-                                ripId: String,
-                            ): List<CipherView> =
-                                when (val result = findCredentials(ids.orEmpty(), ripId)) {
-                                    is FindFido2CredentialsResult.Error -> {
-                                        // This exception is caught and handled by the SDK, which
-                                        // uses it to produce a FIDO 2 spec compliant attestation
-                                        // error.
-                                        throw CreateCredentialUnknownException()
-                                    }
-
-                                    is FindFido2CredentialsResult.Success -> {
-                                        result.cipherViews
-                                    }
-                                }
-
-                            override suspend fun saveCredential(cred: Cipher) {
-                                if (saveCredential(cred) is SaveCredentialResult.Error) {
-                                    // This exception is caught and handled by the SDK, which uses
-                                    // it to produce a FIDO 2 spec compliant attestation error.
-                                    throw CreateCredentialUnknownException()
-                                }
-                            }
-
-                            override suspend fun allCredentials(): List<CipherView> = cipherViews
-                        },
+                        userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
+                            isVerificationSupported = isVerificationSupported,
+                            checkUser = checkUser,
+                            checkUserAndPickCredentialForCreation = checkUserAndPickCredentialForCreation,
+                        ),
+                        credentialStore = Fido2CredentialStoreImpl(
+                            cipherViews = cipherViews,
+                            findFido2Credentials = findCredentials,
+                            saveCipher = saveCredential
+                        ),
                     )
 
                 val result = client
@@ -565,4 +520,86 @@ class VaultSdkSourceImpl(
     private suspend fun getClient(
         userId: String,
     ): Client = sdkClientManager.getOrCreateClient(userId = userId)
+}
+
+private class Fido2CredentialRegistrationUserInterfaceImpl(
+    private val isVerificationSupported: Boolean,
+    private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
+    private val checkUserAndPickCredentialForCreation: suspend (options: CheckUserOptions, newCredential: Fido2CredentialNewView) -> CipherViewWrapper,
+) : Fido2UserInterface {
+    override suspend fun checkUser(
+        options: CheckUserOptions,
+        hint: UiHint,
+    ): CheckUserResult = checkUser.invoke(options, hint)
+
+    override suspend fun checkUserAndPickCredentialForCreation(
+        options: CheckUserOptions,
+        newCredential: Fido2CredentialNewView,
+    ): CipherViewWrapper = checkUserAndPickCredentialForCreation.invoke(options, newCredential)
+
+    override suspend fun isVerificationEnabled() : Boolean = isVerificationSupported
+
+    override suspend fun pickCredentialForAuthentication(
+        availableCredentials: List<CipherView>,
+    ): CipherViewWrapper = throw UnsupportedOperationException()
+}
+
+private class Fido2CredentialAuthenticationUserInterfaceImpl(
+    private val isVerificationSupported: Boolean,
+    private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
+    private val checkUserAndPickCredentialForCreation: suspend (options: CheckUserOptions, newCredential: Fido2CredentialNewView) -> CipherViewWrapper,
+    private val pickCredentialForAuthentication: (List<CipherView>) -> CipherViewWrapper,
+) : Fido2UserInterface {
+    override suspend fun checkUser(
+        options: CheckUserOptions,
+        hint: UiHint,
+    ): CheckUserResult = checkUser.invoke(options, hint)
+
+    override suspend fun checkUserAndPickCredentialForCreation(
+        options: CheckUserOptions,
+        newCredential: Fido2CredentialNewView,
+    ): CipherViewWrapper = checkUserAndPickCredentialForCreation.invoke(options, newCredential)
+
+    override suspend fun isVerificationEnabled() : Boolean = isVerificationSupported
+
+    override suspend fun pickCredentialForAuthentication(
+        availableCredentials: List<CipherView>,
+    ): CipherViewWrapper = pickCredentialForAuthentication.invoke(availableCredentials)
+}
+
+private class Fido2CredentialStoreImpl(
+    private val cipherViews: List<CipherView>,
+    private val findFido2Credentials: suspend (
+        credentialIds: List<ByteArray>,
+        relyingPartyId: String,
+    ) -> FindFido2CredentialsResult,
+    private val saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
+) : Fido2CredentialStore {
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
+    override suspend fun findCredentials(
+        fido2CredentialIds: List<ByteArray>?,
+        relyingPartyId: String,
+    ): List<CipherView> =
+        when (val result = findFido2Credentials(fido2CredentialIds.orEmpty(), relyingPartyId)) {
+            is FindFido2CredentialsResult.Error -> {
+                // This exception is caught and handled by the SDK, which
+                // uses it to produce a FIDO 2 spec compliant attestation
+                // error.
+                throw CreateCredentialUnknownException()
+            }
+
+            is FindFido2CredentialsResult.Success -> {
+                result.cipherViews
+            }
+        }
+
+    override suspend fun saveCredential(cred: Cipher) {
+        if (saveCipher(cred) is SaveCredentialResult.Error) {
+            // This exception is caught and handled by the SDK, which uses
+            // it to produce a FIDO 2 spec compliant attestation error.
+            throw CreateCredentialUnknownException()
+        }
+    }
+
+    override suspend fun allCredentials(): List<CipherView> = cipherViews
 }
