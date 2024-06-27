@@ -936,7 +936,7 @@ class VaultRepositoryImpl(
                         )
                         .map { decryptedFido2CredentialViews ->
                             decryptedFido2CredentialViews.filter { fido2CredentialView ->
-                                fido2CredentialView.rpId == relayingPartyId ||
+                                fido2CredentialView.rpId == relayingPartyId &&
                                     fido2CredentialIds.contains(fido2CredentialView.credentialId)
                             }
                         }
