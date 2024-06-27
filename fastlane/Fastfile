@@ -126,9 +126,11 @@ platform :android do
     currentVersionName = buildConfigText.match(/versionName = "(.+)"/).captures[0]
 
     if options[:versionName].nil? or options[:versionName].to_s.empty?
+        puts "Fetching latest tags from origin..."
+        `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
         puts "Getting latest version name from previous git tag..."
-        latestTag = `git tag --sort=committerdate --list | tail -1`
-        puts "Using previous tag (#{latestTag}) to calculate version name..."
+        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
+        puts "Using tag #{latestTag} to calculate version name..."
         latestTag.slice!(0)
         puts "Current version name resolved to #{latestTag}."
 
