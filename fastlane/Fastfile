@@ -218,7 +218,7 @@ platform :android do
   lane :publishBetaToPlayStore do
     upload_to_play_store(
       package_name: "com.x8bit.bitwarden.beta",
-      track: "Public",
+      track: "internal",
       release_status: "draft",
       aab: "app/build/outputs/bundle/standardBeta/com.x8bit.bitwarden-standard-beta.aab",
     )
