@@ -129,7 +129,7 @@ platform :android do
         puts "Fetching latest tags from origin..."
         `git fetch --prune --no-recurse-submodules --filter=tree:0 --depth=1 --tags origin`
         puts "Getting latest version name from previous git tag..."
-        latestTag = `git tag --sort=taggerdate --list | tail -1`.chomp()
+        latestTag = `git describe --tags $(git rev-list --tags --max-count=1)`.chomp()
         puts "Using tag #{latestTag} to calculate version name..."
         latestTag.slice!(0)
         puts "Current version name resolved to #{latestTag}."
@@ -159,7 +159,7 @@ platform :android do
     buildConfigText.gsub!("versionName = \"#{currentVersionName}\"", "versionName = \"#{nextVersionName}\"")
 
     # Save changes
-    File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
+#     File.open(buildConfigPath, "w") { |buildConfigFile| buildConfigFile << buildConfigText }
   end
   
   desc "Generate artifacts for the given [build] signed with the provided [keystore] and credentials."
