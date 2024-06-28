@@ -60,6 +60,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             CompleteRegistrationState(
                 userEmail = args.emailAddress,
                 emailVerificationToken = args.verificationToken,
+                fromEmail = args.fromEmail,
                 region = args.region,
                 passwordInput = "",
                 confirmPasswordInput = "",
@@ -408,7 +409,8 @@ class CompleteRegistrationViewModel @Inject constructor(
 data class CompleteRegistrationState(
     val userEmail: String,
     val emailVerificationToken: String,
-    val region: Environment.Type,
+    val fromEmail: Boolean,
+    val region: Environment.Type?,
     val passwordInput: String,
     val confirmPasswordInput: String,
     val passwordHintInput: String,

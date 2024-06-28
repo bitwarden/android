@@ -200,6 +200,7 @@ fun RootNavScreen(
                 navController.navigateToCompleteRegistration(
                     emailAddress = currentState.email,
                     verificationToken = currentState.verificationToken,
+                    fromEmail = currentState.fromEmail,
                     region = currentState.region
                 )
             }

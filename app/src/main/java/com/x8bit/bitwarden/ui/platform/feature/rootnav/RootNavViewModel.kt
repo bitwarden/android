@@ -82,6 +82,7 @@ class RootNavViewModel @Inject constructor(
                     email = specialCircumstance.completeRegistrationData.email,
                     verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
                     region = specialCircumstance.completeRegistrationData.region,
+                    fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
                     timestamp = specialCircumstance.timestamp
                 )
             }
@@ -128,6 +129,7 @@ class RootNavViewModel @Inject constructor(
                             email = specialCircumstance.completeRegistrationData.email,
                             verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
                             region = specialCircumstance.completeRegistrationData.region,
+                            fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
                             timestamp = specialCircumstance.timestamp
                         )
                 }
@@ -232,6 +234,7 @@ sealed class RootNavState : Parcelable {
     data class CompleteOngoingRegistration (
         val email: String,
         val verificationToken: String,
+        val fromEmail: Boolean,
         val region: Environment.Type,
         val timestamp: Timestamp
     ) : RootNavState()

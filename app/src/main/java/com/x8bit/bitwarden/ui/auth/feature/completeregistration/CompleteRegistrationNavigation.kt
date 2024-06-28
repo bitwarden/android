@@ -13,8 +13,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 private const val EMAIL_ADDRESS: String = "email_address"
 private const val VERIFICATION_TOKEN: String = "verification_token"
 private const val REGION: String = "region"
+private const val FROM_EMAIL: String = "from_email"
 private const val COMPLETE_REGISTRATION_PREFIX = "complete_registration"
-private const val COMPLETE_REGISTRATION_ROUTE = "$COMPLETE_REGISTRATION_PREFIX/{$EMAIL_ADDRESS}/{$VERIFICATION_TOKEN}/{$REGION}"
+private const val COMPLETE_REGISTRATION_ROUTE = "$COMPLETE_REGISTRATION_PREFIX/{$EMAIL_ADDRESS}/{$VERIFICATION_TOKEN}/{$FROM_EMAIL}/{$REGION}"
 
 /**
  * Class to retrieve login with device arguments from the [SavedStateHandle].
@@ -23,12 +24,14 @@ private const val COMPLETE_REGISTRATION_ROUTE = "$COMPLETE_REGISTRATION_PREFIX/{
 data class CompleteRegistrationArgs(
     val emailAddress: String,
     val verificationToken: String,
-    val region: Environment.Type
+    val fromEmail: Boolean,
+    val region: Environment.Type?
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL_ADDRESS)),
         verificationToken = checkNotNull(savedStateHandle.get<String>(VERIFICATION_TOKEN)),
-        region = checkNotNull(savedStateHandle.get<Environment.Type>(REGION))
+        fromEmail = checkNotNull(savedStateHandle.get<Boolean>(FROM_EMAIL)),
+        region = savedStateHandle.get<Environment.Type>(REGION)
     )
 }
 
@@ -38,9 +41,10 @@ data class CompleteRegistrationArgs(
 fun NavController.navigateToCompleteRegistration(
     emailAddress: String,
     verificationToken: String,
+    fromEmail: Boolean,
     region: Environment.Type? = null,
     navOptions: NavOptions? = null) {
-    this.navigate("$COMPLETE_REGISTRATION_PREFIX/$emailAddress/$verificationToken/$region", navOptions)
+    this.navigate("$COMPLETE_REGISTRATION_PREFIX/$emailAddress/$verificationToken/$fromEmail/$region", navOptions)
 }
 
 /**
@@ -55,6 +59,7 @@ fun NavGraphBuilder.completeRegistrationDestination(
         arguments = listOf(
             navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
             navArgument(VERIFICATION_TOKEN) { type = NavType.StringType },
+            navArgument(FROM_EMAIL) { type = NavType.BoolType },
             navArgument(REGION) { type = NavType.EnumType(Environment.Type::class.java) },
         ),
     ) {

@@ -14,5 +14,6 @@ import kotlinx.parcelize.Parcelize
 data class CompleteRegistrationData(
     val email: String,
     val verificationToken: String,
+    val fromEmail: Boolean,
     val region: Environment.Type
 ) : Parcelable
