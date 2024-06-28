@@ -20,6 +20,8 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
+import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -128,6 +130,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
         coEvery { validateOrigin(any()) } returns Fido2ValidateOriginResult.Success
+    }
+
+    private val organizationEventManager = mockk<OrganizationEventManager> {
+        every { trackEvent(event = any()) } just runs
     }
 
     private val initialState = createVaultItemListingState()
@@ -743,17 +749,22 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopyPasswordClick should call setText on the ClipboardManager`() =
         runTest {
             val password = "passTheWord"
+            val cipherId = "cipherId"
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopyPasswordClick(
                         password = password,
                         requiresPasswordReprompt = true,
+                        cipherId = cipherId,
                     ),
                 ),
             )
             verify(exactly = 1) {
                 clipboardManager.setText(password)
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedPassword(cipherId = cipherId),
+                )
             }
         }
 
@@ -762,17 +773,22 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `OverflowOptionClick Vault CopySecurityCodeClick should call setText on the ClipboardManager`() =
         runTest {
             val securityCode = "234"
+            val cipherId = "cipherId"
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
                 VaultItemListingsAction.OverflowOptionClick(
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = securityCode,
+                        cipherId = cipherId,
                         requiresPasswordReprompt = true,
                     ),
                 ),
             )
             verify(exactly = 1) {
                 clipboardManager.setText(securityCode)
+                organizationEventManager.trackEvent(
+                    event = OrganizationEvent.CipherClientCopiedCardCode(cipherId = cipherId),
+                )
             }
         }
 
@@ -1767,6 +1783,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager = specialCircumstanceManager,
             policyManager = policyManager,
             fido2CredentialManager = fido2CredentialManager,
+            organizationEventManager = organizationEventManager,
         )
 
     @Suppress("MaxLineLength")

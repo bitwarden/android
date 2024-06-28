@@ -5,8 +5,9 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -46,7 +47,7 @@ class OrganizationEventManagerTest {
         every { organizations } returns emptyList()
     }
     private val mutableVaultItemStateFlow = MutableStateFlow<DataState<CipherView?>>(
-        value = DataState.Loading
+        value = DataState.Loading,
     )
     private val vaultRepository = mockk<VaultRepository> {
         every { getVaultItemStateFlow(itemId = any()) } returns mutableVaultItemStateFlow
@@ -69,7 +70,7 @@ class OrganizationEventManagerTest {
     @Test
     fun `onLifecycleStart should upload events after 2 minutes and again after 5 more minutes`() =
         runTest {
-            val organizationEvent = OrganizationEvent(
+            val organizationEvent = OrganizationEventJson(
                 type = OrganizationEventType.CIPHER_UPDATED,
                 cipherId = CIPHER_ID,
                 date = ZonedDateTime.now(fixedClock),
@@ -100,7 +101,7 @@ class OrganizationEventManagerTest {
 
     @Test
     fun `onLifecycleStop should upload events immediately`() = runTest {
-        val organizationEvent = OrganizationEvent(
+        val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_UPDATED,
             cipherId = CIPHER_ID,
             date = ZonedDateTime.now(fixedClock),
@@ -125,8 +126,9 @@ class OrganizationEventManagerTest {
         every { authRepository.activeUserId } returns null
 
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -137,8 +139,9 @@ class OrganizationEventManagerTest {
     @Test
     fun `trackEvent should do nothing if the active user is not authenticated`() {
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -153,8 +156,9 @@ class OrganizationEventManagerTest {
         every { authRepository.organizations } returns listOf(organization)
 
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -172,8 +176,9 @@ class OrganizationEventManagerTest {
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
 
         organizationEventManager.trackEvent(
-            eventType = OrganizationEventType.CIPHER_UPDATED,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(
+                cipherId = CIPHER_ID,
+            ),
         )
 
         coVerify(exactly = 0) {
@@ -191,19 +196,17 @@ class OrganizationEventManagerTest {
         every { authRepository.organizations } returns listOf(organization)
         val cipherView = createMockCipherView(number = 1)
         mutableVaultItemStateFlow.value = DataState.Loaded(data = cipherView)
-        val eventType = OrganizationEventType.CIPHER_UPDATED
 
         organizationEventManager.trackEvent(
-            eventType = eventType,
-            cipherId = CIPHER_ID,
+            event = OrganizationEvent.CipherClientAutoFilled(cipherId = CIPHER_ID),
         )
 
         dispatcher.scheduler.runCurrent()
         coVerify(exactly = 1) {
             eventDiskSource.addOrganizationEvent(
                 userId = USER_ID,
-                event = OrganizationEvent(
-                    type = eventType,
+                event = OrganizationEventJson(
+                    type = OrganizationEventType.CIPHER_CLIENT_AUTO_FILLED,
                     cipherId = CIPHER_ID,
                     date = ZonedDateTime.now(fixedClock),
                 ),

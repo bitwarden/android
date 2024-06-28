@@ -108,6 +108,9 @@ android {
         unitTests.isIncludeAndroidResources = true
         unitTests.isReturnDefaultValues = true
     }
+    lint {
+        disable.add("MissingTranslation")
+    }
 }
 
 kotlin {
@@ -283,8 +286,9 @@ sonar {
         property("sonar.projectKey", "bitwarden_android")
         property("sonar.organization", "bitwarden")
         property("sonar.host.url", "https://sonarcloud.io")
-        property("sonar.sources", "app/src/main/,app/src/standard/,app/src/fdroid/")
-        property("sonar.tests", "app/src/test/")
+        property("sonar.sources", "app/src/")
+        property("sonar.tests", "app/src/")
+        property("sonar.test.inclusions", "app/src/test/")
     }
 }
 

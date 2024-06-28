@@ -4,7 +4,7 @@ import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.dao.FakeOrganizationEventDao
 import com.x8bit.bitwarden.data.platform.datasource.disk.entity.OrganizationEventEntity
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -35,7 +35,7 @@ class EventDiskSourceTest {
     @Test
     fun `addOrganizationEvent should insert a new organization event`() = runTest {
         val userId = "userId-1"
-        val organizationEvent = OrganizationEvent(
+        val organizationEvent = OrganizationEventJson(
             type = OrganizationEventType.CIPHER_DELETED,
             cipherId = "cipherId-1",
             date = ZonedDateTime.now(fixedClock),
@@ -128,7 +128,7 @@ class EventDiskSourceTest {
 
         assertEquals(
             listOf(
-                OrganizationEvent(
+                OrganizationEventJson(
                     type = OrganizationEventType.CIPHER_DELETED,
                     cipherId = "cipherId-1",
                     date = ZonedDateTime.now(fixedClock),

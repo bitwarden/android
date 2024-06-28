@@ -6,10 +6,10 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.AuthState
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEvent
+import com.x8bit.bitwarden.data.platform.datasource.network.model.OrganizationEventJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.EventService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEventType
+import com.x8bit.bitwarden.data.platform.manager.model.OrganizationEvent
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -58,14 +58,14 @@ class OrganizationEventManagerImpl(
     }
 
     @Suppress("ReturnCount")
-    override fun trackEvent(eventType: OrganizationEventType, cipherId: String?) {
+    override fun trackEvent(event: OrganizationEvent) {
         val userId = authRepository.activeUserId ?: return
         if (authRepository.authStateFlow.value !is AuthState.Authenticated) return
         val organizations = authRepository.organizations.filter { it.shouldUseEvents }
         if (organizations.none()) return
 
         ioScope.launch {
-            cipherId?.let { id ->
+            event.cipherId?.let { id ->
                 val cipherOrganizationId = vaultRepository
                     .getVaultItemStateFlow(itemId = id)
                     .first { it.data != null }
@@ -76,9 +76,9 @@ class OrganizationEventManagerImpl(
             }
             eventDiskSource.addOrganizationEvent(
                 userId = userId,
-                event = OrganizationEvent(
-                    type = eventType,
-                    cipherId = cipherId,
+                event = OrganizationEventJson(
+                    type = event.type,
+                    cipherId = event.cipherId,
                     date = ZonedDateTime.now(clock),
                 ),
             )

@@ -161,6 +161,11 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <meta-data
+            android:name="android.content.APP_RESTRICTIONS"
+            android:resource="@xml/app_restrictions" />
+
     </application>
 
     <queries>

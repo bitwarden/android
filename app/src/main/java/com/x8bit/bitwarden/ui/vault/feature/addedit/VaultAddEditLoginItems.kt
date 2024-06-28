@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -301,7 +302,7 @@ fun LazyListScope.vaultAddEditLoginItems(
 
     items(commonState.customFieldData) { customItem ->
         VaultAddEditCustomField(
-            customItem,
+            customField = customItem,
             onCustomFieldValueChange = commonActionHandler.onCustomFieldValueChange,
             onCustomFieldAction = commonActionHandler.onCustomFieldActionSelect,
             modifier = Modifier
@@ -311,6 +312,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 VaultLinkedFieldType.PASSWORD,
                 VaultLinkedFieldType.USERNAME,
             ),
+            onHiddenVisibilityChanged = commonActionHandler.onHiddenFieldVisibilityChange,
         )
     }
 
@@ -436,10 +438,16 @@ private fun PasswordRow(
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
 
     if (canViewPassword) {
+        var shouldShowPassword by remember { mutableStateOf(false) }
         BitwardenPasswordFieldWithActions(
             label = stringResource(id = R.string.password),
             value = password,
             onValueChange = loginItemTypeHandlers.onPasswordTextChange,
+            showPassword = shouldShowPassword,
+            showPasswordChange = {
+                shouldShowPassword = !shouldShowPassword
+                loginItemTypeHandlers.onPasswordVisibilityChange(shouldShowPassword)
+            },
             showPasswordTestTag = "ViewPasswordButton",
             passwordFieldTestTag = "LoginPasswordEntry",
             modifier = Modifier

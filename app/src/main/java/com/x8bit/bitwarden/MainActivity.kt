@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         }
         setContent {
             val state by mainViewModel.stateFlow.collectAsStateWithLifecycle()
+            updateScreenCapture(isScreenCaptureAllowed = state.isScreenCaptureAllowed)
             LocalManagerProvider {
                 BitwardenTheme(theme = state.theme) {
                     RootNavScreen(
@@ -98,15 +99,8 @@ class MainActivity : AppCompatActivity() {
             .eventFlow
             .onEach { event ->
                 when (event) {
-                    is MainEvent.CompleteAutofill -> {
-                        handleCompleteAutofill(event)
-                    }
-
+                    is MainEvent.CompleteAutofill -> handleCompleteAutofill(event)
                     MainEvent.Recreate -> handleRecreate()
-
-                    is MainEvent.ScreenCaptureSettingChange -> {
-                        handleScreenCaptureSettingChange(event)
-                    }
                 }
             }
             .launchIn(lifecycleScope)
@@ -119,15 +113,15 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun handleScreenCaptureSettingChange(event: MainEvent.ScreenCaptureSettingChange) {
-        if (event.isAllowed) {
+    private fun handleRecreate() {
+        recreate()
+    }
+
+    private fun updateScreenCapture(isScreenCaptureAllowed: Boolean) {
+        if (isScreenCaptureAllowed) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         } else {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
-    }
-
-    private fun handleRecreate() {
-        recreate()
     }
 }

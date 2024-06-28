@@ -35,6 +35,7 @@ private const val FIDO2_CREDENTIAL_CREATION_TIME_PATTERN: String = "h:mm a"
  */
 @Suppress("CyclomaticComplexMethod", "LongMethod")
 fun CipherView.toViewState(
+    previousState: VaultItemState.ViewState.Content?,
     isPremiumUser: Boolean,
     hasMasterPassword: Boolean,
     totpCodeItemData: TotpCodeItemData?,
@@ -44,7 +45,8 @@ fun CipherView.toViewState(
         common = VaultItemState.ViewState.Content.Common(
             currentCipher = this,
             name = name,
-            requiresReprompt = reprompt == CipherRepromptType.PASSWORD && hasMasterPassword,
+            requiresReprompt = (reprompt == CipherRepromptType.PASSWORD && hasMasterPassword) &&
+                previousState?.common?.requiresReprompt != false,
             customFields = fields.orEmpty().map { it.toCustomField() },
             lastUpdated = revisionDate.toFormattedPattern(
                 pattern = LAST_UPDATED_DATE_TIME_PATTERN,
@@ -87,7 +89,10 @@ fun CipherView.toViewState(
                     passwordData = loginValues.password?.let {
                         VaultItemState.ViewState.Content.ItemType.Login.PasswordData(
                             password = it,
-                            isVisible = false,
+                            isVisible = (previousState?.type as?
+                                VaultItemState.ViewState.Content.ItemType.Login)
+                                ?.passwordData
+                                ?.isVisible == true,
                             canViewPassword = viewPassword,
                         )
                     },
@@ -115,10 +120,26 @@ fun CipherView.toViewState(
             CipherType.CARD -> {
                 VaultItemState.ViewState.Content.ItemType.Card(
                     cardholderName = card?.cardholderName,
-                    number = card?.number,
+                    number = card?.number?.let {
+                        VaultItemState.ViewState.Content.ItemType.Card.NumberData(
+                            number = it,
+                            isVisible = (previousState?.type
+                                as? VaultItemState.ViewState.Content.ItemType.Card)
+                                ?.number
+                                ?.isVisible == true,
+                        )
+                    },
                     brand = card?.cardBrand,
                     expiration = card?.expiration,
-                    securityCode = card?.code,
+                    securityCode = card?.code?.let {
+                        VaultItemState.ViewState.Content.ItemType.Card.CodeData(
+                            code = it,
+                            isVisible = (previousState?.type
+                                as? VaultItemState.ViewState.Content.ItemType.Card)
+                                ?.securityCode
+                                ?.isVisible == true,
+                        )
+                    },
                 )
             }
 

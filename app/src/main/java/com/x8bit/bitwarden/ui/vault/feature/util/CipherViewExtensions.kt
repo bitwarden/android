@@ -28,6 +28,7 @@ fun CipherView.toOverflowActions(
                 this.login?.password
                     ?.let {
                         ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                            cipherId = cipherId,
                             password = it,
                             requiresPasswordReprompt = hasMasterPassword,
                         )
@@ -45,6 +46,7 @@ fun CipherView.toOverflowActions(
                 this.card?.code?.let {
                     ListingItemOverflowAction.VaultAction.CopySecurityCodeClick(
                         securityCode = it,
+                        cipherId = cipherId,
                         requiresPasswordReprompt = hasMasterPassword,
                     )
                 },

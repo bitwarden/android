@@ -1,6 +1,9 @@
 name: Build
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
     inputs:
       version-name:
@@ -75,7 +78,7 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Check
-        run: bundle exec fastlane test
+        run: bundle exec fastlane check
 
       - name: Build
         run: bundle exec fastlane assembleDebugApks
@@ -368,8 +371,8 @@ jobs:
           bundle exec fastlane run validate_play_store_json_key
 
       - name: Publish Play Store bundle
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && inputs.publish-to-play-store }}
-        run: bundle exec fastlane publishForInternalTesting
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'aab' && (inputs.publish-to-play-store || github.ref_name == 'main') }}
+        run: bundle exec fastlane publishBetaToPlayStore
 
   publish_fdroid:
     name: Publish F-Droid artifacts

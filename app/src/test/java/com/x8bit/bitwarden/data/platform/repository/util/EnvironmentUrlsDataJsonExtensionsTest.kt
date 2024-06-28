@@ -8,20 +8,68 @@ import org.junit.jupiter.api.Test
 
 class EnvironmentUrlsDataJsonExtensionsTest {
     @Test
+    fun `baseApiUrl should return base if it is present`() {
+        assertEquals(
+            "base/api",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseApiUrl,
+        )
+    }
+
+    @Test
+    fun `baseApiUrl should return api value if base is empty`() {
+        assertEquals(
+            "api",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "").baseApiUrl,
+        )
+    }
+
+    @Test
+    fun `baseApiUrl should return default url if base is empty and api is null`() {
+        assertEquals(
+            "https://api.bitwarden.com",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "", api = null).baseApiUrl,
+        )
+    }
+
+    @Test
+    fun `baseEventsUrl should return base if it is present`() {
+        assertEquals(
+            "base/events",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseEventsUrl,
+        )
+    }
+
+    @Test
+    fun `baseEventsUrl should return events value if base is empty`() {
+        assertEquals(
+            "events",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "").baseEventsUrl,
+        )
+    }
+
+    @Test
+    fun `baseEventsUrl should return default url if base is empty and events is null`() {
+        assertEquals(
+            "https://events.bitwarden.com",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.copy(base = "", events = null).baseEventsUrl,
+        )
+    }
+
+    @Test
     fun `baseIdentityUrl should return identity if value is present`() {
         assertEquals(
-            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseIdentityUrl,
             "identity",
+            DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA.baseIdentityUrl,
         )
     }
 
     @Test
     fun `baseIdentityUrl should return base value if identity is null`() {
         assertEquals(
+            "base/identity",
             DEFAULT_CUSTOM_ENVIRONMENT_URL_DATA
                 .copy(identity = null)
                 .baseIdentityUrl,
-            "base/identity",
         )
     }
 
@@ -242,7 +290,7 @@ class EnvironmentUrlsDataJsonExtensionsTest {
 
     @Test
     fun `toIconBaseurl should return default url if base is empty and icon is null`() {
-        val expectedUrl = "https://icons.bitwarden.net/"
+        val expectedUrl = "https://icons.bitwarden.net"
 
         assertEquals(
             expectedUrl,

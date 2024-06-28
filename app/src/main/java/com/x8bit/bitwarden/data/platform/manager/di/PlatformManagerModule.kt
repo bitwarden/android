@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.di
 
 import android.app.Application
 import android.content.Context
+import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
@@ -41,6 +42,8 @@ import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManager
 import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
+import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
@@ -210,5 +213,20 @@ object PlatformManagerModule {
     ): AssetManager = AssetManagerImpl(
         context = context,
         dispatcherManager = dispatcherManager,
+    )
+
+    @Provides
+    @Singleton
+    fun provideRestrictionManager(
+        @ApplicationContext context: Context,
+        appForegroundManager: AppForegroundManager,
+        dispatcherManager: DispatcherManager,
+        environmentRepository: EnvironmentRepository,
+    ): RestrictionManager = RestrictionManagerImpl(
+        appForegroundManager = appForegroundManager,
+        dispatcherManager = dispatcherManager,
+        context = context,
+        environmentRepository = environmentRepository,
+        restrictionsManager = requireNotNull(context.getSystemService()),
     )
 }

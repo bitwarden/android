@@ -49,7 +49,7 @@ class TwoFactorAuthMethodExtensionTest {
                     .concat(" ".asText())
                     .concat(R.string.follow_the_steps_from_duo_to_finish_logging_in.asText()),
             TwoFactorAuthMethod.WEB_AUTH to
-                R.string.continue_to_complete_web_authn_verfication.asText(),
+                R.string.continue_to_complete_web_authn_verification.asText(),
             TwoFactorAuthMethod.RECOVERY_CODE to "".asText(),
         )
             .forEach { (type, title) ->
