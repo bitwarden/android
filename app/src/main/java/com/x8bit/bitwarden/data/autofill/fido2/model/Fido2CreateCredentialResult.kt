@@ -1,23 +1,24 @@
 package com.x8bit.bitwarden.data.autofill.fido2.model
 
-import androidx.credentials.exceptions.CreateCredentialException
-
 /**
  * Models the data returned from creating a FIDO 2 credential.
  */
 sealed class Fido2CreateCredentialResult {
 
     /**
-     * Models a successful response for creating a credential.
+     * Indicates the credential has been successfully registered.
      */
     data class Success(
         val registrationResponse: String,
     ) : Fido2CreateCredentialResult()
 
     /**
-     * Models an error response for creating a credential.
+     * Indicates there was an error and the credential was not registered.
      */
-    data class Error(
-        val exception: CreateCredentialException,
-    ) : Fido2CreateCredentialResult()
+    data object Error : Fido2CreateCredentialResult()
+
+    /**
+     * Indicates the user cancelled the request.
+     */
+    data object Cancelled : Fido2CreateCredentialResult()
 }

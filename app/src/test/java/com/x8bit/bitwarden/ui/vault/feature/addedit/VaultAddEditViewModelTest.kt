@@ -15,11 +15,13 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -132,6 +134,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
     }
+    private val biometricsEncryptionManager = mockk<BiometricsEncryptionManager>()
 
     @BeforeEach
     fun setup() {
@@ -727,14 +730,35 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val mockCreateResult = Fido2CreateCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
             )
+            val mockPasskeyCreateOptions = PublicKeyCredentialCreationOptions(
+                authenticatorSelection = PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria(
+                    authenticatorAttachment = null,
+                    residentKeyRequirement = null,
+                    userVerification = PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.DISCOURAGED,
+                ),
+                user = PublicKeyCredentialCreationOptions.PublicKeyCredentialUserEntity(
+                    name = "mockUserName",
+                    id = "mockUserId",
+                    displayName = "mockDisplayName",
+                ),
+                relyingParty = PublicKeyCredentialCreationOptions.PublicKeyCredentialRpEntity(
+                    name = "mockRpName",
+                    id = "mockRpId",
+                ),
+                pubKeyCredParams = emptyList(),
+                challenge = "mockChallenge",
+            )
             coEvery {
                 vaultRepository.registerFido2Credential(
                     fido2CredentialRequest = fido2CredentialRequest,
                     selectedCipherView = any(),
                     isVerificationSupported = any(),
-                    checkUser = any(),
                 )
             } returns mockCreateResult
+            every {
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
+            } returns mockPasskeyCreateOptions
+            every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns mockk()
 
             turbineScope {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
@@ -759,7 +783,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         fido2CredentialRequest = fido2CredentialRequest,
                         selectedCipherView = any(),
                         isVerificationSupported = any(),
-                        checkUser = any(),
                     )
                 }
             }
@@ -2106,6 +2129,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 settingsRepository = settingsRepository,
                 clock = fixedClock,
                 organizationEventManager = organizationEventManager,
+                biometricsEncryptionManager = biometricsEncryptionManager,
             )
         }
 
@@ -2711,6 +2735,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             settingsRepository = settingsRepository,
             clock = clock,
             organizationEventManager = organizationEventManager,
+            biometricsEncryptionManager = biometricsEncryptionManager,
         )
 
     private fun createVaultData(

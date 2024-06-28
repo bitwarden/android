@@ -27,7 +27,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
-import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
@@ -450,7 +449,6 @@ class VaultSdkSourceImpl(
             )
     }
 
-    @Suppress("MaxLineLength")
     override suspend fun registerFido2Credential(
         userId: String,
         origin: String,
@@ -459,11 +457,6 @@ class VaultSdkSourceImpl(
         selectedCipherView: CipherView,
         cipherViews: List<CipherView>,
         isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-        checkUserAndPickCredentialForCreation: suspend (
-            options: CheckUserOptions,
-            newCredential: Fido2CredentialNewView,
-        ) -> CipherViewWrapper,
         findCredentials: suspend (
             credentialIds: List<ByteArray>,
             relyingPartyId: String,
@@ -478,8 +471,7 @@ class VaultSdkSourceImpl(
                     .client(
                         userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
                             isVerificationSupported = isVerificationSupported,
-                            checkUser = checkUser,
-                            checkUserAndPickCredentialForCreation = checkUserAndPickCredentialForCreation,
+                            selectedCipherView = selectedCipherView,
                         ),
                         credentialStore = Fido2CredentialStoreImpl(
                             cipherViews = cipherViews,
@@ -506,7 +498,6 @@ class VaultSdkSourceImpl(
             .first()
     }
 
-    @Suppress("MaxLineLength")
     override suspend fun authenticateFido2Credential(
         userId: String,
         origin: String,

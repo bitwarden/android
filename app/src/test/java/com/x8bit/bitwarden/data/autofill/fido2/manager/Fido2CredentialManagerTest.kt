@@ -6,7 +6,6 @@ import androidx.credentials.provider.CallingAppInfo
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -25,7 +24,6 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
@@ -286,18 +284,6 @@ class Fido2CredentialManagerTest {
                 ),
             )
         }
-
-    @Test
-    fun `createCredentialForCipher should return error while not implemented`() {
-        val result = fido2CredentialManager.createCredentialForCipher(
-            credentialRequest = mockk(),
-            cipherView = mockk(),
-        )
-
-        assertTrue(
-            result is Fido2CreateCredentialResult.Error,
-        )
-    }
 }
 
 @Suppress("MaxLineLength")

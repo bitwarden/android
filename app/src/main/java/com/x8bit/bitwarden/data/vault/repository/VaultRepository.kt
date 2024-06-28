@@ -4,9 +4,6 @@ import android.net.Uri
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.fido.CheckUserOptions
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
@@ -247,6 +244,5 @@ interface VaultRepository : CipherManager, VaultLockManager {
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
         isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
     ): Fido2CreateCredentialResult
 }

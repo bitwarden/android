@@ -15,25 +15,35 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 @OmitFromCoverage
 class Fido2CredentialRegistrationUserInterfaceImpl(
     private val isVerificationSupported: Boolean,
-    private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-    private val checkUserAndPickCredentialForCreation: suspend (
-        options: CheckUserOptions,
-        newCredential: Fido2CredentialNewView,
-    ) -> CipherViewWrapper,
+    private val selectedCipherView: CipherView,
 ) : Fido2UserInterface {
 
+    /**
+     * Implicitly returns a [CheckUserResult] indicating the user is present and verified.
+     *
+     * The [options] parameter is ignored. User verification is performed prior to invoking the SDK.
+     */
     override suspend fun checkUser(
         options: CheckUserOptions,
         hint: UiHint,
-    ): CheckUserResult = checkUser.invoke(options, hint)
+    ): CheckUserResult = CheckUserResult(true, true)
 
+    /**
+     * Returns a [CipherViewWrapper] containing the [selectedCipherView] the [newCredential] will be
+     * registered to.
+     */
     override suspend fun checkUserAndPickCredentialForCreation(
         options: CheckUserOptions,
         newCredential: Fido2CredentialNewView,
-    ): CipherViewWrapper = checkUserAndPickCredentialForCreation.invoke(options, newCredential)
+    ): CipherViewWrapper = CipherViewWrapper(selectedCipherView)
 
     override suspend fun isVerificationEnabled(): Boolean = isVerificationSupported
 
+    /**
+     * Throws an [IllegalStateException] as it should not be invoked during FIDO 2 credential
+     * registration. Throwing an exception allows the SDK to gracefully terminate the ongoing
+     * process and return a spec compliant error.
+     */
     override suspend fun pickCredentialForAuthentication(
         availableCredentials: List<CipherView>,
     ): CipherViewWrapper = throw IllegalStateException()

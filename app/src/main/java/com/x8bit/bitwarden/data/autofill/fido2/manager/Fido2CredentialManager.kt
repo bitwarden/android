@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
-import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 
@@ -24,13 +22,4 @@ interface Fido2CredentialManager {
     fun getPasskeyCreateOptionsOrNull(
         requestJson: String,
     ): PublicKeyCredentialCreationOptions?
-
-    /**
-     * Attempt to create a FIDO2 credential from the given [credentialRequest] and associate it to
-     * the given [cipherView].
-     */
-    fun createCredentialForCipher(
-        credentialRequest: Fido2CredentialRequest,
-        cipherView: CipherView,
-    ): Fido2CreateCredentialResult
 }
