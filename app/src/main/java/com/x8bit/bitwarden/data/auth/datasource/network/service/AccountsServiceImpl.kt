@@ -9,6 +9,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintReques
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
@@ -92,6 +94,12 @@ class AccountsServiceImpl(
             authenticatedAccountsApi.resetPassword(body = body)
         }
     }
+
+    override suspend fun sendVerificationEmail(
+        body: SendVerificationEmailRequestJson
+    ): Result<SendVerificationEmailResponseJson> =
+        accountsApi.sendVerificationEmail(body = body)
+
 
     override suspend fun setPassword(
         body: SetPasswordRequestJson,

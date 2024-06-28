@@ -4,6 +4,8 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRespo
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 
 /**
@@ -48,6 +50,11 @@ interface AccountsService {
      * Reset the password.
      */
     suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit>
+
+    /**
+     * Send a verification email.
+     */
+    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<SendVerificationEmailResponseJson>
 
     /**
      * Set the password.

@@ -7,9 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
+import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
+import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountDialog
+import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
@@ -89,8 +94,8 @@ class StartRegistrationViewModel @Inject constructor(
             is PrivacyPolicyClick -> handlePrivacyPolicyClick()
             is TermsClick -> handleTermsClick()
             is StartRegistrationAction.UnsubscribeMarketingEmailsClick -> handleUnsubscribeMarketingEmailsClick()
-            is StartRegistrationAction.Internal.ReceiveRegisterResult -> {
-                // handleReceiveRegisterAccountResult(action)
+            is StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult -> {
+                handleReceiveSendVerificationEmailResult(action)
             }
             is StartRegistrationAction.Internal.ReceiveCaptchaToken -> {
                 handleReceiveCaptchaToken(action)
@@ -121,9 +126,7 @@ class StartRegistrationViewModel @Inject constructor(
             }
 
             is CaptchaCallbackTokenResult.Success -> {
-                submitRegisterAccountRequest(
-                    shouldCheckForDataBreaches = false,
-                    shouldIgnorePasswordStrength = true,
+                submitSendVerificationEmailRequest(
                     captchaToken = result.token,
                 )
             }
@@ -224,52 +227,84 @@ class StartRegistrationViewModel @Inject constructor(
         }
 
         else -> {
-            // TODO Call to send verification email
-           /*
-           submitRegisterAccountRequest(
-                shouldCheckForDataBreaches = state.isCheckDataBreachesToggled,
-                shouldIgnorePasswordStrength = false,
+            submitSendVerificationEmailRequest(
                 captchaToken = null,
             )
-            */
-
-            viewModelScope.launch {
-                if (environmentRepository.environment.type == Environment.Type.US || environmentRepository.environment.type == Environment.Type.EU)
-                    sendEvent(StartRegistrationEvent.NavigateToCheckEmail(
-                        email = state.emailInput
-                    ))
-                else
-                    sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
-                        email = state.emailInput,
-                        verificationToken = "",
-                        captchaToken = ""
-                    ))
-            }
         }
     }
 
-    private fun submitRegisterAccountRequest(
-        shouldCheckForDataBreaches: Boolean,
-        shouldIgnorePasswordStrength: Boolean,
+    private fun submitSendVerificationEmailRequest(
         captchaToken: String?,
     ) {
         mutableStateFlow.update {
             it.copy(dialog = StartRegistrationDialog.Loading)
         }
         viewModelScope.launch {
-            // TODO change to send email service call
-            /*
-            val result = authRepository.register(
+            val result = authRepository.sendVerificationEmail(
                 email = state.emailInput,
+                name = state.nameInput,
+                receiveMarketingEmails = state.isReceiveMarketingEmailsToggled,
                 captchaToken = captchaToken,
             )
             sendAction(
-                StartRegistrationAction.Internal.ReceiveRegisterResult(
-                    registerResult = result,
+                StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult(
+                    sendVerificationEmailResult = result,
                 ),
-            )*/
+            )
         }
     }
+
+    private fun handleReceiveSendVerificationEmailResult(result: StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult) {
+        when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
+            is SendVerificationEmailResult.CaptchaRequired -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                sendEvent(
+                    StartRegistrationEvent.NavigateToCaptcha(
+                        uri = generateUriForCaptcha(captchaId = sendVerificationEmailResult.captchaId),
+                    ),
+                )
+            }
+            
+            is SendVerificationEmailResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = StartRegistrationDialog.Error(
+                            BasicDialogState.Shown(
+                                title = R.string.an_error_has_occurred.asText(),
+                                message = sendVerificationEmailResult.errorMessage?.asText()
+                                    ?: R.string.generic_error_message.asText(),
+                            ),
+                        ),
+                    )
+                }
+            }
+
+            is SendVerificationEmailResult.Success -> {
+                mutableStateFlow.update { it.copy(dialog = null) }
+                if (environmentRepository.environment.type == Environment.Type.US || environmentRepository.environment.type == Environment.Type.EU)
+                    sendEvent(StartRegistrationEvent.NavigateToCheckEmail(
+                        email = state.emailInput
+                    ))
+                else if (sendVerificationEmailResult.emailVerificationToken == null)
+                    mutableStateFlow.update {
+                        it.copy(
+                            dialog = StartRegistrationDialog.Error(
+                                BasicDialogState.Shown(
+                                    title = R.string.an_error_has_occurred.asText(),
+                                    message = R.string.generic_error_message.asText(),
+                                ),
+                            ),
+                        )
+                    }
+                else
+                    sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
+                        email = state.emailInput,
+                        verificationToken = sendVerificationEmailResult.emailVerificationToken
+                    ))
+            }
+        }
+    }
+
 }
 
 /**
@@ -330,7 +365,6 @@ sealed class StartRegistrationEvent {
     data class NavigateToCompleteRegistration(
         val email: String,
         val verificationToken: String,
-        val captchaToken: String,
     ) : StartRegistrationEvent()
 
     /**
@@ -431,8 +465,8 @@ sealed class StartRegistrationAction {
         /**
          * Indicates a [RegisterResult] has been received.
          */
-        data class ReceiveRegisterResult(
-            val registerResult: RegisterResult,
+        data class ReceiveSendVerificationEmailResult(
+            val sendVerificationEmailResult: SendVerificationEmailResult,
         ) : Internal()
 
         /**

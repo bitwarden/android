@@ -15,10 +15,13 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
@@ -49,6 +52,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
@@ -711,11 +715,16 @@ class AuthRepositoryImpl(
         )
     }
 
+    /*
+        Remove call to [identityService.register]
+        once email verification flow is the only flow allowed
+    */
     @Suppress("ReturnCount", "LongMethod")
     override suspend fun register(
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
+        emailVerificationToken: String?,
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
@@ -744,21 +753,41 @@ class AuthRepositoryImpl(
                 kdf = kdf,
             )
             .flatMap { registerKeyResponse ->
-                identityService.register(
-                    body = RegisterRequestJson(
-                        email = email,
-                        masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                        masterPasswordHint = masterPasswordHint,
-                        captchaResponse = captchaToken,
-                        key = registerKeyResponse.encryptedUserKey,
-                        keys = RegisterRequestJson.Keys(
-                            publicKey = registerKeyResponse.keys.public,
-                            encryptedPrivateKey = registerKeyResponse.keys.private,
+                if (emailVerificationToken == null) {
+                    identityService.register(
+                        body = RegisterRequestJson(
+                            email = email,
+                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
+                            masterPasswordHint = masterPasswordHint,
+                            captchaResponse = captchaToken,
+                            key = registerKeyResponse.encryptedUserKey,
+                            keys = RegisterRequestJson.Keys(
+                                publicKey = registerKeyResponse.keys.public,
+                                encryptedPrivateKey = registerKeyResponse.keys.private,
+                            ),
+                            kdfType = kdf.toKdfTypeJson(),
+                            kdfIterations = kdf.iterations,
                         ),
-                        kdfType = kdf.toKdfTypeJson(),
-                        kdfIterations = kdf.iterations,
-                    ),
-                )
+                    )
+                } else {
+                    identityService.registerFinish(
+                        body = RegisterFinishRequestJson(
+                            email = email,
+                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
+                            masterPasswordHint = masterPasswordHint,
+                            emailVerificationToken = emailVerificationToken,
+                            captchaResponse = captchaToken,
+                            key = registerKeyResponse.encryptedUserKey,
+                            keys = RegisterFinishRequestJson.Keys(
+                                publicKey = registerKeyResponse.keys.public,
+                                encryptedPrivateKey = registerKeyResponse.keys.private,
+                            ),
+                            kdfType = kdf.toKdfTypeJson(),
+                            kdfIterations = kdf.iterations,
+                        ),
+                    )
+                }
+
             }
             .fold(
                 onSuccess = {
@@ -1108,6 +1137,39 @@ class AuthRepositoryImpl(
         password: String,
     ): Boolean = passwordPolicies
         .all { validatePasswordAgainstPolicy(password, it) }
+
+    override suspend fun sendVerificationEmail(
+        email: String,
+        name: String,
+        receiveMarketingEmails: Boolean,
+        captchaToken: String?,
+    ): SendVerificationEmailResult {
+        return accountsService.sendVerificationEmail(
+            SendVerificationEmailRequestJson(
+                email = email,
+                name = name,
+                receiveMarketingEmails = receiveMarketingEmails,
+                captchaResponse = captchaToken,
+            )).fold(
+            onSuccess = {
+                when (it) {
+                    is SendVerificationEmailResponseJson.Error -> SendVerificationEmailResult.Error(it.message)
+                    is SendVerificationEmailResponseJson.Success -> SendVerificationEmailResult.Success(
+                        emailVerificationToken = it.emailVerificationToken,
+                        captchaToken = it.captchaBypassToken
+                    )
+
+                    is SendVerificationEmailResponseJson.CaptchaRequired ->
+                        it.validationErrors.captchaKeys.firstOrNull()
+                        ?.let { key -> SendVerificationEmailResult.CaptchaRequired(captchaId = key) }
+                        ?: SendVerificationEmailResult.Error(errorMessage = null)
+
+                    is SendVerificationEmailResponseJson.Invalid -> TODO()
+                }
+            },
+            onFailure = { SendVerificationEmailResult.Error(null) },
+        )
+    }
 
     @Suppress("CyclomaticComplexMethod", "ReturnCount")
     private suspend fun validatePasswordAgainstPolicy(

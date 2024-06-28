@@ -13,8 +13,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
-import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.manager.util.toFido2RequestOrNull
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
@@ -23,14 +21,12 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
-import com.x8bit.bitwarden.ui.auth.feature.landing.LandingEvent
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
-import com.x8bit.bitwarden.ui.tools.feature.send.SendEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -99,14 +95,12 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     // Update region when coming from an AppLink to complete the registration
     private fun updateCurrentRegion() {
-        if (state.region == null) {
-            return
-        }
         val environment = when (state.region) {
             Environment.Type.US -> Environment.Us
             Environment.Type.EU -> Environment.Eu
-            Environment.Type.SELF_HOSTED -> {
-                // Self-host does not have email confirmation
+            Environment.Type.SELF_HOSTED,
+            null -> {
+                // Self-host users will open web app to complete the registration
                 return
             }
         }
@@ -117,15 +111,11 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun verifyEmailAddress() {
-        mutableStateFlow.update {
-            it.copy(dialog = CompleteRegistrationDialog.Loading)
-        }
+        if(!state.fromEmail)
+            return
 
-        // TODO Add call to service to verify email
-        sendEvent(CompleteRegistrationEvent.ShowToast(message = R.string.email_verified.asText()))
-
-        mutableStateFlow.update {
-            it.copy(dialog = null)
+        viewModelScope.launch {
+            sendEvent(CompleteRegistrationEvent.ShowToast(message = R.string.email_verified.asText()))
         }
     }
 
@@ -388,6 +378,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 shouldCheckDataBreaches = shouldCheckForDataBreaches,
                 isMasterPasswordStrong = shouldIgnorePasswordStrength ||
                     state.isMasterPasswordStrong,
+                emailVerificationToken = state.emailVerificationToken,
                 email = state.userEmail,
                 masterPassword = state.passwordInput,
                 masterPasswordHint = state.passwordHintInput.ifBlank { null },
