@@ -913,4 +913,16 @@ Do you want to switch to this account?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey-operasjonen feila på grunn av manglande ressurslenker</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey-operasjonen feila fordi appen ikkje vart funnen blant ressurslenkene</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey-operasjonen feila fordi appen ikkje kunne verifiserast</string>
+  <string name="confirm_file_password">Stadfest filpassord</string>
+  <string name="continue_to_give_feedback">Gå vidare til Gje tilbakemelding?</string>
+  <string name="continue_to_provide_feedback">Vel fortset for å gje tilbakemelding på den nye appen!</string>
+  <string name="file_password">Filpassord</string>
+  <string name="give_feedback">Gje tilbakemelding</string>
+  <string name="password_protected">Passordbeskytta</string>
+  <string name="password_used_to_export">Dette passordet vil verte nytta til å eksportere og importere denne fila</string>
+  <string name="autofill_suggestion">Autofyll-forslag</string>
+  <string name="continue_to_complete_web_authn_verification">Gå vidare for å fullføre WebAuth-verifikasjon.</string>
+  <string name="launch_web_authn">Start WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ein feil skjedde under oppstarten av WebAuth-tofaktorautentiseringa</string>
+  <string name="self_hosted_server_url">Self-hosted server URL</string>
 </resources>

@@ -516,12 +516,12 @@ Skenovanie prebehne automaticky.</string>
   <string name="set_master_password">Nastaviť hlavné heslo</string>
   <string name="set_master_password_summary">Aby ste dokončili nastavenie prihlasovacieho portálu (SSO), prosím nastavte hlavné heslo na prístup a ochranu vášho trezora.</string>
   <string name="master_password_policy_in_effect">Jedno alebo viac pravidiel organizácie požadujú aby vaše hlavné heslo spĺňalo nasledujúce požiadavky:</string>
-  <string name="policy_in_effect_min_complexity">Minimálna úroveň zložitosti $SCORE$</string>
-  <string name="policy_in_effect_min_length">Minimálna dĺžka je %s</string>
+  <string name="policy_in_effect_min_complexity">Minimálna úroveň zložitosti %1$s</string>
+  <string name="policy_in_effect_min_length">Minimálna dĺžka %1$s</string>
   <string name="policy_in_effect_uppercase">Obsahuje aspoň jedno veľké písmeno</string>
   <string name="policy_in_effect_lowercase">Obsahuje aspoň jedno malé písmeno</string>
   <string name="policy_in_effect_numbers">Obsahuje aspoň jednu číslicu</string>
-  <string name="policy_in_effect_special">Obsahuje aspoň jeden z následujúcich špeciálnych znakov $CHARS$</string>
+  <string name="policy_in_effect_special">Obsahuje aspoň jeden z následujúcich špeciálnych znakov: %1$s</string>
   <string name="master_password_policy_validation_title">Nesprávne heslo</string>
   <string name="master_password_policy_validation_message">Vaše nové hlavné heslo nespĺňa pravidlá spoločnosti. Prosím pozrite si informácie o pravidlách a skúste to znova.</string>
   <string name="loading">Načíta sa</string>
@@ -913,4 +913,16 @@ Chcete prepnúť na toto konto?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Operácia prístupového kľúča zlyhala, pretože súbor s protokolom Digital Asset Links chýba</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operácia prístupového kľúča zlyhala, pretože sa aplikácia nenašla v súbore s protokolom Digital Asset Links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operácia prístupového kľúča zlyhala, pretože aplikácia sa nedá overiť</string>
+  <string name="confirm_file_password">Potvrdiť heslo súboru</string>
+  <string name="continue_to_give_feedback">Pokračovať na Poskytnúť spätnú väzbu?</string>
+  <string name="continue_to_provide_feedback">Vyberte pokračovať v poskytovaní spätnej väzby na novú aplikáciu!</string>
+  <string name="file_password">Heslo súboru</string>
+  <string name="give_feedback">Poskytnúť spätnú väzbu</string>
+  <string name="password_protected">Chránené heslom</string>
+  <string name="password_used_to_export">Toto heslo sa použije na export a import tohto súboru</string>
+  <string name="autofill_suggestion">Návrhy automatického vypĺňania</string>
+  <string name="continue_to_complete_web_authn_verification">Dokončite overovanie WebAuthn.</string>
+  <string name="launch_web_authn">Spustiť WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Došlo k chybe pri spustení dvojfaktorového overovania WebAuthn</string>
+  <string name="self_hosted_server_url">Adresa URL vlastného hostingu</string>
 </resources>
