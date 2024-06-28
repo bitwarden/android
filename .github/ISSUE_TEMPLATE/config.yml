@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Legacy Android Bug Reports
+    url: https://github.com/bitwarden/mobile/issues
+    about: Bugs found in the publicly available .NET MAUI app should be reported in [bitwarden/mobile](https://github.com/bitwarden/mobile)
   - name: Feature Requests
     url: https://community.bitwarden.com/c/feature-requests/
     about: Request new features using the Community Forums. Please search existing feature requests before making a new one.
