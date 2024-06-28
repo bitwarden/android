@@ -913,4 +913,16 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Suojausavaintoiminto epäonnistui, koska asset-liitoksia puuttuu</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Suojausavaintoiminto epäonnistui, koska sovellusta ei löytynyt asset-liitoksista</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Suojausavaintoiminto epäonnistui, koska sovellusta ei voitu varmentaa</string>
+  <string name="confirm_file_password">Vahvista tiedoston salasana</string>
+  <string name="continue_to_give_feedback">Jatketaanko antamaan palautetta?</string>
+  <string name="continue_to_provide_feedback">Jatka antaaksesi palautetta uudesta sovelluksesta!</string>
+  <string name="file_password">Tiedoston salasana</string>
+  <string name="give_feedback">Anna palautetta</string>
+  <string name="password_protected">Salasanasuojattu</string>
+  <string name="password_used_to_export">Tätä salasanaa käytetään tämän tiedoston viennissä ja tuonnissa</string>
+  <string name="autofill_suggestion">Automaattitäytön ehdotus</string>
+  <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
+  <string name="launch_web_authn">Avaa WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
+  <string name="self_hosted_server_url">Self-hosted server URL</string>
 </resources>

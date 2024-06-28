@@ -913,4 +913,16 @@
   <string name="passkey_operation_failed_because_of_missing_asset_links">Не вдалося виконати операцію з ключем доступу, оскільки відсутні посилання на ресурси</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Не вдалося виконати операцію з ключем доступу, оскільки програму не знайдено в посиланнях на ресурси</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Не вдалося виконати операцію з ключем доступу, оскільки неможливо перевірити програму</string>
+  <string name="confirm_file_password">Підтвердьте пароль файлу</string>
+  <string name="continue_to_give_feedback">Перейти до написання відгуку?</string>
+  <string name="continue_to_provide_feedback">Виберіть \"Продовжити\" для написання відгуку про нову програму!</string>
+  <string name="file_password">Пароль файлу</string>
+  <string name="give_feedback">Написати відгук</string>
+  <string name="password_protected">Захищено паролем</string>
+  <string name="password_used_to_export">Цей пароль буде використано для експортування та імпортування цього файлу</string>
+  <string name="autofill_suggestion">Пропозиція автозаповнення</string>
+  <string name="continue_to_complete_web_authn_verification">Продовжуйте, щоб завершити перевірку WebAuthn.</string>
+  <string name="launch_web_authn">Запустити WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Сталася помилка під час запуску двофакторної автентифікації WebAuthn</string>
+  <string name="self_hosted_server_url">URL-адреса власного сервера</string>
 </resources>
