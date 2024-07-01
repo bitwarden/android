@@ -303,7 +303,7 @@ class LandingViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
             assertEquals(
-                LandingEvent.NavigateToCreateAccount,
+                LandingEvent.NavigateToStartRegistration,
                 awaitItem(),
             )
         }
