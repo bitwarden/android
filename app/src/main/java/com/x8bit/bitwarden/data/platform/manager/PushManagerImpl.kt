@@ -153,7 +153,14 @@ class PushManagerImpl @Inject constructor(
             -> {
                 val payload: NotificationPayload.SyncCipherNotification =
                     json.decodeFromString(notification.payload)
-                if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
+                @Suppress("ComplexCondition")
+                if (payload.id == null ||
+                    payload.revisionDate == null ||
+                    !isLoggedIn(userId) ||
+                    !payload.userMatchesNotification(userId)
+                ) {
+                    return
+                }
                 mutableSyncCipherUpsertSharedFlow.tryEmit(
                     SyncCipherUpsertData(
                         cipherId = payload.id,
@@ -170,7 +177,12 @@ class PushManagerImpl @Inject constructor(
             -> {
                 val payload: NotificationPayload.SyncCipherNotification =
                     json.decodeFromString(notification.payload)
-                if (!isLoggedIn(userId) || !payload.userMatchesNotification(userId)) return
+                if (payload.id == null ||
+                    !isLoggedIn(userId) ||
+                    !payload.userMatchesNotification(userId)
+                ) {
+                    return
+                }
                 mutableSyncCipherDeleteSharedFlow.tryEmit(
                     SyncCipherDeleteData(payload.id),
                 )
@@ -291,8 +303,8 @@ class PushManagerImpl @Inject constructor(
             .fold(
                 onSuccess = {
                     pushDiskSource.storeLastPushTokenRegistrationDate(
-                        userId,
-                        ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC),
+                        userId = userId,
+                        registrationDate = ZonedDateTime.ofInstant(clock.instant(), ZoneOffset.UTC),
                     )
                     pushDiskSource.storeCurrentPushToken(
                         userId = userId,
