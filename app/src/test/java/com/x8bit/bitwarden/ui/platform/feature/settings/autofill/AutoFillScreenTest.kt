@@ -187,6 +187,33 @@ class AutoFillScreenTest : BaseComposeTest() {
             .assertIsNotEnabled()
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on passkey management click should display confirmation dialog and confirm click should emit PasskeyManagementClick`() {
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule
+            .onNodeWithText("Passkey management")
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertExists()
+        composeTestRule
+            .onAllNodesWithText("Continue")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        verify { viewModel.trySendAction(AutoFillAction.PasskeyManagementClick) }
+    }
+
+    @Test
+    fun `passkey management row should not appear according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                showPasskeyManagementRow = false,
+            )
+        }
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText("Passkey management").assertDoesNotExist()
+    }
+
     @Test
     fun `on copy TOTP automatically toggle should send CopyTotpAutomaticallyClick`() {
         composeTestRule
@@ -337,5 +364,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = false,
+    showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
 )

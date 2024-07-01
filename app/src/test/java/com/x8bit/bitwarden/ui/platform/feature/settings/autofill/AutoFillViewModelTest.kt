@@ -1,14 +1,18 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -33,12 +37,20 @@ class AutoFillViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `initial state should be correct when not set`() {
+        mockkStatic(::isBuildVersionBelow)
+        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+
         val viewModel = createViewModel(state = null)
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
+
+        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
     fun `initial state should be correct when set`() {
+        mockkStatic(::isBuildVersionBelow)
+        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns false
+
         mutableIsAutofillEnabledStateFlow.value = true
         val state = DEFAULT_STATE.copy(
             isAutoFillServicesEnabled = true,
@@ -46,6 +58,23 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+
+        unmockkStatic(::isBuildVersionBelow)
+    }
+
+    @Test
+    fun `initial state should be correct when sdk is below min`() {
+        mockkStatic(::isBuildVersionBelow)
+        every { isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE) } returns true
+
+        val expected = DEFAULT_STATE.copy(
+           showPasskeyManagementRow = false,
+        )
+        val viewModel = createViewModel(state = null)
+
+        assertEquals(expected, viewModel.stateFlow.value)
+
+        unmockkStatic(::isBuildVersionBelow)
     }
 
     @Test
@@ -148,6 +177,15 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         verify { settingsRepository.isInlineAutofillEnabled = false }
     }
 
+    @Test
+    fun `on PasskeyManagementClick should emit NavigateToSettings`() = runTest {
+        val viewModel = createViewModel()
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(AutoFillAction.PasskeyManagementClick)
+            assertEquals(AutoFillEvent.NavigateToSettings, awaitItem())
+        }
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `on DefaultUriMatchTypeSelect should update the state and save the new value to settings`() {
@@ -183,5 +221,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = true,
+    showPasskeyManagementRow = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
 )
