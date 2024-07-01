@@ -138,7 +138,7 @@
   <string name="master_password_description">A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</string>
   <string name="master_password_hint">Mesterjelszó emlékeztető (nem kötelező)</string>
   <string name="master_password_hint_description">A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</string>
-  <string name="master_password_length_val_message_x">Mesterjelszónak legalább %1$s karakter hosszúnak kell lennie.</string>
+  <string name="master_password_length_val_message_x">A mesterjelszónak legalább %1$s karakter hosszúnak kell lennie.</string>
   <string name="min_numbers">Legalább ennyi szám</string>
   <string name="min_special">Legalább ennyi speciális karakter</string>
   <string name="more_settings">További beállítások</string>
@@ -745,7 +745,7 @@ TOTP hozzáadása a kulcs biztonságos tárolásához lehetőséget.</string>
 Szeretnénk átváltani erre a fiókra?</string>
   <string name="new_around_here">Új felhasználó vagyunk?</string>
   <string name="get_master_passwordword_hint">Mesterjelszó emlékeztető kérése</string>
-  <string name="logging_in_as_x_on_y">Bejelentkezve mint %1$s :: %2$s.</string>
+  <string name="logging_in_as_x_on_y">Bejelentkezve mint %1$s :: %2$s</string>
   <string name="not_you">Ez tévedés?</string>
   <string name="log_in_with_master_password">Bejelentkezés mesterjelszóval</string>
   <string name="log_in_with_another_device">Bejelentkezés más eszközzel</string>
@@ -912,4 +912,16 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">A belépőkulcs művelet nem sikerült, mert a készlet hivatkozások hiányoznak.</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">A belépőkulcs művelet nem sikerült, mert az alkalmazás nem található a készlet hivatkozásokban.</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">A belépőkulcs művelet nem sikerült, mert az alkalmazás nem lett ellenőrizve.</string>
+  <string name="confirm_file_password">Fájl jelszó megerősítés</string>
+  <string name="continue_to_give_feedback">Folytatás visszajelzés adással?</string>
+  <string name="continue_to_provide_feedback">Válasszuk a Folytatás visszajelzés adással lehetőséget az új alkalmazásban!</string>
+  <string name="file_password">Fájl jelszó</string>
+  <string name="give_feedback">Visszajelzés adása</string>
+  <string name="password_protected">Jelszóval védett</string>
+  <string name="password_used_to_export">Ezt a jelszó kerül használatba a fájl exportálására és importálására.</string>
+  <string name="autofill_suggestion">Automatikus kitöltés javaslatok</string>
+  <string name="continue_to_complete_web_authn_verification">Folytatás a WebAuthn ellenőrzés befejezésével.</string>
+  <string name="launch_web_authn">WebAuthn indítása</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Hiba történt a WebAuthn kétfaktoros hitelesítés indításakor.</string>
+  <string name="self_hosted_server_url">Saját üzemeltetésű szerver webcím</string>
 </resources>

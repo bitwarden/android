@@ -59,6 +59,7 @@ class MainViewModelTest : BaseViewModelTest() {
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
+        every { isScreenCaptureAllowed } returns true
         every { isScreenCaptureAllowedStateFlow } returns mutableScreenCaptureAllowedFlow
     }
     private val authRepository = mockk<AuthRepository> {
@@ -129,9 +130,6 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         viewModel.eventFlow.test {
-            // Ignore initial screen capture event
-            awaitItem()
-
             mutableUserStateFlow.value = UserState(
                 activeUserId = userId1,
                 accounts = listOf(
@@ -179,9 +177,6 @@ class MainViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
 
             viewModel.eventFlow.test {
-                // Ignore initial screen capture event
-                awaitItem()
-
                 mutableVaultStateEventFlow.tryEmit(VaultStateEvent.Unlocked(userId = "userId"))
                 expectNoEvents()
 
@@ -198,9 +193,6 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val cipherView = mockk<CipherView>()
         viewModel.eventFlow.test {
-            // Ignore initial screen capture event
-            awaitItem()
-
             autofillSelectionManager.emitAutofillSelection(cipherView = cipherView)
             assertEquals(
                 MainEvent.CompleteAutofill(cipherView = cipherView),
@@ -229,9 +221,7 @@ class MainViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
 
         assertEquals(
-            MainState(
-                theme = AppTheme.DEFAULT,
-            ),
+            DEFAULT_STATE,
             viewModel.stateFlow.value,
         )
         viewModel.trySendAction(
@@ -240,7 +230,7 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            MainState(
+            DEFAULT_STATE.copy(
                 theme = AppTheme.DARK,
             ),
             viewModel.stateFlow.value,
@@ -623,25 +613,19 @@ class MainViewModelTest : BaseViewModelTest() {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `changes in the allowed screen capture value should result in emissions of ScreenCaptureSettingChange `() =
-        runTest {
-            val viewModel = createViewModel()
+    fun `changes in the allowed screen capture value should update the state`() {
+        val viewModel = createViewModel()
 
-            viewModel.eventFlow.test {
-                assertEquals(
-                    MainEvent.ScreenCaptureSettingChange(isAllowed = true),
-                    awaitItem(),
-                )
+        assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
 
-                mutableScreenCaptureAllowedFlow.value = false
-                assertEquals(
-                    MainEvent.ScreenCaptureSettingChange(isAllowed = false),
-                    awaitItem(),
-                )
-            }
-        }
+        mutableScreenCaptureAllowedFlow.value = false
+
+        assertEquals(
+            DEFAULT_STATE.copy(isScreenCaptureAllowed = false),
+            viewModel.stateFlow.value,
+        )
+    }
 
     private fun createViewModel(
         initialSpecialCircumstance: SpecialCircumstance? = null,
@@ -658,6 +642,11 @@ class MainViewModelTest : BaseViewModelTest() {
         },
     )
 }
+
+private val DEFAULT_STATE: MainState = MainState(
+    theme = AppTheme.DEFAULT,
+    isScreenCaptureAllowed = true,
+)
 
 private const val SPECIAL_CIRCUMSTANCE_KEY: String = "special-circumstance"
 private val DEFAULT_ACCOUNT = UserState.Account(

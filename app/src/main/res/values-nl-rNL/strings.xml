@@ -913,4 +913,16 @@ Wilt u naar dit account wisselen?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey-bewerking mislukt omdat assets links ontbreken</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey-bewerking mislukt omdat de app niet is gevonden in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey-bewerking mislukt omdat de app niet geverifieerd kon worden</string>
+  <string name="confirm_file_password">Bestandswachtwoord bevestigen</string>
+  <string name="continue_to_give_feedback">Doorgaan met feedback geven?</string>
+  <string name="continue_to_provide_feedback">Kies doorgaan om feedback op de nieuwe app te geven!</string>
+  <string name="file_password">Bestandswachtwoord</string>
+  <string name="give_feedback">Feedback geven</string>
+  <string name="password_protected">Beveiligd met een wachtwoord</string>
+  <string name="password_used_to_export">We gebruiken dit wachtwoord bij het exporteren en importeren van dit bestand</string>
+  <string name="autofill_suggestion">Suggesties voor automatisch invullen</string>
+  <string name="continue_to_complete_web_authn_verification">Doorgaan met het voltooien van de WebAuthn verificatie.</string>
+  <string name="launch_web_authn">WebAuthn starten</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Er is een fout opgetreden bij het starten van WebAuthn Twee factor authenticatie</string>
+  <string name="self_hosted_server_url">URL zelfgehoste server</string>
 </resources>

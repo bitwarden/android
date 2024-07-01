@@ -1,4 +1,7 @@
-# Bitwarden Android
+# Bitwarden Android (BETA)
+
+> [!TIP]
+> This repo has the new native Android app, currently in [Beta](https://community.bitwarden.com/t/about-the-beta-program/39185). Looking for the legacy .NET MAUI apps? Head on over to [bitwarden/mobile](https://github.com/bitwarden/mobile)
 
 ## Contents
 
