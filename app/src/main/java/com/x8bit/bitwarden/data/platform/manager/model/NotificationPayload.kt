@@ -20,12 +20,12 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncCipherNotification(
-        @SerialName("Id") val id: String,
+        @SerialName("Id") val id: String?,
         @SerialName("UserId") override val userId: String?,
         @SerialName("OrganizationId") val organizationId: String?,
         @SerialName("CollectionIds") val collectionIds: List<String>?,
         @Contextual
-        @SerialName("RevisionDate") val revisionDate: ZonedDateTime,
+        @SerialName("RevisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
