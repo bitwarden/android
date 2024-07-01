@@ -3,8 +3,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.fido.Verification
-import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -13,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -48,6 +47,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
+import com.x8bit.bitwarden.ui.vault.feature.util.promptForUserVerification
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -67,6 +67,7 @@ import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.util.Collections
 import java.util.UUID
+import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -95,6 +96,7 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
+    private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -256,6 +258,26 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.HiddenFieldVisibilityChange -> {
                 handleHiddenFieldVisibilityChange(action)
             }
+
+            is VaultAddEditAction.Common.BiometricsVerificationSuccess -> {
+                handleBiometricsVerificationSuccess()
+            }
+
+            is VaultAddEditAction.Common.BiometricsLockOut -> {
+                handleBiometricsLockOut()
+            }
+
+            is VaultAddEditAction.Common.BiometricsVerificationFail -> {
+                handleBiometricsVerificationFail()
+            }
+
+            VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
+                handleFido2ErrorDialogDismissed()
+            }
+
+            VaultAddEditAction.Common.BiometricsVerificationCancelled -> {
+                handleFido2BiometricsVerificationCancelled()
+            }
         }
     }
 
@@ -386,23 +408,35 @@ class VaultAddEditViewModel @Inject constructor(
         request: Fido2CredentialRequest,
         content: VaultAddEditState.ViewState.Content,
     ) {
+        val createOptions =
+            fido2CredentialManager.getPasskeyCreateOptionsOrNull(request.requestJson)
+                ?: run {
+                    showGenericErrorDialog()
+                    return
+                }
+
+        if (createOptions.promptForUserVerification) {
+            authRepository.activeUserId
+                ?.let { userId -> biometricsEncryptionManager.getOrCreateCipher(userId) }
+                ?.let { cipher -> sendEvent(VaultAddEditEvent.Fido2UserVerification(cipher)) }
+                ?: run { showFido2ErrorDialog() }
+            return
+        }
+
+        registerFido2CredentialToCipher(request, content.toCipherView())
+    }
+
+    private fun registerFido2CredentialToCipher(
+        request: Fido2CredentialRequest,
+        cipherView: CipherView,
+    ) {
         viewModelScope.launch {
             val result: Fido2CreateCredentialResult = vaultRepository
                 .registerFido2Credential(
                     fido2CredentialRequest = request,
-                    selectedCipherView = content.toCipherView(),
+                    selectedCipherView = cipherView,
                     // TODO: [PM-8137] Check if user verification can be performed
                     isVerificationSupported = true,
-                    checkUser = { options, _ ->
-                        if (options.requireVerification != Verification.DISCOURAGED) {
-                            // TODO [PM-8137]: Perform user verification
-                        } /* else return the new cipher content */
-
-                        CheckUserResult(
-                            userPresent = true,
-                            userVerified = true,
-                        )
-                    },
                 )
             sendAction(
                 VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
@@ -453,16 +487,12 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDismissDialog() {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
     }
 
     private fun handleInitialAutofillDialogDismissed() {
         settingsRepository.initialAutofillDialogShown = true
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
     }
 
     private fun handleHiddenFieldVisibilityChange(
@@ -477,6 +507,46 @@ class VaultAddEditViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handleBiometricsLockOut() {
+        showFido2ErrorDialog()
+    }
+
+    private fun handleBiometricsVerificationSuccess() {
+        specialCircumstanceManager.specialCircumstance
+            ?.toFido2RequestOrNull()
+            ?.let { request ->
+                onContent { content ->
+                    registerFido2CredentialToCipher(
+                        request = request,
+                        cipherView = content.toCipherView(),
+                    )
+                }
+            }
+            ?: showFido2ErrorDialog()
+    }
+
+    private fun handleBiometricsVerificationFail() {
+        showFido2ErrorDialog()
+    }
+
+    private fun handleFido2ErrorDialogDismissed() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompleteFido2Create(
+                result = Fido2CreateCredentialResult.Error,
+            ),
+        )
+    }
+
+    private fun handleFido2BiometricsVerificationCancelled() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompleteFido2Create(
+                result = Fido2CreateCredentialResult.Cancelled,
+            ),
+        )
     }
 
     private fun handleAddNewCustomFieldClick(
@@ -1148,20 +1218,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleCreateCipherResultReceive(
         action: VaultAddEditAction.Internal.CreateCipherResultReceive,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
 
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultAddEditState.DialogState.Generic(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                showGenericErrorDialog()
             }
 
             is CreateCipherResult.Success -> {
@@ -1185,7 +1246,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleUpdateCipherResultReceive(
         action: VaultAddEditAction.Internal.UpdateCipherResultReceive,
     ) {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        clearDialogState()
         when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
                 mutableStateFlow.update {
@@ -1213,17 +1274,11 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
         when (action.result) {
             DeleteCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultAddEditState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                showGenericErrorDialog()
             }
 
             DeleteCipherResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
+                clearDialogState()
                 sendEvent(
                     VaultAddEditEvent.ShowToast(
                         message = R.string.item_soft_deleted.asText(),
@@ -1393,7 +1448,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleFido2RegisterCredentialResultReceive(
         action: VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        clearDialogState()
         when (action.result) {
             is Fido2CreateCredentialResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
@@ -1402,6 +1457,8 @@ class VaultAddEditViewModel @Inject constructor(
             is Fido2CreateCredentialResult.Success -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
             }
+
+            is Fido2CreateCredentialResult.Cancelled -> Unit
         }
         sendEvent(VaultAddEditEvent.CompleteFido2Create(action.result))
     }
@@ -1409,6 +1466,31 @@ class VaultAddEditViewModel @Inject constructor(
     //endregion Internal Type Handlers
 
     //region Utility Functions
+
+    private fun clearDialogState() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun showFido2ErrorDialog() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
+                ),
+            )
+        }
+    }
+
+    private fun showGenericErrorDialog() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    message = R.string.generic_error_message.asText(),
+                ),
+            )
+        }
+    }
 
     private inline fun onContent(
         crossinline block: (VaultAddEditState.ViewState.Content) -> Unit,
@@ -1936,6 +2018,12 @@ data class VaultAddEditState(
          */
         @Parcelize
         data object InitialAutofillPrompt : DialogState()
+
+        /**
+         * Displays a FIDO 2 operation error dialog to the user.
+         */
+        @Parcelize
+        data class Fido2Error(val message: Text) : DialogState()
     }
 }
 
@@ -2011,6 +2099,11 @@ sealed class VaultAddEditEvent {
     data class CompleteFido2Create(
         val result: Fido2CreateCredentialResult,
     ) : VaultAddEditEvent()
+
+    /**
+     * Perform user verification for a FIDO 2 credential operation.
+     */
+    data class Fido2UserVerification(val cipher: Cipher) : VaultAddEditEvent()
 }
 
 /**
@@ -2157,6 +2250,32 @@ sealed class VaultAddEditAction {
          * @property isVisible the new visibility state of the hidden field.
          */
         data class HiddenFieldVisibilityChange(val isVisible: Boolean) : Common()
+
+        /**
+         * The user has too many failed verification attempts for FIDO operations and can no longer
+         * use biometric verification for some time.
+         */
+        data object BiometricsLockOut : Common()
+
+        /**
+         * The user has failed biometric verification for FIDO 2 operations.
+         */
+        data object BiometricsVerificationFail : Common()
+
+        /**
+         * The user has successfully verified themself using biometrics.
+         */
+        data object BiometricsVerificationSuccess : Common()
+
+        /**
+         * The user has cancelled biometric user verification.
+         */
+        data object BiometricsVerificationCancelled : Common()
+
+        /**
+         * The user has dismissed the FIDO 2 credential error dialog.
+         */
+        data object Fido2ErrorDialogDismissed : Common()
     }
 
     /**

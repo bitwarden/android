@@ -1,12 +1,9 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.provider.CallingAppInfo
-import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -103,14 +100,6 @@ class Fido2CredentialManagerImpl(
                 onSuccess = { it },
                 onFailure = { Fido2ValidateOriginResult.Error.Unknown },
             )
-
-    override fun createCredentialForCipher(
-        credentialRequest: Fido2CredentialRequest,
-        cipherView: CipherView,
-    ): Fido2CreateCredentialResult {
-        // TODO [PM-8137]: Create and save passkey to cipher.
-        return Fido2CreateCredentialResult.Error(CreateCredentialUnknownException())
-    }
 
     /**
      * Returns statements targeting the calling Android application, or null.

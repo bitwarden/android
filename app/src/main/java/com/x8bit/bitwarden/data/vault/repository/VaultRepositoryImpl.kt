@@ -1,18 +1,12 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
-import com.bitwarden.fido.Verification
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
-import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -886,11 +880,8 @@ class VaultRepositoryImpl(
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
         isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
     ): Fido2CreateCredentialResult {
-        val userId = activeUserId ?: return Fido2CreateCredentialResult.Error(
-            CreateCredentialUnknownException("Active user is required."),
-        )
+        val userId = activeUserId ?: return Fido2CreateCredentialResult.Error
         val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
             ClientData.DefaultWithCustomHash(
                 hash = fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint(),
@@ -918,14 +909,6 @@ class VaultRepositoryImpl(
                 selectedCipherView = selectedCipherView,
                 cipherViews = ciphersWithFido2Credentials,
                 isVerificationSupported = isVerificationSupported,
-                checkUser = checkUser,
-                checkUserAndPickCredentialForCreation = { options, _ ->
-                    if (options.requireVerification != Verification.DISCOURAGED) {
-                        // TODO [PM-8137]: Trigger user verification as it is preferred|required.
-                        waitUntilUnlocked(userId)
-                    }
-                    CipherViewWrapper(cipher = selectedCipherView)
-                },
                 findCredentials = { fido2CredentialIds, relayingPartyId ->
                     // We force a sync so that the SDK has the latest version of any ciphers that
                     // contain a matching credential.
@@ -973,11 +956,7 @@ class VaultRepositoryImpl(
             }
             .fold(
                 onSuccess = { Fido2CreateCredentialResult.Success(it) },
-                onFailure = {
-                    Fido2CreateCredentialResult.Error(
-                        CreateCredentialUnknownException(it.message),
-                    )
-                },
+                onFailure = { Fido2CreateCredentialResult.Error },
             )
 
         return registerResult

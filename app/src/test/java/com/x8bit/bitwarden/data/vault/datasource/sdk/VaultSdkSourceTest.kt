@@ -14,7 +14,6 @@ import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.fido.Verification
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientCiphers
@@ -1028,10 +1027,6 @@ class VaultSdkSourceTest {
                     selectedCipherView = mockCipherView,
                     cipherViews = emptyList(),
                     isVerificationSupported = true,
-                    checkUser = { _, _ -> CheckUserResult(true, true) },
-                    checkUserAndPickCredentialForCreation = { _, _ ->
-                        CipherViewWrapper(mockCipherView)
-                    },
                     findCredentials = { _, _ -> FindFido2CredentialsResult.Success(emptyList()) },
                     saveCipher = { SaveCredentialResult.Success },
                 )
@@ -1076,8 +1071,6 @@ class VaultSdkSourceTest {
             selectedCipherView = mockCipherView,
             cipherViews = emptyList(),
             isVerificationSupported = true,
-            checkUser = { _, _ -> checkUserResult },
-            checkUserAndPickCredentialForCreation = { _, _ -> CipherViewWrapper(mockCipherView) },
             findCredentials = { _, _ -> FindFido2CredentialsResult.Success(emptyList()) },
             saveCipher = { SaveCredentialResult.Success },
         )

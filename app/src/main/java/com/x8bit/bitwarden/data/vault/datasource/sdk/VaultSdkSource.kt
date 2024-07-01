@@ -26,7 +26,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
-import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
@@ -427,13 +426,6 @@ interface VaultSdkSource {
      * @param selectedCipherView [CipherView] the new credential will be registered to.
      * @param cipherViews All existing cipher views in the users vault.
      * @param isVerificationSupported Whether user verification can be performed on this device.
-     * @param checkUser Receives [CheckUserOptions] and [UiHint] indicating what interactions and
-     * prompts must be presented to the user for registration to complete. A [CheckUserResult] is
-     * expected when interactions are completed.
-     * @param checkUserAndPickCredentialForCreation Receives [CheckUserOptions] indicating user
-     * verification requirements and a [Fido2CredentialNewView] representing the newly registered
-     * credential. A [CipherViewWrapper] containing the [selectedCipherView] updated with the
-     * [Fido2CredentialNewView] in response.
      * @param findCredentials Receives a relying party ID and an optional collection of credential
      * ID's to search for. Returns a collection of matching [CipherView]s.
      * @param saveCipher Receives an updated encrypted [Cipher] containing the newly registered
@@ -451,11 +443,6 @@ interface VaultSdkSource {
         selectedCipherView: CipherView,
         cipherViews: List<CipherView>,
         isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-        checkUserAndPickCredentialForCreation: suspend (
-            options: CheckUserOptions,
-            newCredential: Fido2CredentialNewView,
-        ) -> CipherViewWrapper,
         findCredentials: suspend (
             fido2CredentialIds: List<ByteArray>,
             relyingPartyId: String,

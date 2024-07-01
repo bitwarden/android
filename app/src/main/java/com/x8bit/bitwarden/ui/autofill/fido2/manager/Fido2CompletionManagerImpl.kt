@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.credentials.CreatePublicKeyCredentialResponse
+import androidx.credentials.exceptions.CreateCredentialCancellationException
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
@@ -26,7 +28,7 @@ class Fido2CompletionManagerImpl(
                     PendingIntentHandler
                         .setCreateCredentialException(
                             intent = intent,
-                            exception = result.exception,
+                            exception = CreateCredentialUnknownException(),
                         )
                 }
 
@@ -37,6 +39,14 @@ class Fido2CompletionManagerImpl(
                             response = CreatePublicKeyCredentialResponse(
                                 registrationResponseJson = result.registrationResponse,
                             ),
+                        )
+                }
+
+                Fido2CreateCredentialResult.Cancelled -> {
+                    PendingIntentHandler
+                        .setCreateCredentialException(
+                            intent = intent,
+                            exception = CreateCredentialCancellationException(),
                         )
                 }
             }

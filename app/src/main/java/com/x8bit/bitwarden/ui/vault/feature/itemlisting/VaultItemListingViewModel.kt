@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.os.Parcelable
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
@@ -296,12 +295,7 @@ class VaultItemListingViewModel @Inject constructor(
         }
 
         if (state.isFido2Creation) {
-            val cipherView = getCipherViewOrNull(action.id) ?: return
-            val credentialRequest = state.fido2CredentialRequest ?: return
-            fido2CredentialManager.createCredentialForCipher(
-                credentialRequest = credentialRequest,
-                cipherView = cipherView,
-            )
+            // TODO: [PM-8137] - Register passkey to the clicked cipher.
             return
         }
 
@@ -395,9 +389,7 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleDismissFido2ErrorDialogClick() {
         sendEvent(
             VaultItemListingEvent.CompleteFido2Create(
-                result = Fido2CreateCredentialResult.Error(
-                    exception = CreateCredentialUnknownException(),
-                ),
+                result = Fido2CreateCredentialResult.Error,
             ),
         )
     }
