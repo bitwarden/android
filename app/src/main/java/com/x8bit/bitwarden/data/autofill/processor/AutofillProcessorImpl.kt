@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 /**
@@ -41,6 +41,11 @@ class AutofillProcessorImpl(
      */
     private val scope: CoroutineScope = CoroutineScope(dispatcherManager.unconfined)
 
+    /**
+     * The job being used to process the fill request.
+     */
+    private var job: Job = Job().apply { complete() }
+
     override fun processFillRequest(
         autofillAppInfo: AutofillAppInfo,
         cancellationSignal: CancellationSignal,
@@ -48,7 +53,7 @@ class AutofillProcessorImpl(
         request: FillRequest,
     ) {
         // Set the listener so that any long running work is cancelled when it is no longer needed.
-        cancellationSignal.setOnCancelListener { scope.cancel() }
+        cancellationSignal.setOnCancelListener { job.cancel() }
         // Process the OS data and handle invoking the callback with the result.
         process(
             autofillAppInfo = autofillAppInfo,
@@ -113,7 +118,8 @@ class AutofillProcessorImpl(
         )
         when (autofillRequest) {
             is AutofillRequest.Fillable -> {
-                scope.launch {
+                job.cancel()
+                job = scope.launch {
                     // Fulfill the [autofillRequest].
                     val filledData = filledDataBuilder.build(
                         autofillRequest = autofillRequest,

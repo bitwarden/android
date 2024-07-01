@@ -21,11 +21,12 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
+import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -33,20 +34,21 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.unmockkStatic
 import io.mockk.verify
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class AutofillProcessorTest {
     private lateinit var autofillProcessor: AutofillProcessor
 
-    private val dispatcherManager: DispatcherManager = mockk()
+    private val testDispatcher = StandardTestDispatcher()
+    private val dispatcherManager: FakeDispatcherManager =
+        FakeDispatcherManager(unconfined = testDispatcher)
     private val cancellationSignal: CancellationSignal = mockk()
     private val filledDataBuilder: FilledDataBuilder = mockk()
     private val fillResponseBuilder: FillResponseBuilder = mockk()
@@ -54,7 +56,6 @@ class AutofillProcessorTest {
     private val policyManager: PolicyManager = mockk()
     private val saveInfoBuilder: SaveInfoBuilder = mockk()
     private val settingsRepository: SettingsRepository = mockk()
-    private val testDispatcher = UnconfinedTestDispatcher()
 
     private val appInfo: AutofillAppInfo = AutofillAppInfo(
         context = mockk(),
@@ -67,7 +68,6 @@ class AutofillProcessorTest {
     fun setup() {
         mockkStatic(::createAutofillSavedItemIntentSender)
         mockkStatic(AutofillRequest.Fillable::toAutofillSaveItem)
-        every { dispatcherManager.unconfined } returns testDispatcher
 
         autofillProcessor = AutofillProcessorImpl(
             dispatcherManager = dispatcherManager,
@@ -82,9 +82,6 @@ class AutofillProcessorTest {
 
     @AfterEach
     fun teardown() {
-        verify(exactly = 1) {
-            dispatcherManager.unconfined
-        }
         unmockkStatic(::createAutofillSavedItemIntentSender)
         unmockkStatic(AutofillRequest.Fillable::toAutofillSaveItem)
     }
@@ -178,6 +175,8 @@ class AutofillProcessorTest {
                 fillCallback = fillCallback,
                 request = fillRequest,
             )
+
+            testDispatcher.scheduler.runCurrent()
 
             // Verify
             coVerify(exactly = 1) {
@@ -384,6 +383,106 @@ class AutofillProcessorTest {
                 assistStructure = assistStructure,
             )
             saveCallback.onSuccess()
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processFillRequest should allow additional requests to be invoked after cancellation signal is triggered`() {
+        // Setup
+        val autofillPartition: AutofillPartition = mockk()
+        val autofillRequest: AutofillRequest.Fillable = mockk {
+            every { packageName } returns PACKAGE_NAME
+            every { partition } returns autofillPartition
+        }
+        val fillRequest: FillRequest = mockk()
+        val saveInfo: SaveInfo = mockk()
+        val filledData = FilledData(
+            filledPartitions = listOf(mockk()),
+            ignoreAutofillIds = emptyList(),
+            originalPartition = mockk(),
+            uri = null,
+            vaultItemInlinePresentationSpec = null,
+            isVaultLocked = false,
+        )
+        val fillResponse: FillResponse = mockk()
+        val cancellationSignalListener = slot<CancellationSignal.OnCancelListener>()
+        every {
+            cancellationSignal.setOnCancelListener(capture(cancellationSignalListener))
+        } just runs
+        every {
+            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
+        } returns autofillRequest
+        coEvery { filledDataBuilder.build(autofillRequest = autofillRequest) } returns filledData
+        every {
+            saveInfoBuilder.build(
+                autofillAppInfo = appInfo,
+                autofillPartition = autofillPartition,
+                fillRequest = fillRequest,
+                packageName = PACKAGE_NAME,
+            )
+        } returns saveInfo
+        every {
+            fillResponseBuilder.build(
+                autofillAppInfo = appInfo,
+                filledData = filledData,
+                saveInfo = saveInfo,
+            )
+        } returns fillResponse
+        every { fillCallback.onSuccess(fillResponse) } just runs
+
+        // Test
+        autofillProcessor.processFillRequest(
+            autofillAppInfo = appInfo,
+            cancellationSignal = cancellationSignal,
+            fillCallback = fillCallback,
+            request = fillRequest,
+        )
+
+        // Cancel the job and validate that nothing runs
+        cancellationSignalListener.captured.onCancel()
+        testDispatcher.scheduler.runCurrent()
+        verify(exactly = 1) {
+            // These run as they are not part of the coroutine
+            cancellationSignal.setOnCancelListener(any())
+            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
+        }
+        coVerify(exactly = 0) {
+            filledDataBuilder.build(autofillRequest = autofillRequest)
+        }
+        verify(exactly = 0) {
+            fillResponseBuilder.build(
+                autofillAppInfo = appInfo,
+                filledData = filledData,
+                saveInfo = saveInfo,
+            )
+            fillCallback.onSuccess(fillResponse)
+        }
+        clearMocks(cancellationSignal, parser, answers = false)
+
+        // Test again after cancelling
+        autofillProcessor.processFillRequest(
+            autofillAppInfo = appInfo,
+            cancellationSignal = cancellationSignal,
+            fillCallback = fillCallback,
+            request = fillRequest,
+        )
+
+        testDispatcher.scheduler.runCurrent()
+
+        // Verify
+        verify(exactly = 1) {
+            cancellationSignal.setOnCancelListener(any())
+            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
+            fillResponseBuilder.build(
+                autofillAppInfo = appInfo,
+                filledData = filledData,
+                saveInfo = saveInfo,
+            )
+            fillCallback.onSuccess(fillResponse)
+        }
+        coVerify(exactly = 1) {
+            filledDataBuilder.build(autofillRequest = autofillRequest)
         }
     }
 }
