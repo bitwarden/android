@@ -1,15 +1,20 @@
 package com.x8bit.bitwarden.data.vault.repository
 
+import android.content.pm.Signature
+import android.content.pm.SigningInfo
 import android.net.Uri
+import android.util.Base64
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
+import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.Folder
@@ -21,8 +26,11 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -90,7 +98,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.model.createMockDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
@@ -114,6 +121,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -122,6 +130,7 @@ import org.junit.jupiter.api.Test
 import retrofit2.HttpException
 import java.io.File
 import java.net.UnknownHostException
+import java.security.MessageDigest
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
@@ -135,6 +144,7 @@ class VaultRepositoryTest {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+    private val json: Json = PlatformNetworkModule.providesJson()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
@@ -220,20 +230,23 @@ class VaultRepositoryTest {
         fileManager = fileManager,
         clock = clock,
         userLogoutManager = userLogoutManager,
+        json = json,
     )
 
     @BeforeEach
     fun setup() {
         mockkStatic(SyncResponseJson.Domains::toDomainsData)
         mockkStatic(Uri::class)
+        mockkStatic(MessageDigest::class)
+        mockkStatic(Base64::class)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(SyncResponseJson.Domains::toDomainsData)
         unmockkStatic(Uri::class)
-        unmockkStatic(Instant::class)
-        unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        unmockkStatic(MessageDigest::class)
+        unmockkStatic(Base64::class)
     }
 
     @Test
@@ -4160,6 +4173,150 @@ class VaultRepositoryTest {
             )
         }
 
+    @Test
+    fun `registerFido2Credential should return error when active user ID is null`() = runTest {
+        val mockFido2CredentialRequest = createMockFido2CredentialRequest(1)
+        fakeAuthDiskSource.userState = null
+
+        val result = vaultRepository.registerFido2Credential(
+            fido2CredentialRequest = mockFido2CredentialRequest,
+            selectedCipherView = createMockCipherView(1),
+            isVerificationSupported = true,
+            checkUser = { _, _ -> CheckUserResult(true, true) },
+        )
+
+        assertTrue(
+            result is Fido2CreateCredentialResult.Error,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `registerFido2Credential should construct ClientData DefaultWithCustomHash when callingAppInfo origin is populated`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockByteArray = MOCK_APP_SIGNATURE.toByteArray()
+            every { Base64.encodeToString(any(), any()) } returns MOCK_APP_SIGNATURE
+            every { MessageDigest.getInstance(any()) } returns mockk {
+                every { digest(any()) } returns mockByteArray
+            }
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(MOCK_APP_SIGNATURE))
+            }
+            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "origin",
+                signingInfo = mockSigningInfo,
+            )
+            val mockCipherView = createMockCipherView(1)
+
+            coEvery {
+                vaultSdkSource.registerFido2Credential(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            } coAnswers {
+                mockk<PublicKeyCredentialAuthenticatorAttestationResponse>(relaxed = true)
+                    .asSuccess()
+            }
+
+            vaultRepository.registerFido2Credential(
+                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                selectedCipherView = mockCipherView,
+                isVerificationSupported = true,
+                checkUser = { _, _ -> CheckUserResult(true, true) },
+            )
+
+            coVerify {
+                vaultSdkSource.registerFido2Credential(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    origin = mockFido2CreateCredentialRequest.origin!!,
+                    clientData = ClientData.DefaultWithCustomHash(hash = mockByteArray),
+                    requestJson = """{"publicKey": ${mockFido2CreateCredentialRequest.requestJson}}""",
+                    selectedCipherView = mockCipherView,
+                    isVerificationSupported = true,
+                    cipherViews = any(),
+                    checkUser = any(),
+                    findCredentials = any(),
+                    saveCipher = any(),
+                    checkUserAndPickCredentialForCreation = any(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `registerFido2Credential should construct ClientData DefaultWithExtraData when callingAppInfo origin is null`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val mockByteArray = MOCK_APP_SIGNATURE.toByteArray()
+            every { Base64.encodeToString(any(), any()) } returns MOCK_APP_SIGNATURE
+            every { MessageDigest.getInstance(any()) } returns mockk {
+                every { digest(any()) } returns mockByteArray
+            }
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(MOCK_APP_SIGNATURE))
+            }
+            val mockFido2Request = createMockFido2CredentialRequest(
+                number = 1,
+                signingInfo = mockSigningInfo,
+            )
+            val mockCipherView = createMockCipherView(1)
+
+            coEvery {
+                vaultSdkSource.registerFido2Credential(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            } coAnswers {
+                mockk<PublicKeyCredentialAuthenticatorAttestationResponse>(relaxed = true)
+                    .asSuccess()
+            }
+
+            vaultRepository.registerFido2Credential(
+                fido2CredentialRequest = mockFido2Request,
+                selectedCipherView = createMockCipherView(1),
+                isVerificationSupported = true,
+                checkUser = { _, _ -> CheckUserResult(true, true) },
+            )
+
+            coVerify {
+                vaultSdkSource.registerFido2Credential(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    origin = "android:apk-key-hash:$MOCK_APP_SIGNATURE",
+                    requestJson = """{"publicKey": ${mockFido2Request.requestJson}}""",
+                    clientData = ClientData.DefaultWithExtraData(
+                        androidPackageName = "android:apk-key-hash:$MOCK_APP_SIGNATURE",
+                    ),
+                    selectedCipherView = mockCipherView,
+                    isVerificationSupported = true,
+                    cipherViews = any(),
+                    checkUser = any(),
+                    findCredentials = any(),
+                    saveCipher = any(),
+                    checkUserAndPickCredentialForCreation = any(),
+                )
+            }
+        }
+
     //region Helper functions
 
     /**
@@ -4405,3 +4562,5 @@ private val MOCK_USER_STATE = UserStateJson(
         "mockId-1" to MOCK_ACCOUNT,
     ),
 )
+
+private const val MOCK_APP_SIGNATURE = "0987654321ABCDEF"

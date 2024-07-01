@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.util
 
+import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.ui.platform.base.util.toHostOrPathOrNull
@@ -21,11 +22,8 @@ fun CallingAppInfo.getFido2RpIdOrNull(): String? =
  * Returns the signing certificate hash formatted as a hex string.
  */
 @OptIn(ExperimentalStdlibApi::class)
-fun CallingAppInfo.getCallingAppApkFingerprint(): String {
-    val cert = signingInfo.apkContentsSigners[0].toByteArray()
-    val md = MessageDigest.getInstance("SHA-256")
-    val certHash = md.digest(cert)
-    return certHash
+fun CallingAppInfo.getSignatureFingerprintAsHexString(): String {
+    return getAppSigningSignatureFingerprint()
         .joinToString(":") { b ->
             b.toHexString(HexFormat.UpperCase)
         }
@@ -57,3 +55,24 @@ fun CallingAppInfo.validatePrivilegedApp(allowList: String): Fido2ValidateOrigin
         Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp
     }
 }
+
+/**
+ * Returns the signing key hash of the calling application formatted as an origin URI for an
+ * unprivileged application.
+ */
+fun CallingAppInfo.getAppOrigin(): String {
+    val certHash = getAppSigningSignatureFingerprint()
+    return "android:apk-key-hash:${Base64.encodeToString(certHash, ENCODING_FLAGS)}"
+}
+
+/**
+ * Returns a [ByteArray] containing the application's signing certificate signature hash.
+ */
+fun CallingAppInfo.getAppSigningSignatureFingerprint(): ByteArray {
+    val signature = signingInfo.apkContentsSigners.first()
+    val md = MessageDigest.getInstance(SHA_ALGORITHM)
+    return md.digest(signature.toByteArray())
+}
+
+private const val SHA_ALGORITHM = "SHA-256"
+private const val ENCODING_FLAGS = Base64.URL_SAFE or Base64.NO_WRAP or Base64.NO_PADDING

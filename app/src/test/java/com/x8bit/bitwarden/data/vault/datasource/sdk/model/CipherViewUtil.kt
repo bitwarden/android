@@ -45,6 +45,10 @@ fun createMockCipherView(
     totp: String? = "mockTotp-$number",
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
+    fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(
+        number = 1,
+        clock = clock,
+    ),
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -59,6 +63,7 @@ fun createMockCipherView(
             number = number,
             totp = totp,
             clock = clock,
+            fido2Credentials = fido2Credentials,
         )
             .takeIf { cipherType == CipherType.LOGIN },
         creationDate = clock.instant(),
@@ -91,6 +96,7 @@ fun createMockLoginView(
     number: Int,
     totp: String? = "mockTotp-$number",
     clock: Clock = FIXED_CLOCK,
+    fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
 ): LoginView =
     LoginView(
         username = "mockUsername-$number",
@@ -99,7 +105,7 @@ fun createMockLoginView(
         autofillOnPageLoad = false,
         uris = listOf(createMockUriView(number = number)),
         totp = totp,
-        fido2Credentials = createMockSdkFido2CredentialList(number, clock),
+        fido2Credentials = fido2Credentials,
     )
 
 /**

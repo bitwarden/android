@@ -88,7 +88,7 @@ class CallingAppInfoExtensionsTest {
         }
         assertEquals(
             DEFAULT_SIGNATURE_HASH,
-            appInfo.getCallingAppApkFingerprint(),
+            appInfo.getSignatureFingerprintAsHexString(),
         )
     }
 
@@ -125,6 +125,22 @@ class CallingAppInfoExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `validatePrivilegedApp should return PrivilegedAppSignatureNotFound when IllegalStateException is thrown`() {
+        val appInfo = mockk<CallingAppInfo> {
+            every { packageName } returns "com.x8bit.bitwarden"
+            every { getOrigin(any()) } throws IllegalStateException()
+        }
+
+        assertEquals(
+            Fido2ValidateOriginResult.Error.PrivilegedAppSignatureNotFound,
+            appInfo.validatePrivilegedApp(
+                allowList = INVALID_ALLOW_LIST,
+            ),
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `validatePrivilegedApp should return PrivilegedAppNotAllowed when calling app is not present in allow list`() {
         val appInfo = mockk<CallingAppInfo> {
             every { packageName } returns "packageName"
@@ -136,6 +152,39 @@ class CallingAppInfoExtensionsTest {
             appInfo.validatePrivilegedApp(
                 allowList = DEFAULT_ALLOW_LIST,
             ),
+        )
+    }
+
+    @Test
+    fun `validatePrivilegedApp should return PasskeyNotSupportedForApp when getOrigin is null`() {
+        val appInfo = mockk<CallingAppInfo> {
+            every { getOrigin(any()) } returns null
+            every { packageName } returns "com.x8bit.bitwarden"
+        }
+
+        assertEquals(
+            Fido2ValidateOriginResult.Error.PasskeyNotSupportedForApp,
+            appInfo.validatePrivilegedApp(DEFAULT_ALLOW_LIST),
+        )
+    }
+
+    @Test
+    fun `getAppOrigin should return apk key hash as origin`() {
+        val mockMessageDigest = mockk<MessageDigest> {
+            every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
+        }
+        every { MessageDigest.getInstance(any()) } returns mockMessageDigest
+        every { Base64.encodeToString(any(), any()) } returns DEFAULT_SIGNATURE
+        val mockSigningInfo = mockk<SigningInfo> {
+            every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_SIGNATURE))
+        }
+        val appInfo = mockk<CallingAppInfo> {
+            every { signingInfo } returns mockSigningInfo
+        }
+
+        assertEquals(
+            "android:apk-key-hash:$DEFAULT_SIGNATURE",
+            appInfo.getAppOrigin(),
         )
     }
 }

@@ -10,7 +10,14 @@ private val MOCK_ZONED_DATE_TIME = ZonedDateTime.parse("2023-10-27T12:00:00Z")
 /**
  * Create a mock [SyncResponseJson.Cipher] with a given [number].
  */
-fun createMockCipher(number: Int, hasNullUri: Boolean = false): SyncResponseJson.Cipher =
+fun createMockCipher(
+    number: Int,
+    hasNullUri: Boolean = false,
+    fido2Credentials: List<SyncResponseJson.Cipher.Fido2Credential> = listOf(
+        createMockFido2Credential(number),
+    ),
+    isDeleted: Boolean = true,
+): SyncResponseJson.Cipher =
     SyncResponseJson.Cipher(
         id = "mockId-$number",
         organizationId = "mockOrganizationId-$number",
@@ -19,9 +26,13 @@ fun createMockCipher(number: Int, hasNullUri: Boolean = false): SyncResponseJson
         name = "mockName-$number",
         notes = "mockNotes-$number",
         type = CipherTypeJson.LOGIN,
-        login = createMockLogin(number = number, hasNullUri = hasNullUri),
+        login = createMockLogin(
+            number = number,
+            hasNullUri = hasNullUri,
+            fido2Credentials = fido2Credentials,
+        ),
         creationDate = MOCK_ZONED_DATE_TIME,
-        deletedDate = MOCK_ZONED_DATE_TIME,
+        deletedDate = if (isDeleted) MOCK_ZONED_DATE_TIME else null,
         revisionDate = MOCK_ZONED_DATE_TIME,
         attachments = listOf(createMockAttachment(number = number)),
         card = createMockCard(number = number),
@@ -119,7 +130,13 @@ fun createMockField(number: Int): SyncResponseJson.Cipher.Field =
 /**
  * Create a mock [SyncResponseJson.Cipher.Login] with a given [number].
  */
-fun createMockLogin(number: Int, hasNullUri: Boolean = false): SyncResponseJson.Cipher.Login =
+fun createMockLogin(
+    number: Int,
+    hasNullUri: Boolean = false,
+    fido2Credentials: List<SyncResponseJson.Cipher.Fido2Credential> = listOf(
+        createMockFido2Credential(number),
+    ),
+): SyncResponseJson.Cipher.Login =
     SyncResponseJson.Cipher.Login(
         username = "mockUsername-$number",
         password = "mockPassword-$number",
@@ -128,7 +145,7 @@ fun createMockLogin(number: Int, hasNullUri: Boolean = false): SyncResponseJson.
         uri = if (hasNullUri) null else "mockUri-$number",
         uris = listOf(createMockUri(number = number)),
         totp = "mockTotp-$number",
-        fido2Credentials = listOf(createMockFido2Credential(number)),
+        fido2Credentials = fido2Credentials,
     )
 
 fun createMockFido2Credential(number: Int) = SyncResponseJson.Cipher.Fido2Credential(
