@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
+import com.x8bit.bitwarden.data.platform.manager.PushManager
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,6 +8,9 @@ import java.time.ZonedDateTime
 
 /**
  * The payload of a push notification.
+ *
+ * Note: The data we receive is not always reliable, so everything is nullable and we validate the
+ * data in the [PushManager] as necessary.
  */
 @Serializable
 sealed class NotificationPayload {
@@ -20,7 +24,7 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncCipherNotification(
-        @SerialName("Id") val id: String?,
+        @SerialName("Id") val cipherId: String?,
         @SerialName("UserId") override val userId: String?,
         @SerialName("OrganizationId") val organizationId: String?,
         @SerialName("CollectionIds") val collectionIds: List<String>?,
@@ -33,10 +37,10 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncFolderNotification(
-        @SerialName("Id") val id: String,
-        @SerialName("UserId") override val userId: String,
+        @SerialName("Id") val folderId: String?,
+        @SerialName("UserId") override val userId: String?,
         @Contextual
-        @SerialName("RevisionDate") val revisionDate: ZonedDateTime,
+        @SerialName("RevisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -44,9 +48,9 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class UserNotification(
-        @SerialName("UserId") override val userId: String,
+        @SerialName("UserId") override val userId: String?,
         @Contextual
-        @SerialName("Date") val date: ZonedDateTime,
+        @SerialName("Date") val date: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -54,10 +58,10 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class SyncSendNotification(
-        @SerialName("Id") val id: String,
-        @SerialName("UserId") override val userId: String,
+        @SerialName("Id") val sendId: String?,
+        @SerialName("UserId") override val userId: String?,
         @Contextual
-        @SerialName("RevisionDate") val revisionDate: ZonedDateTime,
+        @SerialName("RevisionDate") val revisionDate: ZonedDateTime?,
     ) : NotificationPayload()
 
     /**
@@ -65,7 +69,7 @@ sealed class NotificationPayload {
      */
     @Serializable
     data class PasswordlessRequestNotification(
-        @SerialName("UserId") override val userId: String,
-        @SerialName("Id") val id: String,
+        @SerialName("UserId") override val userId: String?,
+        @SerialName("Id") val loginRequestId: String?,
     ) : NotificationPayload()
 }
