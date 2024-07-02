@@ -1119,7 +1119,7 @@ class VaultSdkSourceTest {
                     checkUser = { _, _ -> CheckUserResult(true, true) },
                     findCredentials = { _, _ -> FindFido2CredentialsResult.Success(emptyList()) },
                     saveCipher = { SaveCredentialResult.Success },
-                    pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) }
+                    pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) },
                 )
 
                 assertEquals(
@@ -1164,7 +1164,7 @@ class VaultSdkSourceTest {
             checkUser = { _, _ -> checkUserResult },
             findCredentials = { _, _ -> FindFido2CredentialsResult.Success(emptyList()) },
             saveCipher = { SaveCredentialResult.Success },
-            pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) }
+            pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) },
         )
 
         coVerify { mockUserInterface.checkUser(any(), any()) }

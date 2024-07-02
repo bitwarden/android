@@ -809,7 +809,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             val mockCreateResult = Fido2CreateCredentialResult.Error(
-                exception = CreateCredentialUnknownException()
+                exception = CreateCredentialUnknownException(),
             )
             coEvery {
                 vaultRepository.registerFido2Credential(

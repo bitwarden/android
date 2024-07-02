@@ -9,6 +9,7 @@ import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.Verification
 import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
@@ -881,7 +882,7 @@ class VaultRepositoryImpl(
             )
     }
 
-    @Suppress("LongMethod")
+    @Suppress("LongMethod", "ReturnCount")
     override suspend fun registerFido2Credential(
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
@@ -896,7 +897,7 @@ class VaultRepositoryImpl(
                 ?.let { ClientData.DefaultWithCustomHash(hash = it) }
                 ?: return Fido2CreateCredentialResult.Error(
                     exception = CreateCredentialUnknownException(
-                        errorMessage = "Application contains multiple signing certificates."
+                        errorMessage = "Application contains multiple signing certificates.",
                     ),
                 )
         } else {
@@ -930,7 +931,7 @@ class VaultRepositoryImpl(
                     }
                     CipherViewWrapper(cipher = selectedCipherView)
                 },
-                findCredentials = { fido2CredentialIds, relayingPartyId ->
+                findCredentials = { fido2CredentialIds, relyingPartyId ->
                     // We force a sync so that the SDK has the latest version of any ciphers that
                     // contain a matching credential.
                     sync()
@@ -940,10 +941,10 @@ class VaultRepositoryImpl(
                             cipherViews = ciphersWithFido2Credentials.toTypedArray(),
                         )
                         .map { decryptedFido2CredentialViews ->
-                            decryptedFido2CredentialViews.filter { fido2CredentialView ->
-                                fido2CredentialView.rpId == relayingPartyId &&
-                                    fido2CredentialIds.contains(fido2CredentialView.credentialId)
-                            }
+                            decryptedFido2CredentialViews.filterMatchingCredentials(
+                                fido2CredentialIds,
+                                relyingPartyId,
+                            )
                         }
                         .map { matchingFido2Credentials ->
                             ciphersWithFido2Credentials.filter { cipherView ->
@@ -985,6 +986,22 @@ class VaultRepositoryImpl(
             )
 
         return registerResult
+    }
+
+    /**
+     * Return a filtered list containing elements that match the given [relyingPartyId] and a
+     * credential ID contained in [credentialIds].
+     */
+    private fun List<Fido2CredentialAutofillView>.filterMatchingCredentials(
+        credentialIds: List<ByteArray>,
+        relyingPartyId: String,
+    ): List<Fido2CredentialAutofillView> {
+        val skipCredentialIdFiltering = credentialIds.isEmpty()
+        return filter { fido2CredentialView ->
+            fido2CredentialView.rpId == relyingPartyId &&
+                (skipCredentialIdFiltering ||
+                    credentialIds.contains(fido2CredentialView.credentialId))
+        }
     }
 
     /**
