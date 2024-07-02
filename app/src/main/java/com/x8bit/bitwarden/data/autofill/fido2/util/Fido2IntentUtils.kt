@@ -13,7 +13,6 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_USER_ID
  * Checks if this [Intent] contains a [Fido2CredentialRequest] related to an ongoing FIDO 2
  * credential creation process.
  */
-@Suppress("ReturnCount")
 @OmitFromCoverage
 fun Intent.getFido2CredentialRequestOrNull(): Fido2CredentialRequest? {
     if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null

@@ -38,7 +38,7 @@ class FileManagerImpl(
         }
     }
 
-    @Suppress("NestedBlockDepth", "ReturnCount")
+    @Suppress("NestedBlockDepth")
     override suspend fun downloadFileToCache(url: String): DownloadResult {
         val response = downloadService
             .getDataStream(url)

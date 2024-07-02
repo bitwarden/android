@@ -81,7 +81,6 @@ class Fido2ProviderProcessorImpl(
         }
     }
 
-    @Suppress("ReturnCount")
     private fun handleCreatePasskeyQuery(
         request: BeginCreatePublicKeyCredentialRequest,
     ): BeginCreateCredentialResponse? {

@@ -9,7 +9,6 @@ private const val COLLECTION_DIVIDER: String = "/"
  * display names. This function is necessary if we want to show the nested collections for a
  * specific collection.
  */
-@Suppress("ReturnCount")
 fun List<CollectionView>.getCollections(collectionId: String): List<CollectionView> {
     val currentCollection = this.find { it.id == collectionId } ?: return emptyList()
 

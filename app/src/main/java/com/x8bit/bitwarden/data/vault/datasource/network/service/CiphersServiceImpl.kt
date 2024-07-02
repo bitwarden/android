@@ -105,7 +105,6 @@ class CiphersServiceImpl(
                     ?: throw throwable
             }
 
-    @Suppress("ReturnCount")
     override suspend fun shareAttachment(
         cipherId: String,
         attachment: Attachment,
