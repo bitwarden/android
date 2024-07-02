@@ -9,12 +9,12 @@ import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
+import com.x8bit.bitwarden.data.platform.util.regexOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.toSdkUriMatchType
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
-import kotlin.text.Regex
 import kotlin.text.RegexOption
 import kotlin.text.isNullOrBlank
 import kotlin.text.lowercase
@@ -212,8 +212,9 @@ private fun LoginUriView.checkForMatch(
             UriMatchType.NEVER -> MatchResult.NONE
 
             UriMatchType.REGULAR_EXPRESSION -> {
-                val pattern = Regex(loginViewUri, RegexOption.IGNORE_CASE)
-                exactIfTrue(matchUri.matches(pattern))
+                regexOrNull(loginViewUri, RegexOption.IGNORE_CASE)
+                    ?.let { exactIfTrue(matchUri.matches(it)) }
+                    ?: MatchResult.NONE
             }
 
             UriMatchType.STARTS_WITH -> exactIfTrue(matchUri.startsWith(loginViewUri))
