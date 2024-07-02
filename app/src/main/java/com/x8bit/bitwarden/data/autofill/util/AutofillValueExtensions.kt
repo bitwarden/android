@@ -26,7 +26,12 @@ fun AutofillValue.extractMonthValue(
 /**
  * Extract a text value from this [AutofillValue].
  */
-fun AutofillValue.extractTextValue(): String? = this
-    .textValue
-    .takeIf { it.isNotBlank() }
-    ?.toString()
+fun AutofillValue.extractTextValue(): String? =
+    if (this.isText) {
+        this
+            .textValue
+            .takeIf { it.isNotBlank() }
+            ?.toString()
+    } else {
+        null
+    }
