@@ -217,15 +217,6 @@ class StartRegistrationViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = StartRegistrationDialog.Error(dialog)) }
         }
 
-        state.nameInput.isBlank() -> {
-            val dialog = BasicDialogState.Shown(
-                title = R.string.an_error_has_occurred.asText(),
-                message = R.string.validation_field_required
-                    .asText(R.string.name.asText()),
-            )
-            mutableStateFlow.update { it.copy(dialog = StartRegistrationDialog.Error(dialog)) }
-        }
-
         else -> {
             submitSendVerificationEmailRequest(
                 captchaToken = null,
