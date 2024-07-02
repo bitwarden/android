@@ -33,7 +33,7 @@ class CipherViewExtensionsTest {
                         // This visibility state should be preserved
                         isVisible = true,
                         canViewPassword = false,
-                    )
+                    ),
                 ),
             ),
             isPremiumUser = true,
@@ -58,7 +58,7 @@ class CipherViewExtensionsTest {
                         password = "password",
                         isVisible = true,
                         canViewPassword = false,
-                    )
+                    ),
                 ),
             ),
             viewState,

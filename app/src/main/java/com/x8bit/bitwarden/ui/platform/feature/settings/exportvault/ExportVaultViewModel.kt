@@ -130,7 +130,6 @@ class ExportVaultViewModel @Inject constructor(
     /**
      * Verify the master password after confirming exporting the vault.
      */
-    @Suppress("ReturnCount")
     private fun handleConfirmExportVaultClicked() {
         // Display an error alert if the user hasn't entered a password.
         if (state.passwordInput.isBlank()) {

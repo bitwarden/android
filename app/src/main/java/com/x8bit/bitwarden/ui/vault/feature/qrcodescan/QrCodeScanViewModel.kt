@@ -79,7 +79,7 @@ class QrCodeScanViewModel @Inject constructor(
         )
     }
 
-    @Suppress("NestedBlockDepth", "ReturnCount", "MagicNumber")
+    @Suppress("NestedBlockDepth", "MagicNumber")
     private fun areParametersValid(scannedCode: String, parameters: Set<String>): Boolean {
         parameters.forEach { parameter ->
             Uri.parse(scannedCode).getQueryParameter(parameter)?.let { value ->

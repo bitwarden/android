@@ -60,7 +60,7 @@ class MasterPasswordHintViewModel @Inject constructor(
         )
     }
 
-    @Suppress("LongMethod", "ReturnCount")
+    @Suppress("LongMethod")
     private fun handleSubmitClick() {
         val email = stateFlow.value.emailInput
 

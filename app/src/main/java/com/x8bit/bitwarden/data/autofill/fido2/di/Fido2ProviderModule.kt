@@ -9,7 +9,6 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManagerImpl
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -24,7 +23,6 @@ import javax.inject.Singleton
 /**
  * Provides dependencies within the fido2 package.
  */
-@OmitFromCoverage
 @Module
 @InstallIn(SingletonComponent::class)
 object Fido2ProviderModule {

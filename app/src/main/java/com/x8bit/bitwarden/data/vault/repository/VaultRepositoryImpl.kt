@@ -524,7 +524,6 @@ class VaultRepositoryImpl(
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
 
-    @Suppress("ReturnCount")
     override suspend fun unlockVaultWithBiometrics(): VaultUnlockResult {
         val userId = activeUserId ?: return VaultUnlockResult.InvalidStateError
         val biometricsKey = authDiskSource
@@ -543,7 +542,6 @@ class VaultRepositoryImpl(
             }
     }
 
-    @Suppress("ReturnCount")
     override suspend fun unlockVaultWithMasterPassword(
         masterPassword: String,
     ): VaultUnlockResult {
@@ -564,7 +562,6 @@ class VaultRepositoryImpl(
             }
     }
 
-    @Suppress("ReturnCount")
     override suspend fun unlockVaultWithPin(
         pin: String,
     ): VaultUnlockResult {
@@ -601,7 +598,6 @@ class VaultRepositoryImpl(
             organizationKeys = organizationKeys,
         )
 
-    @Suppress("ReturnCount")
     override suspend fun createSend(
         sendView: SendView,
         fileUri: Uri?,
@@ -834,7 +830,6 @@ class VaultRepositoryImpl(
         }
     }
 
-    @Suppress("ReturnCount")
     override suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult {
         val userId = activeUserId ?: return ExportVaultDataResult.Error
         val folders = vaultDiskSource
@@ -920,7 +915,6 @@ class VaultRepositoryImpl(
         }
     }
 
-    @Suppress("ReturnCount")
     private suspend fun unlockVaultForUser(
         userId: String,
         initUserCryptoMethod: InitUserCryptoMethod,
@@ -1128,7 +1122,6 @@ class VaultRepositoryImpl(
      * are met. If the resource cannot be found cloud-side, and it was updated, delete it from disk
      * for now.
      */
-    @Suppress("ReturnCount")
     private suspend fun syncCipherIfNecessary(syncCipherUpsertData: SyncCipherUpsertData) {
         val userId = activeUserId ?: return
         val cipherId = syncCipherUpsertData.cipherId

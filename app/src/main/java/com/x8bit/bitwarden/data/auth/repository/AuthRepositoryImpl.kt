@@ -443,7 +443,6 @@ class AuthRepositoryImpl(
             },
         )
 
-    @Suppress("ReturnCount")
     override suspend fun createNewSsoUser(): NewSsoUserResult {
         val account = authDiskSource.userState?.activeAccount ?: return NewSsoUserResult.Failure
         val orgIdentifier = rememberedOrgIdentifier ?: return NewSsoUserResult.Failure
@@ -501,7 +500,6 @@ class AuthRepositoryImpl(
             )
     }
 
-    @Suppress("ReturnCount")
     override suspend fun completeTdeLogin(
         requestPrivateKey: String,
         asymmetricalKey: String,
@@ -678,7 +676,6 @@ class AuthRepositoryImpl(
             }
             ?: ResendEmailResult.Error(message = null)
 
-    @Suppress("ReturnCount")
     override fun switchAccount(userId: String): SwitchAccountResult {
         val currentUserState = authDiskSource.userState ?: return SwitchAccountResult.NoChange
         val previousActiveUserId = currentUserState.activeUserId
@@ -711,7 +708,7 @@ class AuthRepositoryImpl(
         )
     }
 
-    @Suppress("ReturnCount", "LongMethod")
+    @Suppress("LongMethod")
     override suspend fun register(
         email: String,
         masterPassword: String,
@@ -806,7 +803,6 @@ class AuthRepositoryImpl(
         )
     }
 
-    @Suppress("ReturnCount")
     override suspend fun resetPassword(
         currentPassword: String?,
         newPassword: String,
@@ -1059,7 +1055,6 @@ class AuthRepositoryImpl(
                 onFailure = { PasswordStrengthResult.Error },
             )
 
-    @Suppress("ReturnCount")
     override suspend fun validatePassword(password: String): ValidatePasswordResult {
         val userId = activeUserId ?: return ValidatePasswordResult.Error
         return authDiskSource
@@ -1109,7 +1104,7 @@ class AuthRepositoryImpl(
     ): Boolean = passwordPolicies
         .all { validatePasswordAgainstPolicy(password, it) }
 
-    @Suppress("CyclomaticComplexMethod", "ReturnCount")
+    @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(
         password: String,
         policy: PolicyInformation.MasterPassword,
@@ -1438,7 +1433,6 @@ class AuthRepositoryImpl(
     /**
      * A helper method to handle the [TrustedDeviceUserDecryptionOptionsJson] specific to TDE.
      */
-    @Suppress("ReturnCount")
     private suspend fun handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
         trustedDeviceDecryptionOptions: TrustedDeviceUserDecryptionOptionsJson,
         userStateJson: UserStateJson,

@@ -281,7 +281,6 @@ class PushManagerImpl @Inject constructor(
         }
     }
 
-    @Suppress("ReturnCount")
     override fun registerStoredPushTokenIfNecessary() {
         val userId = activeUserId ?: return
         if (!isLoggedIn(userId)) return
