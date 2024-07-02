@@ -79,6 +79,7 @@ class AutofillValueExtensionsTest {
     fun `extractTextValue should return textValue when not blank`() {
         // Setup
         val autofillValue: AutofillValue = mockk {
+            every { isText } returns true
             every { textValue } returns TEXT_VALUE
         }
 
@@ -93,7 +94,22 @@ class AutofillValueExtensionsTest {
     fun `extractTextValue should return null when not blank`() {
         // Setup
         val autofillValue: AutofillValue = mockk {
+            every { isText } returns true
             every { textValue } returns "   "
+        }
+
+        // Test
+        val actual = autofillValue.extractTextValue()
+
+        // Verify
+        assertNull(actual)
+    }
+
+    @Test
+    fun `extractTextValue should return null when not text`() {
+        // Setup
+        val autofillValue: AutofillValue = mockk {
+            every { isText } returns false
         }
 
         // Test
