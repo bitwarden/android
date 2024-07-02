@@ -119,7 +119,7 @@ class CompleteRegistrationViewModel @Inject constructor(
         }
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         // clean the specialCircumstance after being handled
         specialCircumstance.specialCircumstance = null
         super.onCleared()
