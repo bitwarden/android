@@ -4202,6 +4202,7 @@ class VaultRepositoryTest {
             }
             val mockSigningInfo = mockk<SigningInfo> {
                 every { apkContentsSigners } returns arrayOf(Signature(MOCK_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
             }
             val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
                 number = 1,
@@ -4265,6 +4266,7 @@ class VaultRepositoryTest {
             }
             val mockSigningInfo = mockk<SigningInfo> {
                 every { apkContentsSigners } returns arrayOf(Signature(MOCK_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
             }
             val mockFido2Request = createMockFido2CredentialRequest(
                 number = 1,

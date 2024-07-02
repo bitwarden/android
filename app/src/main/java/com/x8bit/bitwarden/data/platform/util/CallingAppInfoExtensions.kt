@@ -19,12 +19,13 @@ fun CallingAppInfo.getFido2RpIdOrNull(): String? =
     }
 
 /**
- * Returns the signing certificate hash formatted as a hex string.
+ * Returns the application's signing certificate hash formatted as a hex string if it has a single
+ * signing certificate. Otherwise `null` is returned.
  */
 @OptIn(ExperimentalStdlibApi::class)
-fun CallingAppInfo.getSignatureFingerprintAsHexString(): String {
+fun CallingAppInfo.getSignatureFingerprintAsHexString(): String? {
     return getAppSigningSignatureFingerprint()
-        .joinToString(":") { b ->
+        ?.joinToString(":") { b ->
             b.toHexString(HexFormat.UpperCase)
         }
 }
@@ -68,7 +69,9 @@ fun CallingAppInfo.getAppOrigin(): String {
 /**
  * Returns a [ByteArray] containing the application's signing certificate signature hash.
  */
-fun CallingAppInfo.getAppSigningSignatureFingerprint(): ByteArray {
+fun CallingAppInfo.getAppSigningSignatureFingerprint(): ByteArray? {
+    if (signingInfo.hasMultipleSigners()) return null
+
     val signature = signingInfo.apkContentsSigners.first()
     val md = MessageDigest.getInstance(SHA_ALGORITHM)
     return md.digest(signature.toByteArray())

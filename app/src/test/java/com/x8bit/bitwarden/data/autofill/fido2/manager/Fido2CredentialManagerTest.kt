@@ -57,6 +57,7 @@ class Fido2CredentialManagerTest {
     }
     private val mockSigningInfo = mockk<SigningInfo> {
         every { apkContentsSigners } returns arrayOf(Signature("0987654321ABCDEF"))
+        every { hasMultipleSigners() } returns false
     }
     private val mockUnprivilegedCallingAppInfo = CallingAppInfo(
         packageName = "com.x8bit.bitwarden",

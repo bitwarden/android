@@ -73,10 +73,13 @@ class Fido2CredentialManagerImpl(
                     ?: return Fido2ValidateOriginResult.Error.ApplicationNotFound
             }
             .map { matchingStatements ->
-                matchingStatements
-                    .filterMatchingAppSignaturesOrNull(
-                        signature = callingAppInfo.getSignatureFingerprintAsHexString(),
-                    )
+                callingAppInfo.getSignatureFingerprintAsHexString()
+                    ?.let { certificateFingerprint ->
+                        matchingStatements
+                            .filterMatchingAppSignaturesOrNull(
+                                signature = certificateFingerprint,
+                            )
+                    }
                     ?: return Fido2ValidateOriginResult.Error.ApplicationNotVerified
             }
             .fold(

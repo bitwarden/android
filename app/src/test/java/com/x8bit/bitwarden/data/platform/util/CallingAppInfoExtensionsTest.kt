@@ -80,6 +80,7 @@ class CallingAppInfoExtensionsTest {
 
         val mockSigningInfo = mockk<SigningInfo> {
             every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_SIGNATURE))
+            every { hasMultipleSigners() } returns false
         }
         val appInfo = mockk<CallingAppInfo> {
             every { packageName } returns "packageName"
@@ -90,6 +91,25 @@ class CallingAppInfoExtensionsTest {
             DEFAULT_SIGNATURE_HASH,
             appInfo.getSignatureFingerprintAsHexString(),
         )
+    }
+
+    @Test
+    fun `getCallingAppApkFingerprint should return null when app has multiple signers`() {
+        val mockMessageDigest = mockk<MessageDigest> {
+            every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
+        }
+        every { MessageDigest.getInstance(any()) } returns mockMessageDigest
+        every { Base64.encodeToString(any(), any()) } returns DEFAULT_SIGNATURE
+
+        val mockSigningInfo = mockk<SigningInfo> {
+            every { hasMultipleSigners() } returns true
+        }
+        val appInfo = mockk<CallingAppInfo> {
+            every { packageName } returns "packageName"
+            every { signingInfo } returns mockSigningInfo
+            every { origin } returns null
+        }
+        assertNull(appInfo.getSignatureFingerprintAsHexString())
     }
 
     @Test
@@ -177,6 +197,7 @@ class CallingAppInfoExtensionsTest {
         every { Base64.encodeToString(any(), any()) } returns DEFAULT_SIGNATURE
         val mockSigningInfo = mockk<SigningInfo> {
             every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_SIGNATURE))
+            every { hasMultipleSigners() } returns false
         }
         val appInfo = mockk<CallingAppInfo> {
             every { signingInfo } returns mockSigningInfo

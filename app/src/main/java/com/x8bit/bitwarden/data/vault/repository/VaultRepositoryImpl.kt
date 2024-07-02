@@ -892,9 +892,13 @@ class VaultRepositoryImpl(
             CreateCredentialUnknownException("Active user is required."),
         )
         val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
-            ClientData.DefaultWithCustomHash(
-                hash = fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint(),
-            )
+            fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint()
+                ?.let { ClientData.DefaultWithCustomHash(hash = it) }
+                ?: return Fido2CreateCredentialResult.Error(
+                    exception = CreateCredentialUnknownException(
+                        errorMessage = "Application contains multiple signing certificates."
+                    ),
+                )
         } else {
             ClientData.DefaultWithExtraData(
                 androidPackageName = fido2CredentialRequest
