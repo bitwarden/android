@@ -963,7 +963,11 @@ class VaultRepositoryImpl(
                 saveCipher = { cipher ->
                     vaultSdkSource
                         .decryptCipher(userId, cipher)
-                        .map { createCipher(it) }
+                        .map { decryptedCipherView ->
+                            decryptedCipherView.id
+                                ?.let { updateCipher(it, decryptedCipherView) }
+                                ?: createCipher(decryptedCipherView)
+                        }
                         .fold(
                             onSuccess = { SaveCredentialResult.Success },
                             onFailure = { SaveCredentialResult.Error },
