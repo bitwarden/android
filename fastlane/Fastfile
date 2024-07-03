@@ -185,7 +185,7 @@ platform :android do
       android_artifact_type: "APK",
       android_artifact_path: "app/build/outputs/apk/standard/release/com.x8bit.bitwarden-standard-release.apk",
       service_credentials_file: options[:service_credentials_file],
-      groups: "internal-prod-group",
+      groups: "internal-prod-group, livefront",
       release_notes: "Native Play Store Release from commit #{sh("git rev-parse --short HEAD")} on branch #{sh("git rev-parse --abbrev-ref HEAD")}",
     )
   end
@@ -197,7 +197,7 @@ platform :android do
       android_artifact_type: "APK",
       android_artifact_path: "app/build/outputs/apk/standard/beta/com.x8bit.bitwarden-standard-beta.apk",
       service_credentials_file: options[:service_credentials_file],
-      groups: "internal-prod-group",
+      groups: "internal-prod-group, livefront",
       release_notes: "Native Play Store Beta from commit #{sh("git rev-parse --short HEAD")} on branch #{sh("git rev-parse --abbrev-ref HEAD")}",
     )
   end
@@ -209,7 +209,7 @@ platform :android do
       android_artifact_type: "APK",
       android_artifact_path: "app/build/outputs/apk/fdroid/release/com.x8bit.bitwarden-fdroid-release.apk",
       service_credentials_file: options[:service_credentials_file],
-      groups: "internal-prod-group",
+      groups: "internal-prod-group, livefront",
       release_notes: "Native F-Droid Beta from commit #{sh("git rev-parse --short HEAD")} on branch #{sh("git rev-parse --abbrev-ref HEAD")}",
     )
   end
