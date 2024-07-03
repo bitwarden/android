@@ -56,7 +56,7 @@ class ResultCall<T>(
      */
     fun executeForResult(): Result<T> = requireNotNull(execute().body())
 
-    @Suppress("ReturnCount", "TooGenericExceptionCaught")
+    @Suppress("TooGenericExceptionCaught")
     override fun execute(): Response<Result<T>> {
         val response = try {
             backingCall.execute()

@@ -17,7 +17,7 @@ private val json: Json by lazy {
 /**
  * Parses a [JwtTokenDataJson] from the given [jwtToken], or `null` if this parsing is not possible.
  */
-@Suppress("MagicNumber", "ReturnCount")
+@Suppress("MagicNumber")
 fun parseJwtTokenDataOrNull(jwtToken: String): JwtTokenDataJson? {
     val parts = jwtToken.split(".")
     if (parts.size != 3) return null

@@ -287,7 +287,6 @@ class VaultItemListingViewModel @Inject constructor(
         sendEvent(VaultItemListingEvent.NavigateToSendItem(id = action.sendId))
     }
 
-    @Suppress("ReturnCount")
     private fun handleItemClick(action: VaultItemListingsAction.ItemClick) {
         if (state.isAutofill) {
             val cipherView = getCipherViewOrNull(action.id) ?: return

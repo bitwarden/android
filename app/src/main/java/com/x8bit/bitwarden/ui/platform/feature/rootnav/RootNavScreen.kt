@@ -214,7 +214,6 @@ fun RootNavScreen(
  * As noted above, this can be removed after upgrading to latest compose navigation, since
  * the nav args can prevent us from having to do this check.
  */
-@Suppress("ReturnCount")
 private fun NavDestination?.rootLevelRoute(): String? {
     if (this == null) {
         return null

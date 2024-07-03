@@ -17,7 +17,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.toHexColorRepresentation
  * [UserStateJson]. The original will be returned if the sync response does not match any accounts
  * in the [UserStateJson].
  */
-@Suppress("ReturnCount")
 fun UserStateJson.toUpdatedUserStateJson(
     syncResponse: SyncResponseJson,
 ): UserStateJson {

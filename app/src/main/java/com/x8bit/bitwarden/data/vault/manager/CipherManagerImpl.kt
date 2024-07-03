@@ -399,7 +399,6 @@ class CipherManagerImpl(
                 onFailure = { DownloadAttachmentResult.Failure },
             )
 
-    @Suppress("ReturnCount")
     private suspend fun downloadAttachmentForResult(
         cipherView: CipherView,
         attachmentId: String,
@@ -482,7 +481,6 @@ class CipherManagerImpl(
             vaultSdkSource.encryptCipher(userId = userId, cipherView = this)
         }
 
-    @Suppress("ReturnCount")
     private suspend fun migrateAttachments(
         userId: String,
         cipherView: CipherView,

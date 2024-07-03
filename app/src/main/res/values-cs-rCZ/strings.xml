@@ -189,7 +189,7 @@
   <string name="icons">Ikony</string>
   <string name="translations">Překlady</string>
   <string name="items_for_uri">Položky pro %1$s</string>
-  <string name="no_items_for_uri">Žádné položky pro %1$s.</string>
+  <string name="no_items_for_uri">Žádné položky ve Vašem trezoru pro %1$s.</string>
   <string name="bitwarden_autofill_service_overlay">Když vyberete vstupní pole a uvidíte překrytí automatického vyplnění, můžete na něj klepnout a spustit službu automatického vyplnění.</string>
   <string name="bitwarden_autofill_service_notification_content">Klepnutím na toto oznámení automaticky vyplníte přihlašovací údaje z trezoru.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Otevřít nastavení přístupnosti</string>
@@ -232,15 +232,15 @@
   <string name="attachment_large_warning">Tato příloha má velikost %1$s. Opravdu ji chcete stáhnout do Vašeho zařízení?</string>
   <string name="authenticator_key">Autentizační klíč (TOTP)</string>
   <string name="verification_code_totp">Ověřovací kód (TOTP)</string>
-  <string name="authenticator_key_added">Byl přidán autentizační klíč.</string>
-  <string name="authenticator_key_read_error">Nelze přečíst autentizační klíč.</string>
+  <string name="authenticator_key_added">Byl přidán ověřovací klíč.</string>
+  <string name="authenticator_key_read_error">Nelze přečíst ověřovací klíč.</string>
   <string name="point_your_camera_at_the_qr_code">Nasměrujte kameru na QR kód.
 Načtení proběhne automaticky.</string>
-  <string name="scan_qr_title">Načíst QR kód</string>
-  <string name="camera">Fotoaparát</string>
+  <string name="scan_qr_title">Naskenovat QR kód</string>
+  <string name="camera">Kamera</string>
   <string name="photos">Fotky</string>
   <string name="copy_totp">Kopírovat TOTP</string>
-  <string name="copy_totp_automatically_description">Pokud mají Vaše přihlašovací údaje přidán autentizační klíč pro TOTP, vygenerovaný ověřovací kód (TOTP) se automaticky zkopíruje do schránky při každém automatickém vyplnění přihlašovacích údajů.</string>
+  <string name="copy_totp_automatically_description">Pokud mají Vaše přihlašovací údaje přidán ověřovací klíč pro TOTP, vygenerovaný ověřovací kód (TOTP) se automaticky zkopíruje do schránky při každém automatickém vyplnění přihlašovacích údajů.</string>
   <string name="copy_totp_automatically">Automaticky kopírovat TOTP</string>
   <string name="premium_required">Pro použití této funkce je potřebné členství Premium.</string>
   <string name="attachement_added">Příloha byla přidána</string>
@@ -780,14 +780,14 @@ Chcete se přepnout na tento účet?</string>
   <string name="weak_password_identified_and_found_in_a_data_breach_alert_description">Slabé heslo bylo nalezeno mezi odhalenými hesly. K zabezpečení Vašeho účtu používejte silné a jedinečné heslo. Opravdu chcete používat toto heslo?</string>
   <string name="organization_sso_identifier_required">Je vyžadován SSO identifikátor organizace.</string>
   <string name="add_the_key_to_an_existing_or_new_item">Přidat klíč k existující nebo nové položce</string>
-  <string name="there_are_no_items_in_your_vault_that_match_x">Žádné položky se shodou s \"%1$s\"</string>
+  <string name="there_are_no_items_in_your_vault_that_match_x">Žádné položky ve Vašem trezoru se shodou s \"%1$s\"</string>
   <string name="search_for_an_item_or_add_a_new_item">Hledat položku nebo přidat novou</string>
   <string name="there_are_no_items_that_match_the_search">Neexistují žádné položky, které by odpovídaly hledání</string>
   <string name="us">US</string>
   <string name="eu">EU</string>
   <string name="self_hosted">Vlastní hosting</string>
   <string name="data_region">Datový region</string>
-  <string name="region">Region</string>
+  <string name="region">Oblast</string>
   <string name="update_weak_master_password_warning">Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny.</string>
   <string name="current_master_password">Aktuální hlavní heslo</string>
   <string name="logged_in">Přihlášeno!</string>
@@ -812,7 +812,7 @@ Chcete se přepnout na tento účet?</string>
   <string name="your_request_has_been_sent_to_your_admin">Váš požadavek byl odeslán Vašemu správci.</string>
   <string name="you_will_be_notified_once_approved">Po schválení budete upozorněni.</string>
   <string name="trouble_logging_in">Potíže s přihlášením?</string>
-  <string name="logging_in_as_x">Přihlášování jako %1$s</string>
+  <string name="logging_in_as_x">Přihlašování jako %1$s</string>
   <string name="vault_timeout_action_changed_to_log_out">Akce časového limitu trezoru byla změněna na odhlášení</string>
   <string name="block_auto_fill">Blokovat automatické vyplňování</string>
   <string name="auto_fill_will_not_be_offered_for_these_ur_is">Pro tento URI nebude nabízeno automatické vyplňování.</string>
@@ -912,4 +912,16 @@ Chcete se přepnout na tento účet?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Operace přístupového klíče selhala z důvodu chybějících odkazů na aktiva</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Operace přístupového klíče se nezdařila, protože v odkazech na aktivum nebyla nalezena aplikace</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operace přístupového klíče se nezdařila, protože aplikaci nelze ověřit</string>
+  <string name="confirm_file_password">Potvrdit heslo souboru</string>
+  <string name="continue_to_give_feedback">Pokračovat pro zanechání zpětné vazby?</string>
+  <string name="continue_to_provide_feedback">Pokračujte v poskytování zpětné vazby na novou aplikaci!</string>
+  <string name="file_password">Heslo souboru</string>
+  <string name="give_feedback">Zanechat zpětnou vazbu</string>
+  <string name="password_protected">Chráněno heslem</string>
+  <string name="password_used_to_export">Toto heslo bude použito pro export a import tohoto souboru</string>
+  <string name="autofill_suggestion">Návrh automatického vyplňování</string>
+  <string name="continue_to_complete_web_authn_verification">Pokračujte pro dokončení ověření WebAuthn.</string>
+  <string name="launch_web_authn">Otevřít WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Při spouštění dvoufaktorového ověření WebAuthn došlo k chybě</string>
+  <string name="self_hosted_server_url">Adresa URL serveru vlastního hostování</string>
 </resources>

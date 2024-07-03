@@ -57,7 +57,6 @@ class OrganizationEventManagerImpl(
         )
     }
 
-    @Suppress("ReturnCount")
     override fun trackEvent(event: OrganizationEvent) {
         val userId = authRepository.activeUserId ?: return
         if (authRepository.authStateFlow.value !is AuthState.Authenticated) return

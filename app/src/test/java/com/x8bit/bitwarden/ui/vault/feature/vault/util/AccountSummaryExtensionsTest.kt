@@ -12,11 +12,11 @@ class AccountSummaryExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `initials should return the starting letters of the first two words for a multi-word name`() {
+    fun `initials should return the starting letters of the first two words for a multi-word name and ignore any extra spaces`() {
         assertEquals(
             "FS",
             mockk<AccountSummary> {
-                every { name } returns "First Second Third"
+                every { name } returns "First   Second Third"
             }
                 .initials,
         )

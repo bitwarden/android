@@ -34,7 +34,6 @@ object AuthRepositoryModule {
 
     @Provides
     @Singleton
-    @Suppress("LongParameterList")
     fun providesAuthRepository(
         accountsService: AccountsService,
         devicesService: DevicesService,
