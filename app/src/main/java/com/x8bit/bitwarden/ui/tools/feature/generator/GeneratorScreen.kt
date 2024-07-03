@@ -41,6 +41,7 @@ import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -611,8 +612,10 @@ private fun PasswordLengthSliderItem(
                 Text(
                     text = stringResource(id = R.string.length),
                     modifier = Modifier
-                        .onGloballyPositioned {
-                            labelTextWidth = it.size.width.toDp(density)
+                        .onGloballyPositioned { layoutCoordinates ->
+                            if (labelTextWidth == Dp.Unspecified) {
+                                labelTextWidth = layoutCoordinates.size.width.toDp(density)
+                            }
                         },
                 )
             },
@@ -636,7 +639,7 @@ private fun PasswordLengthSliderItem(
                 }
                 .testTag("PasswordLengthLabel")
                 .wrapContentWidth()
-                .width(labelTextWidth + 16.dp + 16.dp),
+                .width(labelTextWidth + 32.dp),
         )
 
         Slider(
