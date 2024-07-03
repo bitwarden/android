@@ -67,9 +67,7 @@ fun CheckEmailScreen(
             }
 
             is CheckEmailEvent.NavigateToEmailApp -> {
-                val intent = Intent(Intent.ACTION_SENDTO)
-                intent.setData(Uri.parse("mailto:"))
-                intentManager.startActivity(intent)
+                intentManager.openEmailApp()
             }
 
             is CheckEmailEvent.NavigateBackToLanding -> {

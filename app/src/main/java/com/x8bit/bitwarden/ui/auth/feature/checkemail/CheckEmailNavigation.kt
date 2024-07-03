@@ -9,8 +9,8 @@ import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
-private const val EMAIL_ADDRESS: String = "email"
-private const val CHECK_EMAIL_ROUTE: String = "check_email/{$EMAIL_ADDRESS}"
+private const val EMAIL: String = "email"
+private const val CHECK_EMAIL_ROUTE: String = "check_email/{$EMAIL}"
 
 /**
  * Navigate to the check email screen.
@@ -27,7 +27,7 @@ data class CheckEmailArgs(
     val emailAddress: String
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
-        emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL_ADDRESS)),
+        emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL)),
     )
 }
 
@@ -41,7 +41,7 @@ fun NavGraphBuilder.checkEmailDestination(
     composableWithSlideTransitions(
         route = CHECK_EMAIL_ROUTE,
         arguments = listOf(
-            navArgument(EMAIL_ADDRESS) { type = NavType.StringType },
+            navArgument(EMAIL) { type = NavType.StringType },
         )
     ) {
         CheckEmailScreen(

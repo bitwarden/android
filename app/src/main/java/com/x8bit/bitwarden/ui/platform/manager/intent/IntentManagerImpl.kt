@@ -103,6 +103,12 @@ class IntentManagerImpl(
         startActivity(intent = intent)
     }
 
+    override fun openEmailApp() {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.setData(Uri.parse("mailto:"))
+        startActivity(intent)
+    }
+
     override fun launchUri(uri: Uri) {
         val newUri = if (uri.scheme == null) {
             uri.buildUpon().scheme("https").build()

@@ -92,6 +92,11 @@ interface IntentManager {
     ): PendingIntent
 
     /**
+     * Open the default email app on device.
+     */
+    fun openEmailApp()
+
+    /**
      * Represents file information.
      */
     @Parcelize
