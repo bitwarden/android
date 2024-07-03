@@ -1,19 +1,12 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.fido.CheckUserOptions
-import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
-import com.bitwarden.fido.Verification
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
-import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -26,9 +19,6 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -49,8 +39,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoadin
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
-import com.x8bit.bitwarden.data.platform.util.getAppOrigin
-import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
@@ -62,9 +50,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -121,7 +106,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.time.Clock
@@ -880,116 +864,6 @@ class VaultRepositoryImpl(
                 onSuccess = { ExportVaultDataResult.Success(it) },
                 onFailure = { ExportVaultDataResult.Error },
             )
-    }
-
-    @Suppress("LongMethod", "ReturnCount")
-    override suspend fun registerFido2Credential(
-        fido2CredentialRequest: Fido2CredentialRequest,
-        selectedCipherView: CipherView,
-        isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-    ): Fido2CreateCredentialResult {
-        val userId = activeUserId ?: return Fido2CreateCredentialResult.Error(
-            CreateCredentialUnknownException("Active user is required."),
-        )
-        val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
-            fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint()
-                ?.let { ClientData.DefaultWithCustomHash(hash = it) }
-                ?: return Fido2CreateCredentialResult.Error(
-                    exception = CreateCredentialUnknownException(
-                        errorMessage = "Application contains multiple signing certificates.",
-                    ),
-                )
-        } else {
-            ClientData.DefaultWithExtraData(
-                androidPackageName = fido2CredentialRequest
-                    .callingAppInfo
-                    .getAppOrigin(),
-            )
-        }
-        val origin = fido2CredentialRequest.origin
-            ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
-
-        val ciphersWithFido2Credentials = ciphersStateFlow.value.data
-            ?.filter { it.isActiveWithFido2Credentials }
-            .orEmpty()
-
-        val registerResult = vaultSdkSource
-            .registerFido2Credential(
-                userId = userId,
-                origin = origin,
-                requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
-                clientData = clientData,
-                selectedCipherView = selectedCipherView,
-                cipherViews = ciphersWithFido2Credentials,
-                isVerificationSupported = isVerificationSupported,
-                checkUser = checkUser,
-                checkUserAndPickCredentialForCreation = { options, _ ->
-                    if (options.requireVerification != Verification.DISCOURAGED) {
-                        // TODO [PM-8137]: Trigger user verification as it is preferred|required.
-                        waitUntilUnlocked(userId)
-                    }
-                    CipherViewWrapper(cipher = selectedCipherView)
-                },
-                findCredentials = { fido2CredentialIds, relyingPartyId ->
-                    // We force a sync so that the SDK has the latest version of any ciphers that
-                    // contain a matching credential.
-                    sync()
-                    vaultSdkSource
-                        .decryptFido2CredentialAutofillViews(
-                            userId = userId,
-                            cipherViews = ciphersWithFido2Credentials.toTypedArray(),
-                        )
-                        .map { decryptedFido2CredentialViews ->
-                            decryptedFido2CredentialViews.filterMatchingCredentials(
-                                fido2CredentialIds,
-                                relyingPartyId,
-                            )
-                        }
-                        .map { matchingFido2Credentials ->
-                            ciphersWithFido2Credentials.filter { cipherView ->
-                                matchingFido2Credentials.any { it.cipherId == cipherView.id }
-                            }
-                        }
-                        .fold(
-                            onSuccess = { matchingCipherViews ->
-                                FindFido2CredentialsResult.Success(
-                                    cipherViews = matchingCipherViews,
-                                )
-                            },
-                            onFailure = { FindFido2CredentialsResult.Error },
-                        )
-                },
-                saveCipher = { cipher ->
-                    vaultSdkSource
-                        .decryptCipher(userId, cipher)
-                        .map { decryptedCipherView ->
-                            decryptedCipherView.id
-                                ?.let { updateCipher(it, decryptedCipherView) }
-                                ?: createCipher(decryptedCipherView)
-                        }
-                        .fold(
-                            onSuccess = { SaveCredentialResult.Success },
-                            onFailure = { SaveCredentialResult.Error },
-                        )
-                },
-            )
-            .map { attestationResponse ->
-                attestationResponse.toAndroidAttestationResponse()
-            }
-            .map { response ->
-                json.encodeToString(response)
-            }
-            .fold(
-                onSuccess = { Fido2CreateCredentialResult.Success(it) },
-                onFailure = {
-                    Fido2CreateCredentialResult.Error(
-                        CreateCredentialUnknownException(it.message),
-                    )
-                },
-            )
-
-        return registerResult
     }
 
     /**

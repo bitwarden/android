@@ -1,10 +1,9 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.bitwarden.fido.Verification
-import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -387,22 +386,22 @@ class VaultAddEditViewModel @Inject constructor(
         content: VaultAddEditState.ViewState.Content,
     ) {
         viewModelScope.launch {
-            val result: Fido2CreateCredentialResult = vaultRepository
-                .registerFido2Credential(
+            val activeUserId = authRepository.activeUserId
+                ?: run {
+                    sendAction(
+                        VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
+                            result = Fido2CreateCredentialResult.Error(
+                                exception = CreateCredentialUnknownException(),
+                            ),
+                        ),
+                    )
+                    return@launch
+                }
+            val result: Fido2CreateCredentialResult =
+                fido2CredentialManager.registerFido2Credential(
+                    userId = activeUserId,
                     fido2CredentialRequest = request,
                     selectedCipherView = content.toCipherView(),
-                    // TODO: [PM-8137] Check if user verification can be performed
-                    isVerificationSupported = true,
-                    checkUser = { options, _ ->
-                        if (options.requireVerification != Verification.DISCOURAGED) {
-                            // TODO [PM-8137]: Perform user verification
-                        } /* else return the new cipher content */
-
-                        CheckUserResult(
-                            userPresent = true,
-                            userVerified = true,
-                        )
-                    },
                 )
             sendAction(
                 VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),

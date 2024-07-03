@@ -1,48 +1,89 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
-import androidx.credentials.exceptions.CreateCredentialUnknownException
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 
 /**
  * Primary implementation of [Fido2CredentialStore].
  */
 @OmitFromCoverage
 class Fido2CredentialStoreImpl(
-    private val cipherViews: List<CipherView>,
-    private val findFido2Credentials: suspend (
-        credentialIds: List<ByteArray>,
-        relyingPartyId: String,
-    ) -> FindFido2CredentialsResult,
-    private val saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
+    private val vaultSdkSource: VaultSdkSource,
+    private val authRepository: AuthRepository,
+    private val vaultRepository: VaultRepository,
 ) : Fido2CredentialStore {
-    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
-    override suspend fun findCredentials(
-        fido2CredentialIds: List<ByteArray>?,
-        relyingPartyId: String,
-    ): List<CipherView> =
-        when (val result = findFido2Credentials(fido2CredentialIds.orEmpty(), relyingPartyId)) {
-            is FindFido2CredentialsResult.Error -> {
-                // This exception is caught and handled by the SDK, which
-                // uses it to produce a FIDO 2 spec compliant attestation
-                // error.
-                throw CreateCredentialUnknownException()
-            }
-
-            is FindFido2CredentialsResult.Success -> {
-                result.cipherViews
-            }
-        }
-
-    override suspend fun saveCredential(cred: Cipher) {
-        if (saveCipher(cred) is SaveCredentialResult.Error) {
-            // This exception is caught and handled by the SDK, which uses
-            // it to produce a FIDO 2 spec compliant attestation error.
-            throw CreateCredentialUnknownException()
-        }
+    override suspend fun allCredentials(): List<CipherView> {
+        vaultRepository.sync()
+        return vaultRepository.ciphersStateFlow.value.data.orEmpty()
     }
 
-    override suspend fun allCredentials(): List<CipherView> = cipherViews
+    override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
+        val userId = getActiveUserIdOrThrow()
+
+        vaultRepository.sync()
+
+        val ciphersWithFido2Credentials = vaultRepository.ciphersStateFlow.value.data
+            ?.filter { it.isActiveWithFido2Credentials }
+            .orEmpty()
+
+        return vaultSdkSource
+            .decryptFido2CredentialAutofillViews(
+                userId = userId,
+                cipherViews = ciphersWithFido2Credentials.toTypedArray(),
+            )
+            .map { decryptedFido2CredentialViews ->
+                decryptedFido2CredentialViews.filterMatchingCredentials(
+                    ids,
+                    ripId,
+                )
+            }
+            .map { matchingFido2Credentials ->
+                ciphersWithFido2Credentials.filter { cipherView ->
+                    matchingFido2Credentials.any { it.cipherId == cipherView.id }
+                }
+            }
+            .fold(
+                onSuccess = { it },
+                onFailure = { throw it },
+            )
+    }
+
+    override suspend fun saveCredential(cred: Cipher) {
+        val userId = getActiveUserIdOrThrow()
+
+        vaultSdkSource
+            .decryptCipher(userId, cred)
+            .map { decryptedCipherView ->
+                decryptedCipherView.id
+                    ?.let { vaultRepository.updateCipher(it, decryptedCipherView) }
+                    ?: vaultRepository.createCipher(decryptedCipherView)
+            }
+            .onFailure { throw it }
+    }
+
+    private fun getActiveUserIdOrThrow() = (authRepository.userStateFlow.value?.activeUserId
+        ?: throw IllegalStateException("Active user is required."))
+
+    /**
+     * Return a filtered list containing elements that match the given [relyingPartyId] and a
+     * credential ID contained in [credentialIds].
+     */
+    private fun List<Fido2CredentialAutofillView>.filterMatchingCredentials(
+        credentialIds: List<ByteArray>?,
+        relyingPartyId: String,
+    ): List<Fido2CredentialAutofillView> {
+        val skipCredentialIdFiltering = credentialIds.isNullOrEmpty()
+        return filter { fido2CredentialView ->
+            fido2CredentialView.rpId == relyingPartyId &&
+                (skipCredentialIdFiltering ||
+                    credentialIds?.contains(fido2CredentialView.credentialId) == true)
+        }
+    }
 }

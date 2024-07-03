@@ -67,7 +67,8 @@ fun CallingAppInfo.getAppOrigin(): String {
 }
 
 /**
- * Returns a [ByteArray] containing the application's signing certificate signature hash.
+ * Returns a [ByteArray] containing the application's signing certificate signature hash. If
+ * multiple signers are identified `null` is returned.
  */
 fun CallingAppInfo.getAppSigningSignatureFingerprint(): ByteArray? {
     if (signingInfo.hasMultipleSigners()) return null

@@ -729,13 +729,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 registrationResponse = "mockRegistrationResponse",
             )
             coEvery {
-                vaultRepository.registerFido2Credential(
-                    fido2CredentialRequest = fido2CredentialRequest,
+                fido2CredentialManager.registerFido2Credential(
+                    userId = "mockUserId",
                     selectedCipherView = any(),
-                    isVerificationSupported = any(),
-                    checkUser = any(),
+                    fido2CredentialRequest = fido2CredentialRequest,
                 )
             } returns mockCreateResult
+            every { authRepository.activeUserId } returns "mockUserId"
 
             turbineScope {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
@@ -756,11 +756,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateTurbine.awaitItem())
 
                 coVerify(exactly = 1) {
-                    vaultRepository.registerFido2Credential(
+                    fido2CredentialManager.registerFido2Credential(
+                        userId = "mockUserId",
                         fido2CredentialRequest = fido2CredentialRequest,
                         selectedCipherView = any(),
-                        isVerificationSupported = any(),
-                        checkUser = any(),
                     )
                 }
             }
@@ -812,13 +811,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 exception = CreateCredentialUnknownException(),
             )
             coEvery {
-                vaultRepository.registerFido2Credential(
-                    fido2CredentialRequest = fido2CredentialRequest,
+                fido2CredentialManager.registerFido2Credential(
+                    userId = "mockUserId",
                     selectedCipherView = any(),
-                    isVerificationSupported = any(),
-                    checkUser = any(),
+                    fido2CredentialRequest = fido2CredentialRequest,
                 )
             } returns mockCreateResult
+            every { authRepository.activeUserId } returns "mockUserId"
 
             turbineScope {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
@@ -839,11 +838,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateTurbine.awaitItem())
 
                 coVerify(exactly = 1) {
-                    vaultRepository.registerFido2Credential(
-                        fido2CredentialRequest = fido2CredentialRequest,
+                    fido2CredentialManager.registerFido2Credential(
+                        userId = "mockUserId",
                         selectedCipherView = any(),
-                        isVerificationSupported = any(),
-                        checkUser = any(),
+                        fido2CredentialRequest = fido2CredentialRequest,
                     )
                 }
             }

@@ -208,6 +208,18 @@ class CallingAppInfoExtensionsTest {
             appInfo.getAppOrigin(),
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getAppSigningSignatureFingerprint should return null when calling app has multiple signers`() {
+        val mockAppInfo = mockk<CallingAppInfo> {
+            every { signingInfo } returns mockk {
+                every { hasMultipleSigners() } returns true
+            }
+        }
+
+        assertNull(mockAppInfo.getAppSigningSignatureFingerprint())
+    }
 }
 
 private const val DEFAULT_SIGNATURE = "0987654321ABCDEF"

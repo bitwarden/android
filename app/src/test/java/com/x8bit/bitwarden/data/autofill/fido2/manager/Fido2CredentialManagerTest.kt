@@ -2,28 +2,39 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import android.content.pm.Signature
 import android.content.pm.SigningInfo
+import android.util.Base64
 import androidx.credentials.provider.CallingAppInfo
+import com.bitwarden.fido.ClientData
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.slot
 import io.mockk.unmockkStatic
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -69,24 +80,28 @@ class Fido2CredentialManagerTest {
         every { requestJson } returns "{}"
     }
     private val mockMessageDigest = mockk<MessageDigest> {
-        every { digest(any()) } returns "0987654321ABCDEF".toByteArray()
+        every { digest(any()) } returns DEFAULT_APP_SIGNATURE.toByteArray()
     }
+    private val mockVaultSdkSource = mockk<VaultSdkSource>()
+    private val mockFido2CredentialStore = mockk<Fido2CredentialStore>()
 
     @BeforeEach
     fun setUp() {
-        mockkStatic(MessageDigest::class)
+        mockkStatic(MessageDigest::class, Base64::class)
         every { MessageDigest.getInstance(any()) } returns mockMessageDigest
 
         fido2CredentialManager = Fido2CredentialManagerImpl(
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
+            vaultSdkSource = mockVaultSdkSource,
+            fido2CredentialStore = mockFido2CredentialStore,
             json = json,
         )
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(MessageDigest::class)
+        unmockkStatic(MessageDigest::class, Base64::class)
     }
 
     @Test
@@ -276,34 +291,252 @@ class Fido2CredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getPasskeyCreateOptionsOrNull should return null when IllegalArgumentException is thrown`() =
+    fun `getPasskeyCreateOptionsOrNull should return null when IllegalArgumentException is thrown`() {
+        every {
+            json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+        } throws IllegalArgumentException()
+
+        assertNull(fido2CredentialManager.getPasskeyCreateOptionsOrNull(requestJson = ""))
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `registerFido2Credential should construct ClientData DefaultWithCustomHash when callingAppInfo origin is populated`() =
         runTest {
-            every {
-                json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
-            } throws IllegalArgumentException()
-            assertNull(
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
-                    requestJson = "",
-                ),
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
+            }
+            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "origin",
+                signingInfo = mockSigningInfo,
+            )
+            val mockCipherView = createMockCipherView(1)
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
+
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every { json.encodeToString<Fido2AttestationResponse>(any(), any()) } returns ""
+            val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = capture(requestCaptureSlot),
+                    fido2CredentialStore = any(),
+                    checkUser = any(),
+                    checkUserAndPickCredential = any(),
+                )
+            } coAnswers {
+                mockRegistrationResponse
+                    .asSuccess()
+            }
+
+            fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                selectedCipherView = mockCipherView,
+            )
+
+            assertTrue(
+                requestCaptureSlot.captured.clientData is ClientData.DefaultWithCustomHash,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `registerFido2Credential should construct ClientData DefaultWithExtraData when callingAppInfo origin is null`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
+            }
+            val mockFido2Request = createMockFido2CredentialRequest(
+                number = 1,
+                signingInfo = mockSigningInfo,
+            )
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
+
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every { json.encodeToString<Fido2AttestationResponse>(any(), any()) } returns ""
+            val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = capture(requestCaptureSlot),
+                    fido2CredentialStore = any(),
+                    checkUser = any(),
+                    checkUserAndPickCredential = any(),
+                )
+            } coAnswers {
+                mockRegistrationResponse
+                    .asSuccess()
+            }
+
+            fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2Request,
+                selectedCipherView = createMockCipherView(1),
             )
         }
 
     @Test
-    fun `createCredentialForCipher should return error while not implemented`() {
-        val result = fido2CredentialManager.createCredentialForCipher(
-            credentialRequest = mockk(),
-            cipherView = mockk(),
-        )
+    fun `registerFido2Credential should wrap request in webauthn json object`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
+            }
+            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "origin",
+                signingInfo = mockSigningInfo,
+            )
+            val mockCipherView = createMockCipherView(1)
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
 
-        assertTrue(
-            result is Fido2CreateCredentialResult.Error,
-        )
-    }
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every { json.encodeToString<Fido2AttestationResponse>(any(), any()) } returns ""
+            val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = capture(requestCaptureSlot),
+                    fido2CredentialStore = any(),
+                    checkUser = any(),
+                    checkUserAndPickCredential = any(),
+                )
+            } coAnswers {
+                mockRegistrationResponse
+                    .asSuccess()
+            }
+
+            fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                selectedCipherView = mockCipherView,
+            )
+
+            assertEquals(
+                """{"publicKey": ${mockFido2CreateCredentialRequest.requestJson}}""",
+                requestCaptureSlot.captured.requestJson,
+            )
+        }
+
+    @Test
+    fun `registerFido2Credential should register FIDO 2 credential to active user ID`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
+            }
+            val mockFido2CreateCredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "origin",
+                signingInfo = mockSigningInfo,
+            )
+            val mockCipherView = createMockCipherView(1)
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
+
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every { json.encodeToString<Fido2AttestationResponse>(any(), any()) } returns ""
+            val requestCaptureSlot = slot<RegisterFido2CredentialRequest>()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = capture(requestCaptureSlot),
+                    fido2CredentialStore = any(),
+                    checkUser = any(),
+                    checkUserAndPickCredential = any(),
+                )
+            } coAnswers {
+                mockRegistrationResponse
+                    .asSuccess()
+            }
+
+            fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CreateCredentialRequest,
+                selectedCipherView = mockCipherView,
+            )
+
+            assertEquals(
+                "mockUserId",
+                requestCaptureSlot.captured.userId,
+            )
+
+            assertNotEquals(
+                "mockUserId",
+                mockFido2CreateCredentialRequest.userId,
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `registerFido2Credential should return Error when getAppSigningSignatureFingerprint is null`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { hasMultipleSigners() } returns true
+            }
+            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "origin",
+                signingInfo = mockSigningInfo,
+            )
+
+            val result = fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CredentialRequest,
+                selectedCipherView = createMockCipherView(number = 1),
+            )
+
+            assertTrue(
+                result is Fido2CreateCredentialResult.Error,
+            )
+        }
+
+    @Test
+    fun `registerFido2Credential should return Error when deserialization fails`() =
+        runTest {
+            val mockSigningInfo = mockk<SigningInfo> {
+                every { apkContentsSigners } returns arrayOf(Signature(DEFAULT_APP_SIGNATURE))
+                every { hasMultipleSigners() } returns false
+            }
+            val mockFido2CredentialRequest = createMockFido2CredentialRequest(
+                number = 1,
+                origin = "origin",
+                signingInfo = mockSigningInfo,
+            )
+            val mockRegistrationResponse = createMockPublicKeyAttestationResponse(number = 1)
+
+            every { Base64.encodeToString(any(), any()) } returns DEFAULT_APP_SIGNATURE
+            every {
+                json.encodeToString<Fido2AttestationResponse>(
+                    any(),
+                    any(),
+                )
+            } throws IllegalArgumentException()
+            coEvery {
+                mockVaultSdkSource.registerFido2Credential(
+                    request = any(),
+                    fido2CredentialStore = any(),
+                    checkUser = any(),
+                    checkUserAndPickCredential = any(),
+                )
+            } coAnswers {
+                mockRegistrationResponse
+                    .asSuccess()
+            }
+
+            val result = fido2CredentialManager.registerFido2Credential(
+                userId = "mockUserId",
+                fido2CredentialRequest = mockFido2CredentialRequest,
+                selectedCipherView = createMockCipherView(number = 1),
+            )
+
+            assertTrue(
+                result is Fido2CreateCredentialResult.Error,
+            )
+        }
 }
 
-@Suppress("MaxLineLength")
-private const val DEFAULT_CERT_FINGERPRINT =
-    "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
+private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
+private const val DEFAULT_CERT_FINGERPRINT = "30:39:38:37:36:35:34:33:32:31:41:42:43:44:45:46"
 private val DEFAULT_STATEMENT = DigitalAssetLinkResponseJson(
     relation = listOf(
         "delegate_permission/common.get_login_creds",
