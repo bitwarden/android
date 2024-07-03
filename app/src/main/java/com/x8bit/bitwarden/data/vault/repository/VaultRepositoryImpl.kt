@@ -6,7 +6,7 @@ import com.bitwarden.bitwarden.InitOrgCryptoRequest
 import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
-import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -19,9 +19,6 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUpdatedUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
-import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.util.isNoConnectionError
 import com.x8bit.bitwarden.data.platform.manager.PushManager
@@ -42,8 +39,6 @@ import com.x8bit.bitwarden.data.platform.repository.util.updateToPendingOrLoadin
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.platform.util.flatMap
-import com.x8bit.bitwarden.data.platform.util.getAppOrigin
-import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateFileSendResponse
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CreateSendJsonResponse
@@ -55,9 +50,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.service.FolderService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SendsService
 import com.x8bit.bitwarden.data.vault.datasource.network.service.SyncService
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.FileManager
 import com.x8bit.bitwarden.data.vault.manager.TotpCodeManager
@@ -114,7 +106,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.time.Clock
@@ -875,91 +866,20 @@ class VaultRepositoryImpl(
             )
     }
 
-    @Suppress("LongMethod")
-    override suspend fun registerFido2Credential(
-        fido2CredentialRequest: Fido2CredentialRequest,
-        selectedCipherView: CipherView,
-        isVerificationSupported: Boolean,
-    ): Fido2CreateCredentialResult {
-        val userId = activeUserId ?: return Fido2CreateCredentialResult.Error
-        val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
-            ClientData.DefaultWithCustomHash(
-                hash = fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint(),
-            )
-        } else {
-            ClientData.DefaultWithExtraData(
-                androidPackageName = fido2CredentialRequest
-                    .callingAppInfo
-                    .getAppOrigin(),
-            )
+    /**
+     * Return a filtered list containing elements that match the given [relyingPartyId] and a
+     * credential ID contained in [credentialIds].
+     */
+    private fun List<Fido2CredentialAutofillView>.filterMatchingCredentials(
+        credentialIds: List<ByteArray>,
+        relyingPartyId: String,
+    ): List<Fido2CredentialAutofillView> {
+        val skipCredentialIdFiltering = credentialIds.isEmpty()
+        return filter { fido2CredentialView ->
+            fido2CredentialView.rpId == relyingPartyId &&
+                (skipCredentialIdFiltering ||
+                    credentialIds.contains(fido2CredentialView.credentialId))
         }
-        val origin = fido2CredentialRequest.origin
-            ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
-
-        val ciphersWithFido2Credentials = ciphersStateFlow.value.data
-            ?.filter { it.isActiveWithFido2Credentials }
-            .orEmpty()
-
-        val registerResult = vaultSdkSource
-            .registerFido2Credential(
-                userId = userId,
-                origin = origin,
-                requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
-                clientData = clientData,
-                selectedCipherView = selectedCipherView,
-                cipherViews = ciphersWithFido2Credentials,
-                isVerificationSupported = isVerificationSupported,
-                findCredentials = { fido2CredentialIds, relayingPartyId ->
-                    // We force a sync so that the SDK has the latest version of any ciphers that
-                    // contain a matching credential.
-                    sync()
-                    vaultSdkSource
-                        .decryptFido2CredentialAutofillViews(
-                            userId = userId,
-                            cipherViews = ciphersWithFido2Credentials.toTypedArray(),
-                        )
-                        .map { decryptedFido2CredentialViews ->
-                            decryptedFido2CredentialViews.filter { fido2CredentialView ->
-                                fido2CredentialView.rpId == relayingPartyId &&
-                                    fido2CredentialIds.contains(fido2CredentialView.credentialId)
-                            }
-                        }
-                        .map { matchingFido2Credentials ->
-                            ciphersWithFido2Credentials.filter { cipherView ->
-                                matchingFido2Credentials.any { it.cipherId == cipherView.id }
-                            }
-                        }
-                        .fold(
-                            onSuccess = { matchingCipherViews ->
-                                FindFido2CredentialsResult.Success(
-                                    cipherViews = matchingCipherViews,
-                                )
-                            },
-                            onFailure = { FindFido2CredentialsResult.Error },
-                        )
-                },
-                saveCipher = { cipher ->
-                    vaultSdkSource
-                        .decryptCipher(userId, cipher)
-                        .map { createCipher(it) }
-                        .fold(
-                            onSuccess = { SaveCredentialResult.Success },
-                            onFailure = { SaveCredentialResult.Error },
-                        )
-                },
-            )
-            .map { attestationResponse ->
-                attestationResponse.toAndroidAttestationResponse()
-            }
-            .map { response ->
-                json.encodeToString(response)
-            }
-            .fold(
-                onSuccess = { Fido2CreateCredentialResult.Success(it) },
-                onFailure = { Fido2CreateCredentialResult.Error },
-            )
-
-        return registerResult
     }
 
     /**

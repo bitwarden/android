@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
@@ -431,12 +432,20 @@ class VaultAddEditViewModel @Inject constructor(
         cipherView: CipherView,
     ) {
         viewModelScope.launch {
-            val result: Fido2CreateCredentialResult = vaultRepository
-                .registerFido2Credential(
+            val activeUserId = authRepository.activeUserId
+                ?: run {
+                    sendAction(
+                        VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
+                            result = Fido2CreateCredentialResult.Error,
+                        ),
+                    )
+                    return@launch
+                }
+            val result: Fido2CreateCredentialResult =
+                fido2CredentialManager.registerFido2Credential(
+                    userId = activeUserId,
                     fido2CredentialRequest = request,
                     selectedCipherView = cipherView,
-                    // TODO: [PM-8137] Check if user verification can be performed
-                    isVerificationSupported = true,
                 )
             sendAction(
                 VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),

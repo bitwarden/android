@@ -516,7 +516,7 @@
   <string name="set_master_password">تنظیم کلمه عبور اصلی</string>
   <string name="set_master_password_summary">برای پر کردن ورود به سیستم با SSO، لطفاً یک کلمه عبور اصلی برای دسترسی و محافظت از گاوصندوق خود تنظیم کنید.</string>
   <string name="master_password_policy_in_effect">یک یا چند سیاست سازمانی برای تأمین شرایط زیر به کلمه عبور اصلی شما احتیاج دارد:</string>
-  <string name="policy_in_effect_min_complexity">حداقل نمره پیچیدگی $SCORE$</string>
+  <string name="policy_in_effect_min_complexity">Minimum complexity score of %1$s</string>
   <string name="policy_in_effect_min_length">حداقل طول %1$s</string>
   <string name="policy_in_effect_uppercase">حاوی یک یا چند کاراکتر بزرگ</string>
   <string name="policy_in_effect_lowercase">حاوی یک یا چند کاراکتر کوچک</string>
@@ -913,4 +913,16 @@
   <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Passkey operation failed because app could not be verified</string>
+  <string name="confirm_file_password">Confirm file password</string>
+  <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
+  <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
+  <string name="file_password">File password</string>
+  <string name="give_feedback">Give Feedback</string>
+  <string name="password_protected">Password Protected</string>
+  <string name="password_used_to_export">This password will be used to export and import this file</string>
+  <string name="autofill_suggestion">Autofill suggestion</string>
+  <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
+  <string name="launch_web_authn">Launch WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
+  <string name="self_hosted_server_url">Self-hosted server URL</string>
 </resources>

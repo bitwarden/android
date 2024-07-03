@@ -103,7 +103,6 @@ private val ACCOUNT_1_UPDATED = ACCOUNT_1.copy(
         email = JWT_TOKEN_DATA.email,
         isEmailVerified = JWT_TOKEN_DATA.isEmailVerified,
         name = JWT_TOKEN_DATA.name,
-        hasPremium = JWT_TOKEN_DATA.hasPremium,
     ),
 )
 

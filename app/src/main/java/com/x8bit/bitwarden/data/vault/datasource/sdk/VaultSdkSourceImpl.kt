@@ -17,6 +17,7 @@ import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
@@ -36,10 +37,8 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialStoreImpl
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.FindFido2CredentialsResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
-import com.x8bit.bitwarden.data.vault.datasource.sdk.model.SaveCredentialResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
@@ -450,41 +449,27 @@ class VaultSdkSourceImpl(
     }
 
     override suspend fun registerFido2Credential(
-        userId: String,
-        origin: String,
-        requestJson: String,
-        clientData: ClientData,
-        selectedCipherView: CipherView,
-        cipherViews: List<CipherView>,
-        isVerificationSupported: Boolean,
-        findCredentials: suspend (
-            credentialIds: List<ByteArray>,
-            relyingPartyId: String,
-        ) -> FindFido2CredentialsResult,
-        saveCipher: suspend (Cipher) -> SaveCredentialResult,
+        request: RegisterFido2CredentialRequest,
+        fido2CredentialStore: Fido2CredentialStore,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
         callbackFlow {
             try {
-                val client = getClient(userId)
+                val client = getClient(request.userId)
                     .platform()
                     .fido2()
                     .client(
                         userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
-                            isVerificationSupported = isVerificationSupported,
-                            selectedCipherView = selectedCipherView,
+                            isVerificationSupported = request.isUserVerificationSupported,
+                            selectedCipherView = request.selectedCipherView,
                         ),
-                        credentialStore = Fido2CredentialStoreImpl(
-                            cipherViews = cipherViews,
-                            findFido2Credentials = findCredentials,
-                            saveCipher = saveCipher,
-                        ),
+                        credentialStore = fido2CredentialStore,
                     )
 
                 val result = client
                     .register(
-                        origin = origin,
-                        request = requestJson,
-                        clientData = clientData,
+                        origin = request.origin,
+                        request = request.requestJson,
+                        clientData = request.clientData,
                     )
 
                 send(result)
@@ -504,14 +489,9 @@ class VaultSdkSourceImpl(
         requestJson: String,
         clientData: ClientData,
         isVerificationSupported: Boolean,
-        cipherViews: List<CipherView>,
         checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
         pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
-        findCredentials: suspend (
-            credentialIds: List<ByteArray>,
-            relyingPartyId: String,
-        ) -> FindFido2CredentialsResult,
-        saveCipher: suspend (cipher: Cipher) -> SaveCredentialResult,
+        fido2CredentialStore: Fido2CredentialStore,
     ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatching {
         callbackFlow {
             try {
@@ -524,11 +504,7 @@ class VaultSdkSourceImpl(
                             checkUser = checkUser,
                             pickCredentialForAuthentication = pickCredentialForAuthentication,
                         ),
-                        credentialStore = Fido2CredentialStoreImpl(
-                            cipherViews = cipherViews,
-                            findFido2Credentials = findCredentials,
-                            saveCipher = saveCipher,
-                        ),
+                        credentialStore = fido2CredentialStore,
                     )
 
                 val result = client.authenticate(

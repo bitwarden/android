@@ -24,7 +24,6 @@ fun RefreshTokenResponseJson.toUserStateJson(
             email = jwtTokenData.email,
             isEmailVerified = jwtTokenData.isEmailVerified,
             name = jwtTokenData.name,
-            hasPremium = jwtTokenData.hasPremium,
         ),
     )
 

@@ -749,16 +749,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 challenge = "mockChallenge",
             )
             coEvery {
-                vaultRepository.registerFido2Credential(
-                    fido2CredentialRequest = fido2CredentialRequest,
+                fido2CredentialManager.registerFido2Credential(
+                    userId = "mockUserId",
                     selectedCipherView = any(),
-                    isVerificationSupported = any(),
+                    fido2CredentialRequest = fido2CredentialRequest,
                 )
             } returns mockCreateResult
-            every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-            } returns mockPasskeyCreateOptions
-            every { biometricsEncryptionManager.getOrCreateCipher(any()) } returns mockk()
+            every { authRepository.activeUserId } returns "mockUserId"
 
             turbineScope {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
@@ -779,10 +776,90 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithName, stateTurbine.awaitItem())
 
                 coVerify(exactly = 1) {
-                    vaultRepository.registerFido2Credential(
+                    fido2CredentialManager.registerFido2Credential(
+                        userId = "mockUserId",
                         fido2CredentialRequest = fido2CredentialRequest,
                         selectedCipherView = any(),
-                        isVerificationSupported = any(),
+                    )
+                }
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode during fido2, SaveClick should show dialog, register credential, show toast on error, and emit ExitApp`() =
+        runTest {
+            val fido2CredentialRequest = Fido2CredentialRequest(
+                userId = "mockUserId",
+                requestJson = "mockRequestJson",
+                packageName = "mockPackageName",
+                signingInfo = mockk<SigningInfo>(),
+                origin = null,
+            )
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.Fido2Save(
+                    fido2CredentialRequest = fido2CredentialRequest,
+                )
+            val stateWithDialog = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                dialogState = VaultAddEditState.DialogState.Loading(
+                    R.string.saving.asText(),
+                ),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+                .copy(shouldExitOnSave = true)
+
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+                .copy(shouldExitOnSave = true)
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+            val mockCreateResult = Fido2CreateCredentialResult.Error
+            coEvery {
+                fido2CredentialManager.registerFido2Credential(
+                    userId = "mockUserId",
+                    selectedCipherView = any(),
+                    fido2CredentialRequest = fido2CredentialRequest,
+                )
+            } returns mockCreateResult
+            every { authRepository.activeUserId } returns "mockUserId"
+
+            turbineScope {
+                val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
+                val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
+
+                viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+                assertEquals(stateWithDialog, stateTurbine.awaitItem())
+                assertEquals(
+                    VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()),
+                    eventTurbine.awaitItem(),
+                )
+                assertEquals(
+                    VaultAddEditEvent.CompleteFido2Create(result = mockCreateResult),
+                    eventTurbine.awaitItem(),
+                )
+                assertEquals(stateWithName, stateTurbine.awaitItem())
+
+                coVerify(exactly = 1) {
+                    fido2CredentialManager.registerFido2Credential(
+                        userId = "mockUserId",
+                        selectedCipherView = any(),
+                        fido2CredentialRequest = fido2CredentialRequest,
                     )
                 }
             }

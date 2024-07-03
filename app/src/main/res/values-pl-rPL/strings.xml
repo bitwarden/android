@@ -308,7 +308,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="october">Październik</string>
   <string name="passport_number">Numer paszportu</string>
   <string name="phone">Telefon</string>
-  <string name="september">September</string>
+  <string name="september">Wrzesień</string>
   <string name="ssn">Numer PESEL</string>
   <string name="state_province">Województwo</string>
   <string name="title">Tytuł</string>
@@ -349,7 +349,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="base_domain">Domena podstawowa</string>
   <string name="default_text">Domyślny</string>
   <string name="exact">Dokładnie</string>
-  <string name="host">Host</string>
+  <string name="host">Serwer</string>
   <string name="reg_ex">Wyrażenie regularne</string>
   <string name="starts_with">Rozpoczyna się od</string>
   <string name="uri_match_detection">Wykrywanie dopasowania URI</string>
@@ -913,4 +913,16 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Passkey operation failed because of missing asset links</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Passkey operation failed because app not found in asset links</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Operacja z Passkey nie powiodła się, ponieważ aplikacja nie mogła zostać zweryfikowana</string>
+  <string name="confirm_file_password">Potwierdź hasło do pliku</string>
+  <string name="continue_to_give_feedback">Kontynuować przekazywanie opinii?</string>
+  <string name="continue_to_provide_feedback">Wybierz kontynuuj, aby przekazać opinie na temat nowej aplikacji!</string>
+  <string name="file_password">Hasło do pliku</string>
+  <string name="give_feedback">Podziel się opinią</string>
+  <string name="password_protected">Zabezpieczone hasłem</string>
+  <string name="password_used_to_export">Hasło będzie używane do eksportowania i importowania pliku</string>
+  <string name="autofill_suggestion">Sugestia autouzupełnienia</string>
+  <string name="continue_to_complete_web_authn_verification">Kontynuuj, aby dokończyć weryfikację WebAuthn.</string>
+  <string name="launch_web_authn">Uruchom WebAuthn</string>
+  <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Wystąpił błąd podczas uruchamiania uwierzytelniania dwuskładnikowego WebAuthn</string>
+  <string name="self_hosted_server_url">Adres URL własnejgo serwera</string>
 </resources>

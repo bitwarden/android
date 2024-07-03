@@ -138,7 +138,7 @@ jobs:
           --name google-services.json --file ${{ github.workspace }}/app/src/standardBeta/google-services.json --output none
 
       - name: Download Firebase credentials
-        if: ${{ matrix.variant == 'prod' && inputs.distribute-to-firebase }}
+        if: ${{ matrix.variant == 'prod' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile
@@ -346,11 +346,11 @@ jobs:
           if-no-files-found: error
 
       - name: Install Firebase app distribution plugin
-        if: ${{ matrix.variant == 'prod' && github.ref_name == 'main' && inputs.distribute-to-firebase }}
+        if: ${{ matrix.variant == 'prod' && github.ref_name == 'main' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
 
       - name: Publish release artifacts to Firebase
-        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && github.ref_name == 'main' && inputs.distribute-to-firebase }}
+        if: ${{ matrix.variant == 'prod' && matrix.artifact == 'apk' && github.ref_name == 'main' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -358,7 +358,7 @@ jobs:
           service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
 
       - name: Publish beta artifacts to Firebase
-        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && github.ref_name == 'main' && inputs.distribute-to-firebase }}
+        if: ${{ (matrix.variant == 'prod' && matrix.artifact == 'apk') && github.ref_name == 'main' && (inputs.distribute-to-firebase || github.event_name == 'push') }}
         env:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
@@ -410,7 +410,7 @@ jobs:
           --name app_beta_fdroid-keystore.jks --file ${{ github.workspace }}/keystores/app_beta_fdroid-keystore.jks --output none
 
       - name: Download Firebase credentials
-        if: ${{ inputs.distribute-to-firebase }}
+        if: ${{ inputs.distribute-to-firebase || github.event_name == 'push' }}
         env:
           ACCOUNT_NAME: bitwardenci
           CONTAINER_NAME: mobile

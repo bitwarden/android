@@ -9,8 +9,6 @@ import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.vault.manager.CipherManager
 import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
@@ -236,13 +234,4 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * Attempt to get the user's vault data for export.
      */
     suspend fun exportVaultDataToString(format: ExportFormat): ExportVaultDataResult
-
-    /**
-     * Register a new FIDO 2 credential to a users vault.
-     */
-    suspend fun registerFido2Credential(
-        fido2CredentialRequest: Fido2CredentialRequest,
-        selectedCipherView: CipherView,
-        isVerificationSupported: Boolean,
-    ): Fido2CreateCredentialResult
 }
