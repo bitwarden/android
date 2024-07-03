@@ -277,8 +277,6 @@ class AutofillCompletionManagerTest {
         verify {
             activity.setResult(Activity.RESULT_OK, resultIntent)
             activity.finish()
-        }
-        verify {
             activity.intent
             clipboardManager.setText(any<String>())
             mockIntent.getAutofillAssistStructureOrNull()
@@ -367,8 +365,6 @@ class AutofillCompletionManagerTest {
         verify {
             activity.setResult(Activity.RESULT_OK, resultIntent)
             activity.finish()
-        }
-        verify {
             activity.intent
             clipboardManager.setText(any<String>())
             mockIntent.getAutofillAssistStructureOrNull()
@@ -400,8 +396,6 @@ class AutofillCompletionManagerTest {
             )
         }
     }
-
-
 
     @Suppress("MaxLineLength")
     @Test
@@ -587,6 +581,7 @@ class AutofillCompletionManagerTest {
                 authIntentSender = null,
                 autofillAppInfo = autofillAppInfo,
             )
+            cipherView.organizationUseTotp
             settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
             organizationEventManager.trackEvent(
