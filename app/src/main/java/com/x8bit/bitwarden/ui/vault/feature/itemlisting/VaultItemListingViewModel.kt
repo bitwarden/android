@@ -297,10 +297,25 @@ class VaultItemListingViewModel @Inject constructor(
         if (state.isFido2Creation) {
             val cipherView = getCipherViewOrNull(action.id) ?: return
             val credentialRequest = state.fido2CredentialRequest ?: return
-            fido2CredentialManager.createCredentialForCipher(
-                credentialRequest = credentialRequest,
-                cipherView = cipherView,
-            )
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = VaultItemListingState.DialogState.Loading(
+                        message = R.string.saving.asText(),
+                    ),
+                )
+            }
+            viewModelScope.launch {
+                val result = fido2CredentialManager.registerFido2Credential(
+                    state.activeAccountSummary.userId,
+                    fido2CredentialRequest = credentialRequest,
+                    selectedCipherView = cipherView,
+                )
+                sendAction(
+                    VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(
+                        result = result,
+                    ),
+                )
+            }
             return
         }
 
@@ -524,6 +539,10 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.Internal.ValidateFido2OriginResultReceive -> {
                 handleValidateFido2OriginResultReceive(action)
             }
+
+            is VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive -> {
+                handleFido2RegisterCredentialResultReceive(action)
+            }
         }
     }
 
@@ -737,6 +756,22 @@ class VaultItemListingViewModel @Inject constructor(
                 policyDisablesSend = action.policyDisablesSend,
             )
         }
+    }
+
+    private fun handleFido2RegisterCredentialResultReceive(
+        action: VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive,
+    ) {
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        when (action.result) {
+            is Fido2CreateCredentialResult.Error -> {
+                sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+            }
+
+            is Fido2CreateCredentialResult.Success -> {
+                sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
+            }
+        }
+        sendEvent(VaultItemListingEvent.CompleteFido2Create(action.result))
     }
 
     private fun handleValidateFido2OriginResultReceive(
@@ -1484,6 +1519,13 @@ sealed class VaultItemListingsAction {
          */
         data class ValidateFido2OriginResultReceive(
             val result: Fido2ValidateOriginResult,
+        ) : Internal()
+
+        /**
+         * Indicates that a result for FIDO 2 credential registration has been received.
+         */
+        data class Fido2RegisterCredentialResultReceive(
+            val result: Fido2CreateCredentialResult,
         ) : Internal()
     }
 }
