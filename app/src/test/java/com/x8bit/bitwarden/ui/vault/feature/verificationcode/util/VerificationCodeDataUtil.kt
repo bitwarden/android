@@ -15,4 +15,5 @@ fun createVerificationCodeItem(number: Int = 1) =
         uriLoginViewList = createMockLoginView(1).uris,
         username = "mockUsername-$number",
         hasPasswordReprompt = false,
+        orgUsesTotp = false,
     )

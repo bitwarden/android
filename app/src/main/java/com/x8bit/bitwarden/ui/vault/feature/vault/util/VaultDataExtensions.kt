@@ -64,11 +64,12 @@ fun VaultData.toViewState(
     return if (filteredCipherViewList.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
+        val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         VaultState.ViewState.Content(
             totpItemsCount = if (isPremium) {
-                filteredCipherViewList.count { it.login?.totp != null }
+                totpItems.count()
             } else {
-                0
+                totpItems.count { it.organizationUseTotp }
             },
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
             cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },

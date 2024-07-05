@@ -319,6 +319,79 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `toViewState should return 1 for totpItemsCount if user does not have premium and has at least 1 totp items with org TOTP true`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(createMockCipherView(number = 1).copy(organizationUseTotp = true)),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = false,
+            vaultFilterType = VaultFilterType.AllVaults,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should omit non org related totp codes when user does not have premium`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(number = 1).copy(organizationUseTotp = true),
+                createMockCipherView(number = 2),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = false,
+            vaultFilterType = VaultFilterType.AllVaults,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 2,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `toLoginIconData should return a IconData Local type if isIconLoadingDisabled is true`() {
         val actual =
             createMockCipherView(
