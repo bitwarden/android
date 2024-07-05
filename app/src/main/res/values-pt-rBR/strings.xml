@@ -55,7 +55,7 @@
   <string name="name">Nome</string>
   <string name="no">Não</string>
   <string name="notes">Notas</string>
-  <string name="ok">Ok</string>
+  <string name="ok">OK</string>
   <string name="password">Senha</string>
   <string name="save">Salvar</string>
   <string name="move">Mover</string>
@@ -545,9 +545,9 @@ A leitura será feita automaticamente.</string>
   <string name="draw_over_description3">Se ativado, a acessibilidade mostrará um \"pop-up\" para aumentar o Serviço de Autopreenchimento para aplicativos mais antigos que não suportam a Estrutura de Autopreenchimento do Android.</string>
   <string name="personal_ownership_submit_error">Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de propriedade para uma organização e escolha entre Coleções disponíveis.</string>
   <string name="personal_ownership_policy_in_effect">Uma política de organização está afetando suas opções de propriedade.</string>
-  <string name="send">Send</string>
+  <string name="send">Enviar</string>
   <string name="all_sends">Todos os Sends</string>
-  <string name="sends">Sends</string>
+  <string name="sends">Envios</string>
   <string name="name_info">Um nome amigável para descrever este Send.</string>
   <string name="text">Texto</string>
   <string name="type_text">Texto</string>

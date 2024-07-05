@@ -912,12 +912,12 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="passkey_operation_failed_because_of_missing_asset_links">Der Passkey-Vorgang ist wegen fehlender Asset-Links fehlgeschlagen</string>
   <string name="passkey_operation_failed_because_app_not_found_in_asset_links">Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht in den Asset-Links gefunden wurde</string>
   <string name="passkey_operation_failed_because_app_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da die App nicht verifiziert werden konnte</string>
-  <string name="confirm_file_password">Confirm file password</string>
+  <string name="confirm_file_password">Dateipasswort bestätigen</string>
   <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
   <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
-  <string name="file_password">File password</string>
-  <string name="give_feedback">Give Feedback</string>
-  <string name="password_protected">Password Protected</string>
+  <string name="file_password">Dateipasswort</string>
+  <string name="give_feedback">Rückmeldung geben</string>
+  <string name="password_protected">Passwortgeschützt</string>
   <string name="password_used_to_export">This password will be used to export and import this file</string>
   <string name="autofill_suggestion">Autofill suggestion</string>
   <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
