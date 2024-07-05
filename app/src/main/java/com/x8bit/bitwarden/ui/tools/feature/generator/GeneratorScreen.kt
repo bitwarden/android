@@ -642,7 +642,8 @@ private fun PasswordLengthSliderItem(
                 }
                 .testTag("PasswordLengthLabel")
                 .wrapContentWidth()
-                .width(labelTextWidth + 32.dp),
+                // We want the width to be no wider than the label + 16dp on either side
+                .width(16.dp + labelTextWidth + 16.dp),
         )
 
         Slider(
