@@ -23,8 +23,8 @@ data class VaultItemListingBiometricUserVerificationHandlers(
     companion object {
 
         /**
-         * Creates an instance of [VaultItemListingBiometricUserVerificationHandlers] by binding actions
-         * to the provided [VaultItemListingViewModel].
+         * Creates an instance of [VaultItemListingBiometricUserVerificationHandlers] by binding
+         * actions to the provided [VaultItemListingViewModel].
          */
         fun create(
             viewModel: VaultItemListingViewModel,

@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -98,6 +99,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
         every { completeFido2Create(any()) } just runs
     }
+    private val biometricsManager: BiometricsManager = mockk()
 
     @Before
     fun setup() {
@@ -116,6 +118,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 exitManager = exitManager,
                 intentManager = intentManager,
                 fido2CompletionManager = fido2CompletionManager,
+                biometricsManager = biometricsManager,
             )
         }
     }

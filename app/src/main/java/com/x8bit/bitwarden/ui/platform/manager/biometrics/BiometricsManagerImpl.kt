@@ -41,7 +41,7 @@ class BiometricsManagerImpl(
             onCancel = onCancel,
             onLockOut = onLockOut,
             onError = onError,
-            cipher = cipher
+            cipher = cipher,
         )
     }
 
@@ -137,7 +137,7 @@ class BiometricsManagerImpl(
                 promptInfoBuilder
                     .setDescription(activity.getString(R.string.user_verification_direction))
                     .setAllowedAuthenticators(
-                        Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL
+                        Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL,
                     )
                 biometricPrompt.authenticate(promptInfoBuilder.build())
             }

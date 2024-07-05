@@ -8,15 +8,10 @@ import com.bitwarden.bitwarden.InitUserCryptoRequest
 import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.TrustDeviceResponse
-import com.bitwarden.fido.CheckUserOptions
-import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -27,7 +22,6 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
-import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory

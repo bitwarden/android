@@ -1008,7 +1008,7 @@ class VaultItemListingViewModel @Inject constructor(
                 dialogState = VaultItemListingState.DialogState.Fido2CreationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
-                )
+                ),
             )
         }
     }

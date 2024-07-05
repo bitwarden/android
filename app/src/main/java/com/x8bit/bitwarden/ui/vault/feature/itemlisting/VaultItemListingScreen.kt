@@ -150,7 +150,7 @@ fun VaultItemListingScreen(
                     biometricsManager.promptUserVerification(
                         onSuccess = {
                             biometricsHandlers.onBiometricsVerificationSuccess(
-                                event.selectedCipherView
+                                event.selectedCipherView,
                             )
                         },
                         onCancel = biometricsHandlers.onBiometricsVerificationCancelled,

@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
@@ -84,6 +85,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
         every { completeFido2Create(any()) } just runs
     }
+    private val biometricsManager: BiometricsManager = mockk()
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultItemListingViewModel>(relaxed = true) {
@@ -100,6 +102,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 intentManager = intentManager,
                 fido2CompletionManager = fido2CompletionManager,
+                biometricsManager = biometricsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItem = { onNavigateToVaultItemId = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
