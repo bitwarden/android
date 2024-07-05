@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
@@ -412,7 +411,7 @@ class VaultAddEditViewModel @Inject constructor(
         val createOptions =
             fido2CredentialManager.getPasskeyCreateOptionsOrNull(request.requestJson)
                 ?: run {
-                    showGenericErrorDialog()
+                    showFido2ErrorDialog()
                     return
                 }
 

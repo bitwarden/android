@@ -44,10 +44,13 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingBiometricUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
@@ -72,11 +75,15 @@ fun VaultItemListingScreen(
     onNavigateToSearch: (searchType: SearchType) -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     fido2CompletionManager: Fido2CompletionManager = LocalFido2CompletionManager.current,
+    biometricsManager: BiometricsManager = LocalBiometricsManager.current,
     viewModel: VaultItemListingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
+    val biometricsHandlers = remember(viewModel) {
+        VaultItemListingBiometricUserVerificationHandlers.create(viewModel = viewModel)
+    }
 
     val pullToRefreshState = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled }
     LaunchedEffect(key1 = pullToRefreshState?.isRefreshing) {
@@ -136,6 +143,23 @@ fun VaultItemListingScreen(
 
             is VaultItemListingEvent.CompleteFido2Create -> {
                 fido2CompletionManager.completeFido2Create(event.result)
+            }
+
+            is VaultItemListingEvent.Fido2UserVerification -> {
+                if (biometricsManager.isUserVerificationSupported) {
+                    biometricsManager.promptUserVerification(
+                        onSuccess = {
+                            biometricsHandlers.onBiometricsVerificationSuccess(
+                                event.selectedCipherView
+                            )
+                        },
+                        onCancel = biometricsHandlers.onBiometricsVerificationCancelled,
+                        onLockOut = biometricsHandlers.onBiometricsLockOut,
+                        onError = biometricsHandlers.onBiometricsVerificationFail,
+                    )
+                } else {
+                    viewModel.trySendAction(VaultItemListingsAction.BiometricsVerificationFail)
+                }
             }
         }
     }

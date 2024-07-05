@@ -22,7 +22,46 @@ class BiometricsManagerImpl(
     private val fragmentActivity: FragmentActivity get() = activity as FragmentActivity
 
     override val isBiometricsSupported: Boolean
-        get() = when (biometricManager.canAuthenticate(Authenticators.BIOMETRIC_STRONG)) {
+        get() = canAuthenticate(Authenticators.BIOMETRIC_STRONG)
+
+    override val isUserVerificationSupported: Boolean
+        get() = canAuthenticate(
+            authenticators = Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL,
+        )
+
+    override fun promptBiometrics(
+        onSuccess: (cipher: Cipher?) -> Unit,
+        onCancel: () -> Unit,
+        onLockOut: () -> Unit,
+        onError: () -> Unit,
+        cipher: Cipher,
+    ) {
+        configureAndDisplayPrompt(
+            onSuccess = onSuccess,
+            onCancel = onCancel,
+            onLockOut = onLockOut,
+            onError = onError,
+            cipher = cipher
+        )
+    }
+
+    override fun promptUserVerification(
+        onSuccess: () -> Unit,
+        onCancel: () -> Unit,
+        onLockOut: () -> Unit,
+        onError: () -> Unit,
+    ) {
+        configureAndDisplayPrompt(
+            onSuccess = { onSuccess() },
+            onCancel = onCancel,
+            onLockOut = onLockOut,
+            onError = onError,
+            cipher = null,
+        )
+    }
+
+    private fun canAuthenticate(authenticators: Int): Boolean =
+        when (biometricManager.canAuthenticate(authenticators)) {
             BiometricManager.BIOMETRIC_SUCCESS -> true
             BiometricManager.BIOMETRIC_STATUS_UNKNOWN,
             BiometricManager.BIOMETRIC_ERROR_UNSUPPORTED,
@@ -35,12 +74,12 @@ class BiometricsManagerImpl(
             else -> false
         }
 
-    override fun promptBiometrics(
-        onSuccess: (cipher: Cipher?) -> Unit,
+    private fun configureAndDisplayPrompt(
+        onSuccess: (Cipher?) -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
-        cipher: Cipher,
+        cipher: Cipher?,
     ) {
         val biometricPrompt = BiometricPrompt(
             fragmentActivity,
@@ -79,13 +118,28 @@ class BiometricsManagerImpl(
             },
         )
 
-        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+        val promptInfoBuilder = BiometricPrompt.PromptInfo.Builder()
             .setTitle(activity.getString(R.string.bitwarden))
-            .setDescription(activity.getString(R.string.biometrics_direction))
-            .setNegativeButtonText(activity.getString(R.string.cancel))
             .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
-            .build()
 
-        biometricPrompt.authenticate(promptInfo, BiometricPrompt.CryptoObject(cipher))
+        cipher
+            ?.let {
+                promptInfoBuilder
+                    .setDescription(activity.getString(R.string.biometrics_direction))
+                    .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
+                    .setNegativeButtonText(activity.getString(R.string.cancel))
+                biometricPrompt.authenticate(
+                    /* info = */ promptInfoBuilder.build(),
+                    /* crypto = */ BiometricPrompt.CryptoObject(it),
+                )
+            }
+            ?: run {
+                promptInfoBuilder
+                    .setDescription(activity.getString(R.string.user_verification_direction))
+                    .setAllowedAuthenticators(
+                        Authenticators.BIOMETRIC_STRONG or Authenticators.DEVICE_CREDENTIAL
+                    )
+                biometricPrompt.authenticate(promptInfoBuilder.build())
+            }
     }
 }
