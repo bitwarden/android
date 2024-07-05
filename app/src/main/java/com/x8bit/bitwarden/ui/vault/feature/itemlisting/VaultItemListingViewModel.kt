@@ -1044,6 +1044,7 @@ data class VaultItemListingState(
         data class NoItems(
             val message: Text,
             val shouldShowAddButton: Boolean,
+            val buttonText: Text,
         ) : ViewState() {
             override val isPullToRefreshEnabled: Boolean get() = true
         }

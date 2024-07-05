@@ -161,6 +161,10 @@ fun VaultData.toViewState(
             ?.uri
             ?.toHostOrPathOrNull()
             ?.let { R.string.no_items_for_uri.asText(it) }
+            ?: fido2CreationData
+                ?.origin
+                ?.toHostOrPathOrNull()
+                ?.let { R.string.no_items_for_uri.asText(it) }
             ?: run {
                 when (itemListingType) {
                     is VaultItemListingState.ItemListingType.Vault.Folder -> {
@@ -189,6 +193,11 @@ fun VaultData.toViewState(
         VaultItemListingState.ViewState.NoItems(
             message = message,
             shouldShowAddButton = shouldShowAddButton,
+            buttonText = if (fido2CreationData != null) {
+                R.string.save_passkey_as_new_login.asText()
+            } else {
+                R.string.add_an_item.asText()
+            },
         )
     }
 }
@@ -213,6 +222,7 @@ fun List<SendView>.toViewState(
         VaultItemListingState.ViewState.NoItems(
             message = R.string.no_items.asText(),
             shouldShowAddButton = true,
+            buttonText = R.string.add_an_item.asText(),
         )
     }
 

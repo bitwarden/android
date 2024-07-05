@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
+import android.content.pm.SigningInfo
 import android.net.Uri
 import com.bitwarden.send.SendType
 import com.bitwarden.vault.CipherRepromptType
@@ -7,6 +8,7 @@ import com.bitwarden.vault.CipherType
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
@@ -513,6 +515,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = R.string.no_items_trash.asText(),
                 shouldShowAddButton = false,
+                buttonText = R.string.add_an_item.asText(),
             ),
             vaultData.toViewState(
                 vaultFilterType = VaultFilterType.AllVaults,
@@ -530,6 +533,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = R.string.no_items_folder.asText(),
                 shouldShowAddButton = false,
+                buttonText = R.string.add_an_item.asText(),
             ),
             vaultData.toViewState(
                 vaultFilterType = VaultFilterType.AllVaults,
@@ -549,6 +553,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = R.string.no_items.asText(),
                 shouldShowAddButton = true,
+                buttonText = R.string.add_an_item.asText(),
             ),
             vaultData.toViewState(
                 vaultFilterType = VaultFilterType.AllVaults,
@@ -566,6 +571,7 @@ class VaultItemListingDataExtensionsTest {
             VaultItemListingState.ViewState.NoItems(
                 message = R.string.no_items_for_uri.asText("www.test.com"),
                 shouldShowAddButton = true,
+                buttonText = R.string.add_an_item.asText(),
             ),
             vaultData.toViewState(
                 vaultFilterType = VaultFilterType.AllVaults,
@@ -577,6 +583,30 @@ class VaultItemListingDataExtensionsTest {
                     uri = "https://www.test.com",
                 ),
                 fido2CreationData = null,
+                hasMasterPassword = true,
+            ),
+        )
+
+        // Autofill passkey
+        assertEquals(
+            VaultItemListingState.ViewState.NoItems(
+                message = R.string.no_items_for_uri.asText("www.test.com"),
+                shouldShowAddButton = true,
+                buttonText = R.string.save_passkey_as_new_login.asText(),
+            ),
+            vaultData.toViewState(
+                vaultFilterType = VaultFilterType.AllVaults,
+                itemListingType = VaultItemListingState.ItemListingType.Vault.Login,
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                autofillSelectionData = null,
+                fido2CreationData = Fido2CredentialRequest(
+                    userId = "",
+                    requestJson = "",
+                    packageName = "",
+                    signingInfo = SigningInfo(),
+                    origin = "https://www.test.com",
+                ),
                 hasMasterPassword = true,
             ),
         )
