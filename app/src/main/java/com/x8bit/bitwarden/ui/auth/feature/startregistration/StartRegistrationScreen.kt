@@ -47,6 +47,7 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
@@ -209,16 +210,20 @@ fun StartRegistrationScreen(
                     .padding(horizontal = 16.dp),
             )
             Spacer(modifier = Modifier.height(16.dp))
-            ReceiveMarketingEmailsSwitch(
-                isChecked = state.isReceiveMarketingEmailsToggled,
-                onCheckedChange =  remember(viewModel) {
-                    { viewModel.trySendAction(StartRegistrationAction.ReceiveMarketingEmailsToggle(it)) }
-                },
-                onUnsubscribeClick = remember(viewModel) {
-                    { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
-                }
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+
+            if (state.selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
+                ReceiveMarketingEmailsSwitch(
+                    isChecked = state.isReceiveMarketingEmailsToggled,
+                    onCheckedChange =  remember(viewModel) {
+                        { viewModel.trySendAction(StartRegistrationAction.ReceiveMarketingEmailsToggle(it)) }
+                    },
+                    onUnsubscribeClick = remember(viewModel) {
+                        { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
             BitwardenFilledButton(
                 label = stringResource(id = R.string.continue_text),
                 onClick = remember(viewModel) {
