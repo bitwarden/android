@@ -11,5 +11,13 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 @Suppress("MaxLineLength")
 val PublicKeyCredentialCreationOptions.promptForUserVerification: Boolean
     get() {
-        return authenticatorSelection.userVerification != PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.DISCOURAGED
+        return when (this.authenticatorSelection.userVerification) {
+            PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.PREFERRED,
+            PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.REQUIRED,
+            -> true
+
+            PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.DISCOURAGED,
+            null,
+            -> false
+        }
     }

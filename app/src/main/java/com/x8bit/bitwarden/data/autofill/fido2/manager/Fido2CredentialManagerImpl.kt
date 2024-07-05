@@ -58,17 +58,18 @@ class Fido2CredentialManagerImpl(
         val origin = fido2CredentialRequest.origin
             ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
 
-        return vaultSdkSource.registerFido2Credential(
-            request = RegisterFido2CredentialRequest(
-                userId = userId,
-                origin = origin,
-                requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
-                clientData = clientData,
-                selectedCipherView = selectedCipherView,
-                isUserVerificationSupported = true,
-            ),
-            fido2CredentialStore = this,
-        )
+        return vaultSdkSource
+            .registerFido2Credential(
+                request = RegisterFido2CredentialRequest(
+                    userId = userId,
+                    origin = origin,
+                    requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
+                    clientData = clientData,
+                    selectedCipherView = selectedCipherView,
+                    isUserVerificationSupported = true,
+                ),
+                fido2CredentialStore = this,
+            )
             .map { it.toAndroidAttestationResponse() }
             .mapCatching { json.encodeToString(it) }
             .fold(

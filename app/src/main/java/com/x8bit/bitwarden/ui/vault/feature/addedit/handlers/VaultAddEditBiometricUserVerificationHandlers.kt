@@ -15,7 +15,7 @@ import javax.crypto.Cipher
  * out the user for a period of time.
  */
 data class VaultAddEditBiometricUserVerificationHandlers(
-    val onBiometricsVerificationSuccess: (cipher: Cipher?) -> Unit,
+    val onBiometricsVerificationSuccess: () -> Unit,
     val onBiometricsLockOut: () -> Unit,
     val onBiometricsVerificationFail: () -> Unit,
     val onBiometricsVerificationCancelled: () -> Unit,

@@ -11,7 +11,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -67,7 +66,6 @@ import kotlinx.parcelize.Parcelize
 import java.time.Clock
 import java.util.Collections
 import java.util.UUID
-import javax.crypto.Cipher
 import javax.inject.Inject
 
 private const val KEY_STATE = "state"
@@ -96,7 +94,6 @@ class VaultAddEditViewModel @Inject constructor(
     private val resourceManager: ResourceManager,
     private val clock: Clock,
     private val organizationEventManager: OrganizationEventManager,
-    private val biometricsEncryptionManager: BiometricsEncryptionManager,
 ) : BaseViewModel<VaultAddEditState, VaultAddEditEvent, VaultAddEditAction>(
     // We load the state from the savedStateHandle for testing purposes.
     initialState = savedStateHandle[KEY_STATE]
@@ -416,14 +413,11 @@ class VaultAddEditViewModel @Inject constructor(
                 }
 
         if (createOptions.promptForUserVerification) {
-            authRepository.activeUserId
-                ?.let { userId -> biometricsEncryptionManager.getOrCreateCipher(userId) }
-                ?.let { cipher -> sendEvent(VaultAddEditEvent.Fido2UserVerification(cipher)) }
-                ?: run { showFido2ErrorDialog() }
-            return
+            sendEvent(VaultAddEditEvent.Fido2UserVerification)
+        } else {
+            registerFido2CredentialToCipher(request, content.toCipherView())
         }
 
-        registerFido2CredentialToCipher(request, content.toCipherView())
     }
 
     private fun registerFido2CredentialToCipher(
@@ -431,18 +425,14 @@ class VaultAddEditViewModel @Inject constructor(
         cipherView: CipherView,
     ) {
         viewModelScope.launch {
-            val activeUserId = authRepository.activeUserId
+            val userId = authRepository.activeUserId
                 ?: run {
-                    sendAction(
-                        VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
-                            result = Fido2CreateCredentialResult.Error,
-                        ),
-                    )
+                    showFido2ErrorDialog()
                     return@launch
                 }
             val result: Fido2CreateCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
-                    userId = activeUserId,
+                    userId = userId,
                     fido2CredentialRequest = request,
                     selectedCipherView = cipherView,
                 )
@@ -1494,6 +1484,7 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Generic(
+                    title = R.string.an_error_has_occurred.asText(),
                     message = R.string.generic_error_message.asText(),
                 ),
             )
@@ -2111,7 +2102,7 @@ sealed class VaultAddEditEvent {
     /**
      * Perform user verification for a FIDO 2 credential operation.
      */
-    data class Fido2UserVerification(val cipher: Cipher) : VaultAddEditEvent()
+    data object Fido2UserVerification : VaultAddEditEvent()
 }
 
 /**

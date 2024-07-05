@@ -50,6 +50,7 @@ import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBiometricUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -60,9 +61,12 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -99,7 +103,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
         every { completeFido2Create(any()) } just runs
     }
-    private val biometricsManager: BiometricsManager = mockk()
+    private val biometricsManager: BiometricsManager = mockk {
+        every { isUserVerificationSupported } returns true
+    }
 
     @Before
     fun setup() {
@@ -196,12 +202,58 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on CompleteFido2Create even should invoke Fido2CompletionManager`() {
+    fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
         val result = Fido2CreateCredentialResult.Success(
             registrationResponse = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Create(result = result))
         verify { fido2CompletionManager.completeFido2Create(result) }
+    }
+
+    @Test
+    fun `on Fido2UserVerification event should call promptUserVerification when supported`() {
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification)
+        verify {
+            biometricsManager.isUserVerificationSupported
+            biometricsManager.promptUserVerification(any(), any(), any(), any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2UserVerification event should send BiometricsVerificationFailed action when user verification is not supported`() {
+        every { biometricsManager.isUserVerificationSupported } returns false
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification)
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationFail)
+        }
+    }
+
+    @Test
+    fun `fido2 error dialog should display based on state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()))
+
+        composeTestRule
+            .onAllNodesWithText("mockMessage")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking dismiss dialog on Fido2Error dialog should send Fido2ErrorDialogDismissed action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()))
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed) }
     }
 
     @Test

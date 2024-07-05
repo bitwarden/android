@@ -449,18 +449,17 @@ class VaultSdkSourceImpl(
         fido2CredentialStore: Fido2CredentialStore,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
         callbackFlow {
+            val client = getClient(request.userId)
+                .platform()
+                .fido2()
+                .client(
+                    userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
+                        isVerificationSupported = request.isUserVerificationSupported,
+                        selectedCipherView = request.selectedCipherView,
+                    ),
+                    credentialStore = fido2CredentialStore,
+                )
             try {
-                val client = getClient(request.userId)
-                    .platform()
-                    .fido2()
-                    .client(
-                        userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
-                            isVerificationSupported = request.isUserVerificationSupported,
-                            selectedCipherView = request.selectedCipherView,
-                        ),
-                        credentialStore = fido2CredentialStore,
-                    )
-
                 val result = client
                     .register(
                         origin = request.origin,
@@ -469,10 +468,9 @@ class VaultSdkSourceImpl(
                     )
 
                 send(result)
-            } catch (e: BitwardenException) {
-                e.asFailure()
-            } finally {
                 close()
+            } catch (e: BitwardenException) {
+                close(e)
             }
             awaitClose()
         }
@@ -508,7 +506,6 @@ class VaultSdkSourceImpl(
             } finally {
                 close()
             }
-
             awaitClose()
         }
             .first()

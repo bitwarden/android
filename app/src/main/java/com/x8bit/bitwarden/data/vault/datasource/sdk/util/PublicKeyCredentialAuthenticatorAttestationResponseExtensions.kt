@@ -1,11 +1,8 @@
-@file:OmitFromCoverage
-
 package com.x8bit.bitwarden.data.vault.datasource.sdk.util
 
 import android.util.Base64
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
-import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 
 /**
  * Converts the SDK attestation response to a [Fido2AttestationResponse] that can be serialized into
@@ -26,13 +23,12 @@ fun PublicKeyCredentialAuthenticatorAttestationResponse.toAndroidAttestationResp
             authenticatorData = response.authenticatorData.base64EncodeForFido2Response(),
         ),
         clientExtensionResults = clientExtensionResults
-            .credProps
-            ?.rk
-            ?.let {
+            .credProps?.rk
+            ?.let { residentKey ->
                 Fido2AttestationResponse.ClientExtensionResults(
                     credentialProperties = Fido2AttestationResponse
                         .ClientExtensionResults
-                        .CredentialProperties(residentKey = it),
+                        .CredentialProperties(residentKey = residentKey),
                 )
             },
         authenticatorAttachment = authenticatorAttachment,

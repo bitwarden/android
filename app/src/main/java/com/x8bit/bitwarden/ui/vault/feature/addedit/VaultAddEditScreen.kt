@@ -125,12 +125,11 @@ fun VaultAddEditScreen(
 
             is VaultAddEditEvent.Fido2UserVerification -> {
                 if (biometricsManager.isUserVerificationSupported) {
-                    biometricsManager.promptBiometrics(
+                    biometricsManager.promptUserVerification(
                         onSuccess = biometricsHandlers.onBiometricsVerificationSuccess,
                         onCancel = biometricsHandlers.onBiometricsVerificationFail,
                         onError = biometricsHandlers.onBiometricsVerificationFail,
                         onLockOut = biometricsHandlers.onBiometricsLockOut,
-                        cipher = event.cipher,
                     )
                 } else {
                     viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationFail)
