@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
  *
  * This function will return the error message or null if there is no error.
  */
-@Suppress("ReturnCount")
 fun String.validateUri(existingUris: List<String>): Text? {
 
     // Check if URI starts with allowed schemes.

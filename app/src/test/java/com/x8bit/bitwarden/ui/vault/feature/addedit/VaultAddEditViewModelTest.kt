@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.content.pm.SigningInfo
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -729,24 +730,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             val mockCreateResult = Fido2CreateCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
-            )
-            val mockPasskeyCreateOptions = PublicKeyCredentialCreationOptions(
-                authenticatorSelection = PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria(
-                    authenticatorAttachment = null,
-                    residentKeyRequirement = null,
-                    userVerification = PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.DISCOURAGED,
-                ),
-                user = PublicKeyCredentialCreationOptions.PublicKeyCredentialUserEntity(
-                    name = "mockUserName",
-                    id = "mockUserId",
-                    displayName = "mockDisplayName",
-                ),
-                relyingParty = PublicKeyCredentialCreationOptions.PublicKeyCredentialRpEntity(
-                    name = "mockRpName",
-                    id = "mockRpId",
-                ),
-                pubKeyCredParams = emptyList(),
-                challenge = "mockChallenge",
             )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(

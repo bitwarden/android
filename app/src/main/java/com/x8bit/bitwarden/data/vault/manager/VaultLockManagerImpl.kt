@@ -431,7 +431,6 @@ class VaultLockManagerImpl(
      * Checks the current [VaultTimeout] for the given [userId]. If the given timeout value has
      * been exceeded, the [VaultTimeoutAction] for the given user will be performed.
      */
-    @Suppress("ReturnCount")
     private fun checkForVaultTimeout(
         userId: String,
         isAppRestart: Boolean = false,
@@ -485,7 +484,6 @@ class VaultLockManagerImpl(
         )
     }
 
-    @Suppress("ReturnCount")
     private suspend fun unlockVaultForUser(
         userId: String,
         initUserCryptoMethod: InitUserCryptoMethod,

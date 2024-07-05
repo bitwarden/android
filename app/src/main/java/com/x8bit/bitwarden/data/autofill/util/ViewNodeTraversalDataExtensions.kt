@@ -13,7 +13,6 @@ private const val ANDROID_APP_SCHEME: String = "androidapp"
  * Try and build a URI. First, try building a website from the list of [ViewNodeTraversalData]. If
  * that fails, try converting [packageName] into an Android app URI.
  */
-@Suppress("ReturnCount")
 fun List<ViewNodeTraversalData>.buildUriOrNull(
     packageName: String?,
 ): String? {

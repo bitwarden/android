@@ -57,7 +57,6 @@ class PolicyManagerImpl(
     /**
      * A helper method to filter policies.
      */
-    @Suppress("ReturnCount")
     private fun filterPolicies(
         userId: String,
         type: PolicyTypeJson,

@@ -142,7 +142,6 @@ fun VaultData.toViewState(
 /**
  * Method to build the icon data for login item icons.
  */
-@Suppress("ReturnCount")
 fun List<LoginUriView>?.toLoginIconData(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,

@@ -35,6 +35,7 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -484,33 +485,26 @@ class VaultSdkSourceImpl(
     }
 
     override suspend fun authenticateFido2Credential(
-        userId: String,
-        origin: String,
-        requestJson: String,
-        clientData: ClientData,
-        isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-        pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
+        request: AuthenticateFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,
     ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatching {
         callbackFlow {
             try {
-                val client = getClient(userId)
+                val client = getClient(request.userId)
                     .platform()
                     .fido2()
                     .client(
                         userInterface = Fido2CredentialAuthenticationUserInterfaceImpl(
-                            isVerificationSupported = isVerificationSupported,
-                            checkUser = checkUser,
-                            pickCredentialForAuthentication = pickCredentialForAuthentication,
+                            isVerificationSupported = request.isUserVerificationSupported,
+                            selectedCipher = request.selectedCipherView
                         ),
                         credentialStore = fido2CredentialStore,
                     )
 
                 val result = client.authenticate(
-                    origin = origin,
-                    request = requestJson,
-                    clientData = clientData,
+                    origin = request.origin,
+                    request = request.requestJson,
+                    clientData = request.clientData,
                 )
 
                 send(result)

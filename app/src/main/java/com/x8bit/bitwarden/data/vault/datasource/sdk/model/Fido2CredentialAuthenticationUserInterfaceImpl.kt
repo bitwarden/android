@@ -15,13 +15,12 @@ import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 @OmitFromCoverage
 class Fido2CredentialAuthenticationUserInterfaceImpl(
     private val isVerificationSupported: Boolean,
-    private val checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-    private val pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
+    private val selectedCipher: CipherView,
 ) : Fido2UserInterface {
     override suspend fun checkUser(
         options: CheckUserOptions,
         hint: UiHint,
-    ): CheckUserResult = checkUser.invoke(options, hint)
+    ): CheckUserResult = CheckUserResult(true, true)
 
     override suspend fun checkUserAndPickCredentialForCreation(
         options: CheckUserOptions,
@@ -32,5 +31,5 @@ class Fido2CredentialAuthenticationUserInterfaceImpl(
 
     override suspend fun pickCredentialForAuthentication(
         availableCredentials: List<CipherView>,
-    ): CipherViewWrapper = pickCredentialForAuthentication.invoke(availableCredentials)
+    ): CipherViewWrapper = CipherViewWrapper(selectedCipher)
 }

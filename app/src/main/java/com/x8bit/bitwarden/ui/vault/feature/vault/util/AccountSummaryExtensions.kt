@@ -18,7 +18,7 @@ import java.util.Locale
  */
 val AccountSummary.initials: String
     get() {
-        val names = this.name.orEmpty().split(" ")
+        val names = this.name.orEmpty().split(" ").filter { it.isNotBlank() }
         return if (names.size >= 2) {
             names
                 .take(2)

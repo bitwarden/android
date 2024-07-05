@@ -27,11 +27,13 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import java.io.File
@@ -435,24 +437,13 @@ interface VaultSdkSource {
      * @param requestJson JSON provided by the relying party.
      * @param clientData Client metadata about the relying party or calling application.
      * @param isVerificationSupported Whether user verification can be performed on this device.
-     * @param checkUser Receives [CheckUserOptions] and [UiHint] indicating what interactions and
-     * prompts must be presented to the user for registration to complete. A [CheckUserResult] is
-     * expected when interactions are completed.
-     * @param pickCredentialForAuthentication Receives a collection of [CipherView]s that can be
-     * chosen to perform authentication with.
      *
      * @return Result of the FIDO 2 credential registration. If successful, a
      * [PublicKeyCredentialAuthenticatorAttestationResponse] is provided.
      */
     @Suppress("LongParameterList")
     suspend fun authenticateFido2Credential(
-        userId: String,
-        origin: String,
-        requestJson: String,
-        clientData: ClientData,
-        isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-        pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
+        request: AuthenticateFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,
     ): Result<PublicKeyCredentialAuthenticatorAssertionResponse>
 

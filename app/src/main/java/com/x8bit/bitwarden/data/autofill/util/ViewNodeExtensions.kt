@@ -155,7 +155,6 @@ private fun AssistStructure.ViewNode.buildAutofillView(
 /**
  * Check whether this [AssistStructure.ViewNode] represents a password field.
  */
-@Suppress("ReturnCount")
 fun AssistStructure.ViewNode.isPasswordField(
     supportedHint: String?,
 ): Boolean {

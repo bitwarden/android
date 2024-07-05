@@ -131,7 +131,6 @@ class IntentManagerImpl(
     override fun getFileDataFromIntent(intent: Intent): IntentManager.FileData? =
         intent.clipData?.getItemAt(0)?.uri?.let { getLocalFileData(it) }
 
-    @Suppress("ReturnCount")
     override fun getShareDataFromIntent(intent: Intent): IntentManager.ShareData? {
         if (intent.action != Intent.ACTION_SEND) return null
         return if (intent.type?.contains("text/") == true) {

@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.ui.tools.feature.generator.GeneratorState.MainType.Us
 /**
  * Converts a [ServiceType] to a [UsernameGeneratorRequest.Forwarded].
  */
-@Suppress("ReturnCount", "LongMethod")
+@Suppress("LongMethod")
 fun ServiceType.toUsernameGeneratorRequest(website: String?): UsernameGeneratorRequest.Forwarded? {
     return when (this) {
         is ServiceType.AddyIo -> {

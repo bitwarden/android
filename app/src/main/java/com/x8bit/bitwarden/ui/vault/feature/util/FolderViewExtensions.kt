@@ -8,7 +8,6 @@ private const val FOLDER_DIVIDER: String = "/"
  * Retrieves the subfolders of a given [folderId] and updates their names to proper display names.
  * This function is necessary if we want to show the subfolders for a specific folder.
  */
-@Suppress("ReturnCount")
 fun List<FolderView>.getFolders(folderId: String): List<FolderView> {
     val currentFolder = this.find { it.id == folderId } ?: return emptyList()
 

@@ -19,11 +19,24 @@ class Fido2CredentialStoreImpl(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
 ) : Fido2CredentialStore {
+
+    /**
+     * Return all active ciphers that contain FIDO 2 credentials.
+     */
     override suspend fun allCredentials(): List<CipherView> {
         vaultRepository.sync()
-        return vaultRepository.ciphersStateFlow.value.data.orEmpty()
+        return vaultRepository.ciphersStateFlow.value.data
+            ?.filter { it.isActiveWithFido2Credentials }
+            ?: emptyList()
     }
 
+    /**
+     * Returns ciphers that contain FIDO 2 credentials for the given [ripId] with the provided
+     * [ids].
+     *
+     * @param ids Optional list of FIDO 2 credential ID's to find.
+     * @param ripId Relying Party ID to find.
+     */
     override suspend fun findCredentials(ids: List<ByteArray>?, ripId: String): List<CipherView> {
         val userId = getActiveUserIdOrThrow()
 
@@ -55,6 +68,9 @@ class Fido2CredentialStoreImpl(
             )
     }
 
+    /**
+     * Save the provided [cred] to the users vault.
+     */
     override suspend fun saveCredential(cred: Cipher) {
         val userId = getActiveUserIdOrThrow()
 
@@ -68,8 +84,8 @@ class Fido2CredentialStoreImpl(
             .onFailure { throw it }
     }
 
-    private fun getActiveUserIdOrThrow() = (authRepository.userStateFlow.value?.activeUserId
-        ?: throw IllegalStateException("Active user is required."))
+    private fun getActiveUserIdOrThrow() = authRepository.userStateFlow.value?.activeUserId
+        ?: throw IllegalStateException("Active user is required.")
 
     /**
      * Return a filtered list containing elements that match the given [relyingPartyId] and a
