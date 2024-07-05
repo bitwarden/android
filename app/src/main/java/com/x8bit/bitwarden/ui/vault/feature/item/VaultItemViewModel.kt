@@ -1279,9 +1279,10 @@ data class VaultItemState(
                  * @property fido2CredentialCreationDateText Optional creation date and time of the
                  * FIDO2 credential associated with the login item.
                  *
-                 * **NOTE** [canViewTotpCode] currently supports a deprecated edge case where an organization
-                 * supports TOTP but not through the current premium model. This additional field is
-                 * added to allow for [isPremiumUser] to be an independent value.
+                 * **NOTE** [canViewTotpCode] currently supports a deprecated edge case where an
+                 * organization supports TOTP but not through the current premium model.
+                 * This additional field is added to allow for [isPremiumUser] to be an independent
+                 * value.
                  * @see [CipherView.organizationUseTotp]
                  *
                  */
