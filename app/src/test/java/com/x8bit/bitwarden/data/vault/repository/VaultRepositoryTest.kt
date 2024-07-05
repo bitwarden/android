@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
+import android.util.Base64
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.bitwarden.bitwarden.ExportFormat
@@ -9,7 +10,6 @@ import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.bitwarden.vault.Cipher
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.Folder
@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -90,7 +91,6 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.model.createMockDomainsData
 import com.x8bit.bitwarden.data.vault.repository.util.toDomainsData
-import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedNetworkCipherResponse
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipher
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCipherList
 import com.x8bit.bitwarden.data.vault.repository.util.toEncryptedSdkCollectionList
@@ -114,6 +114,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -122,6 +123,7 @@ import org.junit.jupiter.api.Test
 import retrofit2.HttpException
 import java.io.File
 import java.net.UnknownHostException
+import java.security.MessageDigest
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
@@ -135,6 +137,7 @@ class VaultRepositoryTest {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
+    private val json: Json = PlatformNetworkModule.providesJson()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
@@ -220,20 +223,23 @@ class VaultRepositoryTest {
         fileManager = fileManager,
         clock = clock,
         userLogoutManager = userLogoutManager,
+        json = json,
     )
 
     @BeforeEach
     fun setup() {
         mockkStatic(SyncResponseJson.Domains::toDomainsData)
         mockkStatic(Uri::class)
+        mockkStatic(MessageDigest::class)
+        mockkStatic(Base64::class)
     }
 
     @AfterEach
     fun tearDown() {
         unmockkStatic(SyncResponseJson.Domains::toDomainsData)
         unmockkStatic(Uri::class)
-        unmockkStatic(Instant::class)
-        unmockkStatic(Cipher::toEncryptedNetworkCipherResponse)
+        unmockkStatic(MessageDigest::class)
+        unmockkStatic(Base64::class)
     }
 
     @Test
@@ -4368,7 +4374,7 @@ class VaultRepositoryTest {
         return mockUri
     }
 
-//endregion Helper functions
+    //endregion Helper functions
 }
 
 private val MOCK_PROFILE = AccountJson.Profile(

@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.os.Parcelable
+import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
@@ -9,6 +10,8 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -348,6 +351,13 @@ class VaultAddEditViewModel @Inject constructor(
             )
         }
 
+        specialCircumstanceManager.specialCircumstance
+            ?.toFido2RequestOrNull()
+            ?.let { request ->
+                registerFido2Credential(request, content)
+                return@onContent
+            }
+
         viewModelScope.launch {
             when (val vaultAddEditType = state.vaultAddEditType) {
                 is VaultAddEditType.AddItem -> {
@@ -368,6 +378,34 @@ class VaultAddEditViewModel @Inject constructor(
                     sendAction(VaultAddEditAction.Internal.CreateCipherResultReceive(result))
                 }
             }
+        }
+    }
+
+    private fun registerFido2Credential(
+        request: Fido2CredentialRequest,
+        content: VaultAddEditState.ViewState.Content,
+    ) {
+        viewModelScope.launch {
+            val activeUserId = authRepository.activeUserId
+                ?: run {
+                    sendAction(
+                        VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
+                            result = Fido2CreateCredentialResult.Error(
+                                exception = CreateCredentialUnknownException(),
+                            ),
+                        ),
+                    )
+                    return@launch
+                }
+            val result: Fido2CreateCredentialResult =
+                fido2CredentialManager.registerFido2Credential(
+                    userId = activeUserId,
+                    fido2CredentialRequest = request,
+                    selectedCipherView = content.toCipherView(),
+                )
+            sendAction(
+                VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
+            )
         }
     }
 
@@ -1099,6 +1137,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Internal.PasswordBreachReceive -> {
                 handlePasswordBreachReceive(action)
             }
+
+            is VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive -> {
+                handleFido2RegisterCredentialResultReceive(action)
+            }
         }
     }
 
@@ -1345,6 +1387,22 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(dialog = VaultAddEditState.DialogState.Generic(message = message))
         }
+    }
+
+    private fun handleFido2RegisterCredentialResultReceive(
+        action: VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive,
+    ) {
+        mutableStateFlow.update { it.copy(dialog = null) }
+        when (action.result) {
+            is Fido2CreateCredentialResult.Error -> {
+                sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
+            }
+
+            is Fido2CreateCredentialResult.Success -> {
+                sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
+            }
+        }
+        sendEvent(VaultAddEditEvent.CompleteFido2Create(action.result))
     }
 
     //endregion Internal Type Handlers
@@ -1943,6 +2001,15 @@ sealed class VaultAddEditEvent {
     data class NavigateToGeneratorModal(
         val generatorMode: GeneratorMode.Modal,
     ) : VaultAddEditEvent()
+
+    /**
+     * Complete the current FIDO 2 credential creation process.
+     *
+     * @property result the result of FIDO 2 credential creation.
+     */
+    data class CompleteFido2Create(
+        val result: Fido2CreateCredentialResult,
+    ) : VaultAddEditEvent()
 }
 
 /**
@@ -2425,6 +2492,13 @@ sealed class VaultAddEditAction {
          */
         data class DeleteCipherReceive(
             val result: DeleteCipherResult,
+        ) : Internal()
+
+        /**
+         * Indicates that the FIDO 2 registration result has been received.
+         */
+        data class Fido2RegisterCredentialResultReceive(
+            val result: Fido2CreateCredentialResult,
         ) : Internal()
     }
 }

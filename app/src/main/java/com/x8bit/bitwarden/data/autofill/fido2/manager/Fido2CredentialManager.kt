@@ -26,11 +26,11 @@ interface Fido2CredentialManager {
     ): PublicKeyCredentialCreationOptions?
 
     /**
-     * Attempt to create a FIDO2 credential from the given [credentialRequest] and associate it to
-     * the given [cipherView].
+     * Register a new FIDO 2 credential to a users vault.
      */
-    fun createCredentialForCipher(
-        credentialRequest: Fido2CredentialRequest,
-        cipherView: CipherView,
+    suspend fun registerFido2Credential(
+        userId: String,
+        fido2CredentialRequest: Fido2CredentialRequest,
+        selectedCipherView: CipherView,
     ): Fido2CreateCredentialResult
 }
