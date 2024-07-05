@@ -107,10 +107,11 @@ class AutofillCompletionManagerImpl(
         cipherView: CipherView,
     ) {
         val isPremium = authRepository.userStateFlow.value?.activeAccount?.isPremium == true
+        val totpAvailableViaPremiumOrOrganization = isPremium || cipherView.organizationUseTotp
         val totpCode = cipherView.login?.totp
         val isTotpDisabled = settingsRepository.isAutoCopyTotpDisabled
 
-        if (!isTotpDisabled && isPremium && totpCode != null) {
+        if (!isTotpDisabled && totpAvailableViaPremiumOrOrganization && totpCode != null) {
             val totpResult = vaultRepository.generateTotp(
                 time = DateTime.now(),
                 totpCode = totpCode,

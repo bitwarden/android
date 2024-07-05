@@ -1214,6 +1214,7 @@ class VaultItemScreenTest : BaseComposeTest() {
                         uris = emptyList(),
                         passwordRevisionDate = null,
                         isPremiumUser = true,
+                        canViewTotpCode = true,
                         totpCodeItemData = null,
                         fido2CredentialCreationDateText = null,
                     ),
@@ -1416,7 +1417,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             currentState.copy(
                 viewState = DEFAULT_LOGIN_VIEW_STATE.copy(
                     type = DEFAULT_LOGIN.copy(
-                        isPremiumUser = false,
+                        canViewTotpCode = false,
                     ),
                 ),
             )
@@ -2258,6 +2259,7 @@ private val DEFAULT_LOGIN: VaultItemState.ViewState.Content.ItemType.Login =
             totpCode = "testCode",
         ),
         fido2CredentialCreationDateText = null,
+        canViewTotpCode = true,
     )
 
 private val DEFAULT_IDENTITY: VaultItemState.ViewState.Content.ItemType.Identity =
@@ -2308,6 +2310,7 @@ private val EMPTY_LOGIN_TYPE: VaultItemState.ViewState.Content.ItemType.Login =
         passwordRevisionDate = null,
         totpCodeItemData = null,
         isPremiumUser = true,
+        canViewTotpCode = true,
         fido2CredentialCreationDateText = null,
     )
 

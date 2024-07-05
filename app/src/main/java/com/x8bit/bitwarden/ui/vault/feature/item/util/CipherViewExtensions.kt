@@ -105,6 +105,7 @@ fun CipherView.toViewState(
                         ),
                     passwordHistoryCount = passwordHistory?.count(),
                     isPremiumUser = isPremiumUser,
+                    canViewTotpCode = isPremiumUser || this.organizationUseTotp,
                     totpCodeItemData = totpCodeItemData,
                     fido2CredentialCreationDateText = loginValues
                         .fido2Credentials

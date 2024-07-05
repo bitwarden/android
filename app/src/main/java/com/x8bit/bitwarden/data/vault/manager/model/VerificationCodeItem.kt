@@ -15,6 +15,7 @@ import com.bitwarden.vault.LoginUriView
  * @property name The name of the cipher item.
  * @property username The username associated with the item.
  * @property hasPasswordReprompt Indicates whether this item has a master password reprompt.
+ * @property orgUsesTotp if the org providing the cipher uses TOTP.
  */
 data class VerificationCodeItem(
     val code: String,
@@ -27,4 +28,5 @@ data class VerificationCodeItem(
     val name: String,
     val username: String?,
     val hasPasswordReprompt: Boolean,
+    val orgUsesTotp: Boolean,
 )
