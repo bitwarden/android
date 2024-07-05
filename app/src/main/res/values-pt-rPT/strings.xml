@@ -369,11 +369,11 @@ A leitura será efetuada automaticamente.</string>
   <string name="autofill_setup2">Recomendamos a desativação de quaisquer outras aplicações de preenchimento automático nas Definições, se não tencionar utilizá-las.</string>
   <string name="bitwarden_autofill_description">Aceda ao seu cofre diretamente a partir do seu teclado para preencher rapidamente as palavras-passe automaticamente.</string>
   <string name="autofill_turn_on">Para configurar o preenchimento automático de palavras-passe no seu dispositivo, siga estas instruções:</string>
-  <string name="autofill_turn_on1">1. Vá à aplicação \"Definições\" do iOS</string>
+  <string name="autofill_turn_on1">1. Vá às Definições do iOS</string>
   <string name="autofill_turn_on2">2. Toque em \"Palavras-passe e contas\"</string>
   <string name="autofill_turn_on3">3. Toque em \"Autopreenchimento de palavras-passe\"</string>
   <string name="autofill_turn_on4">4. Ative o Autopreenchimento</string>
-  <string name="autofill_turn_on5">5. Selecione \"Bitwarden\"</string>
+  <string name="autofill_turn_on5">5. Selecione o Bitwarden</string>
   <string name="password_autofill">Preenchimento automático de palavras-passe</string>
   <string name="bitwarden_autofill_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é utilizando a extensão de preenchimento automático de palavras-passe do Bitwarden. Saiba mais sobre como utilizar a extensão de preenchimento automático de palavras-passe do Bitwarden ao navegar até ao ecrã \"Definições\".</string>
   <string name="invalid_email">Endereço de e-mail inválido.</string>
@@ -387,7 +387,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="check_password">Verificar se a palavra-passe foi exposta.</string>
   <string name="password_exposed">Esta palavra-passe foi exposta %1$s vez(es) em violações de dados. Deve alterá-la.</string>
   <string name="password_safe">Esta palavra-passe não foi encontrada em nenhuma violação de dados conhecida. A sua utilização deve ser segura.</string>
-  <string name="identity_name">Nome de identidade</string>
+  <string name="identity_name">Nome da identidade</string>
   <string name="value">Valor</string>
   <string name="password_history">Histórico de palavras-passe</string>
   <string name="types">Tipos</string>
@@ -427,7 +427,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="unlock">Desbloquear</string>
   <string name="unlock_vault">Desbloquear cofre</string>
   <string name="thirty_minutes">30 minutos</string>
-  <string name="set_pin_description">Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redifinidas se alguma vez sair completamente da aplicação.</string>
+  <string name="set_pin_description">Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redefinidas se alguma vez terminar sessão por completo da aplicação.</string>
   <string name="logged_in_as_on">Sessão iniciada como %1$s em %2$s.</string>
   <string name="vault_locked_master_password">O seu cofre está bloqueado. Verifique a sua palavra-passe mestra para continuar.</string>
   <string name="vault_locked_pin">O seu cofre está bloqueado. Verifique o seu código PIN para continuar.</string>
@@ -486,12 +486,12 @@ A leitura será efetuada automaticamente.</string>
   <string name="enc_export_account_warning">As chaves de encriptação da conta são únicas para cada conta de utilizador Bitwarden, pelo que não é possível importar uma exportação encriptada para uma conta diferente.</string>
   <string name="export_vault_confirmation_title">Confirmar a exportação do cofre</string>
   <string name="warning">Aviso</string>
-  <string name="export_vault_failure">Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre web.</string>
+  <string name="export_vault_failure">Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre Web.</string>
   <string name="export_vault_success">Cofre exportado com sucesso</string>
   <string name="clone">Duplicar</string>
-  <string name="password_generator_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas definições do gerador.</string>
+  <string name="password_generator_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas definições do gerador</string>
   <string name="open">Abrir</string>
-  <string name="unable_to_save_attachment">Houve um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre Web.</string>
+  <string name="unable_to_save_attachment">Ocorreu um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre Web.</string>
   <string name="save_attachment_success">Anexo guardado com sucesso</string>
   <string name="autofill_tile_accessibility_required">Por favor, ative o \"Serviço de acessibilidade de preenchimento automático\" nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
   <string name="autofill_tile_uri_not_found">Nenhum campo de palavra-passe detetado</string>
@@ -678,7 +678,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="scan_qr_code">Ler código QR</string>
   <string name="cannot_scan_qr_code">Não consegue ler o código QR?</string>
   <string name="authenticator_key_scanner">Chave de autenticação</string>
-  <string name="enter_key_manually">Introduzir chave manualmente</string>
+  <string name="enter_key_manually">Introduzir a chave manualmente</string>
   <string name="add_totp">Adicionar TOTP</string>
   <string name="setup_totp">Configurar TOTP</string>
   <string name="once_the_key_is_successfully_entered">Assim que a chave for introduzida com sucesso, selecione Adicionar TOTP para guardar a chave em segurança</string>

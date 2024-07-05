@@ -301,8 +301,8 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="may">Mayıs</string>
   <string name="middle_name">İkinci ad</string>
   <string name="mr">Bay</string>
-  <string name="mrs">Mrs</string>
-  <string name="ms">Ms</string>
+  <string name="mrs">Bayan</string>
+  <string name="ms">Bayan</string>
   <string name="mx">Mx</string>
   <string name="november">Kasım</string>
   <string name="october">Ekim</string>
@@ -545,7 +545,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="draw_over_description3">Bu seçeneği açarsanız, Android\'in otomatik doldurma özelliğini desteklemeyen eski uygulamalarda bu özelliği taklit eden bir pencere açılacaktır.</string>
   <string name="personal_ownership_submit_error">Bir kuruluş ilkesi nedeniyle kişisel kasanıza hesap kaydetmeniz kısıtlanmış. Sahip seçeneğini bir kuruluş olarak değiştirin ve mevcut koleksiyonlar arasından seçim yapın.</string>
   <string name="personal_ownership_policy_in_effect">Bir kuruluş ilkesi sahiplik seçeneklerinizi etkiliyor.</string>
-  <string name="send">Send</string>
+  <string name="send">Gönder</string>
   <string name="all_sends">Tüm Send\'ler</string>
   <string name="sends">Send\'ler</string>
   <string name="name_info">Bu Send\'i açıklayan anlaşılır bir ad</string>
@@ -916,8 +916,8 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="continue_to_give_feedback">Continue to Give Feedback?</string>
   <string name="continue_to_provide_feedback">Select continue to give feedback on the new app!</string>
   <string name="file_password">File password</string>
-  <string name="give_feedback">Give Feedback</string>
-  <string name="password_protected">Password Protected</string>
+  <string name="give_feedback">Geribildirim Gönder</string>
+  <string name="password_protected">Parola Korumalı</string>
   <string name="password_used_to_export">This password will be used to export and import this file</string>
   <string name="autofill_suggestion">Autofill suggestion</string>
   <string name="continue_to_complete_web_authn_verification">Continue to complete WebAuthn verification.</string>
