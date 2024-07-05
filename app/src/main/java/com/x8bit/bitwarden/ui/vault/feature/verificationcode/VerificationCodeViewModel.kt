@@ -296,6 +296,7 @@ class VerificationCodeViewModel @Inject constructor(
                                 startIcon = item.uriLoginViewList.toLoginIconData(
                                     baseIconUrl = state.baseIconUrl,
                                     isIconLoadingDisabled = state.isIconLoadingDisabled,
+                                    usePasskeyDefaultIcon = false,
                                 ),
                             )
                         },

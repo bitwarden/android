@@ -146,13 +146,18 @@ fun VaultData.toViewState(
 fun List<LoginUriView>?.toLoginIconData(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
+    usePasskeyDefaultIcon: Boolean,
 ): IconData {
-    val localIconData = IconData.Local(R.drawable.ic_login_item)
+    val defaultIconRes = if (usePasskeyDefaultIcon) {
+        R.drawable.ic_login_item_passkey
+    } else {
+        R.drawable.ic_login_item
+    }
 
     var uri = this
         ?.map { it.uri }
         ?.firstOrNull { uri -> uri?.contains(".") == true }
-        ?: return localIconData
+        ?: return IconData.Local(defaultIconRes)
 
     if (uri.startsWith(ANDROID_URI)) {
         return IconData.Local(R.drawable.ic_android)
@@ -163,7 +168,7 @@ fun List<LoginUriView>?.toLoginIconData(
     }
 
     if (isIconLoadingDisabled) {
-        return localIconData
+        return IconData.Local(defaultIconRes)
     }
 
     if (!uri.contains("://")) {
@@ -177,7 +182,7 @@ fun List<LoginUriView>?.toLoginIconData(
 
     return IconData.Network(
         uri = url,
-        fallbackIconRes = R.drawable.ic_login_item,
+        fallbackIconRes = defaultIconRes,
     )
 }
 
@@ -199,6 +204,7 @@ private fun CipherView.toVaultItemOrNull(
             startIcon = login?.uris.toLoginIconData(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 baseIconUrl = baseIconUrl,
+                usePasskeyDefaultIcon = false,
             ),
             overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
             extraIconList = toLabelIcons(),

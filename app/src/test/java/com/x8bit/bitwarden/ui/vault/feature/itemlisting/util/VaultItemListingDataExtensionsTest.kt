@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.VaultItemListingState
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import io.mockk.every
@@ -484,6 +485,10 @@ class VaultItemListingDataExtensionsTest {
                         subtitle = null,
                     )
                         .copy(
+                            iconData = IconData.Network(
+                                uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                fallbackIconRes = R.drawable.ic_login_item_passkey,
+                            ),
                             isAutofill = true,
                             shouldShowMasterPasswordReprompt = true,
                         ),

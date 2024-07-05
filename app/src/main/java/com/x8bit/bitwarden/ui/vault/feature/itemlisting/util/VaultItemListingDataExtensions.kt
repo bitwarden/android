@@ -13,6 +13,7 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -303,6 +304,8 @@ private fun CipherView.toDisplayItem(
         iconData = this.toIconData(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
+            usePasskeyDefaultIcon = (isAutofill || isFido2Creation) &&
+                this.isActiveWithFido2Credentials,
         ),
         iconTestTag = toIconTestTag(),
         extraIconList = toLabelIcons(),
@@ -324,12 +327,14 @@ private fun CipherView.toIconTestTag(): String =
 private fun CipherView.toIconData(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    usePasskeyDefaultIcon: Boolean,
 ): IconData {
     return when (this.type) {
         CipherType.LOGIN -> {
             login?.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
+                usePasskeyDefaultIcon = usePasskeyDefaultIcon,
             )
         }
 
