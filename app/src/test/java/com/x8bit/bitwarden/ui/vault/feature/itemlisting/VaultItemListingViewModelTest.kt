@@ -331,6 +331,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `ItemClick for vault item during FIDO 2 registration should show FIDO 2 error dialog when cipherView is null`() {
         val cipherView = createMockCipherView(number = 1)
@@ -351,12 +352,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `ItemClick for vault item during FIDO 2 registration should show FIDO 2 error dialog when PasskeyCreateOptions is null`() {
         setupMockUri()
@@ -380,12 +383,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `ItemClick for vault item during FIDO 2 registration should show loading dialog, then request user verification when required or preferred`() =
         runTest {
@@ -406,7 +411,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
             } returns createMockPublicKeyCredentialCreationOptions(
                 number = 1,
-                userVerificationRequirement = PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement.REQUIRED,
+                userVerificationRequirement = PublicKeyCredentialCreationOptions
+                    .AuthenticatorSelectionCriteria
+                    .UserVerificationRequirement
+                    .REQUIRED,
             )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(
@@ -438,6 +446,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `ItemClick for vault item during FIDO 2 registration should skip user verification and perform registration`() =
         runTest {
@@ -1908,7 +1917,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
             ),
-            viewModel.stateFlow.value.dialogState
+            viewModel.stateFlow.value.dialogState,
         )
     }
 
@@ -1923,9 +1932,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertEquals(
                     VaultItemListingEvent.CompleteFido2Create(
-                        result = Fido2CreateCredentialResult.Cancelled
+                        result = Fido2CreateCredentialResult.Cancelled,
                     ),
-                    awaitItem()
+                    awaitItem(),
                 )
             }
         }
@@ -1941,7 +1950,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
             ),
-            viewModel.stateFlow.value.dialogState
+            viewModel.stateFlow.value.dialogState,
         )
     }
 
@@ -1954,7 +1963,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.registerFido2Credential(
                     any(),
                     any(),
-                    any()
+                    any(),
                 )
             } returns Fido2CreateCredentialResult.Success(
                 registrationResponse = "mockResponse",
@@ -1972,7 +1981,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
-                viewModel.stateFlow.value.dialogState
+                viewModel.stateFlow.value.dialogState,
             )
         }
 
@@ -2010,10 +2019,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
-                viewModel.stateFlow.value.dialogState
+                viewModel.stateFlow.value.dialogState,
             )
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
         every { authRepository.activeUserId } returns null
@@ -2030,12 +2040,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             ),
-            viewModel.stateFlow.value.dialogState
+            viewModel.stateFlow.value.dialogState,
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `BiometricsVerificationSuccess should register FIDO 2 credential when and send result when registration result is received`() =
         runTest {

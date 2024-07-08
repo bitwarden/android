@@ -2794,7 +2794,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 VaultAddEditState.DialogState.Fido2Error(
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
-                viewModel.stateFlow.value.dialog
+                viewModel.stateFlow.value.dialog,
             )
         }
 
@@ -2808,9 +2808,9 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.eventFlow.test {
                     assertEquals(
                         VaultAddEditEvent.CompleteFido2Create(
-                            result = Fido2CreateCredentialResult.Cancelled
+                            result = Fido2CreateCredentialResult.Cancelled,
                         ),
-                        awaitItem()
+                        awaitItem(),
                     )
                 }
             }
@@ -2824,7 +2824,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 VaultAddEditState.DialogState.Fido2Error(
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
-                viewModel.stateFlow.value.dialog
+                viewModel.stateFlow.value.dialog,
             )
         }
 
@@ -2837,7 +2837,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     fido2CredentialManager.registerFido2Credential(
                         any(),
                         any(),
-                        any()
+                        any(),
                     )
                 } returns Fido2CreateCredentialResult.Success(
                     registrationResponse = "mockResponse",
@@ -2849,7 +2849,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     VaultAddEditState.DialogState.Fido2Error(
                         message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                     ),
-                    viewModel.stateFlow.value.dialog
+                    viewModel.stateFlow.value.dialog,
                 )
             }
 
@@ -2881,10 +2881,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     VaultAddEditState.DialogState.Fido2Error(
                         message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                     ),
-                    viewModel.stateFlow.value.dialog
+                    viewModel.stateFlow.value.dialog,
                 )
             }
 
+        @Suppress("MaxLineLength")
         @Test
         fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
             every { authRepository.activeUserId } returns null
@@ -2895,12 +2896,14 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 ),
-                viewModel.stateFlow.value.dialog
+                viewModel.stateFlow.value.dialog,
             )
         }
 
+        @Suppress("MaxLineLength")
         @Test
         fun `BiometricsVerificationSuccess should register FIDO 2 credential when and send result when registration result is received`() =
             runTest {

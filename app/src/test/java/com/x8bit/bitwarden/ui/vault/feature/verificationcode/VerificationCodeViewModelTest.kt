@@ -405,6 +405,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeState Loaded with non premium user and no org TOTP enabled should cause navigate back`() =
         runTest {
@@ -426,6 +427,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `AuthCodeState Loaded with non premium user and one org TOTP enabled should return correct state`() =
         runTest {
@@ -442,7 +444,8 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             )
 
             val displayItems =
-                (viewModel.stateFlow.value.viewState as? VerificationCodeState.ViewState.Content)?.verificationCodeDisplayItems
+                (viewModel.stateFlow.value.viewState as? VerificationCodeState.ViewState.Content)
+                    ?.verificationCodeDisplayItems
             assertEquals(1, displayItems?.size)
         }
 
