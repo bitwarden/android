@@ -65,7 +65,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.activeUserIdChangesFlow
 import com.x8bit.bitwarden.data.auth.repository.util.policyInformation
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
-import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJsonWithPassword
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokensFlow
@@ -625,18 +624,23 @@ class AuthRepositoryImpl(
             ?: return IllegalStateException("Must be logged in.").asFailure()
         return identityService
             .refreshTokenSynchronously(refreshToken)
-            .onSuccess {
+            .flatMap { refreshTokenResponse ->
+                // Check to make sure the user is still logged in after making the request
+                authDiskSource
+                    .userState
+                    ?.accounts
+                    ?.get(userId)
+                    ?.let { refreshTokenResponse.asSuccess() }
+                    ?: IllegalStateException("Must be logged in.").asFailure()
+            }
+            .onSuccess { refreshTokenResponse ->
                 // Update the existing UserState with updated token information
                 authDiskSource.storeAccountTokens(
                     userId = userId,
                     accountTokens = AccountTokensJson(
-                        accessToken = it.accessToken,
-                        refreshToken = it.refreshToken,
+                        accessToken = refreshTokenResponse.accessToken,
+                        refreshToken = refreshTokenResponse.refreshToken,
                     ),
-                )
-                authDiskSource.userState = it.toUserStateJson(
-                    userId = userId,
-                    previousUserState = requireNotNull(authDiskSource.userState),
                 )
             }
     }
