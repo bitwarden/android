@@ -234,6 +234,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     }
 
     /**
+     * Assert that the [accountTokens] was stored successfully using the [userId].
+     */
+    fun assertAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
+        assertEquals(accountTokens, this.storedAccountTokens[userId])
+    }
+
+    /**
      * Assert that the [lastActiveTimeMillis] was stored successfully using the [userId].
      */
     fun assertLastActiveTimeMillis(userId: String, lastActiveTimeMillis: Long?) {
