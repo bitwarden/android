@@ -8,9 +8,10 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -46,7 +47,6 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toItemType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.validateCipherOrReturnErrorState
-import com.x8bit.bitwarden.ui.vault.feature.util.promptForUserVerification
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toCipherView
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -259,15 +259,19 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.Common.UserVerificationSuccess -> {
                 handleUserVerificationSuccess()
             }
+
             VaultAddEditAction.Common.UserVerificationLockOut -> {
                 handleUserVerificationLockOut()
             }
+
             VaultAddEditAction.Common.UserVerificationFail -> {
                 handleUserVerificationFail()
             }
+
             VaultAddEditAction.Common.UserVerificationCancelled -> {
                 handleUserVerificationCancelled()
             }
+
             VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
                 handleFido2ErrorDialogDismissed()
             }
@@ -408,10 +412,20 @@ class VaultAddEditViewModel @Inject constructor(
                     return
                 }
 
-        if (createOptions.promptForUserVerification) {
-            sendEvent(VaultAddEditEvent.Fido2UserVerification)
-        } else {
-            registerFido2CredentialToCipher(request, content.toCipherView())
+        when (createOptions.authenticatorSelection.userVerification) {
+            UserVerificationRequirement.DISCOURAGED -> {
+                registerFido2CredentialToCipher(request, content.toCipherView())
+            }
+
+            UserVerificationRequirement.PREFERRED -> {
+                sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
+            }
+
+            UserVerificationRequirement.REQUIRED,
+            null,
+            -> {
+                sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+            }
         }
     }
 
@@ -2096,8 +2110,12 @@ sealed class VaultAddEditEvent {
 
     /**
      * Perform user verification for a FIDO 2 credential operation.
+     *
+     * @param isRequired When `false`, user verification can be bypassed if it is not supported.
      */
-    data object Fido2UserVerification : VaultAddEditEvent()
+    data class Fido2UserVerification(
+        val isRequired: Boolean,
+    ) : VaultAddEditEvent()
 }
 
 /**

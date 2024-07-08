@@ -209,7 +209,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `on Fido2UserVerification event should call promptUserVerification when supported`() {
         every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
-        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification)
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
         verify {
             biometricsManager.isUserVerificationSupported
             biometricsManager.promptUserVerification(any(), any(), any(), any())
@@ -218,12 +218,23 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on Fido2UserVerification event should send BiometricsVerificationFailed action when user verification is not supported`() {
+    fun `on Fido2UserVerification event should send BiometricsVerificationFailed action when user verification is not supported and it required`() {
         every { biometricsManager.isUserVerificationSupported } returns false
         every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
-        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification)
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
         verify {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2UserVerification event should send BiometricsVerificationSuccess action when user verification is not supported and is not required`() {
+        every { biometricsManager.isUserVerificationSupported } returns false
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
         }
     }
 

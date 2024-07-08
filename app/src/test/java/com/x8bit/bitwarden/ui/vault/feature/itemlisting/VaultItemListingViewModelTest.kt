@@ -12,8 +12,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
@@ -428,19 +428,19 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
 
             viewModel.eventFlow.test {
-
                 assertEquals(
                     VaultItemListingEvent.DismissPullToRefresh,
                     awaitItem(),
                 )
-
                 assertEquals(
                     VaultItemListingState.DialogState.Loading(R.string.saving.asText()),
                     viewModel.stateFlow.value.dialogState,
                 )
-
                 assertEquals(
-                    VaultItemListingEvent.Fido2UserVerification(cipherView),
+                    VaultItemListingEvent.Fido2UserVerification(
+                        isRequired = true,
+                        selectedCipherView = cipherView,
+                    ),
                     awaitItem(),
                 )
             }
@@ -448,7 +448,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ItemClick for vault item during FIDO 2 registration should skip user verification and perform registration`() =
+    fun `ItemClick for vault item during FIDO 2 registration should skip user verification and perform registration when discouraged`() =
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
@@ -468,7 +468,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
             } returns createMockPublicKeyCredentialCreationOptions(
                 number = 1,
-                userVerificationRequirement = null,
+                userVerificationRequirement = PublicKeyCredentialCreationOptions
+                    .AuthenticatorSelectionCriteria
+                    .UserVerificationRequirement
+                    .DISCOURAGED,
             )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(

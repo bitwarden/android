@@ -149,16 +149,23 @@ fun VaultItemListingScreen(
                 if (biometricsManager.isUserVerificationSupported) {
                     biometricsManager.promptUserVerification(
                         onSuccess = {
-                            biometricsHandlers.onBiometricsVerificationSuccess(
-                                event.selectedCipherView,
-                            )
+                            biometricsHandlers
+                                .onBiometricsVerificationSuccess(event.selectedCipherView)
                         },
                         onCancel = biometricsHandlers.onBiometricsVerificationCancelled,
                         onLockOut = biometricsHandlers.onBiometricsLockOut,
                         onError = biometricsHandlers.onBiometricsVerificationFail,
                     )
                 } else {
-                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
+                    if (event.isRequired) {
+                        viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
+                    } else {
+                        viewModel.trySendAction(
+                            VaultItemListingsAction.UserVerificationSuccess(
+                                selectedCipherView = event.selectedCipherView,
+                            ),
+                        )
+                    }
                 }
             }
         }

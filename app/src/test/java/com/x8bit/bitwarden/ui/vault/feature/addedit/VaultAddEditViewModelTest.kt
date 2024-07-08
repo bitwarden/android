@@ -17,8 +17,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -760,7 +760,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithNewLogin, stateTurbine.awaitItem())
                 assertEquals(stateWithSavingDialog, stateTurbine.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.Fido2UserVerification,
+                    VaultAddEditEvent.Fido2UserVerification(isRequired = true),
                     eventTurbine.awaitItem(),
                 )
             }
@@ -888,7 +888,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             val mockCreateResult = Fido2RegisterCredentialResult.Success("mockResponse")
-            val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(number = 1)
+            val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(
+                number = 1,
+                userVerificationRequirement = PublicKeyCredentialCreationOptions
+                    .AuthenticatorSelectionCriteria
+                    .UserVerificationRequirement
+                    .DISCOURAGED
+            )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(
                     userId = mockUserId,
