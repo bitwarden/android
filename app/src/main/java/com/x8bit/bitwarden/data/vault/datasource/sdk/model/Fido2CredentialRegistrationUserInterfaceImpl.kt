@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
 import com.bitwarden.fido.CheckUserOptions
+import com.bitwarden.sdk.CheckUserAndPickCredentialForCreationResult
 import com.bitwarden.sdk.CheckUserResult
 import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Fido2UserInterface
@@ -30,7 +31,7 @@ class Fido2CredentialRegistrationUserInterfaceImpl(
     override suspend fun checkUserAndPickCredentialForCreation(
         options: CheckUserOptions,
         newCredential: Fido2CredentialNewView,
-    ): CipherViewWrapper = checkUserAndPickCredentialForCreation.invoke(options, newCredential)
+    ): CheckUserAndPickCredentialForCreationResult = throw IllegalStateException()
 
     override suspend fun isVerificationEnabled(): Boolean = isVerificationSupported
 

@@ -1,9 +1,9 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import com.bitwarden.bitwarden.ExportFormat
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
