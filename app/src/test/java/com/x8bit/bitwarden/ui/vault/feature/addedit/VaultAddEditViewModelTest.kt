@@ -19,9 +19,9 @@ import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKe
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
-import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
@@ -134,7 +134,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
     private val organizationEventManager = mockk<OrganizationEventManager> {
         every { trackEvent(event = any()) } just runs
     }
-    private val biometricsEncryptionManager = mockk<BiometricsEncryptionManager>()
 
     @BeforeEach
     fun setup() {
@@ -1293,6 +1292,34 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             assertEquals(null, awaitItem().dialog)
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissFido2ErrorDialogClick should clear the dialog state then complete FIDO 2 create`() =
+        runTest {
+            val errorState = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                dialogState = VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = errorState,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+            viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed)
+            viewModel.eventFlow.test {
+                assertNull(viewModel.stateFlow.value.dialog)
+                assertEquals(
+                    VaultAddEditEvent.CompleteFido2Create(
+                        result = Fido2CreateCredentialResult.Error,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Test
     fun `TypeOptionSelect LOGIN should switch to LoginItem`() = runTest {
@@ -2757,6 +2784,151 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
             assertEquals(expectedState, viewModel.stateFlow.value)
         }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `BiometricsLockout should display Fido2ErrorDialog`() {
+            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsLockOut)
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+                viewModel.stateFlow.value.dialog
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `BiometricsVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
+            runTest {
+                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationCancelled)
+
+                assertNull(viewModel.stateFlow.value.dialog)
+                viewModel.eventFlow.test {
+                    assertEquals(
+                        VaultAddEditEvent.CompleteFido2Create(
+                            result = Fido2CreateCredentialResult.Cancelled
+                        ),
+                        awaitItem()
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `BiometricsVerificationFail should display Fido2ErrorDialog`() {
+            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationFail)
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+                viewModel.stateFlow.value.dialog
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when SpecialCircumstance is null`() =
+            runTest {
+                specialCircumstanceManager.specialCircumstance = null
+                coEvery {
+                    fido2CredentialManager.registerFido2Credential(
+                        any(),
+                        any(),
+                        any()
+                    )
+                } returns Fido2CreateCredentialResult.Success(
+                    registrationResponse = "mockResponse",
+                )
+
+                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+
+                assertEquals(
+                    VaultAddEditState.DialogState.Fido2Error(
+                        message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    ),
+                    viewModel.stateFlow.value.dialog
+                )
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when Fido2Request is null`() =
+            runTest {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.AutofillSave(
+                        AutofillSaveItem.Login(
+                            username = "mockUsername",
+                            password = "mockPassword",
+                            uri = "mockUri",
+                        ),
+                    )
+                coEvery {
+                    fido2CredentialManager.registerFido2Credential(
+                        any(),
+                        any(),
+                        any(),
+                    )
+                } returns Fido2CreateCredentialResult.Success(
+                    registrationResponse = "mockResponse",
+                )
+
+                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+
+                assertEquals(
+                    VaultAddEditState.DialogState.Fido2Error(
+                        message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    ),
+                    viewModel.stateFlow.value.dialog
+                )
+            }
+
+        @Test
+        fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
+            every { authRepository.activeUserId } returns null
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
+
+            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+                viewModel.stateFlow.value.dialog
+            )
+        }
+
+        @Test
+        fun `BiometricsVerificationSuccess should register FIDO 2 credential when and send result when registration result is received`() =
+            runTest {
+                val mockRequest = createMockFido2CredentialRequest(number = 1)
+                specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+                    fido2CredentialRequest = mockRequest,
+                )
+                every { authRepository.activeUserId } returns "activeUserId"
+                coEvery {
+                    fido2CredentialManager.registerFido2Credential(
+                        any(),
+                        any(),
+                        any(),
+                    )
+                } returns Fido2CreateCredentialResult.Success(
+                    registrationResponse = "mockResponse",
+                )
+
+                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+
+                coVerify {
+                    fido2CredentialManager.registerFido2Credential(
+                        userId = any(),
+                        fido2CredentialRequest = mockRequest,
+                        selectedCipherView = any(),
+                    )
+                }
+            }
     }
     //region Helper functions
 

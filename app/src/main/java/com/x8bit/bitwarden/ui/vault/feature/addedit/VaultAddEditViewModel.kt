@@ -256,24 +256,20 @@ class VaultAddEditViewModel @Inject constructor(
                 handleHiddenFieldVisibilityChange(action)
             }
 
-            is VaultAddEditAction.Common.BiometricsVerificationSuccess -> {
+            VaultAddEditAction.Common.BiometricsVerificationSuccess -> {
                 handleBiometricsVerificationSuccess()
             }
-
-            is VaultAddEditAction.Common.BiometricsLockOut -> {
+            VaultAddEditAction.Common.BiometricsLockOut -> {
                 handleBiometricsLockOut()
             }
-
-            is VaultAddEditAction.Common.BiometricsVerificationFail -> {
+            VaultAddEditAction.Common.BiometricsVerificationFail -> {
                 handleBiometricsVerificationFail()
             }
-
-            VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
-                handleFido2ErrorDialogDismissed()
-            }
-
             VaultAddEditAction.Common.BiometricsVerificationCancelled -> {
                 handleFido2BiometricsVerificationCancelled()
+            }
+            VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
+                handleFido2ErrorDialogDismissed()
             }
         }
     }
