@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
@@ -398,6 +399,7 @@ class VaultItemListingDataExtensionsTest {
             autofillSelectionData = null,
             fido2CreationData = null,
             hasMasterPassword = true,
+            fido2CredentialAutofillViews = null,
         )
 
         assertEquals(
@@ -456,6 +458,12 @@ class VaultItemListingDataExtensionsTest {
                 folderId = "mockId-1",
             ),
         )
+        val fido2CredentialAutofillViews = listOf(
+            createMockFido2CredentialAutofillView(
+                cipherId = "mockId-1",
+                number = 1,
+            ),
+        )
 
         val result = VaultData(
             cipherViewList = cipherViewList,
@@ -473,6 +481,7 @@ class VaultItemListingDataExtensionsTest {
             ),
             fido2CreationData = null,
             hasMasterPassword = true,
+            fido2CredentialAutofillViews = fido2CredentialAutofillViews,
         )
 
         assertEquals(
@@ -482,7 +491,7 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,
-                        subtitle = null,
+                        subtitle = "mockRpId-1",
                     )
                         .copy(
                             iconData = IconData.Network(
@@ -530,6 +539,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = null,
                 hasMasterPassword = true,
+                fido2CredentialAutofillViews = null,
             ),
         )
 
@@ -550,6 +560,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = null,
                 hasMasterPassword = true,
+                fido2CredentialAutofillViews = null,
             ),
         )
 
@@ -568,6 +579,7 @@ class VaultItemListingDataExtensionsTest {
                 autofillSelectionData = null,
                 fido2CreationData = null,
                 hasMasterPassword = true,
+                fido2CredentialAutofillViews = null,
             ),
         )
 
@@ -589,6 +601,7 @@ class VaultItemListingDataExtensionsTest {
                 ),
                 fido2CreationData = null,
                 hasMasterPassword = true,
+                fido2CredentialAutofillViews = null,
             ),
         )
 
@@ -613,6 +626,7 @@ class VaultItemListingDataExtensionsTest {
                     origin = "https://www.test.com",
                 ),
                 hasMasterPassword = true,
+                fido2CredentialAutofillViews = null,
             ),
         )
     }
@@ -753,6 +767,7 @@ class VaultItemListingDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             fido2CreationData = null,
             hasMasterPassword = true,
+            fido2CredentialAutofillViews = null,
         )
 
         assertEquals(
@@ -794,6 +809,7 @@ class VaultItemListingDataExtensionsTest {
             vaultFilterType = VaultFilterType.AllVaults,
             fido2CreationData = null,
             hasMasterPassword = true,
+            fido2CredentialAutofillViews = null,
         )
 
         assertEquals(

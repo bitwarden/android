@@ -27,6 +27,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class VaultDataExtensionsTest {
 
     private val clock: Clock = Clock.fixed(

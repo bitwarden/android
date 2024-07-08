@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherRepromptType
@@ -102,6 +103,7 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
     fido2CreationData: Fido2CredentialRequest?,
+    fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
         .filter { cipherView ->
@@ -130,6 +132,7 @@ fun VaultData.toViewState(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = autofillSelectionData != null,
                 isFido2Creation = fido2CreationData != null,
+                fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -260,12 +263,14 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Send.SendText -> this
     }
 
+@Suppress("LongParameterList")
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isFido2Creation: Boolean,
+    fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -274,6 +279,10 @@ private fun List<CipherView>.toDisplayItemList(
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isFido2Creation = isFido2Creation,
+            fido2CredentialAutofillView = fido2CredentialAutofillViews
+                ?.firstOrNull { fido2CredentialAutofillView ->
+                    fido2CredentialAutofillView.cipherId == it.id
+                },
         )
     }
 
@@ -288,18 +297,20 @@ private fun List<SendView>.toDisplayItemList(
         )
     }
 
+@Suppress("LongParameterList")
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isFido2Creation: Boolean,
+    fido2CredentialAutofillView: Fido2CredentialAutofillView?,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "CipherNameLabel",
-        subtitle = subtitle,
+        subtitle = this.toSubtitle(fido2CredentialRpId = fido2CredentialAutofillView?.rpId),
         subtitleTestTag = "CipherSubTitleLabel",
         iconData = this.toIconData(
             baseIconUrl = baseIconUrl,
@@ -307,14 +318,26 @@ private fun CipherView.toDisplayItem(
             usePasskeyDefaultIcon = (isAutofill || isFido2Creation) &&
                 this.isActiveWithFido2Credentials,
         ),
-        iconTestTag = toIconTestTag(),
-        extraIconList = toLabelIcons(),
-        overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+        iconTestTag = this.toIconTestTag(),
+        extraIconList = this.toLabelIcons(),
+        overflowOptions = this.toOverflowActions(hasMasterPassword = hasMasterPassword),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isFido2Creation = isFido2Creation,
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
+
+private fun CipherView.toSubtitle(fido2CredentialRpId: String?): String? =
+    fido2CredentialRpId
+        ?.takeIf { this.type == CipherType.LOGIN && it.isNotEmpty() && it != this.name }
+        ?.let {
+            if (subtitle.isNullOrEmpty()) {
+                it
+            } else {
+                it + "\n" + subtitle
+            }
+        }
+        ?: subtitle
 
 private fun CipherView.toIconTestTag(): String =
     when (type) {

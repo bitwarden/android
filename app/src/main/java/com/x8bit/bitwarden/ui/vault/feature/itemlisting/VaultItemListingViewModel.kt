@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
@@ -13,6 +14,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -29,6 +31,7 @@ import com.x8bit.bitwarden.data.platform.repository.util.map
 import com.x8bit.bitwarden.data.platform.util.getFido2RpIdOrNull
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
@@ -853,6 +856,8 @@ class VaultItemListingViewModel @Inject constructor(
                             isIconLoadingDisabled = state.isIconLoadingDisabled,
                             autofillSelectionData = state.autofillSelectionData,
                             fido2CreationData = state.fido2CredentialRequest,
+                            fido2CredentialAutofillViews = vaultData
+                                .fido2CredentialAutofillViewList,
                         )
                     }
 
@@ -895,6 +900,7 @@ class VaultItemListingViewModel @Inject constructor(
                     ciphers = vaultData.cipherViewList,
                     matchUri = matchUri,
                 ),
+                fido2CredentialAutofillViewList = vaultData.toFido2CredentialAutofillViews(),
             )
         }
     }
@@ -915,9 +921,24 @@ class VaultItemListingViewModel @Inject constructor(
                     ciphers = vaultData.cipherViewList,
                     matchUri = matchUri,
                 ),
+                fido2CredentialAutofillViewList = vaultData.toFido2CredentialAutofillViews(),
             )
         }
     }
+
+    /**
+     * Decrypt and filter the fido 2 autofill credentials.
+     */
+    @Suppress("MaxLineLength")
+    private suspend fun VaultData.toFido2CredentialAutofillViews(): List<Fido2CredentialAutofillView>? =
+        (vaultRepository
+            .getDecryptedFido2CredentialAutofillViews(
+                cipherViewList = this
+                    .cipherViewList
+                    .filter { it.isActiveWithFido2Credentials },
+            )
+            as? DecryptFido2CredentialAutofillViewResult.Success)
+            ?.fido2CredentialAutofillViews
 }
 
 /**
