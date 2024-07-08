@@ -66,6 +66,8 @@ class Fido2CredentialManagerImpl(
                     requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
                     clientData = clientData,
                     selectedCipherView = selectedCipherView,
+                    // User verification is currently handled prior to engaging the SDK. We always
+                    // send `true` so that the SDK does not fail if the relying party requests UV.
                     isUserVerificationSupported = true,
                 ),
                 fido2CredentialStore = this,
