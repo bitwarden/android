@@ -1067,6 +1067,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     viewState = VaultItemListingState.ViewState.NoItems(
                         message = R.string.no_items.asText(),
                         shouldShowAddButton = true,
+                        buttonText = R.string.add_an_item.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1095,6 +1096,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     viewState = VaultItemListingState.ViewState.NoItems(
                         message = R.string.no_items.asText(),
                         shouldShowAddButton = true,
+                        buttonText = R.string.add_an_item.asText(),
                     ),
                 ),
                 viewModel.stateFlow.value,
@@ -1164,6 +1166,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
+                    buttonText = R.string.add_an_item.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1190,6 +1193,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
+                    buttonText = R.string.add_an_item.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1277,6 +1281,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
+                    buttonText = R.string.add_an_item.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1306,6 +1311,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
+                    buttonText = R.string.add_an_item.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1391,6 +1397,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
+                    buttonText = R.string.add_an_item.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
@@ -1419,6 +1426,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = R.string.no_items.asText(),
                     shouldShowAddButton = true,
+                    buttonText = R.string.add_an_item.asText(),
                 ),
             ),
             viewModel.stateFlow.value,
