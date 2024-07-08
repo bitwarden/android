@@ -100,7 +100,6 @@ class Fido2CredentialManagerImpl(
             null
         }
 
-    @Suppress("ReturnCount")
     private suspend fun validateCallingApplicationAssetLinks(
         fido2CredentialRequest: Fido2CredentialRequest,
     ): Fido2ValidateOriginResult {
