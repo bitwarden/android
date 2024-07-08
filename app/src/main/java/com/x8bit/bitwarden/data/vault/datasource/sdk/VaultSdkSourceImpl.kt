@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.bitwarden.DerivePinKeyResponse
-import com.bitwarden.bitwarden.ExportFormat
-import com.bitwarden.bitwarden.InitOrgCryptoRequest
-import com.bitwarden.bitwarden.InitUserCryptoRequest
-import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView

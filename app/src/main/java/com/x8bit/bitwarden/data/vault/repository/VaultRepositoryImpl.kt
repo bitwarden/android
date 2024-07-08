@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import com.bitwarden.bitwarden.ExportFormat
-import com.bitwarden.bitwarden.InitOrgCryptoRequest
-import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
