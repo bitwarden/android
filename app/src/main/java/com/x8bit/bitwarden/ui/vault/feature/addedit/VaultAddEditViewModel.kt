@@ -417,7 +417,6 @@ class VaultAddEditViewModel @Inject constructor(
         } else {
             registerFido2CredentialToCipher(request, content.toCipherView())
         }
-
     }
 
     private fun registerFido2CredentialToCipher(

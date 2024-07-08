@@ -50,7 +50,6 @@ import com.x8bit.bitwarden.ui.util.onAllNodesWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onAllNodesWithTextAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithContentDescriptionAfterScroll
 import com.x8bit.bitwarden.ui.util.onNodeWithTextAfterScroll
-import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBiometricUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
@@ -64,9 +63,7 @@ import io.mockk.every
 import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

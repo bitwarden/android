@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.handlers
 
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
-import javax.crypto.Cipher
 
 /**
  * A collection of handler functions specifically tailored for managing action within the context of

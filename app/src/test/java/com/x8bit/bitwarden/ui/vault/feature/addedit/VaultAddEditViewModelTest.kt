@@ -767,6 +767,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `user verification success should register fido 2 credential, show toast once item is saved, and emit ExitApp`() =
         runTest {
@@ -913,7 +914,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 assertEquals(stateWithSavingDialog, stateTurbine.awaitItem())
                 assertEquals(
                     VaultAddEditEvent.ShowToast(R.string.item_updated.asText()),
-                    eventTurbine.awaitItem()
+                    eventTurbine.awaitItem(),
                 )
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(

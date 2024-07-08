@@ -1046,7 +1046,9 @@ class VaultSdkSourceTest {
                 userId = "mockUserId",
                 origin = "mockOrigin",
                 requestJson = "mockRequestJson",
-                clientData = ClientData.DefaultWithCustomHash(hash = DEFAULT_SIGNATURE.toByteArray()),
+                clientData = ClientData.DefaultWithCustomHash(
+                    hash = DEFAULT_SIGNATURE.toByteArray(),
+                ),
                 selectedCipherView = mockk(),
                 isUserVerificationSupported = true,
             )
@@ -1115,7 +1117,7 @@ class VaultSdkSourceTest {
                     rpId = "mockRpId",
                     userNameForUi = null,
                     userHandle = byteArrayOf(0),
-                )
+                ),
             )
             val cipherViews = arrayOf(
                 createMockCipherView(number = 1),
