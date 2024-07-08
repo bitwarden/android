@@ -2539,6 +2539,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     periodSeconds = 30,
                 ),
                 fido2CredentialCreationDateText = null,
+                canViewTotpCode = true,
             )
 
         private val DEFAULT_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =

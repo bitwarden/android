@@ -4,6 +4,8 @@ import android.net.Uri
 import app.cash.turbine.test
 import com.bitwarden.vault.CipherRepromptType
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -51,6 +53,20 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
         every { environmentStateFlow } returns mockk()
+    }
+
+    private val mockUserAccount: UserState.Account = mockk {
+        every { isPremium } returns true
+    }
+
+    private val mockUserState: UserState = mockk {
+        every { activeAccount } returns mockUserAccount
+    }
+
+    private val mutableUserStateFlow: MutableStateFlow<UserState> = MutableStateFlow(mockUserState)
+
+    private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
     }
 
     private val mutablePullToRefreshEnabledFlow = MutableStateFlow(false)
@@ -390,6 +406,47 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `AuthCodeState Loaded with non premium user and no org TOTP enabled should cause navigate back`() =
+        runTest {
+            setupMockUri()
+            every { mockUserAccount.isPremium } returns false
+            val viewModel = createViewModel()
+            mutableAuthCodeFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = listOf(
+                        createVerificationCodeItem(number = 1),
+                        createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                    ),
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(VerificationCodeEvent.NavigateBack, awaitItem())
+                assertEquals(VerificationCodeEvent.DismissPullToRefresh, awaitItem())
+            }
+        }
+
+    @Test
+    fun `AuthCodeState Loaded with non premium user and one org TOTP enabled should return correct state`() =
+        runTest {
+            setupMockUri()
+            every { mockUserAccount.isPremium } returns false
+            val viewModel = createViewModel()
+            mutableAuthCodeFlow.tryEmit(
+                value = DataState.Loaded(
+                    data = listOf(
+                        createVerificationCodeItem(number = 1).copy(orgUsesTotp = true),
+                        createVerificationCodeItem(number = 2).copy(hasPasswordReprompt = true),
+                    ),
+                ),
+            )
+
+            val displayItems =
+                (viewModel.stateFlow.value.viewState as? VerificationCodeState.ViewState.Content)?.verificationCodeDisplayItems
+            assertEquals(1, displayItems?.size)
+        }
+
+    @Test
     fun `AuthCodeFlow Loading should update state to Loading`() = runTest {
         mutableAuthCodeFlow.tryEmit(value = DataState.Loading)
 
@@ -451,6 +508,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
             vaultRepository = vaultRepository,
             environmentRepository = environmentRepository,
             settingsRepository = settingsRepository,
+            authRepository = authRepository,
         )
 
     @Suppress("MaxLineLength")

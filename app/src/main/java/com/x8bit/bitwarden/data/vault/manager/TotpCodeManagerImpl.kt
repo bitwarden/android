@@ -121,6 +121,7 @@ class TotpCodeManagerImpl(
                                         CipherRepromptType.PASSWORD -> true
                                         CipherRepromptType.NONE -> false
                                     },
+                                    orgUsesTotp = cipher.organizationUseTotp,
                                 )
                             }
                             .onFailure {

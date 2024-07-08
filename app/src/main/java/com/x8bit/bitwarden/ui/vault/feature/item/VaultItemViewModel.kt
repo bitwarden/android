@@ -1275,8 +1275,16 @@ data class VaultItemState(
                  * @property totpCodeItemData The optional data related the TOTP code.
                  * @property isPremiumUser Indicates if the user has subscribed to a premium
                  * account.
+                 * @property canViewTotpCode Indicates if the user can view an associated TOTP code.
                  * @property fido2CredentialCreationDateText Optional creation date and time of the
                  * FIDO2 credential associated with the login item.
+                 *
+                 * **NOTE** [canViewTotpCode] currently supports a deprecated edge case where an
+                 * organization supports TOTP but not through the current premium model.
+                 * This additional field is added to allow for [isPremiumUser] to be an independent
+                 * value.
+                 * @see [CipherView.organizationUseTotp]
+                 *
                  */
                 @Parcelize
                 data class Login(
@@ -1287,6 +1295,7 @@ data class VaultItemState(
                     val passwordRevisionDate: String?,
                     val totpCodeItemData: TotpCodeItemData?,
                     val isPremiumUser: Boolean,
+                    val canViewTotpCode: Boolean,
                     val fido2CredentialCreationDateText: Text?,
                 ) : ItemType() {
 
