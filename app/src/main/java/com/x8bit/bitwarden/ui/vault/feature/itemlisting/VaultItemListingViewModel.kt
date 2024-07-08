@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -346,8 +347,17 @@ class VaultItemListingViewModel @Inject constructor(
         }
 
         if (state.isFido2Creation) {
-            val cipherView = getCipherViewOrNull(action.id) ?: return
-            val credentialRequest = state.fido2CredentialRequest ?: return
+            val cipherView = getCipherViewOrNull(action.id) ?: run {
+                showFido2ErrorDialog()
+                return
+            }
+            val credentialRequest = state.fido2CredentialRequest ?: run {
+                // This scenario should not occur because `isFido2Creation` is false when
+                // `fido2CredentialRequest` is null. We show the FIDO 2 error dialog to inform
+                // the user and terminate the flow.
+                showFido2ErrorDialog()
+                return
+            }
             mutableStateFlow.update {
                 it.copy(
                     dialogState = VaultItemListingState.DialogState.Loading(
@@ -394,11 +404,7 @@ class VaultItemListingViewModel @Inject constructor(
         viewModelScope.launch {
             val activeUserId = authRepository.activeUserId
                 ?: run {
-                    sendAction(
-                        VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(
-                            result = Fido2CreateCredentialResult.Error,
-                        ),
-                    )
+                    showFido2ErrorDialog()
                     return@launch
                 }
             val result: Fido2CreateCredentialResult =
@@ -489,6 +495,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleDismissFido2ErrorDialogClick() {
+        clearDialogState()
         sendEvent(
             VaultItemListingEvent.CompleteFido2Create(
                 result = Fido2CreateCredentialResult.Error,
