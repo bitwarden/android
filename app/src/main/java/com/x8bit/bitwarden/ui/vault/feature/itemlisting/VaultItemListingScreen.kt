@@ -141,7 +141,7 @@ fun VaultItemListingScreen(
                 onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
 
-            is VaultItemListingEvent.CompleteFido2Create -> {
+            is VaultItemListingEvent.CompleteFido2Registration -> {
                 fido2CompletionManager.completeFido2Create(event.result)
             }
 
@@ -158,7 +158,7 @@ fun VaultItemListingScreen(
                         onError = biometricsHandlers.onBiometricsVerificationFail,
                     )
                 } else {
-                    viewModel.trySendAction(VaultItemListingsAction.BiometricsVerificationFail)
+                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
                 }
             }
         }

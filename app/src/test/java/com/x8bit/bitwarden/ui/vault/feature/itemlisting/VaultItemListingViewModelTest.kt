@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
@@ -250,8 +250,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialogState)
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Create(
-                        result = Fido2CreateCredentialResult.Error,
+                    VaultItemListingEvent.CompleteFido2Registration(
+                        result = Fido2RegisterCredentialResult.Error,
                     ),
                     awaitItem(),
                 )
@@ -422,7 +422,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                     any(),
                 )
-            } returns Fido2CreateCredentialResult.Success("mockResponse")
+            } returns Fido2RegisterCredentialResult.Success("mockResponse")
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
@@ -476,7 +476,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                     any(),
                 )
-            } returns Fido2CreateCredentialResult.Success("mockResponse")
+            } returns Fido2RegisterCredentialResult.Success("mockResponse")
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
@@ -1910,7 +1910,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `BiometricsLockout should display Fido2ErrorDialog`() {
         val viewModel = createVaultItemListingViewModel()
-        viewModel.trySendAction(VaultItemListingsAction.BiometricsLockOut)
+        viewModel.trySendAction(VaultItemListingsAction.UserVerificationLockOut)
 
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
@@ -1926,13 +1926,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `BiometricsVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
         runTest {
             val viewModel = createVaultItemListingViewModel()
-            viewModel.trySendAction(VaultItemListingsAction.BiometricsVerificationCancelled)
+            viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
 
             assertNull(viewModel.stateFlow.value.dialogState)
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.CompleteFido2Create(
-                        result = Fido2CreateCredentialResult.Cancelled,
+                    VaultItemListingEvent.CompleteFido2Registration(
+                        result = Fido2RegisterCredentialResult.Cancelled,
                     ),
                     awaitItem(),
                 )
@@ -1943,7 +1943,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     @Test
     fun `BiometricsVerificationFail should display Fido2ErrorDialog`() {
         val viewModel = createVaultItemListingViewModel()
-        viewModel.trySendAction(VaultItemListingsAction.BiometricsVerificationFail)
+        viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
 
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
@@ -1965,13 +1965,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                     any(),
                 )
-            } returns Fido2CreateCredentialResult.Success(
+            } returns Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
-                VaultItemListingsAction.BiometricsVerificationSuccess(
+                VaultItemListingsAction.UserVerificationSuccess(
                     createMockCipherView(number = 1),
                 ),
             )
@@ -2003,13 +2003,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                     any(),
                 )
-            } returns Fido2CreateCredentialResult.Success(
+            } returns Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
-                VaultItemListingsAction.BiometricsVerificationSuccess(
+                VaultItemListingsAction.UserVerificationSuccess(
                     selectedCipherView = createMockCipherView(number = 1),
                 ),
             )
@@ -2032,7 +2032,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(
-            VaultItemListingsAction.BiometricsVerificationSuccess(
+            VaultItemListingsAction.UserVerificationSuccess(
                 selectedCipherView = createMockCipherView(number = 1),
             ),
         )
@@ -2061,13 +2061,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     any(),
                     any(),
                 )
-            } returns Fido2CreateCredentialResult.Success(
+            } returns Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockResponse",
             )
 
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(
-                VaultItemListingsAction.BiometricsVerificationSuccess(
+                VaultItemListingsAction.UserVerificationSuccess(
                     selectedCipherView = createMockCipherView(number = 1),
                 ),
             )

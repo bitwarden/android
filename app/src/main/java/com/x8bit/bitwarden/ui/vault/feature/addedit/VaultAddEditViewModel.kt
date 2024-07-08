@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -256,17 +256,17 @@ class VaultAddEditViewModel @Inject constructor(
                 handleHiddenFieldVisibilityChange(action)
             }
 
-            VaultAddEditAction.Common.BiometricsVerificationSuccess -> {
-                handleBiometricsVerificationSuccess()
+            VaultAddEditAction.Common.UserVerificationSuccess -> {
+                handleUserVerificationSuccess()
             }
-            VaultAddEditAction.Common.BiometricsLockOut -> {
-                handleBiometricsLockOut()
+            VaultAddEditAction.Common.UserVerificationLockOut -> {
+                handleUserVerificationLockOut()
             }
-            VaultAddEditAction.Common.BiometricsVerificationFail -> {
-                handleBiometricsVerificationFail()
+            VaultAddEditAction.Common.UserVerificationFail -> {
+                handleUserVerificationFail()
             }
-            VaultAddEditAction.Common.BiometricsVerificationCancelled -> {
-                handleFido2BiometricsVerificationCancelled()
+            VaultAddEditAction.Common.UserVerificationCancelled -> {
+                handleUserVerificationCancelled()
             }
             VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
                 handleFido2ErrorDialogDismissed()
@@ -425,7 +425,7 @@ class VaultAddEditViewModel @Inject constructor(
                     showFido2ErrorDialog()
                     return@launch
                 }
-            val result: Fido2CreateCredentialResult =
+            val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
                     userId = userId,
                     fido2CredentialRequest = request,
@@ -502,11 +502,11 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
-    private fun handleBiometricsLockOut() {
+    private fun handleUserVerificationLockOut() {
         showFido2ErrorDialog()
     }
 
-    private fun handleBiometricsVerificationSuccess() {
+    private fun handleUserVerificationSuccess() {
         specialCircumstanceManager.specialCircumstance
             ?.toFido2RequestOrNull()
             ?.let { request ->
@@ -520,24 +520,24 @@ class VaultAddEditViewModel @Inject constructor(
             ?: showFido2ErrorDialog()
     }
 
-    private fun handleBiometricsVerificationFail() {
+    private fun handleUserVerificationFail() {
         showFido2ErrorDialog()
     }
 
     private fun handleFido2ErrorDialogDismissed() {
         clearDialogState()
         sendEvent(
-            VaultAddEditEvent.CompleteFido2Create(
-                result = Fido2CreateCredentialResult.Error,
+            VaultAddEditEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Error,
             ),
         )
     }
 
-    private fun handleFido2BiometricsVerificationCancelled() {
+    private fun handleUserVerificationCancelled() {
         clearDialogState()
         sendEvent(
-            VaultAddEditEvent.CompleteFido2Create(
-                result = Fido2CreateCredentialResult.Cancelled,
+            VaultAddEditEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Cancelled,
             ),
         )
     }
@@ -1443,17 +1443,17 @@ class VaultAddEditViewModel @Inject constructor(
     ) {
         clearDialogState()
         when (action.result) {
-            is Fido2CreateCredentialResult.Error -> {
+            is Fido2RegisterCredentialResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
             }
 
-            is Fido2CreateCredentialResult.Success -> {
+            is Fido2RegisterCredentialResult.Success -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
             }
 
-            is Fido2CreateCredentialResult.Cancelled -> Unit
+            is Fido2RegisterCredentialResult.Cancelled -> Unit
         }
-        sendEvent(VaultAddEditEvent.CompleteFido2Create(action.result))
+        sendEvent(VaultAddEditEvent.CompleteFido2Registration(action.result))
     }
 
     //endregion Internal Type Handlers
@@ -2086,12 +2086,12 @@ sealed class VaultAddEditEvent {
     ) : VaultAddEditEvent()
 
     /**
-     * Complete the current FIDO 2 credential creation process.
+     * Complete the current FIDO 2 credential registration process.
      *
-     * @property result the result of FIDO 2 credential creation.
+     * @property result the result of FIDO 2 credential registration.
      */
-    data class CompleteFido2Create(
-        val result: Fido2CreateCredentialResult,
+    data class CompleteFido2Registration(
+        val result: Fido2RegisterCredentialResult,
     ) : VaultAddEditEvent()
 
     /**
@@ -2249,22 +2249,22 @@ sealed class VaultAddEditAction {
          * The user has too many failed verification attempts for FIDO operations and can no longer
          * use biometric verification for some time.
          */
-        data object BiometricsLockOut : Common()
+        data object UserVerificationLockOut : Common()
 
         /**
          * The user has failed biometric verification for FIDO 2 operations.
          */
-        data object BiometricsVerificationFail : Common()
+        data object UserVerificationFail : Common()
 
         /**
          * The user has successfully verified themself using biometrics.
          */
-        data object BiometricsVerificationSuccess : Common()
+        data object UserVerificationSuccess : Common()
 
         /**
          * The user has cancelled biometric user verification.
          */
-        data object BiometricsVerificationCancelled : Common()
+        data object UserVerificationCancelled : Common()
 
         /**
          * The user has dismissed the FIDO 2 credential error dialog.
@@ -2612,7 +2612,7 @@ sealed class VaultAddEditAction {
          * Indicates that the FIDO 2 registration result has been received.
          */
         data class Fido2RegisterCredentialResultReceive(
-            val result: Fido2CreateCredentialResult,
+            val result: Fido2RegisterCredentialResult,
         ) : Internal()
     }
 }

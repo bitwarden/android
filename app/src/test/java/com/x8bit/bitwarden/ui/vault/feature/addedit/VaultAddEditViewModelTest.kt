@@ -17,7 +17,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -729,7 +729,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 ),
             )
-            val mockCreateResult = Fido2CreateCredentialResult.Success(
+            val mockCreateResult = Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
             )
             val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(
@@ -801,7 +801,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 ),
             )
-            val mockCreateResult = Fido2CreateCredentialResult.Success(
+            val mockCreateResult = Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
             )
             val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(number = 1)
@@ -823,7 +823,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 val stateTurbine = viewModel.stateFlow.testIn(backgroundScope)
                 val eventTurbine = viewModel.eventFlow.testIn(backgroundScope)
 
-                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+                viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
                 assertEquals(stateWithNewLogin, stateTurbine.awaitItem())
                 assertEquals(
@@ -831,7 +831,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     eventTurbine.awaitItem(),
                 )
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Create(mockCreateResult),
+                    VaultAddEditEvent.CompleteFido2Registration(mockCreateResult),
                     eventTurbine.awaitItem(),
                 )
                 coVerify(exactly = 1) {
@@ -887,7 +887,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 ),
             )
-            val mockCreateResult = Fido2CreateCredentialResult.Success("mockResponse")
+            val mockCreateResult = Fido2RegisterCredentialResult.Success("mockResponse")
             val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(number = 1)
             coEvery {
                 fido2CredentialManager.registerFido2Credential(
@@ -917,7 +917,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
                 assertEquals(stateWithName, stateTurbine.awaitItem())
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Create(mockCreateResult),
+                    VaultAddEditEvent.CompleteFido2Registration(mockCreateResult),
                     eventTurbine.awaitItem(),
                 )
                 coVerify(exactly = 1) {
@@ -1313,8 +1313,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.eventFlow.test {
                 assertNull(viewModel.stateFlow.value.dialog)
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Create(
-                        result = Fido2CreateCredentialResult.Error,
+                    VaultAddEditEvent.CompleteFido2Registration(
+                        result = Fido2RegisterCredentialResult.Error,
                     ),
                     awaitItem(),
                 )
@@ -2788,7 +2788,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `BiometricsLockout should display Fido2ErrorDialog`() {
-            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsLockOut)
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
@@ -2802,13 +2802,13 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Test
         fun `BiometricsVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
             runTest {
-                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationCancelled)
+                viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationCancelled)
 
                 assertNull(viewModel.stateFlow.value.dialog)
                 viewModel.eventFlow.test {
                     assertEquals(
-                        VaultAddEditEvent.CompleteFido2Create(
-                            result = Fido2CreateCredentialResult.Cancelled,
+                        VaultAddEditEvent.CompleteFido2Registration(
+                            result = Fido2RegisterCredentialResult.Cancelled,
                         ),
                         awaitItem(),
                     )
@@ -2818,7 +2818,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         @Suppress("MaxLineLength")
         @Test
         fun `BiometricsVerificationFail should display Fido2ErrorDialog`() {
-            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationFail)
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
@@ -2839,11 +2839,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         any(),
                         any(),
                     )
-                } returns Fido2CreateCredentialResult.Success(
+                } returns Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
 
-                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+                viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
                 assertEquals(
                     VaultAddEditState.DialogState.Fido2Error(
@@ -2871,11 +2871,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         any(),
                         any(),
                     )
-                } returns Fido2CreateCredentialResult.Success(
+                } returns Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
 
-                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+                viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
                 assertEquals(
                     VaultAddEditState.DialogState.Fido2Error(
@@ -2892,7 +2892,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
 
-            viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
@@ -2918,11 +2918,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         any(),
                         any(),
                     )
-                } returns Fido2CreateCredentialResult.Success(
+                } returns Fido2RegisterCredentialResult.Success(
                     registrationResponse = "mockResponse",
                 )
 
-                viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+                viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
                 coVerify {
                     fido2CredentialManager.registerFido2Credential(

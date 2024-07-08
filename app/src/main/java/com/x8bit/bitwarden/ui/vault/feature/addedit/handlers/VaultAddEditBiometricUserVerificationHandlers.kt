@@ -30,17 +30,17 @@ data class VaultAddEditBiometricUserVerificationHandlers(
         ): VaultAddEditBiometricUserVerificationHandlers =
             VaultAddEditBiometricUserVerificationHandlers(
                 onBiometricsVerificationSuccess = {
-                    viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationSuccess)
+                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
                 },
                 onBiometricsVerificationFail = {
-                    viewModel.trySendAction(VaultAddEditAction.Common.BiometricsLockOut)
+                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
                 },
                 onBiometricsLockOut = {
-                    viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationFail)
+                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
                 },
                 onBiometricsVerificationCancelled = {
                     viewModel.trySendAction(
-                        VaultAddEditAction.Common.BiometricsVerificationCancelled,
+                        VaultAddEditAction.Common.UserVerificationCancelled,
                     )
                 },
             )

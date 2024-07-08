@@ -32,19 +32,19 @@ data class VaultItemListingBiometricUserVerificationHandlers(
             VaultItemListingBiometricUserVerificationHandlers(
                 onBiometricsVerificationSuccess = { selectedCipherView ->
                     viewModel.trySendAction(
-                        VaultItemListingsAction.BiometricsVerificationSuccess(
+                        VaultItemListingsAction.UserVerificationSuccess(
                             selectedCipherView = selectedCipherView,
                         ),
                     )
                 },
                 onBiometricsVerificationFail = {
-                    viewModel.trySendAction(VaultItemListingsAction.BiometricsLockOut)
+                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationLockOut)
                 },
                 onBiometricsLockOut = {
-                    viewModel.trySendAction(VaultItemListingsAction.BiometricsVerificationFail)
+                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
                 },
                 onBiometricsVerificationCancelled = {
-                    viewModel.trySendAction(VaultItemListingsAction.BiometricsVerificationCancelled)
+                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
                 },
             )
     }

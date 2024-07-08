@@ -119,7 +119,7 @@ fun VaultAddEditScreen(
                 )
             }
 
-            is VaultAddEditEvent.CompleteFido2Create -> {
+            is VaultAddEditEvent.CompleteFido2Registration -> {
                 fido2CompletionManager.completeFido2Create(event.result)
             }
 
@@ -132,7 +132,7 @@ fun VaultAddEditScreen(
                         onLockOut = biometricsHandlers.onBiometricsLockOut,
                     )
                 } else {
-                    viewModel.trySendAction(VaultAddEditAction.Common.BiometricsVerificationFail)
+                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
                 }
             }
         }

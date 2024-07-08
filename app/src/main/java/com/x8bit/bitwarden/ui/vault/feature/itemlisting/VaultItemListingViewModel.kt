@@ -8,7 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
@@ -196,22 +196,18 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
             is VaultItemListingsAction.RefreshPull -> handleRefreshPull()
 
-            VaultItemListingsAction.BiometricsLockOut -> {
-                handleBiometricsLockOut()
+            VaultItemListingsAction.UserVerificationLockOut -> {
+                handleUserVerificationLockOut()
             }
-
-            VaultItemListingsAction.BiometricsVerificationCancelled -> {
-                handleFido2BiometricsVerificationCancelled()
+            VaultItemListingsAction.UserVerificationCancelled -> {
+                handleUserVerificationCancelled()
             }
-
-            VaultItemListingsAction.BiometricsVerificationFail -> {
-                handleBiometricsVerificationFail()
+            VaultItemListingsAction.UserVerificationFail -> {
+                handleUserVerificationFail()
             }
-
-            is VaultItemListingsAction.BiometricsVerificationSuccess -> {
-                handleBiometricsVerificationSuccess(action)
+            is VaultItemListingsAction.UserVerificationSuccess -> {
+                handleUserVerificationSuccess(action)
             }
-
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
         }
     }
@@ -247,12 +243,12 @@ class VaultItemListingViewModel @Inject constructor(
         vaultRepository.sync()
     }
 
-    private fun handleBiometricsLockOut() {
+    private fun handleUserVerificationLockOut() {
         showFido2ErrorDialog()
     }
 
-    private fun handleBiometricsVerificationSuccess(
-        action: VaultItemListingsAction.BiometricsVerificationSuccess,
+    private fun handleUserVerificationSuccess(
+        action: VaultItemListingsAction.UserVerificationSuccess,
     ) {
         specialCircumstanceManager.specialCircumstance
             ?.toFido2RequestOrNull()
@@ -265,15 +261,15 @@ class VaultItemListingViewModel @Inject constructor(
             ?: showFido2ErrorDialog()
     }
 
-    private fun handleBiometricsVerificationFail() {
+    private fun handleUserVerificationFail() {
         showFido2ErrorDialog()
     }
 
-    private fun handleFido2BiometricsVerificationCancelled() {
+    private fun handleUserVerificationCancelled() {
         clearDialogState()
         sendEvent(
-            VaultItemListingEvent.CompleteFido2Create(
-                result = Fido2CreateCredentialResult.Cancelled,
+            VaultItemListingEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Cancelled,
             ),
         )
     }
@@ -406,7 +402,7 @@ class VaultItemListingViewModel @Inject constructor(
                     showFido2ErrorDialog()
                     return@launch
                 }
-            val result: Fido2CreateCredentialResult =
+            val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
                     userId = activeUserId,
                     fido2CredentialRequest = request,
@@ -496,8 +492,8 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleDismissFido2ErrorDialogClick() {
         clearDialogState()
         sendEvent(
-            VaultItemListingEvent.CompleteFido2Create(
-                result = Fido2CreateCredentialResult.Error,
+            VaultItemListingEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Error,
             ),
         )
     }
@@ -849,17 +845,17 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
         when (action.result) {
-            is Fido2CreateCredentialResult.Error -> {
+            is Fido2RegisterCredentialResult.Error -> {
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
             }
 
-            is Fido2CreateCredentialResult.Success -> {
+            is Fido2RegisterCredentialResult.Success -> {
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
             }
 
-            Fido2CreateCredentialResult.Cancelled -> Unit
+            Fido2RegisterCredentialResult.Cancelled -> Unit
         }
-        sendEvent(VaultItemListingEvent.CompleteFido2Create(action.result))
+        sendEvent(VaultItemListingEvent.CompleteFido2Registration(action.result))
     }
 
     private fun handleValidateFido2OriginResultReceive(
@@ -1442,12 +1438,12 @@ sealed class VaultItemListingEvent {
     data class ShowToast(val text: Text) : VaultItemListingEvent()
 
     /**
-     * Complete the current FIDO 2 credential creation process.
+     * Complete the current FIDO 2 credential registration process.
      *
-     * @property result the result of FIDO 2 credential creation.
+     * @property result the result of FIDO 2 credential registration.
      */
-    data class CompleteFido2Create(
-        val result: Fido2CreateCredentialResult,
+    data class CompleteFido2Registration(
+        val result: Fido2RegisterCredentialResult,
     ) : VaultItemListingEvent()
 
     /**
@@ -1571,24 +1567,24 @@ sealed class VaultItemListingsAction {
      * The user has too many failed verification attempts for FIDO operations and can no longer
      * use biometric verification for some time.
      */
-    data object BiometricsLockOut : VaultItemListingsAction()
+    data object UserVerificationLockOut : VaultItemListingsAction()
 
     /**
      * The user has failed biometric verification for FIDO 2 operations.
      */
-    data object BiometricsVerificationFail : VaultItemListingsAction()
+    data object UserVerificationFail : VaultItemListingsAction()
 
     /**
      * The user has successfully verified themself using biometrics.
      */
-    data class BiometricsVerificationSuccess(
+    data class UserVerificationSuccess(
         val selectedCipherView: CipherView,
     ) : VaultItemListingsAction()
 
     /**
      * The user has cancelled biometric user verification.
      */
-    data object BiometricsVerificationCancelled : VaultItemListingsAction()
+    data object UserVerificationCancelled : VaultItemListingsAction()
 
     /**
      * Models actions that the [VaultItemListingViewModel] itself might send.
@@ -1659,7 +1655,7 @@ sealed class VaultItemListingsAction {
          * Indicates that a result for FIDO 2 credential registration has been received.
          */
         data class Fido2RegisterCredentialResultReceive(
-            val result: Fido2CreateCredentialResult,
+            val result: Fido2RegisterCredentialResult,
         ) : Internal()
     }
 }
