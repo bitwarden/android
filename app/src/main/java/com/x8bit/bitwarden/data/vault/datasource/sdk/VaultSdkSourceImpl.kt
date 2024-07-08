@@ -470,6 +470,7 @@ class VaultSdkSourceImpl(
                 send(result)
                 close()
             } catch (e: BitwardenException) {
+                // Close with a non-null exception so that it is bubbles up to the caller.
                 close(e)
             }
             awaitClose()
@@ -501,10 +502,10 @@ class VaultSdkSourceImpl(
                 )
 
                 send(result)
-            } catch (e: BitwardenException) {
-                e.asFailure()
-            } finally {
                 close()
+            } catch (e: BitwardenException) {
+                // Close with a non-null exception so that it is bubbles up to the caller.
+                close(e)
             }
             awaitClose()
         }
