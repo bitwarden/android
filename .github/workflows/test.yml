@@ -58,7 +58,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Configure Ruby
-        uses: ruby/setup-ruby@3783f195e29b74ae398d7caca108814bbafde90e # v1.180.1
+        uses: ruby/setup-ruby@3a77c29278ae80936b4cb030fefc7d21c96c786f # v1.185.0
         with:
           bundler-cache: true
 
