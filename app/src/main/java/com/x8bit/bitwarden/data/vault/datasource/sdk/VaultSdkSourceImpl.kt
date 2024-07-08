@@ -29,7 +29,6 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
-import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
@@ -470,7 +469,7 @@ class VaultSdkSourceImpl(
                 send(result)
                 close()
             } catch (e: BitwardenException) {
-                // Close with a non-null exception so that it is bubbles up to the caller.
+                // Close with a non-null cause so that the exception is caught by runCatching.
                 close(e)
             }
             awaitClose()
@@ -504,7 +503,7 @@ class VaultSdkSourceImpl(
                 send(result)
                 close()
             } catch (e: BitwardenException) {
-                // Close with a non-null exception so that it is bubbles up to the caller.
+                // Close with a non-null cause so that the exception is caught by runCatching.
                 close(e)
             }
             awaitClose()
