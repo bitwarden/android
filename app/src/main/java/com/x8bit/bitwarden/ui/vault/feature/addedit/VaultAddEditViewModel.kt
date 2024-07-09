@@ -405,12 +405,12 @@ class VaultAddEditViewModel @Inject constructor(
         request: Fido2CredentialRequest,
         content: VaultAddEditState.ViewState.Content,
     ) {
-        val createOptions =
-            fido2CredentialManager.getPasskeyCreateOptionsOrNull(request.requestJson)
-                ?: run {
-                    showFido2ErrorDialog()
-                    return
-                }
+        val createOptions = fido2CredentialManager
+            .getPasskeyCreateOptionsOrNull(request.requestJson)
+            ?: run {
+                showFido2ErrorDialog()
+                return
+            }
 
         when (createOptions.authenticatorSelection.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
