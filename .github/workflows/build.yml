@@ -497,6 +497,25 @@ jobs:
           path: ./bw-fdroid-apk-sha256.txt
           if-no-files-found: error
 
+      - name: Upload F-Droid Beta .apk artifact
+        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        with:
+          name: com.x8bit.bitwarden-fdroid-beta.apk
+          path: app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden-fdroid-beta.apk
+          if-no-files-found: error
+
+      - name: Create checksum for F-Droid Beta artifact
+        run: |
+          sha256sum "app/build/outputs/apk/fdroid/beta/com.x8bit.bitwarden-fdroid-beta.apk" \
+          > ./bw-fdroid-beta-apk-sha256.txt
+
+      - name: Upload F-Droid Beta SHA file
+        uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4.3.4
+        with:
+          name: bw-fdroid-beta-apk-sha256.txt
+          path: ./bw-fdroid-beta-apk-sha256.txt
+          if-no-files-found: error
+
       - name: Install Firebase app distribution plugin
         if: ${{ github.ref_name == 'main' && inputs.distribute_to_firebase }}
         run: bundle exec fastlane add_plugin firebase_app_distribution
