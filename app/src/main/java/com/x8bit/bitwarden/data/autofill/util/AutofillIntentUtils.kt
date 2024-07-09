@@ -18,7 +18,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.model.AutofillTotpCopyData
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.util.getSafeParcelableExtra
-import java.util.UUID
+import kotlin.random.Random
 
 private const val AUTOFILL_SAVE_ITEM_DATA_KEY = "autofill-save-item-data"
 private const val AUTOFILL_SELECTION_DATA_KEY = "autofill-selection-data"
@@ -67,7 +67,7 @@ fun createTotpCopyIntentSender(
     return PendingIntent
         .getActivity(
             context,
-            UUID.randomUUID().hashCode(),
+            Random.nextInt(),
             intent,
             PendingIntent.FLAG_CANCEL_CURRENT.toPendingIntentMutabilityFlag(),
         )
@@ -93,7 +93,7 @@ fun createAutofillSavedItemIntentSender(
     return PendingIntent
         .getActivity(
             autofillAppInfo.context,
-            0,
+            Random.nextInt(),
             intent,
             PendingIntent.FLAG_CANCEL_CURRENT.toPendingIntentMutabilityFlag(),
         )
