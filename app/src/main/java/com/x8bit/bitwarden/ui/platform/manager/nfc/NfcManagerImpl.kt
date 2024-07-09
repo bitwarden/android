@@ -8,6 +8,7 @@ import android.nfc.NfcAdapter
 import com.x8bit.bitwarden.AuthCallbackActivity
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import kotlin.random.Random
 
 /**
  * The default implementation of the [NfcManager].
@@ -26,7 +27,7 @@ class NfcManagerImpl(
             activity,
             PendingIntent.getActivity(
                 activity,
-                1,
+                Random.nextInt(),
                 Intent(activity, AuthCallbackActivity::class.java).addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP,
                 ),
