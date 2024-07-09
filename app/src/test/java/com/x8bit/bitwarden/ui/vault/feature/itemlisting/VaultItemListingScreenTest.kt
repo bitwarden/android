@@ -355,6 +355,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no Sends in your account.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -384,12 +385,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `add an item button click should send AddItemClick action`() {
+    fun `Add an Item button click should send AddItemClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -490,6 +492,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -512,6 +515,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -528,7 +532,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Add an item button should be displayed according to state`() {
+    fun `Add an Item button should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
             .onNodeWithText(text = "Add an Item")
@@ -539,6 +543,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -552,6 +557,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = false,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -567,11 +573,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Save passkey as new login".asText(),
                 ),
             )
         }
         composeTestRule
             .onNodeWithText(text = "There are no items in your vault.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Save passkey as new login")
             .assertIsDisplayed()
     }
 
