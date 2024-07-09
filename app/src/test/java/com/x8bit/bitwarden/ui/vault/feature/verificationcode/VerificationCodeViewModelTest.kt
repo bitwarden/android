@@ -443,9 +443,9 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
                 ),
             )
 
-            val displayItems =
-                (viewModel.stateFlow.value.viewState as? VerificationCodeState.ViewState.Content)
-                    ?.verificationCodeDisplayItems
+            val displayItems = (viewModel.stateFlow.value.viewState as?
+                VerificationCodeState.ViewState.Content)
+                ?.verificationCodeDisplayItems
             assertEquals(1, displayItems?.size)
         }
 

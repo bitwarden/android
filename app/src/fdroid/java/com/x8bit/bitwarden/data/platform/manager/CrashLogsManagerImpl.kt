@@ -11,4 +11,6 @@ class CrashLogsManagerImpl(
     legacyAppCenterMigrator: LegacyAppCenterMigrator,
 ) : CrashLogsManager {
     override var isEnabled: Boolean = true
+
+    override fun trackNonFatalException(e: Exception) = Unit
 }

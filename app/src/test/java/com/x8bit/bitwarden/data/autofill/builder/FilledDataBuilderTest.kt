@@ -361,6 +361,96 @@ class FilledDataBuilderTest {
             }
         }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `build should return filled data with hard-coded max count of inline specs and partitions`() =
+        runTest {
+            // Setup
+            val password = "Password"
+            val username = "johnDoe"
+            val autofillCipher = AutofillCipher.Login(
+                cipherId = null,
+                isTotpEnabled = false,
+                name = "Cipher One",
+                password = password,
+                username = username,
+                subtitle = "Subtitle",
+            )
+            val filledItemPassword: FilledItem = mockk()
+            val filledItemUsername: FilledItem = mockk()
+            val autofillViewPassword: AutofillView.Login.Password = mockk {
+                every { buildFilledItemOrNull(password) } returns filledItemPassword
+            }
+            val autofillViewUsername: AutofillView.Login.Username = mockk {
+                every { buildFilledItemOrNull(username) } returns filledItemUsername
+            }
+            val autofillPartition = AutofillPartition.Login(
+                views = listOf(autofillViewPassword, autofillViewUsername),
+            )
+            val inlinePresentationSpec: InlinePresentationSpec = mockk()
+            val autofillRequest = AutofillRequest.Fillable(
+                ignoreAutofillIds = emptyList(),
+                inlinePresentationSpecs = listOf(inlinePresentationSpec),
+                maxInlineSuggestionsCount = 10,
+                packageName = null,
+                partition = autofillPartition,
+                uri = URI,
+            )
+            val filledPartition = FilledPartition(
+                autofillCipher = autofillCipher,
+                filledItems = listOf(filledItemPassword, filledItemUsername),
+                inlinePresentationSpec = inlinePresentationSpec,
+            )
+            val expected = FilledData(
+                // 5 with inline specs, 20 total
+                filledPartitions = listOf(
+                    filledPartition,
+                    filledPartition.copy(),
+                    filledPartition.copy(),
+                    filledPartition.copy(),
+                    filledPartition.copy(),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                    filledPartition.copy(inlinePresentationSpec = null),
+                ),
+                ignoreAutofillIds = emptyList(),
+                originalPartition = autofillPartition,
+                uri = URI,
+                vaultItemInlinePresentationSpec = inlinePresentationSpec,
+                isVaultLocked = false,
+            )
+            coEvery {
+                autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            } returns List(size = 22) { autofillCipher }
+
+            // Test
+            val actual = filledDataBuilder.build(
+                autofillRequest = autofillRequest,
+            )
+
+            // Verify
+            assertEquals(expected, actual)
+            coVerify(exactly = 1) {
+                autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            }
+            verify(exactly = 22) {
+                autofillViewPassword.buildFilledItemOrNull(password)
+                autofillViewUsername.buildFilledItemOrNull(username)
+            }
+        }
+
     companion object {
         private const val URI: String = "androidapp://com.x8bit.bitwarden"
     }
