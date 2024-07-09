@@ -893,7 +893,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 userVerificationRequirement = PublicKeyCredentialCreationOptions
                     .AuthenticatorSelectionCriteria
                     .UserVerificationRequirement
-                    .DISCOURAGED
+                    .DISCOURAGED,
             )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(

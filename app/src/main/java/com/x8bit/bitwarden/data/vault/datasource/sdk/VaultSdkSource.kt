@@ -8,8 +8,6 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
-import com.bitwarden.fido.CheckUserOptions
-import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
