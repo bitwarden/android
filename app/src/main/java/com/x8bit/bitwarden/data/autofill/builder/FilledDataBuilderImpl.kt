@@ -11,6 +11,22 @@ import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.util.buildFilledItemOrNull
 
 /**
+ * The maximum amount of filled partitions the user will see. Viewing the rest will require opening
+ * the vault.
+ *
+ * Note: The vault item is not included in this count.
+ */
+private const val MAX_FILLED_PARTITIONS_COUNT: Int = 20
+
+/**
+ * The maximum amount of inline suggestions the user will see. Viewing the rest will require
+ * opening the vault.
+ *
+ * Note: The vault item is not included in this count.
+ */
+private const val MAX_INLINE_SUGGESTION_COUNT: Int = 5
+
+/**
  * The default [FilledDataBuilder]. This converts parsed autofill data into filled data that is
  * ready to be loaded into an autofill response.
  */
@@ -21,7 +37,9 @@ class FilledDataBuilderImpl(
         val isVaultLocked = autofillCipherProvider.isVaultLocked()
 
         // Subtract one to make sure there is space for the vault item.
-        val maxCipherInlineSuggestionsCount = autofillRequest.maxInlineSuggestionsCount - 1
+        val maxCipherInlineSuggestionsCount = (autofillRequest.maxInlineSuggestionsCount - 1)
+            .coerceAtMost(maximumValue = MAX_INLINE_SUGGESTION_COUNT)
+
         // Track the number of inline suggestions that have been added.
         var inlineSuggestionsAdded = 0
 
@@ -76,7 +94,7 @@ class FilledDataBuilderImpl(
             ?.getOrLastOrNull(inlineSuggestionsAdded)
 
         return FilledData(
-            filledPartitions = filledPartitions,
+            filledPartitions = filledPartitions.take(n = MAX_FILLED_PARTITIONS_COUNT),
             ignoreAutofillIds = autofillRequest.ignoreAutofillIds,
             originalPartition = autofillRequest.partition,
             uri = autofillRequest.uri,
