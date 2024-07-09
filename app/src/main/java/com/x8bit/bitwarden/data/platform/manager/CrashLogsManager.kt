@@ -9,4 +9,9 @@ interface CrashLogsManager {
      * Gets or sets whether the collection of crash logs is enabled.
      */
     var isEnabled: Boolean
+
+    /**
+     * Tracks an exception if logs are enabled.
+     */
+    fun trackNonFatalException(e: Exception)
 }
