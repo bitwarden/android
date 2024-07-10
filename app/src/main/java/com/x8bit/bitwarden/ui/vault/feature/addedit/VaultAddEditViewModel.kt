@@ -318,28 +318,15 @@ class VaultAddEditViewModel @Inject constructor(
     @Suppress("LongMethod")
     private fun handleSaveClick() = onContent { content ->
         if (content.common.name.isBlank()) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.validation_field_required
-                            .asText(R.string.name.asText()),
-                    ),
-                )
-            }
+            showGenericErrorDialog(
+                message = R.string.validation_field_required.asText(R.string.name.asText()),
+            )
             return@onContent
         } else if (
             content.common.selectedOwnerId != null &&
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = VaultAddEditState.DialogState.Generic(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.select_one_collection.asText(),
-                    ),
-                )
-            }
+            showGenericErrorDialog(R.string.select_one_collection.asText())
             return@onContent
         }
 
@@ -1147,14 +1134,7 @@ class VaultAddEditViewModel @Inject constructor(
 
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultAddEditState.DialogState.Generic(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                showGenericErrorDialog()
             }
 
             is CreateCipherResult.Success -> {
@@ -1181,17 +1161,12 @@ class VaultAddEditViewModel @Inject constructor(
         clearDialogState()
         when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultAddEditState.DialogState.Generic(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = result
-                                .errorMessage
-                                ?.asText()
-                                ?: R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                showGenericErrorDialog(
+                    message = result
+                        .errorMessage
+                        ?.asText()
+                        ?: R.string.generic_error_message.asText(),
+                )
             }
 
             is UpdateCipherResult.Success -> {
@@ -1206,13 +1181,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
         when (action.result) {
             DeleteCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultAddEditState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                showGenericErrorDialog()
             }
 
             DeleteCipherResult.Success -> {
@@ -1331,14 +1300,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             TotpCodeResult.CodeScanningError -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultAddEditState.DialogState.Generic(
-                            title = R.string.an_error_has_occurred.asText(),
-                            message = R.string.authenticator_key_read_error.asText(),
-                        ),
-                    )
-                }
+                showGenericErrorDialog(R.string.authenticator_key_read_error.asText())
             }
         }
     }
@@ -1378,9 +1340,7 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
         }
-        mutableStateFlow.update {
-            it.copy(dialog = VaultAddEditState.DialogState.Generic(message = message))
-        }
+        showGenericErrorDialog(message = message)
     }
 
     private fun handleFido2RegisterCredentialResultReceive(
@@ -1405,6 +1365,17 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun clearDialogState() {
         mutableStateFlow.update { it.copy(dialog = null) }
+    }
+
+    private fun showGenericErrorDialog(message: Text = R.string.generic_error_message.asText()) {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Generic(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = message,
+                ),
+            )
+        }
     }
 
     private inline fun onContent(
