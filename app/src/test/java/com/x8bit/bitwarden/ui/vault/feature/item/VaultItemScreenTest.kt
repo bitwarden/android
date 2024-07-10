@@ -867,6 +867,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .onNodeWithText("Restore")
             .performClick()
 
+        mutableStateFlow.update {
+            it.copy(pendingRestoreCipher = true)
+        }
+
         composeTestRule
             .onAllNodesWithText("Do you really want to restore this item?")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -910,6 +914,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .onNodeWithText("Restore")
             .performClick()
 
+        mutableStateFlow.update {
+            it.copy(pendingRestoreCipher = true)
+        }
+
         composeTestRule
             .onAllNodesWithText("Do you really want to restore this item?")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -930,6 +938,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
+
+        mutableStateFlow.update {
+            it.copy(pendingRestoreCipher = false)
+        }
 
         composeTestRule.assertNoDialogExists()
     }
@@ -956,6 +968,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .onNodeWithText("Restore")
             .performClick()
 
+        mutableStateFlow.update {
+            it.copy(pendingRestoreCipher = true)
+        }
+
         composeTestRule
             .onAllNodesWithText("Do you really want to restore this item?")
             .filterToOne(hasAnyAncestor(isDialog()))
@@ -976,6 +992,10 @@ class VaultItemScreenTest : BaseComposeTest() {
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
             .performClick()
+
+        mutableStateFlow.update {
+            it.copy(pendingRestoreCipher = false)
+        }
 
         composeTestRule.assertNoDialogExists()
 
@@ -2191,6 +2211,7 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     vaultItemId = VAULT_ITEM_ID,
     viewState = VaultItemState.ViewState.Loading,
     dialog = null,
+    pendingRestoreCipher = false,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =

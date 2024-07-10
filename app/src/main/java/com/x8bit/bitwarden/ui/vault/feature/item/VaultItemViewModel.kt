@@ -62,6 +62,7 @@ class VaultItemViewModel @Inject constructor(
         vaultItemId = VaultItemArgs(savedStateHandle).vaultItemId,
         viewState = VaultItemState.ViewState.Loading,
         dialog = null,
+        pendingRestoreCipher = false,
     ),
 ) {
     /**
@@ -165,6 +166,8 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick -> {
                 handleConfirmCloneClick()
             }
+            is VaultItemAction.Common.DismissRestoreDialog -> handleDismissRestoreDialog()
+            is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
         }
     }
 
@@ -502,6 +505,7 @@ class VaultItemViewModel @Inject constructor(
                 dialog = VaultItemState.DialogState.Loading(
                     R.string.restoring.asText(),
                 ),
+                pendingRestoreCipher = false,
             )
         }
         onContent { content ->
@@ -1058,12 +1062,41 @@ class VaultItemViewModel @Inject constructor(
         }
     }
 
+    private fun handleRestoreItemClicked() {
+
+        onContent { content ->
+            if (content.common.requiresReprompt) {
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.RestoreItemClick
+                    )
+                )
+            } else {
+                updatePendingRestoreCipher(true)
+            }
+        }
+    }
+
+    private fun handleDismissRestoreDialog() {
+        updatePendingRestoreCipher(false)
+    }
+
     //endregion Internal Type Handlers
+
+    private fun updatePendingRestoreCipher(updatedValue: Boolean) = mutableStateFlow.update {
+        it.copy(pendingRestoreCipher = updatedValue)
+    }
+
+    private fun updateDialogState(dialog: VaultItemState.DialogState?) {
+        mutableStateFlow.update {
+            it.copy(dialog = dialog)
+        }
+    }
 
     private inline fun onContent(
         crossinline block: (VaultItemState.ViewState.Content) -> Unit,
     ) {
-        (state.viewState as? VaultItemState.ViewState.Content)?.let(block)
+        state.viewState.asContentOrNull()?.let(block)
     }
 
     private inline fun onLoginContent(
@@ -1072,7 +1105,7 @@ class VaultItemViewModel @Inject constructor(
             VaultItemState.ViewState.Content.ItemType.Login,
         ) -> Unit,
     ) {
-        (state.viewState as? VaultItemState.ViewState.Content)
+        state.viewState.asContentOrNull()
             ?.let { content ->
                 (content.type as? VaultItemState.ViewState.Content.ItemType.Login)
                     ?.let { loginContent ->
@@ -1087,7 +1120,7 @@ class VaultItemViewModel @Inject constructor(
             VaultItemState.ViewState.Content.ItemType.Card,
         ) -> Unit,
     ) {
-        (state.viewState as? VaultItemState.ViewState.Content)
+        state.viewState.asContentOrNull()
             ?.let { content ->
                 (content.type as? VaultItemState.ViewState.Content.ItemType.Card)
                     ?.let { loginContent ->
@@ -1105,13 +1138,14 @@ data class VaultItemState(
     val vaultItemId: String,
     val viewState: ViewState,
     val dialog: DialogState?,
+    val pendingRestoreCipher: Boolean,
 ) : Parcelable {
 
     /**
      * Whether or not the cipher has been deleted.
      */
     val isCipherDeleted: Boolean
-        get() = (viewState as? ViewState.Content)
+        get() = viewState.asContentOrNull()
             ?.common
             ?.currentCipher
             ?.deletedDate != null
@@ -1126,7 +1160,7 @@ data class VaultItemState(
      * Whether or not the cipher is in a collection.
      */
     val isCipherInCollection: Boolean
-        get() = (viewState as? ViewState.Content)
+        get() = viewState.asContentOrNull()
             ?.common
             ?.currentCipher
             ?.collectionIds
@@ -1399,6 +1433,8 @@ data class VaultItemState(
                 }
             }
         }
+
+        fun asContentOrNull(): Content? = this as? Content
     }
 
     /**
@@ -1542,6 +1578,12 @@ sealed class VaultItemAction {
         data object ConfirmDeleteClick : Common()
 
         /**
+         * The user has clicked to restore a deleted item.
+
+         */
+        data object RestoreVaultItemClick : Common()
+
+        /**
          * The user has confirmed to restore the cipher.
          */
         data object ConfirmRestoreClick : Common()
@@ -1550,6 +1592,11 @@ sealed class VaultItemAction {
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialogClick : Common()
+
+        /**
+         * The user has clicked dismiss restore item dialog
+         */
+        data object DismissRestoreDialog : Common()
 
         /**
          * The user has clicked the edit button.
@@ -1933,5 +1980,14 @@ sealed class PasswordRepromptAction : Parcelable {
                 field = this.field,
                 isVisible = this.isVisible,
             )
+    }
+
+    /**
+     * Indicates that we should show the confirm restore
+     */
+    @Parcelize
+    data object RestoreItemClick : PasswordRepromptAction() {
+        override val vaultItemAction: VaultItemAction
+            get() = VaultItemAction.Common.RestoreVaultItemClick
     }
 }

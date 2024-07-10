@@ -73,8 +73,6 @@ fun VaultItemScreen(
         { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
     }
 
-    var pendingRestoreCipher by rememberSaveable { mutableStateOf(false) }
-
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)
             ?.let {
@@ -152,22 +150,23 @@ fun VaultItemScreen(
         },
     )
 
-    if (pendingRestoreCipher) {
+    val dismissRestoreDialog = remember(viewModel) {
+        {
+            viewModel.trySendAction(VaultItemAction.Common.DismissRestoreDialog)
+        }
+    }
+
+    if (state.pendingRestoreCipher) {
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.restore),
             message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
             confirmButtonText = stringResource(id = R.string.ok),
             dismissButtonText = stringResource(id = R.string.cancel),
             onConfirmClick = {
-                pendingRestoreCipher = false
                 confirmRestoreAction()
             },
-            onDismissClick = {
-                pendingRestoreCipher = false
-            },
-            onDismissRequest = {
-                pendingRestoreCipher = false
-            },
+            onDismissClick = dismissRestoreDialog,
+            onDismissRequest = dismissRestoreDialog,
         )
     }
 
@@ -189,7 +188,11 @@ fun VaultItemScreen(
                     if (state.isCipherDeleted) {
                         BitwardenTextButton(
                             label = stringResource(id = R.string.restore),
-                            onClick = { pendingRestoreCipher = true },
+                            onClick = remember(viewModel) {
+                                {
+                                    viewModel.trySendAction(VaultItemAction.Common.RestoreVaultItemClick)
+                                }
+                            },
                             modifier = Modifier.testTag("RestoreButton"),
                         )
                     }
