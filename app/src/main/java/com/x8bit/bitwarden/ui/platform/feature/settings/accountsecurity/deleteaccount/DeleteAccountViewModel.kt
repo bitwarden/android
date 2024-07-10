@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -74,12 +75,23 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleDeleteAccountConfirmDialogClick(
         action: DeleteAccountAction.DeleteAccountConfirmDialogClick,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading)
-        }
         viewModelScope.launch {
-            val result = authRepository.deleteAccountWithMasterPassword(action.masterPassword)
-            sendAction(DeleteAccountAction.Internal.DeleteAccountComplete(result))
+            val validPasswordResult = authRepository.validatePassword(action.masterPassword)
+            if ((validPasswordResult as? ValidatePasswordResult.Success)?.isValid == false) {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialog = DeleteAccountState.DeleteAccountDialog.Error(
+                            message = R.string.invalid_master_password.asText()
+                        )
+                    )
+                }
+            } else {
+                mutableStateFlow.update {
+                    it.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading)
+                }
+                val result = authRepository.deleteAccountWithMasterPassword(action.masterPassword)
+                sendAction(DeleteAccountAction.Internal.DeleteAccountComplete(result))
+            }
         }
     }
 
