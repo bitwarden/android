@@ -50,8 +50,8 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
-import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingBiometricUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
+import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.initials
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
@@ -81,8 +81,8 @@ fun VaultItemListingScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
-    val biometricsHandlers = remember(viewModel) {
-        VaultItemListingBiometricUserVerificationHandlers.create(viewModel = viewModel)
+    val userVerificationHandlers = remember(viewModel) {
+        VaultItemListingUserVerificationHandlers.create(viewModel = viewModel)
     }
 
     val pullToRefreshState = rememberPullToRefreshState().takeIf { state.isPullToRefreshEnabled }
@@ -149,12 +149,12 @@ fun VaultItemListingScreen(
                 if (biometricsManager.isUserVerificationSupported) {
                     biometricsManager.promptUserVerification(
                         onSuccess = {
-                            biometricsHandlers
-                                .onBiometricsVerificationSuccess(event.selectedCipherView)
+                            userVerificationHandlers
+                                .onUserVerificationSuccess(event.selectedCipherView)
                         },
-                        onCancel = biometricsHandlers.onBiometricsVerificationCancelled,
-                        onLockOut = biometricsHandlers.onBiometricsLockOut,
-                        onError = biometricsHandlers.onBiometricsVerificationFail,
+                        onCancel = userVerificationHandlers.onUserVerificationCancelled,
+                        onLockOut = userVerificationHandlers.onUserVerificationLockOut,
+                        onError = userVerificationHandlers.onUserVerificationFail,
                     )
                 } else {
                     if (event.isRequired) {

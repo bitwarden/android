@@ -129,8 +129,8 @@ class BiometricsManagerImpl(
                     .setAllowedAuthenticators(Authenticators.BIOMETRIC_STRONG)
                     .setNegativeButtonText(activity.getString(R.string.cancel))
                 biometricPrompt.authenticate(
-                    /* info = */ promptInfoBuilder.build(),
-                    /* crypto = */ BiometricPrompt.CryptoObject(it),
+                    promptInfoBuilder.build(),
+                    BiometricPrompt.CryptoObject(it),
                 )
             }
             ?: run {

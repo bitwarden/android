@@ -50,11 +50,11 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
 import com.x8bit.bitwarden.ui.platform.util.persistentListOfNotNull
 import com.x8bit.bitwarden.ui.tools.feature.generator.model.GeneratorMode
-import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditBiometricUserVerificationHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditUserVerificationHandlers
 
 /**
  * Top level composable for the vault add item screen.
@@ -79,8 +79,8 @@ fun VaultAddEditScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
-    val biometricsHandlers = remember(viewModel) {
-        VaultAddEditBiometricUserVerificationHandlers.create(viewModel = viewModel)
+    val userVerificationHandlers = remember(viewModel) {
+        VaultAddEditUserVerificationHandlers.create(viewModel = viewModel)
     }
 
     EventsEffect(viewModel = viewModel) { event ->
@@ -127,10 +127,10 @@ fun VaultAddEditScreen(
                 when {
                     biometricsManager.isUserVerificationSupported -> {
                         biometricsManager.promptUserVerification(
-                            onSuccess = biometricsHandlers.onBiometricsVerificationSuccess,
-                            onCancel = biometricsHandlers.onBiometricsVerificationFail,
-                            onError = biometricsHandlers.onBiometricsVerificationFail,
-                            onLockOut = biometricsHandlers.onBiometricsLockOut,
+                            onSuccess = userVerificationHandlers.onUserVerificationSuccess,
+                            onCancel = userVerificationHandlers.onUserVerificationFail,
+                            onError = userVerificationHandlers.onUserVerificationFail,
+                            onLockOut = userVerificationHandlers.onUserVerificationLockOut,
                         )
                     }
 
