@@ -62,7 +62,6 @@ class VaultItemViewModel @Inject constructor(
         vaultItemId = VaultItemArgs(savedStateHandle).vaultItemId,
         viewState = VaultItemState.ViewState.Loading,
         dialog = null,
-        pendingRestoreCipher = false,
     ),
 ) {
     /**
@@ -166,7 +165,6 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick -> {
                 handleConfirmCloneClick()
             }
-            is VaultItemAction.Common.DismissRestoreDialog -> handleDismissRestoreDialog()
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
         }
     }
@@ -176,28 +174,24 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleDismissDialogClick() {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        dismissDialog()
     }
 
     private fun handleDeleteClick() {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.DeleteClick,
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.DeleteClick,
+                    ),
+                )
                 return@onContent
             } else {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState
-                            .DialogState
-                            .DeleteConfirmationPrompt(state.deletionConfirmationText),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState
+                        .DialogState
+                        .DeleteConfirmationPrompt(state.deletionConfirmationText),
+                )
             }
         }
     }
@@ -205,13 +199,11 @@ class VaultItemViewModel @Inject constructor(
     private fun handleEditClick() {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.EditClick,
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.EditClick,
+                    ),
+                )
                 return@onContent
             }
             sendEvent(
@@ -224,9 +216,7 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleMasterPasswordSubmit(action: VaultItemAction.Common.MasterPasswordSubmit) {
-        mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
-        }
+        updateDialogState(VaultItemState.DialogState.Loading(R.string.loading.asText()))
         viewModelScope.launch {
             val result = authRepository.validatePassword(action.masterPassword)
             sendAction(VaultItemAction.Internal.ValidatePasswordReceive(result, action.action))
@@ -243,13 +233,11 @@ class VaultItemViewModel @Inject constructor(
     ) {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.CopyClick(action.field),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(action.field),
+                    ),
+                )
                 return@onContent
             }
             clipboardManager.setText(text = action.field)
@@ -272,16 +260,14 @@ class VaultItemViewModel @Inject constructor(
     ) {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.ViewHiddenFieldClicked(
-                                field = action.field,
-                                isVisible = action.isVisible,
-                            ),
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewHiddenFieldClicked(
+                            field = action.field,
+                            isVisible = action.isVisible,
                         ),
-                    )
-                }
+                    ),
+                )
                 return@onContent
             }
             mutableStateFlow.update { currentState ->
@@ -314,23 +300,17 @@ class VaultItemViewModel @Inject constructor(
     ) {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.AttachmentDownloadClick(
-                                attachment = action.attachment,
-                            ),
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.AttachmentDownloadClick(
+                            attachment = action.attachment,
                         ),
-                    )
-                }
+                    ),
+                )
                 return@onContent
             }
 
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = VaultItemState.DialogState.Loading(R.string.downloading.asText()),
-                )
-            }
+            updateDialogState(VaultItemState.DialogState.Loading(R.string.downloading.asText()))
 
             viewModelScope.launch {
                 val result = vaultRepository
@@ -352,9 +332,7 @@ class VaultItemViewModel @Inject constructor(
     private fun handleAttachmentFileLocationReceive(
         action: VaultItemAction.Common.AttachmentFileLocationReceive,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        dismissDialog()
 
         val file = temporaryAttachmentData ?: return
         viewModelScope.launch {
@@ -377,25 +355,21 @@ class VaultItemViewModel @Inject constructor(
             temporaryAttachmentData?.let { fileManager.delete(it) }
         }
 
-        mutableStateFlow.update {
-            it.copy(
-                dialog = VaultItemState.DialogState.Generic(
-                    R.string.unable_to_save_attachment.asText(),
-                ),
-            )
-        }
+        updateDialogState(
+            VaultItemState.DialogState.Generic(
+                R.string.unable_to_save_attachment.asText(),
+            ),
+        )
     }
 
     private fun handleAttachmentsClick() {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.AttachmentsClick,
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.AttachmentsClick,
+                    ),
+                )
                 return@onContent
             }
             sendEvent(VaultItemEvent.NavigateToAttachments(itemId = state.vaultItemId))
@@ -406,22 +380,18 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCloneClick() {
         onContent { content ->
             if (content.common.requiresCloneConfirmation) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt(
-                            message = R.string.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.Fido2CredentialCannotBeCopiedConfirmationPrompt(
+                        message = R.string.the_passkey_will_not_be_copied_to_the_cloned_item_do_you_want_to_continue_cloning_this_item.asText(),
+                    ),
+                )
                 return@onContent
             } else if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.CloneClick,
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CloneClick,
+                    ),
+                )
                 return@onContent
             }
             sendEvent(VaultItemEvent.NavigateToAddEdit(itemId = state.vaultItemId, isClone = true))
@@ -448,13 +418,11 @@ class VaultItemViewModel @Inject constructor(
     private fun handleMoveToOrganizationClick() {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.MoveToOrganizationClick,
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.MoveToOrganizationClick,
+                    ),
+                )
                 return@onContent
             }
             sendEvent(VaultItemEvent.NavigateToMoveToOrganization(itemId = state.vaultItemId))
@@ -467,17 +435,15 @@ class VaultItemViewModel @Inject constructor(
 
     private fun handleConfirmDeleteClick() {
         onContent { content ->
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = VaultItemState.DialogState.Loading(
-                        if (state.isCipherDeleted) {
-                            R.string.deleting.asText()
-                        } else {
-                            R.string.soft_deleting.asText()
-                        },
-                    ),
-                )
-            }
+            updateDialogState(
+                VaultItemState.DialogState.Loading(
+                    if (state.isCipherDeleted) {
+                        R.string.deleting.asText()
+                    } else {
+                        R.string.soft_deleting.asText()
+                    },
+                ),
+            )
             content.common.currentCipher?.let { cipher ->
                 viewModelScope.launch {
                     trySendAction(
@@ -500,14 +466,11 @@ class VaultItemViewModel @Inject constructor(
     }
 
     private fun handleConfirmRestoreClick() {
-        mutableStateFlow.update {
-            it.copy(
-                dialog = VaultItemState.DialogState.Loading(
-                    R.string.restoring.asText(),
-                ),
-                pendingRestoreCipher = false,
-            )
-        }
+        updateDialogState(
+            VaultItemState.DialogState.Loading(
+                R.string.restoring.asText(),
+            ),
+        )
         onContent { content ->
             content
                 .common
@@ -570,9 +533,7 @@ class VaultItemViewModel @Inject constructor(
     private fun handleCheckForBreachClick() {
         onLoginContent { _, login ->
             val password = requireNotNull(login.passwordData?.password)
-            mutableStateFlow.update {
-                it.copy(dialog = VaultItemState.DialogState.Loading(R.string.loading.asText()))
-            }
+            updateDialogState(VaultItemState.DialogState.Loading(R.string.loading.asText()))
             viewModelScope.launch {
                 val result = authRepository.getPasswordBreachCount(password = password)
                 sendAction(VaultItemAction.Internal.PasswordBreachReceive(result))
@@ -584,13 +545,11 @@ class VaultItemViewModel @Inject constructor(
         onLoginContent { content, login ->
             val password = requireNotNull(login.passwordData?.password)
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.CopyClick(value = password),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = password),
+                    ),
+                )
                 return@onLoginContent
             }
             clipboardManager.setText(text = password)
@@ -627,13 +586,11 @@ class VaultItemViewModel @Inject constructor(
     private fun handlePasswordHistoryClick() {
         onContent { content ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.PasswordHistoryClick,
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.PasswordHistoryClick,
+                    ),
+                )
                 return@onContent
             }
             sendEvent(VaultItemEvent.NavigateToPasswordHistory(state.vaultItemId))
@@ -645,15 +602,13 @@ class VaultItemViewModel @Inject constructor(
     ) {
         onLoginContent { content, login ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.ViewPasswordClick(
-                                isVisible = action.isVisible,
-                            ),
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewPasswordClick(
+                            isVisible = action.isVisible,
                         ),
-                    )
-                }
+                    ),
+                )
                 return@onLoginContent
             }
             mutableStateFlow.update { currentState ->
@@ -700,15 +655,13 @@ class VaultItemViewModel @Inject constructor(
     ) {
         onCardContent { content, card ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.ViewCodeClick(
-                                isVisible = action.isVisible,
-                            ),
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewCodeClick(
+                            isVisible = action.isVisible,
                         ),
-                    )
-                }
+                    ),
+                )
                 return@onCardContent
             }
             mutableStateFlow.update { currentState ->
@@ -736,13 +689,11 @@ class VaultItemViewModel @Inject constructor(
         onCardContent { content, card ->
             val number = requireNotNull(card.number).number
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.CopyClick(value = number),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = number),
+                    ),
+                )
                 return@onCardContent
             }
             clipboardManager.setText(text = number)
@@ -753,13 +704,11 @@ class VaultItemViewModel @Inject constructor(
         onCardContent { content, card ->
             val securityCode = requireNotNull(card.securityCode).code
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.CopyClick(value = securityCode),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.CopyClick(value = securityCode),
+                    ),
+                )
                 return@onCardContent
             }
             clipboardManager.setText(text = securityCode)
@@ -771,15 +720,13 @@ class VaultItemViewModel @Inject constructor(
     ) {
         onCardContent { content, card ->
             if (content.common.requiresReprompt) {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.MasterPasswordDialog(
-                            action = PasswordRepromptAction.ViewNumberClick(
-                                isVisible = action.isVisible,
-                            ),
+                updateDialogState(
+                    VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.ViewNumberClick(
+                            isVisible = action.isVisible,
                         ),
-                    )
-                }
+                    ),
+                )
                 return@onCardContent
             }
             mutableStateFlow.update { currentState ->
@@ -846,9 +793,7 @@ class VaultItemViewModel @Inject constructor(
                 }
             }
         }
-        mutableStateFlow.update {
-            it.copy(dialog = VaultItemState.DialogState.Generic(message = message))
-        }
+        updateDialogState(VaultItemState.DialogState.Generic(message = message))
     }
 
     @Suppress("LongMethod")
@@ -934,13 +879,11 @@ class VaultItemViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             ValidatePasswordResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                )
             }
 
             is ValidatePasswordResult.Success -> {
@@ -957,13 +900,11 @@ class VaultItemViewModel @Inject constructor(
                         trySendAction(action.repromptAction.vaultItemAction)
                     }
                 } else {
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialog = VaultItemState.DialogState.Generic(
-                                message = R.string.invalid_master_password.asText(),
-                            ),
-                        )
-                    }
+                    updateDialogState(
+                        VaultItemState.DialogState.Generic(
+                            message = R.string.invalid_master_password.asText(),
+                        ),
+                    )
                 }
             }
         }
@@ -972,17 +913,15 @@ class VaultItemViewModel @Inject constructor(
     private fun handleDeleteCipherReceive(action: VaultItemAction.Internal.DeleteCipherReceive) {
         when (action.result) {
             DeleteCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                )
             }
 
             DeleteCipherResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
+                dismissDialog()
                 sendEvent(
                     VaultItemEvent.ShowToast(
                         message = if (state.isCipherDeleted) {
@@ -1000,17 +939,15 @@ class VaultItemViewModel @Inject constructor(
     private fun handleRestoreCipherReceive(action: VaultItemAction.Internal.RestoreCipherReceive) {
         when (action.result) {
             RestoreCipherResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = R.string.generic_error_message.asText(),
+                    ),
+                )
             }
 
             RestoreCipherResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
+                dismissDialog()
                 sendEvent(VaultItemEvent.ShowToast(message = R.string.item_restored.asText()))
                 sendEvent(VaultItemEvent.NavigateBack)
             }
@@ -1022,13 +959,11 @@ class VaultItemViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             DownloadAttachmentResult.Failure -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = VaultItemState.DialogState.Generic(
-                            message = R.string.unable_to_download_file.asText(),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    VaultItemState.DialogState.Generic(
+                        message = R.string.unable_to_download_file.asText(),
+                    ),
+                )
             }
 
             is DownloadAttachmentResult.Success -> {
@@ -1052,18 +987,15 @@ class VaultItemViewModel @Inject constructor(
         if (action.isSaved) {
             sendEvent(VaultItemEvent.ShowToast(R.string.save_attachment_success.asText()))
         } else {
-            mutableStateFlow.update {
-                it.copy(
-                    dialog = VaultItemState.DialogState.Generic(
-                        R.string.unable_to_save_attachment.asText(),
-                    ),
-                )
-            }
+            updateDialogState(
+                VaultItemState.DialogState.Generic(
+                    R.string.unable_to_save_attachment.asText(),
+                ),
+            )
         }
     }
 
     private fun handleRestoreItemClicked() {
-
         onContent { content ->
             if (content.common.requiresReprompt) {
                 updateDialogState(
@@ -1072,25 +1004,21 @@ class VaultItemViewModel @Inject constructor(
                     ),
                 )
             } else {
-                updatePendingRestoreCipher(true)
+                updateDialogState(VaultItemState.DialogState.RestoreItemDialog)
             }
         }
     }
 
-    private fun handleDismissRestoreDialog() {
-        updatePendingRestoreCipher(false)
-    }
-
     //endregion Internal Type Handlers
-
-    private fun updatePendingRestoreCipher(updatedValue: Boolean) = mutableStateFlow.update {
-        it.copy(pendingRestoreCipher = updatedValue)
-    }
 
     private fun updateDialogState(dialog: VaultItemState.DialogState?) {
         mutableStateFlow.update {
             it.copy(dialog = dialog)
         }
+    }
+
+    private fun dismissDialog() {
+        updateDialogState(null)
     }
 
     private inline fun onContent(
@@ -1138,7 +1066,6 @@ data class VaultItemState(
     val vaultItemId: String,
     val viewState: ViewState,
     val dialog: DialogState?,
-    val pendingRestoreCipher: Boolean,
 ) : Parcelable {
 
     /**
@@ -1485,6 +1412,12 @@ data class VaultItemState(
         data class Fido2CredentialCannotBeCopiedConfirmationPrompt(
             val message: Text,
         ) : DialogState()
+
+        /**
+         * Displays the dialog to prompt the user to confirm restoring a deleted item.
+         */
+        @Parcelize
+        data object RestoreItemDialog : DialogState()
     }
 }
 
@@ -1596,11 +1529,6 @@ sealed class VaultItemAction {
          * The user has clicked to dismiss the dialog.
          */
         data object DismissDialogClick : Common()
-
-        /**
-         * The user has clicked dismiss restore item dialog
-         */
-        data object DismissRestoreDialog : Common()
 
         /**
          * The user has clicked the edit button.

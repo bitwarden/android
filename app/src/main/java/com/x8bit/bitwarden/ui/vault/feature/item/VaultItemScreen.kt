@@ -67,9 +67,6 @@ fun VaultItemScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
-    val confirmRestoreAction = remember(viewModel) {
-        { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
-    }
 
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)
@@ -146,27 +143,12 @@ fun VaultItemScreen(
                 )
             }
         },
+        onConfirmRestoreAction = remember(viewModel) {
+            {
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+            }
+        },
     )
-
-    val dismissRestoreDialog = remember(viewModel) {
-        {
-            viewModel.trySendAction(VaultItemAction.Common.DismissRestoreDialog)
-        }
-    }
-
-    if (state.pendingRestoreCipher) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.restore),
-            message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
-            dismissButtonText = stringResource(id = R.string.cancel),
-            onConfirmClick = {
-                confirmRestoreAction()
-            },
-            onDismissClick = dismissRestoreDialog,
-            onDismissRequest = dismissRestoreDialog,
-        )
-    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -301,6 +283,7 @@ private fun VaultItemDialogs(
     onConfirmDeleteClick: () -> Unit,
     onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
+    onConfirmRestoreAction: () -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
@@ -345,7 +328,15 @@ private fun VaultItemDialogs(
                 onDismissRequest = onDismissRequest,
             )
         }
-
+        VaultItemState.DialogState.RestoreItemDialog -> BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.restore),
+            message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
+            confirmButtonText = stringResource(id = R.string.ok),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = onConfirmRestoreAction,
+            onDismissClick = onDismissRequest,
+            onDismissRequest = onDismissRequest,
+        )
         null -> Unit
     }
 }
