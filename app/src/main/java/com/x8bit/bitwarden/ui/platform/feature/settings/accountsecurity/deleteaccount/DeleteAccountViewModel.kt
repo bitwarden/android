@@ -81,8 +81,8 @@ class DeleteAccountViewModel @Inject constructor(
                 mutableStateFlow.update {
                     it.copy(
                         dialog = DeleteAccountState.DeleteAccountDialog.Error(
-                            message = R.string.invalid_master_password.asText()
-                        )
+                            message = R.string.invalid_master_password.asText(),
+                        ),
                     )
                 }
             } else {
