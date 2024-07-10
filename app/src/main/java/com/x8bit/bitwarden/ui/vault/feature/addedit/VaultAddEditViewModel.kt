@@ -452,16 +452,12 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleDismissDialog() {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
     }
 
     private fun handleInitialAutofillDialogDismissed() {
         settingsRepository.initialAutofillDialogShown = true
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
     }
 
     private fun handleHiddenFieldVisibilityChange(
@@ -1147,9 +1143,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleCreateCipherResultReceive(
         action: VaultAddEditAction.Internal.CreateCipherResultReceive,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialog = null)
-        }
+        clearDialogState()
 
         when (action.createCipherResult) {
             is CreateCipherResult.Error -> {
@@ -1184,7 +1178,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleUpdateCipherResultReceive(
         action: VaultAddEditAction.Internal.UpdateCipherResultReceive,
     ) {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        clearDialogState()
         when (val result = action.updateCipherResult) {
             is UpdateCipherResult.Error -> {
                 mutableStateFlow.update {
@@ -1222,7 +1216,7 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             DeleteCipherResult.Success -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
+                clearDialogState()
                 sendEvent(
                     VaultAddEditEvent.ShowToast(
                         message = R.string.item_soft_deleted.asText(),
@@ -1392,7 +1386,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleFido2RegisterCredentialResultReceive(
         action: VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive,
     ) {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        clearDialogState()
         when (action.result) {
             is Fido2CreateCredentialResult.Error -> {
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.an_error_has_occurred.asText()))
@@ -1408,6 +1402,10 @@ class VaultAddEditViewModel @Inject constructor(
     //endregion Internal Type Handlers
 
     //region Utility Functions
+
+    private fun clearDialogState() {
+        mutableStateFlow.update { it.copy(dialog = null) }
+    }
 
     private inline fun onContent(
         crossinline block: (VaultAddEditState.ViewState.Content) -> Unit,
