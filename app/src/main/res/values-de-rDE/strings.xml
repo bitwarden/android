@@ -95,7 +95,7 @@
   <string name="bitwarden_autofill_accessibility_service_description">Verwende den Bitwarden Dienst in den Bedienungshilfen um deine Zugangsdaten automatisch einzufügen.</string>
   <string name="change_email">E-Mail-Adresse ändern</string>
   <string name="change_email_confirmation">Du kannst deine E-Mail Adresse im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?</string>
-  <string name="change_master_password">Master-Password ändern</string>
+  <string name="change_master_password">Master-Passwort ändern</string>
   <string name="close">Schließen</string>
   <string name="continue_text">Fortsetzen</string>
   <string name="create_account">Konto erstellen</string>
