@@ -922,7 +922,7 @@ class VaultItemViewModel @Inject constructor(
         .data
         ?.cipher
         ?.toViewState(
-            previousState = state.viewState as? VaultItemState.ViewState.Content,
+            previousState = state.viewState.asContentOrNull(),
             isPremiumUser = account.isPremium,
             hasMasterPassword = account.hasMasterPassword,
             totpCodeItemData = this.data?.totpCodeItemData,
@@ -1068,8 +1068,8 @@ class VaultItemViewModel @Inject constructor(
             if (content.common.requiresReprompt) {
                 updateDialogState(
                     VaultItemState.DialogState.MasterPasswordDialog(
-                        action = PasswordRepromptAction.RestoreItemClick
-                    )
+                        action = PasswordRepromptAction.RestoreItemClick,
+                    ),
                 )
             } else {
                 updatePendingRestoreCipher(true)
@@ -1434,6 +1434,10 @@ data class VaultItemState(
             }
         }
 
+        /**
+         * Convenience function to keep the syntax a little cleaner when safe casting specifically
+         * for [Content]
+         */
         fun asContentOrNull(): Content? = this as? Content
     }
 
