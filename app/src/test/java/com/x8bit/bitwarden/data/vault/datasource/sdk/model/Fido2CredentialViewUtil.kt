@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.Fido2CredentialView
 import java.time.Instant
 
@@ -20,4 +21,17 @@ fun createMockFido2CredentialView(number: Int): Fido2CredentialView = Fido2Crede
     userDisplayName = "mockUserDisplayName-$number",
     discoverable = "mockDiscoverable-$number",
     creationDate = Instant.now(),
+)
+
+/**
+ * Creates a [createMockFido2CredentialAutofillView] instance for testing.
+ */
+fun createMockFido2CredentialAutofillView(
+    number: Int,
+): Fido2CredentialAutofillView = Fido2CredentialAutofillView(
+    credentialId = "mockCredentialId-$number".toByteArray(),
+    cipherId = "mockCipherId-$number",
+    rpId = "mockRpId-$number",
+    userNameForUi = "mockUserNameForUi-$number",
+    userHandle = "mockUserHandle-$number".toByteArray(),
 )

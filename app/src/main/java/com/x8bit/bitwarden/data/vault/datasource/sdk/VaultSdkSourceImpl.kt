@@ -32,6 +32,7 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import kotlinx.coroutines.channels.awaitClose
@@ -522,6 +523,21 @@ class VaultSdkSourceImpl(
                 .fido2()
                 .decryptFido2AutofillCredentials(it)
         }
+    }
+
+    override suspend fun silentlyDiscoverCredentials(
+        userId: String,
+        fido2CredentialStore: Fido2CredentialStore,
+        relayingPartyId: String,
+    ): Result<List<Fido2CredentialAutofillView>> = runCatching {
+        getClient(userId)
+            .platform()
+            .fido2()
+            .authenticator(
+                userInterface = Fido2CredentialSearchUserInterfaceImpl(),
+                credentialStore = fido2CredentialStore,
+            )
+            .silentlyDiscoverCredentials(relayingPartyId)
     }
 
     private suspend fun getClient(

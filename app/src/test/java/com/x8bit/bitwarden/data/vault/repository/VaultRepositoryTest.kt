@@ -9,6 +9,7 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
@@ -4255,6 +4256,42 @@ class VaultRepositoryTest {
                 )
             }
         }
+
+    @Test
+    fun `silentlyDiscoverCredentials should return result`() = runTest {
+        val userId = "userId"
+        val fido2CredentialStore: Fido2CredentialStore = mockk()
+        val relayingPartyId = "relayingPartyId"
+        val expected: Result<List<Fido2CredentialAutofillView>> = mockk()
+        coEvery {
+            vaultSdkSource.silentlyDiscoverCredentials(
+                userId = userId,
+                fido2CredentialStore = fido2CredentialStore,
+                relayingPartyId = relayingPartyId,
+            )
+        } returns expected
+
+        turbineScope {
+            val result = vaultRepository.silentlyDiscoverCredentials(
+                userId = userId,
+                fido2CredentialStore = fido2CredentialStore,
+                relayingPartyId = relayingPartyId,
+            )
+
+            assertEquals(
+                expected,
+                result,
+            )
+        }
+
+        coVerify {
+            vaultSdkSource.silentlyDiscoverCredentials(
+                userId = userId,
+                fido2CredentialStore = fido2CredentialStore,
+                relayingPartyId = relayingPartyId,
+            )
+        }
+    }
 
     //region Helper functions
 

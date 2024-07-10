@@ -4,6 +4,8 @@ import android.net.Uri
 import com.bitwarden.core.DateTime
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
+import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
@@ -151,6 +153,15 @@ interface VaultRepository : CipherManager, VaultLockManager {
     suspend fun getDecryptedFido2CredentialAutofillViews(
         cipherViewList: List<CipherView>,
     ): DecryptFido2CredentialAutofillViewResult
+
+    /**
+     * Silently discovers FIDO 2 credentials for a given [userId] and [relayingPartyId].
+     */
+    suspend fun silentlyDiscoverCredentials(
+        userId: String,
+        fido2CredentialStore: Fido2CredentialStore,
+        relayingPartyId: String,
+    ): Result<List<Fido2CredentialAutofillView>>
 
     /**
      * Emits the totp code result flow to listeners.

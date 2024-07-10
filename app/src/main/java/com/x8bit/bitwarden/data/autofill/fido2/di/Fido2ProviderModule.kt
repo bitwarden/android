@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorI
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.Module
 import dagger.Provides
@@ -35,12 +36,16 @@ object Fido2ProviderModule {
     fun provideCredentialProviderProcessor(
         @ApplicationContext context: Context,
         authRepository: AuthRepository,
+        vaultRepository: VaultRepository,
+        fido2CredentialStore: Fido2CredentialStore,
         dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
     ): Fido2ProviderProcessor =
         Fido2ProviderProcessorImpl(
             context,
             authRepository,
+            vaultRepository,
+            fido2CredentialStore,
             intentManager,
             dispatcherManager,
         )

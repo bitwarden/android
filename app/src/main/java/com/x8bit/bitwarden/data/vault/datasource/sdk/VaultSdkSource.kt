@@ -446,4 +446,15 @@ interface VaultSdkSource {
         userId: String,
         vararg cipherViews: CipherView,
     ): Result<List<Fido2CredentialAutofillView>>
+
+    /**
+     * Silently discovers FIDO 2 credentials for a given [userId] and [relayingPartyId].
+     *
+     * @return A list of FIDO 2 credentials.
+     */
+    suspend fun silentlyDiscoverCredentials(
+        userId: String,
+        fido2CredentialStore: Fido2CredentialStore,
+        relayingPartyId: String,
+    ): Result<List<Fido2CredentialAutofillView>>
 }

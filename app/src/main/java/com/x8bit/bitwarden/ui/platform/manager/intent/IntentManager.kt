@@ -92,6 +92,25 @@ interface IntentManager {
     ): PendingIntent
 
     /**
+     * Creates a pending intent to use when providing
+     * [androidx.credentials.provider.CredentialEntry] instances for FIDO 2 credential filling.
+     */
+    fun createFido2GetCredentialPendingIntent(
+        action: String,
+        credentialId: String,
+        requestCode: Int,
+    ): PendingIntent
+
+    /**
+     * Creates a pending intent to use when providing
+     * [androidx.credentials.provider.AuthenticationAction] instances for FIDO 2 credential filling.
+     */
+    fun createFido2UnlockPendingIntent(
+        action: String,
+        requestCode: Int,
+    ): PendingIntent
+
+    /**
      * Represents file information.
      */
     @Parcelize

@@ -6,6 +6,8 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
+import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -537,6 +539,18 @@ class VaultRepositoryImpl(
                 onSuccess = { DecryptFido2CredentialAutofillViewResult.Success(it) },
             )
     }
+
+    override suspend fun silentlyDiscoverCredentials(
+        userId: String,
+        fido2CredentialStore: Fido2CredentialStore,
+        relayingPartyId: String,
+    ): Result<List<Fido2CredentialAutofillView>> =
+        vaultSdkSource
+            .silentlyDiscoverCredentials(
+                userId = userId,
+                fido2CredentialStore = fido2CredentialStore,
+                relayingPartyId = relayingPartyId,
+            )
 
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
