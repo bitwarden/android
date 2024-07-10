@@ -868,7 +868,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         mutableStateFlow.update {
-            it.copy(pendingRestoreCipher = true)
+            it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
         }
 
         composeTestRule
@@ -915,7 +915,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         mutableStateFlow.update {
-            it.copy(pendingRestoreCipher = true)
+            it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
         }
 
         composeTestRule
@@ -940,7 +940,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         mutableStateFlow.update {
-            it.copy(pendingRestoreCipher = false)
+            it.copy(dialog = null)
         }
 
         composeTestRule.assertNoDialogExists()
@@ -969,7 +969,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         mutableStateFlow.update {
-            it.copy(pendingRestoreCipher = true)
+            it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
         }
 
         composeTestRule
@@ -994,7 +994,7 @@ class VaultItemScreenTest : BaseComposeTest() {
             .performClick()
 
         mutableStateFlow.update {
-            it.copy(pendingRestoreCipher = false)
+            it.copy(dialog = null)
         }
 
         composeTestRule.assertNoDialogExists()
@@ -2211,7 +2211,6 @@ private val DEFAULT_STATE: VaultItemState = VaultItemState(
     vaultItemId = VAULT_ITEM_ID,
     viewState = VaultItemState.ViewState.Loading,
     dialog = null,
-    pendingRestoreCipher = false,
 )
 
 private val DEFAULT_COMMON: VaultItemState.ViewState.Content.Common =

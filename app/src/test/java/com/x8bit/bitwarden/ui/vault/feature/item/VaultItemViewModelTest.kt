@@ -450,15 +450,15 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 // show dialog
                 viewModel.trySendAction(VaultItemAction.Common.RestoreVaultItemClick)
                 assertEquals(
-                    loginState.copy(pendingRestoreCipher = true),
+                    loginState.copy(dialog = VaultItemState.DialogState.RestoreItemDialog),
                     viewModel.stateFlow.value
                 )
 
                 // dismiss dialog
-                viewModel.trySendAction(VaultItemAction.Common.DismissRestoreDialog)
+                viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
                 assertEquals(
                     // setting this to be explicit.
-                    loginState.copy(pendingRestoreCipher = false),
+                    loginState.copy(dialog = null),
                     viewModel.stateFlow.value
                 )
             }
@@ -2557,7 +2557,6 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             vaultItemId = VAULT_ITEM_ID,
             viewState = VaultItemState.ViewState.Loading,
             dialog = null,
-            pendingRestoreCipher = false,
         )
 
         private val DEFAULT_USER_STATE: UserState = UserState(
