@@ -10,8 +10,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditViewModel
  * @property onUserVerificationSuccess Handles the action when biometric verification is
  * successful.
  * @property onUserVerificationFail Handles the action when biometric verification fails.
- * @property onUserVerificationLockOut Handles the action when too many failed verification attempts locks
- * out the user for a period of time.
+ * @property onUserVerificationLockOut Handles the action when too many failed verification attempts
+ * locks out the user for a period of time.
  */
 data class VaultAddEditUserVerificationHandlers(
     val onUserVerificationSuccess: () -> Unit,
