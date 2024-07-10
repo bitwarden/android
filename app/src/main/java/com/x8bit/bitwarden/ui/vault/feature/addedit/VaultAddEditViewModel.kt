@@ -326,7 +326,9 @@ class VaultAddEditViewModel @Inject constructor(
             content.common.selectedOwnerId != null &&
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
-            showGenericErrorDialog(R.string.select_one_collection.asText())
+            showGenericErrorDialog(
+                message = R.string.select_one_collection.asText()
+            )
             return@onContent
         }
 
@@ -1181,7 +1183,7 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleDeleteCipherReceive(action: VaultAddEditAction.Internal.DeleteCipherReceive) {
         when (action.result) {
             DeleteCipherResult.Error -> {
-                showGenericErrorDialog()
+                showErrorDialog(message = R.string.generic_error_message.asText())
             }
 
             DeleteCipherResult.Success -> {
@@ -1300,7 +1302,10 @@ class VaultAddEditViewModel @Inject constructor(
             }
 
             TotpCodeResult.CodeScanningError -> {
-                showGenericErrorDialog(R.string.authenticator_key_read_error.asText())
+                showErrorDialog(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.authenticator_key_read_error.asText(),
+                )
             }
         }
     }
@@ -1340,7 +1345,7 @@ class VaultAddEditViewModel @Inject constructor(
                 }
             }
         }
-        showGenericErrorDialog(message = message)
+        showErrorDialog(message = message)
     }
 
     private fun handleFido2RegisterCredentialResultReceive(
@@ -1367,11 +1372,20 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
-    private fun showGenericErrorDialog(message: Text = R.string.generic_error_message.asText()) {
+    private fun showGenericErrorDialog(
+        message: Text = R.string.generic_error_message.asText(),
+    ) {
+        showErrorDialog(
+            title = R.string.an_error_has_occurred.asText(),
+            message = message,
+        )
+    }
+
+    private fun showErrorDialog(title: Text? = null, message: Text) {
         mutableStateFlow.update {
             it.copy(
                 dialog = VaultAddEditState.DialogState.Generic(
-                    title = R.string.an_error_has_occurred.asText(),
+                    title = title,
                     message = message,
                 ),
             )
