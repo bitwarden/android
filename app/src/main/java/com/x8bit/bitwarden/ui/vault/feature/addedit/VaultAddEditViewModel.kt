@@ -327,7 +327,7 @@ class VaultAddEditViewModel @Inject constructor(
             content.common.selectedOwner?.collections?.all { !it.isSelected } == true
         ) {
             showGenericErrorDialog(
-                message = R.string.select_one_collection.asText()
+                message = R.string.select_one_collection.asText(),
             )
             return@onContent
         }
