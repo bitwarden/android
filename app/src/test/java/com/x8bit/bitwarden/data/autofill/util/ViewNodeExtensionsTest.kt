@@ -230,15 +230,18 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillView should return null when hint is not supported, is an inputField, and isn't a username or password`() {
+    fun `toAutofillView should return only unused field when hint is not supported, is an inputField, and isn't a username or password`() {
         // Setup
         setupUnsupportedInputFieldViewNode()
+        val expected = AutofillView.Unused(
+            data = autofillViewData,
+        )
 
         // Test
         val actual = viewNode.toAutofillView()
 
         // Verify
-        assertNull(actual)
+        assertEquals(expected, actual)
     }
 
     @Test
