@@ -82,7 +82,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
-        every { completeFido2Create(any()) } just runs
+        every { completeFido2Registration(any()) } just runs
     }
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)

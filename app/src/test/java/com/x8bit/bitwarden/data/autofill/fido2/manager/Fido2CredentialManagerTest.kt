@@ -10,8 +10,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalA
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
@@ -486,7 +486,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertTrue(
-                result is Fido2CreateCredentialResult.Error,
+                result is Fido2RegisterCredentialResult.Error,
             )
         }
 
@@ -530,7 +530,7 @@ class Fido2CredentialManagerTest {
             )
 
             assertTrue(
-                result is Fido2CreateCredentialResult.Error,
+                result is Fido2RegisterCredentialResult.Error,
             )
         }
 }

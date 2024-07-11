@@ -2,12 +2,12 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 
 /**
- * Responsible for managing FIDO 2 credential creation and authentication.
+ * Responsible for managing FIDO 2 credential registration and authentication.
  */
 interface Fido2CredentialManager {
 
@@ -32,5 +32,5 @@ interface Fido2CredentialManager {
         userId: String,
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
-    ): Fido2CreateCredentialResult
+    ): Fido2RegisterCredentialResult
 }

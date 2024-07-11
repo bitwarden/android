@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit
 
 import android.content.pm.SigningInfo
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -17,8 +16,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
@@ -725,7 +724,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 ),
             )
-            val mockCreateResult = Fido2CreateCredentialResult.Success(
+            val mockCreateResult = Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
             )
             coEvery {
@@ -750,7 +749,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     eventTurbine.awaitItem(),
                 )
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Create(result = mockCreateResult),
+                    VaultAddEditEvent.CompleteFido2Registration(result = mockCreateResult),
                     eventTurbine.awaitItem(),
                 )
                 assertEquals(stateWithName, stateTurbine.awaitItem())
@@ -807,9 +806,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 ),
             )
-            val mockCreateResult = Fido2CreateCredentialResult.Error(
-                exception = CreateCredentialUnknownException(),
-            )
+            val mockCreateResult = Fido2RegisterCredentialResult.Error
             coEvery {
                 fido2CredentialManager.registerFido2Credential(
                     userId = "mockUserId",
@@ -832,7 +829,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     eventTurbine.awaitItem(),
                 )
                 assertEquals(
-                    VaultAddEditEvent.CompleteFido2Create(result = mockCreateResult),
+                    VaultAddEditEvent.CompleteFido2Registration(result = mockCreateResult),
                     eventTurbine.awaitItem(),
                 )
                 assertEquals(stateWithName, stateTurbine.awaitItem())

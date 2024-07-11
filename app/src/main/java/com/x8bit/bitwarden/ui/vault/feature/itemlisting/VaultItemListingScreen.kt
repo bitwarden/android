@@ -135,7 +135,7 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.CompleteFido2Create -> {
-                fido2CompletionManager.completeFido2Create(event.result)
+                fido2CompletionManager.completeFido2Registration(event.result)
             }
         }
     }

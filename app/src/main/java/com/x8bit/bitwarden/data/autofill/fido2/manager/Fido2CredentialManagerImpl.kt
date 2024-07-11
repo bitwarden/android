@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.fido.ClientData
 import com.bitwarden.sdk.CheckUserResult
@@ -10,8 +9,8 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -46,15 +45,11 @@ class Fido2CredentialManagerImpl(
         userId: String,
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
-    ): Fido2CreateCredentialResult {
+    ): Fido2RegisterCredentialResult {
         val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
             fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint()
                 ?.let { ClientData.DefaultWithCustomHash(hash = it) }
-                ?: return Fido2CreateCredentialResult.Error(
-                    exception = CreateCredentialUnknownException(
-                        errorMessage = "Application contains multiple signing certificates.",
-                    ),
-                )
+                ?: return Fido2RegisterCredentialResult.Error
         } else {
             ClientData.DefaultWithExtraData(
                 androidPackageName = fido2CredentialRequest
@@ -82,9 +77,9 @@ class Fido2CredentialManagerImpl(
             .map { it.toAndroidAttestationResponse() }
             .mapCatching { json.encodeToString(it) }
             .fold(
-                onSuccess = { Fido2CreateCredentialResult.Success(it) },
+                onSuccess = { Fido2RegisterCredentialResult.Success(it) },
                 onFailure = {
-                    Fido2CreateCredentialResult.Error(CreateCredentialUnknownException())
+                    Fido2RegisterCredentialResult.Error
                 },
             )
     }
