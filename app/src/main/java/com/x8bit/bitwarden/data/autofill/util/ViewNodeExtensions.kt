@@ -112,7 +112,7 @@ private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
     supportedHint: String?,
-): AutofillView? = when {
+): AutofillView = when {
     supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> {
         val monthValue = this
             .autofillValue
@@ -156,7 +156,11 @@ private fun AssistStructure.ViewNode.buildAutofillView(
         )
     }
 
-    else -> null
+    else -> {
+        AutofillView.Unused(
+            data = autofillViewData,
+        )
+    }
 }
 
 /**
