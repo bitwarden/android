@@ -328,6 +328,7 @@ private fun VaultItemDialogs(
                 onDismissRequest = onDismissRequest,
             )
         }
+
         VaultItemState.DialogState.RestoreItemDialog -> BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.restore),
             message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
@@ -337,6 +338,7 @@ private fun VaultItemDialogs(
             onDismissClick = onDismissRequest,
             onDismissRequest = onDismissRequest,
         )
+
         null -> Unit
     }
 }

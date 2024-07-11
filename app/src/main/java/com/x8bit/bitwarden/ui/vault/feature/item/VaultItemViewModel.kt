@@ -165,6 +165,7 @@ class VaultItemViewModel @Inject constructor(
             is VaultItemAction.Common.ConfirmCloneWithoutFido2CredentialClick -> {
                 handleConfirmCloneClick()
             }
+
             is VaultItemAction.Common.RestoreVaultItemClick -> handleRestoreItemClicked()
         }
     }

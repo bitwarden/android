@@ -846,7 +846,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Restore click should send show restore confirmation dialog`() {
+    fun `Clicking Restore should send RestoreVaultItemClick ViewModel action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_IDENTITY_VIEW_STATE
@@ -866,6 +866,31 @@ class VaultItemScreenTest : BaseComposeTest() {
         composeTestRule
             .onNodeWithText("Restore")
             .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemAction.Common.RestoreVaultItemClick
+            )
+        }
+    }
+
+    @Test
+    fun `Restore dialog should display correctly when dialog state changes`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    deletedDate = Instant.MIN,
+                                ),
+                            ),
+                    ),
+            )
+        }
+
+        composeTestRule.assertNoDialogExists()
 
         mutableStateFlow.update {
             it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
@@ -893,7 +918,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Restore dialog cancel click should hide restore confirmation menu`() {
+    fun `Restore dialog should hide restore confirmation menu if dialog state changes`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_IDENTITY_VIEW_STATE
@@ -909,10 +934,6 @@ class VaultItemScreenTest : BaseComposeTest() {
         }
 
         composeTestRule.assertNoDialogExists()
-
-        composeTestRule
-            .onNodeWithText("Restore")
-            .performClick()
 
         mutableStateFlow.update {
             it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
@@ -937,7 +958,6 @@ class VaultItemScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Cancel")
             .filterToOne(hasAnyAncestor(isDialog()))
             .assertIsDisplayed()
-            .performClick()
 
         mutableStateFlow.update {
             it.copy(dialog = null)
@@ -964,28 +984,9 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         composeTestRule.assertNoDialogExists()
 
-        composeTestRule
-            .onNodeWithText("Restore")
-            .performClick()
-
         mutableStateFlow.update {
             it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
         }
-
-        composeTestRule
-            .onAllNodesWithText("Do you really want to restore this item?")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onAllNodesWithText("Restore")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onAllNodesWithText("Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .assertIsDisplayed()
 
         composeTestRule
             .onAllNodesWithText("Ok")
@@ -993,14 +994,41 @@ class VaultItemScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .performClick()
 
+        verify {
+            viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+        }
+    }
+
+    @Test
+    fun `Restore dialog cancel click should close the dialog and send DismissDialogClick`() {
         mutableStateFlow.update {
-            it.copy(dialog = null)
+            it.copy(
+                viewState = DEFAULT_IDENTITY_VIEW_STATE
+                    .copy(
+                        common = DEFAULT_COMMON
+                            .copy(
+                                currentCipher = createMockCipherView(1).copy(
+                                    deletedDate = Instant.MIN,
+                                ),
+                            ),
+                    ),
+            )
         }
 
         composeTestRule.assertNoDialogExists()
 
+        mutableStateFlow.update {
+            it.copy(dialog = VaultItemState.DialogState.RestoreItemDialog)
+        }
+
+        composeTestRule
+            .onAllNodesWithText("Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+            .performClick()
+
         verify {
-            viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+            viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
         }
     }
 
