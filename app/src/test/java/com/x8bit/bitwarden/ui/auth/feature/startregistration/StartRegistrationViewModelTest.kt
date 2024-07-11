@@ -142,8 +142,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     captchaToken = null,
                 )
             } returns SendVerificationEmailResult.Success(
-                emailVerificationToken = "verification_token",
-                captchaToken = "mock_token"
+                emailVerificationToken = "verification_token"
             )
         }
         val viewModel = StartRegistrationViewModel(
@@ -254,9 +253,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     receiveMarketingEmails = true,
                     captchaToken = null,
                 )
-            } returns SendVerificationEmailResult.Success(
-                emailVerificationToken = "verification_token",
-                captchaToken = "mock_captcha_token")
+            } returns SendVerificationEmailResult.Success(emailVerificationToken = "verification_token",)
         }
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,

@@ -54,7 +54,7 @@ interface AccountsService {
     /**
      * Send a verification email.
      */
-    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<SendVerificationEmailResponseJson>
+    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<String?>
 
     /**
      * Set the password.

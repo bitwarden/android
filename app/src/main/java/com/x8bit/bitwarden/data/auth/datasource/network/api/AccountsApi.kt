@@ -24,5 +24,5 @@ interface AccountsApi {
     @POST("/accounts/register/send-verification-email")
     suspend fun sendVerificationEmail(
         @Body body: SendVerificationEmailRequestJson,
-    ): Result<SendVerificationEmailResponseJson>
+    ): Result<String?>
 }

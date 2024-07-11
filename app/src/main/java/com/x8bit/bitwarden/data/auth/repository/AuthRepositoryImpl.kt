@@ -770,8 +770,8 @@ class AuthRepositoryImpl(
                             masterPasswordHint = masterPasswordHint,
                             emailVerificationToken = emailVerificationToken,
                             captchaResponse = captchaToken,
-                            key = registerKeyResponse.encryptedUserKey,
-                            keys = RegisterFinishRequestJson.Keys(
+                            userSymmetricKey = registerKeyResponse.encryptedUserKey,
+                            userAsymmetricKeys = RegisterFinishRequestJson.Keys(
                                 publicKey = registerKeyResponse.keys.public,
                                 encryptedPrivateKey = registerKeyResponse.keys.private,
                             ),
@@ -1142,22 +1142,7 @@ class AuthRepositoryImpl(
                 receiveMarketingEmails = receiveMarketingEmails,
                 captchaResponse = captchaToken,
             )).fold(
-            onSuccess = {
-                when (it) {
-                    is SendVerificationEmailResponseJson.Error -> SendVerificationEmailResult.Error(it.message)
-                    is SendVerificationEmailResponseJson.Success -> SendVerificationEmailResult.Success(
-                        emailVerificationToken = it.emailVerificationToken,
-                        captchaToken = it.captchaBypassToken
-                    )
-
-                    is SendVerificationEmailResponseJson.CaptchaRequired ->
-                        it.validationErrors.captchaKeys.firstOrNull()
-                        ?.let { key -> SendVerificationEmailResult.CaptchaRequired(captchaId = key) }
-                        ?: SendVerificationEmailResult.Error(errorMessage = null)
-
-                    is SendVerificationEmailResponseJson.Invalid -> TODO()
-                }
-            },
+            onSuccess =  { SendVerificationEmailResult.Success(it) },
             onFailure = { SendVerificationEmailResult.Error(null) },
         )
     }

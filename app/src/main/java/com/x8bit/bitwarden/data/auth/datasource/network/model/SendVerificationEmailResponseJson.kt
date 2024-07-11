@@ -9,39 +9,12 @@ sealed class SendVerificationEmailResponseJson {
     /**
      * Models a successful json response.
      *
-     * @param captchaBypassToken the bypass token.
+     * @param emailVerificationToken the token to verify the email.
      */
     @Serializable
     data class Success(
-        @SerialName("emailVerificationToken")
         val emailVerificationToken: String?,
-        
-        @SerialName("captchaBypassToken")
-        val captchaBypassToken: String,
     ) : SendVerificationEmailResponseJson()
-
-    /**
-     * Models a json body of a captcha error.
-     *
-     * @param validationErrors object containing error validations of the response.
-     */
-    @Serializable
-    data class CaptchaRequired(
-        @SerialName("validationErrors")
-        val validationErrors: ValidationErrors,
-    ) : SendVerificationEmailResponseJson() {
-
-        /**
-         * Error validations containing a HCaptcha Site Key.
-         *
-         * @param captchaKeys keys for attempting captcha verification.
-         */
-        @Serializable
-        data class ValidationErrors(
-            @SerialName("HCaptcha_SiteKey")
-            val captchaKeys: List<String>,
-        )
-    }
 
     /**
      * Represents the json body of an invalid request.

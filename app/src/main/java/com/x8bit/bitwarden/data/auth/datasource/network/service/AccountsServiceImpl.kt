@@ -97,8 +97,9 @@ class AccountsServiceImpl(
 
     override suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson
-    ): Result<SendVerificationEmailResponseJson> =
-        accountsApi.sendVerificationEmail(body = body)
+    ): Result<String?> {
+        return accountsApi.sendVerificationEmail(body = body)
+    }
 
 
     override suspend fun setPassword(
