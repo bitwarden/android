@@ -1501,7 +1501,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             VaultItemListingEvent.Fido2UserVerification(
                 isRequired = true,
                 selectedCipherView = createMockCipherView(number = 1),
-            )
+            ),
         )
         verify {
             biometricsManager.promptUserVerification(
@@ -1513,6 +1513,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `Fido2UserVerification event should send UserVerificationFail when user verification required and is not supported by the device`() {
         every { biometricsManager.isUserVerificationSupported } returns false
@@ -1527,6 +1528,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `Fido2UserVerification event should send UserVerificationSuccess when user verification is not required and is not supported by the device`() {
         val selectedCipherView = createMockCipherView(number = 1)
@@ -1570,7 +1572,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.UserVerificationSuccess(selectedCipherView)
+                VaultItemListingsAction.UserVerificationSuccess(selectedCipherView),
             )
         }
     }
@@ -1599,7 +1601,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.UserVerificationCancelled
+                VaultItemListingsAction.UserVerificationCancelled,
             )
         }
     }
@@ -1628,7 +1630,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.UserVerificationLockOut
+                VaultItemListingsAction.UserVerificationLockOut,
             )
         }
     }
@@ -1657,7 +1659,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.UserVerificationFail
+                VaultItemListingsAction.UserVerificationFail,
             )
         }
     }

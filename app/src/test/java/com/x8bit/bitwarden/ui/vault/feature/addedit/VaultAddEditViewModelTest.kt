@@ -3046,8 +3046,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
-                        mockResult
-                    )
+                        mockResult,
+                    ),
                 )
 
                 viewModel.eventFlow.test {
@@ -3085,8 +3085,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
-                        mockResult
-                    )
+                        mockResult,
+                    ),
                 )
 
                 viewModel.eventFlow.test {
@@ -3122,8 +3122,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
                 viewModel.trySendAction(
                     VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
-                        mockResult
-                    )
+                        mockResult,
+                    ),
                 )
 
                 viewModel.eventFlow.test {
