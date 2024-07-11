@@ -411,22 +411,28 @@ class VaultItemListingDataExtensionsTest {
                         cipherType = CipherType.LOGIN,
                         subtitle = null,
                     )
-                        .copy(shouldShowMasterPasswordReprompt = true),
+                        .copy(
+                            secondSubtitleTestTag = "PasskeySite",
+                            shouldShowMasterPasswordReprompt = true,
+                        ),
                     createMockDisplayItemForCipher(
                         number = 2,
                         cipherType = CipherType.CARD,
                         subtitle = null,
-                    ),
+                    )
+                        .copy(secondSubtitleTestTag = "PasskeySite"),
                     createMockDisplayItemForCipher(
                         number = 3,
                         cipherType = CipherType.SECURE_NOTE,
                         subtitle = null,
-                    ),
+                    )
+                        .copy(secondSubtitleTestTag = "PasskeySite"),
                     createMockDisplayItemForCipher(
                         number = 4,
                         cipherType = CipherType.IDENTITY,
                         subtitle = null,
-                    ),
+                    )
+                        .copy(secondSubtitleTestTag = "PasskeySite"),
                 ),
                 displayFolderList = emptyList(),
             ),
@@ -495,6 +501,8 @@ class VaultItemListingDataExtensionsTest {
                     )
                         .copy(
                             secondSubtitle = "mockRpId-1",
+                            secondSubtitleTestTag = "PasskeySite",
+                            subtitleTestTag = "PasskeyName",
                             iconData = IconData.Network(
                                 uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                                 fallbackIconRes = R.drawable.ic_login_item_passkey,
@@ -507,7 +515,11 @@ class VaultItemListingDataExtensionsTest {
                         cipherType = CipherType.CARD,
                         subtitle = null,
                     )
-                        .copy(isAutofill = true),
+                        .copy(
+                            secondSubtitleTestTag = "PasskeySite",
+                            subtitleTestTag = "PasswordName",
+                            isAutofill = true,
+                        ),
                 ),
                 displayFolderList = emptyList(),
             ),

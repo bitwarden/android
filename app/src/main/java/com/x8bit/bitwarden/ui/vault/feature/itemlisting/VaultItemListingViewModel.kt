@@ -1107,6 +1107,7 @@ data class VaultItemListingState(
      * @property title title of the item.
      * @property titleTestTag The test tag associated with the [title].
      * @property secondSubtitle The second subtitle of the item (nullable).
+     * @property secondSubtitleTestTag The test tag associated with the [secondSubtitle].
      * @property subtitle subtitle of the item (nullable).
      * @property subtitleTestTag The test tag associated with the [subtitle].
      * @property iconData data for the icon to be displayed (nullable).
@@ -1123,6 +1124,7 @@ data class VaultItemListingState(
         val title: String,
         val titleTestTag: String,
         val secondSubtitle: String?,
+        val secondSubtitleTestTag: String?,
         val subtitle: String?,
         val subtitleTestTag: String,
         val iconData: IconData,

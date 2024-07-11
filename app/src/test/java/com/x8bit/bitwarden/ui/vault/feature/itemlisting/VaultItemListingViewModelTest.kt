@@ -364,7 +364,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -414,7 +415,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -938,7 +940,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     viewState = VaultItemListingState.ViewState.Content(
                         displayCollectionList = emptyList(),
                         displayItemList = listOf(
-                            createMockDisplayItemForCipher(number = 1),
+                            createMockDisplayItemForCipher(number = 1)
+                                .copy(secondSubtitleTestTag = "PasskeySite"),
                         ),
                         displayFolderList = emptyList(),
                     ),
@@ -993,6 +996,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayCollectionList = emptyList(),
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1).copy(
+                                secondSubtitleTestTag = "PasskeySite",
+                                subtitleTestTag = "PasskeyName",
                                 iconData = IconData.Network(
                                     uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                                     fallbackIconRes = R.drawable.ic_login_item_passkey,
@@ -1068,6 +1073,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1)
                                 .copy(
+                                    secondSubtitleTestTag = "PasskeySite",
+                                    subtitleTestTag = "PasskeyName",
                                     iconData = IconData.Network(
                                         uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                                         fallbackIconRes = R.drawable.ic_login_item_passkey,
@@ -1183,7 +1190,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -1293,7 +1301,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -1410,7 +1419,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),

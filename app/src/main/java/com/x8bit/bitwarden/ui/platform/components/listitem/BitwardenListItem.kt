@@ -55,6 +55,7 @@ import kotlinx.collections.immutable.persistentListOf
  * @param optionsTestTag The optional test tag for the options button.
  * @param secondSupportingLabel An additional optional text label to display beneath the label and
  * above the optional supporting label.
+ * @param secondSupportingLabelTestTag The optional test tag for the [secondSupportingLabel].
  * @param supportingLabel An optional secondary text label to display beneath the label.
  * @param supportingLabelTestTag The optional test tag for the [supportingLabel].
  * @param startIconTestTag The optional test tag for the [startIcon].
@@ -71,6 +72,7 @@ fun BitwardenListItem(
     labelTestTag: String? = null,
     optionsTestTag: String? = null,
     secondSupportingLabel: String? = null,
+    secondSupportingLabelTestTag: String? = null,
     supportingLabel: String? = null,
     supportingLabelTestTag: String? = null,
     startIconTestTag: String? = null,
@@ -132,6 +134,9 @@ fun BitwardenListItem(
                     text = secondSupportLabel,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.semantics {
+                        secondSupportingLabelTestTag?.let { testTag = it }
+                    },
                 )
             }
 
