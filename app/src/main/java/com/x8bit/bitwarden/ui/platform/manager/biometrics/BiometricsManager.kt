@@ -14,6 +14,12 @@ interface BiometricsManager {
     val isBiometricsSupported: Boolean
 
     /**
+     * Returns `true` if the device supports performing user verification with biometrics or device
+     * credentials, `false` otherwise.
+     */
+    val isUserVerificationSupported: Boolean
+
+    /**
      * Display a prompt for setting up or verifying biometrics.
      */
     fun promptBiometrics(
@@ -22,5 +28,15 @@ interface BiometricsManager {
         onLockOut: () -> Unit,
         onError: () -> Unit,
         cipher: Cipher,
+    )
+
+    /**
+     * Display a prompt for performing user verification with biometrics or device credentials.
+     */
+    fun promptUserVerification(
+        onSuccess: () -> Unit,
+        onCancel: () -> Unit,
+        onLockOut: () -> Unit,
+        onError: () -> Unit,
     )
 }
