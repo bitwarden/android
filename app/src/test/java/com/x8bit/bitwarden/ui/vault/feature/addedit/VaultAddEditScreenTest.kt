@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.permissions.FakePermissionManager
@@ -98,6 +99,9 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
         every { completeFido2Registration(any()) } just runs
     }
+    private val biometricsManager: BiometricsManager = mockk {
+        every { isUserVerificationSupported } returns true
+    }
 
     @Before
     fun setup() {
@@ -116,6 +120,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
                 exitManager = exitManager,
                 intentManager = intentManager,
                 fido2CompletionManager = fido2CompletionManager,
+                biometricsManager = biometricsManager,
             )
         }
     }
@@ -193,12 +198,69 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on CompleteFido2Create even should invoke Fido2CompletionManager`() {
+    fun `on CompleteFido2Create event should invoke Fido2CompletionManager`() {
         val result = Fido2RegisterCredentialResult.Success(
             registrationResponse = "mockRegistrationResponse",
         )
         mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
         verify { fido2CompletionManager.completeFido2Registration(result) }
+    }
+
+    @Test
+    fun `on Fido2UserVerification event should call promptUserVerification when supported`() {
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify {
+            biometricsManager.isUserVerificationSupported
+            biometricsManager.promptUserVerification(any(), any(), any(), any())
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2UserVerification event should send BiometricsVerificationFailed action when user verification is not supported and it required`() {
+        every { biometricsManager.isUserVerificationSupported } returns false
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on Fido2UserVerification event should send BiometricsVerificationSuccess action when user verification is not supported and is not required`() {
+        every { biometricsManager.isUserVerificationSupported } returns false
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
+        verify {
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
+        }
+    }
+
+    @Test
+    fun `fido2 error dialog should display based on state`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()))
+
+        composeTestRule
+            .onAllNodesWithText("mockMessage")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `clicking dismiss dialog on Fido2Error dialog should send Fido2ErrorDialogDismissed action`() {
+        mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
+            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()))
+
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed) }
     }
 
     @Test
