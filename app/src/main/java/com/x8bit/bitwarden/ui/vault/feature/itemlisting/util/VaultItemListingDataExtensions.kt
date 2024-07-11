@@ -310,7 +310,8 @@ private fun CipherView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "CipherNameLabel",
-        subtitle = this.toSubtitle(fido2CredentialRpId = fido2CredentialAutofillView?.rpId),
+        secondSubtitle = this.toSecondSubtitle(fido2CredentialAutofillView?.rpId),
+        subtitle = this.subtitle,
         subtitleTestTag = "CipherSubTitleLabel",
         iconData = this.toIconData(
             baseIconUrl = baseIconUrl,
@@ -327,17 +328,9 @@ private fun CipherView.toDisplayItem(
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
 
-private fun CipherView.toSubtitle(fido2CredentialRpId: String?): String? =
+private fun CipherView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
     fido2CredentialRpId
         ?.takeIf { this.type == CipherType.LOGIN && it.isNotEmpty() && it != this.name }
-        ?.let {
-            if (subtitle.isNullOrEmpty()) {
-                it
-            } else {
-                it + "\n" + subtitle
-            }
-        }
-        ?: subtitle
 
 private fun CipherView.toIconTestTag(): String =
     when (type) {
@@ -375,6 +368,7 @@ private fun SendView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "SendNameLabel",
+        secondSubtitle = null,
         subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(

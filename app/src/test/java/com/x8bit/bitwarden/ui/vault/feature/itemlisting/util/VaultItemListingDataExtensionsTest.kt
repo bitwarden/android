@@ -491,9 +491,10 @@ class VaultItemListingDataExtensionsTest {
                     createMockDisplayItemForCipher(
                         number = 1,
                         cipherType = CipherType.LOGIN,
-                        subtitle = "mockRpId-1",
+                        subtitle = null,
                     )
                         .copy(
+                            secondSubtitle = "mockRpId-1",
                             iconData = IconData.Network(
                                 uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
                                 fallbackIconRes = R.drawable.ic_login_item_passkey,
