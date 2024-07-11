@@ -14,7 +14,6 @@ import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.fido.Verification
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientCiphers
@@ -46,6 +45,7 @@ import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -1032,10 +1032,6 @@ class VaultSdkSourceTest {
                         selectedCipherView = mockCipherView,
                         isUserVerificationSupported = true,
                     ),
-                    checkUser = { _, _ -> CheckUserResult(true, true) },
-                    checkUserAndPickCredential = { _, _ ->
-                        CipherViewWrapper(mockCipherView)
-                    },
                     fido2CredentialStore = mockFido2CredentialStore,
                 )
 
@@ -1082,8 +1078,6 @@ class VaultSdkSourceTest {
                 selectedCipherView = mockCipherView,
                 isUserVerificationSupported = true,
             ),
-            checkUser = { _, _ -> checkUserResult },
-            checkUserAndPickCredential = { _, _ -> CipherViewWrapper(mockCipherView) },
             fido2CredentialStore = mockFido2CredentialStore,
         )
 
@@ -1115,13 +1109,16 @@ class VaultSdkSourceTest {
                 coEvery { fido2.authenticate(any(), any(), any()) } returns mockAssertion
 
                 val result = vaultSdkSource.authenticateFido2Credential(
-                    userId = "mockUserId",
-                    origin = "www.bitwarden.com",
-                    requestJson = "requestJson",
-                    clientData = ClientData.DefaultWithCustomHash(DEFAULT_SIGNATURE.toByteArray()),
-                    isVerificationSupported = true,
-                    checkUser = { _, _ -> CheckUserResult(true, true) },
-                    pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) },
+                    AuthenticateFido2CredentialRequest(
+                        userId = "mockUserId",
+                        origin = "www.bitwarden.com",
+                        requestJson = "requestJson",
+                        clientData = ClientData.DefaultWithCustomHash(
+                            DEFAULT_SIGNATURE.toByteArray(),
+                        ),
+                        isUserVerificationSupported = true,
+                        selectedCipherView = mockCipherView,
+                    ),
                     fido2CredentialStore = mockFido2CredentialStore,
                 )
 
@@ -1158,13 +1155,16 @@ class VaultSdkSourceTest {
             mockAssertion
         }
         vaultSdkSource.authenticateFido2Credential(
-            userId = "mockUserId",
-            origin = "www.bitwarden.com",
-            requestJson = "requestJson",
-            clientData = ClientData.DefaultWithCustomHash(DEFAULT_SIGNATURE.toByteArray()),
-            isVerificationSupported = true,
-            checkUser = { _, _ -> checkUserResult },
-            pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) },
+            AuthenticateFido2CredentialRequest(
+                userId = "mockUserId",
+                origin = "www.bitwarden.com",
+                requestJson = "requestJson",
+                clientData = ClientData.DefaultWithCustomHash(
+                    DEFAULT_SIGNATURE.toByteArray(),
+                ),
+                isUserVerificationSupported = true,
+                selectedCipherView = mockCipherView,
+            ),
             fido2CredentialStore = mockFido2CredentialStore,
         )
 

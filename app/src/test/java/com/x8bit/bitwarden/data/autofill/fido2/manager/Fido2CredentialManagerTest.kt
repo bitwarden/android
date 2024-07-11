@@ -322,8 +322,6 @@ class Fido2CredentialManagerTest {
                 mockVaultSdkSource.registerFido2Credential(
                     request = capture(requestCaptureSlot),
                     fido2CredentialStore = any(),
-                    checkUser = any(),
-                    checkUserAndPickCredential = any(),
                 )
             } coAnswers {
                 mockRegistrationResponse
@@ -362,8 +360,6 @@ class Fido2CredentialManagerTest {
                 mockVaultSdkSource.registerFido2Credential(
                     request = capture(requestCaptureSlot),
                     fido2CredentialStore = any(),
-                    checkUser = any(),
-                    checkUserAndPickCredential = any(),
                 )
             } coAnswers {
                 mockRegistrationResponse
@@ -399,8 +395,6 @@ class Fido2CredentialManagerTest {
                 mockVaultSdkSource.registerFido2Credential(
                     request = capture(requestCaptureSlot),
                     fido2CredentialStore = any(),
-                    checkUser = any(),
-                    checkUserAndPickCredential = any(),
                 )
             } coAnswers {
                 mockRegistrationResponse
@@ -441,8 +435,6 @@ class Fido2CredentialManagerTest {
                 mockVaultSdkSource.registerFido2Credential(
                     request = capture(requestCaptureSlot),
                     fido2CredentialStore = any(),
-                    checkUser = any(),
-                    checkUserAndPickCredential = any(),
                 )
             } coAnswers {
                 mockRegistrationResponse
@@ -515,8 +507,6 @@ class Fido2CredentialManagerTest {
                 mockVaultSdkSource.registerFido2Credential(
                     request = any(),
                     fido2CredentialStore = any(),
-                    checkUser = any(),
-                    checkUserAndPickCredential = any(),
                 )
             } coAnswers {
                 mockRegistrationResponse
