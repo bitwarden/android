@@ -34,11 +34,11 @@ data class RegisterFinishRequestJson(
     @SerialName("captchaResponse")
     val captchaResponse: String?,
 
-    @SerialName("key")
-    val key: String,
+    @SerialName("userSymmetricKey")
+    val userSymmetricKey: String,
 
-    @SerialName("keys")
-    val keys: Keys,
+    @SerialName("userAsymmetricKeys")
+    val userAsymmetricKeys: Keys,
 
     @SerialName("kdf")
     val kdfType: KdfTypeJson,
