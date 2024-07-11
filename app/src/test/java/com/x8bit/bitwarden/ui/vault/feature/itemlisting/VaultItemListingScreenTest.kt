@@ -16,11 +16,13 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -52,6 +54,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -1479,6 +1482,184 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .onNodeWithText(loadingMessage)
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
+    }
+
+    @Test
+    fun `CompleteFido2Registration event should call Fido2CompletionManager with result`() {
+        val result = Fido2RegisterCredentialResult.Success("mockResponse")
+        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
+        verify {
+            fido2CompletionManager.completeFido2Create(result)
+        }
+    }
+
+    @Test
+    fun `Fido2UserVerification event should perform user verification when it is supported`() {
+        every { biometricsManager.isUserVerificationSupported } returns true
+        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = createMockCipherView(number = 1),
+            )
+        )
+        verify {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        }
+    }
+
+    @Test
+    fun `Fido2UserVerification event should send UserVerificationFail when user verification required and is not supported by the device`() {
+        every { biometricsManager.isUserVerificationSupported } returns false
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = createMockCipherView(number = 1),
+            ),
+        )
+        verify {
+            viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
+        }
+    }
+
+    @Test
+    fun `Fido2UserVerification event should send UserVerificationSuccess when user verification is not required and is not supported by the device`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every { biometricsManager.isUserVerificationSupported } returns false
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = false,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationSuccess(
+                    selectedCipherView,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onSuccess should send UserVerificationSuccess action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every { biometricsManager.isUserVerificationSupported } returns true
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = captureLambda(),
+                any(),
+                any(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationSuccess(selectedCipherView)
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onCancel should send UserVerificationCancelled action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every { biometricsManager.isUserVerificationSupported } returns true
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                onCancel = captureLambda(),
+                any(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationCancelled
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onLockOut should send UserVerificationLockOut action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every { biometricsManager.isUserVerificationSupported } returns true
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                onLockOut = captureLambda(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationLockOut
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onError should send UserVerificationFail action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every { biometricsManager.isUserVerificationSupported } returns true
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                onError = captureLambda(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationFail
+            )
+        }
     }
 }
 
