@@ -128,7 +128,7 @@ fun VaultAddEditScreen(
                     biometricsManager.isUserVerificationSupported -> {
                         biometricsManager.promptUserVerification(
                             onSuccess = userVerificationHandlers.onUserVerificationSuccess,
-                            onCancel = userVerificationHandlers.onUserVerificationFail,
+                            onCancel = userVerificationHandlers.onUserVerificationCancelled,
                             onError = userVerificationHandlers.onUserVerificationFail,
                             onLockOut = userVerificationHandlers.onUserVerificationLockOut,
                         )

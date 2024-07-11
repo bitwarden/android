@@ -10,7 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
+import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
@@ -392,7 +392,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ItemClick for vault item during FIDO 2 registration should show loading dialog, then request user verification when required or preferred`() =
+    fun `ItemClick for vault item during FIDO 2 registration should show loading dialog, then request user verification when required`() =
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
@@ -411,10 +411,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
             } returns createMockPublicKeyCredentialCreationOptions(
                 number = 1,
-                userVerificationRequirement = PublicKeyCredentialCreationOptions
-                    .AuthenticatorSelectionCriteria
-                    .UserVerificationRequirement
-                    .REQUIRED,
+                userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(
@@ -468,10 +465,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
             } returns createMockPublicKeyCredentialCreationOptions(
                 number = 1,
-                userVerificationRequirement = PublicKeyCredentialCreationOptions
-                    .AuthenticatorSelectionCriteria
-                    .UserVerificationRequirement
-                    .DISCOURAGED,
+                userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
             )
             coEvery {
                 fido2CredentialManager.registerFido2Credential(
@@ -1919,7 +1913,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsLockout should display Fido2ErrorDialog`() {
+    fun `UserVerificationLockout should display Fido2ErrorDialog`() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.UserVerificationLockOut)
 
@@ -1934,7 +1928,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
+    fun `UserVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
         runTest {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
@@ -1952,7 +1946,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsVerificationFail should display Fido2ErrorDialog`() {
+    fun `UserVerificationFail should display Fido2ErrorDialog`() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
 
@@ -1967,7 +1961,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when SpecialCircumstance is null`() =
+    fun `UserVerificationSuccess should display Fido2ErrorDialog when SpecialCircumstance is null`() =
         runTest {
             specialCircumstanceManager.specialCircumstance = null
             coEvery {
@@ -1998,7 +1992,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when Fido2Request is null`() =
+    fun `UserVerificationSuccess should display Fido2ErrorDialog when SpecialCircumstance is invalid`() =
         runTest {
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.AutofillSave(
@@ -2036,7 +2030,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
+    fun `UserVerificationSuccess should display Fido2ErrorDialog when activeUserId is null`() {
         every { authRepository.activeUserId } returns null
         specialCircumstanceManager.specialCircumstance =
             SpecialCircumstance.Fido2Save(createMockFido2CredentialRequest(number = 1))
@@ -2060,7 +2054,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `BiometricsVerificationSuccess should register FIDO 2 credential when and send result when registration result is received`() =
+    fun `UserVerificationSuccess should register FIDO 2 credential when and send result when registration result is received`() =
         runTest {
             val mockRequest = createMockFido2CredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
