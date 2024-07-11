@@ -407,7 +407,7 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleDismissFido2ErrorDialogClick() {
         sendEvent(
-            VaultItemListingEvent.CompleteFido2Create(
+            VaultItemListingEvent.CompleteFido2Registration(
                 result = Fido2RegisterCredentialResult.Error,
             ),
         )
@@ -770,7 +770,7 @@ class VaultItemListingViewModel @Inject constructor(
 
             Fido2RegisterCredentialResult.Cancelled -> Unit
         }
-        sendEvent(VaultItemListingEvent.CompleteFido2Create(action.result))
+        sendEvent(VaultItemListingEvent.CompleteFido2Registration(action.result))
     }
 
     private fun handleValidateFido2OriginResultReceive(
@@ -1342,7 +1342,7 @@ sealed class VaultItemListingEvent {
      *
      * @property result the result of FIDO 2 credential creation.
      */
-    data class CompleteFido2Create(
+    data class CompleteFido2Registration(
         val result: Fido2RegisterCredentialResult,
     ) : VaultItemListingEvent()
 }

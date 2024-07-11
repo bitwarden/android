@@ -134,7 +134,7 @@ fun VaultItemListingScreen(
                 onNavigateToVaultItemListing(VaultItemListingType.Collection(event.collectionId))
             }
 
-            is VaultItemListingEvent.CompleteFido2Create -> {
+            is VaultItemListingEvent.CompleteFido2Registration -> {
                 fido2CompletionManager.completeFido2Registration(event.result)
             }
         }
