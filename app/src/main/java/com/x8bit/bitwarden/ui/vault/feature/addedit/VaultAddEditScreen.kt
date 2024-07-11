@@ -112,8 +112,8 @@ fun VaultAddEditScreen(
                 )
             }
 
-            is VaultAddEditEvent.CompleteFido2Create -> {
-                fido2CompletionManager.completeFido2Create(event.result)
+            is VaultAddEditEvent.CompleteFido2Registration -> {
+                fido2CompletionManager.completeFido2Registration(event.result)
             }
         }
     }

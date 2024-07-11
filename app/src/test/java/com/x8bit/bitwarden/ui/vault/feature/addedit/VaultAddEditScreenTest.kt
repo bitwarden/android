@@ -33,7 +33,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.core.net.toUri
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
@@ -96,7 +96,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
-        every { completeFido2Create(any()) } just runs
+        every { completeFido2Registration(any()) } just runs
     }
 
     @Before
@@ -194,11 +194,11 @@ class VaultAddEditScreenTest : BaseComposeTest() {
 
     @Test
     fun `on CompleteFido2Create even should invoke Fido2CompletionManager`() {
-        val result = Fido2CreateCredentialResult.Success(
+        val result = Fido2RegisterCredentialResult.Success(
             registrationResponse = "mockRegistrationResponse",
         )
-        mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Create(result = result))
-        verify { fido2CompletionManager.completeFido2Create(result) }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.CompleteFido2Registration(result = result))
+        verify { fido2CompletionManager.completeFido2Registration(result) }
     }
 
     @Test

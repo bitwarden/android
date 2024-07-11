@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -66,6 +67,7 @@ import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Clock
@@ -1734,6 +1736,98 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value.dialogState,
             )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
+        runTest {
+            val mockResult = Fido2RegisterCredentialResult.Error
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(
+                    mockResult,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    VaultItemListingEvent.CompleteFido2Registration(mockResult),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Fido2RegisterCredentialResult Success should show toast and emit CompleteFido2Registration result`() =
+        runTest {
+            val mockResult = Fido2RegisterCredentialResult.Success(
+                registrationResponse = "mockResponse",
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(
+                    mockResult,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemListingEvent.ShowToast(R.string.item_updated.asText()),
+                    awaitItem(),
+                )
+
+                assertEquals(
+                    VaultItemListingEvent.CompleteFido2Registration(mockResult),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Fido2RegisterCredentialResult Cancelled should emit CompleteFido2Registration result`() =
+        runTest {
+            val mockResult = Fido2RegisterCredentialResult.Cancelled
+            val viewModel = createVaultItemListingViewModel()
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.Internal.Fido2RegisterCredentialResultReceive(
+                    mockResult,
+                ),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    VaultItemListingEvent.CompleteFido2Registration(mockResult),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `DismissFido2ErrorDialogClick should clear the dialog state then complete FIDO 2 create`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(VaultItemListingsAction.DismissFido2CreationErrorDialogClick)
+            viewModel.eventFlow.test {
+                assertNull(viewModel.stateFlow.value.dialogState)
+                assertEquals(
+                    VaultItemListingEvent.CompleteFido2Registration(
+                        result = Fido2RegisterCredentialResult.Error,
+                    ),
+                    awaitItem(),
+                )
+            }
         }
 
     @Suppress("CyclomaticComplexMethod")

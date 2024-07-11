@@ -1,15 +1,14 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 
 import android.os.Parcelable
-import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CreateCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -408,10 +407,8 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun handleDismissFido2ErrorDialogClick() {
         sendEvent(
-            VaultItemListingEvent.CompleteFido2Create(
-                result = Fido2CreateCredentialResult.Error(
-                    exception = CreateCredentialUnknownException(),
-                ),
+            VaultItemListingEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Error,
             ),
         )
     }
@@ -766,15 +763,19 @@ class VaultItemListingViewModel @Inject constructor(
     ) {
         mutableStateFlow.update { it.copy(dialogState = null) }
         when (action.result) {
-            is Fido2CreateCredentialResult.Error -> {
+            is Fido2RegisterCredentialResult.Error -> {
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.an_error_has_occurred.asText()))
             }
 
-            is Fido2CreateCredentialResult.Success -> {
+            is Fido2RegisterCredentialResult.Success -> {
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
             }
+
+            Fido2RegisterCredentialResult.Cancelled -> {
+                // no-op: The OS will handle re-displaying the system prompt.
+            }
         }
-        sendEvent(VaultItemListingEvent.CompleteFido2Create(action.result))
+        sendEvent(VaultItemListingEvent.CompleteFido2Registration(action.result))
     }
 
     private fun handleValidateFido2OriginResultReceive(
@@ -1346,8 +1347,8 @@ sealed class VaultItemListingEvent {
      *
      * @property result the result of FIDO 2 credential creation.
      */
-    data class CompleteFido2Create(
-        val result: Fido2CreateCredentialResult,
+    data class CompleteFido2Registration(
+        val result: Fido2RegisterCredentialResult,
     ) : VaultItemListingEvent()
 }
 
@@ -1529,7 +1530,7 @@ sealed class VaultItemListingsAction {
          * Indicates that a result for FIDO 2 credential registration has been received.
          */
         data class Fido2RegisterCredentialResultReceive(
-            val result: Fido2CreateCredentialResult,
+            val result: Fido2RegisterCredentialResult,
         ) : Internal()
     }
 }
