@@ -11,8 +11,6 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -456,13 +454,8 @@ class VaultSdkSourceImpl(
                     .fido2()
                     .client(
                         userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
+                            selectedCipherView = request.selectedCipherView,
                             isVerificationSupported = request.isUserVerificationSupported,
-                            checkUser = { _, _ ->
-                                CheckUserResult(true, true)
-                            },
-                            checkUserAndPickCredentialForCreation = { _, _ ->
-                                CipherViewWrapper(request.selectedCipherView)
-                            },
                         ),
                         credentialStore = fido2CredentialStore,
                     )
@@ -496,13 +489,8 @@ class VaultSdkSourceImpl(
                     .fido2()
                     .client(
                         userInterface = Fido2CredentialAuthenticationUserInterfaceImpl(
+                            selectedCipherView = request.selectedCipherView,
                             isVerificationSupported = request.isUserVerificationSupported,
-                            checkUser = { _, _ ->
-                                CheckUserResult(true, true)
-                            },
-                            pickCredentialForAuthentication = {
-                                CipherViewWrapper(request.selectedCipherView)
-                            },
                         ),
                         credentialStore = fido2CredentialStore,
                     )
