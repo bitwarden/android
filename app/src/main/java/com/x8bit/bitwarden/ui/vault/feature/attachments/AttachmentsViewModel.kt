@@ -239,8 +239,10 @@ class AttachmentsViewModel @Inject constructor(
                     viewState = AttachmentsState.ViewState.Error(
                         message = R.string.internet_connection_required_title
                             .asText()
-                            .concat("\n".asText())
-                            .concat(R.string.internet_connection_required_message.asText()),
+                            .concat(
+                                " ".asText(),
+                                R.string.internet_connection_required_message.asText(),
+                            ),
                     ),
                 )
             }

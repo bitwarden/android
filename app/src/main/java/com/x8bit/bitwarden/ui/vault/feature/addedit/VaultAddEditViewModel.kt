@@ -1233,7 +1233,10 @@ class VaultAddEditViewModel @Inject constructor(
                         viewState = VaultAddEditState.ViewState.Error(
                             message = R.string.internet_connection_required_title
                                 .asText()
-                                .concat(R.string.internet_connection_required_message.asText()),
+                                .concat(
+                                    " ".asText(),
+                                    R.string.internet_connection_required_message.asText(),
+                                ),
                         ),
                     )
                 }
@@ -1358,7 +1361,9 @@ class VaultAddEditViewModel @Inject constructor(
                 sendEvent(VaultAddEditEvent.ShowToast(R.string.item_updated.asText()))
             }
 
-            Fido2RegisterCredentialResult.Cancelled -> Unit
+            Fido2RegisterCredentialResult.Cancelled -> {
+                // no-op: The OS will handle re-displaying the system prompt.
+            }
         }
         sendEvent(VaultAddEditEvent.CompleteFido2Registration(action.result))
     }
