@@ -572,7 +572,10 @@ class FolderAddEditViewModelTest : BaseViewModelTest() {
                 viewState = FolderAddEditState.ViewState.Error(
                     R.string.internet_connection_required_title
                         .asText()
-                        .concat(R.string.internet_connection_required_message.asText()),
+                        .concat(
+                            " ".asText(),
+                            R.string.internet_connection_required_message.asText(),
+                        ),
                 ),
             ),
             viewModel.stateFlow.value,
