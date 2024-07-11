@@ -771,7 +771,9 @@ class VaultItemListingViewModel @Inject constructor(
                 sendEvent(VaultItemListingEvent.ShowToast(R.string.item_updated.asText()))
             }
 
-            Fido2RegisterCredentialResult.Cancelled -> Unit
+            Fido2RegisterCredentialResult.Cancelled -> {
+                // no-op: The OS will handle re-displaying the system prompt.
+            }
         }
         sendEvent(VaultItemListingEvent.CompleteFido2Registration(action.result))
     }
