@@ -1,18 +1,24 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
+import android.os.Build
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class AutoFillViewModelTest : BaseViewModelTest() {
@@ -31,6 +37,17 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         every { disableAutofill() } just runs
     }
 
+    @BeforeEach
+    fun setup() {
+        mockkStatic(::isBuildVersionBelow)
+        every { isBuildVersionBelow(Build.VERSION_CODES.R) } returns true
+    }
+
+    @AfterEach
+    fun tearDown() {
+        unmockkStatic(::isBuildVersionBelow)
+    }
+
     @Test
     fun `initial state should be correct when not set`() {
         val viewModel = createViewModel(state = null)
@@ -46,6 +63,16 @@ class AutoFillViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(state = state)
         assertEquals(state, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `showInlineAutofillOption should be true when the build version is not below R`() {
+        every { isBuildVersionBelow(Build.VERSION_CODES.R) } returns false
+        val viewModel = createViewModel(state = null)
+        assertEquals(
+            DEFAULT_STATE.copy(showInlineAutofillOption = true),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -183,5 +210,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = true,
+    showInlineAutofillOption = false,
     defaultUriMatchType = UriMatchType.DOMAIN,
 )
