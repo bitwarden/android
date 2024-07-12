@@ -7,18 +7,13 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
-import com.bitwarden.fido.CheckUserOptions
-import com.bitwarden.fido.ClientData
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -28,14 +23,13 @@ import com.bitwarden.vault.CipherListView
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
-import com.bitwarden.vault.Fido2CredentialNewView
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
-import com.x8bit.bitwarden.data.platform.util.asFailure
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
@@ -452,11 +446,6 @@ class VaultSdkSourceImpl(
     override suspend fun registerFido2Credential(
         request: RegisterFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-        checkUserAndPickCredential: suspend (
-            options: CheckUserOptions,
-            newCredential: Fido2CredentialNewView,
-        ) -> CipherViewWrapper,
     ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
         callbackFlow {
             try {
@@ -465,9 +454,8 @@ class VaultSdkSourceImpl(
                     .fido2()
                     .client(
                         userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
+                            selectedCipherView = request.selectedCipherView,
                             isVerificationSupported = request.isUserVerificationSupported,
-                            checkUser = checkUser,
-                            checkUserAndPickCredentialForCreation = checkUserAndPickCredential,
                         ),
                         credentialStore = fido2CredentialStore,
                     )
@@ -480,10 +468,9 @@ class VaultSdkSourceImpl(
                     )
 
                 send(result)
-            } catch (e: BitwardenException) {
-                e.asFailure()
-            } finally {
                 close()
+            } catch (e: BitwardenException) {
+                close(e)
             }
             awaitClose()
         }
@@ -492,40 +479,32 @@ class VaultSdkSourceImpl(
 
     @Suppress("MaxLineLength")
     override suspend fun authenticateFido2Credential(
-        userId: String,
-        origin: String,
-        requestJson: String,
-        clientData: ClientData,
-        isVerificationSupported: Boolean,
-        checkUser: suspend (CheckUserOptions, UiHint?) -> CheckUserResult,
-        pickCredentialForAuthentication: suspend (List<CipherView>) -> CipherViewWrapper,
+        request: AuthenticateFido2CredentialRequest,
         fido2CredentialStore: Fido2CredentialStore,
     ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatching {
         callbackFlow {
             try {
-                val client = getClient(userId)
+                val client = getClient(request.userId)
                     .platform()
                     .fido2()
                     .client(
                         userInterface = Fido2CredentialAuthenticationUserInterfaceImpl(
-                            isVerificationSupported = isVerificationSupported,
-                            checkUser = checkUser,
-                            pickCredentialForAuthentication = pickCredentialForAuthentication,
+                            selectedCipherView = request.selectedCipherView,
+                            isVerificationSupported = request.isUserVerificationSupported,
                         ),
                         credentialStore = fido2CredentialStore,
                     )
 
                 val result = client.authenticate(
-                    origin = origin,
-                    request = requestJson,
-                    clientData = clientData,
+                    origin = request.origin,
+                    request = request.requestJson,
+                    clientData = request.clientData,
                 )
 
                 send(result)
-            } catch (e: BitwardenException) {
-                e.asFailure()
-            } finally {
                 close()
+            } catch (e: BitwardenException) {
+                close(e)
             }
 
             awaitClose()

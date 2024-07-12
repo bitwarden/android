@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.fido.ClientData
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
@@ -60,27 +58,25 @@ class Fido2CredentialManagerImpl(
         val origin = fido2CredentialRequest.origin
             ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
 
-        return vaultSdkSource.registerFido2Credential(
-            request = RegisterFido2CredentialRequest(
-                userId = userId,
-                origin = origin,
-                requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
-                clientData = clientData,
-                selectedCipherView = selectedCipherView,
-                isUserVerificationSupported = true,
-            ),
-            fido2CredentialStore = this,
-            // TODO: [PM-8137] Determine if user verification is supported
-            checkUser = { _, _ -> CheckUserResult(true, true) },
-            checkUserAndPickCredential = { _, _ -> CipherViewWrapper(selectedCipherView) },
-        )
+        return vaultSdkSource
+            .registerFido2Credential(
+                request = RegisterFido2CredentialRequest(
+                    userId = userId,
+                    origin = origin,
+                    requestJson = """{"publicKey": ${fido2CredentialRequest.requestJson}}""",
+                    clientData = clientData,
+                    selectedCipherView = selectedCipherView,
+                    // User verification is handled prior to engaging the SDK. We always respond
+                    // `true` so that the SDK does not fail if the relying party requests UV.
+                    isUserVerificationSupported = true,
+                ),
+                fido2CredentialStore = this,
+            )
             .map { it.toAndroidAttestationResponse() }
             .mapCatching { json.encodeToString(it) }
             .fold(
                 onSuccess = { Fido2RegisterCredentialResult.Success(it) },
-                onFailure = {
-                    Fido2RegisterCredentialResult.Error
-                },
+                onFailure = { Fido2RegisterCredentialResult.Error },
             )
     }
 
