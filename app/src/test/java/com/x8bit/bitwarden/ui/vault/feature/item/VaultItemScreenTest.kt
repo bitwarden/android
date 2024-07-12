@@ -869,7 +869,7 @@ class VaultItemScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemAction.Common.RestoreVaultItemClick
+                VaultItemAction.Common.RestoreVaultItemClick,
             )
         }
     }

@@ -118,6 +118,9 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { vaultDataStateFlow } returns mutableVaultDataStateFlow
         every { lockVault(any()) } just runs
         every { sync() } just runs
+        coEvery {
+            getDecryptedFido2CredentialAutofillViews(any())
+        } returns DecryptFido2CredentialAutofillViewResult.Error
     }
     private val environmentRepository: EnvironmentRepository = mockk {
         every { environment } returns Environment.Us
@@ -422,12 +425,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingEvent.DismissPullToRefresh,
-                    awaitItem(),
-                )
-                assertEquals(
                     VaultItemListingState.DialogState.Loading(R.string.saving.asText()),
                     viewModel.stateFlow.value.dialogState,
+                )
+                assertEquals(
+                    VaultItemListingEvent.DismissPullToRefresh,
+                    awaitItem(),
                 )
                 assertEquals(
                     VaultItemListingEvent.Fido2UserVerification(

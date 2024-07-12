@@ -425,6 +425,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             )
         }
 
+        @Suppress("MaxLineLength")
         @Test
         fun `on RestoreItemClick when no need to prompt for master password updates pendingCipher state correctly`() =
             runTest {
@@ -451,7 +452,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 viewModel.trySendAction(VaultItemAction.Common.RestoreVaultItemClick)
                 assertEquals(
                     loginState.copy(dialog = VaultItemState.DialogState.RestoreItemDialog),
-                    viewModel.stateFlow.value
+                    viewModel.stateFlow.value,
                 )
 
                 // dismiss dialog
@@ -459,7 +460,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     // setting this to be explicit.
                     loginState.copy(dialog = null),
-                    viewModel.stateFlow.value
+                    viewModel.stateFlow.value,
                 )
             }
 
