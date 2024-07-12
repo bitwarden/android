@@ -34,7 +34,7 @@ class UserLogoutManagerImpl(
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
     override fun logout(userId: String, isExpired: Boolean) {
-        if (authDiskSource.userState == null) return
+        authDiskSource.userState ?: return
 
         if (isExpired) {
             showToast(message = R.string.login_expired)
