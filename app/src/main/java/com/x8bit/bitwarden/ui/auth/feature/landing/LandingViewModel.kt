@@ -216,7 +216,8 @@ class LandingViewModel @Inject constructor(
      */
     private fun handleActiveAccountChange(activeAccount: UserState.Account) {
         val activeUserNotLoggedIn = activeAccount.isLoggedIn.not()
-        if (activeUserNotLoggedIn) {
+        val noPendingAdditions = authRepository.hasPendingAccountAddition.not()
+        if (activeUserNotLoggedIn && noPendingAdditions) {
             trySendAction(LandingAction.EmailInputChanged(activeAccount.email))
         }
     }

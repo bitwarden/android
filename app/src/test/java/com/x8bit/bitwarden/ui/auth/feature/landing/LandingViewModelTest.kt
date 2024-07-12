@@ -432,6 +432,40 @@ class LandingViewModelTest : BaseViewModelTest() {
         assertEquals(expectedEmail, viewModel.stateFlow.value.emailInput)
     }
 
+    @Test
+    fun `Email input will not change based on active user when adding new account`() = runTest {
+        val expectedEmail = "frodo@hobbit.on"
+        val userId = "1"
+
+        val userAccount: UserState.Account = UserState.Account(
+            userId = userId,
+            name = null,
+            email = expectedEmail,
+            avatarColorHex = "lorem",
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            needsMasterPassword = false,
+            trustedDevice = null,
+            organizations = listOf(),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
+
+        val userState = UserState(
+            activeUserId = userId,
+            accounts = listOf(userAccount),
+        )
+
+        every { authRepository.hasPendingAccountAddition } returns true
+
+        val viewModel = createViewModel(userState = userState)
+
+        assert(viewModel.stateFlow.value.emailInput.isEmpty())
+    }
+
     //region Helper methods
 
     private fun createViewModel(
