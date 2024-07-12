@@ -24,6 +24,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the [DeleteAccountScreen].
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class DeleteAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -62,7 +63,7 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleInternalActions(action: DeleteAccountAction.Internal) {
         when (action) {
             is DeleteAccountAction.Internal.DeleteAccountComplete -> handleDeleteAccountComplete(
-                action
+                action,
             )
 
             is DeleteAccountAction.Internal.UpdateDialogState -> updateDialogState(action.dialog)
@@ -91,8 +92,8 @@ class DeleteAccountViewModel @Inject constructor(
                     DeleteAccountAction.Internal.UpdateDialogState(
                         DeleteAccountDialog.Error(
                             message = R.string.invalid_master_password.asText(),
-                        )
-                    )
+                        ),
+                    ),
                 )
             } else {
                 sendAction(
@@ -126,7 +127,7 @@ class DeleteAccountViewModel @Inject constructor(
                     DeleteAccountDialog.Error(
                         message = result.message?.asText()
                             ?: R.string.generic_error_message.asText(),
-                    )
+                    ),
                 )
             }
         }
@@ -253,6 +254,9 @@ sealed class DeleteAccountAction {
             val result: DeleteAccountResult,
         ) : Internal()
 
+        /**
+         * An internal event to update the dialog state utilizing the synchronous action channel.
+         */
         data class UpdateDialogState(
             val dialog: DeleteAccountDialog,
         ) : Internal()
