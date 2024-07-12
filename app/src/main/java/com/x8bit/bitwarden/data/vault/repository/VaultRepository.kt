@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
@@ -143,6 +144,13 @@ interface VaultRepository : CipherManager, VaultLockManager {
      * This may emit an empty list if any issues arise during code generation.
      */
     fun getAuthCodesFlow(): StateFlow<DataState<List<VerificationCodeItem>>>
+
+    /**
+     * Get the decrypted list of fido credentials for the current ciphers and user id.
+     */
+    suspend fun getDecryptedFido2CredentialAutofillViews(
+        cipherViewList: List<CipherView>,
+    ): DecryptFido2CredentialAutofillViewResult
 
     /**
      * Emits the totp code result flow to listeners.

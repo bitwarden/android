@@ -198,6 +198,8 @@ fun VaultItemListingContent(
                     startIconTestTag = it.iconTestTag,
                     label = it.title,
                     labelTestTag = it.titleTestTag,
+                    secondSupportingLabel = it.secondSubtitle,
+                    secondSupportingLabelTestTag = it.secondSubtitleTestTag,
                     supportingLabel = it.subtitle,
                     supportingLabelTestTag = it.subtitleTestTag,
                     optionsTestTag = it.optionsTestTag,

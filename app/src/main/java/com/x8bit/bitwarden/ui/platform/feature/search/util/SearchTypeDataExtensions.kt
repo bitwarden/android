@@ -222,6 +222,7 @@ private fun CipherView.toIconData(
             login?.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
+                usePasskeyDefaultIcon = false,
             )
         }
 
