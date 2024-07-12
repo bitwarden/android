@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -397,6 +398,38 @@ class LandingViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `Active Logged Out user causes email field to prepopulate`() = runTest {
+        val expectedEmail = "frodo@hobbit.on"
+        val userId = "1"
+
+        val userAccount: UserState.Account = UserState.Account(
+            userId = userId,
+            name = null,
+            email = expectedEmail,
+            avatarColorHex = "lorem",
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            needsMasterPassword = false,
+            trustedDevice = null,
+            organizations = listOf(),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
+
+        val userState = UserState(
+            activeUserId = userId,
+            accounts = listOf(userAccount),
+        )
+
+        val viewModel = createViewModel(userState = userState)
+
+        assertEquals(expectedEmail, viewModel.stateFlow.value.emailInput)
     }
 
     //region Helper methods

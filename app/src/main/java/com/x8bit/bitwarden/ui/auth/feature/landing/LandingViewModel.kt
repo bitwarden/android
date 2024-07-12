@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -76,6 +77,10 @@ class LandingViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
+
+        authRepository.userStateFlow.onEach { userState ->
+            userState?.activeAccount?.let(this::handleActiveAccountChange)
+        }.launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LandingAction) {
@@ -91,8 +96,15 @@ class LandingViewModel @Inject constructor(
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
             is LandingAction.DialogDismiss -> handleDialogDismiss()
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
-            is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action)
+            is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action.input)
             is LandingAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
+            is LandingAction.Internal -> handleInternalActions(action)
+        }
+    }
+
+    private fun handleInternalActions(action: LandingAction.Internal) {
+        when (action) {
+            is LandingAction.Internal.UpdateEmailState -> handleEmailInputUpdated(action.emailInput)
             is LandingAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
             }
@@ -117,12 +129,11 @@ class LandingViewModel @Inject constructor(
         authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
-    private fun handleEmailInputUpdated(action: LandingAction.EmailInputChanged) {
-        val email = action.input
+    private fun handleEmailInputUpdated(updatedInput: String) {
         mutableStateFlow.update {
             it.copy(
-                emailInput = email,
-                isContinueButtonEnabled = email.isNotBlank(),
+                emailInput = updatedInput,
+                isContinueButtonEnabled = updatedInput.isNotBlank(),
             )
         }
     }
@@ -196,6 +207,17 @@ class LandingViewModel @Inject constructor(
             it.copy(
                 selectedEnvironmentType = action.environment.type,
             )
+        }
+    }
+
+    /**
+     * If the user state account is changed to an active but not "logged in" account we can
+     * pre-populate the email field with this account.
+     */
+    private fun handleActiveAccountChange(activeAccount: UserState.Account) {
+        val activeUserNotLoggedIn = activeAccount.isLoggedIn.not()
+        if (activeUserNotLoggedIn) {
+            trySendAction(LandingAction.EmailInputChanged(activeAccount.email))
         }
     }
 }
@@ -341,5 +363,10 @@ sealed class LandingAction {
         data class UpdatedEnvironmentReceive(
             val environment: Environment,
         ) : Internal()
+
+        /**
+         * Internal action to update the email input state from a non-user action
+         */
+        data class UpdateEmailState(val emailInput: String) : Internal()
     }
 }

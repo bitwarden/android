@@ -130,7 +130,20 @@ class UserLogoutManagerTest {
     fun `softLogout should clear most data associated with the given user and remove token data in the authDiskSource`() {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
-        val vaultTimeoutAction = VaultTimeoutAction.LOCK
+        val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+
+        mockkStatic(Toast::class)
+
+        every {
+            Toast
+                .makeText(
+                    context,
+                    R.string.account_switched_automatically,
+                    Toast.LENGTH_SHORT,
+                )
+                .show()
+        } just runs
+        every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         } returns vaultTimeoutInMinutes
@@ -154,6 +167,41 @@ class UserLogoutManagerTest {
                 userId = userId,
                 vaultTimeoutAction = vaultTimeoutAction,
             )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softLogout should switch active user but keep previous user in accounts list`() {
+        val userId = USER_ID_1
+        val vaultTimeoutInMinutes = 360
+        val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+
+        mockkStatic(Toast::class)
+
+        every {
+            Toast
+                .makeText(
+                    context,
+                    R.string.account_switched_automatically,
+                    Toast.LENGTH_SHORT,
+                )
+                .show()
+        } just runs
+        every { authDiskSource.userState } returns MULTI_USER_STATE
+        every {
+            settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
+        } returns vaultTimeoutInMinutes
+        every {
+            settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        } returns vaultTimeoutAction
+
+        userLogoutManager.softLogout(userId = userId)
+
+        verify { authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null) }
+        verify {
+            authDiskSource.userState =
+                UserStateJson(activeUserId = USER_ID_2, accounts = MULTI_USER_STATE.accounts)
         }
     }
 
