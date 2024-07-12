@@ -967,7 +967,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Restore dialog ok click should close the dialog and send ConfirmRestoreClick`() {
+    fun `Restore dialog ok click should send ConfirmRestoreClick`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_IDENTITY_VIEW_STATE
@@ -1000,7 +1000,7 @@ class VaultItemScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Restore dialog cancel click should close the dialog and send DismissDialogClick`() {
+    fun `Restore dialog cancel click should send DismissDialogClick`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = DEFAULT_IDENTITY_VIEW_STATE
