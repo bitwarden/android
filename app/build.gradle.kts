@@ -219,6 +219,7 @@ sonar {
         property("sonar.sources", "app/src/")
         property("sonar.tests", "app/src/")
         property("sonar.test.inclusions", "app/src/test/")
+        property("sonar.exclusions", "app/src/test/")
     }
 }
 
