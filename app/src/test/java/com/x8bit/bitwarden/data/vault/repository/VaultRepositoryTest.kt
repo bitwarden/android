@@ -8,6 +8,7 @@ import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.exporters.ExportFormat
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherView
@@ -77,6 +78,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
@@ -4164,6 +4166,94 @@ class VaultRepositoryTest {
                 expected,
                 result,
             )
+        }
+
+    @Test
+    fun `getDecryptedFido2CredentialAutofillViews should return error when userId not found`() =
+        runTest {
+            fakeAuthDiskSource.userState = null
+
+            val expected = DecryptFido2CredentialAutofillViewResult.Error
+            val result = vaultRepository
+                .getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(createMockCipherView(number = 1)),
+                )
+
+            assertEquals(
+                expected,
+                result,
+            )
+            coVerify(exactly = 0) {
+                vaultSdkSource.decryptFido2CredentialAutofillViews(any(), any())
+            }
+        }
+
+    @Test
+    fun `getDecryptedFido2CredentialAutofillViews should return error when decryption fails`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherViewList = listOf(createMockCipherView(number = 1))
+            coEvery {
+                vaultSdkSource.decryptFido2CredentialAutofillViews(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherViews = cipherViewList.toTypedArray(),
+                )
+            } returns Throwable().asFailure()
+
+            turbineScope {
+                val expected = DecryptFido2CredentialAutofillViewResult.Error
+                val result = vaultRepository
+                    .getDecryptedFido2CredentialAutofillViews(
+                        cipherViewList = cipherViewList,
+                    )
+
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+            coVerify {
+                vaultSdkSource.decryptFido2CredentialAutofillViews(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherViews = cipherViewList.toTypedArray(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getDecryptedFido2CredentialAutofillViews should return correct results when decryption succeeds`() =
+        runTest {
+            fakeAuthDiskSource.userState = MOCK_USER_STATE
+            val cipherViewList = listOf(createMockCipherView(number = 1))
+            val autofillViewList = mockk<List<Fido2CredentialAutofillView>>()
+            val expected = DecryptFido2CredentialAutofillViewResult.Success(
+                fido2CredentialAutofillViews = autofillViewList,
+            )
+            coEvery {
+                vaultSdkSource.decryptFido2CredentialAutofillViews(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherViews = cipherViewList.toTypedArray(),
+                )
+            } returns autofillViewList.asSuccess()
+
+            turbineScope {
+                val result = vaultRepository
+                    .getDecryptedFido2CredentialAutofillViews(
+                        cipherViewList = cipherViewList,
+                    )
+
+                assertEquals(
+                    expected,
+                    result,
+                )
+            }
+            coVerify {
+                vaultSdkSource.decryptFido2CredentialAutofillViews(
+                    userId = MOCK_USER_STATE.activeUserId,
+                    cipherViews = cipherViewList.toTypedArray(),
+                )
+            }
         }
 
     //region Helper functions

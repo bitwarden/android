@@ -1012,22 +1012,12 @@ class VaultSdkSourceTest {
                     every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
                 }
 
-                val mockCipherView = createMockCipherView(1)
                 val mockAttestation = mockk<PublicKeyCredentialAuthenticatorAttestationResponse>()
 
                 coEvery { fido2.register(any(), any(), any()) } returns mockAttestation
 
                 val result = vaultSdkSource.registerFido2Credential(
-                    request = RegisterFido2CredentialRequest(
-                        userId = "mockUserId",
-                        origin = "www.bitwarden.com",
-                        requestJson = "requestJson",
-                        clientData = ClientData.DefaultWithCustomHash(
-                            hash = DEFAULT_SIGNATURE.toByteArray(),
-                        ),
-                        selectedCipherView = mockCipherView,
-                        isUserVerificationSupported = true,
-                    ),
+                    DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST,
                     fido2CredentialStore = mockFido2CredentialStore,
                 )
 
@@ -1041,8 +1031,6 @@ class VaultSdkSourceTest {
     @Test
     fun `registerFido2Credential should return Failure when BitwardenException is thrown`() =
         runTest {
-            val mockCipherView = createMockCipherView(1)
-
             coEvery {
                 fido2.register(
                     any(),
@@ -1052,16 +1040,7 @@ class VaultSdkSourceTest {
             } throws BitwardenException.E("mockException")
 
             val result = vaultSdkSource.registerFido2Credential(
-                RegisterFido2CredentialRequest(
-                    userId = "mockUserId",
-                    origin = "www.bitwarden.com",
-                    requestJson = "requestJson",
-                    clientData = ClientData.DefaultWithCustomHash(
-                        DEFAULT_SIGNATURE.toByteArray(),
-                    ),
-                    isUserVerificationSupported = true,
-                    selectedCipherView = mockCipherView,
-                ),
+                DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST,
                 fido2CredentialStore = mockFido2CredentialStore,
             )
 
@@ -1077,24 +1056,15 @@ class VaultSdkSourceTest {
                     every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
                 }
 
-                val mockCipherView = createMockCipherView(1)
                 val mockAssertion = mockk<PublicKeyCredentialAuthenticatorAssertionResponse>()
 
                 coEvery { fido2.authenticate(any(), any(), any()) } returns mockAssertion
 
-                val result = vaultSdkSource.authenticateFido2Credential(
-                    AuthenticateFido2CredentialRequest(
-                        userId = "mockUserId",
-                        origin = "www.bitwarden.com",
-                        requestJson = "requestJson",
-                        clientData = ClientData.DefaultWithCustomHash(
-                            DEFAULT_SIGNATURE.toByteArray(),
-                        ),
-                        isUserVerificationSupported = true,
-                        selectedCipherView = mockCipherView,
-                    ),
-                    fido2CredentialStore = mockFido2CredentialStore,
-                )
+                val result = vaultSdkSource
+                    .authenticateFido2Credential(
+                        DEFAULT_FIDO_2_AUTH_REQUEST,
+                        fido2CredentialStore = mockFido2CredentialStore,
+                    )
 
                 assertEquals(
                     mockAssertion.asSuccess(),
@@ -1106,8 +1076,6 @@ class VaultSdkSourceTest {
     @Test
     fun `authenticateFido2Credential should return Failure when BitwardenException is thrown`() =
         runTest {
-            val mockCipherView = createMockCipherView(1)
-
             coEvery {
                 fido2.authenticate(
                     any(),
@@ -1116,19 +1084,11 @@ class VaultSdkSourceTest {
                 )
             } throws BitwardenException.E("mockException")
 
-            val result = vaultSdkSource.authenticateFido2Credential(
-                AuthenticateFido2CredentialRequest(
-                    userId = "mockUserId",
-                    origin = "www.bitwarden.com",
-                    requestJson = "requestJson",
-                    clientData = ClientData.DefaultWithCustomHash(
-                        DEFAULT_SIGNATURE.toByteArray(),
-                    ),
-                    isUserVerificationSupported = true,
-                    selectedCipherView = mockCipherView,
-                ),
-                fido2CredentialStore = mockFido2CredentialStore,
-            )
+            val result = vaultSdkSource
+                .authenticateFido2Credential(
+                    DEFAULT_FIDO_2_AUTH_REQUEST,
+                    fido2CredentialStore = mockFido2CredentialStore,
+                )
 
             assertTrue(result.isFailure)
         }
@@ -1179,3 +1139,23 @@ class VaultSdkSourceTest {
 }
 
 private const val DEFAULT_SIGNATURE = "0987654321ABCDEF"
+private val DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST = RegisterFido2CredentialRequest(
+    userId = "mockUserId",
+    origin = "www.bitwarden.com",
+    requestJson = "requestJson",
+    clientData = ClientData.DefaultWithCustomHash(
+        DEFAULT_SIGNATURE.toByteArray(),
+    ),
+    isUserVerificationSupported = true,
+    selectedCipherView = createMockCipherView(number = 1),
+)
+val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
+    userId = "mockUserId",
+    origin = "www.bitwarden.com",
+    requestJson = "requestJson",
+    clientData = ClientData.DefaultWithCustomHash(
+        DEFAULT_SIGNATURE.toByteArray(),
+    ),
+    isUserVerificationSupported = true,
+    selectedCipherView = createMockCipherView(number = 1),
+)

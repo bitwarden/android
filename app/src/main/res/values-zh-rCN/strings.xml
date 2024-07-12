@@ -925,4 +925,6 @@
   <string name="launch_web_authn">启动 WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">启动 WebAuthn 双重身份验证时出错</string>
   <string name="self_hosted_server_url">自托管服务器 URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">由于无法验证用户，passkey 操作失败</string>
+  <string name="user_verification_direction">用户验证</string>
 </resources>

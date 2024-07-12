@@ -39,6 +39,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionV
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
@@ -47,6 +48,7 @@ import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
+import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
@@ -288,6 +290,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
             val cipherView = createMockCipherView(number = 1)
+            coEvery {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView),
+                )
+            } returns DecryptFido2CredentialAutofillViewResult.Error
             specialCircumstanceManager.specialCircumstance =
                 SpecialCircumstance.AutofillSelection(
                     autofillSelectionData = AutofillSelectionData(
@@ -311,6 +318,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 assertEquals(
                     cipherView,
                     awaitItem(),
+                )
+            }
+            coVerify {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView),
                 )
             }
         }
@@ -514,7 +526,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -564,7 +577,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -1088,7 +1102,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     viewState = VaultItemListingState.ViewState.Content(
                         displayCollectionList = emptyList(),
                         displayItemList = listOf(
-                            createMockDisplayItemForCipher(number = 1),
+                            createMockDisplayItemForCipher(number = 1)
+                                .copy(secondSubtitleTestTag = "PasskeySite"),
                         ),
                         displayFolderList = emptyList(),
                     ),
@@ -1105,6 +1120,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val cipherView1 = createMockCipherView(number = 1)
             val cipherView2 = createMockCipherView(number = 2)
+
+            coEvery {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                )
+            } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
 
             // Set up the data to be filtered
             mockFilteredCiphers = listOf(cipherView1)
@@ -1136,7 +1157,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     viewState = VaultItemListingState.ViewState.Content(
                         displayCollectionList = emptyList(),
                         displayItemList = listOf(
-                            createMockDisplayItemForCipher(number = 1).copy(isAutofill = true),
+                            createMockDisplayItemForCipher(number = 1).copy(
+                                secondSubtitleTestTag = "PasskeySite",
+                                subtitleTestTag = "PasskeyName",
+                                iconData = IconData.Network(
+                                    uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                    fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                ),
+                                isAutofill = true,
+                            ),
                         ),
                         displayFolderList = emptyList(),
                     ),
@@ -1147,6 +1176,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 viewModel.stateFlow.value,
             )
+            coVerify {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                )
+            }
         }
 
     @Suppress("MaxLineLength")
@@ -1155,12 +1189,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
 
+            val cipherView1 = createMockCipherView(number = 1)
+            val cipherView2 = createMockCipherView(number = 2)
+
+            coEvery {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                )
+            } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
             coEvery {
                 fido2CredentialManager.validateOrigin(any())
             } returns Fido2ValidateOriginResult.Success
-
-            val cipherView1 = createMockCipherView(number = 1)
-            val cipherView2 = createMockCipherView(number = 2)
 
             mockFilteredCiphers = listOf(cipherView1)
 
@@ -1195,7 +1234,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                         displayCollectionList = emptyList(),
                         displayItemList = listOf(
                             createMockDisplayItemForCipher(number = 1)
-                                .copy(isFido2Creation = true),
+                                .copy(
+                                    secondSubtitleTestTag = "PasskeySite",
+                                    subtitleTestTag = "PasskeyName",
+                                    iconData = IconData.Network(
+                                        uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                        fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                    ),
+                                    isFido2Creation = true,
+                                ),
                         ),
                         displayFolderList = emptyList(),
                     ),
@@ -1206,6 +1253,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     ),
                 viewModel.stateFlow.value,
             )
+            coVerify {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                )
+                fido2CredentialManager.validateOrigin(any())
+            }
         }
 
     @Test
@@ -1299,7 +1352,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -1409,7 +1463,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
@@ -1529,7 +1584,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 viewState = VaultItemListingState.ViewState.Content(
                     displayCollectionList = emptyList(),
                     displayItemList = listOf(
-                        createMockDisplayItemForCipher(number = 1),
+                        createMockDisplayItemForCipher(number = 1)
+                            .copy(secondSubtitleTestTag = "PasskeySite"),
                     ),
                     displayFolderList = emptyList(),
                 ),
