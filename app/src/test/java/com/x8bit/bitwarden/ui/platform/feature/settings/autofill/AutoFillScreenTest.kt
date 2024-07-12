@@ -188,6 +188,24 @@ class AutoFillScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `use inline autofill should be displayed according to state`() {
+        mutableStateFlow.update {
+            it.copy(showInlineAutofillOption = true)
+        }
+
+        composeTestRule
+            .onNodeWithText(text = "Use inline autofill")
+            .performScrollTo()
+            .assertIsDisplayed()
+
+        mutableStateFlow.update {
+            it.copy(showInlineAutofillOption = false)
+        }
+
+        composeTestRule.onNodeWithText(text = "Use inline autofill").assertDoesNotExist()
+    }
+
+    @Test
     fun `on copy TOTP automatically toggle should send CopyTotpAutomaticallyClick`() {
         composeTestRule
             .onNodeWithText("Copy TOTP automatically")
@@ -337,5 +355,6 @@ private val DEFAULT_STATE: AutoFillState = AutoFillState(
     isAutoFillServicesEnabled = false,
     isCopyTotpAutomaticallyEnabled = false,
     isUseInlineAutoFillEnabled = false,
+    showInlineAutofillOption = true,
     defaultUriMatchType = UriMatchType.DOMAIN,
 )

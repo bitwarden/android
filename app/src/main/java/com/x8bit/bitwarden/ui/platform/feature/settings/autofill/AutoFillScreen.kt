@@ -133,19 +133,23 @@ fun AutoFillScreen(
                     .testTag("AutofillServicesSwitch")
                     .padding(horizontal = 16.dp),
             )
-            BitwardenWideSwitch(
-                label = stringResource(id = R.string.inline_autofill),
-                description = stringResource(id = R.string.use_inline_autofill_explanation_long),
-                isChecked = state.isUseInlineAutoFillEnabled,
-                onCheckedChange = remember(viewModel) {
-                    { viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(it)) }
-                },
-                enabled = state.canInteractWithInlineAutofillToggle,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("InlineAutofillSwitch")
-                    .padding(horizontal = 16.dp),
-            )
+            if (state.showInlineAutofillOption) {
+                BitwardenWideSwitch(
+                    label = stringResource(id = R.string.inline_autofill),
+                    description = stringResource(
+                        id = R.string.use_inline_autofill_explanation_long,
+                    ),
+                    isChecked = state.isUseInlineAutoFillEnabled,
+                    onCheckedChange = remember(viewModel) {
+                        { viewModel.trySendAction(AutoFillAction.UseInlineAutofillClick(it)) }
+                    },
+                    enabled = state.canInteractWithInlineAutofillToggle,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("InlineAutofillSwitch")
+                        .padding(horizontal = 16.dp),
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.additional_options),
