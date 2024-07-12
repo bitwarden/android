@@ -86,6 +86,9 @@ class DeleteAccountViewModel @Inject constructor(
         action: DeleteAccountAction.DeleteAccountConfirmDialogClick,
     ) {
         viewModelScope.launch {
+            sendAction(
+                DeleteAccountAction.Internal.UpdateDialogState(DeleteAccountDialog.Loading),
+            )
             val validPasswordResult = authRepository.validatePassword(action.masterPassword)
             if ((validPasswordResult as? ValidatePasswordResult.Success)?.isValid == false) {
                 sendAction(
@@ -96,9 +99,6 @@ class DeleteAccountViewModel @Inject constructor(
                     ),
                 )
             } else {
-                sendAction(
-                    DeleteAccountAction.Internal.UpdateDialogState(DeleteAccountDialog.Loading),
-                )
                 val result = authRepository.deleteAccountWithMasterPassword(action.masterPassword)
                 sendAction(DeleteAccountAction.Internal.DeleteAccountComplete(result))
             }
