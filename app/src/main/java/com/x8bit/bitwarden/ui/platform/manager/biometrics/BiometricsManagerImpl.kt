@@ -52,18 +52,16 @@ class BiometricsManagerImpl(
         onError: () -> Unit,
         onNotSupported: () -> Unit,
     ) {
-        when {
-            isUserVerificationSupported.not() -> onNotSupported()
-
-            else -> {
-                configureAndDisplayPrompt(
-                    onSuccess = { onSuccess() },
-                    onCancel = onCancel,
-                    onLockOut = onLockOut,
-                    onError = onError,
-                    cipher = null,
-                )
-            }
+        if (isUserVerificationSupported.not()) {
+            onNotSupported()
+        } else {
+            configureAndDisplayPrompt(
+                onSuccess = { onSuccess() },
+                onCancel = onCancel,
+                onLockOut = onLockOut,
+                onError = onError,
+                cipher = null,
+            )
         }
     }
 
