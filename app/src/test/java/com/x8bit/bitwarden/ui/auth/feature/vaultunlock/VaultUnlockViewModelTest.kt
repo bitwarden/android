@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -66,6 +67,10 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
                 cipher = null,
             )
         } returns false
+    }
+    private val fido2CredentialManager: Fido2CredentialManager = mockk {
+        every { isUserVerified } returns true
+        every { isUserVerified = any() } just runs
     }
 
     @Test
@@ -871,6 +876,38 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveVaultUnlockResult should set FIDO 2 user verification state to verified when result is Success`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
+                userId = "activeUserId",
+                vaultUnlockResult = VaultUnlockResult.Success,
+                isBiometricLogin = true,
+            ),
+        )
+
+        verify { fido2CredentialManager.isUserVerified = true }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveVaultUnlockResult should set FIDO 2 user verification state to verified when result is not Success`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            VaultUnlockAction.Internal.ReceiveVaultUnlockResult(
+                userId = "activeUserId",
+                vaultUnlockResult = VaultUnlockResult.InvalidStateError,
+                isBiometricLogin = false,
+            ),
+        )
+
+        verify { fido2CredentialManager.isUserVerified = false }
+    }
+
     private fun createViewModel(
         state: VaultUnlockState? = null,
         unlockType: UnlockType = UnlockType.STANDARD,
@@ -886,6 +923,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         vaultRepo = vaultRepo,
         environmentRepo = environmentRepo,
         biometricsEncryptionManager = biometricsEncryptionManager,
+        fido2CredentialManager = fido2CredentialManager,
     )
 }
 

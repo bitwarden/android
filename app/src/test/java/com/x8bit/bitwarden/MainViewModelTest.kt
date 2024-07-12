@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -55,7 +56,6 @@ class MainViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val mutableAppThemeFlow = MutableStateFlow(AppTheme.DEFAULT)
     private val mutableScreenCaptureAllowedFlow = MutableStateFlow(true)
-    private val fido2CredentialManager = mockk<Fido2CredentialManager>()
     private val settingsRepository = mockk<SettingsRepository> {
         every { appTheme } returns AppTheme.DEFAULT
         every { appThemeStateFlow } returns mutableAppThemeFlow
@@ -77,6 +77,10 @@ class MainViewModelTest : BaseViewModelTest() {
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val intentManager: IntentManager = mockk {
         every { getShareDataFromIntent(any()) } returns null
+    }
+    private val fido2CredentialManager = mockk<Fido2CredentialManager> {
+        every { isUserVerified } returns true
+        every { isUserVerified = any() } just runs
     }
     private val savedStateHandle = SavedStateHandle()
 
@@ -362,22 +366,16 @@ class MainViewModelTest : BaseViewModelTest() {
             signingInfo = SigningInfo(),
             origin = "mockOrigin",
         )
-        val mockIntent = mockk<Intent> {
-            every { getFido2CredentialRequestOrNull() } returns fido2CredentialRequest
-            every { getPasswordlessRequestDataIntentOrNull() } returns null
-            every { getAutofillSelectionDataOrNull() } returns null
-            every { getAutofillSaveItemOrNull() } returns null
-            every { isMyVaultShortcut } returns false
-            every { isPasswordGeneratorShortcut } returns false
-        }
-        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        val fido2Intent = createMockFido2RegistrationIntent(fido2CredentialRequest)
+
+        every { intentManager.getShareDataFromIntent(fido2Intent) } returns null
         coEvery {
             fido2CredentialManager.validateOrigin(any())
         } returns Fido2ValidateOriginResult.Success
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
-                intent = mockIntent,
+                intent = fido2Intent,
             ),
         )
 
@@ -387,6 +385,22 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
             specialCircumstanceManager.specialCircumstance,
         )
+    }
+
+    @Test
+    fun `on ReceiveFirstIntent with fido2 request data should set the user to unverified`() {
+        val viewModel = createViewModel()
+        val fido2Intent = createMockFido2RegistrationIntent()
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = fido2Intent,
+            ),
+        )
+
+        verify {
+            fido2CredentialManager.isUserVerified = false
+        }
     }
 
     @Suppress("MaxLineLength")
@@ -633,6 +647,7 @@ class MainViewModelTest : BaseViewModelTest() {
         autofillSelectionManager = autofillSelectionManager,
         specialCircumstanceManager = specialCircumstanceManager,
         garbageCollectionManager = garbageCollectionManager,
+        fido2CredentialManager = fido2CredentialManager,
         intentManager = intentManager,
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
@@ -669,3 +684,14 @@ private val DEFAULT_USER_STATE = UserState(
     activeUserId = "activeUserId",
     accounts = listOf(DEFAULT_ACCOUNT),
 )
+
+private fun createMockFido2RegistrationIntent(
+    fido2CredentialRequest: Fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+): Intent = mockk<Intent> {
+    every { getFido2CredentialRequestOrNull() } returns fido2CredentialRequest
+    every { getPasswordlessRequestDataIntentOrNull() } returns null
+    every { getAutofillSelectionDataOrNull() } returns null
+    every { getAutofillSaveItemOrNull() } returns null
+    every { isMyVaultShortcut } returns false
+    every { isPasswordGeneratorShortcut } returns false
+}

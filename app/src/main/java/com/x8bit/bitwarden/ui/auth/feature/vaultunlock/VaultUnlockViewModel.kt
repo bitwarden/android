@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -43,6 +44,7 @@ class VaultUnlockViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepo: VaultRepository,
     private val biometricsEncryptionManager: BiometricsEncryptionManager,
+    private val fido2CredentialManager: Fido2CredentialManager,
     environmentRepo: EnvironmentRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<VaultUnlockState, VaultUnlockEvent, VaultUnlockAction>(
@@ -252,6 +254,10 @@ class VaultUnlockViewModel @Inject constructor(
             mutableStateFlow.update { it.copy(dialog = null) }
             return
         }
+
+        // Mark the user verified for this session if the unlock result is Success.
+        fido2CredentialManager.isUserVerified =
+            action.vaultUnlockResult is VaultUnlockResult.Success
 
         when (action.vaultUnlockResult) {
             VaultUnlockResult.AuthenticationError -> {
