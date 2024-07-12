@@ -1,10 +1,12 @@
 package com.x8bit.bitwarden.ui.platform.feature.settings.autofill
 
+import android.os.Build
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.UriMatchType
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +34,7 @@ class AutoFillViewModel @Inject constructor(
             isAutoFillServicesEnabled = settingsRepository.isAutofillEnabledStateFlow.value,
             isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
+            showInlineAutofillOption = !isBuildVersionBelow(Build.VERSION_CODES.R),
             defaultUriMatchType = settingsRepository.defaultUriMatchType,
         ),
 ) {
@@ -121,6 +124,7 @@ data class AutoFillState(
     val isAutoFillServicesEnabled: Boolean,
     val isCopyTotpAutomaticallyEnabled: Boolean,
     val isUseInlineAutoFillEnabled: Boolean,
+    val showInlineAutofillOption: Boolean,
     val defaultUriMatchType: UriMatchType,
 ) : Parcelable {
 
