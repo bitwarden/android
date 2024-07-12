@@ -259,7 +259,7 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `Verify Checking for timeout should take place for a user who is an logged in state`() {
+    fun `Verify Checking for timeout should take place for a user with logged in state`() {
         setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
