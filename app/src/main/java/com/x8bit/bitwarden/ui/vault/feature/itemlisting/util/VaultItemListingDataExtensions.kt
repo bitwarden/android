@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.itemlisting.util
 
 import androidx.annotation.DrawableRes
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.CipherRepromptType
@@ -13,6 +14,7 @@ import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -101,6 +103,7 @@ fun VaultData.toViewState(
     isIconLoadingDisabled: Boolean,
     autofillSelectionData: AutofillSelectionData?,
     fido2CreationData: Fido2CredentialRequest?,
+    fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
         .filter { cipherView ->
@@ -129,6 +132,7 @@ fun VaultData.toViewState(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 isAutofill = autofillSelectionData != null,
                 isFido2Creation = fido2CreationData != null,
+                fido2CredentialAutofillViews = fido2CredentialAutofillViews,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -259,12 +263,14 @@ fun VaultItemListingState.ItemListingType.updateWithAdditionalDataIfNecessary(
         is VaultItemListingState.ItemListingType.Send.SendText -> this
     }
 
+@Suppress("LongParameterList")
 private fun List<CipherView>.toDisplayItemList(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isFido2Creation: Boolean,
+    fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -273,6 +279,10 @@ private fun List<CipherView>.toDisplayItemList(
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
             isFido2Creation = isFido2Creation,
+            fido2CredentialAutofillView = fido2CredentialAutofillViews
+                ?.firstOrNull { fido2CredentialAutofillView ->
+                    fido2CredentialAutofillView.cipherId == it.id
+                },
         )
     }
 
@@ -287,31 +297,54 @@ private fun List<SendView>.toDisplayItemList(
         )
     }
 
+@Suppress("LongParameterList")
 private fun CipherView.toDisplayItem(
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
     isFido2Creation: Boolean,
+    fido2CredentialAutofillView: Fido2CredentialAutofillView?,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "CipherNameLabel",
-        subtitle = subtitle,
-        subtitleTestTag = "CipherSubTitleLabel",
+        secondSubtitle = this.toSecondSubtitle(fido2CredentialAutofillView?.rpId),
+        secondSubtitleTestTag = "PasskeySite",
+        subtitle = this.subtitle,
+        subtitleTestTag = this.toSubtitleTestTag(
+            isAutofill = isAutofill,
+            isFido2Creation = isFido2Creation,
+        ),
         iconData = this.toIconData(
             baseIconUrl = baseIconUrl,
             isIconLoadingDisabled = isIconLoadingDisabled,
+            usePasskeyDefaultIcon = (isAutofill || isFido2Creation) &&
+                this.isActiveWithFido2Credentials,
         ),
-        iconTestTag = toIconTestTag(),
-        extraIconList = toLabelIcons(),
-        overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+        iconTestTag = this.toIconTestTag(),
+        extraIconList = this.toLabelIcons(),
+        overflowOptions = this.toOverflowActions(hasMasterPassword = hasMasterPassword),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isFido2Creation = isFido2Creation,
         shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
     )
+
+private fun CipherView.toSecondSubtitle(fido2CredentialRpId: String?): String? =
+    fido2CredentialRpId
+        ?.takeIf { this.type == CipherType.LOGIN && it.isNotEmpty() && it != this.name }
+
+private fun CipherView.toSubtitleTestTag(
+    isAutofill: Boolean,
+    isFido2Creation: Boolean,
+): String =
+    if ((isAutofill || isFido2Creation)) {
+        if (this.isActiveWithFido2Credentials) "PasskeyName" else "PasswordName"
+    } else {
+        "CipherSubTitleLabel"
+    }
 
 private fun CipherView.toIconTestTag(): String =
     when (type) {
@@ -324,12 +357,14 @@ private fun CipherView.toIconTestTag(): String =
 private fun CipherView.toIconData(
     baseIconUrl: String,
     isIconLoadingDisabled: Boolean,
+    usePasskeyDefaultIcon: Boolean,
 ): IconData {
     return when (this.type) {
         CipherType.LOGIN -> {
             login?.uris.toLoginIconData(
                 baseIconUrl = baseIconUrl,
                 isIconLoadingDisabled = isIconLoadingDisabled,
+                usePasskeyDefaultIcon = usePasskeyDefaultIcon,
             )
         }
 
@@ -347,6 +382,8 @@ private fun SendView.toDisplayItem(
         id = id.orEmpty(),
         title = name,
         titleTestTag = "SendNameLabel",
+        secondSubtitle = null,
+        secondSubtitleTestTag = null,
         subtitle = deletionDate.toFormattedPattern(DELETION_DATE_PATTERN, clock),
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(

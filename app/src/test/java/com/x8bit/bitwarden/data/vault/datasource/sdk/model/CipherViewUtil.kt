@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
@@ -137,6 +138,21 @@ fun createMockSdkFido2Credential(
     discoverable = "mockDiscoverable-$number",
     creationDate = clock.instant(),
 )
+
+/**
+ * Create a mock [Fido2CredentialAutofillView] with a given [number] and optional [cipherId].
+ */
+fun createMockFido2CredentialAutofillView(
+    number: Int,
+    cipherId: String? = null,
+): Fido2CredentialAutofillView =
+    Fido2CredentialAutofillView(
+        credentialId = "mockCredentialId-$number".encodeToByteArray(),
+        cipherId = cipherId ?: "mockCipherId-$number",
+        rpId = "mockRpId-$number",
+        userNameForUi = "mockUserNameForUi-$number",
+        userHandle = "mockUserHandle-$number".encodeToByteArray(),
+    )
 
 /**
  * Create a mock [LoginUriView] with a given [number].

@@ -546,6 +546,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
                     startIcon = cipherView.login?.uris.toLoginIconData(
                         isIconLoadingDisabled = initialState.isIconLoadingDisabled,
                         baseIconUrl = initialState.baseIconUrl,
+                        usePasskeyDefaultIcon = false,
                     ),
                 )
             },
@@ -566,6 +567,7 @@ class VerificationCodeViewModelTest : BaseViewModelTest() {
                     startIcon = cipherView.login?.uris.toLoginIconData(
                         isIconLoadingDisabled = initialState.isIconLoadingDisabled,
                         baseIconUrl = initialState.baseIconUrl,
+                        usePasskeyDefaultIcon = false,
                     ),
                 )
             },
