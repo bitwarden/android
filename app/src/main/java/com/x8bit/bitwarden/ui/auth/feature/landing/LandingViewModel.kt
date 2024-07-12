@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toAccountSummaries
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
@@ -78,9 +79,15 @@ class LandingViewModel @Inject constructor(
             }
             .launchIn(viewModelScope)
 
-        authRepository.userStateFlow.onEach { userState ->
-            userState?.activeAccount?.let(this::handleActiveAccountChange)
-        }.launchIn(viewModelScope)
+        authRepository
+            .userStateFlow
+            .map { userState ->
+                userState?.activeAccount?.let(this::mapToInternalActionOrNull)
+            }
+            .onEach { action ->
+                action?.let(::handleAction)
+            }
+            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: LandingAction) {
@@ -214,12 +221,13 @@ class LandingViewModel @Inject constructor(
      * If the user state account is changed to an active but not "logged in" account we can
      * pre-populate the email field with this account.
      */
-    private fun handleActiveAccountChange(activeAccount: UserState.Account) {
+    private fun mapToInternalActionOrNull(
+        activeAccount: UserState.Account,
+    ): LandingAction.Internal.UpdateEmailState? {
         val activeUserNotLoggedIn = activeAccount.isLoggedIn.not()
         val noPendingAdditions = authRepository.hasPendingAccountAddition.not()
-        if (activeUserNotLoggedIn && noPendingAdditions) {
-            trySendAction(LandingAction.EmailInputChanged(activeAccount.email))
-        }
+        return LandingAction.Internal.UpdateEmailState(activeAccount.email)
+            .takeIf { activeUserNotLoggedIn && noPendingAdditions }
     }
 }
 
