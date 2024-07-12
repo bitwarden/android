@@ -212,6 +212,10 @@ class VaultItemListingViewModel @Inject constructor(
                 handleUserVerificationSuccess(action)
             }
 
+            VaultItemListingsAction.UserVerificationNotSupported -> {
+                handleUserVerificationNotSupported()
+            }
+
             is VaultItemListingsAction.Internal -> handleInternalAction(action)
         }
     }
@@ -254,7 +258,8 @@ class VaultItemListingViewModel @Inject constructor(
     private fun handleUserVerificationSuccess(
         action: VaultItemListingsAction.UserVerificationSuccess,
     ) {
-        specialCircumstanceManager.specialCircumstance
+        specialCircumstanceManager
+            .specialCircumstance
             ?.toFido2RequestOrNull()
             ?.let { request ->
                 registerFido2CredentialToCipher(
@@ -276,6 +281,10 @@ class VaultItemListingViewModel @Inject constructor(
                 result = Fido2RegisterCredentialResult.Cancelled,
             ),
         )
+    }
+
+    private fun handleUserVerificationNotSupported() {
+        showFido2ErrorDialog()
     }
 
     private fun handleCopySendUrlClick(action: ListingItemOverflowAction.SendAction.CopyUrlClick) {
@@ -367,7 +376,8 @@ class VaultItemListingViewModel @Inject constructor(
                 showFido2ErrorDialog()
                 return
             }
-        val credentialRequest = state.fido2CredentialRequest
+        val credentialRequest = state
+            .fido2CredentialRequest
             ?: run {
                 // This scenario should not occur because `isFido2Creation` is false when
                 // `fido2CredentialRequest` is null. We show the FIDO 2 error dialog to inform
@@ -382,8 +392,8 @@ class VaultItemListingViewModel @Inject constructor(
                 ),
             )
         }
-        val createOptions =
-            fido2CredentialManager.getPasskeyCreateOptionsOrNull(credentialRequest.requestJson)
+        val createOptions = fido2CredentialManager
+                .getPasskeyCreateOptionsOrNull(credentialRequest.requestJson)
                 ?: run {
                     showFido2ErrorDialog()
                     return
@@ -406,15 +416,19 @@ class VaultItemListingViewModel @Inject constructor(
                 )
             }
 
-            UserVerificationRequirement.REQUIRED,
-            null,
-            -> {
+            UserVerificationRequirement.REQUIRED -> {
                 sendEvent(
                     VaultItemListingEvent.Fido2UserVerification(
                         isRequired = true,
                         selectedCipherView = cipherView,
                     ),
                 )
+            }
+
+            null -> {
+                // Per WebAuthn spec members should be ignored when invalid. Since the request
+                // violates spec we display an error and terminate the operation.
+                showFido2ErrorDialog()
             }
         }
     }
@@ -423,12 +437,12 @@ class VaultItemListingViewModel @Inject constructor(
         request: Fido2CredentialRequest,
         cipherView: CipherView,
     ) {
+        val activeUserId = authRepository.activeUserId
+            ?: run {
+                showFido2ErrorDialog()
+                return
+            }
         viewModelScope.launch {
-            val activeUserId = authRepository.activeUserId
-                ?: run {
-                    showFido2ErrorDialog()
-                    return@launch
-                }
             val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
                     userId = activeUserId,
@@ -1035,13 +1049,13 @@ class VaultItemListingViewModel @Inject constructor(
         }
     }
 
-    @Suppress("MaxLineLength")
     private fun showFido2ErrorDialog() {
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Fido2CreationFail(
                     title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
                 ),
             )
         }
@@ -1619,6 +1633,11 @@ sealed class VaultItemListingsAction {
      * The user has cancelled biometric user verification.
      */
     data object UserVerificationCancelled : VaultItemListingsAction()
+
+    /**
+     * The user cannot perform verification because it is not supported by the device.
+     */
+    data object UserVerificationNotSupported : VaultItemListingsAction()
 
     /**
      * Models actions that the [VaultItemListingViewModel] itself might send.

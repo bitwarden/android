@@ -146,27 +146,16 @@ fun VaultItemListingScreen(
             }
 
             is VaultItemListingEvent.Fido2UserVerification -> {
-                if (biometricsManager.isUserVerificationSupported) {
-                    biometricsManager.promptUserVerification(
-                        onSuccess = {
-                            userVerificationHandlers
-                                .onUserVerificationSuccess(event.selectedCipherView)
-                        },
-                        onCancel = userVerificationHandlers.onUserVerificationCancelled,
-                        onLockOut = userVerificationHandlers.onUserVerificationLockOut,
-                        onError = userVerificationHandlers.onUserVerificationFail,
-                    )
-                } else {
-                    if (event.isRequired) {
-                        viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
-                    } else {
-                        viewModel.trySendAction(
-                            VaultItemListingsAction.UserVerificationSuccess(
-                                selectedCipherView = event.selectedCipherView,
-                            ),
-                        )
-                    }
-                }
+                biometricsManager.promptUserVerification(
+                    onSuccess = {
+                        userVerificationHandlers
+                            .onUserVerificationSuccess(event.selectedCipherView)
+                    },
+                    onCancel = userVerificationHandlers.onUserVerificationCancelled,
+                    onLockOut = userVerificationHandlers.onUserVerificationLockOut,
+                    onError = userVerificationHandlers.onUserVerificationFail,
+                    onNotSupported = userVerificationHandlers.onUserVerificationNotSupported,
+                )
             }
         }
     }

@@ -50,14 +50,21 @@ class BiometricsManagerImpl(
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
+        onNotSupported: () -> Unit,
     ) {
-        configureAndDisplayPrompt(
-            onSuccess = { onSuccess() },
-            onCancel = onCancel,
-            onLockOut = onLockOut,
-            onError = onError,
-            cipher = null,
-        )
+        when {
+            isUserVerificationSupported.not() -> onNotSupported()
+
+            else -> {
+                configureAndDisplayPrompt(
+                    onSuccess = { onSuccess() },
+                    onCancel = onCancel,
+                    onLockOut = onLockOut,
+                    onError = onError,
+                    cipher = null,
+                )
+            }
+        }
     }
 
     private fun canAuthenticate(authenticators: Int): Boolean =

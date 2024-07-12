@@ -19,6 +19,7 @@ data class VaultItemListingUserVerificationHandlers(
     val onUserVerificationLockOut: () -> Unit,
     val onUserVerificationFail: () -> Unit,
     val onUserVerificationCancelled: () -> Unit,
+    val onUserVerificationNotSupported: () -> Unit,
 ) {
     companion object {
 
@@ -45,6 +46,9 @@ data class VaultItemListingUserVerificationHandlers(
                 },
                 onUserVerificationCancelled = {
                     viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
+                },
+                onUserVerificationNotSupported = {
+                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationNotSupported)
                 },
             )
     }

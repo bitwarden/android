@@ -32,11 +32,20 @@ interface BiometricsManager {
 
     /**
      * Display a prompt for performing user verification with biometrics or device credentials.
+     *
+     * @param onSuccess Indicates the user was successfully verified.
+     * @param onCancel Indicates the user cancelled verification.
+     * @param onLockOut Indicates there were too many failed verification attempts and must wait
+     * some time before attempting verification again.
+     * @param onError Indicates the user was not verified due to an unexpected error.
+     * @param onNotSupported Indicates the users device is not capable of performing user
+     * verification.
      */
     fun promptUserVerification(
         onSuccess: () -> Unit,
         onCancel: () -> Unit,
         onLockOut: () -> Unit,
         onError: () -> Unit,
+        onNotSupported: () -> Unit,
     )
 }

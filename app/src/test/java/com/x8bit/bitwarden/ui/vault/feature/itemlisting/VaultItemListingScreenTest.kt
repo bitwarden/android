@@ -1495,8 +1495,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
     @Test
     fun `Fido2UserVerification event should perform user verification when it is supported`() {
-        every { biometricsManager.isUserVerificationSupported } returns true
-        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } just runs
         mutableEventFlow.tryEmit(
             VaultItemListingEvent.Fido2UserVerification(
                 isRequired = true,
@@ -1509,41 +1516,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 any(),
                 any(),
                 any(),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2UserVerification event should send UserVerificationFail when user verification required and is not supported by the device`() {
-        every { biometricsManager.isUserVerificationSupported } returns false
-        mutableEventFlow.tryEmit(
-            VaultItemListingEvent.Fido2UserVerification(
-                isRequired = true,
-                selectedCipherView = createMockCipherView(number = 1),
-            ),
-        )
-        verify {
-            viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `Fido2UserVerification event should send UserVerificationSuccess when user verification is not required and is not supported by the device`() {
-        val selectedCipherView = createMockCipherView(number = 1)
-        every { biometricsManager.isUserVerificationSupported } returns false
-        mutableEventFlow.tryEmit(
-            VaultItemListingEvent.Fido2UserVerification(
-                isRequired = false,
-                selectedCipherView = selectedCipherView,
-            ),
-        )
-        verify {
-            viewModel.trySendAction(
-                VaultItemListingsAction.UserVerificationSuccess(
-                    selectedCipherView,
-                ),
+                any(),
             )
         }
     }
@@ -1551,10 +1524,10 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `promptForUserVerification onSuccess should send UserVerificationSuccess action`() {
         val selectedCipherView = createMockCipherView(number = 1)
-        every { biometricsManager.isUserVerificationSupported } returns true
         every {
             biometricsManager.promptUserVerification(
                 onSuccess = captureLambda(),
+                any(),
                 any(),
                 any(),
                 any(),
@@ -1580,11 +1553,11 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `promptForUserVerification onCancel should send UserVerificationCancelled action`() {
         val selectedCipherView = createMockCipherView(number = 1)
-        every { biometricsManager.isUserVerificationSupported } returns true
         every {
             biometricsManager.promptUserVerification(
                 any(),
                 onCancel = captureLambda(),
+                any(),
                 any(),
                 any(),
             )
@@ -1609,12 +1582,12 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `promptForUserVerification onLockOut should send UserVerificationLockOut action`() {
         val selectedCipherView = createMockCipherView(number = 1)
-        every { biometricsManager.isUserVerificationSupported } returns true
         every {
             biometricsManager.promptUserVerification(
                 any(),
                 any(),
                 onLockOut = captureLambda(),
+                any(),
                 any(),
             )
         } answers {
@@ -1638,13 +1611,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     @Test
     fun `promptForUserVerification onError should send UserVerificationFail action`() {
         val selectedCipherView = createMockCipherView(number = 1)
-        every { biometricsManager.isUserVerificationSupported } returns true
         every {
             biometricsManager.promptUserVerification(
                 any(),
                 any(),
                 any(),
                 onError = captureLambda(),
+                any(),
             )
         } answers {
             lambda<() -> Unit>().invoke()
@@ -1660,6 +1633,35 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultItemListingsAction.UserVerificationFail,
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onNotSupported should send UserVerificationNotFailed action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                any(),
+                onNotSupported = captureLambda(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationNotSupported,
             )
         }
     }

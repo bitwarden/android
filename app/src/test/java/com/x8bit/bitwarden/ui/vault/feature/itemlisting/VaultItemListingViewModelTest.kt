@@ -2133,7 +2133,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationSuccess should register FIDO 2 credential and send result when registration result is received`() =
+    fun `UserVerificationSuccess should register FIDO 2 credential when registration result is received`() =
         runTest {
             val mockRequest = createMockFido2CredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2164,6 +2164,21 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Test
+    fun `UserVerificationNotSupported should display Fido2ErrorDialog`() {
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.trySendAction(VaultItemListingsAction.UserVerificationNotSupported)
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
 
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
