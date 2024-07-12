@@ -82,7 +82,7 @@ class LandingViewModel @Inject constructor(
         authRepository
             .userStateFlow
             .map { userState ->
-                userState?.activeAccount?.let(this::mapToInternalActionOrNull)
+                userState?.activeAccount?.let(::mapToInternalActionOrNull)
             }
             .onEach { action ->
                 action?.let(::handleAction)
