@@ -465,7 +465,7 @@ class TwoFactorLoginViewModel @Inject constructor(
                         )
                     }
                 }
-                mutableStateFlow.update { it.copy(authMethod = action.authMethod) }
+                updateAuthMethodRelatedState(action.authMethod)
             }
 
             TwoFactorAuthMethod.AUTHENTICATOR_APP,
@@ -476,8 +476,17 @@ class TwoFactorLoginViewModel @Inject constructor(
             TwoFactorAuthMethod.DUO_ORGANIZATION,
             TwoFactorAuthMethod.WEB_AUTH,
             -> {
-                mutableStateFlow.update { it.copy(authMethod = action.authMethod) }
+                updateAuthMethodRelatedState(action.authMethod)
             }
+        }
+    }
+
+    private fun updateAuthMethodRelatedState(authMethod: TwoFactorAuthMethod) {
+        mutableStateFlow.update {
+            it.copy(
+                authMethod = authMethod,
+                isContinueButtonEnabled = authMethod.isContinueButtonEnabled,
+            )
         }
     }
 
