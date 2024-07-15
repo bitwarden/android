@@ -7,14 +7,11 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
 import com.bitwarden.exporters.ExportFormat
-import com.bitwarden.fido.CheckUserOptions
 import com.bitwarden.fido.ClientData
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
 import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
-import com.bitwarden.fido.Verification
 import com.bitwarden.sdk.BitwardenException
-import com.bitwarden.sdk.CheckUserResult
-import com.bitwarden.sdk.CipherViewWrapper
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientAuth
 import com.bitwarden.sdk.ClientCiphers
@@ -27,8 +24,6 @@ import com.bitwarden.sdk.ClientPlatform
 import com.bitwarden.sdk.ClientSends
 import com.bitwarden.sdk.ClientVault
 import com.bitwarden.sdk.Fido2CredentialStore
-import com.bitwarden.sdk.Fido2UserInterface
-import com.bitwarden.sdk.UiHint
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -46,6 +41,7 @@ import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -58,11 +54,11 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
-import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.security.MessageDigest
 
@@ -1016,26 +1012,12 @@ class VaultSdkSourceTest {
                     every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
                 }
 
-                val mockCipherView = createMockCipherView(1)
                 val mockAttestation = mockk<PublicKeyCredentialAuthenticatorAttestationResponse>()
 
                 coEvery { fido2.register(any(), any(), any()) } returns mockAttestation
 
                 val result = vaultSdkSource.registerFido2Credential(
-                    request = RegisterFido2CredentialRequest(
-                        userId = "mockUserId",
-                        origin = "www.bitwarden.com",
-                        requestJson = "requestJson",
-                        clientData = ClientData.DefaultWithCustomHash(
-                            hash = DEFAULT_SIGNATURE.toByteArray(),
-                        ),
-                        selectedCipherView = mockCipherView,
-                        isUserVerificationSupported = true,
-                    ),
-                    checkUser = { _, _ -> CheckUserResult(true, true) },
-                    checkUserAndPickCredential = { _, _ ->
-                        CipherViewWrapper(mockCipherView)
-                    },
+                    DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST,
                     fido2CredentialStore = mockFido2CredentialStore,
                 )
 
@@ -1047,58 +1029,23 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `registerFido2Credential should invoke checkUser when called by the SDK`() = runTest {
-        val checkUserResult = CheckUserResult(true, true)
-
-        val checkUserOptionsSlot = slot<CheckUserOptions>()
-        val uiHintSlot = slot<UiHint>()
-        val mockUserInterface = mockk<Fido2UserInterface> {
+    fun `registerFido2Credential should return Failure when BitwardenException is thrown`() =
+        runTest {
             coEvery {
-                checkUser(
-                    capture(checkUserOptionsSlot),
-                    capture(uiHintSlot),
+                fido2.register(
+                    any(),
+                    any(),
+                    any(),
                 )
-            } returns checkUserResult
-        }
+            } throws BitwardenException.E("mockException")
 
-        val mockCipherView = createMockCipherView(number = 1)
-        val mockAttestation = mockk<PublicKeyCredentialAuthenticatorAttestationResponse>()
-        val mockCheckUserOptions = CheckUserOptions(true, Verification.REQUIRED)
-        coEvery { fido2.register(any(), any(), any()) } coAnswers {
-            mockUserInterface.checkUser(
-                mockCheckUserOptions,
-                UiHint.InformNoCredentialsFound,
+            val result = vaultSdkSource.registerFido2Credential(
+                DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST,
+                fido2CredentialStore = mockFido2CredentialStore,
             )
-            mockAttestation
+
+            assertTrue(result.isFailure)
         }
-        vaultSdkSource.registerFido2Credential(
-            request = RegisterFido2CredentialRequest(
-                userId = "mockUserId",
-                origin = "www.bitwarden.com",
-                requestJson = "requestJson",
-                clientData = ClientData.DefaultWithCustomHash(
-                    hash = DEFAULT_SIGNATURE.toByteArray(),
-                ),
-                selectedCipherView = mockCipherView,
-                isUserVerificationSupported = true,
-            ),
-            checkUser = { _, _ -> checkUserResult },
-            checkUserAndPickCredential = { _, _ -> CipherViewWrapper(mockCipherView) },
-            fido2CredentialStore = mockFido2CredentialStore,
-        )
-
-        coVerify { mockUserInterface.checkUser(any(), any()) }
-
-        assertEquals(
-            mockCheckUserOptions,
-            checkUserOptionsSlot.captured,
-        )
-
-        assertEquals(
-            UiHint.InformNoCredentialsFound,
-            uiHintSlot.captured,
-        )
-    }
 
     @Suppress("MaxLineLength")
     @Test
@@ -1109,21 +1056,15 @@ class VaultSdkSourceTest {
                     every { digest(any()) } returns DEFAULT_SIGNATURE.toByteArray()
                 }
 
-                val mockCipherView = createMockCipherView(1)
                 val mockAssertion = mockk<PublicKeyCredentialAuthenticatorAssertionResponse>()
 
                 coEvery { fido2.authenticate(any(), any(), any()) } returns mockAssertion
 
-                val result = vaultSdkSource.authenticateFido2Credential(
-                    userId = "mockUserId",
-                    origin = "www.bitwarden.com",
-                    requestJson = "requestJson",
-                    clientData = ClientData.DefaultWithCustomHash(DEFAULT_SIGNATURE.toByteArray()),
-                    isVerificationSupported = true,
-                    checkUser = { _, _ -> CheckUserResult(true, true) },
-                    pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) },
-                    fido2CredentialStore = mockFido2CredentialStore,
-                )
+                val result = vaultSdkSource
+                    .authenticateFido2Credential(
+                        DEFAULT_FIDO_2_AUTH_REQUEST,
+                        fido2CredentialStore = mockFido2CredentialStore,
+                    )
 
                 assertEquals(
                     mockAssertion.asSuccess(),
@@ -1133,53 +1074,88 @@ class VaultSdkSourceTest {
         }
 
     @Test
-    fun `authenticateFido2Credential should invoke checkUser when called by the SDK`() = runTest {
-        val checkUserResult = CheckUserResult(true, true)
-
-        val checkUserOptionsSlot = slot<CheckUserOptions>()
-        val uiHintSlot = slot<UiHint>()
-        val mockUserInterface = mockk<Fido2UserInterface> {
+    fun `authenticateFido2Credential should return Failure when BitwardenException is thrown`() =
+        runTest {
             coEvery {
-                checkUser(
-                    capture(checkUserOptionsSlot),
-                    capture(uiHintSlot),
+                fido2.authenticate(
+                    any(),
+                    any(),
+                    any(),
                 )
-            } returns checkUserResult
+            } throws BitwardenException.E("mockException")
+
+            val result = vaultSdkSource
+                .authenticateFido2Credential(
+                    DEFAULT_FIDO_2_AUTH_REQUEST,
+                    fido2CredentialStore = mockFido2CredentialStore,
+                )
+
+            assertTrue(result.isFailure)
         }
 
+    @Test
+    fun `decryptFido2CredentialAutofillViews should return results when successful`() = runTest {
         val mockCipherView = createMockCipherView(number = 1)
-        val mockAssertion = mockk<PublicKeyCredentialAuthenticatorAssertionResponse>()
-        val mockCheckUserOptions = CheckUserOptions(true, Verification.REQUIRED)
-        coEvery { fido2.authenticate(any(), any(), any()) } coAnswers {
-            mockUserInterface.checkUser(
-                mockCheckUserOptions,
-                UiHint.InformNoCredentialsFound,
-            )
-            mockAssertion
-        }
-        vaultSdkSource.authenticateFido2Credential(
+        val mockAutofillView = Fido2CredentialAutofillView(
+            credentialId = byteArrayOf(0),
+            cipherId = "mockCipherId",
+            rpId = "mockRpId",
+            userNameForUi = "mockUserNameForUi",
+            userHandle = "mockUserHandle".toByteArray(),
+        )
+        val autofillViews = listOf(mockAutofillView)
+
+        coEvery {
+            clientFido2.decryptFido2AutofillCredentials(mockCipherView)
+        } returns autofillViews
+
+        val result = vaultSdkSource.decryptFido2CredentialAutofillViews(
             userId = "mockUserId",
-            origin = "www.bitwarden.com",
-            requestJson = "requestJson",
-            clientData = ClientData.DefaultWithCustomHash(DEFAULT_SIGNATURE.toByteArray()),
-            isVerificationSupported = true,
-            checkUser = { _, _ -> checkUserResult },
-            pickCredentialForAuthentication = { CipherViewWrapper(mockCipherView) },
-            fido2CredentialStore = mockFido2CredentialStore,
-        )
-
-        coVerify { mockUserInterface.checkUser(any(), any()) }
-
-        assertEquals(
-            mockCheckUserOptions,
-            checkUserOptionsSlot.captured,
+            cipherViews = arrayOf(mockCipherView),
         )
 
         assertEquals(
-            UiHint.InformNoCredentialsFound,
-            uiHintSlot.captured,
+            autofillViews.asSuccess(),
+            result,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `decryptFido2CredentialAutofillViews should return Failure when Bitwarden exception is thrown`() =
+        runTest {
+            val mockCipherView = createMockCipherView(number = 1)
+            coEvery {
+                clientFido2.decryptFido2AutofillCredentials(mockCipherView)
+            } throws BitwardenException.E("mockException")
+
+            val result = vaultSdkSource.decryptFido2CredentialAutofillViews(
+                userId = "mockUserId",
+                cipherViews = arrayOf(mockCipherView),
+            )
+
+            assertTrue(result.isFailure)
+        }
 }
 
 private const val DEFAULT_SIGNATURE = "0987654321ABCDEF"
+private val DEFAULT_FIDO_2_REGISTER_CREDENTIAL_REQUEST = RegisterFido2CredentialRequest(
+    userId = "mockUserId",
+    origin = "www.bitwarden.com",
+    requestJson = "requestJson",
+    clientData = ClientData.DefaultWithCustomHash(
+        DEFAULT_SIGNATURE.toByteArray(),
+    ),
+    isUserVerificationSupported = true,
+    selectedCipherView = createMockCipherView(number = 1),
+)
+val DEFAULT_FIDO_2_AUTH_REQUEST = AuthenticateFido2CredentialRequest(
+    userId = "mockUserId",
+    origin = "www.bitwarden.com",
+    requestJson = "requestJson",
+    clientData = ClientData.DefaultWithCustomHash(
+        DEFAULT_SIGNATURE.toByteArray(),
+    ),
+    isUserVerificationSupported = true,
+    selectedCipherView = createMockCipherView(number = 1),
+)

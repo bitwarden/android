@@ -616,13 +616,13 @@ A leitura será efetuada automaticamente.</string>
   <string name="update_password_error">Atualmente não é possível atualizar a palavra-passe</string>
   <string name="remove_master_password">Remover palavra-passe mestra</string>
   <string name="remove_master_password_warning">%1$s está a utilizar SSO com encriptação gerida pelo cliente. Se continuar removerá a sua palavra-passe mestra da sua conta e será exigido SSO para iniciar sessão.</string>
-  <string name="remove_master_password_warning2">Se não pretender remover a sua palavra-passe mestra, pode deixar esta organização.</string>
-  <string name="leave_organization">Deixar a organização</string>
-  <string name="leave_organization_name">Deixar %1$s?</string>
+  <string name="remove_master_password_warning2">Se não pretender remover a sua palavra-passe mestra, pode sair desta organização.</string>
+  <string name="leave_organization">Sair da organização</string>
+  <string name="leave_organization_name">Sair da %1$s?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
   <string name="fido2_instruction">Para continuar, tenha a sua chave de segurança compatível com o FIDO2 WebAuthn pronta e siga as instruções depois de clicar em \"Autenticar WebAuthn\" no ecrã seguinte.</string>
   <string name="fido2_desc">Autenticação utilizando FIDO2 WebAuthn, pode autenticar utilizando uma chave de segurança externa.</string>
-  <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
+  <string name="fido2_authenticate_web_authn">Autenticar o WebAuthn</string>
   <string name="fido2_return_to_app">Voltar à aplicação</string>
   <string name="fido2_check_browser">Por favor, certifique-se de que o seu navegador predefinido suporta o WebAuthn e tente novamente.</string>
   <string name="reset_password_auto_enroll_invite_warning">Esta organização tem uma política empresarial que o inscreverá automaticamente na redefinição de palavra-passe. A inscrição permitirá que os administradores da organização alterem a sua palavra-passe mestra.</string>
@@ -701,7 +701,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="log_in_accepted">Início de sessão confirmado</string>
   <string name="log_in_denied">Início de sessão recusado</string>
   <string name="approve_login_requests">Aprovar pedidos de início de sessão</string>
-  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Utilize este dispositivo para aprovar pedidos de início de sessão efetuados a partir de outros dispositivos.</string>
+  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Utilize este dispositivo para aprovar pedidos de início de sessão efetuados a partir de outros dispositivos</string>
   <string name="allow_notifications">Permitir notificações</string>
   <string name="receive_push_notifications_for_new_login_requests">Receber notificações push de novos pedidos de início de sessão</string>
   <string name="no_thanks">Não, obrigado</string>
@@ -730,7 +730,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="email_type">Tipo de e-mail</string>
   <string name="website_required">Site (necessário)</string>
   <string name="unknown_x_error_message">Ocorreu um erro desconhecido (%1$s).</string>
-  <string name="plus_addressed_email_description">Utilize as capacidades de subendereçamento do seu fornecedor de e-mail.</string>
+  <string name="plus_addressed_email_description">Utilize as capacidades de subendereçamento do seu fornecedor de e-mail</string>
   <string name="catch_all_email_description">Utilize a caixa de entrada de captura geral configurada para o seu domínio.</string>
   <string name="forwarded_email_description">Gerar um alias de e-mail com um serviço de reencaminhamento externo.</string>
   <string name="random">Aleatório</string>
@@ -924,4 +924,6 @@ Pretende mudar para esta conta?</string>
   <string name="launch_web_authn">Iniciar o WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ocorreu um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
   <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

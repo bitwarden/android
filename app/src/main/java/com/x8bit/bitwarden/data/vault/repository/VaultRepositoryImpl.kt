@@ -6,7 +6,6 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
-import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -57,6 +56,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
@@ -183,6 +183,7 @@ class VaultRepositoryImpl(
             ) { ciphersData, foldersData, collectionsData, sendsData ->
                 VaultData(
                     cipherViewList = ciphersData,
+                    fido2CredentialAutofillViewList = null,
                     folderViewList = foldersData,
                     collectionViewList = collectionsData,
                     sendViewList = sendsData.sendViewList,
@@ -523,6 +524,20 @@ class VaultRepositoryImpl(
             )
     }
 
+    override suspend fun getDecryptedFido2CredentialAutofillViews(
+        cipherViewList: List<CipherView>,
+    ): DecryptFido2CredentialAutofillViewResult {
+        return vaultSdkSource
+            .decryptFido2CredentialAutofillViews(
+                userId = activeUserId ?: return DecryptFido2CredentialAutofillViewResult.Error,
+                cipherViews = cipherViewList.toTypedArray(),
+            )
+            .fold(
+                onFailure = { DecryptFido2CredentialAutofillViewResult.Error },
+                onSuccess = { DecryptFido2CredentialAutofillViewResult.Success(it) },
+            )
+    }
+
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
@@ -859,22 +874,6 @@ class VaultRepositoryImpl(
                 onSuccess = { ExportVaultDataResult.Success(it) },
                 onFailure = { ExportVaultDataResult.Error },
             )
-    }
-
-    /**
-     * Return a filtered list containing elements that match the given [relyingPartyId] and a
-     * credential ID contained in [credentialIds].
-     */
-    private fun List<Fido2CredentialAutofillView>.filterMatchingCredentials(
-        credentialIds: List<ByteArray>,
-        relyingPartyId: String,
-    ): List<Fido2CredentialAutofillView> {
-        val skipCredentialIdFiltering = credentialIds.isEmpty()
-        return filter { fido2CredentialView ->
-            fido2CredentialView.rpId == relyingPartyId &&
-                (skipCredentialIdFiltering ||
-                    credentialIds.contains(fido2CredentialView.credentialId))
-        }
     }
 
     /**

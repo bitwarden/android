@@ -15,9 +15,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -69,11 +67,6 @@ fun VaultItemScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = context.resources
-    val confirmRestoreAction = remember(viewModel) {
-        { viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick) }
-    }
-
-    var pendingRestoreCipher by rememberSaveable { mutableStateOf(false) }
 
     val fileChooserLauncher = intentManager.getActivityResultLauncher { activityResult ->
         intentManager.getFileDataFromActivityResult(activityResult)
@@ -150,26 +143,12 @@ fun VaultItemScreen(
                 )
             }
         },
+        onConfirmRestoreAction = remember(viewModel) {
+            {
+                viewModel.trySendAction(VaultItemAction.Common.ConfirmRestoreClick)
+            }
+        },
     )
-
-    if (pendingRestoreCipher) {
-        BitwardenTwoButtonDialog(
-            title = stringResource(id = R.string.restore),
-            message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
-            confirmButtonText = stringResource(id = R.string.ok),
-            dismissButtonText = stringResource(id = R.string.cancel),
-            onConfirmClick = {
-                pendingRestoreCipher = false
-                confirmRestoreAction()
-            },
-            onDismissClick = {
-                pendingRestoreCipher = false
-            },
-            onDismissRequest = {
-                pendingRestoreCipher = false
-            },
-        )
-    }
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -189,7 +168,13 @@ fun VaultItemScreen(
                     if (state.isCipherDeleted) {
                         BitwardenTextButton(
                             label = stringResource(id = R.string.restore),
-                            onClick = { pendingRestoreCipher = true },
+                            onClick = remember(viewModel) {
+                                {
+                                    viewModel.trySendAction(
+                                        VaultItemAction.Common.RestoreVaultItemClick,
+                                    )
+                                }
+                            },
                             modifier = Modifier.testTag("RestoreButton"),
                         )
                     }
@@ -298,6 +283,7 @@ private fun VaultItemDialogs(
     onConfirmDeleteClick: () -> Unit,
     onSubmitMasterPassword: (masterPassword: String, action: PasswordRepromptAction) -> Unit,
     onConfirmCloneWithoutFido2Credential: () -> Unit,
+    onConfirmRestoreAction: () -> Unit,
 ) {
     when (dialog) {
         is VaultItemState.DialogState.Generic -> BitwardenBasicDialog(
@@ -342,6 +328,16 @@ private fun VaultItemDialogs(
                 onDismissRequest = onDismissRequest,
             )
         }
+
+        VaultItemState.DialogState.RestoreItemDialog -> BitwardenTwoButtonDialog(
+            title = stringResource(id = R.string.restore),
+            message = stringResource(id = R.string.do_you_really_want_to_restore_cipher),
+            confirmButtonText = stringResource(id = R.string.ok),
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onConfirmClick = onConfirmRestoreAction,
+            onDismissClick = onDismissRequest,
+            onDismissRequest = onDismissRequest,
+        )
 
         null -> Unit
     }

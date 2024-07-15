@@ -927,4 +927,6 @@
   <string name="launch_web_authn">Запустить WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Возникла ошибка при запуске двухэтапной аутентификации WebAuthn</string>
   <string name="self_hosted_server_url">URL собственного сервера</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>
