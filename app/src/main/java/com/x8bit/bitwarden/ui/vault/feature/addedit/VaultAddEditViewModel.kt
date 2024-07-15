@@ -275,6 +275,10 @@ class VaultAddEditViewModel @Inject constructor(
             VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
                 handleFido2ErrorDialogDismissed()
             }
+
+            VaultAddEditAction.Common.UserVerificationNotSupported -> {
+                handleUserVerificationNotSupported()
+            }
         }
     }
 
@@ -541,6 +545,15 @@ class VaultAddEditViewModel @Inject constructor(
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
                 result = Fido2RegisterCredentialResult.Cancelled,
+            ),
+        )
+    }
+
+    private fun handleUserVerificationNotSupported() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Error,
             ),
         )
     }
@@ -2257,22 +2270,22 @@ sealed class VaultAddEditAction {
 
         /**
          * The user has too many failed verification attempts for FIDO operations and can no longer
-         * use biometric verification for some time.
+         * use biometric or device credential verification for some time.
          */
         data object UserVerificationLockOut : Common()
 
         /**
-         * The user has failed biometric verification for FIDO 2 operations.
+         * The user has failed verification for FIDO 2 operations.
          */
         data object UserVerificationFail : Common()
 
         /**
-         * The user has successfully verified themself using biometrics.
+         * The user has successfully verified themself using device biometrics or credentials.
          */
         data object UserVerificationSuccess : Common()
 
         /**
-         * The user has cancelled biometric user verification.
+         * The user has cancelled device verification.
          */
         data object UserVerificationCancelled : Common()
 
@@ -2280,6 +2293,11 @@ sealed class VaultAddEditAction {
          * The user has dismissed the FIDO 2 credential error dialog.
          */
         data object Fido2ErrorDialogDismissed : Common()
+
+        /**
+         * User cannot be performed with device biometrics or credentials.
+         */
+        data object UserVerificationNotSupported : Common()
     }
 
     /**

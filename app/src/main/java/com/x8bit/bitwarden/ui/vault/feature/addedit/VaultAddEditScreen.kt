@@ -124,24 +124,13 @@ fun VaultAddEditScreen(
             }
 
             is VaultAddEditEvent.Fido2UserVerification -> {
-                when {
-                    biometricsManager.isUserVerificationSupported -> {
-                        biometricsManager.promptUserVerification(
-                            onSuccess = userVerificationHandlers.onUserVerificationSuccess,
-                            onCancel = userVerificationHandlers.onUserVerificationCancelled,
-                            onError = userVerificationHandlers.onUserVerificationFail,
-                            onLockOut = userVerificationHandlers.onUserVerificationLockOut,
-                        )
-                    }
-
-                    event.isRequired -> {
-                        viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
-                    }
-
-                    else -> {
-                        viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
-                    }
-                }
+                biometricsManager.promptUserVerification(
+                    onSuccess = userVerificationHandlers.onUserVerificationSuccess,
+                    onCancel = userVerificationHandlers.onUserVerificationCancelled,
+                    onError = userVerificationHandlers.onUserVerificationFail,
+                    onLockOut = userVerificationHandlers.onUserVerificationLockOut,
+                    onNotSupported = userVerificationHandlers.onUserVerificationNotSupported,
+                )
             }
         }
     }

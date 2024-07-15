@@ -18,6 +18,7 @@ data class VaultAddEditUserVerificationHandlers(
     val onUserVerificationLockOut: () -> Unit,
     val onUserVerificationFail: () -> Unit,
     val onUserVerificationCancelled: () -> Unit,
+    val onUserVerificationNotSupported: () -> Unit,
 ) {
     companion object {
 
@@ -33,14 +34,19 @@ data class VaultAddEditUserVerificationHandlers(
                     viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
                 },
                 onUserVerificationFail = {
-                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
+                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
                 },
                 onUserVerificationLockOut = {
-                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
+                    viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
                 },
                 onUserVerificationCancelled = {
                     viewModel.trySendAction(
                         VaultAddEditAction.Common.UserVerificationCancelled,
+                    )
+                },
+                onUserVerificationNotSupported = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.Common.UserVerificationNotSupported,
                     )
                 },
             )

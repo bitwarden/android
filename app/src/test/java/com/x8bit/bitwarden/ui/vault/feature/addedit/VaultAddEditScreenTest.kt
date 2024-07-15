@@ -60,6 +60,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultCollection
 import com.x8bit.bitwarden.ui.vault.model.VaultIdentityTitle
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import io.mockk.every
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
@@ -207,41 +208,10 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `on Fido2UserVerification event should call promptUserVerification when supported`() {
-        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
-        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
-        verify {
-            biometricsManager.isUserVerificationSupported
-            biometricsManager.promptUserVerification(any(), any(), any(), any())
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on Fido2UserVerification event should send BiometricsVerificationFailed action when user verification is not supported and it required`() {
-        every { biometricsManager.isUserVerificationSupported } returns false
-        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
-        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
-        verify {
-            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    @Test
-    fun `on Fido2UserVerification event should send BiometricsVerificationSuccess action when user verification is not supported and is not required`() {
-        every { biometricsManager.isUserVerificationSupported } returns false
-        every { biometricsManager.promptUserVerification(any(), any(), any(), any()) } just runs
-        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
-        verify {
-            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
-        }
-    }
-
-    @Test
-    fun `fido2 error dialog should display based on state`() {
+    fun `Fido2Error dialog should display based on state`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()))
+            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()),
+        )
 
         composeTestRule
             .onAllNodesWithText("mockMessage")
@@ -253,7 +223,8 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     @Test
     fun `clicking dismiss dialog on Fido2Error dialog should send Fido2ErrorDialogDismissed action`() {
         mutableStateFlow.value = DEFAULT_STATE_LOGIN.copy(
-            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()))
+            dialog = VaultAddEditState.DialogState.Fido2Error("mockMessage".asText()),
+        )
 
         composeTestRule
             .onAllNodesWithText("Ok")
@@ -2938,6 +2909,104 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
 
         composeTestRule.assertNoDialogExists()
+    }
+
+    @Test
+    fun `Fido2UserVerification event should prompt for user verification`() {
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = any(),
+                onCancel = any(),
+                onLockOut = any(),
+                onError = any(),
+                onNotSupported = any(),
+            )
+        } just runs
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(true))
+        verify {
+            biometricsManager.promptUserVerification(any(), any(), any(), any(), any())
+        }
+    }
+
+    @Test
+    fun `Fido2UserVerification onSuccess should send UserVerificationSuccess action`() {
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = captureLambda(),
+                onCancel = any(),
+                onLockOut = any(),
+                onError = any(),
+                onNotSupported = any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess) }
+    }
+
+    @Test
+    fun `Fido2UserVerification onCancel should send UserVerificationCancelled action`() {
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = any(),
+                onCancel = captureLambda(),
+                onLockOut = any(),
+                onError = any(),
+                onNotSupported = any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationCancelled) }
+    }
+
+    @Test
+    fun `Fido2UserVerification onLockout should send UserVerificationLockOut action`() {
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = any(),
+                onCancel = any(),
+                onLockOut = captureLambda(),
+                onError = any(),
+                onNotSupported = any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut) }
+    }
+
+    @Test
+    fun `Fido2UserVerification onError should send UserVerificationFail action`() {
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = any(),
+                onCancel = any(),
+                onLockOut = any(),
+                onError = captureLambda(),
+                onNotSupported = any(),
+            )
+        } answers { lambda<() -> Unit>().invoke() }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail) }
+    }
+
+    @Test
+    fun `Fido2UserVerification onNotSupported should send UserVerificationNotSupported action`() {
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = any(),
+                onCancel = any(),
+                onLockOut = any(),
+                onError = any(),
+                onNotSupported = captureLambda(),
+            )
+        } answers { lambda<() -> Unit>().invoke() }
+        mutableEventFlow.tryEmit(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+        verify { viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported) }
     }
 
     //region Helper functions
