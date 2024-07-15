@@ -414,10 +414,14 @@ class VaultAddEditViewModel @Inject constructor(
                 sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
             }
 
-            UserVerificationRequirement.REQUIRED,
-            null,
-            -> {
+            UserVerificationRequirement.REQUIRED -> {
                 sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+            }
+
+            null -> {
+                // Per WebAuthn spec members should be ignored when invalid. Since the request
+                // violates spec we display an error and terminate the operation.
+                showFido2ErrorDialog()
             }
         }
     }
@@ -514,7 +518,8 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationSuccess() {
-        specialCircumstanceManager.specialCircumstance
+        specialCircumstanceManager
+            .specialCircumstance
             ?.toFido2RequestOrNull()
             ?.let { request ->
                 onContent { content ->
