@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.vault
 
 import android.Manifest
-import android.os.Build
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.scaleIn
@@ -125,7 +125,10 @@ fun VaultScreen(
         }
     }
     val vaultHandlers = remember(viewModel) { VaultHandlers.create(viewModel) }
-    VaultScreenPushNotifications(permissionsManager = permissionsManager)
+    VaultScreenPushNotifications(
+        hideNotificationsDialog = state.hideNotificationsDialog,
+        permissionsManager = permissionsManager,
+    )
     VaultScreenScaffold(
         state = state,
         pullToRefreshState = pullToRefreshState,
@@ -139,14 +142,17 @@ fun VaultScreen(
  */
 @Composable
 private fun VaultScreenPushNotifications(
+    hideNotificationsDialog: Boolean,
     permissionsManager: PermissionsManager,
 ) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+    if (hideNotificationsDialog) return
     val launcher = permissionsManager.getLauncher {
         // We do not actually care what the response is, we just need
         // to give the user a chance to give us the permission.
     }
     LaunchedEffect(key1 = Unit) {
+        @SuppressLint("InlinedApi")
+        // We check the version code as part of the 'hideNotificationsDialog' property.
         if (!permissionsManager.checkPermission(Manifest.permission.POST_NOTIFICATIONS)) {
             launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
