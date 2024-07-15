@@ -39,6 +39,8 @@ class Fido2CredentialManagerImpl(
 ) : Fido2CredentialManager,
     Fido2CredentialStore by fido2CredentialStore {
 
+    override var isUserVerified: Boolean = false
+
     override suspend fun registerFido2Credential(
         userId: String,
         fido2CredentialRequest: Fido2CredentialRequest,
