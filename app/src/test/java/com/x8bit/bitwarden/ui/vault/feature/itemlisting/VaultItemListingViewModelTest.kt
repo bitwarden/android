@@ -141,6 +141,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     }
     private val fido2CredentialManager: Fido2CredentialManager = mockk {
         coEvery { validateOrigin(any()) } returns Fido2ValidateOriginResult.Success
+        every { isUserVerified } returns false
+        every { isUserVerified = any() } just runs
     }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -485,6 +487,51 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ItemClick for vault item during FIDO 2 registration should skip user verification when user is verified`() {
+        setupMockUri()
+        val cipherView = createMockCipherView(number = 1)
+        val mockFido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+            fido2CredentialRequest = mockFido2CredentialRequest,
+        )
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                cipherViewList = listOf(cipherView),
+                folderViewList = emptyList(),
+                collectionViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+        every {
+            fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
+        } returns createMockPublicKeyCredentialCreationOptions(
+            number = 1,
+            userVerificationRequirement = UserVerificationRequirement.REQUIRED,
+        )
+        coEvery {
+            fido2CredentialManager.registerFido2Credential(
+                any(),
+                any(),
+                any(),
+            )
+        } returns Fido2RegisterCredentialResult.Success("mockResponse")
+        every { fido2CredentialManager.isUserVerified } returns true
+
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
+
+        coVerify { fido2CredentialManager.isUserVerified }
+        coVerify(exactly = 1) {
+            fido2CredentialManager.registerFido2Credential(
+                userId = DEFAULT_USER_STATE.activeUserId,
+                fido2CredentialRequest = mockFido2CredentialRequest,
+                selectedCipherView = cipherView,
+            )
+        }
+    }
 
     @Test
     fun `ItemClick for vault item should emit NavigateToVaultItem`() = runTest {
@@ -2051,10 +2098,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationLockout should display Fido2ErrorDialog`() {
+    fun `UserVerificationLockout should display Fido2ErrorDialog and set isUserVerified to false`() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.UserVerificationLockOut)
 
+        verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
                 title = R.string.an_error_has_occurred.asText(),
@@ -2066,11 +2114,12 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
+    fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteFido2Create with cancelled result`() =
         runTest {
             val viewModel = createVaultItemListingViewModel()
             viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
 
+            verify { fido2CredentialManager.isUserVerified = false }
             assertNull(viewModel.stateFlow.value.dialogState)
             viewModel.eventFlow.test {
                 assertEquals(
@@ -2082,16 +2131,17 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationFail should display Fido2ErrorDialog`() {
+    fun `UserVerificationFail should display Fido2ErrorDialog and set isUserVerified to false`() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.UserVerificationFail)
 
+        verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
                 title = R.string.an_error_has_occurred.asText(),
-                message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -2192,7 +2242,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationSuccess should register FIDO 2 credential when registration result is received`() =
+    fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential when registration result is received`() =
         runTest {
             val mockRequest = createMockFido2CredentialRequest(number = 1)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
@@ -2216,6 +2266,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             coVerify {
+                fido2CredentialManager.isUserVerified = true
                 fido2CredentialManager.registerFido2Credential(
                     userId = DEFAULT_ACCOUNT.userId,
                     fido2CredentialRequest = mockRequest,
@@ -2224,11 +2275,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationNotSupported should display Fido2ErrorDialog`() {
+    fun `UserVerificationNotSupported should display Fido2ErrorDialog and set isUserVerified to false`() {
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.UserVerificationNotSupported)
 
+        verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
             VaultItemListingState.DialogState.Fido2CreationFail(
                 title = R.string.an_error_has_occurred.asText(),
