@@ -165,8 +165,8 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
 
             viewModel.trySendAction(
                 DeleteAccountAction.DeleteAccountConfirmDialogClick(
-                    masterPassword
-                )
+                    masterPassword,
+                ),
             )
 
             assertEquals(
