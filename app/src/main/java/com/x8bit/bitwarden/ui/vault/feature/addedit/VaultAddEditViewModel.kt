@@ -398,6 +398,12 @@ class VaultAddEditViewModel @Inject constructor(
         request: Fido2CredentialRequest,
         content: VaultAddEditState.ViewState.Content,
     ) {
+
+        if (fido2CredentialManager.isUserVerified) {
+            registerFido2CredentialToCipher(request, content.toCipherView())
+            return
+        }
+
         val createOptions = fido2CredentialManager
             .getPasskeyCreateOptionsOrNull(request.requestJson)
             ?: run {
@@ -514,10 +520,12 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationLockOut() {
+        fido2CredentialManager.isUserVerified = false
         showFido2ErrorDialog()
     }
 
     private fun handleUserVerificationSuccess() {
+        fido2CredentialManager.isUserVerified = true
         specialCircumstanceManager
             .specialCircumstance
             ?.toFido2RequestOrNull()
@@ -533,10 +541,12 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationFail() {
+        fido2CredentialManager.isUserVerified = false
         showFido2ErrorDialog()
     }
 
     private fun handleFido2ErrorDialogDismissed() {
+        fido2CredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
@@ -546,6 +556,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationCancelled() {
+        fido2CredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(
@@ -555,6 +566,7 @@ class VaultAddEditViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationNotSupported() {
+        fido2CredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultAddEditEvent.CompleteFido2Registration(

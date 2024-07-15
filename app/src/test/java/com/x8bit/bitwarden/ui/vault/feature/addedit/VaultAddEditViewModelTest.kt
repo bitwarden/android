@@ -122,7 +122,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             getActivePolicies(type = PolicyTypeJson.PERSONAL_OWNERSHIP)
         } returns emptyList()
     }
-    private val fido2CredentialManager = mockk<Fido2CredentialManager>()
+    private val fido2CredentialManager = mockk<Fido2CredentialManager> {
+        every { isUserVerified } returns false
+        every { isUserVerified = any() } just runs
+    }
     private val vaultRepository: VaultRepository = mockk {
         every { vaultDataStateFlow } returns mutableVaultDataFlow
         every { totpCodeFlow } returns totpTestCodeFlow
@@ -852,6 +855,59 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         fido2CredentialRequest = fido2CredentialRequest,
                     )
                 }
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in add mode during fido2, SaveClick should skip user verification when user is verified`() =
+        runTest {
+            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.Fido2Save(
+                    fido2CredentialRequest = fido2CredentialRequest,
+                )
+
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                ),
+            )
+                .copy(shouldExitOnSave = true)
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(),
+            )
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
+                ),
+            )
+
+            every { authRepository.activeUserId } returns fido2CredentialRequest.userId
+            every { fido2CredentialManager.isUserVerified } returns true
+            coEvery {
+                fido2CredentialManager.registerFido2Credential(
+                    userId = fido2CredentialRequest.userId,
+                    fido2CredentialRequest = fido2CredentialRequest,
+                    selectedCipherView = any(),
+                )
+            } returns Fido2RegisterCredentialResult.Success(registrationResponse = "mockResponse")
+
+            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+            coVerify {
+                fido2CredentialManager.registerFido2Credential(
+                    userId = fido2CredentialRequest.userId,
+                    fido2CredentialRequest = fido2CredentialRequest,
+                    selectedCipherView = any(),
+                )
+            }
+
+            verify(exactly = 0) {
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
             }
         }
 
@@ -2869,9 +2925,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationLockout should display Fido2ErrorDialog`() {
+        fun `UserVerificationLockout should set isUserVerified to false and display Fido2ErrorDialog`() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationLockOut)
 
+            verify { fido2CredentialManager.isUserVerified = false }
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
@@ -2882,10 +2939,11 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationCancelled should clear dialog state and emit CompleteFido2Create with cancelled result`() =
+        fun `UserVerificationCancelled should clear dialog state, set isUserVerified to false, and emit CompleteFido2Create with cancelled result`() =
             runTest {
                 viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationCancelled)
 
+                verify { fido2CredentialManager.isUserVerified = false }
                 assertNull(viewModel.stateFlow.value.dialog)
                 viewModel.eventFlow.test {
                     assertEquals(
@@ -2899,9 +2957,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `UserVerificationFail should display Fido2ErrorDialog`() {
+        fun `UserVerificationFail should set isUserVerified to false, and display Fido2ErrorDialog`() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationFail)
 
+            verify { fido2CredentialManager.isUserVerified = false }
             assertEquals(
                 VaultAddEditState.DialogState.Fido2Error(
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
@@ -2986,7 +3045,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
         }
 
         @Test
-        fun `UserVerificationSuccess should register FIDO 2 credential`() =
+        fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential`() =
             runTest {
                 val mockRequest = createMockFido2CredentialRequest(number = 1)
                 val mockResult = Fido2RegisterCredentialResult.Success(
@@ -3003,10 +3062,12 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         any(),
                     )
                 } returns mockResult
+                every { fido2CredentialManager.isUserVerified } returns true
 
                 viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationSuccess)
 
                 coVerify {
+                    fido2CredentialManager.isUserVerified = true
                     fido2CredentialManager.registerFido2Credential(
                         userId = any(),
                         fido2CredentialRequest = mockRequest,
