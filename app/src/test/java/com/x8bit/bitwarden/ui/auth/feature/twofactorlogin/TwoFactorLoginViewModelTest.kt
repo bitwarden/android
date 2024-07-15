@@ -680,14 +680,33 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
     @Test
     fun `SelectAuthMethod with other method should update the state`() {
         val viewModel = createViewModel()
+
+        // To method with continue button enabled by default
         viewModel.trySendAction(
             TwoFactorLoginAction.SelectAuthMethod(
-                TwoFactorAuthMethod.AUTHENTICATOR_APP,
+                TwoFactorAuthMethod.DUO,
             ),
         )
+
         assertEquals(
             DEFAULT_STATE.copy(
-                authMethod = TwoFactorAuthMethod.AUTHENTICATOR_APP,
+                authMethod = TwoFactorAuthMethod.DUO,
+                isContinueButtonEnabled = true,
+            ),
+            viewModel.stateFlow.value,
+        )
+
+        // To method with continue button disabled by default
+        viewModel.trySendAction(
+            TwoFactorLoginAction.SelectAuthMethod(
+                TwoFactorAuthMethod.YUBI_KEY,
+            ),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                authMethod = TwoFactorAuthMethod.YUBI_KEY,
+                isContinueButtonEnabled = false,
             ),
             viewModel.stateFlow.value,
         )

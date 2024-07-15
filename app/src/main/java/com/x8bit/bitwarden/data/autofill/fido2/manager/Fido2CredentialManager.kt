@@ -12,6 +12,12 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 interface Fido2CredentialManager {
 
     /**
+     * Returns true when the user has performed an explicit verification action. E.g., biometric
+     * verification, device credential verification, or vault unlock.
+     */
+    var isUserVerified: Boolean
+
+    /**
      * Attempt to validate the RP and origin of the provided [fido2CredentialRequest].
      */
     suspend fun validateOrigin(
