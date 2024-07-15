@@ -1559,7 +1559,7 @@ class VaultLockManagerTest {
         userIds.forEach { userId ->
             fakeAuthDiskSource.storeAccountTokens(
                 userId,
-                accountTokens = AccountTokensJson("access-$userId", "refresh-$userId")
+                accountTokens = AccountTokensJson("access-$userId", "refresh-$userId"),
             )
         }
     }
