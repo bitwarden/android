@@ -22,6 +22,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class LandingViewModelTest : BaseViewModelTest() {
@@ -463,7 +464,7 @@ class LandingViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel(userState = userState)
 
-        assert(viewModel.stateFlow.value.emailInput.isEmpty())
+        assertTrue(viewModel.stateFlow.value.emailInput.isEmpty())
     }
 
     //region Helper methods

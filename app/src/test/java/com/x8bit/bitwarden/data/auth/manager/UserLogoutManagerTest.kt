@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -92,17 +93,7 @@ class UserLogoutManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `logout for multiple accounts should clear data associated with the given user and change to the new active user`() {
-        mockkStatic(Toast::class)
-
-        every {
-            Toast
-                .makeText(
-                    context,
-                    R.string.account_switched_automatically,
-                    Toast.LENGTH_SHORT,
-                )
-                .show()
-        } just runs
+        mockToast(R.string.account_switched_automatically)
 
         val userId = USER_ID_1
         every { authDiskSource.userState } returns MULTI_USER_STATE
@@ -132,17 +123,8 @@ class UserLogoutManagerTest {
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
 
-        mockkStatic(Toast::class)
+        mockToast(R.string.account_switched_automatically)
 
-        every {
-            Toast
-                .makeText(
-                    context,
-                    R.string.account_switched_automatically,
-                    Toast.LENGTH_SHORT,
-                )
-                .show()
-        } just runs
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
@@ -177,17 +159,8 @@ class UserLogoutManagerTest {
         val vaultTimeoutInMinutes = 360
         val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
 
-        mockkStatic(Toast::class)
+        mockToast(R.string.account_switched_automatically)
 
-        every {
-            Toast
-                .makeText(
-                    context,
-                    R.string.account_switched_automatically,
-                    Toast.LENGTH_SHORT,
-                )
-                .show()
-        } just runs
         every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
@@ -215,6 +188,15 @@ class UserLogoutManagerTest {
         coVerify {
             vaultDiskSource.deleteVaultData(userId = userId)
         }
+    }
+
+    private fun mockToast(@StringRes res: Int) {
+        mockkStatic(Toast::class)
+        every {
+            Toast
+                .makeText(context, res, Toast.LENGTH_SHORT)
+                .show()
+        } just runs
     }
 }
 

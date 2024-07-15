@@ -49,4 +49,4 @@ fun CipherView.toAutofillCipherProvider(): AutofillCipherProvider =
  * Returns true when the cipher is not deleted and contains at least one FIDO 2 credential.
  */
 val CipherView.isActiveWithFido2Credentials: Boolean
-    get() = deletedDate == null && login?.fido2Credentials.isNullOrEmpty().not()
+    get() = deletedDate == null && !(login?.fido2Credentials.isNullOrEmpty())

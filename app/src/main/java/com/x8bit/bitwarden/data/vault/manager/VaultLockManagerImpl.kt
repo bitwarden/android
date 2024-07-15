@@ -438,7 +438,7 @@ class VaultLockManagerImpl(
     ) {
         val accounts = authDiskSource.userAccountTokens
         // Check if the user is already logged out. If this is the case no need to check timeout.
-        if (accounts.find { it.userId == userId }?.isLoggedIn?.not() == true) {
+        if ((accounts.find { it.userId == userId }?.isLoggedIn) == false) {
             return
         }
 

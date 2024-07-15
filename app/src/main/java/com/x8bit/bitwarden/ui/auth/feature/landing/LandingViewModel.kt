@@ -103,7 +103,7 @@ class LandingViewModel @Inject constructor(
             LandingAction.CreateAccountClick -> handleCreateAccountClicked()
             is LandingAction.DialogDismiss -> handleDialogDismiss()
             is LandingAction.RememberMeToggle -> handleRememberMeToggled(action)
-            is LandingAction.EmailInputChanged -> handleEmailInputUpdated(action.input)
+            is LandingAction.EmailInputChanged -> handleEmailInputChanged(action)
             is LandingAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
             is LandingAction.Internal -> handleInternalActions(action)
         }
@@ -111,7 +111,7 @@ class LandingViewModel @Inject constructor(
 
     private fun handleInternalActions(action: LandingAction.Internal) {
         when (action) {
-            is LandingAction.Internal.UpdateEmailState -> handleEmailInputUpdated(action.emailInput)
+            is LandingAction.Internal.UpdateEmailState -> handleInternalEmailStateUpdate(action)
             is LandingAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
             }
@@ -136,7 +136,15 @@ class LandingViewModel @Inject constructor(
         authRepository.switchAccount(userId = action.accountSummary.userId)
     }
 
-    private fun handleEmailInputUpdated(updatedInput: String) {
+    private fun handleEmailInputChanged(action: LandingAction.EmailInputChanged) {
+        updateEmailInput(action.input)
+    }
+
+    private fun handleInternalEmailStateUpdate(action: LandingAction.Internal.UpdateEmailState) {
+        updateEmailInput(action.emailInput)
+    }
+
+    private fun updateEmailInput(updatedInput: String) {
         mutableStateFlow.update {
             it.copy(
                 emailInput = updatedInput,
@@ -224,8 +232,8 @@ class LandingViewModel @Inject constructor(
     private fun mapToInternalActionOrNull(
         activeAccount: UserState.Account,
     ): LandingAction.Internal.UpdateEmailState? {
-        val activeUserNotLoggedIn = activeAccount.isLoggedIn.not()
-        val noPendingAdditions = authRepository.hasPendingAccountAddition.not()
+        val activeUserNotLoggedIn = !activeAccount.isLoggedIn
+        val noPendingAdditions = !authRepository.hasPendingAccountAddition
         return LandingAction.Internal.UpdateEmailState(activeAccount.email)
             .takeIf { activeUserNotLoggedIn && noPendingAdditions }
     }
