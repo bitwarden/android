@@ -2300,7 +2300,7 @@ sealed class VaultAddEditAction {
         data object Fido2ErrorDialogDismissed : Common()
 
         /**
-         * User cannot be performed with device biometrics or credentials.
+         * User verification cannot be performed with device biometrics or credentials.
          */
         data object UserVerificationNotSupported : Common()
     }
