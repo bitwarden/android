@@ -691,7 +691,7 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         assertEquals(
             DEFAULT_STATE.copy(
                 authMethod = TwoFactorAuthMethod.DUO,
-                isContinueButtonEnabled = true
+                isContinueButtonEnabled = true,
             ),
             viewModel.stateFlow.value,
         )
@@ -699,8 +699,8 @@ class TwoFactorLoginViewModelTest : BaseViewModelTest() {
         // To method with continue button disabled by default
         viewModel.trySendAction(
             TwoFactorLoginAction.SelectAuthMethod(
-                TwoFactorAuthMethod.YUBI_KEY
-            )
+                TwoFactorAuthMethod.YUBI_KEY,
+            ),
         )
 
         assertEquals(
