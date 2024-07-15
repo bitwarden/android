@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -82,6 +83,9 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel()
             val masterPassword = "ckasb kcs ja"
             coEvery {
+                authRepo.validatePassword(any())
+            } returns ValidatePasswordResult.Success(isValid = true)
+            coEvery {
                 authRepo.deleteAccountWithMasterPassword(masterPassword)
             } returns DeleteAccountResult.Success
 
@@ -125,6 +129,9 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel()
         val masterPassword = "ckasb kcs ja"
         coEvery {
+            authRepo.validatePassword(any())
+        } returns ValidatePasswordResult.Success(isValid = true)
+        coEvery {
             authRepo.deleteAccountWithMasterPassword(masterPassword)
         } returns DeleteAccountResult.Error(message = null)
 
@@ -143,6 +150,38 @@ class DeleteAccountViewModelTest : BaseViewModelTest() {
             authRepo.deleteAccountWithMasterPassword(masterPassword)
         }
     }
+
+    @Test
+    fun `on DeleteAccountClick should update dialog state when invalid master pass is invalid`() =
+        runTest {
+            val viewModel = createViewModel()
+            val masterPassword = "ckasb kcs ja"
+            coEvery {
+                authRepo.validatePassword(any())
+            } returns ValidatePasswordResult.Success(isValid = false)
+            coEvery {
+                authRepo.deleteAccountWithMasterPassword(masterPassword)
+            } returns DeleteAccountResult.Error(message = null)
+
+            viewModel.trySendAction(
+                DeleteAccountAction.DeleteAccountConfirmDialogClick(
+                    masterPassword
+                )
+            )
+
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    dialog = DeleteAccountState.DeleteAccountDialog.Error(
+                        message = R.string.invalid_master_password.asText(),
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+
+            coVerify(exactly = 0) {
+                authRepo.deleteAccountWithMasterPassword(masterPassword)
+            }
+        }
 
     @Test
     fun `AccountDeletionConfirm should clear dialog state and call clearPendingAccountDeletion`() =
