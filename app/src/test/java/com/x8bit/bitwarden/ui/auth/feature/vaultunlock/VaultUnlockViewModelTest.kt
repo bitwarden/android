@@ -894,7 +894,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveVaultUnlockResult should set FIDO 2 user verification state to verified when result is not Success`() {
+    fun `on ReceiveVaultUnlockResult should set FIDO 2 user verification state to not verified when result is not Success`() {
         val viewModel = createViewModel()
 
         viewModel.trySendAction(
