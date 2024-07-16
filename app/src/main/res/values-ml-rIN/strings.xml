@@ -482,8 +482,6 @@
   <string name="code_sent">കോഡ് അയച്ചു!</string>
   <string name="confirm_your_identity">തുടരാൻ നിങ്ങളുടെ ഐഡന്റിറ്റി സ്ഥിരീകരിക്കുക.</string>
   <string name="export_vault_warning">ഈ എക്‌സ്‌പോർട്ടിൽ എൻക്രിപ്റ്റ് ചെയ്യാത്ത ഫോർമാറ്റിൽ നിങ്ങളുടെ വാൾട് ഡാറ്റ അടങ്ങിയിരിക്കുന്നു. എക്‌സ്‌പോർട് ചെയ്ത ഫയൽ സുരക്ഷിതമല്ലാത്ത ചാനലുകളിൽ (ഇമെയിൽ പോലുള്ളവ) നിങ്ങൾ സംഭരിക്കുകയോ അയയ്ക്കുകയോ ചെയ്യരുത്. നിങ്ങൾ ഇത് ഉപയോഗിച്ചുകഴിഞ്ഞാലുടൻ അത് മായ്ച്ചുകളയണം.</string>
-  <string name="enc_export_key_warning">This export encrypts your data using your account\'s encryption key. If you ever rotate your account\'s encryption key you should export again since you will not be able to decrypt this export file.</string>
-  <string name="enc_export_account_warning">Account encryption keys are unique to each Bitwarden user account, so you can\'t import an encrypted export into a different account.</string>
   <string name="export_vault_confirmation_title">വാൾട് എക്‌സ്‌പോർട്ട് സ്ഥിരീകരിക്കുക</string>
   <string name="warning">മുന്നറിയിപ്പ്‌</string>
   <string name="export_vault_failure">നിങ്ങളുടെ വാൾട് കയറ്റുമതി ചെയ്യുന്നതിൽ ഒരു പ്രശ്നമുണ്ടായിരുന്നു. പ്രശ്നം നിലനിൽക്കുകയാണെങ്കിൽ, നിങ്ങൾ വെബ് വാൾട്ടിൽ  നിന്ന് എക്‌സ്‌പോർട്ടുചെയ്യേണ്ടതുണ്ട്.</string>

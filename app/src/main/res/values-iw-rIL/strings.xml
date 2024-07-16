@@ -484,8 +484,6 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="code_sent">קוד נשלח!</string>
   <string name="confirm_your_identity">אשר את זהותך כדי להמשיך.</string>
   <string name="export_vault_warning">הקובץ מכיל את פרטי הכספת שלך בפורמט לא מוצפן. מומלץ להעביר את הקובץ רק בדרכים מוצפנות, ומאוד לא מומלץ לשמור או לשלוח את הקובץ הזה בדרכים לא מוצפנות (כדוגמת סתם אימייל). מחק את הקובץ מיד לאחר שסיימת את השימוש בו.</string>
-  <string name="enc_export_key_warning">יצוא זה מצפין את המידע שלך בעזרת מפתח ההצפנה הנוכחי שלך. אם תחליף (rotate) את מפתחות ההצפנה של החשבון שלך, עליך לבצע ייצוא חדש משום שלא תוכל לפענח את הקובץ הקיים.</string>
-  <string name="enc_export_account_warning">מפתחות הצפנת חשבון ייחודיים לכל חשבון משתמש של Bitwarden, כך שלא ניתן לייבא ייצוא מוצפן לחשבון אחר.</string>
   <string name="export_vault_confirmation_title">אישור ייצוא כספת</string>
   <string name="warning">אזהרה</string>
   <string name="export_vault_failure">היתה בעיה ביצוא הכספת שלך. אם הבעיה נמשכת, נסה לייצא את כספת הרשת במקום זאת.</string>

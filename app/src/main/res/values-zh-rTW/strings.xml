@@ -482,8 +482,6 @@
   <string name="code_sent">驗證碼已傳送！</string>
   <string name="confirm_your_identity">請先確認身分後再繼續。</string>
   <string name="export_vault_warning">此次匯出的密碼庫檔案為未加密格式。您不應將它存放或經由不安全的方式（例如電子郵件）傳送。用完後請立即將它刪除。</string>
-  <string name="enc_export_key_warning">將使用您帳戶的加密金鑰來加密匯出的資料，若您更新了帳戶的加密金鑰，請重新匯出，否則將無法解密匯出的檔案。</string>
-  <string name="enc_export_account_warning">每個 Bitwarden 使用者帳戶的帳戶加密金鑰都不相同，因此無法將已加密匯出的檔案匯入至不同帳戶中。</string>
   <string name="export_vault_confirmation_title">確認匯出密碼庫</string>
   <string name="warning">警告</string>
   <string name="export_vault_failure">匯出您的密碼庫時發生錯誤。若問題持續發生，請改用網頁版密碼庫匯出資料。</string>

@@ -481,8 +481,6 @@
   <string name="code_sent">Codice inviato!</string>
   <string name="confirm_your_identity">Conferma la tua identità per continuare.</string>
   <string name="export_vault_warning">Questa esportazione contiene i dati della tua cassaforte in un formato non crittografato. Non salvare o inviare il file esportato attraverso canali non protetti (come le email). Eliminalo immediatamente dopo l\'utilizzo.</string>
-  <string name="enc_export_key_warning">Questa esportazione crittografa i tuoi dati usando la chiave di crittografia del tuo account. Se cambi la chiave di crittografia del tuo account, non potrai più decifrare il file esportato e dovrai eseguire una nuova esportazione.</string>
-  <string name="enc_export_account_warning">Le chiavi di crittografia dell\'account sono uniche per ogni account Bitwarden, quindi non puoi importare un file di esportazione crittato in un account diverso.</string>
   <string name="export_vault_confirmation_title">Conferma esportazione della cassaforte</string>
   <string name="warning">Avviso</string>
   <string name="export_vault_failure">Si è verificato un problema esportando la tua cassaforte. Se il problema persiste, esportala dalla cassaforte web.</string>
