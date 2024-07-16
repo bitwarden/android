@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRep
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.CreateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteCipherResult
@@ -554,10 +555,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         ),
                         totpCode = "mockTotp-1",
                         canViewPassword = true,
-                        fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                            "10/27/23",
-                            "12:00 PM",
-                        ),
+                        fido2CredentialCreationDateTime = null,
                     )
                         .copy(totp = "mockTotp-1"),
                 ),
@@ -1395,6 +1393,59 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 vaultRepository.updateCipher(DEFAULT_EDIT_ITEM_ID, any())
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `in edit mode during FIDO 2 registration, SaveClick should display ConfirmOverwriteExistingPasskeyDialog when origin cipher has a passkey`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+        )
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val stateWithName = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = createCommonContentViewState(
+                name = "mockName-1",
+                originalCipher = cipherView,
+                customFieldData = listOf(
+                    VaultAddEditState.Custom.HiddenField(
+                        itemId = "testId",
+                        name = "mockName-1",
+                        value = "mockValue-1",
+                    ),
+                ),
+                notes = "mockNotes-1",
+            ),
+        )
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+            fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+        )
+        every {
+            cipherView.toViewState(
+                isClone = false,
+                isIndividualVaultDisabled = false,
+                resourceManager = resourceManager,
+                clock = fixedClock,
+            )
+        } returns stateWithName.viewState
+        mutableVaultDataFlow.value = DataState.Loaded(
+            createVaultData(cipherView = cipherView),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithName,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+
+        viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
+
+        assertEquals(
+            VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt,
+            viewModel.stateFlow.value.dialog,
+        )
+    }
 
     @Test
     fun `Saving item with an empty name field will cause a dialog to show up`() = runTest {

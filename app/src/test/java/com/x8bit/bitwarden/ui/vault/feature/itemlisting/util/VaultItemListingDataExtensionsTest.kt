@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -455,6 +456,7 @@ class VaultItemListingDataExtensionsTest {
                 isDeleted = false,
                 cipherType = CipherType.LOGIN,
                 folderId = "mockId-1",
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
                 .copy(reprompt = CipherRepromptType.PASSWORD),
             createMockCipherView(
@@ -462,6 +464,7 @@ class VaultItemListingDataExtensionsTest {
                 isDeleted = false,
                 cipherType = CipherType.CARD,
                 folderId = "mockId-1",
+                fido2Credentials = createMockSdkFido2CredentialList(number = 2),
             ),
         )
         val fido2CredentialAutofillViews = listOf(

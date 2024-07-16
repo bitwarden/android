@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -167,6 +168,13 @@ fun VaultAddEditScreen(
         },
         onFido2ErrorDismiss = remember(viewModel) {
             { viewModel.trySendAction(VaultAddEditAction.Common.Fido2ErrorDialogDismissed) }
+        },
+        onConfirmOverwriteExistingPasskey = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick,
+                )
+            }
         },
     )
 
@@ -302,6 +310,7 @@ private fun VaultAddEditItemDialogs(
     onDismissRequest: () -> Unit,
     onAutofillDismissRequest: () -> Unit,
     onFido2ErrorDismiss: () -> Unit,
+    onConfirmOverwriteExistingPasskey: () -> Unit,
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
@@ -337,6 +346,13 @@ private fun VaultAddEditItemDialogs(
                     message = dialogState.message,
                 ),
                 onDismissRequest = onFido2ErrorDismiss,
+            )
+        }
+
+        is VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt -> {
+            BitwardenOverwritePasskeyConfirmationDialog(
+                onConfirmClick = onConfirmOverwriteExistingPasskey,
+                onDismissRequest = onDismissRequest,
             )
         }
 
