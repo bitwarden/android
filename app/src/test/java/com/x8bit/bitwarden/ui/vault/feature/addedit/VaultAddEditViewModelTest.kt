@@ -3044,6 +3044,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             )
         }
 
+        @Suppress("MaxLineLength")
         @Test
         fun `UserVerificationSuccess should set isUserVerified to true, and register FIDO 2 credential`() =
             runTest {
