@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import android.os.SystemClock
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePINResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
@@ -87,6 +89,7 @@ import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -1101,6 +1104,51 @@ class AuthRepositoryImpl(
                         },
                     )
             }
+    }
+
+    override suspend fun validatePIN(pin: String): ValidatePINResult {
+        val activeAccount = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?: return ValidatePINResult.Error
+        val privateKey = authDiskSource
+            .getPrivateKey(userId = activeAccount.userId)
+            ?: return ValidatePINResult.Error
+        val pinProtectedUserKey = authDiskSource
+            .getPinProtectedUserKey(userId = activeAccount.userId)
+            ?: return ValidatePINResult.Error
+
+        // HACK: As the SDK doesn't provide a way to directly validate the pin yet, we instead
+        // try to initialize the user crypto, and if it succeeds then the PIN is correct, otherwise
+        // the PIN is incorrect.
+        return vaultSdkSource
+            .initializeCrypto(
+                userId = activeAccount.userId,
+                request = InitUserCryptoRequest(
+                    kdfParams = activeAccount.toSdkParams(),
+                    email = activeAccount.email,
+                    privateKey = privateKey,
+                    method = InitUserCryptoMethod.Pin(
+                        pin = pin,
+                        pinProtectedUserKey = pinProtectedUserKey,
+                    ),
+                ),
+            )
+            .fold(
+                onSuccess = {
+                    when (it) {
+                        InitializeCryptoResult.Success -> {
+                            ValidatePINResult.Success(isValid = true)
+                        }
+
+                        InitializeCryptoResult.AuthenticationError -> {
+                            ValidatePINResult.Success(isValid = false)
+                        }
+                    }
+                },
+                onFailure = { ValidatePINResult.Error },
+            )
     }
 
     override suspend fun validatePasswordAgainstPolicies(

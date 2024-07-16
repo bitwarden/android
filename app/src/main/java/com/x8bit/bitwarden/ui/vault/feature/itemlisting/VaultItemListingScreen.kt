@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPINDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -197,17 +198,34 @@ fun VaultItemListingScreen(
                 )
             }
         },
-        onDismissFido2PasswordVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
-                )
-            }
-        },
         onRetryFido2PasswordVerification = remember(viewModel) {
             {
                 viewModel.trySendAction(
                     VaultItemListingsAction.RetryFido2PasswordVerificationClick(it),
+                )
+            }
+        },
+        onSubmitPINFido2Verification = remember(viewModel) {
+            { pin, cipherId ->
+                viewModel.trySendAction(
+                    VaultItemListingsAction.PINFido2VerificationSubmit(
+                        pin = pin,
+                        selectedCipherId = cipherId,
+                    ),
+                )
+            }
+        },
+        onRetryFido2PINVerification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.RetryFido2PINVerificationClick(it),
+                )
+            }
+        },
+        onDismissFido2Verification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.DismissFido2VerificationDialogClick,
                 )
             }
         },
@@ -222,6 +240,7 @@ fun VaultItemListingScreen(
     )
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
@@ -229,8 +248,10 @@ private fun VaultItemListingDialogs(
     onDismissFido2ErrorDialog: () -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
-    onDismissFido2PasswordVerification: () -> Unit,
     onRetryFido2PasswordVerification: (cipherViewId: String) -> Unit,
+    onSubmitPINFido2Verification: (pin: String, cipherId: String) -> Unit,
+    onRetryFido2PINVerification: (cipherViewId: String) -> Unit,
+    onDismissFido2Verification: () -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -268,7 +289,7 @@ private fun VaultItemListingDialogs(
                         dialogState.selectedCipherId,
                     )
                 },
-                onDismissRequest = onDismissFido2PasswordVerification,
+                onDismissRequest = onDismissFido2Verification,
             )
         }
 
@@ -280,6 +301,30 @@ private fun VaultItemListingDialogs(
                 ),
                 onDismissRequest = {
                     onRetryFido2PasswordVerification(dialogState.selectedCipherId)
+                },
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2PINPrompt -> {
+            BitwardenPINDialog(
+                onConfirmClick = { pin ->
+                    onSubmitPINFido2Verification(
+                        pin,
+                        dialogState.selectedCipherId,
+                    )
+                },
+                onDismissRequest = onDismissFido2Verification,
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2PINError -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialogState.title,
+                    message = dialogState.message,
+                ),
+                onDismissRequest = {
+                    onRetryFido2PINVerification(dialogState.selectedCipherId)
                 },
             )
         }

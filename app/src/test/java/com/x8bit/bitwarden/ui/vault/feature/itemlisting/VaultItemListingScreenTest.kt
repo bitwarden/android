@@ -1510,7 +1510,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+                VaultItemListingsAction.DismissFido2VerificationDialogClick,
             )
         }
 
@@ -1520,7 +1520,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+                VaultItemListingsAction.DismissFido2VerificationDialogClick,
             )
         }
 
@@ -1572,6 +1572,100 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultItemListingsAction.RetryFido2PasswordVerificationClick(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 PIN prompt dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogTitle = "Verify PIN"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogTitle).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2PINPrompt(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2VerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2VerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("PIN")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.PINFido2VerificationSubmit(
+                    pin = "PIN",
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 PIN error dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogMessage = "Invalid PIN. Try again."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2PINError(
+                    title = null,
+                    message = dialogMessage.asText(),
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.RetryFido2PINVerificationClick(
                     selectedCipherId = selectedCipherId,
                 ),
             )
