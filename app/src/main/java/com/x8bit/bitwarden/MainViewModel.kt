@@ -220,6 +220,9 @@ class MainViewModel @Inject constructor(
             }
 
             fido2CredentialRequestData != null -> {
+                // Set the user's verification status when a new FIDO 2 request is received to force
+                // explicit verification if the user's vault is unlocked when the request is
+                // received.
                 fido2CredentialManager.isUserVerified = false
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
