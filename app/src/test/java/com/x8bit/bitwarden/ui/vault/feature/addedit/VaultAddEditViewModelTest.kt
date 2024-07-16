@@ -3028,6 +3028,23 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `UserVerificationNotSupported should clear dialog state and send CompleteFido2Registration event with Error`() =
+            runTest {
+                viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported)
+
+                viewModel.eventFlow.test {
+                    assertNull(viewModel.stateFlow.value.dialog)
+                    assertEquals(
+                        VaultAddEditEvent.CompleteFido2Registration(
+                            result = Fido2RegisterCredentialResult.Error,
+                        ),
+                        awaitItem(),
+                    )
+                }
+            }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `Fido2RegisterCredentialResult Error should show toast and emit CompleteFido2Registration result`() =
             runTest {
                 val mockRequest = createMockFido2CredentialRequest(number = 1)
