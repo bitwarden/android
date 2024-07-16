@@ -46,10 +46,7 @@ fun createMockCipherView(
     totp: String? = "mockTotp-$number",
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
-    fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(
-        number = 1,
-        clock = clock,
-    ),
+    fido2Credentials: List<Fido2Credential>? = null,
 ): CipherView =
     CipherView(
         id = "mockId-$number",

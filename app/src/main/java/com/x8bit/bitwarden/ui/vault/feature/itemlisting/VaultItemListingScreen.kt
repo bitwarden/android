@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -172,6 +173,15 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onConfirmOverwriteExistingPasskey = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                        cipherViewId = it,
+                    ),
+                )
+            }
+        },
     )
 
     VaultItemListingScaffold(
@@ -183,11 +193,13 @@ fun VaultItemListingScreen(
     )
 }
 
+@Suppress("MaxLineLength")
 @Composable
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
     onDismissRequest: () -> Unit,
     onDismissFido2ErrorDialog: () -> Unit,
+    onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -209,6 +221,13 @@ private fun VaultItemListingDialogs(
             ),
             onDismissRequest = onDismissFido2ErrorDialog,
         )
+
+        is VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt -> {
+            BitwardenOverwritePasskeyConfirmationDialog(
+                onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
+                onDismissRequest = onDismissRequest,
+            )
+        }
 
         null -> Unit
     }
