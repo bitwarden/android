@@ -567,12 +567,7 @@ class VaultAddEditViewModel @Inject constructor(
 
     private fun handleUserVerificationNotSupported() {
         fido2CredentialManager.isUserVerified = false
-        clearDialogState()
-        sendEvent(
-            VaultAddEditEvent.CompleteFido2Registration(
-                result = Fido2RegisterCredentialResult.Error,
-            ),
-        )
+        showFido2ErrorDialog()
     }
 
     private fun handleAddNewCustomFieldClick(
