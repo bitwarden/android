@@ -255,12 +255,14 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationLockOut() {
+        fido2CredentialManager.isUserVerified = false
         showFido2ErrorDialog()
     }
 
     private fun handleUserVerificationSuccess(
         action: VaultItemListingsAction.UserVerificationSuccess,
     ) {
+        fido2CredentialManager.isUserVerified = true
         specialCircumstanceManager
             .specialCircumstance
             ?.toFido2RequestOrNull()
@@ -274,10 +276,12 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationFail() {
+        fido2CredentialManager.isUserVerified = false
         showFido2ErrorDialog()
     }
 
     private fun handleUserVerificationCancelled() {
+        fido2CredentialManager.isUserVerified = false
         clearDialogState()
         sendEvent(
             VaultItemListingEvent.CompleteFido2Registration(
@@ -287,6 +291,7 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     private fun handleUserVerificationNotSupported() {
+        fido2CredentialManager.isUserVerified = false
         showFido2ErrorDialog()
     }
 
@@ -384,7 +389,7 @@ class VaultItemListingViewModel @Inject constructor(
             ?: run {
                 // This scenario should not occur because `isFido2Creation` is false when
                 // `fido2CredentialRequest` is null. We show the FIDO 2 error dialog to inform
-                // the user and terminate the flow.
+                // the user and terminate the flow just in case it does occur.
                 showFido2ErrorDialog()
                 return
             }
@@ -395,13 +400,28 @@ class VaultItemListingViewModel @Inject constructor(
                 ),
             )
         }
-        val createOptions = fido2CredentialManager
-                .getPasskeyCreateOptionsOrNull(credentialRequest.requestJson)
-                ?: run {
-                    showFido2ErrorDialog()
-                    return
-                }
+        if (fido2CredentialManager.isUserVerified) {
+            // The user has performed verification implicitly so we continue FIDO 2 registration
+            // without checking the request's user verification settings.
+            registerFido2CredentialToCipher(
+                request = credentialRequest,
+                cipherView = cipherView,
+            )
+        } else {
+            performUserVerificationIfRequired(credentialRequest, cipherView)
+        }
+    }
 
+    private fun performUserVerificationIfRequired(
+        credentialRequest: Fido2CredentialRequest,
+        cipherView: CipherView,
+    ) {
+        val createOptions = fido2CredentialManager
+            .getPasskeyCreateOptionsOrNull(credentialRequest.requestJson)
+            ?: run {
+                showFido2ErrorDialog()
+                return
+            }
         when (createOptions.authenticatorSelection.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
                 registerFido2CredentialToCipher(
