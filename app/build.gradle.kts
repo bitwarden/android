@@ -253,7 +253,7 @@ kover {
 tasks {
     getByName("check") {
         // Add detekt with type resolution to check
-        dependsOn("detektMain")
+        dependsOn("detekt")
     }
 
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
