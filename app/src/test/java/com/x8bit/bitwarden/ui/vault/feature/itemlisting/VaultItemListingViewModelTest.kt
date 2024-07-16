@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
@@ -294,7 +295,10 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item when autofill should post to the AutofillSelectionManager`() =
         runTest {
             setupMockUri()
-            val cipherView = createMockCipherView(number = 1)
+            val cipherView = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
             coEvery {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView),
@@ -396,7 +400,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
     fun `ItemClick for vault item during FIDO 2 registration should show loading dialog, then request user verification when required`() =
         runTest {
             setupMockUri()
-            val cipherView = createMockCipherView(number = 1)
+            val cipherView = createMockCipherView(number = 1, fido2Credentials = null)
             specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
                 fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
             )
@@ -1168,8 +1172,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
 
-            val cipherView1 = createMockCipherView(number = 1)
-            val cipherView2 = createMockCipherView(number = 2)
+            val cipherView1 = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+            val cipherView2 = createMockCipherView(
+                number = 2,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
 
             coEvery {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
@@ -1239,8 +1249,14 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         runTest {
             setupMockUri()
 
-            val cipherView1 = createMockCipherView(number = 1)
-            val cipherView2 = createMockCipherView(number = 2)
+            val cipherView1 = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+            val cipherView2 = createMockCipherView(
+                number = 2,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
 
             coEvery {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
