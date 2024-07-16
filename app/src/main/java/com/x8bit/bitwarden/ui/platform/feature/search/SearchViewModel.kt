@@ -101,6 +101,7 @@ class SearchViewModel @Inject constructor(
                 isIconLoadingDisabled = settingsRepo.isIconLoadingDisabled,
                 autofillSelectionData = autofillSelectionData,
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
+                isPremium = userState.activeAccount.isPremium,
             )
         },
 ) {
@@ -657,6 +658,7 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
+                                isPremiumUser = state.isPremium,
                             )
                     }
 
@@ -701,6 +703,7 @@ data class SearchState(
     // Internal
     val autofillSelectionData: AutofillSelectionData? = null,
     val hasMasterPassword: Boolean,
+    val isPremium: Boolean,
 ) : Parcelable {
 
     /**

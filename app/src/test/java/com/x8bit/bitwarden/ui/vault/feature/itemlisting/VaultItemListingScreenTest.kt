@@ -1713,6 +1713,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     dialogState = null,
     policyDisablesSend = false,
     hasMasterPassword = true,
+    isPremium = false,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
