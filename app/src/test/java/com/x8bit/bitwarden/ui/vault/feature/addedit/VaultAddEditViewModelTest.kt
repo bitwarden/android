@@ -867,7 +867,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 SpecialCircumstance.Fido2Save(
                     fido2CredentialRequest = fido2CredentialRequest,
                 )
-
             val stateWithName = createVaultAddItemState(
                 vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
                 commonContentViewState = createCommonContentViewState(
