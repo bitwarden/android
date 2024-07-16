@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.util
 import com.bitwarden.vault.CipherType
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -139,7 +140,10 @@ class CipherViewExtensionsTest {
     @Test
     fun `isActiveWithFido2Credentials should return true when type is login, deleted date is null, and fido2 credentials are not null`() {
         assertTrue(
-            createMockCipherView(number = 1)
+            createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
                 .isActiveWithFido2Credentials,
         )
     }

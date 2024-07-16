@@ -30,6 +30,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCollectionView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFolderView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockLoginView
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockUriView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -1334,7 +1335,10 @@ class SearchViewModelTest : BaseViewModelTest() {
             autofillSelectionData = AUTOFILL_SELECTION_DATA,
             shouldFinishWhenComplete = true,
         )
-        val cipherView = createMockCipherView(number = 1)
+        val cipherView = createMockCipherView(
+            number = 1,
+            fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+        )
         val ciphers = listOf(cipherView)
         val expectedViewState = SearchState.ViewState.Content(
             displayItems = listOf(createMockDisplayItemForCipher(number = 1)),
