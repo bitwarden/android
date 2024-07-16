@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
@@ -254,6 +255,30 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.Common.HiddenFieldVisibilityChange -> {
                 handleHiddenFieldVisibilityChange(action)
             }
+
+            VaultAddEditAction.Common.UserVerificationSuccess -> {
+                handleUserVerificationSuccess()
+            }
+
+            VaultAddEditAction.Common.UserVerificationLockOut -> {
+                handleUserVerificationLockOut()
+            }
+
+            VaultAddEditAction.Common.UserVerificationFail -> {
+                handleUserVerificationFail()
+            }
+
+            VaultAddEditAction.Common.UserVerificationCancelled -> {
+                handleUserVerificationCancelled()
+            }
+
+            VaultAddEditAction.Common.Fido2ErrorDialogDismissed -> {
+                handleFido2ErrorDialogDismissed()
+            }
+
+            VaultAddEditAction.Common.UserVerificationNotSupported -> {
+                handleUserVerificationNotSupported()
+            }
         }
     }
 
@@ -373,21 +398,49 @@ class VaultAddEditViewModel @Inject constructor(
         request: Fido2CredentialRequest,
         content: VaultAddEditState.ViewState.Content,
     ) {
+        val createOptions = fido2CredentialManager
+            .getPasskeyCreateOptionsOrNull(request.requestJson)
+            ?: run {
+                showFido2ErrorDialog()
+                return
+            }
+
+        when (createOptions.authenticatorSelection.userVerification) {
+            UserVerificationRequirement.DISCOURAGED -> {
+                registerFido2CredentialToCipher(request, content.toCipherView())
+            }
+
+            UserVerificationRequirement.PREFERRED -> {
+                sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = false))
+            }
+
+            UserVerificationRequirement.REQUIRED -> {
+                sendEvent(VaultAddEditEvent.Fido2UserVerification(isRequired = true))
+            }
+
+            null -> {
+                // Per WebAuthn spec members should be ignored when invalid. Since the request
+                // violates spec we display an error and terminate the operation.
+                showFido2ErrorDialog()
+            }
+        }
+    }
+
+    private fun registerFido2CredentialToCipher(
+        request: Fido2CredentialRequest,
+        cipherView: CipherView,
+    ) {
         viewModelScope.launch {
-            val activeUserId = authRepository.activeUserId
+            val userId = authRepository.activeUserId
                 ?: run {
-                    sendAction(
-                        VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(
-                            result = Fido2RegisterCredentialResult.Error,
-                        ),
-                    )
+                    showFido2ErrorDialog()
                     return@launch
                 }
             val result: Fido2RegisterCredentialResult =
                 fido2CredentialManager.registerFido2Credential(
-                    userId = activeUserId,
+                    userId = userId,
                     fido2CredentialRequest = request,
-                    selectedCipherView = content.toCipherView(),
+                    selectedCipherView = cipherView,
                 )
             sendAction(
                 VaultAddEditAction.Internal.Fido2RegisterCredentialResultReceive(result),
@@ -458,6 +511,56 @@ class VaultAddEditViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handleUserVerificationLockOut() {
+        showFido2ErrorDialog()
+    }
+
+    private fun handleUserVerificationSuccess() {
+        specialCircumstanceManager
+            .specialCircumstance
+            ?.toFido2RequestOrNull()
+            ?.let { request ->
+                onContent { content ->
+                    registerFido2CredentialToCipher(
+                        request = request,
+                        cipherView = content.toCipherView(),
+                    )
+                }
+            }
+            ?: showFido2ErrorDialog()
+    }
+
+    private fun handleUserVerificationFail() {
+        showFido2ErrorDialog()
+    }
+
+    private fun handleFido2ErrorDialogDismissed() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Error,
+            ),
+        )
+    }
+
+    private fun handleUserVerificationCancelled() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Cancelled,
+            ),
+        )
+    }
+
+    private fun handleUserVerificationNotSupported() {
+        clearDialogState()
+        sendEvent(
+            VaultAddEditEvent.CompleteFido2Registration(
+                result = Fido2RegisterCredentialResult.Error,
+            ),
+        )
     }
 
     private fun handleAddNewCustomFieldClick(
@@ -1376,6 +1479,17 @@ class VaultAddEditViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(dialog = null) }
     }
 
+    private fun showFido2ErrorDialog() {
+        mutableStateFlow.update {
+            it.copy(
+                dialog = VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
+                ),
+            )
+        }
+    }
+
     private fun showGenericErrorDialog(
         message: Text = R.string.generic_error_message.asText(),
     ) {
@@ -1922,6 +2036,12 @@ data class VaultAddEditState(
          */
         @Parcelize
         data object InitialAutofillPrompt : DialogState()
+
+        /**
+         * Displays a FIDO 2 operation error dialog to the user.
+         */
+        @Parcelize
+        data class Fido2Error(val message: Text) : DialogState()
     }
 }
 
@@ -1992,10 +2112,19 @@ sealed class VaultAddEditEvent {
     /**
      * Complete the current FIDO 2 credential registration process.
      *
-     * @property result the result of FIDO 2 credential creation.
+     * @property result the result of FIDO 2 credential registration.
      */
     data class CompleteFido2Registration(
         val result: Fido2RegisterCredentialResult,
+    ) : VaultAddEditEvent()
+
+    /**
+     * Perform user verification for a FIDO 2 credential operation.
+     *
+     * @param isRequired When `false`, user verification can be bypassed if it is not supported.
+     */
+    data class Fido2UserVerification(
+        val isRequired: Boolean,
     ) : VaultAddEditEvent()
 }
 
@@ -2143,6 +2272,37 @@ sealed class VaultAddEditAction {
          * @property isVisible the new visibility state of the hidden field.
          */
         data class HiddenFieldVisibilityChange(val isVisible: Boolean) : Common()
+
+        /**
+         * The user has too many failed verification attempts for FIDO operations and can no longer
+         * use biometric or device credential verification for some time.
+         */
+        data object UserVerificationLockOut : Common()
+
+        /**
+         * The user has failed verification for FIDO 2 operations.
+         */
+        data object UserVerificationFail : Common()
+
+        /**
+         * The user has successfully verified themself using device biometrics or credentials.
+         */
+        data object UserVerificationSuccess : Common()
+
+        /**
+         * The user has cancelled device verification.
+         */
+        data object UserVerificationCancelled : Common()
+
+        /**
+         * The user has dismissed the FIDO 2 credential error dialog.
+         */
+        data object Fido2ErrorDialogDismissed : Common()
+
+        /**
+         * User verification cannot be performed with device biometrics or credentials.
+         */
+        data object UserVerificationNotSupported : Common()
     }
 
     /**
