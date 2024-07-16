@@ -15,12 +15,6 @@ import org.junit.jupiter.api.Test
 
 class CipherViewExtensionsTest {
 
-    private val id = "mockId-1"
-    private val username = "Bitwarden"
-    private val password = "password"
-    private val totpCode = "mockTotp-1"
-    private val uri = "www.test.com"
-
     @Test
     fun `toOverflowActions should return all actions for a login cipher when a user has premium`() {
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.LOGIN).copy(
@@ -378,3 +372,9 @@ class CipherViewExtensionsTest {
         assertEquals(expected, result)
     }
 }
+
+private const val id = "mockId-1"
+private const val username = "Bitwarden"
+private const val password = "password"
+private const val totpCode = "mockTotp-1"
+private const val uri = "www.test.com"
