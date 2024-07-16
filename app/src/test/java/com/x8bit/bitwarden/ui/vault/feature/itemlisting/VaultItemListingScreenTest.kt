@@ -1485,6 +1485,100 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `fido2 master password prompt dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogTitle = "Master password confirmation"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogTitle).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2MasterPasswordPrompt(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("password")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                    password = "password",
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 master password error dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogMessage = "Invalid master password. Try again."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2MasterPasswordError(
+                    title = null,
+                    message = dialogMessage.asText(),
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.RetryFido2PasswordVerificationClick(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `CompleteFido2Registration event should call Fido2CompletionManager with result`() {
         val result = Fido2RegisterCredentialResult.Success("mockResponse")
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
@@ -1661,7 +1755,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.UserVerificationNotSupported,
+                VaultItemListingsAction.UserVerificationNotSupported(
+                    selectedCipherId = selectedCipherView.id,
+                ),
             )
         }
     }
