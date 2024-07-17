@@ -1460,7 +1460,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             commonContentViewState = createCommonContentViewState(
                 name = "mockName-1",
                 originalCipher = cipherView,
-                notes = "mockNotes-1"
+                notes = "mockNotes-1",
             ),
         )
         val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
