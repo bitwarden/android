@@ -193,7 +193,6 @@ fun VaultItemListingScreen(
     )
 }
 
-@Suppress("MaxLineLength")
 @Composable
 private fun VaultItemListingDialogs(
     dialogState: VaultItemListingState.DialogState?,
