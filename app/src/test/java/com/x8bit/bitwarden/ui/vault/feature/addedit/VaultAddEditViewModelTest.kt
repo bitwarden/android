@@ -1396,7 +1396,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `in edit mode during FIDO 2 registration, SaveClick should display ConfirmOverwriteExistingPasskeyDialog when origin cipher has a passkey`() {
+    fun `in edit mode during FIDO 2 registration, SaveClick should display ConfirmOverwriteExistingPasskeyDialog when original cipher has a passkey`() {
         val cipherView = createMockCipherView(
             number = 1,
             fido2Credentials = createMockSdkFido2CredentialList(number = 1),
@@ -1446,6 +1446,128 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value.dialog,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmOverwriteExistingPasskeyClick should register credential when user is verified`() {
+        val cipherView = createMockCipherView(
+            number = 1,
+            fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+        )
+        val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+        val stateWithName = createVaultAddItemState(
+            vaultAddEditType = vaultAddEditType,
+            commonContentViewState = createCommonContentViewState(
+                name = "mockName-1",
+                originalCipher = cipherView,
+                notes = "mockNotes-1"
+            ),
+        )
+        val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+            fido2CredentialRequest = mockFidoRequest,
+        )
+        coEvery {
+            fido2CredentialManager.registerFido2Credential(
+                userId = mockFidoRequest.userId,
+                fido2CredentialRequest = mockFidoRequest,
+                selectedCipherView = any(),
+            )
+        } returns Fido2RegisterCredentialResult.Success("mockResponse")
+        every { authRepository.activeUserId } returns mockFidoRequest.userId
+        every {
+            cipherView.toViewState(
+                isClone = false,
+                isIndividualVaultDisabled = false,
+                resourceManager = resourceManager,
+                clock = fixedClock,
+            )
+        } returns stateWithName.viewState
+        every { fido2CredentialManager.isUserVerified } returns true
+
+        mutableVaultDataFlow.value = DataState.Loaded(
+            createVaultData(cipherView = cipherView),
+        )
+
+        val viewModel = createAddVaultItemViewModel(
+            createSavedStateHandleWithState(
+                state = stateWithName,
+                vaultAddEditType = vaultAddEditType,
+            ),
+        )
+        viewModel.trySendAction(VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick)
+
+        coVerify {
+            fido2CredentialManager.isUserVerified
+            fido2CredentialManager.registerFido2Credential(
+                userId = mockFidoRequest.userId,
+                fido2CredentialRequest = mockFidoRequest,
+                selectedCipherView = any(),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmOverwriteExistingPasskeyClick should check if user verification is required`() =
+        runTest {
+            val cipherView = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+            val vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID)
+            val stateWithName = createVaultAddItemState(
+                vaultAddEditType = vaultAddEditType,
+                commonContentViewState = createCommonContentViewState(
+                    name = "mockName-1",
+                    originalCipher = cipherView,
+                    customFieldData = listOf(
+                        VaultAddEditState.Custom.HiddenField(
+                            itemId = "testId",
+                            name = "mockName-1",
+                            value = "mockValue-1",
+                        ),
+                    ),
+                    notes = "mockNotes-1",
+                ),
+            )
+            val mockFidoRequest = createMockFido2CredentialRequest(number = 1)
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = mockFidoRequest,
+            )
+            every {
+                cipherView.toViewState(
+                    isClone = false,
+                    isIndividualVaultDisabled = false,
+                    resourceManager = resourceManager,
+                    clock = fixedClock,
+                )
+            } returns stateWithName.viewState
+            every { fido2CredentialManager.isUserVerified } returns false
+            every {
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
+            } returns createMockPublicKeyCredentialCreationOptions(
+                number = 1,
+                userVerificationRequirement = UserVerificationRequirement.REQUIRED,
+            )
+
+            mutableVaultDataFlow.value = DataState.Loaded(
+                createVaultData(cipherView = cipherView),
+            )
+
+            val viewModel = createAddVaultItemViewModel(
+                createSavedStateHandleWithState(
+                    state = stateWithName,
+                    vaultAddEditType = vaultAddEditType,
+                ),
+            )
+            viewModel.trySendAction(VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick)
+
+            coVerify {
+                fido2CredentialManager.isUserVerified
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(mockFidoRequest.requestJson)
+            }
+        }
 
     @Test
     fun `Saving item with an empty name field will cause a dialog to show up`() = runTest {
