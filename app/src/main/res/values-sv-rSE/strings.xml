@@ -483,8 +483,6 @@ Skanningen sker automatiskt.</string>
   <string name="code_sent">Kod har skickats!</string>
   <string name="confirm_your_identity">Bekräfta din identitet för att fortsätta.</string>
   <string name="export_vault_warning">Denna export innehåller ditt valv i ett okrypterat format. Du bör inte lagra eller skicka den exporterade filen över osäkra kanaler (t.ex. e-post). Radera den omedelbart när du är färdig med den.</string>
-  <string name="enc_export_key_warning">Denna export krypterar dina data med kontots krypteringsnyckel. Om du någonsin roterar kontots krypteringsnyckel bör du exportera igen eftersom du inte kommer att kunna dekryptera denna exportfil.</string>
-  <string name="enc_export_account_warning">Kypteringnycklar är unika för varje Bitwarden-konto, så du kan inte importera en krypterad export till ett annat konto.</string>
   <string name="export_vault_confirmation_title">Bekräfta export av valv</string>
   <string name="warning">Varning</string>
   <string name="export_vault_failure">Det gick inte att exportera ditt valv. Om problemet kvarstår måste du exportera från webbvalvet istället.</string>

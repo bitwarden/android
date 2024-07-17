@@ -482,8 +482,6 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="code_sent">Kod göndərildi!</string>
   <string name="confirm_your_identity">Davam etmək üçün kimliyinizi doğrulayın.</string>
   <string name="export_vault_warning">Xaricə köçürdüyünüz bu fayldakı datanız şifrələnməmiş formatdadır. Bu faylı güvənli olmayan kanallar (e-poçt kimi) üzərində saxlamamalı və ya göndərməməlisiniz. İşiniz bitdikdən sonra faylı dərhal silin.</string>
-  <string name="enc_export_key_warning">Xaricə köçürdüyünüz bu fayldakı data, hesabınızın şifrələmə açarı istifadə edilərək şifrələnir. Hesabınızın şifrələmə açarını dəyişdirsəniz, bu faylın şifrəsini aça bilməyəcəksiniz və onu yenidən xaricə köçürməli olacaqsınız.</string>
-  <string name="enc_export_account_warning">Hesab şifrələmə açarları, hər Bitwarden istifadəçi hesabı üçün unikaldır, buna görə də şifrələnmiş bir xaricə köçürməni, fərqli bir hesaba köçürə bilməzsiniz.</string>
   <string name="export_vault_confirmation_title">Anbarın xaricə köçürülməsini təsdiqlə</string>
   <string name="warning">Xəbərdarlıq</string>
   <string name="export_vault_failure">Anbarınızın xaricə köçürülməsi zamanı problem yarandı. Əgər problem davam edərsə, veb anbarından xaricə köçürməli olacaqsınız.</string>

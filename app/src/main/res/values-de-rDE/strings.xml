@@ -482,8 +482,6 @@ Das Scannen erfolgt automatisch.</string>
   <string name="code_sent">Code gesendet!</string>
   <string name="confirm_your_identity">Verifiziere deine Identität, um fortzufahren.</string>
   <string name="export_vault_warning">Dieser Export enthält deine Tresordaten in einem unverschlüsseltem Format. Du solltest sie nicht speichern oder über unsichere Kanäle (z. B. E-Mail) senden. Lösche sie sofort nach ihrer Verwendung.</string>
-  <string name="enc_export_key_warning">Dieser Export verschlüsselt deine Daten mit dem Verschlüsselungscode deines Kontos. Falls du deinen Verschlüsselungscode erneuerst, solltest du den Export erneut durchführen, da du die zuvor erstellte Datei ansonsten nicht mehr entschlüsseln kannst.</string>
-  <string name="enc_export_account_warning">Die Verschlüsselungscodes eines Kontos sind für jedes Bitwarden Benutzerkonto einzigartig, deshalb kannst du keinen verschlüsselten Export in ein anderes Konto importieren.</string>
   <string name="export_vault_confirmation_title">Tresor-Export bestätigen</string>
   <string name="warning">Warnung</string>
   <string name="export_vault_failure">Beim Exportieren deines Tresors ist ein Problem aufgetreten. Wenn das Problem weiterhin besteht, musst du ihn aus dem Web-Tresor exportieren.</string>

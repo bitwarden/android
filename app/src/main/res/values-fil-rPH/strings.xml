@@ -482,8 +482,6 @@ Awtomatikong itong magsa-scan.</string>
   <string name="code_sent">Ipinadala ang code!</string>
   <string name="confirm_your_identity">Kumpirmahin ang pagkakakilanlan mo para tumuloy.</string>
   <string name="export_vault_warning">Naglalaman ng unencrypted vault data mo ang export na ito. Hindi mo dapat ilagay o ipadala ang file gamit ang hindi ligtas na mga paraan (tulad ng email). Burahin ito kaagad pagkagamit.</string>
-  <string name="enc_export_key_warning">Ine-encrypt ng export na ito ang data mo gamit ang encryption key ng iyong account. Kung iro-rotate mo man ang encryption key ng iyong account, kailangan mong mag-export ulit dahil hindi mo na made-decrypt ang file na ito.</string>
-  <string name="enc_export_account_warning">Magkaiba ang encryption key ng bawat Bitwarden user account, kaya hindi ka makakapag-import ng encrypted export sa iba pang account.</string>
   <string name="export_vault_confirmation_title">Kumpirmahin ang pag-export ng vault</string>
   <string name="warning">Babala</string>
   <string name="export_vault_failure">Nagkaproblema sa pag-e-export ng vault mo. Kung paulit-ulit nang nagkakaproblema, sa web vault ka dapat mag-export.</string>

@@ -482,8 +482,6 @@
   <string name="code_sent">確認コードを送信しました。</string>
   <string name="confirm_your_identity">続行するには本人確認を行ってください。</string>
   <string name="export_vault_warning">このエクスポートデータは暗号化されていない形式の保管庫データを含んでいます。メールなどのセキュリティ保護されていない方法で共有したり保管したりしないでください。使用した後はすぐに削除してください。</string>
-  <string name="enc_export_key_warning">このエクスポートは、アカウントの暗号化キーを使用してデータを暗号化します。 暗号化キーをローテーションした場合は、このエクスポートファイルを復号することはできなくなるため、もう一度エクスポートする必要があります。</string>
-  <string name="enc_export_account_warning">アカウント暗号化キーは各 Bitwarden ユーザーアカウントに固有であるため、暗号化されたエクスポートを別のアカウントにインポートすることはできません。</string>
   <string name="export_vault_confirmation_title">保管庫のエクスポートの確認</string>
   <string name="warning">注意</string>
   <string name="export_vault_failure">保管庫のエクスポート時に問題が発生しました。問題が続くようであれば、ウェブ保管庫からエクスポートしてください。</string>

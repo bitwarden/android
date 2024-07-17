@@ -481,8 +481,6 @@
   <string name="code_sent">A kód elküldésre került.</string>
   <string name="confirm_your_identity">A folytatáshoz meg kell erősíteni a személyazonosságot.</string>
   <string name="export_vault_warning">Az exportált széfadatok titkosítatlan formátumban kerülnek elmentésre. Ne tároljuk sehol, illetve ne küldjük el senkinek a fájlt nem biztonságos felületeken (például email). Használat után azonnal töröljük.</string>
-  <string name="enc_export_key_warning">Ez az exportálás titkosítja az adatokat a fiók titkosítási kulcsával. Ha valaha a diók forgatási kulcsa más lesz, akkor újra exportálni kell, mert nem lehet visszafejteni ezt az exportálási fájlt.</string>
-  <string name="enc_export_account_warning">A fiók titkosítási kulcsai minden Bitwarden felhasználói fiókhoz egyediek, ezért nem importálhatunk titkosított exportálást egy másik fiókba.</string>
   <string name="export_vault_confirmation_title">Széf export megerősítése</string>
   <string name="warning">Figyelmeztetés</string>
   <string name="export_vault_failure">Hiba lépett fel exportálás közben. Ha a hiba továbbra is fennáll, próbáluk exportálni a webes felületen.</string>

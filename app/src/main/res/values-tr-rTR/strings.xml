@@ -482,8 +482,6 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="code_sent">Kod gönderildi!</string>
   <string name="confirm_your_identity">Devam etmek için kimliğinizi doğrulayın.</string>
   <string name="export_vault_warning">Dışa aktarılan dosyadaki verileriniz şifrelenmemiş olacak. Bu dosyayı güvensiz yöntemlerle (örn. e-posta) göndermemeli ve saklamamalısınız. İşiniz bittikten sonra dosyayı hemen silin.</string>
-  <string name="enc_export_key_warning">Dışa aktardığınız bu dosyadaki verileriniz, hesabınızın şifreleme anahtarıyla şifrelenir. Hesabınızın şifreleme anahtarını değiştirirseniz bu dosyanın şifresi çözülemez hale gelir, dolayısıyla dosyayı yeniden dışa aktarmanız gerekir.</string>
-  <string name="enc_export_account_warning">Hesap şifreleme anahtarları her Bitwarden kullanıcı hesabı için farklıdır. Dolayısıyla şifrelenmiş bir dışa aktarmayı başka bir hesapta içe aktaramazsınız.</string>
   <string name="export_vault_confirmation_title">Kasayı dışa aktarmayı onaylayın</string>
   <string name="warning">Uyarı</string>
   <string name="export_vault_failure">Kasanızı dışa aktarırken bir sorun oluştu. Sorun devam ederse web kasasından dışa aktarmanız gerekir.</string>
