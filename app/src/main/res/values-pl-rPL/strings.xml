@@ -482,8 +482,6 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="code_sent">Kod został wysłany!</string>
   <string name="confirm_your_identity">Potwierdź swoją tożsamość, aby kontynuować.</string>
   <string name="export_vault_warning">Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</string>
-  <string name="enc_export_key_warning">Dane eksportu zostaną zaszyfrowane za pomocą klucza szyfrowania konta. Jeśli kiedykolwiek zmienisz ten klucz, wyeksportuj dane ponownie, ponieważ nie będziesz w stanie odszyfrować tego pliku.</string>
-  <string name="enc_export_account_warning">Klucze szyfrowania konta są unikalne dla każdego użytkownika Bitwarden, więc nie możesz zaimportować zaszyfrowanego pliku eksportu na inne konto.</string>
   <string name="export_vault_confirmation_title">Potwierdź eksportowanie sejfu</string>
   <string name="warning">Ostrzeżenie</string>
   <string name="export_vault_failure">Wystąpił problem z wyeksportowaniem sejfu. Jeśli problem nadal występuje, musisz wyeksportować dane z sejfu internetowego.</string>

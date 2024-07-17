@@ -482,8 +482,6 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="code_sent">Kodas išsiųstas!</string>
   <string name="confirm_your_identity">Norint tęsti, patvirtinkite tapatybę.</string>
   <string name="export_vault_warning">Šiame eksporte yra jūsų saugyklos duomenys nešifruotu formatu. Neturėtumėte saugoti ar siųsti eksportuoto failo nesaugiais kanalais (pvz., el. paštu). Ištrinkite jį iš karto, kai baigsite naudoti.</string>
-  <string name="enc_export_key_warning">Šis eksportavimas užšifruoja jūsų duomenis naudojant paskyros šifravimo raktą. Jei kada nors pakeisite paskyros šifravimo raktą, turėtumėte eksportuoti dar kartą, nes negalėsite iššifruoti šio eksporto failo.</string>
-  <string name="enc_export_account_warning">Paskyros šifravimo raktai yra unikalūs kiekvienai „Bitwarden“ vartotojo paskyrai, todėl negalite importuoti šifruoto eksporto į kitą paskyrą.</string>
   <string name="export_vault_confirmation_title">Patvirtinkite saugyklos eksportavimą</string>
   <string name="warning">Įspėjimas</string>
   <string name="export_vault_failure">Eksportuojant saugyklą kilo problema. Jei problema išlieka, turėsite eksportuoti iš žiniatinklio saugyklos.</string>

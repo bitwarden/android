@@ -482,8 +482,6 @@ Skandering gebeur outomaties.</string>
   <string name="code_sent">Kode verstuur!</string>
   <string name="confirm_your_identity">Bevestig u identiteit om voort te gaan.</string>
   <string name="export_vault_warning">Hierdie uitstuur bevat u kluisdata in ’n ongeënkripteerde formaat. U behoort dit nie oor onbeveiligde kanale (soos e-pos) te bewaar of verstuur nie. Skrap dit sodra u dit klaar gebruik het.</string>
-  <string name="enc_export_key_warning">Hierdie uitstuur vergrendel u data met u rekening se enkripsiesleutel. Indien u ooit u rekening se enkripsiesleitel wil verander moet u dit weer uitstuur aangesien u dan nie hierdie uitstuurlêer sal kan dekripteer nie.</string>
-  <string name="enc_export_account_warning">Rekeningenkripsiesleutels is uniek tot elke Bitwarden-gebruikersrekening, daarom kan u nie ’n geënkripteerde uitstuur in ’n ander rekening invoer nie.</string>
   <string name="export_vault_confirmation_title">Bevestig kluisuitstuur</string>
   <string name="warning">Waarskuwing</string>
   <string name="export_vault_failure">Daar was ’n probleem met die uitstuur van u kluis. Indien die probeem voortduur moet u vanuit die webkluis uitstuur.</string>
