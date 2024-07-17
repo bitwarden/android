@@ -185,6 +185,7 @@ class VaultLockManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `app coming into foreground for the first time for OnAppRestart timeout should clear existing times and lock vaults if necessary`() {
+        setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.OnAppRestart
@@ -209,6 +210,7 @@ class VaultLockManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `app coming into foreground for the first time for other timeout should clear existing times and lock vaults if necessary`() {
+        setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
@@ -233,6 +235,7 @@ class VaultLockManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `app coming into foreground for the first time for non-Never timeout should clear existing times and perform timeout action`() {
+        setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOCK
         mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
@@ -256,7 +259,49 @@ class VaultLockManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `Verify Checking for timeout should take place for a user with logged in state`() {
+        setAccountTokens()
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
+        mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+
+        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAuthDiskSource.storeLastActiveTimeMillis(
+            userId = USER_ID,
+            lastActiveTimeMillis = 123L,
+        )
+        verifyUnlockedVaultBlocking(userId = USER_ID)
+        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+
+        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+
+        verify(exactly = 1) { settingsRepository.getVaultTimeoutActionStateFlow(USER_ID) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Verify Checking for timeout should not take place for a user who is already in the soft logged out state`() {
+        fakeAuthDiskSource.userState = MOCK_USER_STATE
+        mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
+        mutableVaultTimeoutStateFlow.value = VaultTimeout.ThirtyMinutes
+
+        fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
+        fakeAuthDiskSource.storeLastActiveTimeMillis(
+            userId = USER_ID,
+            lastActiveTimeMillis = 123L,
+        )
+        verifyUnlockedVaultBlocking(userId = USER_ID)
+        assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
+
+        fakeAppForegroundManager.appForegroundState = AppForegroundState.FOREGROUNDED
+
+        verify(exactly = 0) { settingsRepository.getVaultTimeoutActionStateFlow(USER_ID) }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `app coming into foreground subsequent times should perform timeout action if necessary and not clear existing times`() {
+        setAccountTokens()
         fakeAuthDiskSource.userState = MOCK_USER_STATE
 
         // Start in a foregrounded state
@@ -362,6 +407,7 @@ class VaultLockManagerTest {
     @Test
     fun `switching users should perform lock actions for each user if necessary and reset their last active times`() {
         val userId2 = "mockId-2"
+        setAccountTokens(listOf(USER_ID, userId2))
         fakeAuthDiskSource.userState = UserStateJson(
             activeUserId = USER_ID,
             accounts = mapOf(
@@ -1506,6 +1552,16 @@ class VaultLockManagerTest {
 
     private fun verifyUnlockedVaultBlocking(userId: String) {
         runBlocking { verifyUnlockedVault(userId = userId) }
+    }
+
+    // region helper functions
+    private fun setAccountTokens(userIds: List<String> = listOf(USER_ID)) {
+        userIds.forEach { userId ->
+            fakeAuthDiskSource.storeAccountTokens(
+                userId,
+                accountTokens = AccountTokensJson("access-$userId", "refresh-$userId"),
+            )
+        }
     }
 }
 

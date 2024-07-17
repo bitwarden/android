@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.manager
 
 import android.content.Context
 import android.widget.Toast
+import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
@@ -92,17 +93,7 @@ class UserLogoutManagerTest {
     @Suppress("MaxLineLength")
     @Test
     fun `logout for multiple accounts should clear data associated with the given user and change to the new active user`() {
-        mockkStatic(Toast::class)
-
-        every {
-            Toast
-                .makeText(
-                    context,
-                    R.string.account_switched_automatically,
-                    Toast.LENGTH_SHORT,
-                )
-                .show()
-        } just runs
+        mockToast(R.string.account_switched_automatically)
 
         val userId = USER_ID_1
         every { authDiskSource.userState } returns MULTI_USER_STATE
@@ -130,7 +121,11 @@ class UserLogoutManagerTest {
     fun `softLogout should clear most data associated with the given user and remove token data in the authDiskSource`() {
         val userId = USER_ID_1
         val vaultTimeoutInMinutes = 360
-        val vaultTimeoutAction = VaultTimeoutAction.LOCK
+        val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+
+        mockToast(R.string.account_switched_automatically)
+
+        every { authDiskSource.userState } returns MULTI_USER_STATE
         every {
             settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         } returns vaultTimeoutInMinutes
@@ -157,6 +152,32 @@ class UserLogoutManagerTest {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `softLogout should switch active user but keep previous user in accounts list`() {
+        val userId = USER_ID_1
+        val vaultTimeoutInMinutes = 360
+        val vaultTimeoutAction = VaultTimeoutAction.LOGOUT
+
+        mockToast(R.string.account_switched_automatically)
+
+        every { authDiskSource.userState } returns MULTI_USER_STATE
+        every {
+            settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
+        } returns vaultTimeoutInMinutes
+        every {
+            settingsDiskSource.getVaultTimeoutAction(userId = userId)
+        } returns vaultTimeoutAction
+
+        userLogoutManager.softLogout(userId = userId)
+
+        verify { authDiskSource.storeAccountTokens(userId = USER_ID_1, accountTokens = null) }
+        verify {
+            authDiskSource.userState =
+                UserStateJson(activeUserId = USER_ID_2, accounts = MULTI_USER_STATE.accounts)
+        }
+    }
+
     private fun assertDataCleared(userId: String) {
         verify { vaultSdkSource.clearCrypto(userId = userId) }
         verify { authDiskSource.clearData(userId = userId) }
@@ -167,6 +188,15 @@ class UserLogoutManagerTest {
         coVerify {
             vaultDiskSource.deleteVaultData(userId = userId)
         }
+    }
+
+    private fun mockToast(@StringRes res: Int) {
+        mockkStatic(Toast::class)
+        every {
+            Toast
+                .makeText(context, res, Toast.LENGTH_SHORT)
+                .show()
+        } just runs
     }
 }
 
