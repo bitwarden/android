@@ -174,10 +174,10 @@ fun VaultItemListingScreen(
             }
         },
         onConfirmOverwriteExistingPasskey = remember(viewModel) {
-            {
+            { cipherId ->
                 viewModel.trySendAction(
                     VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
-                        cipherViewId = it,
+                        cipherViewId = cipherId,
                     ),
                 )
             }
