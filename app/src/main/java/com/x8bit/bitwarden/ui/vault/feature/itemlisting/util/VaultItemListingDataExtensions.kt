@@ -104,6 +104,7 @@ fun VaultData.toViewState(
     autofillSelectionData: AutofillSelectionData?,
     fido2CreationData: Fido2CredentialRequest?,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
+    isPremiumUser: Boolean,
 ): VaultItemListingState.ViewState {
     val filteredCipherViewList = cipherViewList
         .filter { cipherView ->
@@ -133,6 +134,7 @@ fun VaultData.toViewState(
                 isAutofill = autofillSelectionData != null,
                 isFido2Creation = fido2CreationData != null,
                 fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+                isPremiumUser = isPremiumUser,
             ),
             displayFolderList = folderList.map { folderView ->
                 VaultItemListingState.FolderDisplayItem(
@@ -271,6 +273,7 @@ private fun List<CipherView>.toDisplayItemList(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     fido2CredentialAutofillViews: List<Fido2CredentialAutofillView>?,
+    isPremiumUser: Boolean,
 ): List<VaultItemListingState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -283,6 +286,7 @@ private fun List<CipherView>.toDisplayItemList(
                 ?.firstOrNull { fido2CredentialAutofillView ->
                     fido2CredentialAutofillView.cipherId == it.id
                 },
+            isPremiumUser = isPremiumUser,
         )
     }
 
@@ -305,6 +309,7 @@ private fun CipherView.toDisplayItem(
     isAutofill: Boolean,
     isFido2Creation: Boolean,
     fido2CredentialAutofillView: Fido2CredentialAutofillView?,
+    isPremiumUser: Boolean,
 ): VaultItemListingState.DisplayItem =
     VaultItemListingState.DisplayItem(
         id = id.orEmpty(),
@@ -325,7 +330,10 @@ private fun CipherView.toDisplayItem(
         ),
         iconTestTag = this.toIconTestTag(),
         extraIconList = this.toLabelIcons(),
-        overflowOptions = this.toOverflowActions(hasMasterPassword = hasMasterPassword),
+        overflowOptions = this.toOverflowActions(
+            hasMasterPassword = hasMasterPassword,
+            isPremiumUser = isPremiumUser,
+        ),
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isFido2Creation = isFido2Creation,

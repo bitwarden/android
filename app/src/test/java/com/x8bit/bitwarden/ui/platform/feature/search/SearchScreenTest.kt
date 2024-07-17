@@ -887,6 +887,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseIconUrl = "www.test.com",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
+    isPremium = true,
 )
 
 private fun createStateForAutofill(

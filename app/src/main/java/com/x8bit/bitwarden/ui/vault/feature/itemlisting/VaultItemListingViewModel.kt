@@ -123,6 +123,7 @@ class VaultItemListingViewModel @Inject constructor(
             shouldFinishOnComplete = shouldFinishOnComplete,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             fido2CredentialRequest = fido2CreationData?.fido2CredentialRequest,
+            isPremium = userState.activeAccount.isPremium,
         )
     },
 ) {
@@ -1008,6 +1009,7 @@ class VaultItemListingViewModel @Inject constructor(
                             fido2CreationData = state.fido2CredentialRequest,
                             fido2CredentialAutofillViews = vaultData
                                 .fido2CredentialAutofillViewList,
+                            isPremiumUser = state.isPremium,
                         )
                     }
 
@@ -1127,6 +1129,7 @@ data class VaultItemListingState(
     val fido2CredentialRequest: Fido2CredentialRequest? = null,
     val shouldFinishOnComplete: Boolean = false,
     val hasMasterPassword: Boolean,
+    val isPremium: Boolean,
 ) {
     /**
      * Whether or not this represents a listing screen for autofill.

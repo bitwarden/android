@@ -2374,6 +2374,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             policyDisablesSend = false,
             hasMasterPassword = true,
             fido2CredentialRequest = null,
+            isPremium = true,
         )
 }
 
