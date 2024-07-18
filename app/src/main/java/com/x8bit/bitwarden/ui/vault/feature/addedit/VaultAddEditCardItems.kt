@@ -274,6 +274,7 @@ fun LazyListScope.vaultAddEditCardItems(
     }
 
     items(commonState.customFieldData) { customItem ->
+        Spacer(modifier = Modifier.height(8.dp))
         VaultAddEditCustomField(
             customField = customItem,
             onCustomFieldValueChange = commonHandlers.onCustomFieldValueChange,

@@ -123,6 +123,7 @@ class VaultItemListingViewModel @Inject constructor(
             shouldFinishOnComplete = shouldFinishOnComplete,
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             fido2CredentialRequest = fido2CreationData?.fido2CredentialRequest,
+            isPremium = userState.activeAccount.isPremium,
         )
     },
 ) {
@@ -198,6 +199,9 @@ class VaultItemListingViewModel @Inject constructor(
             is VaultItemListingsAction.AddVaultItemClick -> handleAddVaultItemClick()
             is VaultItemListingsAction.RefreshClick -> handleRefreshClick()
             is VaultItemListingsAction.RefreshPull -> handleRefreshPull()
+            is VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick -> {
+                handleConfirmOverwriteExistingPasskeyClick(action)
+            }
 
             VaultItemListingsAction.UserVerificationLockOut -> {
                 handleUserVerificationLockOut()
@@ -252,6 +256,18 @@ class VaultItemListingViewModel @Inject constructor(
         // The Pull-To-Refresh composable is already in the refreshing state.
         // We will reset that state when sendDataStateFlow emits later on.
         vaultRepository.sync()
+    }
+
+    private fun handleConfirmOverwriteExistingPasskeyClick(
+        action: VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick,
+    ) {
+        clearDialogState()
+        getCipherViewOrNull(action.cipherViewId)
+            ?.let { registerFido2Credential(it) }
+            ?: run {
+                showFido2ErrorDialog()
+                return
+            }
     }
 
     private fun handleUserVerificationLockOut() {
@@ -384,6 +400,21 @@ class VaultItemListingViewModel @Inject constructor(
                 showFido2ErrorDialog()
                 return
             }
+
+        if (cipherView.isActiveWithFido2Credentials) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = VaultItemListingState
+                        .DialogState
+                        .OverwritePasskeyConfirmationPrompt(cipherViewId = action.id),
+                )
+            }
+        } else {
+            registerFido2Credential(cipherView)
+        }
+    }
+
+    private fun registerFido2Credential(cipherView: CipherView) {
         val credentialRequest = state
             .fido2CredentialRequest
             ?: run {
@@ -1008,6 +1039,7 @@ class VaultItemListingViewModel @Inject constructor(
                             fido2CreationData = state.fido2CredentialRequest,
                             fido2CredentialAutofillViews = vaultData
                                 .fido2CredentialAutofillViewList,
+                            isPremiumUser = state.isPremium,
                         )
                     }
 
@@ -1127,6 +1159,7 @@ data class VaultItemListingState(
     val fido2CredentialRequest: Fido2CredentialRequest? = null,
     val shouldFinishOnComplete: Boolean = false,
     val hasMasterPassword: Boolean,
+    val isPremium: Boolean,
 ) {
     /**
      * Whether or not this represents a listing screen for autofill.
@@ -1206,6 +1239,12 @@ data class VaultItemListingState(
         data class Loading(
             val message: Text,
         ) : DialogState()
+
+        /**
+         * Displays the overwrite passkey confirmation prompt to the user.
+         */
+        @Parcelize
+        data class OverwritePasskeyConfirmationPrompt(val cipherViewId: String) : DialogState()
     }
 
     /**
@@ -1683,6 +1722,13 @@ sealed class VaultItemListingsAction {
      * The user cannot perform verification because it is not supported by the device.
      */
     data object UserVerificationNotSupported : VaultItemListingsAction()
+
+    /**
+     * The user has confirmed overwriting the existing cipher's passkey.
+     */
+    data class ConfirmOverwriteExistingPasskeyClick(
+        val cipherViewId: String,
+    ) : VaultItemListingsAction()
 
     /**
      * Models actions that the [VaultItemListingViewModel] itself might send.

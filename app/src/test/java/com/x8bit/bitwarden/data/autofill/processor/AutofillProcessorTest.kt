@@ -107,6 +107,7 @@ class AutofillProcessorTest {
             fillCallback = fillCallback,
             request = fillRequest,
         )
+        testDispatcher.scheduler.runCurrent()
 
         // Verify
         verify(exactly = 1) {
@@ -445,9 +446,9 @@ class AutofillProcessorTest {
         verify(exactly = 1) {
             // These run as they are not part of the coroutine
             cancellationSignal.setOnCancelListener(any())
-            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
         }
         coVerify(exactly = 0) {
+            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
             filledDataBuilder.build(autofillRequest = autofillRequest)
         }
         verify(exactly = 0) {

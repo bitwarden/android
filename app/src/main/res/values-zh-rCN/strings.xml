@@ -482,8 +482,6 @@
   <string name="code_sent">验证码已发送！</string>
   <string name="confirm_your_identity">请先确认您的身份后继续。</string>
   <string name="export_vault_warning">导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。</string>
-  <string name="enc_export_key_warning">此导出将使用您账户的加密密钥来加密您的数据。如果您曾经轮换过账户的加密密钥，您应将其重新导出，否则您将无法解密导出的文件。</string>
-  <string name="enc_export_account_warning">每个 Bitwarden 用户账户的账户加密密钥都是唯一的，因此您无法将加密的导出导入到另一个账户。</string>
   <string name="export_vault_confirmation_title">确认密码库导出</string>
   <string name="warning">警告</string>
   <string name="export_vault_failure">导出您的密码库时出现问题。如果问题仍然存在，您需要从网页密版码库中导出。</string>

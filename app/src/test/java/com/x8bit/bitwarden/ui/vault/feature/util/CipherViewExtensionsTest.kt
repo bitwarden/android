@@ -16,12 +16,7 @@ import org.junit.jupiter.api.Test
 class CipherViewExtensionsTest {
 
     @Test
-    fun `toOverflowActions should return all actions for a login cipher`() {
-        val id = "mockId-1"
-        val username = "Bitwarden"
-        val password = "password"
-        val totpCode = "mockTotp-1"
-        val uri = "www.test.com"
+    fun `toOverflowActions should return all actions for a login cipher when a user has premium`() {
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.LOGIN).copy(
             id = id,
             login = createMockLoginView(number = 1).copy(
@@ -31,7 +26,7 @@ class CipherViewExtensionsTest {
             ),
         )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = false)
+        val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = true)
 
         assertEquals(
             listOf(
@@ -53,14 +48,41 @@ class CipherViewExtensionsTest {
         )
     }
 
+    @Test
+    fun `toOverflowActions should not return TOTP action when a user does not have premium`() {
+        val cipher = createMockCipherView(number = 1, cipherType = CipherType.LOGIN).copy(
+            id = id,
+            login = createMockLoginView(number = 1).copy(
+                username = username,
+                password = password,
+                uris = listOf(createMockUriView(number = 1).copy(uri = uri)),
+            ),
+        )
+
+        val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
+
+        assertEquals(
+            listOf(
+                ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id),
+                ListingItemOverflowAction.VaultAction.EditClick(
+                    cipherId = id,
+                    requiresPasswordReprompt = false,
+                ),
+                ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
+                ListingItemOverflowAction.VaultAction.CopyPasswordClick(
+                    password = password,
+                    requiresPasswordReprompt = false,
+                    cipherId = id,
+                ),
+                ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
+            ),
+            result,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `toOverflowActions should return the correct actions when viewPassword is false for a login cipher`() {
-        val id = "mockId-1"
-        val username = "Bitwarden"
-        val password = "password"
-        val totpCode = "mockTotp-1"
-        val uri = "www.test.com"
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.LOGIN).copy(
             id = id,
             login = createMockLoginView(number = 1).copy(
@@ -70,7 +92,7 @@ class CipherViewExtensionsTest {
             ),
             viewPassword = false,
         )
-        val result = cipher.toOverflowActions(hasMasterPassword = true)
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
             listOf(
@@ -80,7 +102,6 @@ class CipherViewExtensionsTest {
                     requiresPasswordReprompt = true,
                 ),
                 ListingItemOverflowAction.VaultAction.CopyUsernameClick(username = username),
-                ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = totpCode),
                 ListingItemOverflowAction.VaultAction.LaunchClick(url = uri),
             ),
             result,
@@ -89,7 +110,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return minimum actions for a login cipher`() {
-        val id = "mockId-1"
         val cipher = createMockCipherView(
             number = 1,
             isDeleted = true,
@@ -105,7 +125,7 @@ class CipherViewExtensionsTest {
                 ),
             )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = true)
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -115,7 +135,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a card cipher`() {
-        val id = "mockId-1"
         val number = "1322-2414-7634-2354"
         val securityCode = "123"
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.CARD).copy(
@@ -126,7 +145,7 @@ class CipherViewExtensionsTest {
             ),
         )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = true)
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
             listOf(
@@ -151,7 +170,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return minimum actions for a card cipher`() {
-        val id = "mockId-1"
         val cipher = createMockCipherView(
             number = 1,
             isDeleted = true,
@@ -165,7 +183,7 @@ class CipherViewExtensionsTest {
                 ),
             )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = false)
+        val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -175,13 +193,12 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a identity cipher`() {
-        val id = "mockId-1"
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.IDENTITY).copy(
             id = id,
             identity = createMockIdentityView(number = 1),
         )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = false)
+        val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
 
         assertEquals(
             listOf(
@@ -197,7 +214,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return minimum actions for a identity cipher`() {
-        val id = "mockId-1"
         val cipher = createMockCipherView(
             number = 1,
             isDeleted = true,
@@ -208,7 +224,7 @@ class CipherViewExtensionsTest {
                 identity = createMockIdentityView(number = 1),
             )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = true)
+        val result = cipher.toOverflowActions(hasMasterPassword = true, false)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -218,7 +234,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return all actions for a secure note cipher`() {
-        val id = "mockId-1"
         val notes = "so secure"
         val cipher = createMockCipherView(number = 1, cipherType = CipherType.SECURE_NOTE).copy(
             id = id,
@@ -226,7 +241,7 @@ class CipherViewExtensionsTest {
             notes = notes,
         )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = true)
+        val result = cipher.toOverflowActions(hasMasterPassword = true, isPremiumUser = false)
 
         assertEquals(
             listOf(
@@ -243,7 +258,6 @@ class CipherViewExtensionsTest {
 
     @Test
     fun `toOverflowActions should return minimum actions for a secure note cipher`() {
-        val id = "mockId-1"
         val cipher = createMockCipherView(
             number = 1,
             isDeleted = true,
@@ -255,7 +269,7 @@ class CipherViewExtensionsTest {
                 notes = null,
             )
 
-        val result = cipher.toOverflowActions(hasMasterPassword = false)
+        val result = cipher.toOverflowActions(hasMasterPassword = false, isPremiumUser = false)
 
         assertEquals(
             listOf(ListingItemOverflowAction.VaultAction.ViewClick(cipherId = id)),
@@ -358,3 +372,9 @@ class CipherViewExtensionsTest {
         assertEquals(expected, result)
     }
 }
+
+private const val id = "mockId-1"
+private const val username = "Bitwarden"
+private const val password = "password"
+private const val totpCode = "mockTotp-1"
+private const val uri = "www.test.com"

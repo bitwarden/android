@@ -482,8 +482,6 @@ L\'escaneig es farà automàticament.</string>
   <string name="code_sent">Codi enviat!</string>
   <string name="confirm_your_identity">Confirmeu la vostra identitat per continuar.</string>
   <string name="export_vault_warning">Aquesta exportació conté les dades de la vostra caixa forta en un format no xifrat. No hauríeu d\'emmagatzemar o enviar el fitxer exportat a través de canals no segurs (com ara el correu electrònic). Elimineu-lo immediatament després d\'haver acabat d\'usar-lo.</string>
-  <string name="enc_export_key_warning">Aquesta exportació xifra les vostres dades mitjançant la vostra clau de xifratge. Si alguna vegada gireu eixa clau, hauríeu d\'exportar de nou, ja que no podreu desxifrar aquest fitxer d\'exportació.</string>
-  <string name="enc_export_account_warning">Les claus de xifratge són exclusives de cada compte d\'usuari Bitwarden, de manera que no podeu importar una exportació xifrada a un compte diferent.</string>
   <string name="export_vault_confirmation_title">Confirma l\'exportació de la Caixa forta</string>
   <string name="warning">Advertiment</string>
   <string name="export_vault_failure">S\'ha produït un problema en exportar la caixa forta. Si el problema continua, haureu d’exportar-la des del web.</string>

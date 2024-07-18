@@ -482,8 +482,6 @@ A leitura será efetuada automaticamente.</string>
   <string name="code_sent">Código enviado!</string>
   <string name="confirm_your_identity">Confirme a sua identidade para continuar.</string>
   <string name="export_vault_warning">Esta exportação contém os dados do seu cofre num formato não encriptado. Não deve armazenar ou enviar o ficheiro exportado através de canais não seguros (como o e-mail). Elimine-o imediatamente após terminar a sua utilização.</string>
-  <string name="enc_export_key_warning">Esta exportação encripta os seus dados utilizando a chave de encriptação da sua conta. Se alguma vez regenerar a chave de encriptação da sua conta, deve exportar novamente, uma vez que não conseguirá desencriptar este ficheiro de exportação.</string>
-  <string name="enc_export_account_warning">As chaves de encriptação da conta são únicas para cada conta de utilizador Bitwarden, pelo que não é possível importar uma exportação encriptada para uma conta diferente.</string>
   <string name="export_vault_confirmation_title">Confirmar a exportação do cofre</string>
   <string name="warning">Aviso</string>
   <string name="export_vault_failure">Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre Web.</string>

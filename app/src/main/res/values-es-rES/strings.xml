@@ -482,8 +482,6 @@ El escaneo se realizará automáticamente.</string>
   <string name="code_sent">¡Código Enviado!</string>
   <string name="confirm_your_identity">Confirme su identidad para continuar.</string>
   <string name="export_vault_warning">Ésta exportación contiene sus datos de la caja fuerte en un formato no cifrado. No debería almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínelo inmediatamente cuando termine de utilizarlo.</string>
-  <string name="enc_export_key_warning">Esta exportación encripta sus datos usando la clave de cifrado de su cuenta. Si alguna vez gira la clave de cifrado de su cuenta debe volver a exportar, ya que no podrá descifrar este archivo de exportación.</string>
-  <string name="enc_export_account_warning">Las claves de cifrado de cuenta son únicas para cada cuenta de usuario de Bitwarden, por lo que no puede importar una exportación cifrada a una cuenta diferente.</string>
   <string name="export_vault_confirmation_title">Confirmar exportación de la caja fuerte</string>
   <string name="warning">Advertencia</string>
   <string name="export_vault_failure">Hubo un problema al exportar su caja fuerte. Si el problema persiste, deberá exportar desde la caja fuerte en la web.</string>

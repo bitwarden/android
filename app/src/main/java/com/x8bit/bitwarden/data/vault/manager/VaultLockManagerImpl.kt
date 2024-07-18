@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
+import com.x8bit.bitwarden.data.auth.repository.util.userAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.platform.manager.AppForegroundManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -435,6 +436,17 @@ class VaultLockManagerImpl(
         userId: String,
         isAppRestart: Boolean = false,
     ) {
+        val accounts = authDiskSource.userAccountTokens
+        /**
+         * Check if the user is already logged out. If this is the case no need to check timeout.
+         * This is required in the case that an account has been "soft logged out" and has an
+         * immediate time interval time out. Without this check it would be automatically switch
+         * the active user back to an authenticated user if one exists.
+         */
+        if ((accounts.find { it.userId == userId }?.isLoggedIn) == false) {
+            return
+        }
+
         val currentTimeMillis = elapsedRealtimeMillisProvider()
         val lastActiveTimeMillis = authDiskSource.getLastActiveTimeMillis(userId = userId) ?: 0
         val vaultTimeout = settingsRepository.getVaultTimeoutStateFlow(userId = userId).value

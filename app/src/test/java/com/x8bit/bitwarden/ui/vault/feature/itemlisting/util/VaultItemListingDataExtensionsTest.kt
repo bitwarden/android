@@ -401,6 +401,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CreationData = null,
             hasMasterPassword = true,
             fido2CredentialAutofillViews = null,
+            isPremiumUser = true,
         )
 
         assertEquals(
@@ -491,6 +492,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CreationData = null,
             hasMasterPassword = true,
             fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+            isPremiumUser = true,
         )
 
         assertEquals(
@@ -556,6 +558,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CreationData = null,
                 hasMasterPassword = true,
                 fido2CredentialAutofillViews = null,
+                isPremiumUser = true,
             ),
         )
 
@@ -577,6 +580,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CreationData = null,
                 hasMasterPassword = true,
                 fido2CredentialAutofillViews = null,
+                isPremiumUser = true,
             ),
         )
 
@@ -596,6 +600,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CreationData = null,
                 hasMasterPassword = true,
                 fido2CredentialAutofillViews = null,
+                isPremiumUser = true,
             ),
         )
 
@@ -618,6 +623,7 @@ class VaultItemListingDataExtensionsTest {
                 fido2CreationData = null,
                 hasMasterPassword = true,
                 fido2CredentialAutofillViews = null,
+                isPremiumUser = true,
             ),
         )
 
@@ -643,6 +649,7 @@ class VaultItemListingDataExtensionsTest {
                 ),
                 hasMasterPassword = true,
                 fido2CredentialAutofillViews = null,
+                isPremiumUser = true,
             ),
         )
     }
@@ -784,6 +791,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CreationData = null,
             hasMasterPassword = true,
             fido2CredentialAutofillViews = null,
+            isPremiumUser = true,
         )
 
         assertEquals(
@@ -826,6 +834,7 @@ class VaultItemListingDataExtensionsTest {
             fido2CreationData = null,
             hasMasterPassword = true,
             fido2CredentialAutofillViews = null,
+            isPremiumUser = true,
         )
 
         assertEquals(

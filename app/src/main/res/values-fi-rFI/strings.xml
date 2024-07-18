@@ -482,8 +482,6 @@ Koodi skannataan automaattisesti.</string>
   <string name="code_sent">Koodi lähetettiin!</string>
   <string name="confirm_your_identity">Jatka vahvistamalla henkilöllisyytesi.</string>
   <string name="export_vault_warning">Tämä vienti sisältää holvisi tiedot salaamattomassa muodossa. Sinun ei tulisi säilyttää tai lähettää vietyä tiedostoa suojaamattomien kanavien (kuten sähköpostin) välityksellä. Poista se välittömästi kun sille ei enää ole käyttöä.</string>
-  <string name="enc_export_key_warning">Tämä vienti salaa tietosi käyttäen tilisi salausavainta. Jos joskus uudistat tilisi salausavaimen, tulisi vienti suorittaa uudelleen, koska et voi enää purkaa nyt viedyn tiedoston salausta.</string>
-  <string name="enc_export_account_warning">Tilin salausavaimet ovat ainutlaatuisia jokaiselle Bitwarden-käyttäjätilille, joten et voi tuoda salattua vientitiedostoa toiselle tilille.</string>
   <string name="export_vault_confirmation_title">Vahvista holvin vienti</string>
   <string name="warning">Varoitus</string>
   <string name="export_vault_failure">Holvin viennissä oli ongelma. Jos ongelma jatkuu, sinun on tehtävä vienti verkkoholvin kautta.</string>

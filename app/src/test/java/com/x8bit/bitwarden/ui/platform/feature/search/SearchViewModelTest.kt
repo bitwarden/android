@@ -862,6 +862,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
+                isPremiumUser = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -963,6 +964,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
+                isPremiumUser = true,
             )
         } returns expectedViewState
         mutableVaultDataStateFlow.tryEmit(
@@ -1074,6 +1076,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
+                isPremiumUser = true,
             )
         } returns expectedViewState
         val dataState = DataState.Error(
@@ -1188,6 +1191,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = false,
                 isAutofill = false,
                 hasMasterPassword = true,
+                isPremiumUser = true,
             )
         } returns expectedViewState
         val dataState = DataState.NoNetwork(
@@ -1359,6 +1363,7 @@ class SearchViewModelTest : BaseViewModelTest() {
                 isIconLoadingDisabled = false,
                 isAutofill = true,
                 hasMasterPassword = true,
+                isPremiumUser = true,
             )
         } returns expectedViewState
         val dataState = DataState.Loaded(
@@ -1391,6 +1396,7 @@ private val DEFAULT_STATE: SearchState = SearchState(
     baseIconUrl = "https://vault.bitwarden.com/icons",
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
+    isPremium = true,
 )
 
 private val DEFAULT_USER_STATE = UserState(

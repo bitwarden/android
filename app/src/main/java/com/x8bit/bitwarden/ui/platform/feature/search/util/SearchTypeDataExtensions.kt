@@ -140,12 +140,14 @@ private fun CipherView.matchedSearch(searchTerm: String): SortPriority? {
 /**
  * Transforms a list of [CipherView] into [SearchState.ViewState].
  */
+@Suppress("LongParameterList")
 fun List<CipherView>.toViewState(
     searchTerm: String,
     baseIconUrl: String,
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isPremiumUser: Boolean,
 ): SearchState.ViewState =
     when {
         searchTerm.isEmpty() -> SearchState.ViewState.Empty(message = null)
@@ -156,6 +158,7 @@ fun List<CipherView>.toViewState(
                     hasMasterPassword = hasMasterPassword,
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
+                    isPremiumUser = isPremiumUser,
                 ),
             )
         }
@@ -172,6 +175,7 @@ private fun List<CipherView>.toDisplayItemList(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isPremiumUser: Boolean,
 ): List<SearchState.DisplayItem> =
     this.map {
         it.toDisplayItem(
@@ -179,6 +183,7 @@ private fun List<CipherView>.toDisplayItemList(
             hasMasterPassword = hasMasterPassword,
             isIconLoadingDisabled = isIconLoadingDisabled,
             isAutofill = isAutofill,
+            isPremiumUser = isPremiumUser,
         )
     }
 
@@ -187,6 +192,7 @@ private fun CipherView.toDisplayItem(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     isAutofill: Boolean,
+    isPremiumUser: Boolean,
 ): SearchState.DisplayItem =
     SearchState.DisplayItem(
         id = id.orEmpty(),
@@ -199,7 +205,10 @@ private fun CipherView.toDisplayItem(
             isIconLoadingDisabled = isIconLoadingDisabled,
         ),
         extraIconList = toLabelIcons(),
-        overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+        overflowOptions = toOverflowActions(
+            hasMasterPassword = hasMasterPassword,
+            isPremiumUser = isPremiumUser,
+        ),
         overflowTestTag = "CipherOptionsButton",
         totpCode = login?.totp,
         autofillSelectionOptions = AutofillSelectionOption

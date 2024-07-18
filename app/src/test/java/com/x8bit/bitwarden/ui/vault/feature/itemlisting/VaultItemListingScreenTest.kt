@@ -1665,6 +1665,40 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             )
         }
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverwritePasskeyConfirmationPrompt should display based on dialog state and send ConfirmOverwriteExistingPasskeyClick on Ok click`() {
+        val stateWithDialog = DEFAULT_STATE
+            .copy(
+                dialogState = VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt(
+                    cipherViewId = "mockCipherViewId",
+                ),
+            )
+
+        mutableStateFlow.value = stateWithDialog
+
+        composeTestRule
+            .onNodeWithText("Overwrite passkey?")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText("This item already contains a passkey. Are you sure you want to overwrite the current passkey?")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                    cipherViewId = "mockCipherViewId",
+                ),
+            )
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1713,6 +1747,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     dialogState = null,
     policyDisablesSend = false,
     hasMasterPassword = true,
+    isPremium = false,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(

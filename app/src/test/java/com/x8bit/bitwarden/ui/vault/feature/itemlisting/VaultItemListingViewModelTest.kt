@@ -397,6 +397,52 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `ItemClick for vault item during FIDO 2 registration should show overwrite passkey confirmation when selected cipher has existing passkey`() {
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            every {
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
+            } returns createMockPublicKeyCredentialCreationOptions(
+                number = 1,
+                userVerificationRequirement = UserVerificationRequirement.REQUIRED,
+            )
+            coEvery {
+                fido2CredentialManager.registerFido2Credential(
+                    any(),
+                    any(),
+                    any(),
+                )
+            } returns Fido2RegisterCredentialResult.Success("mockResponse")
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
+
+            assertEquals(
+                VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt(
+                    cipherViewId = cipherView.id!!,
+                ),
+                viewModel.stateFlow.value.dialogState,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `ItemClick for vault item during FIDO 2 registration should show loading dialog, then request user verification when required`() =
         runTest {
             setupMockUri()
@@ -2308,6 +2354,71 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
     }
 
+    @Test
+    fun `ConfirmOverwriteExistingPasskeyClick should check if user is verified`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            every {
+                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
+            } returns createMockPublicKeyCredentialCreationOptions(
+                number = 1,
+                userVerificationRequirement = UserVerificationRequirement.REQUIRED,
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                    cipherViewId = cipherView.id!!,
+                ),
+            )
+
+            verify { fido2CredentialManager.isUserVerified }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ConfirmOverwriteExistingPasskeyClick should display Fido2ErrorDialog when getSelectedCipher returns null`() = runTest {
+        setupMockUri()
+        val cipherView = createMockCipherView(number = 1)
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+            fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+        )
+        mutableVaultDataStateFlow.value = DataState.Loaded(
+            data = VaultData(
+                cipherViewList = listOf(cipherView),
+                folderViewList = emptyList(),
+                collectionViewList = emptyList(),
+                sendViewList = emptyList(),
+            ),
+        )
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.trySendAction(
+            VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                cipherViewId = "invalidId",
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                R.string.an_error_has_occurred.asText(),
+                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
         vaultItemListingType: VaultItemListingType,
@@ -2390,6 +2501,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             policyDisablesSend = false,
             hasMasterPassword = true,
             fido2CredentialRequest = null,
+            isPremium = true,
         )
 }
 

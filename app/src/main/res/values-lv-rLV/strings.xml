@@ -482,8 +482,6 @@ Nolasīšana notiks automātiski.</string>
   <string name="code_sent">Kods nosūtīts</string>
   <string name="confirm_your_identity">Jāapstiprina identitāte, lai turpinātu.</string>
   <string name="export_vault_warning">Šī izguve satur glabātavas datus nešifrētā veidā. Izgūto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Tā ir jāizdzēš uzreiz pēc izmantošanas.</string>
-  <string name="enc_export_key_warning">Šī izguve šifrē datus ar konta šifrēšanas atslēgu. Ja tā jebkad tiks mainīta, izvadi vajadzētu veikt vēlreiz, jo vairs nebūs iespējams atšifrēt šo datni.</string>
-  <string name="enc_export_account_warning">Katram Bitwarden kontam ir neatkārtojamas šifrēšanas atslēgas, tādēļ nav iespējams ievietot šifrētu izguvi citā kontā.</string>
   <string name="export_vault_confirmation_title">Apstiprināt glabātavas satura izgūšanu</string>
   <string name="warning">Brīdinājums</string>
   <string name="export_vault_failure">Glabātavas satura izgūšanā radās sarežģījumi. Ja tie turpina pastāvēt, būs nepieciešams veikt izgūšanu tīmekļa glabātavā.</string>
