@@ -1129,6 +1129,14 @@ class VaultScreenTest : BaseComposeTest() {
             viewModel.trySendAction(VaultAction.TrashClick)
         }
     }
+
+    @Test
+    fun `permissionManager is invoked for notifications based on state`() {
+        assertFalse(permissionsManager.hasGetLauncherBeenCalled)
+        mutableStateFlow.update { it.copy(hideNotificationsDialog = false) }
+        composeTestRule.waitForIdle()
+        assertTrue(permissionsManager.hasGetLauncherBeenCalled)
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1181,6 +1189,7 @@ private val DEFAULT_STATE: VaultState = VaultState(
     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
     isIconLoadingDisabled = false,
     hasMasterPassword = true,
+    hideNotificationsDialog = true,
 )
 
 private val DEFAULT_CONTENT_VIEW_STATE: VaultState.ViewState.Content = VaultState.ViewState.Content(
