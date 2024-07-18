@@ -21,6 +21,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AutofillCipherProviderTest {
     private val cardView: CardView = mockk {
         every { cardholderName } returns CARD_CARDHOLDER_NAME
@@ -139,7 +141,7 @@ class AutofillCipherProviderTest {
                 autofillCipherProvider.isVaultLocked()
             }
 
-            testScheduler.advanceUntilIdle()
+            testScheduler.runCurrent()
             assertFalse(result.isCompleted)
 
             mutableVaultStateFlow.value = listOf(
@@ -153,6 +155,53 @@ class AutofillCipherProviderTest {
             assertTrue(result.isCompleted)
 
             assertFalse(result.await())
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `isVaultLocked when there is an active user should wait for pending unlocking to finish and return the locked state for that user when it times out`() =
+        runTest {
+            every { authRepository.activeUserId } returns ACTIVE_USER_ID
+            mutableVaultStateFlow.value = listOf(
+                VaultUnlockData(
+                    userId = ACTIVE_USER_ID,
+                    status = VaultUnlockData.Status.UNLOCKING,
+                ),
+            )
+
+            val result = async {
+                autofillCipherProvider.isVaultLocked()
+            }
+
+            testScheduler.runCurrent()
+            assertFalse(result.isCompleted)
+
+            testScheduler.advanceTimeBy(delayTimeMillis = 1_000L)
+            testScheduler.runCurrent()
+            assertTrue(result.isCompleted)
+            assertTrue(result.await())
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getCardAutofillCiphers when unlocked should return empty list when retrieving ciphers times out`() =
+        runTest {
+            coEvery { vaultRepository.isVaultUnlocked(ACTIVE_USER_ID) } returns true
+            mutableCiphersStateFlow.value = DataState.Loading
+
+            // Test
+            val actual = async {
+                autofillCipherProvider.getCardAutofillCiphers()
+            }
+
+            testScheduler.runCurrent()
+            assertFalse(actual.isCompleted)
+            testScheduler.advanceTimeBy(delayTimeMillis = 5_000L)
+            testScheduler.runCurrent()
+
+            // Verify
+            assertTrue(actual.isCompleted)
+            assertEquals(emptyList<AutofillCipher.Card>(), actual.await())
         }
 
     @Suppress("MaxLineLength")
@@ -204,6 +253,28 @@ class AutofillCipherProviderTest {
 
         assertEquals(emptyList<AutofillCipher.Card>(), actual)
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getLoginAutofillCiphers when unlocked should return empty list when retrieving ciphers times out`() =
+        runTest {
+            coEvery { vaultRepository.isVaultUnlocked(ACTIVE_USER_ID) } returns true
+            mutableCiphersStateFlow.value = DataState.Loading
+
+            // Test
+            val actual = async {
+                autofillCipherProvider.getLoginAutofillCiphers(uri = URI)
+            }
+
+            testScheduler.runCurrent()
+            assertFalse(actual.isCompleted)
+            testScheduler.advanceTimeBy(delayTimeMillis = 5_000L)
+            testScheduler.runCurrent()
+
+            // Verify
+            assertTrue(actual.isCompleted)
+            assertEquals(emptyList<AutofillCipher.Login>(), actual.await())
+        }
 
     @Suppress("MaxLineLength")
     @Test
