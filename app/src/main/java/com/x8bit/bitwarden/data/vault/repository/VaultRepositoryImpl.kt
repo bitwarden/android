@@ -543,13 +543,13 @@ class VaultRepositoryImpl(
     override suspend fun silentlyDiscoverCredentials(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
-        relayingPartyId: String,
+        relyingPartyId: String,
     ): Result<List<Fido2CredentialAutofillView>> =
         vaultSdkSource
             .silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = relayingPartyId,
+                relyingPartyId = relyingPartyId,
             )
 
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {

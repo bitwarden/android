@@ -38,6 +38,7 @@ object Fido2ProviderModule {
         authRepository: AuthRepository,
         vaultRepository: VaultRepository,
         fido2CredentialStore: Fido2CredentialStore,
+        fido2CredentialManager: Fido2CredentialManager,
         dispatcherManager: DispatcherManager,
         intentManager: IntentManager,
     ): Fido2ProviderProcessor =
@@ -46,6 +47,7 @@ object Fido2ProviderModule {
             authRepository,
             vaultRepository,
             fido2CredentialStore,
+            fido2CredentialManager,
             intentManager,
             dispatcherManager,
         )

@@ -4261,13 +4261,13 @@ class VaultRepositoryTest {
     fun `silentlyDiscoverCredentials should return result`() = runTest {
         val userId = "userId"
         val fido2CredentialStore: Fido2CredentialStore = mockk()
-        val relayingPartyId = "relayingPartyId"
+        val relyingPartyId = "relyingPartyId"
         val expected: Result<List<Fido2CredentialAutofillView>> = mockk()
         coEvery {
             vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = relayingPartyId,
+                relyingPartyId = relyingPartyId,
             )
         } returns expected
 
@@ -4275,7 +4275,7 @@ class VaultRepositoryTest {
             val result = vaultRepository.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = relayingPartyId,
+                relyingPartyId = relyingPartyId,
             )
 
             assertEquals(
@@ -4288,7 +4288,7 @@ class VaultRepositoryTest {
             vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = relayingPartyId,
+                relyingPartyId = relyingPartyId,
             )
         }
     }

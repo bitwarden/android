@@ -98,6 +98,7 @@ interface IntentManager {
     fun createFido2GetCredentialPendingIntent(
         action: String,
         credentialId: String,
+        cipherId: String,
         requestCode: Int,
     ): PendingIntent
 

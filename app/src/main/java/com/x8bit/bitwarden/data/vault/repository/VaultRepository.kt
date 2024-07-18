@@ -155,12 +155,12 @@ interface VaultRepository : CipherManager, VaultLockManager {
     ): DecryptFido2CredentialAutofillViewResult
 
     /**
-     * Silently discovers FIDO 2 credentials for a given [userId] and [relayingPartyId].
+     * Silently discovers FIDO 2 credentials for a given [userId] and [relyingPartyId].
      */
     suspend fun silentlyDiscoverCredentials(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
-        relayingPartyId: String,
+        relyingPartyId: String,
     ): Result<List<Fido2CredentialAutofillView>>
 
     /**

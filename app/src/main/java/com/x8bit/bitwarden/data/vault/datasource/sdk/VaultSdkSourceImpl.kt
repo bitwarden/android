@@ -528,7 +528,7 @@ class VaultSdkSourceImpl(
     override suspend fun silentlyDiscoverCredentials(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
-        relayingPartyId: String,
+        relyingPartyId: String,
     ): Result<List<Fido2CredentialAutofillView>> = runCatching {
         getClient(userId)
             .platform()
@@ -537,7 +537,7 @@ class VaultSdkSourceImpl(
                 userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                 credentialStore = fido2CredentialStore,
             )
-            .silentlyDiscoverCredentials(relayingPartyId)
+            .silentlyDiscoverCredentials(relyingPartyId)
     }
 
     private suspend fun getClient(

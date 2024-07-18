@@ -1143,7 +1143,7 @@ class VaultSdkSourceTest {
     fun `silentlyDiscoverCredentials should return results when successful`() = runTest {
         val userId = "userId"
         val fido2CredentialStore: Fido2CredentialStore = mockk()
-        val relayingPartyId = "relayingPartyId"
+        val relyingPartyId = "relyingPartyId"
         val mockAutofillView = Fido2CredentialAutofillView(
             credentialId = byteArrayOf(0),
             cipherId = "mockCipherId",
@@ -1154,7 +1154,7 @@ class VaultSdkSourceTest {
         val autofillViews = listOf(mockAutofillView)
 
         val authenticator: ClientFido2Authenticator = mockk {
-            coEvery { silentlyDiscoverCredentials(relayingPartyId) } returns autofillViews
+            coEvery { silentlyDiscoverCredentials(relyingPartyId) } returns autofillViews
         }
         every {
             clientFido2.authenticator(
@@ -1166,7 +1166,7 @@ class VaultSdkSourceTest {
         val result = vaultSdkSource.silentlyDiscoverCredentials(
             userId = userId,
             fido2CredentialStore = fido2CredentialStore,
-            relayingPartyId = relayingPartyId,
+            relyingPartyId = relyingPartyId,
         )
 
         assertEquals(
@@ -1180,7 +1180,7 @@ class VaultSdkSourceTest {
         runTest {
             val userId = "userId"
             val fido2CredentialStore: Fido2CredentialStore = mockk()
-            val relayingPartyId = "relayingPartyId"
+            val relyingPartyId = "relyingPartyId"
 
             coEvery {
                 clientFido2
@@ -1188,13 +1188,13 @@ class VaultSdkSourceTest {
                         userInterface = Fido2CredentialSearchUserInterfaceImpl(),
                         credentialStore = fido2CredentialStore,
                     )
-                    .silentlyDiscoverCredentials(relayingPartyId)
+                    .silentlyDiscoverCredentials(relyingPartyId)
             } throws BitwardenException.E("mockException")
 
             val result = vaultSdkSource.silentlyDiscoverCredentials(
                 userId = userId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = relayingPartyId,
+                relyingPartyId = relyingPartyId,
             )
 
             assertTrue(result.isFailure)

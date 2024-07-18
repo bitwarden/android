@@ -448,13 +448,13 @@ interface VaultSdkSource {
     ): Result<List<Fido2CredentialAutofillView>>
 
     /**
-     * Silently discovers FIDO 2 credentials for a given [userId] and [relayingPartyId].
+     * Silently discovers FIDO 2 credentials for a given [userId] and [relyingPartyId].
      *
      * @return A list of FIDO 2 credentials.
      */
     suspend fun silentlyDiscoverCredentials(
         userId: String,
         fido2CredentialStore: Fido2CredentialStore,
-        relayingPartyId: String,
+        relyingPartyId: String,
     ): Result<List<Fido2CredentialAutofillView>>
 }

@@ -9,6 +9,7 @@ import androidx.credentials.exceptions.CreateCredentialException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.exceptions.GetCredentialUnknownException
+import androidx.credentials.exceptions.GetCredentialUnsupportedException
 import androidx.credentials.provider.AuthenticationAction
 import androidx.credentials.provider.BeginCreateCredentialRequest
 import androidx.credentials.provider.BeginCreateCredentialResponse
@@ -24,7 +25,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.autofill.fido2.model.PublicKeyCredentialRequestOptions
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -36,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -68,6 +70,10 @@ class Fido2ProviderProcessorTest {
     private val vaultRepository: VaultRepository = mockk {
         every { ciphersStateFlow } returns mutableCiphersStateFlow
     }
+    private val passkeyAssertionOptions = createMockPasskeyAssertionOptions(number = 1)
+    private val fido2CredentialManager: Fido2CredentialManager = mockk {
+        every { getPasskeyAssertionOptionsOrNull(any()) } returns passkeyAssertionOptions
+    }
     private val fido2CredentialStore: Fido2CredentialStore = mockk()
     private val intentManager: IntentManager = mockk()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
@@ -82,6 +88,7 @@ class Fido2ProviderProcessorTest {
             authRepository,
             vaultRepository,
             fido2CredentialStore,
+            fido2CredentialManager,
             intentManager,
             dispatcherManager,
         )
@@ -329,19 +336,24 @@ class Fido2ProviderProcessorTest {
         verify(exactly = 1) { callback.onError(any()) }
         verify(exactly = 0) { callback.onResult(any()) }
 
-        assert(captureSlot.captured is GetCredentialUnknownException)
+        assert(captureSlot.captured is GetCredentialUnsupportedException)
         assertEquals("Unsupported option.", captureSlot.captured.errorMessage)
     }
 
     @Suppress("MaxLineLength")
     @Test
     fun `processGetCredentialRequest should invoke callback with error when option does not contain valid request json`() {
-        val mockOption: BeginGetPublicKeyCredentialOption = mockk {
-            every { requestJson } returns "mockInvalidData"
-        }
+        val mockOption = BeginGetPublicKeyCredentialOption(
+            candidateQueryData = Bundle(),
+            id = "",
+            requestJson = json.encodeToString(passkeyAssertionOptions),
+        )
         val request: BeginGetCredentialRequest = mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)
         }
+        every {
+            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
+        } returns null
         val callback: OutcomeReceiver<BeginGetCredentialResponse, GetCredentialException> = mockk()
         val captureSlot = slot<GetCredentialException>()
         mutableUserStateFlow.value = DEFAULT_USER_STATE
@@ -360,17 +372,11 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processGetCredentialRequest should invoke callback with error when discovering passkey fails`() {
-        val mockRequestJson = json.encodeToString(
-            PublicKeyCredentialRequestOptions(
-                allowCredentials = emptyList(),
-                challenge = "",
-                relayingPartyId = "mockRpId",
-                userVerification = "",
-            ),
+        val mockOption = BeginGetPublicKeyCredentialOption(
+            candidateQueryData = Bundle(),
+            id = "",
+            requestJson = json.encodeToString(passkeyAssertionOptions),
         )
-        val mockOption: BeginGetPublicKeyCredentialOption = mockk {
-            every { requestJson } returns mockRequestJson
-        }
         val request: BeginGetCredentialRequest = mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)
         }
@@ -385,7 +391,7 @@ class Fido2ProviderProcessorTest {
             vaultRepository.silentlyDiscoverCredentials(
                 userId = DEFAULT_USER_STATE.activeUserId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = "mockRpId",
+                relyingPartyId = "mockRelyingPartyId-1",
             )
         } returns Throwable().asFailure()
 
@@ -397,7 +403,7 @@ class Fido2ProviderProcessorTest {
             vaultRepository.silentlyDiscoverCredentials(
                 userId = DEFAULT_USER_STATE.activeUserId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = "mockRpId",
+                relyingPartyId = "mockRelyingPartyId-1",
             )
         }
 
@@ -408,18 +414,10 @@ class Fido2ProviderProcessorTest {
     @Suppress("MaxLineLength")
     @Test
     fun `processGetCredentialRequest should invoke callback with filtered and discovered passkeys`() {
-        val mockRequestJson = json.encodeToString(
-            PublicKeyCredentialRequestOptions(
-                allowCredentials = emptyList(),
-                challenge = "",
-                relayingPartyId = "mockRpId",
-                userVerification = "",
-            ),
-        )
         val mockOption = BeginGetPublicKeyCredentialOption(
             candidateQueryData = Bundle(),
             id = "",
-            requestJson = mockRequestJson,
+            requestJson = json.encodeToString(passkeyAssertionOptions),
         )
         val request: BeginGetCredentialRequest = mockk {
             every { beginGetCredentialOptions } returns listOf(mockOption)
@@ -440,13 +438,14 @@ class Fido2ProviderProcessorTest {
             vaultRepository.silentlyDiscoverCredentials(
                 userId = DEFAULT_USER_STATE.activeUserId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = "mockRpId",
+                relyingPartyId = "mockRelyingPartyId-1",
             )
         } returns mockFido2CredentialAutofillViews.asSuccess()
         every {
             intentManager.createFido2GetCredentialPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
                 credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
+                cipherId = mockFido2CredentialAutofillViews.first().cipherId,
                 requestCode = any(),
             )
         } returns mockIntent
@@ -464,6 +463,7 @@ class Fido2ProviderProcessorTest {
             intentManager.createFido2GetCredentialPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
                 credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
+                cipherId = mockFido2CredentialAutofillViews.first().cipherId,
                 requestCode = any(),
             )
         }
@@ -471,7 +471,7 @@ class Fido2ProviderProcessorTest {
             vaultRepository.silentlyDiscoverCredentials(
                 userId = DEFAULT_USER_STATE.activeUserId,
                 fido2CredentialStore = fido2CredentialStore,
-                relayingPartyId = "mockRpId",
+                relyingPartyId = "mockRelyingPartyId-1",
             )
         }
 
