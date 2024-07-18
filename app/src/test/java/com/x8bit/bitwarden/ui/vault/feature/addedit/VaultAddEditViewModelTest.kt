@@ -554,10 +554,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                         ),
                         totpCode = "mockTotp-1",
                         canViewPassword = true,
-                        fido2CredentialCreationDateTime = R.string.created_xy.asText(
-                            "10/27/23",
-                            "12:00 PM",
-                        ),
+                        fido2CredentialCreationDateTime = null,
                     )
                         .copy(totp = "mockTotp-1"),
                 ),
