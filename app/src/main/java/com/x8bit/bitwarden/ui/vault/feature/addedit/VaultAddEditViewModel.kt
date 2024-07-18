@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKe
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
+import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -256,6 +257,10 @@ class VaultAddEditViewModel @Inject constructor(
                 handleHiddenFieldVisibilityChange(action)
             }
 
+            is VaultAddEditAction.Common.ConfirmOverwriteExistingPasskeyClick -> {
+                handleConfirmOverwriteExistingPasskeyClick()
+            }
+
             VaultAddEditAction.Common.UserVerificationSuccess -> {
                 handleUserVerificationSuccess()
             }
@@ -367,7 +372,7 @@ class VaultAddEditViewModel @Inject constructor(
         specialCircumstanceManager.specialCircumstance
             ?.toFido2RequestOrNull()
             ?.let { request ->
-                registerFido2Credential(request, content)
+                handleFido2RequestSpecialCircumstance(request, content.toCipherView())
                 return@onContent
             }
 
@@ -394,13 +399,26 @@ class VaultAddEditViewModel @Inject constructor(
         }
     }
 
+    private fun handleFido2RequestSpecialCircumstance(
+        request: Fido2CredentialRequest,
+        cipherView: CipherView,
+    ) {
+        if (cipherView.isActiveWithFido2Credentials) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultAddEditState.DialogState.OverwritePasskeyConfirmationPrompt)
+            }
+        } else {
+            registerFido2Credential(request, cipherView)
+        }
+    }
+
     private fun registerFido2Credential(
         request: Fido2CredentialRequest,
-        content: VaultAddEditState.ViewState.Content,
+        cipherView: CipherView,
     ) {
 
         if (fido2CredentialManager.isUserVerified) {
-            registerFido2CredentialToCipher(request, content.toCipherView())
+            registerFido2CredentialToCipher(request, cipherView)
             return
         }
 
@@ -413,7 +431,7 @@ class VaultAddEditViewModel @Inject constructor(
 
         when (createOptions.authenticatorSelection.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
-                registerFido2CredentialToCipher(request, content.toCipherView())
+                registerFido2CredentialToCipher(request, cipherView)
             }
 
             UserVerificationRequirement.PREFERRED -> {
@@ -517,6 +535,18 @@ class VaultAddEditViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun handleConfirmOverwriteExistingPasskeyClick() {
+        specialCircumstanceManager
+            .specialCircumstance
+            ?.toFido2RequestOrNull()
+            ?.let { request ->
+                onContent { content ->
+                    registerFido2Credential(request, content.toCipherView())
+                }
+            }
+            ?: showFido2ErrorDialog()
     }
 
     private fun handleUserVerificationLockOut() {
@@ -2049,6 +2079,12 @@ data class VaultAddEditState(
          */
         @Parcelize
         data class Fido2Error(val message: Text) : DialogState()
+
+        /**
+         * Displays the overwrite passkey confirmation prompt to the user.
+         */
+        @Parcelize
+        data object OverwritePasskeyConfirmationPrompt : DialogState()
     }
 }
 
@@ -2185,6 +2221,11 @@ sealed class VaultAddEditAction {
          * The user has confirmed to deleted the cipher.
          */
         data object ConfirmDeleteClick : Common()
+
+        /**
+         * The user has confirmed overwriting the existing passkey.
+         */
+        data object ConfirmOverwriteExistingPasskeyClick : Common()
 
         /**
          * Represents the action when a type option is selected.
