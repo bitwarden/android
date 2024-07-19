@@ -9,11 +9,11 @@ import kotlinx.parcelize.Parcelize
  *
  * @property email The email of the user creating the account.
  * @property verificationToken The token required to finish the registration process.
+ * @property fromEmail indicates that this information came from an email AppLink.
  */
 @Parcelize
 data class CompleteRegistrationData(
     val email: String,
     val verificationToken: String,
-    val fromEmail: Boolean,
-    val region: Environment.Type
+    val fromEmail: Boolean
 ) : Parcelable

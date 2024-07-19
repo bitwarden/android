@@ -247,7 +247,6 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             userEmail = EMAIL,
             emailVerificationToken = TOKEN,
             fromEmail = true,
-            region = Environment.Type.US,
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",

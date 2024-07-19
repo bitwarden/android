@@ -57,7 +57,6 @@ class CompleteRegistrationViewModel @Inject constructor(
                 userEmail = args.emailAddress,
                 emailVerificationToken = args.verificationToken,
                 fromEmail = args.fromEmail,
-                region = args.region,
                 passwordInput = "",
                 confirmPasswordInput = "",
                 passwordHintInput = "",
@@ -75,7 +74,6 @@ class CompleteRegistrationViewModel @Inject constructor(
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
-        updateCurrentRegion()
         verifyEmailAddress()
         // As state updates, write to saved state handle:
         stateFlow
@@ -91,23 +89,6 @@ class CompleteRegistrationViewModel @Inject constructor(
                 )
             }
             .launchIn(viewModelScope)
-    }
-
-    // Update region when coming from an AppLink to complete the registration
-    private fun updateCurrentRegion() {
-        val environment = when (state.region) {
-            Environment.Type.US -> Environment.Us
-            Environment.Type.EU -> Environment.Eu
-            Environment.Type.SELF_HOSTED,
-            null -> {
-                // Self-host users will open web app to complete the registration
-                return
-            }
-        }
-
-        // Update the environment in the repo; the VM state will update accordingly because it is
-        // listening for changes.
-        environmentRepository.environment = environment
     }
 
     private fun verifyEmailAddress() {
@@ -371,6 +352,8 @@ class CompleteRegistrationViewModel @Inject constructor(
             it.copy(dialog = CompleteRegistrationDialog.Loading)
         }
         viewModelScope.launch {
+            // Update region accordingly to a user email
+            environmentRepository.loadEnvironmentForEmail(state.userEmail)  
             val result = authRepository.register(
                 shouldCheckDataBreaches = shouldCheckForDataBreaches,
                 isMasterPasswordStrong = shouldIgnorePasswordStrength ||
@@ -398,7 +381,6 @@ data class CompleteRegistrationState(
     val userEmail: String,
     val emailVerificationToken: String,
     val fromEmail: Boolean,
-    val region: Environment.Type?,
     val passwordInput: String,
     val confirmPasswordInput: String,
     val passwordHintInput: String,

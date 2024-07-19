@@ -12,17 +12,15 @@ import com.x8bit.bitwarden.data.platform.repository.model.Environment
 fun Intent.getCompleteRegistrationDataIntentOrNull(): CompleteRegistrationData?  {
     val sanitizedUriString = data.toString().replace("/#/","/")
     val uri = runCatching { Uri.parse(sanitizedUriString) }.getOrNull() ?: return null
-    val host = uri.host ?: return null
+    uri.host ?: return null
     if (uri.path != "/finish-signup") return null
     val email = uri?.getQueryParameter("email") ?: return null
     val verificationToken = uri.getQueryParameter("token") ?: return null
     val fromEmail = uri.getBooleanQueryParameter("fromEmail", true)
-    val region = if (host.contains("bitwarden.eu")) Environment.Type.EU else Environment.Type.US
     return CompleteRegistrationData(
         email = email,
         verificationToken = verificationToken,
-        fromEmail = fromEmail,
-        region = region
+        fromEmail = fromEmail
     )
 }
 

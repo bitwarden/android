@@ -220,6 +220,7 @@ class StartRegistrationViewModel @Inject constructor(
             }
 
             is SendVerificationEmailResult.Success -> {
+                environmentRepository.saveCurrentEnvironmentForEmail(state.emailInput)
                 mutableStateFlow.update { it.copy(dialog = null) }
                 if (sendVerificationEmailResult.emailVerificationToken == null)
                     sendEvent(StartRegistrationEvent.NavigateToCheckEmail(
