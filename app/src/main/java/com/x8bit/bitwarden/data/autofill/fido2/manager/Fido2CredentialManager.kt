@@ -25,7 +25,7 @@ interface Fido2CredentialManager {
     ): Fido2ValidateOriginResult
 
     /**
-     * Attempt to extract FIDO 2 passkey creation options from the system [requestJson], or null.
+     * Attempt to extract FIDO 2 passkey attestation options from the system [requestJson], or null.
      */
     fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,

@@ -266,7 +266,7 @@ class Fido2CredentialManagerTest {
         }
 
     @Test
-    fun `getPasskeyCreateOptionsOrNull should return passkey options when deserialized`() =
+    fun `getPasskeyAttestationOptionsOrNull should return passkey options when deserialized`() =
         runTest {
             assertEquals(
                 createMockPasskeyAttestationOptions(number = 1),

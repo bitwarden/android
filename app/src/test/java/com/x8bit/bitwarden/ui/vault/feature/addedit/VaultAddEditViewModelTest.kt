@@ -732,7 +732,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val mockCreateResult = Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
             )
-            val mockCreateOptions = createMockPasskeyAttestationOptions(
+            val mockAttestationOptions = createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
@@ -811,7 +811,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             val mockCreateResult = Fido2RegisterCredentialResult.Success("mockResponse")
-            val mockCreateOptions = createMockPasskeyAttestationOptions(
+            val mockAttestationOptions = createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
             )

@@ -116,7 +116,7 @@ class VaultAddEditViewModel @Inject constructor(
                 .specialCircumstance
                 ?.toFido2RequestOrNull()
 
-            val fido2CreationOptions = fido2CreationRequest
+            val fido2AttestationOptions = fido2CreationRequest
                 ?.let { request ->
                     fido2CredentialManager
                         .getPasskeyAttestationOptionsOrNull(request.requestJson)
