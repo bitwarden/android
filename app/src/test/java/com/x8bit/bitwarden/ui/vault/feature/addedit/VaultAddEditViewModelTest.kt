@@ -748,7 +748,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns mockCreateOptions
+            } returns mockAttestationOptions
             every { authRepository.activeUserId } returns "mockUserId"
 
             turbineScope {
@@ -826,7 +826,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns mockCreateOptions
+            } returns mockAttestationOptions
             every { authRepository.activeUserId } returns mockUserId
 
             turbineScope {

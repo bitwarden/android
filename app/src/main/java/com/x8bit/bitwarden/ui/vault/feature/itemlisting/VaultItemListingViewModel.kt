@@ -453,7 +453,7 @@ class VaultItemListingViewModel @Inject constructor(
                 showFido2ErrorDialog()
                 return
             }
-        when (createOptions.authenticatorSelection.userVerification) {
+        when (attestationOptions.authenticatorSelection.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
                 registerFido2CredentialToCipher(
                     request = credentialRequest,

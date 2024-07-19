@@ -142,7 +142,7 @@ class VaultAddEditViewModel @Inject constructor(
                                 ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: fido2CreationRequest
                                 ?.toDefaultAddTypeContent(
-                                    attestationOptions = fido2CreationOptions,
+                                    attestationOptions = fido2AttestationOptions,
                                     isIndividualVaultDisabled = isIndividualVaultDisabled,
                                 )
                             ?: VaultAddEditState.ViewState.Content(
@@ -157,8 +157,8 @@ class VaultAddEditViewModel @Inject constructor(
                 },
                 dialog = dialogState,
                 // Set special conditions for autofill and fido2 save
-                shouldShowCloseButton = autofillSaveItem == null && fido2CreationOptions == null,
-                shouldExitOnSave = autofillSaveItem != null || fido2CreationOptions != null,
+                shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
+                shouldExitOnSave = autofillSaveItem != null || fido2AttestationOptions != null,
             )
         },
 ) {
