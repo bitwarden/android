@@ -13,7 +13,7 @@ import java.util.UUID
  * [VaultAddEditState.ViewState.Content] during FIDO 2 credential creation.
  */
 fun Fido2CredentialRequest.toDefaultAddTypeContent(
-    creationOptions: PasskeyAttestationOptions?,
+    attestationOptions: PasskeyAttestationOptions?,
     isIndividualVaultDisabled: Boolean,
 ): VaultAddEditState.ViewState.Content {
 
@@ -23,12 +23,12 @@ fun Fido2CredentialRequest.toDefaultAddTypeContent(
         ?: packageName
             .toAndroidAppUriString()
 
-    val rpName = creationOptions
+    val rpName = attestationOptions
         ?.relyingParty
         ?.name
         .orEmpty()
 
-    val username = creationOptions
+    val username = attestationOptions
         ?.user
         ?.name
         .orEmpty()

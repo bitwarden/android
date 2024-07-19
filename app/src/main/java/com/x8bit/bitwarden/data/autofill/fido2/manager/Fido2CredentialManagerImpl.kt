@@ -93,7 +93,7 @@ class Fido2CredentialManagerImpl(
         }
     }
 
-    override fun getPasskeyCreateOptionsOrNull(
+    override fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
     ): PasskeyAttestationOptions? =
         try {

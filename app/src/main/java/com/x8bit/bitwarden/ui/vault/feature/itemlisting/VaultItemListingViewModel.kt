@@ -448,7 +448,7 @@ class VaultItemListingViewModel @Inject constructor(
         cipherView: CipherView,
     ) {
         val createOptions = fido2CredentialManager
-            .getPasskeyCreateOptionsOrNull(credentialRequest.requestJson)
+            .getPasskeyAttestationOptionsOrNull(credentialRequest.requestJson)
             ?: run {
                 showFido2ErrorDialog()
                 return

@@ -119,7 +119,7 @@ class VaultAddEditViewModel @Inject constructor(
             val fido2CreationOptions = fido2CreationRequest
                 ?.let { request ->
                     fido2CredentialManager
-                        .getPasskeyCreateOptionsOrNull(request.requestJson)
+                        .getPasskeyAttestationOptionsOrNull(request.requestJson)
                 }
 
             val dialogState =
@@ -142,7 +142,7 @@ class VaultAddEditViewModel @Inject constructor(
                                 ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: fido2CreationRequest
                                 ?.toDefaultAddTypeContent(
-                                    creationOptions = fido2CreationOptions,
+                                    attestationOptions = fido2CreationOptions,
                                     isIndividualVaultDisabled = isIndividualVaultDisabled,
                                 )
                             ?: VaultAddEditState.ViewState.Content(
@@ -423,7 +423,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
 
         val createOptions = fido2CredentialManager
-            .getPasskeyCreateOptionsOrNull(request.requestJson)
+            .getPasskeyAttestationOptionsOrNull(request.requestJson)
             ?: run {
                 showFido2ErrorDialog()
                 return

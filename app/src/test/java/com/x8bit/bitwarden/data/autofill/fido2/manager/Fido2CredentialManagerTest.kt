@@ -21,7 +21,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -56,7 +56,7 @@ class Fido2CredentialManagerTest {
     private val json = mockk<Json> {
         every {
             decodeFromString<PasskeyAttestationOptions>(any())
-        } returns createMockPublicKeyCredentialCreationOptions(number = 1)
+        } returns createMockPasskeyAttestationOptions(number = 1)
     }
     private val mockPrivilegedCallingAppInfo = mockk<CallingAppInfo> {
         every { packageName } returns "com.x8bit.bitwarden"
@@ -269,8 +269,8 @@ class Fido2CredentialManagerTest {
     fun `getPasskeyCreateOptionsOrNull should return passkey options when deserialized`() =
         runTest {
             assertEquals(
-                createMockPublicKeyCredentialCreationOptions(number = 1),
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                createMockPasskeyAttestationOptions(number = 1),
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = "",
                 ),
             )
@@ -283,7 +283,7 @@ class Fido2CredentialManagerTest {
                 json.decodeFromString<PasskeyAttestationOptions>(any())
             } throws SerializationException()
             assertNull(
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = "",
                 ),
             )
@@ -296,7 +296,7 @@ class Fido2CredentialManagerTest {
             json.decodeFromString<PasskeyAttestationOptions>(any())
         } throws IllegalArgumentException()
 
-        assertNull(fido2CredentialManager.getPasskeyCreateOptionsOrNull(requestJson = ""))
+        assertNull(fido2CredentialManager.getPasskeyAttestationOptionsOrNull(requestJson = ""))
     }
 
     @Suppress("MaxLineLength")

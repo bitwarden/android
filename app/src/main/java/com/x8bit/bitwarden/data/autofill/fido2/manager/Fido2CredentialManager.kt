@@ -27,7 +27,7 @@ interface Fido2CredentialManager {
     /**
      * Attempt to extract FIDO 2 passkey creation options from the system [requestJson], or null.
      */
-    fun getPasskeyCreateOptionsOrNull(
+    fun getPasskeyAttestationOptionsOrNull(
         requestJson: String,
     ): PasskeyAttestationOptions?
 

@@ -7,7 +7,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
  * creation request.
  */
 @Suppress("MaxLineLength")
-fun createMockPublicKeyCredentialCreationOptions(
+fun createMockPasskeyAttestationOptions(
     number: Int,
     userVerificationRequirement: PasskeyAttestationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement? = null,
 ) = PasskeyAttestationOptions(
