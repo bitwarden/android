@@ -15,10 +15,10 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -54,7 +54,7 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldAction
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.CustomFieldType
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.toCustomField
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toDefaultAddTypeContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.toViewState
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
@@ -326,7 +326,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             fido2CredentialRequest = fido2CredentialRequest,
         )
         val fido2ContentState = fido2CredentialRequest.toDefaultAddTypeContent(
-            creationOptions = createMockPublicKeyCredentialCreationOptions(number = 1),
+            attestationOptions = createMockPasskeyAttestationOptions(number = 1),
             isIndividualVaultDisabled = false,
         )
         val vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN)
@@ -732,7 +732,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             val mockCreateResult = Fido2RegisterCredentialResult.Success(
                 registrationResponse = "mockRegistrationResponse",
             )
-            val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(
+            val mockAttestationOptions = createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
@@ -745,10 +745,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             } returns mockCreateResult
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns mockCreateOptions
+            } returns mockAttestationOptions
             every { authRepository.activeUserId } returns "mockUserId"
 
             turbineScope {
@@ -811,7 +811,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
             )
             val mockCreateResult = Fido2RegisterCredentialResult.Success("mockResponse")
-            val mockCreateOptions = createMockPublicKeyCredentialCreationOptions(
+            val mockAttestationOptions = createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
             )
@@ -823,10 +823,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 )
             } returns mockCreateResult
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns mockCreateOptions
+            } returns mockAttestationOptions
             every { authRepository.activeUserId } returns mockUserId
 
             turbineScope {
@@ -904,7 +904,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
 
             verify(exactly = 0) {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
             }
         }
 
@@ -927,7 +927,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(shouldExitOnSave = true)
 
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
             } returns null
@@ -971,10 +971,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(shouldExitOnSave = true)
 
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns createMockPublicKeyCredentialCreationOptions(
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.PREFERRED,
             )
@@ -1017,10 +1017,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 .copy(shouldExitOnSave = true)
 
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns createMockPublicKeyCredentialCreationOptions(
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
@@ -1062,10 +1062,10 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     fido2CredentialRequest = fido2CredentialRequest,
                 )
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
                     requestJson = fido2CredentialRequest.requestJson,
                 )
-            } returns createMockPublicKeyCredentialCreationOptions(
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = null,
             )
@@ -1545,8 +1545,8 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             } returns stateWithName.viewState
             every { fido2CredentialManager.isUserVerified } returns false
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-            } returns createMockPublicKeyCredentialCreationOptions(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
@@ -1565,7 +1565,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             coVerify {
                 fido2CredentialManager.isUserVerified
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(mockFidoRequest.requestJson)
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(mockFidoRequest.requestJson)
             }
         }
 

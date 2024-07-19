@@ -10,11 +10,11 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
@@ -51,7 +51,7 @@ import com.x8bit.bitwarden.ui.platform.base.util.concat
 import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
-import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPublicKeyCredentialCreationOptions
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.model.ListingItemOverflowAction
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.util.createMockDisplayItemForCipher
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
@@ -380,7 +380,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 sendViewList = emptyList(),
             ),
         )
-        every { fido2CredentialManager.getPasskeyCreateOptionsOrNull(any()) } returns null
+        every { fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any()) } returns null
 
         val viewModel = createVaultItemListingViewModel()
         viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
@@ -416,8 +416,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-            } returns createMockPublicKeyCredentialCreationOptions(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
@@ -459,8 +459,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-            } returns createMockPublicKeyCredentialCreationOptions(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )
@@ -513,8 +513,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-            } returns createMockPublicKeyCredentialCreationOptions(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.DISCOURAGED,
             )
@@ -556,8 +556,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             ),
         )
         every {
-            fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-        } returns createMockPublicKeyCredentialCreationOptions(
+            fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
+        } returns createMockPasskeyAttestationOptions(
             number = 1,
             userVerificationRequirement = UserVerificationRequirement.REQUIRED,
         )
@@ -2371,8 +2371,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             )
             every {
-                fido2CredentialManager.getPasskeyCreateOptionsOrNull(any())
-            } returns createMockPublicKeyCredentialCreationOptions(
+                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(any())
+            } returns createMockPasskeyAttestationOptions(
                 number = 1,
                 userVerificationRequirement = UserVerificationRequirement.REQUIRED,
             )

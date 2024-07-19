@@ -8,10 +8,10 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -116,10 +116,10 @@ class VaultAddEditViewModel @Inject constructor(
                 .specialCircumstance
                 ?.toFido2RequestOrNull()
 
-            val fido2CreationOptions = fido2CreationRequest
+            val fido2AttestationOptions = fido2CreationRequest
                 ?.let { request ->
                     fido2CredentialManager
-                        .getPasskeyCreateOptionsOrNull(request.requestJson)
+                        .getPasskeyAttestationOptionsOrNull(request.requestJson)
                 }
 
             val dialogState =
@@ -142,7 +142,7 @@ class VaultAddEditViewModel @Inject constructor(
                                 ?.toDefaultAddTypeContent(isIndividualVaultDisabled)
                             ?: fido2CreationRequest
                                 ?.toDefaultAddTypeContent(
-                                    creationOptions = fido2CreationOptions,
+                                    attestationOptions = fido2AttestationOptions,
                                     isIndividualVaultDisabled = isIndividualVaultDisabled,
                                 )
                             ?: VaultAddEditState.ViewState.Content(
@@ -157,8 +157,8 @@ class VaultAddEditViewModel @Inject constructor(
                 },
                 dialog = dialogState,
                 // Set special conditions for autofill and fido2 save
-                shouldShowCloseButton = autofillSaveItem == null && fido2CreationOptions == null,
-                shouldExitOnSave = autofillSaveItem != null || fido2CreationOptions != null,
+                shouldShowCloseButton = autofillSaveItem == null && fido2AttestationOptions == null,
+                shouldExitOnSave = autofillSaveItem != null || fido2AttestationOptions != null,
             )
         },
 ) {
@@ -423,7 +423,7 @@ class VaultAddEditViewModel @Inject constructor(
         }
 
         val createOptions = fido2CredentialManager
-            .getPasskeyCreateOptionsOrNull(request.requestJson)
+            .getPasskeyAttestationOptionsOrNull(request.requestJson)
             ?: run {
                 showFido2ErrorDialog()
                 return

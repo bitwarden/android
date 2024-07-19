@@ -8,11 +8,11 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.autofill.util.isActiveWithFido2Credentials
@@ -447,13 +447,13 @@ class VaultItemListingViewModel @Inject constructor(
         credentialRequest: Fido2CredentialRequest,
         cipherView: CipherView,
     ) {
-        val createOptions = fido2CredentialManager
-            .getPasskeyCreateOptionsOrNull(credentialRequest.requestJson)
+        val attestationOptions = fido2CredentialManager
+            .getPasskeyAttestationOptionsOrNull(credentialRequest.requestJson)
             ?: run {
                 showFido2ErrorDialog()
                 return
             }
-        when (createOptions.authenticatorSelection.userVerification) {
+        when (attestationOptions.authenticatorSelection.userVerification) {
             UserVerificationRequirement.DISCOURAGED -> {
                 registerFido2CredentialToCipher(
                     request = credentialRequest,

@@ -1,4 +1,4 @@
-package com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model
+package com.x8bit.bitwarden.data.autofill.fido2.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
  * Models a FIDO 2 credential creation request options received from a Relying Party (RP).
  */
 @Serializable
-data class PublicKeyCredentialCreationOptions(
+data class PasskeyAttestationOptions(
     @SerialName("authenticatorSelection")
     val authenticatorSelection: AuthenticatorSelectionCriteria,
     @SerialName("challenge")
