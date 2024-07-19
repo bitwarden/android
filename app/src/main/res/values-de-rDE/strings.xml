@@ -482,6 +482,7 @@ Das Scannen erfolgt automatisch.</string>
   <string name="code_sent">Code gesendet!</string>
   <string name="confirm_your_identity">Verifiziere deine Identität, um fortzufahren.</string>
   <string name="export_vault_warning">Dieser Export enthält deine Tresordaten in einem unverschlüsseltem Format. Du solltest sie nicht speichern oder über unsichere Kanäle (z. B. E-Mail) senden. Lösche sie sofort nach ihrer Verwendung.</string>
+  <string name="export_vault_file_pw_protect_info">Dieser Datei-Export ist passwortgeschützt und erfordert das Dateipasswort zum Entschlüsseln.</string>
   <string name="export_vault_confirmation_title">Tresor-Export bestätigen</string>
   <string name="warning">Warnung</string>
   <string name="export_vault_failure">Beim Exportieren deines Tresors ist ein Problem aufgetreten. Wenn das Problem weiterhin besteht, musst du ihn aus dem Web-Tresor exportieren.</string>
@@ -922,6 +923,6 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="launch_web_authn">WebAuthn starten</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Es gab einen Fehler beim Starten der WebAuthn Zwei-Faktor-Authentifizierung</string>
   <string name="self_hosted_server_url">Selbst gehostete Server-URL</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Der Passkey-Vorgang ist fehlgeschlagen, da der Benutzer nicht verifiziert werden konnte.</string>
+  <string name="user_verification_direction">Benutzer-Verifizierung</string>
 </resources>

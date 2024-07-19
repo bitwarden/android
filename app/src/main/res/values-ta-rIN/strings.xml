@@ -482,6 +482,7 @@
   <string name="code_sent">குறியீடு அனுப்பப்பட்டது!</string>
   <string name="confirm_your_identity">தொடர உம் அடையாளத்தை உறுதிசெய்.</string>
   <string name="export_vault_warning">இவ்வேற்றுமதி உம் பெட்டக தரவை மறையாக்கப்படா வடிவில் கொண்டுள்ளது. சேமிக்கவோ பாதுகாப்பற்ற தடங்களில் (மின்னஞ்சல் போன்றவை) அனுப்பவோ கூடாது. பயன்படுத்தியவுடன் அழித்துவிடவும்.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">பெட்டக ஏற்றுமதியை உறுதிசெய்</string>
   <string name="warning">எச்சரிக்கை</string>
   <string name="export_vault_failure">உம் பெட்டகத்தை ஏற்றுமதி செய்வதில் ஒரு சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து ஏற்றுமதி செய்ய வேண்டும்.</string>

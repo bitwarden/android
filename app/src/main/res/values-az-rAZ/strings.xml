@@ -482,6 +482,7 @@ Skan prosesi avtomatik baş tutacaq.</string>
   <string name="code_sent">Kod göndərildi!</string>
   <string name="confirm_your_identity">Davam etmək üçün kimliyinizi doğrulayın.</string>
   <string name="export_vault_warning">Xaricə köçürdüyünüz bu fayldakı datanız şifrələnməmiş formatdadır. Bu faylı güvənli olmayan kanallar (e-poçt kimi) üzərində saxlamamalı və ya göndərməməlisiniz. İşiniz bitdikdən sonra faylı dərhal silin.</string>
+  <string name="export_vault_file_pw_protect_info">Bu faylın xaricə köçürülməsi, parolla qorunacaq və şifrəsini açmaq üçün fayl parolu tələb olunacaq.</string>
   <string name="export_vault_confirmation_title">Anbarın xaricə köçürülməsini təsdiqlə</string>
   <string name="warning">Xəbərdarlıq</string>
   <string name="export_vault_failure">Anbarınızın xaricə köçürülməsi zamanı problem yarandı. Əgər problem davam edərsə, veb anbarından xaricə köçürməli olacaqsınız.</string>
@@ -922,6 +923,6 @@ Bu hesaba keçmək istəyirsiniz?</string>
   <string name="launch_web_authn">WebAuthn-u başlat</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">WebAuthn iki faktorlu kimlik doğrulama başladılarkən bir xəta baş verdi</string>
   <string name="self_hosted_server_url">Self-hosted server URL-si</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">İstifadəçi doğrulana bilmədiyi üçün keçid açarı əəməliyyatı uğursuz oldu.</string>
+  <string name="user_verification_direction">İstifadəçi doğrulama</string>
 </resources>

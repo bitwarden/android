@@ -482,6 +482,7 @@ Skanning skjer automatisk.</string>
   <string name="code_sent">Kode sendt!</string>
   <string name="confirm_your_identity">Bekreft din identitet for å fortsette.</string>
   <string name="export_vault_warning">Denne eksporten inneholder hvelvdataene dine i et ukryptert format. Du bør ikke lagre eller sende den eksporterte filen over usikre kanaler (for eksempel e-post). Slett den umiddelbart etter at du er ferdig med å bruke den.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Bekreft eksport av hvelvet</string>
   <string name="warning">Advarsel</string>
   <string name="export_vault_failure">Det oppsto et problem med å eksportere hvelvet. Hvis problemet vedvarer, må du eksportere fra netthvelvet.</string>

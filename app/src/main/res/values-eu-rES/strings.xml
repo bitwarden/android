@@ -481,6 +481,7 @@
   <string name="code_sent">Kodea bidalia!</string>
   <string name="confirm_your_identity">Jarraitzeko, berretsi zure identitatea.</string>
   <string name="export_vault_warning">Esportazio honek kutxa gotorraren datuak zifratu gabeko formatuan biltzen ditu. Ez zenuke gorde edo kanal ez-seguruetaik (emaila, adibidez) bidali behar. Erabili eta berehala ezabatu.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Baieztatu kutxa gotorra esportatzea</string>
   <string name="warning">Kontuz</string>
   <string name="export_vault_failure">Kutxa gotorra esportatzean arazo bat izan da. Arazoak bere horretan jarraitzen badu, kutxa gotorretik esportatu beharko duzu.</string>
