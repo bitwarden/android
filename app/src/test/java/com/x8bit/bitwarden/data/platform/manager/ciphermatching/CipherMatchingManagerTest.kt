@@ -17,13 +17,18 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class CipherMatchingManagerTest {
     private lateinit var cipherMatchingManager: CipherMatchingManager
 
@@ -32,8 +37,11 @@ class CipherMatchingManagerTest {
     private val settingsRepository: SettingsRepository = mockk {
         every { defaultUriMatchType } returns DEFAULT_URI_MATCH_TYPE
     }
+    private val mutableDomainsStateFlow = MutableStateFlow<DataState<DomainsData>>(
+        value = DataState.Loaded(DOMAINS_DATA),
+    )
     private val vaultRepository: VaultRepository = mockk {
-        every { domainsStateFlow } returns MutableStateFlow(DataState.Loaded(DOMAINS_DATA))
+        every { domainsStateFlow } returns mutableDomainsStateFlow
     }
 
     // Setup test ciphers
@@ -178,6 +186,31 @@ class CipherMatchingManagerTest {
             String::getWebHostFromAndroidUriOrNull,
         )
     }
+
+    @Test
+    fun `filterCiphersForMatches should return an empty list when retrieving domains times out`() =
+        runTest {
+            // Setup
+            val uri = "google.com"
+            mutableDomainsStateFlow.value = DataState.Loading
+
+            // Test
+            val actual = async {
+                cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = ciphers,
+                    matchUri = uri,
+                )
+            }
+
+            testScheduler.runCurrent()
+            assertFalse(actual.isCompleted)
+            testScheduler.advanceTimeBy(delayTimeMillis = 1_000L)
+            testScheduler.runCurrent()
+
+            // Verify
+            assertTrue(actual.isCompleted)
+            assertEquals(emptyList<CipherView>(), actual.await())
+        }
 
     @Suppress("MaxLineLength")
     @Test
