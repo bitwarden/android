@@ -63,7 +63,7 @@ import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 @Composable
 fun CompleteRegistrationScreen(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
+    onNavigateToLanding: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
     viewModel: CompleteRegistrationViewModel = hiltViewModel(),
 ) {
@@ -80,11 +80,8 @@ fun CompleteRegistrationScreen(
                 intentManager.startCustomTabsActivity(uri = event.uri)
             }
 
-            is CompleteRegistrationEvent.NavigateToLogin -> {
-                onNavigateToLogin(
-                    event.email,
-                    event.captchaToken,
-                )
+            is CompleteRegistrationEvent.NavigateToLanding -> {
+                onNavigateToLanding()
             }
         }
     }

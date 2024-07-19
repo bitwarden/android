@@ -228,10 +228,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             is RegisterResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
                 sendEvent(
-                    CompleteRegistrationEvent.NavigateToLogin(
-                        email = state.userEmail,
-                        captchaToken = registerAccountResult.captchaToken,
-                    ),
+                    CompleteRegistrationEvent.NavigateToLanding,
                 )
             }
 
@@ -491,12 +488,9 @@ sealed class CompleteRegistrationEvent {
     data class NavigateToCaptcha(val uri: Uri) : CompleteRegistrationEvent()
 
     /**
-     * Navigates to the captcha verification screen.
+     * Navigates to the landing screen.
      */
-    data class NavigateToLogin(
-        val email: String,
-        val captchaToken: String,
-    ) : CompleteRegistrationEvent()
+    data object NavigateToLanding : CompleteRegistrationEvent()
 }
 
 /**

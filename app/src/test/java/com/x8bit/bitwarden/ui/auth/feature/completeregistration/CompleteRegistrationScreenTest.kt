@@ -39,7 +39,7 @@ import org.junit.Test
 class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     private var onNavigateBackCalled = false
-    private var onNavigateToLoginCalled = false
+    private var onNavigateToLandingCalled = false
 
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
@@ -59,7 +59,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             CompleteRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToLogin = { _, _ -> onNavigateToLoginCalled = true },
+                onNavigateToLanding = { onNavigateToLandingCalled = true },
                 intentManager = intentManager,
                 viewModel = viewModel,
             )
@@ -95,8 +95,8 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `NavigateToLogin event should invoke navigate login lambda`() {
-        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToLogin(email = "", captchaToken = ""))
-        assertTrue(onNavigateToLoginCalled)
+        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToLanding)
+        assertTrue(onNavigateToLandingCalled)
     }
 
     @Test

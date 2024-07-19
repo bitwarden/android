@@ -76,8 +76,8 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             })
         completeRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
-            onNavigateToLogin = { emailAddress, captchaToken ->
-                navController.navigateToLogin(emailAddress, captchaToken)
+            onNavigateToLanding = {
+                navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
             },
         )
         enterpriseSignOnDestination(

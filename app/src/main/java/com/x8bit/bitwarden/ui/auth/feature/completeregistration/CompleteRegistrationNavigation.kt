@@ -52,7 +52,7 @@ fun NavController.navigateToCompleteRegistration(
  */
 fun NavGraphBuilder.completeRegistrationDestination(
     onNavigateBack: () -> Unit,
-    onNavigateToLogin: (emailAddress: String, captchaToken: String) -> Unit,
+    onNavigateToLanding: () -> Unit,
 ) {
     composableWithSlideTransitions(
         route = COMPLETE_REGISTRATION_ROUTE,
@@ -65,7 +65,7 @@ fun NavGraphBuilder.completeRegistrationDestination(
     ) {
         CompleteRegistrationScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToLogin = onNavigateToLogin
+            onNavigateToLanding = onNavigateToLanding
         )
     }
 }

@@ -173,10 +173,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                CompleteRegistrationEvent.NavigateToLogin(
-                    email = EMAIL,
-                    captchaToken = "mock_token",
-                ),
+                CompleteRegistrationEvent.NavigateToLanding,
                 eventFlow.awaitItem(),
             )
             // Make sure loading dialog is hidden:
@@ -276,10 +273,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
             assertEquals(
-                CompleteRegistrationEvent.NavigateToLogin(
-                    email = EMAIL,
-                    captchaToken = "mock_captcha_token",
-                ),
+                CompleteRegistrationEvent.NavigateToLanding,
                 awaitItem(),
             )
         }
