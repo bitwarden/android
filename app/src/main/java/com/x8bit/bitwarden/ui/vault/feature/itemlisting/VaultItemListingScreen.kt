@@ -41,6 +41,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -155,7 +156,11 @@ fun VaultItemListingScreen(
                     onCancel = userVerificationHandlers.onUserVerificationCancelled,
                     onLockOut = userVerificationHandlers.onUserVerificationLockOut,
                     onError = userVerificationHandlers.onUserVerificationFail,
-                    onNotSupported = userVerificationHandlers.onUserVerificationNotSupported,
+                    onNotSupported = {
+                        userVerificationHandlers.onUserVerificationNotSupported(
+                            event.selectedCipherView.id,
+                        )
+                    },
                 )
             }
         }
@@ -182,6 +187,30 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onSubmitMasterPasswordFido2Verification = remember(viewModel) {
+            { password, cipherId ->
+                viewModel.trySendAction(
+                    VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                        password = password,
+                        selectedCipherId = cipherId,
+                    ),
+                )
+            }
+        },
+        onDismissFido2PasswordVerification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+                )
+            }
+        },
+        onRetryFido2PasswordVerification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.RetryFido2PasswordVerificationClick(it),
+                )
+            }
+        },
     )
 
     VaultItemListingScaffold(
@@ -199,6 +228,9 @@ private fun VaultItemListingDialogs(
     onDismissRequest: () -> Unit,
     onDismissFido2ErrorDialog: () -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
+    onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
+    onDismissFido2PasswordVerification: () -> Unit,
+    onRetryFido2PasswordVerification: (cipherViewId: String) -> Unit,
 ) {
     when (dialogState) {
         is VaultItemListingState.DialogState.Error -> BitwardenBasicDialog(
@@ -225,6 +257,30 @@ private fun VaultItemListingDialogs(
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = { onConfirmOverwriteExistingPasskey(dialogState.cipherViewId) },
                 onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2MasterPasswordPrompt -> {
+            BitwardenMasterPasswordDialog(
+                onConfirmClick = { password ->
+                    onSubmitMasterPasswordFido2Verification(
+                        password,
+                        dialogState.selectedCipherId,
+                    )
+                },
+                onDismissRequest = onDismissFido2PasswordVerification,
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2MasterPasswordError -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialogState.title,
+                    message = dialogState.message,
+                ),
+                onDismissRequest = {
+                    onRetryFido2PasswordVerification(dialogState.selectedCipherId)
+                },
             )
         }
 

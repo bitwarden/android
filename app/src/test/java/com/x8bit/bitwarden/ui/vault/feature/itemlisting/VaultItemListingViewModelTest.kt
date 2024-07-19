@@ -144,6 +144,8 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         coEvery { validateOrigin(any()) } returns Fido2ValidateOriginResult.Success
         every { isUserVerified } returns false
         every { isUserVerified = any() } just runs
+        every { authenticationAttempts } returns 0
+        every { authenticationAttempts = any() } just runs
     }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -2337,11 +2339,15 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
     @Test
-    fun `UserVerificationNotSupported should display Fido2ErrorDialog and set isUserVerified to false`() {
+    fun `UserVerificationNotSupported should display Fido2CreationFail when no cipher id found`() {
         val viewModel = createVaultItemListingViewModel()
-        viewModel.trySendAction(VaultItemListingsAction.UserVerificationNotSupported)
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.UserVerificationNotSupported(
+                selectedCipherId = null,
+            ),
+        )
 
         verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
@@ -2349,6 +2355,239 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserVerificationNotSupported should display Fido2CreationFail when no active account found`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+        mutableUserStateFlow.value = null
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.UserVerificationNotSupported(
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        verify { fido2CredentialManager.isUserVerified = false }
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `UserVerificationNotSupported should display Fido2MasterPasswordPrompt when user has password but no pin`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.UserVerificationNotSupported(
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        verify { fido2CredentialManager.isUserVerified = false }
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2MasterPasswordPrompt(
+                selectedCipherId = selectedCipherId,
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordFido2VerificationSubmit should display Fido2ErrorDialog when password verification fails`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(password = password)
+        } returns ValidatePasswordResult.Error
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                password = password,
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+        coVerify {
+            authRepository.validatePassword(password = password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordFido2VerificationSubmit should display Fido2MasterPasswordError when user has retries remaining`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(password = password)
+        } returns ValidatePasswordResult.Success(isValid = false)
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                password = password,
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2MasterPasswordError(
+                title = null,
+                message = R.string.invalid_master_password.asText(),
+                selectedCipherId = selectedCipherId,
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+        coVerify {
+            authRepository.validatePassword(password = password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordFido2VerificationSubmit should display Fido2ErrorDialog when user has no retries remaining`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+        val password = "password"
+        every { fido2CredentialManager.authenticationAttempts } returns 5
+        coEvery {
+            authRepository.validatePassword(password = password)
+        } returns ValidatePasswordResult.Success(isValid = false)
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                password = password,
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+        coVerify {
+            authRepository.validatePassword(password = password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordFido2VerificationSubmit should display Fido2ErrorDialog when cipher not found`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+        val password = "password"
+        coEvery {
+            authRepository.validatePassword(password = password)
+        } returns ValidatePasswordResult.Success(isValid = true)
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                password = password,
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+        coVerify {
+            authRepository.validatePassword(password = password)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `MasterPasswordFido2VerificationSubmit should register credential when password authenticated successfully`() =
+        runTest {
+            val viewModel = createVaultItemListingViewModel()
+            val cipherView = createMockCipherView(number = 1)
+            val selectedCipherId = cipherView.id ?: ""
+            val password = "password"
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    collectionViewList = emptyList(),
+                    folderViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            coEvery {
+                authRepository.validatePassword(password = password)
+            } returns ValidatePasswordResult.Success(isValid = true)
+
+            viewModel.trySendAction(
+                VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                    password = password,
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+            coVerify {
+                authRepository.validatePassword(password = password)
+            }
+        }
+
+    @Test
+    fun `DismissFido2PasswordVerificationDialogClick should display Fido2ErrorDialog`() {
+        val viewModel = createVaultItemListingViewModel()
+        viewModel.trySendAction(
+            VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2CreationFail(
+                title = R.string.an_error_has_occurred.asText(),
+                message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                    .asText(),
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Test
+    fun `RetryFido2PasswordVerificationClick should display Fido2MasterPasswordPrompt`() {
+        val viewModel = createVaultItemListingViewModel()
+        val selectedCipherId = "selectedCipherId"
+
+        viewModel.trySendAction(
+            VaultItemListingsAction.RetryFido2PasswordVerificationClick(
+                selectedCipherId = selectedCipherId,
+            ),
+        )
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2MasterPasswordPrompt(
+                selectedCipherId = selectedCipherId,
             ),
             viewModel.stateFlow.value.dialogState,
         )
@@ -2389,35 +2628,36 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ConfirmOverwriteExistingPasskeyClick should display Fido2ErrorDialog when getSelectedCipher returns null`() = runTest {
-        setupMockUri()
-        val cipherView = createMockCipherView(number = 1)
-        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
-            fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
-        )
-        mutableVaultDataStateFlow.value = DataState.Loaded(
-            data = VaultData(
-                cipherViewList = listOf(cipherView),
-                folderViewList = emptyList(),
-                collectionViewList = emptyList(),
-                sendViewList = emptyList(),
-            ),
-        )
-        val viewModel = createVaultItemListingViewModel()
-        viewModel.trySendAction(
-            VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
-                cipherViewId = "invalidId",
-            ),
-        )
+    fun `ConfirmOverwriteExistingPasskeyClick should display Fido2ErrorDialog when getSelectedCipher returns null`() =
+        runTest {
+            setupMockUri()
+            val cipherView = createMockCipherView(number = 1)
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = createMockFido2CredentialRequest(number = 1),
+            )
+            mutableVaultDataStateFlow.value = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView),
+                    folderViewList = emptyList(),
+                    collectionViewList = emptyList(),
+                    sendViewList = emptyList(),
+                ),
+            )
+            val viewModel = createVaultItemListingViewModel()
+            viewModel.trySendAction(
+                VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                    cipherViewId = "invalidId",
+                ),
+            )
 
-        assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
-                R.string.an_error_has_occurred.asText(),
-                R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
-            ),
-            viewModel.stateFlow.value.dialogState,
-        )
-    }
+            assertEquals(
+                VaultItemListingState.DialogState.Fido2CreationFail(
+                    R.string.an_error_has_occurred.asText(),
+                    R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
+                ),
+                viewModel.stateFlow.value.dialogState,
+            )
+        }
 
     @Suppress("CyclomaticComplexMethod")
     private fun createSavedStateHandleWithVaultItemListingType(
