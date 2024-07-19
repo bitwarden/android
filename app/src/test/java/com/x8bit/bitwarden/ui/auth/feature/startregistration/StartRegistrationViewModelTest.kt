@@ -92,6 +92,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(EmailInputChange(input))
         val expectedState = DEFAULT_STATE.copy(
             emailInput = input,
+            isContinueButtonEnabled = true,
             dialog = StartRegistrationDialog.Error(
                 BasicDialogState.Shown(
                     title = R.string.an_error_has_occurred.asText(),
@@ -159,7 +160,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                StartRegistrationEvent.NavigateToCheckEmail(email = EMAIL),
+                StartRegistrationEvent.NavigateToCompleteRegistration(EMAIL, "verification_token"),
                 eventFlow.awaitItem(),
             )
             // Make sure loading dialog is hidden:
@@ -229,9 +230,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.eventFlow.test {
             viewModel.trySendAction(StartRegistrationAction.ContinueClick)
             assertEquals(
-                StartRegistrationEvent.NavigateToCheckEmail(
-                    email = EMAIL
-                ),
+                StartRegistrationEvent.NavigateToCompleteRegistration(EMAIL, "verification_token"),
                 awaitItem(),
             )
         }
@@ -333,7 +332,10 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         )
         viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE.copy(emailInput = "input"), awaitItem())
+            assertEquals(DEFAULT_STATE.copy(
+                emailInput = "input",
+                isContinueButtonEnabled = true,
+            ), awaitItem())
         }
     }
 
