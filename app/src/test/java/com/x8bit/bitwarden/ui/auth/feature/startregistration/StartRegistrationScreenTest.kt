@@ -100,15 +100,6 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `NavigateToCaptcha event should invoke intent manager`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(StartRegistrationEvent.NavigateToCaptcha(uri = mockUri))
-        verify {
-            intentManager.startCustomTabsActivity(mockUri)
-        }
-    }
-
-    @Test
     fun `NavigateToPrivacyPolicy event should invoke intent manager`() {
         mutableEventFlow.tryEmit(StartRegistrationEvent.NavigateToPrivacyPolicy)
         verify {

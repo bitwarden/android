@@ -139,7 +139,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     email = EMAIL,
                     name= NAME,
                     receiveMarketingEmails = true,
-                    captchaToken = null,
                 )
             } returns SendVerificationEmailResult.Success(
                 emailVerificationToken = "verification_token"
@@ -177,7 +176,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     email = EMAIL,
                     name= NAME,
                     receiveMarketingEmails = true,
-                    captchaToken = null,
                 )
             } returns SendVerificationEmailResult.Error(errorMessage = "mock_error")
         }
@@ -208,37 +206,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `ContinueClick register returns CaptchaRequired should emit NavigateToCaptcha`() = runTest {
-        val mockkUri = mockk<Uri>()
-        every {
-            generateUriForCaptcha(captchaId = "mock_captcha_id")
-        } returns mockkUri
-        val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
-            coEvery {
-                sendVerificationEmail(
-                    email = EMAIL,
-                    name= NAME,
-                    receiveMarketingEmails = true,
-                    captchaToken = null,
-                )
-            } returns SendVerificationEmailResult.CaptchaRequired(captchaId = "mock_captcha_id")
-        }
-        val viewModel = StartRegistrationViewModel(
-            savedStateHandle = validInputHandle,
-            authRepository = repo,
-            environmentRepository = fakeEnvironmentRepository
-        )
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(StartRegistrationAction.ContinueClick)
-            assertEquals(
-                StartRegistrationEvent.NavigateToCaptcha(uri = mockkUri),
-                awaitItem(),
-            )
-        }
-    }
-
-    @Test
     fun `ContinueClick register returns Success should emit NavigateToCheckEmail`() = runTest {
         val mockkUri = mockk<Uri>()
         every {
@@ -251,7 +218,6 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     email = EMAIL,
                     name= NAME,
                     receiveMarketingEmails = true,
-                    captchaToken = null,
                 )
             } returns SendVerificationEmailResult.Success(emailVerificationToken = "verification_token",)
         }
