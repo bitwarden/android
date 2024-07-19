@@ -356,7 +356,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     suspend fun sendVerificationEmail(
         email: String,
         name: String,
-        receiveMarketingEmails: Boolean,
-        captchaToken: String?
+        receiveMarketingEmails: Boolean
     ): SendVerificationEmailResult
 }

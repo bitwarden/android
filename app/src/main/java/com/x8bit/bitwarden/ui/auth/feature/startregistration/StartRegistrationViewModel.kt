@@ -61,16 +61,6 @@ class StartRegistrationViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
-        authRepository
-            .captchaTokenResultFlow
-            .onEach {
-                sendAction(
-                    StartRegistrationAction.Internal.ReceiveCaptchaToken(
-                        tokenResult = it,
-                    ),
-                )
-            }
-            .launchIn(viewModelScope)
 
         // Listen for changes in environment triggered both by this VM and externally.
         environmentRepository
@@ -97,38 +87,10 @@ class StartRegistrationViewModel @Inject constructor(
             is StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult -> {
                 handleReceiveSendVerificationEmailResult(action)
             }
-            is StartRegistrationAction.Internal.ReceiveCaptchaToken -> {
-                handleReceiveCaptchaToken(action)
-            }
 
             is StartRegistrationAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
             is StartRegistrationAction.Internal.UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
-            }
-        }
-    }
-
-    private fun handleReceiveCaptchaToken(
-        action: StartRegistrationAction.Internal.ReceiveCaptchaToken,
-    ) {
-        when (val result = action.tokenResult) {
-            is CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = StartRegistrationDialog.Error(
-                            BasicDialogState.Shown(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.captcha_failed.asText(),
-                            ),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                submitSendVerificationEmailRequest(
-                    captchaToken = result.token,
-                )
             }
         }
     }
@@ -185,7 +147,7 @@ class StartRegistrationViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 emailInput = action.input,
-                isContinueButtonEnabled = action.input.isNotBlank() && state.nameInput.isNotBlank()
+                isContinueButtonEnabled = action.input.isNotBlank()
             )
         }
     }
@@ -194,7 +156,7 @@ class StartRegistrationViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 nameInput = action.input,
-                isContinueButtonEnabled = action.input.isNotBlank() && state.emailInput.isNotBlank()
+                isContinueButtonEnabled = state.emailInput.isNotBlank()
             )
         }
     }
@@ -218,15 +180,11 @@ class StartRegistrationViewModel @Inject constructor(
         }
 
         else -> {
-            submitSendVerificationEmailRequest(
-                captchaToken = null,
-            )
+            submitSendVerificationEmailRequest()
         }
     }
 
-    private fun submitSendVerificationEmailRequest(
-        captchaToken: String?,
-    ) {
+    private fun submitSendVerificationEmailRequest() {
         mutableStateFlow.update {
             it.copy(dialog = StartRegistrationDialog.Loading)
         }
@@ -235,7 +193,6 @@ class StartRegistrationViewModel @Inject constructor(
                 email = state.emailInput,
                 name = state.nameInput,
                 receiveMarketingEmails = state.isReceiveMarketingEmailsToggled,
-                captchaToken = captchaToken,
             )
             sendAction(
                 StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult(
@@ -247,14 +204,6 @@ class StartRegistrationViewModel @Inject constructor(
 
     private fun handleReceiveSendVerificationEmailResult(result: StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult) {
         when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
-            is SendVerificationEmailResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(
-                    StartRegistrationEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = sendVerificationEmailResult.captchaId),
-                    ),
-                )
-            }
             
             is SendVerificationEmailResult.Error -> {
                 mutableStateFlow.update {
@@ -272,21 +221,10 @@ class StartRegistrationViewModel @Inject constructor(
 
             is SendVerificationEmailResult.Success -> {
                 mutableStateFlow.update { it.copy(dialog = null) }
-                if (environmentRepository.environment.type == Environment.Type.US || environmentRepository.environment.type == Environment.Type.EU)
+                if (sendVerificationEmailResult.emailVerificationToken == null)
                     sendEvent(StartRegistrationEvent.NavigateToCheckEmail(
                         email = state.emailInput
                     ))
-                else if (sendVerificationEmailResult.emailVerificationToken == null)
-                    mutableStateFlow.update {
-                        it.copy(
-                            dialog = StartRegistrationDialog.Error(
-                                BasicDialogState.Shown(
-                                    title = R.string.an_error_has_occurred.asText(),
-                                    message = R.string.generic_error_message.asText(),
-                                ),
-                            ),
-                        )
-                    }
                 else
                     sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
                         email = state.emailInput,
@@ -344,11 +282,6 @@ sealed class StartRegistrationEvent {
      * Placeholder event for showing a toast. Can be removed once there are real events.
      */
     data class ShowToast(val text: String) : StartRegistrationEvent()
-
-    /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : StartRegistrationEvent()
 
     /**
      * Navigates to the complete registration screen.
@@ -446,13 +379,6 @@ sealed class StartRegistrationAction {
      * Models actions that the [StartRegistrationViewModel] itself might send.
      */
     sealed class Internal : StartRegistrationAction() {
-        /**
-         * Indicates a captcha callback token has been received.
-         */
-        data class ReceiveCaptchaToken(
-            val tokenResult: CaptchaCallbackTokenResult,
-        ) : Internal()
-
         /**
          * Indicates a [RegisterResult] has been received.
          */

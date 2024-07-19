@@ -10,15 +10,8 @@ sealed class SendVerificationEmailResult {
      * @param emailVerificationToken the token to verify the email.
      */
     data class Success(
-        val emailVerificationToken: String?
+        val emailVerificationToken: String? = null
     ) : SendVerificationEmailResult()
-
-    /**
-     * Captcha verification is required.
-     *
-     * @param captchaId the captcha id for performing the captcha verification.
-     */
-    data class CaptchaRequired(val captchaId: String) : SendVerificationEmailResult()
 
     /**
      * There was an error sending the email.

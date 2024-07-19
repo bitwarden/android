@@ -1133,18 +1133,14 @@ class AuthRepositoryImpl(
         email: String,
         name: String,
         receiveMarketingEmails: Boolean,
-        captchaToken: String?,
     ): SendVerificationEmailResult {
-        return accountsService.sendVerificationEmail(
+        val result = identityService.sendVerificationEmail(
             SendVerificationEmailRequestJson(
                 email = email,
                 name = name,
                 receiveMarketingEmails = receiveMarketingEmails,
-                captchaResponse = captchaToken,
-            )).fold(
-            onSuccess =  { SendVerificationEmailResult.Success(it) },
-            onFailure = { SendVerificationEmailResult.Error(null) },
-        )
+            )).getOrNull()
+        return SendVerificationEmailResult.Success(result)
     }
 
     @Suppress("CyclomaticComplexMethod")

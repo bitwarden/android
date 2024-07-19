@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
  * @param email the email to be registered.
  * @param name the name to be registered.
  * @param receiveMarketingEmails the answer to receive marketing emails.
- * @param captchaResponse the captcha bypass token.
  */
 @Serializable
 data class SendVerificationEmailRequestJson(
@@ -21,8 +20,5 @@ data class SendVerificationEmailRequestJson(
 
     @SerialName("receiveMarketingEmails")
     val receiveMarketingEmails: Boolean,
-
-    @SerialName("captchaResponse")
-    val captchaResponse: String?,
 )
 

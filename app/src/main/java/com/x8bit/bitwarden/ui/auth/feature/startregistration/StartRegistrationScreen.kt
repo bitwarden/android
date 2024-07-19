@@ -107,10 +107,6 @@ fun StartRegistrationScreen(
                 Toast.makeText(context, event.text, Toast.LENGTH_SHORT).show()
             }
 
-            is StartRegistrationEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
-            }
-
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
                 onNavigateToCompleteRegistration(
                     event.email,
