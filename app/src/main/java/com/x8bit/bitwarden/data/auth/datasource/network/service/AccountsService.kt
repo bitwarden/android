@@ -52,11 +52,6 @@ interface AccountsService {
     suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit>
 
     /**
-     * Send a verification email.
-     */
-    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<String?>
-
-    /**
      * Set the password.
      */
     suspend fun setPassword(body: SetPasswordRequestJson): Result<Unit>

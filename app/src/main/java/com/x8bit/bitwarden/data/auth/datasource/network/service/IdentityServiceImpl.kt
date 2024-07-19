@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 import com.x8bit.bitwarden.data.platform.datasource.network.model.toBitwardenError
 import com.x8bit.bitwarden.data.platform.datasource.network.util.base64UrlEncode
@@ -120,4 +121,10 @@ class IdentityServiceImpl(
             refreshToken = refreshToken,
         )
         .executeForResult()
+
+    override suspend fun sendVerificationEmail(
+        body: SendVerificationEmailRequestJson
+    ): Result<String?> {
+        return api.sendVerificationEmail(body = body)
+    }
 }

@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
 
 /**
@@ -64,4 +65,9 @@ interface IdentityService {
      * @param refreshToken The refresh token needed to obtain a new token.
      */
     fun refreshTokenSynchronously(refreshToken: String): Result<RefreshTokenResponseJson>
+
+    /**
+     * Send a verification email.
+     */
+    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<String?>
 }

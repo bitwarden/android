@@ -20,9 +20,4 @@ interface AccountsApi {
     suspend fun resendVerificationCodeEmail(
         @Body body: ResendEmailRequestJson,
     ): Result<Unit>
-
-    @POST("/accounts/register/send-verification-email")
-    suspend fun sendVerificationEmail(
-        @Body body: SendVerificationEmailRequestJson,
-    ): Result<String?>
 }
