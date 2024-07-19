@@ -7,12 +7,12 @@ import androidx.credentials.provider.CallingAppInfo
 import com.bitwarden.fido.ClientData
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2AttestationResponse
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -55,7 +55,7 @@ class Fido2CredentialManagerTest {
     }
     private val json = mockk<Json> {
         every {
-            decodeFromString<PublicKeyCredentialCreationOptions>(any())
+            decodeFromString<PasskeyAttestationOptions>(any())
         } returns createMockPublicKeyCredentialCreationOptions(number = 1)
     }
     private val mockPrivilegedCallingAppInfo = mockk<CallingAppInfo> {
@@ -184,7 +184,7 @@ class Fido2CredentialManagerTest {
     @Test
     fun `validateOrigin should return error when request cannot be decoded`() = runTest {
         every {
-            json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+            json.decodeFromString<PasskeyAttestationOptions>(any())
         } throws SerializationException()
 
         assertEquals(
@@ -197,7 +197,7 @@ class Fido2CredentialManagerTest {
     fun `validateOrigin should return error when request cannot be cast to object type`() =
         runTest {
             every {
-                json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+                json.decodeFromString<PasskeyAttestationOptions>(any())
             } throws IllegalArgumentException()
 
             assertEquals(
@@ -280,7 +280,7 @@ class Fido2CredentialManagerTest {
     fun `getPasskeyCreateOptionsOrNull should return null when deserialization fails`() =
         runTest {
             every {
-                json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+                json.decodeFromString<PasskeyAttestationOptions>(any())
             } throws SerializationException()
             assertNull(
                 fido2CredentialManager.getPasskeyCreateOptionsOrNull(
@@ -293,7 +293,7 @@ class Fido2CredentialManagerTest {
     @Test
     fun `getPasskeyCreateOptionsOrNull should return null when IllegalArgumentException is thrown`() {
         every {
-            json.decodeFromString<PublicKeyCredentialCreationOptions>(any())
+            json.decodeFromString<PasskeyAttestationOptions>(any())
         } throws IllegalArgumentException()
 
         assertNull(fido2CredentialManager.getPasskeyCreateOptionsOrNull(requestJson = ""))

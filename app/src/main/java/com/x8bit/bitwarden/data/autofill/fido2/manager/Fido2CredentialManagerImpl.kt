@@ -5,11 +5,11 @@ import com.bitwarden.fido.ClientData
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -95,9 +95,9 @@ class Fido2CredentialManagerImpl(
 
     override fun getPasskeyCreateOptionsOrNull(
         requestJson: String,
-    ): PublicKeyCredentialCreationOptions? =
+    ): PasskeyAttestationOptions? =
         try {
-            json.decodeFromString<PublicKeyCredentialCreationOptions>(requestJson)
+            json.decodeFromString<PasskeyAttestationOptions>(requestJson)
         } catch (e: SerializationException) {
             null
         } catch (e: IllegalArgumentException) {
@@ -194,7 +194,7 @@ class Fido2CredentialManagerImpl(
     private fun String.getRpId(json: Json): Result<String> {
         return try {
             json
-                .decodeFromString<PublicKeyCredentialCreationOptions>(this)
+                .decodeFromString<PasskeyAttestationOptions>(this)
                 .relyingParty
                 .id
                 .asSuccess()
