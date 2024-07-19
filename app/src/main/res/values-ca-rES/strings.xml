@@ -482,6 +482,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="code_sent">Codi enviat!</string>
   <string name="confirm_your_identity">Confirmeu la vostra identitat per continuar.</string>
   <string name="export_vault_warning">Aquesta exportació conté les dades de la vostra caixa forta en un format no xifrat. No hauríeu d\'emmagatzemar o enviar el fitxer exportat a través de canals no segurs (com ara el correu electrònic). Elimineu-lo immediatament després d\'haver acabat d\'usar-lo.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirma l\'exportació de la Caixa forta</string>
   <string name="warning">Advertiment</string>
   <string name="export_vault_failure">S\'ha produït un problema en exportar la caixa forta. Si el problema continua, haureu d’exportar-la des del web.</string>

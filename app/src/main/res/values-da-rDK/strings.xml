@@ -482,6 +482,7 @@ Skanning vil ske automatisk.</string>
   <string name="code_sent">Kode sendt!</string>
   <string name="confirm_your_identity">Bekræft identiteten for at fortsætte.</string>
   <string name="export_vault_warning">Denne eksport indeholder boksdataene i ukrypteret form. Den eksporterede fil bør derfor ikke gemmes eller sendes via usikre kanaler (f.eks. e-mail). Slet den så snart, at den ikke længere skal bruges.</string>
+  <string name="export_vault_file_pw_protect_info">Denne fileksport adgangskodebeskyttes, og dekryptering vil kræve filadgangskoden.</string>
   <string name="export_vault_confirmation_title">Bekræft eksport af boks</string>
   <string name="warning">Advarsel</string>
   <string name="export_vault_failure">Et problem opstod under eksporten af boksen. Fortsætter problemet, eksportér i stedet fra web-boksen.</string>

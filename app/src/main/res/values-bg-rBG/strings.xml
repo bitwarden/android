@@ -482,6 +482,7 @@
   <string name="code_sent">Кодът е изпратен!</string>
   <string name="confirm_your_identity">Потвърдете самоличността си, за да продължите.</string>
   <string name="export_vault_warning">Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</string>
+  <string name="export_vault_file_pw_protect_info">Изнесеният файл ще бъде защитен с парола, която ще бъде необходима за дешифриране на файла.</string>
   <string name="export_vault_confirmation_title">Потвърждаване на изнасянето на трезора</string>
   <string name="warning">ВНИМАНИЕ</string>
   <string name="export_vault_failure">Проблем при изнасянето на трезора, пробвайте отново. Ако проблемът пак се прояви, пробвайте през трезора по уеб.</string>
@@ -923,6 +924,6 @@
   <string name="launch_web_authn">Стартиране на WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Имаше грешка при стартирането на двустепенното удостоверяване чрез WebAuthn</string>
   <string name="self_hosted_server_url">Адрес на собствения сървър</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Операцията със секретния ключ беше неуспешна, тъй като потребителят не може да бъде потвърден.</string>
+  <string name="user_verification_direction">Потвърждение на потребителя</string>
 </resources>

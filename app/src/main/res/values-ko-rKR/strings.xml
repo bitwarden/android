@@ -482,6 +482,7 @@
   <string name="code_sent">코드가 전송되었습니다!</string>
   <string name="confirm_your_identity">계속하려면 암호를 확인하세요.</string>
   <string name="export_vault_warning">내보내기는 보관함 데이터가 암호화되지 않은 형식으로 포함됩니다. 내보낸 파일을 안전하지 않은 채널(예: 이메일)을 통해 저장하거나 보내지 마십시오. 사용이 끝난 후에는 즉시 삭제하십시오.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">보관함 내보내기 확인</string>
   <string name="warning">경고</string>
   <string name="export_vault_failure">보관함을 내보내던 도중 문제가 생겼습니다. 계속 문제가 생긴다면 웹 보관함에서 내보내셔야 합니다.</string>

@@ -482,6 +482,7 @@ Skandering gebeur outomaties.</string>
   <string name="code_sent">Kode verstuur!</string>
   <string name="confirm_your_identity">Bevestig u identiteit om voort te gaan.</string>
   <string name="export_vault_warning">Hierdie uitstuur bevat u kluisdata in ’n ongeënkripteerde formaat. U behoort dit nie oor onbeveiligde kanale (soos e-pos) te bewaar of verstuur nie. Skrap dit sodra u dit klaar gebruik het.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Bevestig kluisuitstuur</string>
   <string name="warning">Waarskuwing</string>
   <string name="export_vault_failure">Daar was ’n probleem met die uitstuur van u kluis. Indien die probeem voortduur moet u vanuit die webkluis uitstuur.</string>

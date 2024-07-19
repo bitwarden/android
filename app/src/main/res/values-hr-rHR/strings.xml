@@ -481,6 +481,7 @@
   <string name="code_sent">Kôd poslan!</string>
   <string name="confirm_your_identity">Potvrdite lozinku za nastavak.</string>
   <string name="export_vault_warning">Ovaj izvoz sadrži podatke trezora u nešifriranom obliku! Izvezenu datoteku se ne bi smjelo pohranjivati ili slati putem nesigurnih kanala (npr. e-poštom). Izbriši ju odmah nakon završetka korištenja.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Potvrdi izvoz trezora</string>
   <string name="warning">Upozorenje</string>
   <string name="export_vault_failure">Dogodio se problem prilikom izvoza trezora. Ako se problem ponavlja, izvezi trezor koristeći web trezor.</string>

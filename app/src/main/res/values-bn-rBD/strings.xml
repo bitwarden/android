@@ -482,6 +482,7 @@ Scanning will happen automatically.</string>
   <string name="code_sent">Code sent!</string>
   <string name="confirm_your_identity">Confirm your identity to continue.</string>
   <string name="export_vault_warning">এই রফতানীতে একটি বিনা-এনক্রিপ্টেড করা বিন্যাসে আপনার ভল্ট তথ্য রয়েছে। আপনার রফতানিকৃত হওয়া ফাইল নিরাপত্তাহীন চ্যানেলগুলির মাধ্যমে (যেমন ইমেল) সংরক্ষণ বা প্রেরণ করা উচিত নয়। আপনি এটি ব্যবহার করে কাজ শেষ করার পর সাথে সাথে মুছে ফেলুন।</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">ভল্ট রফতানির নিশ্চয়তা দিন</string>
   <string name="warning">সতর্কতা</string>
   <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\'ll need to export from the web vault.</string>

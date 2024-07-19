@@ -482,6 +482,7 @@
   <string name="code_sent">تم إرسال الرمز</string>
   <string name="confirm_your_identity">قم بتأكيد هويتك للمتابعة.</string>
   <string name="export_vault_warning">يحتوي هذا التصدير على بيانات خزنتك بتنسيق غير مشفر. لا يجب عليك تخزين أو إرسال الملف الذي تم تصديره عبر قنوات غير آمنة (مثل البريد الإلكتروني). احذفه مباشرة بعد انتهائك من استخدامه.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">تأكيد تصدير الخزنة</string>
   <string name="warning">تحذير</string>
   <string name="export_vault_failure">كانت هناك مشكلة في تصدير خزنتك. إذا استمرت المشكلة، ستحتاج إلى التصدير من خزانة الويب.</string>

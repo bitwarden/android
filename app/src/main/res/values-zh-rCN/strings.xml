@@ -228,7 +228,7 @@
   <string name="attachments">附件</string>
   <string name="unable_to_download_file">无法下载文件。</string>
   <string name="unable_to_open_file">您的设备无法打开这种类型的文件。</string>
-  <string name="downloading">正在下载……</string>
+  <string name="downloading">下载中...</string>
   <string name="attachment_large_warning">此附件大小为 %1$s 。确定要将其下载到您的设备上吗？</string>
   <string name="authenticator_key">验证器密钥 (TOTP)</string>
   <string name="verification_code_totp">验证码 (TOTP)</string>
@@ -358,7 +358,7 @@
   <string name="autofill_and_save">自动填充并保存</string>
   <string name="organization">组织</string>
   <string name="hold_yubikey_near_top">把你的 Yubikey 靠近设备的顶部。</string>
-  <string name="try_again">再试一次</string>
+  <string name="try_again">请重试</string>
   <string name="yubi_key_instruction_ios">要继续，请将您的 YubiKey NEO 靠在设备背面。</string>
   <string name="bitwarden_autofill_accessibility_service_description2">当应用程序不支持标准的自动填充服务时，无障碍服务可能会很有用。</string>
   <string name="date_password_updated">密码更新于</string>
@@ -482,6 +482,7 @@
   <string name="code_sent">验证码已发送！</string>
   <string name="confirm_your_identity">请先确认您的身份后继续。</string>
   <string name="export_vault_warning">导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。</string>
+  <string name="export_vault_file_pw_protect_info">此文件导出将受密码保护，需要文件密码才能解密。</string>
   <string name="export_vault_confirmation_title">确认密码库导出</string>
   <string name="warning">警告</string>
   <string name="export_vault_failure">导出您的密码库时出现问题。如果问题仍然存在，您需要从网页密版码库中导出。</string>
@@ -522,7 +523,7 @@
   <string name="policy_in_effect_special">至少包含一个以下特殊字符：%1$s</string>
   <string name="master_password_policy_validation_title">无效的密码</string>
   <string name="master_password_policy_validation_message">密码不符合组织要求。请检查策略信息然后重试。</string>
-  <string name="loading">载入中</string>
+  <string name="loading">加载中</string>
   <string name="accept_policies">激活此开关表示您同意：</string>
   <string name="accept_policies_error">尚未同意服务条款和隐私政策。</string>
   <string name="terms_of_service">服务条款</string>
@@ -923,6 +924,6 @@
   <string name="launch_web_authn">启动 WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">启动 WebAuthn 双重身份验证时出错</string>
   <string name="self_hosted_server_url">自托管服务器 URL</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">由于无法验证用户，passkey 操作失败</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">由于无法验证用户，通行密钥操作失败。</string>
   <string name="user_verification_direction">用户验证</string>
 </resources>

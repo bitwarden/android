@@ -482,6 +482,7 @@ Het scannen gebeurt automatisch.</string>
   <string name="code_sent">Code verstuurd</string>
   <string name="confirm_your_identity">Bevestig je identiteit om door te gaan.</string>
   <string name="export_vault_warning">Deze export bevat jouw kluisgegevens in een niet-versleutelde opmaak. Je moet het geëxporteerde bestand niet opslaan of verzenden over onbeveiligde kanalen (zoals e-mail). Verwijder het exportbestand direct na gebruik.</string>
+  <string name="export_vault_file_pw_protect_info">Deze bestandsexport wordt met een wachtwoord beveiligd en vereist het bestandswachtwoord om te decoderen.</string>
   <string name="export_vault_confirmation_title">Kluisexport bevestigen</string>
   <string name="warning">Waarschuwing</string>
   <string name="export_vault_failure">Er ging iets mis met het exporteren van je kluis. Als het probleem aanhoudt, moet je exporteren via de webkluis.</string>
@@ -923,6 +924,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="launch_web_authn">WebAuthn starten</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Er is een fout opgetreden bij het starten van WebAuthn Twee factor authenticatie</string>
   <string name="self_hosted_server_url">URL zelfgehoste server</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey-bewerking mislukt omdat de gebruiker niet geverifieerd kon worden.</string>
+  <string name="user_verification_direction">Gebruikersverificatie</string>
 </resources>
