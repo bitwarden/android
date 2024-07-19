@@ -44,4 +44,9 @@ interface Fido2CredentialManager {
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult
+
+    /**
+     * Whether or not the user has authentication attempts remaining.
+     */
+    fun hasAuthenticationAttemptsRemaining(): Boolean
 }
