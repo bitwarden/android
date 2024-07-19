@@ -22,8 +22,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -238,11 +238,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Switches to the account corresponding to the given [userId] if possible.
      */
     fun switchAccount(userId: String): SwitchAccountResult
-
-    /**
-     * Updates the "last active time" for the current user.
-     */
-    fun updateLastActiveTime()
 
     /**
      * Attempt to register a new account with the given parameters.

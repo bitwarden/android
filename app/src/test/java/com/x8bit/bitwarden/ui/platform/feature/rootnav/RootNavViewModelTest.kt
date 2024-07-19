@@ -13,10 +13,7 @@ import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import io.mockk.every
-import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
-import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -25,7 +22,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
-        every { updateLastActiveTime() } just runs
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
 
@@ -555,13 +551,6 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(RootNavState.VaultLocked, viewModel.stateFlow.value)
-    }
-
-    @Test
-    fun `BackStackUpdate should call updateLastActiveTime`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(RootNavAction.BackStackUpdate)
-        verify { authRepository.updateLastActiveTime() }
     }
 
     private fun createViewModel(): RootNavViewModel =

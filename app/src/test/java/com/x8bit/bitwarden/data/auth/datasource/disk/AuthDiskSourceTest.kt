@@ -206,10 +206,6 @@ class AuthDiskSourceTest {
             userId = userId,
             pinProtectedUserKey = "pinProtectedUserKey",
         )
-        authDiskSource.storeLastActiveTimeMillis(
-            userId = userId,
-            lastActiveTimeMillis = 123456789L,
-        )
         authDiskSource.storeInvalidUnlockAttempts(
             userId = userId,
             invalidUnlockAttempts = 1,
@@ -252,7 +248,6 @@ class AuthDiskSourceTest {
         // These should be cleared
         assertNull(authDiskSource.getUserBiometricUnlockKey(userId = userId))
         assertNull(authDiskSource.getPinProtectedUserKey(userId = userId))
-        assertNull(authDiskSource.getLastActiveTimeMillis(userId = userId))
         assertNull(authDiskSource.getInvalidUnlockAttempts(userId = userId))
         assertNull(authDiskSource.getUserKey(userId = userId))
         assertNull(authDiskSource.getUserAutoUnlockKey(userId = userId))
@@ -263,63 +258,6 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getAccountTokens(userId = userId))
         assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
-    }
-
-    @Test
-    fun `getLastActiveTimeMillis should pull from SharedPreferences`() {
-        val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
-        val mockUserId = "mockUserId"
-        val mockLastActiveTime = 123456789L
-        fakeSharedPreferences
-            .edit {
-                putLong(
-                    "${lastActiveTimeBaseKey}_$mockUserId",
-                    mockLastActiveTime,
-                )
-            }
-        val actual = authDiskSource.getLastActiveTimeMillis(userId = mockUserId)
-        assertEquals(
-            mockLastActiveTime,
-            actual,
-        )
-    }
-
-    @Test
-    fun `storeLastActiveTimeMillis for non-null values should update SharedPreferences`() {
-        val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
-        val mockUserId = "mockUserId"
-        val mockLastActiveTime = 123456789L
-        authDiskSource.storeLastActiveTimeMillis(
-            userId = mockUserId,
-            lastActiveTimeMillis = mockLastActiveTime,
-        )
-        val actual = fakeSharedPreferences
-            .getLong(
-                "${lastActiveTimeBaseKey}_$mockUserId",
-                0L,
-            )
-        assertEquals(
-            mockLastActiveTime,
-            actual,
-        )
-    }
-
-    @Test
-    fun `storeLastActiveTimeMillis for null values should clear SharedPreferences`() {
-        val lastActiveTimeBaseKey = "bwPreferencesStorage:lastActiveTime"
-        val mockUserId = "mockUserId"
-        val mockLastActiveTime = 123456789L
-        val lastActiveTimeKey = "${lastActiveTimeBaseKey}_$mockUserId"
-        fakeSharedPreferences
-            .edit {
-                putLong(lastActiveTimeKey, mockLastActiveTime)
-            }
-        assertTrue(fakeSharedPreferences.contains(lastActiveTimeKey))
-        authDiskSource.storeLastActiveTimeMillis(
-            userId = mockUserId,
-            lastActiveTimeMillis = null,
-        )
-        assertFalse(fakeSharedPreferences.contains(lastActiveTimeKey))
     }
 
     @Test
