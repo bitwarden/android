@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-
 import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
@@ -14,7 +13,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
@@ -48,7 +46,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val authRepository: AuthRepository,
     private val environmentRepository: EnvironmentRepository,
-    private val specialCircumstance: SpecialCircumstanceManager
+    private val specialCircumstance: SpecialCircumstanceManager,
 ) : BaseViewModel<CompleteRegistrationState, CompleteRegistrationEvent, CompleteRegistrationAction>(
     initialState = savedStateHandle[KEY_STATE]
         ?: run {
@@ -64,7 +62,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 dialog = null,
                 passwordStrengthState = PasswordStrengthState.NONE,
             )
-               },
+        },
 ) {
 
     /**
@@ -92,7 +90,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun verifyEmailAddress() {
-        if(!state.fromEmail)
+        if (!state.fromEmail)
             return
 
         viewModelScope.launch {
@@ -353,7 +351,7 @@ class CompleteRegistrationViewModel @Inject constructor(
         }
         viewModelScope.launch {
             // Update region accordingly to a user email
-            environmentRepository.loadEnvironmentForEmail(state.userEmail)  
+            environmentRepository.loadEnvironmentForEmail(state.userEmail)
             val result = authRepository.register(
                 shouldCheckDataBreaches = shouldCheckForDataBreaches,
                 isMasterPasswordStrong = shouldIgnorePasswordStrength ||

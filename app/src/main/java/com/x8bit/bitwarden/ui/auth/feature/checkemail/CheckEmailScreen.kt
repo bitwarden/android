@@ -1,7 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.checkemail
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -93,102 +91,105 @@ fun CheckEmailScreen(
             )
         },
     ) { innerPadding ->
-            Column(
+        Column(
+            modifier = Modifier
+                .padding(innerPadding)
+                .imePadding()
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+        ) {
+            Spacer(modifier = Modifier.height(32.dp))
+            Image(
+                painter = rememberVectorPainter(id = R.drawable.email_check),
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
+                contentDescription = null,
+                contentScale = ContentScale.FillHeight,
                 modifier = Modifier
-                    .padding(innerPadding)
-                    .imePadding()
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState()),
-            ) {
-                Spacer(modifier = Modifier.height(32.dp))
-                Image(
-                    painter = rememberVectorPainter(id = R.drawable.email_check),
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillHeight,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .height(112.dp)
-                        .fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                Text(
-                    text = stringResource(id = R.string.check_your_email),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .wrapContentHeight()
-                        .fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                    .padding(horizontal = 16.dp)
+                    .height(112.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Text(
+                text = stringResource(id = R.string.check_your_email),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .wrapContentHeight()
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(16.dp))
 
-                val descriptionAnnotatedString = CreateAnnotatedString(
-                    mainText = stringResource(id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account, state.email),
-                    highlightText = state.email,
-                    highlightSpanStyle = SpanStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                        fontWeight = FontWeight.Bold
-                    )
+            val descriptionAnnotatedString = CreateAnnotatedString(
+                mainText = stringResource(
+                    id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
+                    state.email
+                ),
+                highlightText = state.email,
+                highlightSpanStyle = SpanStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = descriptionAnnotatedString,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .fillMaxWidth()
-                        .wrapContentHeight(),
+            )
+            Text(
+                text = descriptionAnnotatedString,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            BitwardenFilledButton(
+                label = stringResource(id = R.string.open_email_app),
+                onClick = remember(viewModel) {
+                    { viewModel.trySendAction(CheckEmailAction.OpenEmailTap) }
+                },
+                modifier = Modifier
+                    .testTag("OpenEmailApp")
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                val goBackAnnotatedString = CreateAnnotatedString(
+                    mainText = stringResource(id = R.string.no_email_go_back_to_edit_your_email_address),
+                    highlightText = stringResource(id = R.string.go_back)
                 )
-                Spacer(modifier = Modifier.height(32.dp))
-                BitwardenFilledButton(
-                    label = stringResource(id = R.string.open_email_app),
-                    onClick = remember(viewModel) {
-                        { viewModel.trySendAction(CheckEmailAction.OpenEmailTap) }
-                    },
-                    modifier = Modifier
-                        .testTag("OpenEmailApp")
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                )
-                Spacer(modifier = Modifier.height(32.dp))
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    val goBackAnnotatedString = CreateAnnotatedString(
-                        mainText = stringResource(id = R.string.no_email_go_back_to_edit_your_email_address),
-                        highlightText = stringResource(id = R.string.go_back)
-                    )
-                    ClickableText(
-                        text = goBackAnnotatedString,
-                        onClick = {
-                            goBackAnnotatedString
-                                .getStringAnnotations("URL", it, it)
-                                .firstOrNull()?.let {
-                                   viewModel.trySendAction(CheckEmailAction.CloseTap)
+                ClickableText(
+                    text = goBackAnnotatedString,
+                    onClick = {
+                        goBackAnnotatedString
+                            .getStringAnnotations("URL", it, it)
+                            .firstOrNull()?.let {
+                                viewModel.trySendAction(CheckEmailAction.CloseTap)
                             }
-                        }
-                    )
-                    Spacer(modifier = Modifier.height(32.dp))
-                    val logInAnnotatedString = CreateAnnotatedString(
-                        mainText = stringResource(id = R.string.or_log_in_you_may_already_have_an_account),
-                        highlightText = stringResource(id = R.string.log_in)
-                    )
-                    ClickableText(
-                        text = logInAnnotatedString,
-                        onClick = {
-                            logInAnnotatedString
-                                .getStringAnnotations("URL", it, it)
-                                .firstOrNull()?.let {
-                                    viewModel.trySendAction(CheckEmailAction.LoginTap)
-                                }
-                        }
-                    )
-                }
-                Spacer(modifier = Modifier.navigationBarsPadding())
+                    }
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+                val logInAnnotatedString = CreateAnnotatedString(
+                    mainText = stringResource(id = R.string.or_log_in_you_may_already_have_an_account),
+                    highlightText = stringResource(id = R.string.log_in)
+                )
+                ClickableText(
+                    text = logInAnnotatedString,
+                    onClick = {
+                        logInAnnotatedString
+                            .getStringAnnotations("URL", it, it)
+                            .firstOrNull()?.let {
+                                viewModel.trySendAction(CheckEmailAction.LoginTap)
+                            }
+                    }
+                )
             }
+            Spacer(modifier = Modifier.navigationBarsPadding())
+        }
     }
 }
 
@@ -204,9 +205,9 @@ private fun CreateAnnotatedString(
         color = MaterialTheme.colorScheme.primary,
         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
         fontWeight = FontWeight.Bold
-    )
-):  AnnotatedString {
-    return  buildAnnotatedString {
+    ),
+): AnnotatedString {
+    return buildAnnotatedString {
         val startIndex = mainText.indexOf(highlightText, ignoreCase = true)
         val endIndex = startIndex + highlightText.length
         append(mainText)

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -163,11 +162,11 @@ fun CompleteRegistrationScreen(
                     id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
                     state.userEmail
                 ),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxWidth(),
             )
             Spacer(modifier = Modifier.height(16.dp))
             var showPassword by rememberSaveable { mutableStateOf(false) }

@@ -46,10 +46,8 @@ class CheckEmailViewModel @Inject constructor(
  */
 @Parcelize
 data class CheckEmailState(
-    val email: String
-) : Parcelable {
-
-}
+    val email: String,
+) : Parcelable
 
 /**
  * Models events for the check email screen.

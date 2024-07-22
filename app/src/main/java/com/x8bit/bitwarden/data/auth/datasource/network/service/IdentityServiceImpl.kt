@@ -124,7 +124,7 @@ class IdentityServiceImpl(
         .executeForResult()
 
     override suspend fun sendVerificationEmail(
-        body: SendVerificationEmailRequestJson
+        body: SendVerificationEmailRequestJson,
     ): Result<ResponseBody?> {
         return api.sendVerificationEmail(body = body)
     }

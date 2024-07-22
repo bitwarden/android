@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -15,5 +14,5 @@ import kotlinx.parcelize.Parcelize
 data class CompleteRegistrationData(
     val email: String,
     val verificationToken: String,
-    val fromEmail: Boolean
+    val fromEmail: Boolean,
 ) : Parcelable

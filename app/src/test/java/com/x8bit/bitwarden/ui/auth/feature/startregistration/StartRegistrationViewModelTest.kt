@@ -300,7 +300,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             awaitItem()
             viewModel.trySendAction(StartRegistrationAction.EnvironmentTypeSelect(inputEnvironmentType))
             assertEquals(
-                StartRegistrationViewModelTest.DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
+                DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
                 awaitItem(),
             )
         }

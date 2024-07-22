@@ -24,7 +24,7 @@ fun NavController.navigateToCheckEmail(emailAddress: String, navOptions: NavOpti
  */
 @OmitFromCoverage
 data class CheckEmailArgs(
-    val emailAddress: String
+    val emailAddress: String,
 ) {
     constructor(savedStateHandle: SavedStateHandle) : this(
         emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL)),

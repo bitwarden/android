@@ -2,8 +2,6 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import retrofit2.http.Body
 import retrofit2.http.POST
 

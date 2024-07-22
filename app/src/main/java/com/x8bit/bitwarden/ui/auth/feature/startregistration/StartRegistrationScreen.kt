@@ -80,7 +80,8 @@ fun StartRegistrationScreen(
     onNavigateBack: () -> Unit,
     onNavigateToCompleteRegistration: (
         emailAddress: String,
-        verificationToken: String) -> Unit,
+        verificationToken: String,
+    ) -> Unit,
     onNavigateToCheckEmail: (email: String) -> Unit,
     onNavigateToEnvironment: () -> Unit,
     intentManager: IntentManager = LocalIntentManager.current,
@@ -210,8 +211,14 @@ fun StartRegistrationScreen(
             if (state.selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
                 ReceiveMarketingEmailsSwitch(
                     isChecked = state.isReceiveMarketingEmailsToggled,
-                    onCheckedChange =  remember(viewModel) {
-                        { viewModel.trySendAction(StartRegistrationAction.ReceiveMarketingEmailsToggle(it)) }
+                    onCheckedChange = remember(viewModel) {
+                        {
+                            viewModel.trySendAction(
+                                StartRegistrationAction.ReceiveMarketingEmailsToggle(
+                                    it
+                                )
+                            )
+                        }
                     },
                     onUnsubscribeClick = remember(viewModel) {
                         { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
@@ -253,7 +260,8 @@ private fun TermsAndPrivacyText(
     onPrivacyPolicyClick: () -> Unit,
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-        val strTermsAndPrivacy = stringResource(id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy)
+        val strTermsAndPrivacy =
+            stringResource(id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy)
         val strTerms = stringResource(id = R.string.terms_of_service)
         val strPrivacy = stringResource(id = R.string.privacy_policy)
         val startIndexTerms = strTermsAndPrivacy.indexOf(strTerms)
@@ -337,7 +345,8 @@ private fun ReceiveMarketingEmailsSwitch(
     onUnsubscribeClick: () -> Unit,
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-        val strMarketingEmail = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
+        val strMarketingEmail =
+            stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
         val strUnsubscribe = stringResource(id = R.string.unsubscribe)
         val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe, ignoreCase = true)
         val endIndexUnsubscribe = startIndexUnsubscribe + strUnsubscribe.length

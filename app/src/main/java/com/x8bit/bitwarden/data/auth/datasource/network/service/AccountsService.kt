@@ -4,8 +4,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRespo
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
-import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 
 /**

@@ -7,14 +7,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithSlideTransitions
 
 private const val EMAIL_ADDRESS: String = "email_address"
 private const val VERIFICATION_TOKEN: String = "verification_token"
 private const val FROM_EMAIL: String = "from_email"
 private const val COMPLETE_REGISTRATION_PREFIX = "complete_registration"
-private const val COMPLETE_REGISTRATION_ROUTE = "$COMPLETE_REGISTRATION_PREFIX/{$EMAIL_ADDRESS}/{$VERIFICATION_TOKEN}/{$FROM_EMAIL}"
+private const val COMPLETE_REGISTRATION_ROUTE =
+    "$COMPLETE_REGISTRATION_PREFIX/{$EMAIL_ADDRESS}/{$VERIFICATION_TOKEN}/{$FROM_EMAIL}"
 
 /**
  * Class to retrieve login with device arguments from the [SavedStateHandle].
@@ -39,8 +39,12 @@ fun NavController.navigateToCompleteRegistration(
     emailAddress: String,
     verificationToken: String,
     fromEmail: Boolean,
-    navOptions: NavOptions? = null) {
-    this.navigate("$COMPLETE_REGISTRATION_PREFIX/$emailAddress/$verificationToken/$fromEmail", navOptions)
+    navOptions: NavOptions? = null,
+) {
+    this.navigate(
+        "$COMPLETE_REGISTRATION_PREFIX/$emailAddress/$verificationToken/$fromEmail",
+        navOptions
+    )
 }
 
 /**

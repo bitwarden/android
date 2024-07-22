@@ -24,7 +24,7 @@ class CheckEmailScreenTest : BaseComposeTest() {
     private var onNavigateBackToLandingCalled = false
     private var onNavigateToEmailAppCalled = false
 
-    private val mutableStateFlow = MutableStateFlow(CheckEmailScreenTest.DEFAULT_STATE)
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val mutableEventFlow = bufferedMutableSharedFlow<CheckEmailEvent>()
     private val viewModel = mockk<CheckEmailViewModel>(relaxed = true) {
         every { stateFlow } returns mutableStateFlow

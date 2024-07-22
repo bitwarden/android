@@ -59,12 +59,12 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             onNavigateBack = { navController.popBackStack() },
             onNavigateToCompleteRegistration = { emailAddress, verificationToken ->
                 navController.navigateToCompleteRegistration(
-                    emailAddress= emailAddress,
+                    emailAddress = emailAddress,
                     verificationToken = verificationToken,
                     fromEmail = false
                 )
             },
-            onNavigateToCheckEmail = {emailAddress ->
+            onNavigateToCheckEmail = { emailAddress ->
                 navController.navigateToCheckEmail(emailAddress)
             },
             onNavigateToEnvironment = { navController.navigateToEnvironment() }
@@ -102,7 +102,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             onNavigateToEnvironment = {
                 navController.navigateToEnvironment()
             },
-            onNavigateToStartRegistration = { navController.navigateToStartRegistration()}
+            onNavigateToStartRegistration = { navController.navigateToStartRegistration() }
         )
         loginDestination(
             onNavigateBack = { navController.popBackStack() },

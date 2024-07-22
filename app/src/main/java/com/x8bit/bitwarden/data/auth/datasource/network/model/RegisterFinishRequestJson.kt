@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.model
 
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson.Keys
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson.Keys
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -122,7 +122,7 @@ class RootNavViewModel @Inject constructor(
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
                     is SpecialCircumstance.CompleteRegistration ->
-                        RootNavState.CompleteOngoingRegistration (
+                        RootNavState.CompleteOngoingRegistration(
                             email = specialCircumstance.completeRegistrationData.email,
                             verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
                             fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
@@ -227,11 +227,11 @@ sealed class RootNavState : Parcelable {
      * App should show the screen to complete an ongoing registration process.
      */
     @Parcelize
-    data class CompleteOngoingRegistration (
+    data class CompleteOngoingRegistration(
         val email: String,
         val verificationToken: String,
         val fromEmail: Boolean,
-        val timestamp: Long
+        val timestamp: Long,
     ) : RootNavState()
 
     /**

@@ -54,7 +54,7 @@ sealed class SpecialCircumstance : Parcelable {
     @Parcelize
     data class CompleteRegistration(
         val completeRegistrationData: CompleteRegistrationData,
-        val timestamp: Long
+        val timestamp: Long,
     ) : SpecialCircumstance()
 
     /**

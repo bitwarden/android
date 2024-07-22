@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -8,19 +7,14 @@ import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.util.asSuccess
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountDialog
-import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountEvent
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
@@ -80,7 +74,10 @@ class StartRegistrationViewModel @Inject constructor(
             is NameInputChange -> handleNameInputChanged(action)
             is CloseClick -> handleCloseClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
-            is StartRegistrationAction.ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(action)
+            is StartRegistrationAction.ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
+                action
+            )
+
             is PrivacyPolicyClick -> handlePrivacyPolicyClick()
             is TermsClick -> handleTermsClick()
             is StartRegistrationAction.UnsubscribeMarketingEmailsClick -> handleUnsubscribeMarketingEmailsClick()
@@ -121,11 +118,13 @@ class StartRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handlePrivacyPolicyClick() = sendEvent(StartRegistrationEvent.NavigateToPrivacyPolicy)
+    private fun handlePrivacyPolicyClick() =
+        sendEvent(StartRegistrationEvent.NavigateToPrivacyPolicy)
 
     private fun handleTermsClick() = sendEvent(StartRegistrationEvent.NavigateToTerms)
 
-    private fun handleUnsubscribeMarketingEmailsClick() = sendEvent(StartRegistrationEvent.NavigateToUnsubscribe)
+    private fun handleUnsubscribeMarketingEmailsClick() =
+        sendEvent(StartRegistrationEvent.NavigateToUnsubscribe)
 
     private fun handleReceiveMarketingEmailsToggle(action: StartRegistrationAction.ReceiveMarketingEmailsToggle) {
         mutableStateFlow.update {
@@ -204,7 +203,7 @@ class StartRegistrationViewModel @Inject constructor(
 
     private fun handleReceiveSendVerificationEmailResult(result: StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult) {
         when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
-            
+
             is SendVerificationEmailResult.Error -> {
                 mutableStateFlow.update {
                     it.copy(
@@ -223,14 +222,18 @@ class StartRegistrationViewModel @Inject constructor(
                 environmentRepository.saveCurrentEnvironmentForEmail(state.emailInput)
                 mutableStateFlow.update { it.copy(dialog = null) }
                 if (sendVerificationEmailResult.emailVerificationToken == null)
-                    sendEvent(StartRegistrationEvent.NavigateToCheckEmail(
-                        email = state.emailInput
-                    ))
+                    sendEvent(
+                        StartRegistrationEvent.NavigateToCheckEmail(
+                            email = state.emailInput
+                        )
+                    )
                 else
-                    sendEvent(StartRegistrationEvent.NavigateToCompleteRegistration(
-                        email = state.emailInput,
-                        verificationToken = sendVerificationEmailResult.emailVerificationToken
-                    ))
+                    sendEvent(
+                        StartRegistrationEvent.NavigateToCompleteRegistration(
+                            email = state.emailInput,
+                            verificationToken = sendVerificationEmailResult.emailVerificationToken
+                        )
+                    )
             }
         }
     }
@@ -247,10 +250,8 @@ data class StartRegistrationState(
     val isReceiveMarketingEmailsToggled: Boolean,
     val isContinueButtonEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
-    val dialog: StartRegistrationDialog?
-) : Parcelable {
-
-}
+    val dialog: StartRegistrationDialog?,
+) : Parcelable
 
 /**
  * Models dialogs that can be displayed on the start registration screen.
@@ -296,7 +297,7 @@ sealed class StartRegistrationEvent {
      * Navigates to the complete registration screen.
      */
     data class NavigateToCheckEmail(
-        val email: String
+        val email: String,
     ) : StartRegistrationEvent()
 
     /**
@@ -312,7 +313,7 @@ sealed class StartRegistrationEvent {
     /**
      * Navigate to unsubscribe to marketing emails.
      */
-    data object NavigateToUnsubscribe: StartRegistrationEvent()
+    data object NavigateToUnsubscribe : StartRegistrationEvent()
 
     /**
      * Navigates to the self-hosted/custom environment screen.
