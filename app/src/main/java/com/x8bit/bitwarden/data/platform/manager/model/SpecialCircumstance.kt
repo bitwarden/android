@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -55,6 +56,15 @@ sealed class SpecialCircumstance : Parcelable {
     @Parcelize
     data class Fido2Save(
         val fido2CredentialRequest: Fido2CredentialRequest,
+    ) : SpecialCircumstance()
+
+    /**
+     * The app was launched via the credential manager framework in order to authenticate a FIDO 2
+     * credential saved to their vault
+     */
+    @Parcelize
+    data class Fido2Assertion(
+        val fido2AssertionRequest: Fido2CredentialAssertionRequest,
     ) : SpecialCircumstance()
 
     /**
