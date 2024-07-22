@@ -384,7 +384,7 @@ class AuthDiskSourceImpl(
     ) {
         putString(
             key = EMAIL_VERIFICATION_URLS.appendIdentifier(userEmail),
-            value =  json.encodeToString(urls),
+            value = json.encodeToString(urls),
         )
     }
 
