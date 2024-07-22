@@ -56,14 +56,14 @@ const val EXTRA_KEY_USER_ID: String = "user_id"
  *
  * @see IntentManager.createFido2GetCredentialPendingIntent
  */
-private const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
+const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
 
 /**
  * Key for the cipher id included in FIDO 2 provider "get entries".
  *
  * @see IntentManager.createFido2GetCredentialPendingIntent
  */
-private const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
+const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
 
 /**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
