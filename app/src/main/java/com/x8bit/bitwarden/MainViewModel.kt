@@ -5,7 +5,6 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.vault.CipherView
-import com.google.firebase.Timestamp
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
@@ -197,7 +196,7 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.CompleteRegistration(
                         completeRegistrationData = completeRegistrationData,
-                        timestamp = Timestamp.now()
+                        timestamp = System.currentTimeMillis()
                     )
             }
 

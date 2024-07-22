@@ -4,7 +4,6 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.google.firebase.Timestamp
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_0
 import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength.LEVEL_1
@@ -85,7 +84,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 verificationToken = TOKEN,
                 fromEmail = true
             ),
-            Timestamp.now()
+            System.currentTimeMillis()
         )
 
         val viewModel =  CompleteRegistrationViewModel(

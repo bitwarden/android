@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager.model
 
 import android.os.Parcelable
-import com.google.firebase.Timestamp
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
@@ -55,7 +54,7 @@ sealed class SpecialCircumstance : Parcelable {
     @Parcelize
     data class CompleteRegistration(
         val completeRegistrationData: CompleteRegistrationData,
-        val timestamp: Timestamp
+        val timestamp: Long
     ) : SpecialCircumstance()
 
     /**
