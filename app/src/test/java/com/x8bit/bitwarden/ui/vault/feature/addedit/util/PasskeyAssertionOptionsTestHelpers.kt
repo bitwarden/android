@@ -1,7 +1,8 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.x8bit.bitwarden.data.autofill.fido2.model.PublicKeyCredentialDescriptor
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
+import com.x8bit.bitwarden.data.autofill.fido2.model.PublicKeyCredentialDescriptor
+import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 
 /**
  * Returns a mock FIDO 2 [PasskeyAssertionOptions] object to simulate a credential
@@ -19,5 +20,5 @@ fun createMockPasskeyAssertionOptions(
         ),
     ),
     relyingPartyId = "mockRelyingPartyId-$number",
-    userVerification = "mockUserVerification-$number",
+    userVerification = UserVerificationRequirement.PREFERRED,
 )
