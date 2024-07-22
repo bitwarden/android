@@ -104,8 +104,9 @@ class IntentManagerImpl(
     }
 
     override fun openEmailApp() {
-        val intent = Intent(Intent.ACTION_SENDTO)
-        intent.setData(Uri.parse("mailto:"))
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_APP_EMAIL)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
     }
 
