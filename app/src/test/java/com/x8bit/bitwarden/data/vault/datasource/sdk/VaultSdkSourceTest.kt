@@ -18,6 +18,7 @@ import com.bitwarden.sdk.ClientCiphers
 import com.bitwarden.sdk.ClientCrypto
 import com.bitwarden.sdk.ClientExporters
 import com.bitwarden.sdk.ClientFido2
+import com.bitwarden.sdk.ClientFido2Authenticator
 import com.bitwarden.sdk.ClientFido2Client
 import com.bitwarden.sdk.ClientPasswordHistory
 import com.bitwarden.sdk.ClientPlatform
@@ -42,6 +43,7 @@ import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
@@ -1132,6 +1134,67 @@ class VaultSdkSourceTest {
             val result = vaultSdkSource.decryptFido2CredentialAutofillViews(
                 userId = "mockUserId",
                 cipherViews = arrayOf(mockCipherView),
+            )
+
+            assertTrue(result.isFailure)
+        }
+
+    @Test
+    fun `silentlyDiscoverCredentials should return results when successful`() = runTest {
+        val userId = "userId"
+        val fido2CredentialStore: Fido2CredentialStore = mockk()
+        val relyingPartyId = "relyingPartyId"
+        val mockAutofillView = Fido2CredentialAutofillView(
+            credentialId = byteArrayOf(0),
+            cipherId = "mockCipherId",
+            rpId = "mockRpId",
+            userNameForUi = "mockUserNameForUi",
+            userHandle = "mockUserHandle".toByteArray(),
+        )
+        val autofillViews = listOf(mockAutofillView)
+
+        val authenticator: ClientFido2Authenticator = mockk {
+            coEvery { silentlyDiscoverCredentials(relyingPartyId) } returns autofillViews
+        }
+        every {
+            clientFido2.authenticator(
+                userInterface = any(),
+                credentialStore = fido2CredentialStore,
+            )
+        } returns authenticator
+
+        val result = vaultSdkSource.silentlyDiscoverCredentials(
+            userId = userId,
+            fido2CredentialStore = fido2CredentialStore,
+            relyingPartyId = relyingPartyId,
+        )
+
+        assertEquals(
+            autofillViews.asSuccess(),
+            result,
+        )
+    }
+
+    @Test
+    fun `silentlyDiscoverCredentials should return Failure when Bitwarden exception is thrown`() =
+        runTest {
+            val userId = "userId"
+            val fido2CredentialStore: Fido2CredentialStore = mockk()
+            val relyingPartyId = "relyingPartyId"
+
+            coEvery {
+                clientFido2
+                    .authenticator(
+                        userInterface = Fido2CredentialSearchUserInterfaceImpl(),
+                        credentialStore = fido2CredentialStore,
+                    )
+                    .silentlyDiscoverCredentials(relyingPartyId)
+            } throws BitwardenException.E("mockException")
+
+            val result = vaultSdkSource.silentlyDiscoverCredentials(
+                userId = userId,
+                fido2CredentialStore = fido2CredentialStore,
+                relyingPartyId = relyingPartyId,
             )
 
             assertTrue(result.isFailure)

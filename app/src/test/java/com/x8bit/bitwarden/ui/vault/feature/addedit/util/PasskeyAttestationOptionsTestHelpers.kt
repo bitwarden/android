@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.autofill.fido2.model.PublicKeyCredentialDescriptor
 
 /**
  * Returns a mock FIDO 2 [PasskeyAttestationOptions] object to simulate a credential
@@ -15,7 +16,7 @@ fun createMockPasskeyAttestationOptions(
         .AuthenticatorSelectionCriteria(userVerification = userVerificationRequirement),
     challenge = "mockPublicKeyCredentialCreationOptionsChallenge-$number",
     excludeCredentials = listOf(
-        PasskeyAttestationOptions.PublicKeyCredentialDescriptor(
+        PublicKeyCredentialDescriptor(
             type = "mockPublicKeyCredentialDescriptorType-$number",
             id = "mockPublicKeyCredentialDescriptorId-$number",
             transports = listOf("mockPublicKeyCredentialDescriptorTransports-$number"),

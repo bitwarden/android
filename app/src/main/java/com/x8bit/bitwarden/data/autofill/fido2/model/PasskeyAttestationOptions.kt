@@ -91,19 +91,6 @@ data class PasskeyAttestationOptions(
     }
 
     /**
-     * Represents details about a credential provided in the creation options.
-     */
-    @Serializable
-    data class PublicKeyCredentialDescriptor(
-        @SerialName("type")
-        val type: String,
-        @SerialName("id")
-        val id: String,
-        @SerialName("transports")
-        val transports: List<String>,
-    )
-
-    /**
      * Represents parameters for a credential in the creation options.
      */
     @Serializable

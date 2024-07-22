@@ -9,6 +9,8 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="com.x8bit.bitwarden.fido2.ACTION_CREATE_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY" />
+                <action android:name="com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
