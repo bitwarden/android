@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.autofill.fido2.di
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
@@ -11,6 +12,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessor
 import com.x8bit.bitwarden.data.autofill.fido2.processor.Fido2ProviderProcessorImpl
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import dagger.Module
 import dagger.Provides
@@ -48,11 +50,15 @@ object Fido2ProviderModule {
     fun provideFido2CredentialManager(
         assetManager: AssetManager,
         digitalAssetLinkService: DigitalAssetLinkService,
+        vaultSdkSource: VaultSdkSource,
+        fido2CredentialStore: Fido2CredentialStore,
         json: Json,
     ): Fido2CredentialManager =
         Fido2CredentialManagerImpl(
             assetManager = assetManager,
             digitalAssetLinkService = digitalAssetLinkService,
+            vaultSdkSource = vaultSdkSource,
+            fido2CredentialStore = fido2CredentialStore,
             json = json,
         )
 }

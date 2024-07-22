@@ -482,8 +482,7 @@ Skanning skjer automatisk.</string>
   <string name="code_sent">Kode sendt!</string>
   <string name="confirm_your_identity">Bekreft din identitet for å fortsette.</string>
   <string name="export_vault_warning">Denne eksporten inneholder hvelvdataene dine i et ukryptert format. Du bør ikke lagre eller sende den eksporterte filen over usikre kanaler (for eksempel e-post). Slett den umiddelbart etter at du er ferdig med å bruke den.</string>
-  <string name="enc_export_key_warning">Denne eksporten krypterer dataene dine ved hjelp av kontoen din sin krypteringsnøkkel. Hvis du noen gang endrer krypteringsnøkkelen til kontoen din, bør du eksportere dataene igjen, ettersom du da ikke vil kunne dekryptere denne eksportfilen.</string>
-  <string name="enc_export_account_warning">Kontokrypteringsnøkler er unike for hver eneste Bitwarden brukerkonto, så du kan ikke importere en kryptert eksport til en annen konto.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Bekreft eksport av hvelvet</string>
   <string name="warning">Advarsel</string>
   <string name="export_vault_failure">Det oppsto et problem med å eksportere hvelvet. Hvis problemet vedvarer, må du eksportere fra netthvelvet.</string>
@@ -925,4 +924,6 @@ Vil du bytte til denne kontoen?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

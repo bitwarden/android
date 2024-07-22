@@ -6,9 +6,11 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.DeleteAccountResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.deleteaccount.DeleteAccountState.DeleteAccountDialog
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,6 +24,7 @@ private const val KEY_STATE = "state"
 /**
  * View model for the [DeleteAccountScreen].
  */
+@Suppress("TooManyFunctions")
 @HiltViewModel
 class DeleteAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -49,13 +52,21 @@ class DeleteAccountViewModel @Inject constructor(
             is DeleteAccountAction.DeleteAccountClick -> handleDeleteAccountClick()
             DeleteAccountAction.AccountDeletionConfirm -> handleAccountDeletionConfirm()
             DeleteAccountAction.DismissDialog -> handleDismissDialog()
-            is DeleteAccountAction.Internal.DeleteAccountComplete -> {
-                handleDeleteAccountComplete(action)
-            }
+            is DeleteAccountAction.Internal -> handleInternalActions(action)
 
             is DeleteAccountAction.DeleteAccountConfirmDialogClick -> {
                 handleDeleteAccountConfirmDialogClick(action)
             }
+        }
+    }
+
+    private fun handleInternalActions(action: DeleteAccountAction.Internal) {
+        when (action) {
+            is DeleteAccountAction.Internal.DeleteAccountComplete -> handleDeleteAccountComplete(
+                action,
+            )
+
+            is DeleteAccountAction.Internal.UpdateDialogState -> updateDialogState(action.dialog)
         }
     }
 
@@ -74,22 +85,31 @@ class DeleteAccountViewModel @Inject constructor(
     private fun handleDeleteAccountConfirmDialogClick(
         action: DeleteAccountAction.DeleteAccountConfirmDialogClick,
     ) {
-        mutableStateFlow.update {
-            it.copy(dialog = DeleteAccountState.DeleteAccountDialog.Loading)
-        }
+        updateDialogState(DeleteAccountDialog.Loading)
         viewModelScope.launch {
-            val result = authRepository.deleteAccountWithMasterPassword(action.masterPassword)
-            sendAction(DeleteAccountAction.Internal.DeleteAccountComplete(result))
+            val validPasswordResult = authRepository.validatePassword(action.masterPassword)
+            if ((validPasswordResult as? ValidatePasswordResult.Success)?.isValid == false) {
+                sendAction(
+                    DeleteAccountAction.Internal.UpdateDialogState(
+                        DeleteAccountDialog.Error(
+                            message = R.string.invalid_master_password.asText(),
+                        ),
+                    ),
+                )
+            } else {
+                val result = authRepository.deleteAccountWithMasterPassword(action.masterPassword)
+                sendAction(DeleteAccountAction.Internal.DeleteAccountComplete(result))
+            }
         }
     }
 
     private fun handleAccountDeletionConfirm() {
         authRepository.clearPendingAccountDeletion()
-        mutableStateFlow.update { it.copy(dialog = null) }
+        dismissDialog()
     }
 
     private fun handleDismissDialog() {
-        mutableStateFlow.update { it.copy(dialog = null) }
+        dismissDialog()
     }
 
     private fun handleDeleteAccountComplete(
@@ -97,22 +117,28 @@ class DeleteAccountViewModel @Inject constructor(
     ) {
         when (val result = action.result) {
             DeleteAccountResult.Success -> {
-                mutableStateFlow.update {
-                    it.copy(dialog = DeleteAccountState.DeleteAccountDialog.DeleteSuccess)
-                }
+                updateDialogState(DeleteAccountDialog.DeleteSuccess)
             }
 
             is DeleteAccountResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = DeleteAccountState.DeleteAccountDialog.Error(
-                            message = result.message?.asText()
-                                ?: R.string.generic_error_message.asText(),
-                        ),
-                    )
-                }
+                updateDialogState(
+                    DeleteAccountDialog.Error(
+                        message = result.message?.asText()
+                            ?: R.string.generic_error_message.asText(),
+                    ),
+                )
             }
         }
+    }
+
+    private fun updateDialogState(dialog: DeleteAccountDialog?) {
+        mutableStateFlow.update {
+            it.copy(dialog = dialog)
+        }
+    }
+
+    private fun dismissDialog() {
+        updateDialogState(null)
     }
 }
 
@@ -224,6 +250,13 @@ sealed class DeleteAccountAction {
          */
         data class DeleteAccountComplete(
             val result: DeleteAccountResult,
+        ) : Internal()
+
+        /**
+         * An internal event to update the dialog state utilizing the synchronous action channel.
+         */
+        data class UpdateDialogState(
+            val dialog: DeleteAccountDialog,
         ) : Internal()
     }
 }

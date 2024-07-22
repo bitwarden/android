@@ -253,7 +253,7 @@ kover {
 tasks {
     getByName("check") {
         // Add detekt with type resolution to check
-        dependsOn("detektMain")
+        dependsOn("detekt")
     }
 
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
@@ -289,6 +289,7 @@ sonar {
         property("sonar.sources", "app/src/")
         property("sonar.tests", "app/src/")
         property("sonar.test.inclusions", "app/src/test/")
+        property("sonar.exclusions", "app/src/test/")
     }
 }
 

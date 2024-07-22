@@ -301,6 +301,7 @@ fun LazyListScope.vaultAddEditLoginItems(
     }
 
     items(commonState.customFieldData) { customItem ->
+        Spacer(modifier = Modifier.height(8.dp))
         VaultAddEditCustomField(
             customField = customItem,
             onCustomFieldValueChange = commonActionHandler.onCustomFieldValueChange,

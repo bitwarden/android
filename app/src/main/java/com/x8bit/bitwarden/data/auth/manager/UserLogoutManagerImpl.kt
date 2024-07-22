@@ -34,37 +34,19 @@ class UserLogoutManagerImpl(
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
     override fun logout(userId: String, isExpired: Boolean) {
-        val currentUserState = authDiskSource.userState ?: return
+        authDiskSource.userState ?: return
 
         if (isExpired) {
             showToast(message = R.string.login_expired)
         }
 
-        // Remove the active user from the accounts map
-        val updatedAccounts = currentUserState
-            .accounts
-            .filterKeys { it != userId }
+        val ableToSwitchToNewAccount = switchUserIfAvailable(
+            currentUserId = userId,
+            isExpired = isExpired,
+            removeCurrentUserFromAccounts = true,
+        )
 
-        // Check if there is a new active user
-        if (updatedAccounts.isNotEmpty()) {
-            if (userId == currentUserState.activeUserId && !isExpired) {
-                showToast(message = R.string.account_switched_automatically)
-            }
-
-            // If we logged out a non-active user, we want to leave the active user unchanged.
-            // If we logged out the active user, we want to set the active user to the first one
-            // in the list.
-            val updatedActiveUserId = currentUserState
-                .activeUserId
-                .takeUnless { it == userId }
-                ?: updatedAccounts.entries.first().key
-
-            // Update the user information and emit an updated token
-            authDiskSource.userState = currentUserState.copy(
-                activeUserId = updatedActiveUserId,
-                accounts = updatedAccounts,
-            )
-        } else {
+        if (!ableToSwitchToNewAccount) {
             // Update the user information and log out
             authDiskSource.userState = null
         }
@@ -81,6 +63,8 @@ class UserLogoutManagerImpl(
         // Save any data that will still need to be retained after otherwise clearing all dat
         val vaultTimeoutInMinutes = settingsDiskSource.getVaultTimeoutInMinutes(userId = userId)
         val vaultTimeoutAction = settingsDiskSource.getVaultTimeoutAction(userId = userId)
+
+        switchUserIfAvailable(currentUserId = userId, removeCurrentUserFromAccounts = false)
 
         clearData(userId = userId)
 
@@ -111,5 +95,47 @@ class UserLogoutManagerImpl(
 
     private fun showToast(@StringRes message: Int) {
         mainScope.launch { Toast.makeText(context, message, Toast.LENGTH_SHORT).show() }
+    }
+
+    private fun switchUserIfAvailable(
+        currentUserId: String,
+        removeCurrentUserFromAccounts: Boolean,
+        isExpired: Boolean = false,
+    ): Boolean {
+        val currentUserState = authDiskSource.userState ?: return false
+
+        val currentAccountsMap = currentUserState.accounts
+
+        // Remove the active user from the accounts map
+        val updatedAccounts = currentAccountsMap
+            .filterKeys { it != currentUserId }
+
+        // Check if there is a new active user
+        return if (updatedAccounts.isNotEmpty()) {
+            if (currentUserId == currentUserState.activeUserId && !isExpired) {
+                showToast(message = R.string.account_switched_automatically)
+            }
+
+            // If we logged out a non-active user, we want to leave the active user unchanged.
+            // If we logged out the active user, we want to set the active user to the first one
+            // in the list.
+            val updatedActiveUserId = currentUserState
+                .activeUserId
+                .takeUnless { it == currentUserId }
+                ?: updatedAccounts.entries.first().key
+
+            // Update the user information and emit an updated token
+            authDiskSource.userState = currentUserState.copy(
+                activeUserId = updatedActiveUserId,
+                accounts = if (removeCurrentUserFromAccounts) {
+                    updatedAccounts
+                } else {
+                    currentAccountsMap
+                },
+            )
+            true
+        } else {
+            false
+        }
     }
 }

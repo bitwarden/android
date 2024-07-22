@@ -177,13 +177,32 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillView should return AutofillView Login Username when is android text field and is isUsernameField`() {
+    fun `toAutofillView should return AutofillView Login Username when is EditText and isUsernameField`() {
         // Setup
         val expected = AutofillView.Login.Username(
             data = autofillViewData,
         )
         setupUnsupportedInputFieldViewNode()
-        every { viewNode.className } returns ANDROID_EDIT_TEXT_CLASS_NAME
+        every { viewNode.className } returns "android.widget.EditText"
+        every { any<Int>().isPasswordInputType } returns false
+        every { any<Int>().isUsernameInputType } returns true
+
+        // Test
+        val actual = viewNode.toAutofillView()
+
+        // Verify
+        assertEquals(expected, actual)
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toAutofillView should return AutofillView Login Username when is EditText subclass and isUsernameField`() {
+        // Setup
+        val expected = AutofillView.Login.Username(
+            data = autofillViewData,
+        )
+        setupUnsupportedInputFieldViewNode()
+        every { viewNode.className } returns "android.widget.AutoCompleteTextView"
         every { any<Int>().isPasswordInputType } returns false
         every { any<Int>().isUsernameInputType } returns true
 
@@ -211,15 +230,18 @@ class ViewNodeExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `toAutofillView should return null when hint is not supported, is an inputField, and isn't a username or password`() {
+    fun `toAutofillView should return only unused field when hint is not supported, is an inputField, and isn't a username or password`() {
         // Setup
         setupUnsupportedInputFieldViewNode()
+        val expected = AutofillView.Unused(
+            data = autofillViewData,
+        )
 
         // Test
         val actual = viewNode.toAutofillView()
 
         // Verify
-        assertNull(actual)
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -532,7 +554,6 @@ private val AUTOFILL_OPTIONS_LIST: List<String> = listOf(
     AUTOFILL_OPTION_TWO,
 )
 private const val AUTOFILL_TYPE: Int = View.AUTOFILL_TYPE_LIST
-private const val ANDROID_EDIT_TEXT_CLASS_NAME: String = "android.widget.EditText"
 private val IGNORED_RAW_HINTS: List<String> = listOf(
     "search",
     "find",

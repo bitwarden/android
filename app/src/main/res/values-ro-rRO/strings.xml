@@ -482,8 +482,7 @@ Scanarea se va face automat.</string>
   <string name="code_sent">Cod trimis!</string>
   <string name="confirm_your_identity">Confirmați-vă identitatea pentru a continua.</string>
   <string name="export_vault_warning">Acest export conține datele dvs. din seif în format necriptat. Nu ar trebui să stocați sau să trimiteți fișierul pe canale nesecurizate (cum ar fi e-mail). Ștergeți-l imediat după ce nu îl mai folosiți.</string>
-  <string name="enc_export_key_warning">Acest export criptează datele, utilizând cheia de criptare a contului. Dacă revocați vreodată cheia de criptare a contului dvs., ar trebui să exportați din nou, deoarece nu veți putea decripta acest fișier de export.</string>
-  <string name="enc_export_account_warning">Cheile de criptare a contului sunt unice fiecărui cont de utilizator Bitwarden, astfel încât nu puteți importa un export criptat într-un cont diferit.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirmare export seif</string>
   <string name="warning">Avertisment</string>
   <string name="export_vault_failure">A apărut o problemă la exportul seifului dvs. Dacă problema persistă, va trebui să exportați din seiful web.</string>
@@ -925,4 +924,6 @@ Doriți să comutați la acest cont?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

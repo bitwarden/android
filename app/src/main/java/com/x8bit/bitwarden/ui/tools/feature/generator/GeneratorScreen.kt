@@ -596,6 +596,20 @@ private fun PasswordLengthSliderItem(
     val density = LocalDensity.current
     val sliderRange = minValue.toFloat()..maxValue.toFloat()
 
+    val lengthLabel: @Composable () -> Unit = remember {
+        {
+            Text(
+                text = stringResource(id = R.string.length),
+                modifier = Modifier
+                    .onGloballyPositioned { layoutCoordinates ->
+                        if (labelTextWidth == Dp.Unspecified) {
+                            labelTextWidth = layoutCoordinates.size.width.toDp(density)
+                        }
+                    },
+            )
+        }
+    }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -607,15 +621,7 @@ private fun PasswordLengthSliderItem(
             value = sliderValue.toString(),
             readOnly = true,
             onValueChange = { },
-            label = {
-                Text(
-                    text = stringResource(id = R.string.length),
-                    modifier = Modifier
-                        .onGloballyPositioned {
-                            labelTextWidth = it.size.width.toDp(density)
-                        },
-                )
-            },
+            label = lengthLabel,
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier
@@ -636,7 +642,8 @@ private fun PasswordLengthSliderItem(
                 }
                 .testTag("PasswordLengthLabel")
                 .wrapContentWidth()
-                .width(labelTextWidth + 16.dp + 16.dp),
+                // We want the width to be no wider than the label + 16dp on either side
+                .width(16.dp + labelTextWidth + 16.dp),
         )
 
         Slider(

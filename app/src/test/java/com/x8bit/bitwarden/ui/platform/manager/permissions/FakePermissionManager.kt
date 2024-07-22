@@ -26,14 +26,20 @@ class FakePermissionManager : PermissionsManager {
     var getMultiplePermissionsResult: Map<String, Boolean> = emptyMap()
 
     /**
-     * * The value for whether a rationale should be shown to the user.
+     * The value for whether a rationale should be shown to the user.
      */
     var shouldShowRequestRationale: Boolean = false
+
+    /**
+     * Indicates that the [getLauncher] function has been called.
+     */
+    var hasGetLauncherBeenCalled: Boolean = false
 
     @Composable
     override fun getLauncher(
         onResult: (Boolean) -> Unit,
     ): ManagedActivityResultLauncher<String, Boolean> {
+        hasGetLauncherBeenCalled = true
         return mockk {
             every { launch(any()) } answers { onResult.invoke(getPermissionsResult) }
         }

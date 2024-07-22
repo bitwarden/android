@@ -482,8 +482,7 @@
   <string name="code_sent">تم إرسال الرمز</string>
   <string name="confirm_your_identity">قم بتأكيد هويتك للمتابعة.</string>
   <string name="export_vault_warning">يحتوي هذا التصدير على بيانات خزنتك بتنسيق غير مشفر. لا يجب عليك تخزين أو إرسال الملف الذي تم تصديره عبر قنوات غير آمنة (مثل البريد الإلكتروني). احذفه مباشرة بعد انتهائك من استخدامه.</string>
-  <string name="enc_export_key_warning">يقوم هذا التصدير بتشفير بياناتك باستخدام مفتاح تشفير حسابك. إذا قمت بتدوير مفتاح تشفير حسابك يجب عليك التصدير مرة أخرى لأنك لن تتمكن من فك تشفير ملف التصدير هذا.</string>
-  <string name="enc_export_account_warning">مفاتيح تشفير الحساب فريدة من نوعها لكل حساب مستخدم Bitwarden، لذلك لا يمكنك استيراد تصدير مشفر إلى حساب آخر.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">تأكيد تصدير الخزنة</string>
   <string name="warning">تحذير</string>
   <string name="export_vault_failure">كانت هناك مشكلة في تصدير خزنتك. إذا استمرت المشكلة، ستحتاج إلى التصدير من خزانة الويب.</string>
@@ -925,4 +924,6 @@
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

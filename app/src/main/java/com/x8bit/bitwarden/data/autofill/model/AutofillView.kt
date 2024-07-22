@@ -86,4 +86,11 @@ sealed class AutofillView {
             override val data: Data,
         ) : Login()
     }
+
+    /**
+     * A view that is an input field but does not correspond to any known autofill field.
+     */
+    data class Unused(
+        override val data: Data,
+    ) : AutofillView()
 }

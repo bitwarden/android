@@ -101,6 +101,7 @@ class SearchViewModel @Inject constructor(
                 isIconLoadingDisabled = settingsRepo.isIconLoadingDisabled,
                 autofillSelectionData = autofillSelectionData,
                 hasMasterPassword = userState.activeAccount.hasMasterPassword,
+                isPremium = userState.activeAccount.isPremium,
             )
         },
 ) {
@@ -610,7 +611,10 @@ class SearchViewModel @Inject constructor(
                         viewState = SearchState.ViewState.Error(
                             message = R.string.internet_connection_required_title
                                 .asText()
-                                .concat(R.string.internet_connection_required_message.asText()),
+                                .concat(
+                                    " ".asText(),
+                                    R.string.internet_connection_required_message.asText(),
+                                ),
                         ),
                         dialogState = null,
                     )
@@ -654,6 +658,7 @@ class SearchViewModel @Inject constructor(
                                 baseIconUrl = state.baseIconUrl,
                                 isIconLoadingDisabled = state.isIconLoadingDisabled,
                                 isAutofill = state.isAutofill,
+                                isPremiumUser = state.isPremium,
                             )
                     }
 
@@ -698,6 +703,7 @@ data class SearchState(
     // Internal
     val autofillSelectionData: AutofillSelectionData? = null,
     val hasMasterPassword: Boolean,
+    val isPremium: Boolean,
 ) : Parcelable {
 
     /**

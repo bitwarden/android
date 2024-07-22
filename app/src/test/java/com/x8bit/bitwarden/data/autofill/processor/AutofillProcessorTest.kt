@@ -22,6 +22,7 @@ import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
@@ -56,6 +57,7 @@ class AutofillProcessorTest {
     private val policyManager: PolicyManager = mockk()
     private val saveInfoBuilder: SaveInfoBuilder = mockk()
     private val settingsRepository: SettingsRepository = mockk()
+    private val crashLogsManager: CrashLogsManager = mockk()
 
     private val appInfo: AutofillAppInfo = AutofillAppInfo(
         context = mockk(),
@@ -77,6 +79,7 @@ class AutofillProcessorTest {
             policyManager = policyManager,
             saveInfoBuilder = saveInfoBuilder,
             settingsRepository = settingsRepository,
+            crashLogsManager = crashLogsManager,
         )
     }
 
@@ -107,6 +110,7 @@ class AutofillProcessorTest {
             fillCallback = fillCallback,
             request = fillRequest,
         )
+        testDispatcher.scheduler.runCurrent()
 
         // Verify
         verify(exactly = 1) {
@@ -196,6 +200,80 @@ class AutofillProcessorTest {
                     saveInfo = saveInfo,
                 )
                 fillCallback.onSuccess(fillResponse)
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `processFillRequest should invoke callback with filled response when has filledItems and track exceptions thrown by callback`() =
+        runTest {
+            // Setup
+            val fillRequest: FillRequest = mockk()
+            val filledData = FilledData(
+                filledPartitions = listOf(mockk()),
+                ignoreAutofillIds = emptyList(),
+                originalPartition = mockk(),
+                uri = null,
+                vaultItemInlinePresentationSpec = null,
+                isVaultLocked = false,
+            )
+            val fillResponse: FillResponse = mockk()
+            val autofillPartition: AutofillPartition = mockk()
+            val autofillRequest: AutofillRequest.Fillable = mockk {
+                every { packageName } returns PACKAGE_NAME
+                every { partition } returns autofillPartition
+            }
+            val saveInfo: SaveInfo = mockk()
+            coEvery {
+                filledDataBuilder.build(autofillRequest = autofillRequest)
+            } returns filledData
+            every { cancellationSignal.setOnCancelListener(any()) } just runs
+            every {
+                parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
+            } returns autofillRequest
+            every {
+                saveInfoBuilder.build(
+                    autofillAppInfo = appInfo,
+                    autofillPartition = autofillPartition,
+                    fillRequest = fillRequest,
+                    packageName = PACKAGE_NAME,
+                )
+            } returns saveInfo
+            every {
+                fillResponseBuilder.build(
+                    autofillAppInfo = appInfo,
+                    filledData = filledData,
+                    saveInfo = saveInfo,
+                )
+            } returns fillResponse
+            val runtimeException = RuntimeException("TransactionToLarge")
+            every { fillCallback.onSuccess(fillResponse) } throws runtimeException
+            every { crashLogsManager.trackNonFatalException(runtimeException) } just runs
+
+            // Test
+            autofillProcessor.processFillRequest(
+                autofillAppInfo = appInfo,
+                cancellationSignal = cancellationSignal,
+                fillCallback = fillCallback,
+                request = fillRequest,
+            )
+
+            testDispatcher.scheduler.runCurrent()
+
+            // Verify
+            coVerify(exactly = 1) {
+                filledDataBuilder.build(autofillRequest = autofillRequest)
+            }
+            verify(exactly = 1) {
+                cancellationSignal.setOnCancelListener(any())
+                parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
+                fillResponseBuilder.build(
+                    autofillAppInfo = appInfo,
+                    filledData = filledData,
+                    saveInfo = saveInfo,
+                )
+                fillCallback.onSuccess(fillResponse)
+                crashLogsManager.trackNonFatalException(runtimeException)
             }
         }
 
@@ -445,9 +523,9 @@ class AutofillProcessorTest {
         verify(exactly = 1) {
             // These run as they are not part of the coroutine
             cancellationSignal.setOnCancelListener(any())
-            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
         }
         coVerify(exactly = 0) {
+            parser.parse(autofillAppInfo = appInfo, fillRequest = fillRequest)
             filledDataBuilder.build(autofillRequest = autofillRequest)
         }
         verify(exactly = 0) {

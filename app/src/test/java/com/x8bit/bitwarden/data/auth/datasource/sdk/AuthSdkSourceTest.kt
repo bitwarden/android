@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.auth.datasource.sdk
 
-import com.bitwarden.bitwarden.AuthRequestResponse
-import com.bitwarden.bitwarden.FingerprintRequest
-import com.bitwarden.bitwarden.MasterPasswordPolicyOptions
-import com.bitwarden.bitwarden.RegisterKeyResponse
-import com.bitwarden.bitwarden.RegisterTdeKeyResponse
+import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.FingerprintRequest
+import com.bitwarden.core.MasterPasswordPolicyOptions
+import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.RegisterTdeKeyResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.sdk.Client
@@ -21,7 +21,6 @@ import io.mockk.mockk
 import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class AuthSdkSourceTest {
@@ -192,9 +191,6 @@ class AuthSdkSourceTest {
             }
         }
 
-    // TODO: This test is disabled due to issue here with mocking UByte (BIT-877).
-    //  See: https://github.com/mockk/mockk/issues/544
-    @Disabled
     @Test
     fun `passwordStrength should call SDK and return a Result with the correct data`() =
         runBlocking {

@@ -2,13 +2,9 @@ package com.x8bit.bitwarden.data.autofill.util
 
 import android.app.assist.AssistStructure
 import android.view.View
+import android.widget.EditText
 import com.x8bit.bitwarden.data.autofill.model.AutofillView
 import com.x8bit.bitwarden.ui.platform.base.util.orNullIfBlank
-
-/**
- * The class name of the android edit text field.
- */
-private const val ANDROID_EDIT_TEXT_CLASS_NAME: String = "android.widget.EditText"
 
 /**
  * The default web URI scheme.
@@ -59,7 +55,18 @@ private val SUPPORTED_VIEW_HINTS: List<String> = listOf(
  * Whether this [AssistStructure.ViewNode] represents an input field.
  */
 private val AssistStructure.ViewNode.isInputField: Boolean
-    get() = className == ANDROID_EDIT_TEXT_CLASS_NAME || htmlInfo.isInputField
+    get() {
+        val isEditText = className
+            ?.let {
+                try {
+                    Class.forName(it)
+                } catch (e: ClassNotFoundException) {
+                    null
+                }
+            }
+            ?.let { EditText::class.java.isAssignableFrom(it) } == true
+        return isEditText || htmlInfo.isInputField
+    }
 
 /**
  * Attempt to convert this [AssistStructure.ViewNode] into an [AutofillView]. If the view node
@@ -105,7 +112,7 @@ private fun AssistStructure.ViewNode.buildAutofillView(
     autofillOptions: List<String>,
     autofillViewData: AutofillView.Data,
     supportedHint: String?,
-): AutofillView? = when {
+): AutofillView = when {
     supportedHint == View.AUTOFILL_HINT_CREDIT_CARD_EXPIRATION_MONTH -> {
         val monthValue = this
             .autofillValue
@@ -149,7 +156,11 @@ private fun AssistStructure.ViewNode.buildAutofillView(
         )
     }
 
-    else -> null
+    else -> {
+        AutofillView.Unused(
+            data = autofillViewData,
+        )
+    }
 }
 
 /**

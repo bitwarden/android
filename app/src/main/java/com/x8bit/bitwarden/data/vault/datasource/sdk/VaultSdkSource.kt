@@ -1,13 +1,17 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.bitwarden.DerivePinKeyResponse
-import com.bitwarden.bitwarden.ExportFormat
-import com.bitwarden.bitwarden.InitOrgCryptoRequest
-import com.bitwarden.bitwarden.InitUserCryptoMethod
-import com.bitwarden.bitwarden.InitUserCryptoRequest
-import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.exporters.ExportFormat
+import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -23,7 +27,9 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import java.io.File
 
 /**
@@ -405,4 +411,39 @@ interface VaultSdkSource {
         ciphers: List<Cipher>,
         format: ExportFormat,
     ): Result<String>
+
+    /**
+     * Register a new FIDO 2 credential to a cipher.
+     *
+     * @return Result of the FIDO 2 credential registration. If successful, a
+     * [PublicKeyCredentialAuthenticatorAttestationResponse] is provided.
+     */
+    suspend fun registerFido2Credential(
+        request: RegisterFido2CredentialRequest,
+        fido2CredentialStore: Fido2CredentialStore,
+    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse>
+
+    /**
+     * Authenticate a user with a FIDO 2 credential.
+     *
+     * @return Result of the FIDO 2 credential registration. If successful, a
+     * [PublicKeyCredentialAuthenticatorAttestationResponse] is provided.
+     */
+    @Suppress("LongParameterList")
+    suspend fun authenticateFido2Credential(
+        request: AuthenticateFido2CredentialRequest,
+        fido2CredentialStore: Fido2CredentialStore,
+    ): Result<PublicKeyCredentialAuthenticatorAssertionResponse>
+
+    /**
+     * Decrypt a list of FIDO 2 credential autofill view items associated with the given
+     * [cipherViews].
+     *
+     * This should only be called after a successful call to [initializeCrypto] for the associated
+     * user.
+     */
+    suspend fun decryptFido2CredentialAutofillViews(
+        userId: String,
+        vararg cipherViews: CipherView,
+    ): Result<List<Fido2CredentialAutofillView>>
 }

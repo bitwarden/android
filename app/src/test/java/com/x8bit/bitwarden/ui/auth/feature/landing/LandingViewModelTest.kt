@@ -5,6 +5,7 @@ import app.cash.turbine.test
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -21,6 +22,7 @@ import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class LandingViewModelTest : BaseViewModelTest() {
@@ -397,6 +399,72 @@ class LandingViewModelTest : BaseViewModelTest() {
                 awaitItem(),
             )
         }
+    }
+
+    @Test
+    fun `Active Logged Out user causes email field to prepopulate`() = runTest {
+        val expectedEmail = "frodo@hobbit.on"
+        val userId = "1"
+
+        val userAccount: UserState.Account = UserState.Account(
+            userId = userId,
+            name = null,
+            email = expectedEmail,
+            avatarColorHex = "lorem",
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            needsMasterPassword = false,
+            trustedDevice = null,
+            organizations = listOf(),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
+
+        val userState = UserState(
+            activeUserId = userId,
+            accounts = listOf(userAccount),
+        )
+
+        val viewModel = createViewModel(userState = userState)
+
+        assertEquals(expectedEmail, viewModel.stateFlow.value.emailInput)
+    }
+
+    @Test
+    fun `Email input will not change based on active user when adding new account`() = runTest {
+        val expectedEmail = "frodo@hobbit.on"
+        val userId = "1"
+
+        val userAccount: UserState.Account = UserState.Account(
+            userId = userId,
+            name = null,
+            email = expectedEmail,
+            avatarColorHex = "lorem",
+            environment = Environment.Us,
+            isPremium = false,
+            isLoggedIn = false,
+            isVaultUnlocked = false,
+            needsPasswordReset = false,
+            needsMasterPassword = false,
+            trustedDevice = null,
+            organizations = listOf(),
+            isBiometricsEnabled = false,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
+
+        val userState = UserState(
+            activeUserId = userId,
+            accounts = listOf(userAccount),
+        )
+
+        every { authRepository.hasPendingAccountAddition } returns true
+
+        val viewModel = createViewModel(userState = userState)
+
+        assertTrue(viewModel.stateFlow.value.emailInput.isEmpty())
     }
 
     //region Helper methods

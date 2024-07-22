@@ -142,7 +142,44 @@ class CipherViewExtensionsTest {
             VaultItemState.ViewState.Content(
                 common = createCommonContent(isEmpty = false, isPremiumUser = isPremiumUser)
                     .copy(currentCipher = cipherView),
-                type = createLoginContent(isEmpty = false).copy(isPremiumUser = isPremiumUser),
+                type = createLoginContent(isEmpty = false).copy(
+                    isPremiumUser = isPremiumUser,
+                    canViewTotpCode = false,
+                ),
+            ),
+            viewState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toViewState should transform full CipherView into ViewState Login Content without premium but with org totp access`() {
+        val isPremiumUser = false
+        val cipherView = createCipherView(
+            type = CipherType.LOGIN,
+            isEmpty = false,
+        ).copy(organizationUseTotp = true)
+        val viewState = cipherView.toViewState(
+            previousState = null,
+            isPremiumUser = isPremiumUser,
+            hasMasterPassword = true,
+            totpCodeItemData = TotpCodeItemData(
+                periodSeconds = 30,
+                timeLeftSeconds = 15,
+                verificationCode = "123456",
+                totpCode = "testCode",
+            ),
+            clock = fixedClock,
+        )
+
+        assertEquals(
+            VaultItemState.ViewState.Content(
+                common = createCommonContent(isEmpty = false, isPremiumUser = isPremiumUser)
+                    .copy(currentCipher = cipherView),
+                type = createLoginContent(isEmpty = false).copy(
+                    isPremiumUser = isPremiumUser,
+                    canViewTotpCode = true,
+                ),
             ),
             viewState,
         )

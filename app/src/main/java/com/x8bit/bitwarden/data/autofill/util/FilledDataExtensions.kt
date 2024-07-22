@@ -17,6 +17,7 @@ import com.x8bit.bitwarden.data.autofill.model.FilledData
 import com.x8bit.bitwarden.data.autofill.model.FilledItem
 import com.x8bit.bitwarden.ui.autofill.buildVaultItemAutofillRemoteViews
 import com.x8bit.bitwarden.ui.autofill.util.createVaultItemInlinePresentationOrNull
+import kotlin.random.Random
 
 /**
  * Returns all the possible [AutofillId]s that were potentially fillable for the given [FilledData].
@@ -43,7 +44,7 @@ fun FilledData.buildVaultItemDataset(
     val pendingIntent = PendingIntent
         .getActivity(
             autofillAppInfo.context,
-            0,
+            Random.nextInt(),
             intent,
             PendingIntent.FLAG_CANCEL_CURRENT.toPendingIntentMutabilityFlag(),
         )

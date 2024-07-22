@@ -482,8 +482,7 @@ Načtení proběhne automaticky.</string>
   <string name="code_sent">Kód byl odeslán!</string>
   <string name="confirm_your_identity">Pro pokračování potvrďte svou identitu.</string>
   <string name="export_vault_warning">Tento export obsahuje data Vašeho trezoru v nezašifrovaném formátu. Soubor s exportem byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Smažte jej okamžitě po jeho použití.</string>
-  <string name="enc_export_key_warning">Tento export zašifruje Vaše data pomocí šifrovacího klíče Vašeho účtu. Pokud někdy změníte šifrovací klíč Vašeho účtu, měli by jste vyexportovat data znovu, protože tento exportovaný soubor nebudete moci dešifrovat.</string>
-  <string name="enc_export_account_warning">Šifrovací klíče účtu jsou pro každý uživatelský účet Bitwardenu jedinečné, takže nelze importovat šifrovaný export do jiného účtu.</string>
+  <string name="export_vault_file_pw_protect_info">Tento soubor exportu bude chráněn heslem a k dešifrování bude vyžadovat heslo souboru.</string>
   <string name="export_vault_confirmation_title">Potvrdit export trezoru</string>
   <string name="warning">Varování</string>
   <string name="export_vault_failure">Při exportu Vašeho trezoru došlo k chybě. Pokud problém přetrvává, proveďte export z webového trezoru.</string>
@@ -924,4 +923,6 @@ Chcete se přepnout na tento účet?</string>
   <string name="launch_web_authn">Otevřít WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Při spouštění dvoufaktorového ověření WebAuthn došlo k chybě</string>
   <string name="self_hosted_server_url">Adresa URL serveru vlastního hostování</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Operace přístupového klíče se nezdařila, protože uživatele nelze ověřit.</string>
+  <string name="user_verification_direction">Ověření uživatele</string>
 </resources>

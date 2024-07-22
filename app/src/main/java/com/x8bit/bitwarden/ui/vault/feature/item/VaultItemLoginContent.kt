@@ -117,7 +117,7 @@ fun VaultItemLoginContent(
                 Spacer(modifier = Modifier.height(8.dp))
                 TotpField(
                     totpCodeItemData = totpCodeItemData,
-                    isPremiumUser = loginItemState.isPremiumUser,
+                    enabled = loginItemState.canViewTotpCode,
                     onCopyTotpClick = vaultLoginItemTypeHandlers.onCopyTotpCodeClick,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -366,11 +366,11 @@ private fun PasswordHistoryCount(
 @Composable
 private fun TotpField(
     totpCodeItemData: TotpCodeItemData,
-    isPremiumUser: Boolean,
+    enabled: Boolean,
     onCopyTotpClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (isPremiumUser) {
+    if (enabled) {
         Row {
             BitwardenTextFieldWithActions(
                 label = stringResource(id = R.string.verification_code_totp),

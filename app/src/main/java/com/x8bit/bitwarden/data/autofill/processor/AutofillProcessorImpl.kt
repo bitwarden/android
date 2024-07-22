@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillRequest
 import com.x8bit.bitwarden.data.autofill.parser.AutofillParser
 import com.x8bit.bitwarden.data.autofill.util.createAutofillSavedItemIntentSender
 import com.x8bit.bitwarden.data.autofill.util.toAutofillSaveItem
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -34,6 +35,7 @@ class AutofillProcessorImpl(
     private val parser: AutofillParser,
     private val saveInfoBuilder: SaveInfoBuilder,
     private val settingsRepository: SettingsRepository,
+    private val crashLogsManager: CrashLogsManager,
 ) : AutofillProcessor {
 
     /**
@@ -55,11 +57,14 @@ class AutofillProcessorImpl(
         // Set the listener so that any long running work is cancelled when it is no longer needed.
         cancellationSignal.setOnCancelListener { job.cancel() }
         // Process the OS data and handle invoking the callback with the result.
-        process(
-            autofillAppInfo = autofillAppInfo,
-            fillCallback = fillCallback,
-            fillRequest = request,
-        )
+        job.cancel()
+        job = scope.launch {
+            process(
+                autofillAppInfo = autofillAppInfo,
+                fillCallback = fillCallback,
+                fillRequest = request,
+            )
+        }
     }
 
     override fun processSaveRequest(
@@ -106,7 +111,7 @@ class AutofillProcessorImpl(
     /**
      * Process the [fillRequest] and invoke the [FillCallback] with the response.
      */
-    private fun process(
+    private suspend fun process(
         autofillAppInfo: AutofillAppInfo,
         fillCallback: FillCallback,
         fillRequest: FillRequest,
@@ -118,27 +123,31 @@ class AutofillProcessorImpl(
         )
         when (autofillRequest) {
             is AutofillRequest.Fillable -> {
-                job.cancel()
-                job = scope.launch {
-                    // Fulfill the [autofillRequest].
-                    val filledData = filledDataBuilder.build(
-                        autofillRequest = autofillRequest,
-                    )
-                    val saveInfo = saveInfoBuilder.build(
-                        autofillAppInfo = autofillAppInfo,
-                        autofillPartition = autofillRequest.partition,
-                        fillRequest = fillRequest,
-                        packageName = autofillRequest.packageName,
-                    )
+                // Fulfill the [autofillRequest].
+                val filledData = filledDataBuilder.build(
+                    autofillRequest = autofillRequest,
+                )
+                val saveInfo = saveInfoBuilder.build(
+                    autofillAppInfo = autofillAppInfo,
+                    autofillPartition = autofillRequest.partition,
+                    fillRequest = fillRequest,
+                    packageName = autofillRequest.packageName,
+                )
 
-                    // Load the filledData and saveInfo into a FillResponse.
-                    val response = fillResponseBuilder.build(
-                        autofillAppInfo = autofillAppInfo,
-                        filledData = filledData,
-                        saveInfo = saveInfo,
-                    )
+                // Load the filledData and saveInfo into a FillResponse.
+                val response = fillResponseBuilder.build(
+                    autofillAppInfo = autofillAppInfo,
+                    filledData = filledData,
+                    saveInfo = saveInfo,
+                )
 
+                @Suppress("TooGenericExceptionCaught")
+                try {
                     fillCallback.onSuccess(response)
+                } catch (e: RuntimeException) {
+                    // This is to catch any TransactionTooLargeExceptions that could occur here.
+                    // These exceptions get wrapped as a RuntimeException.
+                    crashLogsManager.trackNonFatalException(e)
                 }
             }
 

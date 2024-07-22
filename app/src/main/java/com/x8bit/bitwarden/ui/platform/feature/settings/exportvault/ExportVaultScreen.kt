@@ -103,9 +103,7 @@ fun ExportVaultScreen(
         BitwardenTwoButtonDialog(
             title = stringResource(id = R.string.export_vault_confirmation_title),
             message = if (state.exportFormat == ExportVaultFormat.JSON_ENCRYPTED) {
-                stringResource(id = R.string.enc_export_key_warning)
-                    .plus("\n\n")
-                    .plus(stringResource(id = R.string.enc_export_account_warning))
+                stringResource(id = R.string.export_vault_file_pw_protect_info)
             } else {
                 stringResource(
                     id = R.string.export_vault_warning,

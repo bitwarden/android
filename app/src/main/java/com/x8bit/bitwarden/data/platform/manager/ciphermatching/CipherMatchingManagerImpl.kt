@@ -5,21 +5,26 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
+import com.x8bit.bitwarden.data.platform.util.regexOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.toSdkUriMatchType
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
-import kotlin.text.Regex
 import kotlin.text.RegexOption
 import kotlin.text.isNullOrBlank
 import kotlin.text.lowercase
 import kotlin.text.matches
 import kotlin.text.startsWith
+
+/**
+ * The duration, in milliseconds, we should wait while retrieving domain data before we proceed.
+ */
+private const val GET_DOMAINS_TIMEOUT_MS: Long = 1_000L
 
 /**
  * The default [CipherMatchingManager] implementation. This class is responsible for matching
@@ -37,7 +42,8 @@ class CipherMatchingManagerImpl(
         val equivalentDomainsData = vaultRepository
             .domainsStateFlow
             .mapNotNull { it.data }
-            .first()
+            .firstWithTimeoutOrNull(timeMillis = GET_DOMAINS_TIMEOUT_MS)
+            ?: return emptyList()
 
         val isAndroidApp = matchUri.isAndroidApp()
         val defaultUriMatchType = settingsRepository.defaultUriMatchType.toSdkUriMatchType()
@@ -212,8 +218,9 @@ private fun LoginUriView.checkForMatch(
             UriMatchType.NEVER -> MatchResult.NONE
 
             UriMatchType.REGULAR_EXPRESSION -> {
-                val pattern = Regex(loginViewUri, RegexOption.IGNORE_CASE)
-                exactIfTrue(matchUri.matches(pattern))
+                regexOrNull(loginViewUri, RegexOption.IGNORE_CASE)
+                    ?.let { exactIfTrue(matchUri.matches(it)) }
+                    ?: MatchResult.NONE
             }
 
             UriMatchType.STARTS_WITH -> exactIfTrue(matchUri.startsWith(loginViewUri))

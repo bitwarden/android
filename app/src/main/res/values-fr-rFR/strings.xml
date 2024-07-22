@@ -482,8 +482,7 @@ La numérisation se fera automatiquement.</string>
   <string name="code_sent">Code envoyé !</string>
   <string name="confirm_your_identity">Confirmez votre identité pour continuer.</string>
   <string name="export_vault_warning">Cet export contient vos données de coffre dans un format non chiffré. Vous ne devriez pas stocker ou envoyer le fichier exporté par des canaux non sécurisés (comme le courriel). Supprimez-le immédiatement dès que vous avez fini de l\'utiliser.</string>
-  <string name="enc_export_key_warning">Cet export chiffre vos données en utilisant la clé de chiffrement de votre compte. Si jamais vous modifiez la clé de chiffrement de votre compte, vous devriez exporter à nouveau car vous ne pourrez pas déchiffrer ce fichier.</string>
-  <string name="enc_export_account_warning">Les clés de chiffrement du compte sont spécifiques à chaque utilisateur Bitwarden. Vous ne pouvez donc pas importer d\'export chiffré dans un compte différent.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirmez l\'export du coffre</string>
   <string name="warning">Avertissement</string>
   <string name="export_vault_failure">Un problème est survenu lors de l\'exportation de votre coffre. Si le problème persiste, vous devrez l\'exporter depuis le coffre web.</string>
@@ -925,4 +924,6 @@ Voulez-vous basculer vers ce compte ?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

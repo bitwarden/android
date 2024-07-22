@@ -482,8 +482,7 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="code_sent">Kode Terkirim!</string>
   <string name="confirm_your_identity">Konfirmasi identitas Anda untuk melanjutkan.</string>
   <string name="export_vault_warning">Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti emel). Hapus segera setelah Anda selesai menggunakannya.</string>
-  <string name="enc_export_key_warning">Ekspor ini mengenkripsi data Anda menggunakan kunci enkripsi akun Anda. Jika Anda pernah merotasi kunci enkripsi akun Anda, Anda harus mengekspor lagi karena Anda tidak akan dapat mendekripsi file ekspor ini.</string>
-  <string name="enc_export_account_warning">Kunci enkripsi akun unik untuk setiap akun pengguna Bitwarden, jadi Anda tidak dapat mengimpor ekspor terenkripsi ke akun lain.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Konfirmasi Ekspor Vault</string>
   <string name="warning">Peringatan</string>
   <string name="export_vault_failure">Terjadi masalah saat mengekspor vault Anda. Jika masalah terus berlanjut, Anda harus mengekspor dari brankas web.</string>
@@ -925,4 +924,6 @@ Do you want to switch to this account?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

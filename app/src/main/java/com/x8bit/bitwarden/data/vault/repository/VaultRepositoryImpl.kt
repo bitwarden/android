@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
-import com.bitwarden.bitwarden.ExportFormat
-import com.bitwarden.bitwarden.InitOrgCryptoRequest
-import com.bitwarden.bitwarden.InitUserCryptoMethod
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
+import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -56,6 +56,7 @@ import com.x8bit.bitwarden.data.vault.manager.VaultLockManager
 import com.x8bit.bitwarden.data.vault.manager.model.VerificationCodeItem
 import com.x8bit.bitwarden.data.vault.repository.model.CreateFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.CreateSendResult
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteFolderResult
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
@@ -105,6 +106,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
@@ -135,6 +137,7 @@ class VaultRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     pushManager: PushManager,
     private val clock: Clock,
+    private val json: Json,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
@@ -180,6 +183,7 @@ class VaultRepositoryImpl(
             ) { ciphersData, foldersData, collectionsData, sendsData ->
                 VaultData(
                     cipherViewList = ciphersData,
+                    fido2CredentialAutofillViewList = null,
                     folderViewList = foldersData,
                     collectionViewList = collectionsData,
                     sendViewList = sendsData.sendViewList,
@@ -517,6 +521,20 @@ class VaultRepositoryImpl(
                 scope = unconfinedScope,
                 started = SharingStarted.WhileSubscribed(),
                 initialValue = DataState.Loading,
+            )
+    }
+
+    override suspend fun getDecryptedFido2CredentialAutofillViews(
+        cipherViewList: List<CipherView>,
+    ): DecryptFido2CredentialAutofillViewResult {
+        return vaultSdkSource
+            .decryptFido2CredentialAutofillViews(
+                userId = activeUserId ?: return DecryptFido2CredentialAutofillViewResult.Error,
+                cipherViews = cipherViewList.toTypedArray(),
+            )
+            .fold(
+                onFailure = { DecryptFido2CredentialAutofillViewResult.Error },
+                onSuccess = { DecryptFido2CredentialAutofillViewResult.Success(it) },
             )
     }
 

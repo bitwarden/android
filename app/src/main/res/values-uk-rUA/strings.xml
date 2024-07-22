@@ -35,8 +35,8 @@
   <string name="go_to_website">Перейти на вебсайт</string>
   <string name="help_and_feedback">Допомога та зворотний зв\'язок</string>
   <string name="hide">Приховати</string>
-  <string name="internet_connection_required_message">Для продовження, під\'єднайтесь до інтернету.</string>
-  <string name="internet_connection_required_title">Необхідно з\'єднатися з інтернетом</string>
+  <string name="internet_connection_required_message">Щоб продовжити, під\'єднайтеся до інтернету.</string>
+  <string name="internet_connection_required_title">Необхідно під\'єднатися до інтернету</string>
   <string name="invalid_master_password">Недійсний головний пароль. Спробуйте знову.</string>
   <string name="invalid_pin">Недійсний PIN. Спробуйте знову.</string>
   <string name="launch">Перейти</string>
@@ -90,7 +90,7 @@
   <string name="avoid_ambiguous_characters">Уникати неоднозначних символів</string>
   <string name="bitwarden_app_extension">Розширення Bitwarden</string>
   <string name="bitwarden_app_extension_alert2">Найлегшим способом додавання нових записів у сховище є використання розширення Bitwarden. Дізнайтеся більше про використання розширення Bitwarden в меню \"Налаштування\".</string>
-  <string name="bitwarden_app_extension_description">Використовуйте Bitwarden в Safari та інших програмах для автоматичного заповнення паролів.</string>
+  <string name="bitwarden_app_extension_description">Використовуйте Bitwarden у Safari та інших програмах для автоматичного заповнення паролів.</string>
   <string name="bitwarden_autofill_service">Служба автозаповнення Bitwarden</string>
   <string name="bitwarden_autofill_accessibility_service_description">Використовуйте службу спеціальних можливостей Bitwarden, щоб автоматично вводити паролі.</string>
   <string name="change_email">Змінити е-пошту</string>
@@ -106,20 +106,20 @@
   <string name="exntesion_reenable">Повторно увімкнути розширення</string>
   <string name="extension_almost_done">Майже готово!</string>
   <string name="extension_enable">Увімкнути розширення</string>
-  <string name="extension_in_safari">В Safari знайдіть Bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню).</string>
+  <string name="extension_in_safari">У Safari знайдіть Bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню).</string>
   <string name="extension_instant_access">Отримайте миттєвий доступ до своїх паролів!</string>
   <string name="extension_ready">Ви готові до входу!</string>
-  <string name="extension_setup">Тепер ви можете легко отримувати доступ до своїх записів з Safari, Chrome та інших підтримуваних програм.</string>
-  <string name="extension_setup2">В Safari та Chrome знайдіть Bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню Поділитися).</string>
-  <string name="extension_tap_icon">Торкніться піктограми Bitwarden в меню для запуску розширення.</string>
-  <string name="extension_turn_on">Щоб увімкнути Bitwarden в Safari та інших програмах, торкніться піктограми \"Ще\" в нижньому рядку меню.</string>
+  <string name="extension_setup">Тепер ви можете легко отримувати доступ до своїх записів у Safari, Chrome та інших підтримуваних програмах.</string>
+  <string name="extension_setup2">У Safari та Chrome знайдіть Bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню Поділитися).</string>
+  <string name="extension_tap_icon">Торкніться піктограми Bitwarden у меню, щоб запустити розширення.</string>
+  <string name="extension_turn_on">Щоб увімкнути Bitwarden у Safari та інших програмах, торкніться піктограми \"Ще\" в нижньому рядку меню.</string>
   <string name="favorite">Обране</string>
   <string name="fingerprint">Відбиток пальця</string>
   <string name="generate_password">Генерувати пароль</string>
   <string name="get_password_hint">Отримати підказку для головного пароля</string>
   <string name="import_items">Імпортувати записи</string>
-  <string name="import_items_confirmation">Ви можете робити масовий імпорт записів зі сховища на bitwarden.com. Хочете перейти на вебсайт зараз?</string>
-  <string name="import_items_description">Швидкий імпорт ваших записів з інших програм керування паролями.</string>
+  <string name="import_items_confirmation">Ви можете скористатися масовим імпортуванням записів у сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</string>
+  <string name="import_items_description">Швидко імпортуйте свої записи з інших програм керування паролями.</string>
   <string name="last_sync">Остання синхронізація:</string>
   <string name="length">Довжина</string>
   <string name="lock">Блокувати</string>
@@ -160,7 +160,7 @@
   <string name="password_override_alert">Ви дійсно хочете перезаписати поточний пароль?</string>
   <string name="push_notification_alert">Bitwarden автоматично синхронізує ваше сховище за допомогою push-сповіщень. Для найкращої роботи оберіть \"Дозволити\" в наступному запиті про увімкнення push-сповіщень.</string>
   <string name="rate_the_app">Оцініть програму</string>
-  <string name="rate_the_app_description">Будь ласка, подумайте про те, щоб допомогти нам хорошим відгуком!</string>
+  <string name="rate_the_app_description">Розкажіть іншим про свої враження, залишивши хороший відгук!</string>
   <string name="regenerate_password">Генерувати новий</string>
   <string name="retype_master_password">Введіть головний пароль ще раз</string>
   <string name="search_vault">Шукати у сховищі</string>
@@ -182,7 +182,7 @@
   <string name="validating">Перевірка</string>
   <string name="verification_code">Код підтвердження</string>
   <string name="view_item">Переглянути запис</string>
-  <string name="web_vault">Веб сховище Bitwarden</string>
+  <string name="web_vault">Вебсховище Bitwarden</string>
   <string name="lost_2fa_app">Втратили доступ до програми автентифікації?</string>
   <string name="items">Записи</string>
   <string name="extension_activated">Розширення активовано!</string>
@@ -190,8 +190,8 @@
   <string name="translations">Переклади</string>
   <string name="items_for_uri">Записи для %1$s</string>
   <string name="no_items_for_uri">У вашому сховищі немає записів для %1$s.</string>
-  <string name="bitwarden_autofill_service_overlay">При виборі поля введення ви побачите накладання автозаповнення Bitwarden, до якого ви можете торкнутися, щоб запустити службу автозаповнення.</string>
-  <string name="bitwarden_autofill_service_notification_content">Торкніться цього сповіщення для автозаповнення пароля.</string>
+  <string name="bitwarden_autofill_service_overlay">Вибравши поле введення, ви побачите накладання автозаповнення Bitwarden, до якого ви можете торкнутися, щоб запустити службу автозаповнення.</string>
+  <string name="bitwarden_autofill_service_notification_content">Торкніться цього сповіщення, щоб автоматично заповнити дані.</string>
   <string name="bitwarden_autofill_service_open_accessibility_settings">Відкрити налаштування спеціальних можливостей</string>
   <string name="bitwarden_autofill_service_step1">1. На екрані налаштувань Android \"Спеціальні можливості\" в розділі \"Завантажені служби\" оберіть \"Bitwarden\".</string>
   <string name="bitwarden_autofill_service_step2">2. Змініть положення перемикача й схваліть запит.</string>
@@ -199,11 +199,11 @@
   <string name="enabled">Увімкнено</string>
   <string name="off" tools:override="true">Вимк</string>
   <string name="on" tools:override="true">Увімк</string>
-  <string name="status">Статус</string>
+  <string name="status">Стан</string>
   <string name="bitwarden_autofill_service_alert2">Найлегшим способом додавання нових записів у сховище є використання служби автозаповнення Bitwarden. Дізнайтеся більше про використання служби автозаповнення Bitwarden в меню \"Налаштування\".</string>
   <string name="autofill">Автозаповнення</string>
   <string name="autofill_or_view">Автоматично заповнити чи переглянути запис?</string>
-  <string name="bitwarden_autofill_service_match_confirm">Ви дійсно хочете використати цей запис для автоматичного заповнення? Він не повністю відповідає \"%1$s\".</string>
+  <string name="bitwarden_autofill_service_match_confirm">Ви дійсно хочете використати цей запис для автозаповнення? Він не повністю відповідає \"%1$s\".</string>
   <string name="matching_items">Відповідні записи</string>
   <string name="possible_matching_items">Можливі відповідні записи</string>
   <string name="search">Пошук</string>
@@ -251,7 +251,7 @@
   <string name="no_attachments">Немає вкладень.</string>
   <string name="file_source">Джерело файлу</string>
   <string name="feature_unavailable">Функція недоступна</string>
-  <string name="max_file_size">Максимальний розмір файлу 100 Мб.</string>
+  <string name="max_file_size">Максимальний розмір файлу 100 МБ.</string>
   <string name="update_key">Ви не можете використовувати цю функцію доки не оновите свій ключ шифрування.</string>
   <string name="encryption_key_migration_required_description_long">Потрібно перенести ключ шифрування. Увійдіть у вебсховище та оновіть свій ключ шифрування.</string>
   <string name="learn_more">Докладніше</string>
@@ -259,12 +259,12 @@
   <string name="custom_environment">Власне середовище</string>
   <string name="custom_environment_footer">Для досвідчених користувачів. Ви можете вказати основну URL-адресу окремо для кожної служби.</string>
   <string name="environment_saved">URL-адреси середовища збережено.</string>
-  <string name="formatted_incorrectly">%1$s є неправильним форматом.</string>
+  <string name="formatted_incorrectly">%1$s має некоректне форматування.</string>
   <string name="identity_url">URL-адреса сервера ідентифікації</string>
   <string name="self_hosted_environment">Середовище власного хостингу</string>
   <string name="self_hosted_environment_footer">Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden.</string>
   <string name="server_url">URL-адреса сервера</string>
-  <string name="web_vault_url">URL-адреса сервера веб сховища</string>
+  <string name="web_vault_url">URL-адреса сервера вебсховища</string>
   <string name="bitwarden_autofill_service_notification_content_old">Торкніться цього сповіщення для перегляду записів з вашого сховища.</string>
   <string name="custom_fields">Власні поля</string>
   <string name="copy_number">Копіювати номер</string>
@@ -322,8 +322,8 @@
   <string name="vault_is_locked">Сховище заблоковано</string>
   <string name="go_to_my_vault">Перейти в моє сховище</string>
   <string name="collections">Збірки</string>
-  <string name="no_items_collection">В цій збірці немає записів.</string>
-  <string name="no_items_folder">В цій теці немає записів.</string>
+  <string name="no_items_collection">У цій збірці немає записів.</string>
+  <string name="no_items_folder">У цій теці немає записів.</string>
   <string name="no_items_trash">У смітнику немає записів.</string>
   <string name="autofill_accessibility_service">Служба спеціальних можливостей автозаповнення</string>
   <string name="autofill_service_description">Служба автозаповнення Bitwarden використовує Android Autofill Framework для введення облікових даних в інших програмах на вашому пристрої.</string>
@@ -335,7 +335,7 @@
   <string name="verify_face_id">Підтвердження Face ID</string>
   <string name="windows_hello">Windows Hello</string>
   <string name="bitwarden_credential_provider_go_to_settings">Не вдалося автоматично відкрити меню налаштувань провайдера облікових даних Android. Ви можете власноруч відкрити меню в Налаштуваннях Android &gt; Система &gt; Паролі та облікові записи &gt; Паролі, ключі доступу і служби даних.</string>
-  <string name="bitwarden_autofill_go_to_settings">Нам не вдалося автоматично відкрити меню налаштувань автозаповнення Android. Ви можете перейти до меню налаштувань автозаповнення вручну в Налаштування &gt; Система &gt; Мова і введення &gt; Додатково &gt; Служба автозаповнення.</string>
+  <string name="bitwarden_autofill_go_to_settings">Не вдалося автоматично відкрити меню налаштувань автозаповнення Android. Ви можете перейти до меню налаштувань автозаповнення вручну в Налаштування &gt; Система &gt; Мова і введення &gt; Додатково &gt; Служба автозаповнення.</string>
   <string name="custom_field_name">Назва власного поля</string>
   <string name="field_type_boolean">Логічне значення</string>
   <string name="field_type_hidden">Приховано</string>
@@ -360,7 +360,7 @@
   <string name="hold_yubikey_near_top">Утримуйте Yubikey біля верхньої частини пристрою.</string>
   <string name="try_again">Спробуйте знову</string>
   <string name="yubi_key_instruction_ios">Щоб продовжити, утримуйте YubiKey NEO навпроти задньої частини пристрою.</string>
-  <string name="bitwarden_autofill_accessibility_service_description2">Служба спеціальних можливостей може бути корисною для використання, коли програми не підтримують стандартну службу автозаповнення.</string>
+  <string name="bitwarden_autofill_accessibility_service_description2">Служба спеціальних можливостей може бути корисною, коли програми не підтримують стандартну службу автозаповнення.</string>
   <string name="date_password_updated">Пароль оновлено</string>
   <string name="date_updated">Оновлено</string>
   <string name="autofill_activated">Автозаповнення активовано!</string>
@@ -471,7 +471,7 @@
   <string name="use_biometrics_to_unlock">Використовувати біометрію для розблокування</string>
   <string name="accessibility_overlay_permission_alert">Bitwarden потребує вашої уваги - Див. розділ \"Служба спеціальних можливостей автозаповнення\" в налаштуваннях Bitwarden</string>
   <string name="bitwarden_autofill_service_overlay_permission">3. У налаштуваннях Android для Bitwarden перейдіть до \"Накладання інших програм\" (розділ Розширені) і змініть положення перемикача для активації накладання.</string>
-  <string name="overlay_permission">Дозволи</string>
+  <string name="overlay_permission">Дозвіл</string>
   <string name="bitwarden_autofill_service_open_overlay_permission_settings">Відкрити налаштування дозволів накладання</string>
   <string name="bitwarden_autofill_service_step3">3. У налаштуваннях Android для Bitwarden оберіть \"Накладання інших програм\" (розділ Розширені) і змініть положення перемикача для дозволу накладання.</string>
   <string name="denied">Заборонено</string>
@@ -482,16 +482,15 @@
   <string name="code_sent">Код надіслано!</string>
   <string name="confirm_your_identity">Підтвердьте свої облікові дані для продовження.</string>
   <string name="export_vault_warning">Ваші експортовані дані сховища незашифровані. Не зберігайте і не надсилайте їх незахищеними каналами (як-от електронна пошта). Після використання негайно видаліть їх.</string>
-  <string name="enc_export_key_warning">Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, необхідно виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту.</string>
-  <string name="enc_export_account_warning">Ключі шифрування є унікальними для кожного облікового запису Bitwarden, тому ви не можете імпортувати зашифрований експорт в інший обліковий запис.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Підтвердити експорт сховища</string>
   <string name="warning">Попередження</string>
-  <string name="export_vault_failure">Сталася помилка під час експорту вашого сховища. Якщо проблема не зникне, вам необхідно буде експортувати з веб сховища.</string>
+  <string name="export_vault_failure">Сталася помилка під час експорту вашого сховища. Якщо проблема не зникне, вам необхідно буде експортувати з вебсховища.</string>
   <string name="export_vault_success">Сховище успішно експортовано</string>
   <string name="clone">Клонувати</string>
   <string name="password_generator_policy_in_effect">На параметри генератора впливають одна чи декілька політик організації</string>
   <string name="open">Відкрити</string>
-  <string name="unable_to_save_attachment">Виникла проблема зі збереженням цього вкладення. Якщо проблема не зникне, ви можете зберегти її з веб сховища.</string>
+  <string name="unable_to_save_attachment">Виникла проблема зі збереженням цього вкладення. Якщо проблема не зникне, ви можете зберегти його з вебсховища.</string>
   <string name="save_attachment_success">Вкладення успішно збережено</string>
   <string name="autofill_tile_accessibility_required">Увімкніть \"Службу спеціальних можливостей автозаповнення\" у налаштуваннях Bitwarden для використання панелі автозаповнення.</string>
   <string name="autofill_tile_uri_not_found">Полів пароля не виявлено</string>
@@ -572,7 +571,7 @@
   <string name="maximum_access_count_reached">Досягнуто максимальної кількості доступів</string>
   <string name="current_access_count">Поточна кількість доступів</string>
   <string name="new_password">Новий пароль</string>
-  <string name="password_info">За бажанням вимагати пароль в користувачів для доступу до цього відправлення.</string>
+  <string name="password_info">Ви можете встановити пароль для доступу до цього відправлення.</string>
   <string name="remove_password">Вилучити пароль</string>
   <string name="are_you_sure_remove_send_password">Ви дійсно хочете вилучити пароль?</string>
   <string name="removing_send_password">Вилучення пароля</string>
@@ -603,7 +602,7 @@
   <string name="hide_email">Приховувати мою адресу електронної пошти від отримувачів</string>
   <string name="send_options_policy_in_effect">На параметри відправлень впливають одна чи декілька політик організації.</string>
   <string name="send_file_premium_required">З безплатним обліковим записом можна відправляти лише текст. Щоб відправляти файли через Send, необхідна передплата преміум.</string>
-  <string name="send_file_email_verification_required">Для відправлення файлів необхідно підтвердити електронну пошту. Ви можете виконати підтвердження у веб сховищі.</string>
+  <string name="send_file_email_verification_required">Для відправлення файлів необхідно підтвердити електронну пошту. Ви можете виконати підтвердження у вебсховищі.</string>
   <string name="password_prompt">Повторний запит головного пароля</string>
   <string name="password_confirmation">Підтвердження головного пароля</string>
   <string name="password_confirmation_desc">Ця дія захищена. Щоб продовжити, повторно введіть головний пароль.</string>
@@ -660,7 +659,7 @@
   <string name="options_expanded">Налаштування розгорнуто. Торкніться, щоб згорнути.</string>
   <string name="options_collapsed">Налаштування згорнуто. Торкніться, щоб розгорнути.</string>
   <string name="uppercase_ato_z">Верхній регістр (A - Z)</string>
-  <string name="lowercase_ato_z">Нижній регістр (A - Z)</string>
+  <string name="lowercase_ato_z">Нижній регістр (a - z)</string>
   <string name="numbers_zero_to_nine">Числа (0 - 9)</string>
   <string name="special_characters">Спеціальні символи (!@#$%^&amp;*)</string>
   <string name="tap_to_go_back">Торкніться, щоб повернутися</string>
@@ -925,4 +924,6 @@
   <string name="launch_web_authn">Запустити WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Сталася помилка під час запуску двофакторної автентифікації WebAuthn</string>
   <string name="self_hosted_server_url">URL-адреса власного сервера</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

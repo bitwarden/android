@@ -3,6 +3,8 @@ package com.x8bit.bitwarden.ui.vault.feature.verificationcode
 import android.os.Parcelable
 import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -18,6 +20,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.feature.vault.util.toLoginIconData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -32,6 +35,7 @@ import javax.inject.Inject
 @Suppress("TooManyFunctions")
 @HiltViewModel
 class VerificationCodeViewModel @Inject constructor(
+    authRepository: AuthRepository,
     private val clipboardManager: BitwardenClipboardManager,
     private val environmentRepository: EnvironmentRepository,
     private val settingsRepository: SettingsRepository,
@@ -64,6 +68,13 @@ class VerificationCodeViewModel @Inject constructor(
 
         vaultRepository
             .getAuthCodesFlow()
+            .combine(authRepository.userStateFlow) { listDataState, userState ->
+                if (listDataState is DataState.Loaded) {
+                    filterAuthCodesForDataState(listDataState.data, userState?.activeAccount)
+                } else {
+                    listDataState
+                }
+            }
             .onEach {
                 sendAction(
                     VerificationCodeAction.Internal.AuthCodesReceive(it),
@@ -208,7 +219,10 @@ class VerificationCodeViewModel @Inject constructor(
                     viewState = VerificationCodeState.ViewState.Error(
                         message = R.string.internet_connection_required_title
                             .asText()
-                            .concat(R.string.internet_connection_required_message.asText()),
+                            .concat(
+                                " ".asText(),
+                                R.string.internet_connection_required_message.asText(),
+                            ),
                     ),
                     dialogState = null,
                 )
@@ -285,6 +299,7 @@ class VerificationCodeViewModel @Inject constructor(
                                 startIcon = item.uriLoginViewList.toLoginIconData(
                                     baseIconUrl = state.baseIconUrl,
                                     isIconLoadingDisabled = state.isIconLoadingDisabled,
+                                    usePasskeyDefaultIcon = false,
                                 ),
                             )
                         },
@@ -294,7 +309,23 @@ class VerificationCodeViewModel @Inject constructor(
         }
     }
 
-//endregion VerificationCode Handlers
+    /**
+     * Filter verification codes in the event that the user is not a "premium" account but
+     * has TOTP codes associated with a legacy organization.
+     */
+    private fun filterAuthCodesForDataState(
+        authCodes: List<VerificationCodeItem>,
+        userAccount: UserState.Account?,
+    ): DataState<List<VerificationCodeItem>> {
+        val filteredAuthCodes = authCodes.mapNotNull { authCode ->
+            if (userAccount?.isPremium == true) {
+                authCode
+            } else {
+                authCode.takeIf { it.orgUsesTotp }
+            }
+        }
+        return DataState.Loaded(filteredAuthCodes)
+    }
 }
 
 /**

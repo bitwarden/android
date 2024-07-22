@@ -70,7 +70,7 @@
   <string name="uri">URI</string>
   <string name="use_fingerprint_to_unlock">Utilizar a impressão digital para desbloquear</string>
   <string name="username">Nome de utilizador</string>
-  <string name="validation_field_required">O campo %1$s é necessário.</string>
+  <string name="validation_field_required">O campo %1$s é obrigatório.</string>
   <string name="value_has_been_copied">%1$s copiado(a)</string>
   <string name="verify_fingerprint">Verificar a impressão digital</string>
   <string name="verify_master_password">Verificar a palavra-passe mestra</string>
@@ -369,11 +369,11 @@ A leitura será efetuada automaticamente.</string>
   <string name="autofill_setup2">Recomendamos a desativação de quaisquer outras aplicações de preenchimento automático nas Definições, se não tencionar utilizá-las.</string>
   <string name="bitwarden_autofill_description">Aceda ao seu cofre diretamente a partir do seu teclado para preencher rapidamente as palavras-passe automaticamente.</string>
   <string name="autofill_turn_on">Para configurar o preenchimento automático de palavras-passe no seu dispositivo, siga estas instruções:</string>
-  <string name="autofill_turn_on1">1. Vá à aplicação \"Definições\" do iOS</string>
+  <string name="autofill_turn_on1">1. Vá às Definições do iOS</string>
   <string name="autofill_turn_on2">2. Toque em \"Palavras-passe e contas\"</string>
   <string name="autofill_turn_on3">3. Toque em \"Autopreenchimento de palavras-passe\"</string>
   <string name="autofill_turn_on4">4. Ative o Autopreenchimento</string>
-  <string name="autofill_turn_on5">5. Selecione \"Bitwarden\"</string>
+  <string name="autofill_turn_on5">5. Selecione o Bitwarden</string>
   <string name="password_autofill">Preenchimento automático de palavras-passe</string>
   <string name="bitwarden_autofill_alert2">A maneira mais fácil de adicionar novas credenciais ao seu cofre é utilizando a extensão de preenchimento automático de palavras-passe do Bitwarden. Saiba mais sobre como utilizar a extensão de preenchimento automático de palavras-passe do Bitwarden ao navegar até ao ecrã \"Definições\".</string>
   <string name="invalid_email">Endereço de e-mail inválido.</string>
@@ -387,7 +387,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="check_password">Verificar se a palavra-passe foi exposta.</string>
   <string name="password_exposed">Esta palavra-passe foi exposta %1$s vez(es) em violações de dados. Deve alterá-la.</string>
   <string name="password_safe">Esta palavra-passe não foi encontrada em nenhuma violação de dados conhecida. A sua utilização deve ser segura.</string>
-  <string name="identity_name">Nome de identidade</string>
+  <string name="identity_name">Nome da identidade</string>
   <string name="value">Valor</string>
   <string name="password_history">Histórico de palavras-passe</string>
   <string name="types">Tipos</string>
@@ -427,7 +427,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="unlock">Desbloquear</string>
   <string name="unlock_vault">Desbloquear cofre</string>
   <string name="thirty_minutes">30 minutos</string>
-  <string name="set_pin_description">Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redifinidas se alguma vez sair completamente da aplicação.</string>
+  <string name="set_pin_description">Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redefinidas se alguma vez terminar sessão por completo da aplicação.</string>
   <string name="logged_in_as_on">Sessão iniciada como %1$s em %2$s.</string>
   <string name="vault_locked_master_password">O seu cofre está bloqueado. Verifique a sua palavra-passe mestra para continuar.</string>
   <string name="vault_locked_pin">O seu cofre está bloqueado. Verifique o seu código PIN para continuar.</string>
@@ -482,16 +482,15 @@ A leitura será efetuada automaticamente.</string>
   <string name="code_sent">Código enviado!</string>
   <string name="confirm_your_identity">Confirme a sua identidade para continuar.</string>
   <string name="export_vault_warning">Esta exportação contém os dados do seu cofre num formato não encriptado. Não deve armazenar ou enviar o ficheiro exportado através de canais não seguros (como o e-mail). Elimine-o imediatamente após terminar a sua utilização.</string>
-  <string name="enc_export_key_warning">Esta exportação encripta os seus dados utilizando a chave de encriptação da sua conta. Se alguma vez regenerar a chave de encriptação da sua conta, deve exportar novamente, uma vez que não conseguirá desencriptar este ficheiro de exportação.</string>
-  <string name="enc_export_account_warning">As chaves de encriptação da conta são únicas para cada conta de utilizador Bitwarden, pelo que não é possível importar uma exportação encriptada para uma conta diferente.</string>
+  <string name="export_vault_file_pw_protect_info">A exportação deste ficheiro será protegida por uma palavra-passe e exigirá a palavra-passe do ficheiro para ser desencriptada.</string>
   <string name="export_vault_confirmation_title">Confirmar a exportação do cofre</string>
   <string name="warning">Aviso</string>
-  <string name="export_vault_failure">Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre web.</string>
+  <string name="export_vault_failure">Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre Web.</string>
   <string name="export_vault_success">Cofre exportado com sucesso</string>
   <string name="clone">Duplicar</string>
-  <string name="password_generator_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas definições do gerador.</string>
+  <string name="password_generator_policy_in_effect">Uma ou mais políticas da organização estão a afetar as suas definições do gerador</string>
   <string name="open">Abrir</string>
-  <string name="unable_to_save_attachment">Houve um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre Web.</string>
+  <string name="unable_to_save_attachment">Ocorreu um problema ao guardar este anexo. Se o problema persistir, poderá guardá-lo através do cofre Web.</string>
   <string name="save_attachment_success">Anexo guardado com sucesso</string>
   <string name="autofill_tile_accessibility_required">Por favor, ative o \"Serviço de acessibilidade de preenchimento automático\" nas definições do Bitwarden para utilizar o mosaico de preenchimento automático.</string>
   <string name="autofill_tile_uri_not_found">Nenhum campo de palavra-passe detetado</string>
@@ -616,13 +615,13 @@ A leitura será efetuada automaticamente.</string>
   <string name="update_password_error">Atualmente não é possível atualizar a palavra-passe</string>
   <string name="remove_master_password">Remover palavra-passe mestra</string>
   <string name="remove_master_password_warning">%1$s está a utilizar SSO com encriptação gerida pelo cliente. Se continuar removerá a sua palavra-passe mestra da sua conta e será exigido SSO para iniciar sessão.</string>
-  <string name="remove_master_password_warning2">Se não pretender remover a sua palavra-passe mestra, pode deixar esta organização.</string>
-  <string name="leave_organization">Deixar a organização</string>
-  <string name="leave_organization_name">Deixar %1$s?</string>
+  <string name="remove_master_password_warning2">Se não pretender remover a sua palavra-passe mestra, pode sair desta organização.</string>
+  <string name="leave_organization">Sair da organização</string>
+  <string name="leave_organization_name">Sair da %1$s?</string>
   <string name="fido2_title">FIDO2 WebAuthn</string>
   <string name="fido2_instruction">Para continuar, tenha a sua chave de segurança compatível com o FIDO2 WebAuthn pronta e siga as instruções depois de clicar em \"Autenticar WebAuthn\" no ecrã seguinte.</string>
   <string name="fido2_desc">Autenticação utilizando FIDO2 WebAuthn, pode autenticar utilizando uma chave de segurança externa.</string>
-  <string name="fido2_authenticate_web_authn">Autenticar WebAuthn</string>
+  <string name="fido2_authenticate_web_authn">Autenticar o WebAuthn</string>
   <string name="fido2_return_to_app">Voltar à aplicação</string>
   <string name="fido2_check_browser">Por favor, certifique-se de que o seu navegador predefinido suporta o WebAuthn e tente novamente.</string>
   <string name="reset_password_auto_enroll_invite_warning">Esta organização tem uma política empresarial que o inscreverá automaticamente na redefinição de palavra-passe. A inscrição permitirá que os administradores da organização alterem a sua palavra-passe mestra.</string>
@@ -678,7 +677,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="scan_qr_code">Ler código QR</string>
   <string name="cannot_scan_qr_code">Não consegue ler o código QR?</string>
   <string name="authenticator_key_scanner">Chave de autenticação</string>
-  <string name="enter_key_manually">Introduzir chave manualmente</string>
+  <string name="enter_key_manually">Introduzir a chave manualmente</string>
   <string name="add_totp">Adicionar TOTP</string>
   <string name="setup_totp">Configurar TOTP</string>
   <string name="once_the_key_is_successfully_entered">Assim que a chave for introduzida com sucesso, selecione Adicionar TOTP para guardar a chave em segurança</string>
@@ -701,7 +700,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="log_in_accepted">Início de sessão confirmado</string>
   <string name="log_in_denied">Início de sessão recusado</string>
   <string name="approve_login_requests">Aprovar pedidos de início de sessão</string>
-  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Utilize este dispositivo para aprovar pedidos de início de sessão efetuados a partir de outros dispositivos.</string>
+  <string name="use_this_device_to_approve_login_requests_made_from_other_devices">Utilize este dispositivo para aprovar pedidos de início de sessão efetuados a partir de outros dispositivos</string>
   <string name="allow_notifications">Permitir notificações</string>
   <string name="receive_push_notifications_for_new_login_requests">Receber notificações push de novos pedidos de início de sessão</string>
   <string name="no_thanks">Não, obrigado</string>
@@ -714,9 +713,9 @@ A leitura será efetuada automaticamente.</string>
   <string name="catch_all_email">E-mail de captura geral</string>
   <string name="forwarded_email_alias">Alias de e-mail reencaminhado</string>
   <string name="random_word">Palavra aleatória</string>
-  <string name="email_required_parenthesis">E-mail (necessário)</string>
-  <string name="domain_name_required_parenthesis">Nome do domínio (necessário)</string>
-  <string name="api_key_required_parenthesis">Chave da API (necessário)</string>
+  <string name="email_required_parenthesis">E-mail (obrigatório)</string>
+  <string name="domain_name_required_parenthesis">Nome do domínio (obrigatório)</string>
+  <string name="api_key_required_parenthesis">Chave da API (obrigatório)</string>
   <string name="service">Serviço</string>
   <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
@@ -728,9 +727,9 @@ A leitura será efetuada automaticamente.</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Tem a certeza de que pretende substituir o nome de utilizador atual?</string>
   <string name="generate_username">Gerar nome de utilizador</string>
   <string name="email_type">Tipo de e-mail</string>
-  <string name="website_required">Site (necessário)</string>
+  <string name="website_required">Site (obrigatório)</string>
   <string name="unknown_x_error_message">Ocorreu um erro desconhecido (%1$s).</string>
-  <string name="plus_addressed_email_description">Utilize as capacidades de subendereçamento do seu fornecedor de e-mail.</string>
+  <string name="plus_addressed_email_description">Utilize as capacidades de subendereçamento do seu fornecedor de e-mail</string>
   <string name="catch_all_email_description">Utilize a caixa de entrada de captura geral configurada para o seu domínio.</string>
   <string name="forwarded_email_description">Gerar um alias de e-mail com um serviço de reencaminhamento externo.</string>
   <string name="random">Aleatório</string>
@@ -878,7 +877,7 @@ Pretende mudar para esta conta?</string>
   <string name="choose_a_login_to_save_this_passkey_to">Escolha uma credencial para guardar esta chave de acesso</string>
   <string name="save_passkey_as_new_login">Guardar a chave de acesso como uma nova credencial</string>
   <string name="save_passkey">Guardar a chave de acesso</string>
-  <string name="passkeys_for_x">Chave de acesso para %1$s</string>
+  <string name="passkeys_for_x">Chaves de acesso para %1$s</string>
   <string name="passwords_for_x">Palavra-passe para %1$s</string>
   <string name="overwrite_passkey">Substituir chave de acesso?</string>
   <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Este item já contém uma chave de acesso. Tem a certeza de que pretende substituir a chave de acesso atual?</string>
@@ -889,7 +888,7 @@ Pretende mudar para esta conta?</string>
   <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">É necessária uma verificação para esta ação. Configure um método de desbloqueio no Bitwarden para continuar.</string>
   <string name="error_creating_passkey">Erro ao criar chave de acesso</string>
   <string name="error_reading_passkey">Erro ao ler chave de acesso</string>
-  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Houve um problema ao criar uma chave de acesso para %1$s. Tente novamente mais tarde.</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Ocorreu um problema ao criar uma chave de acesso para %1$s. Tente novamente mais tarde.</string>
   <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Houve um problema ao ler a sua chave de acesso para %1$s. Tente novamente mais tarde.</string>
   <string name="verifying_identity_ellipsis">A verificar identidade...</string>
   <string name="passwords">Palavras-passe</string>
@@ -924,4 +923,6 @@ Pretende mudar para esta conta?</string>
   <string name="launch_web_authn">Iniciar o WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ocorreu um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
   <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da chave de acesso falhou porque o utilizador não pôde ser verificado.</string>
+  <string name="user_verification_direction">Verificação do utilizador</string>
 </resources>

@@ -27,6 +27,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
 
+@Suppress("LargeClass")
 class VaultDataExtensionsTest {
 
     private val clock: Clock = Clock.fixed(
@@ -319,6 +320,77 @@ class VaultDataExtensionsTest {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `toViewState should return 1 for totpItemsCount if user does not have premium and has at least 1 totp items with org TOTP true`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(createMockCipherView(number = 1).copy(organizationUseTotp = true)),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = false,
+            vaultFilterType = VaultFilterType.AllVaults,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 1,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
+    }
+
+    @Test
+    fun `toViewState should omit non org related totp codes when user does not have premium`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(number = 1).copy(organizationUseTotp = true),
+                createMockCipherView(number = 2),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = false,
+            vaultFilterType = VaultFilterType.AllVaults,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 2,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 0,
+                totpItemsCount = 1,
+            ),
+            actual,
+        )
+    }
+
+    @Test
     fun `toLoginIconData should return a IconData Local type if isIconLoadingDisabled is true`() {
         val actual =
             createMockCipherView(
@@ -330,6 +402,7 @@ class VaultDataExtensionsTest {
                 .toLoginIconData(
                     isIconLoadingDisabled = true,
                     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    usePasskeyDefaultIcon = false,
                 )
 
         val expected = IconData.Local(iconRes = R.drawable.ic_login_item)
@@ -338,6 +411,26 @@ class VaultDataExtensionsTest {
     }
 
     @Suppress("MaxLineLength")
+    @Test
+    fun `toLoginIconData should return a IconData Local type if isIconLoadingDisabled is true and usePasskeyDefaultIcon true`() {
+        val actual =
+            createMockCipherView(
+                number = 1,
+                cipherType = CipherType.LOGIN,
+            )
+                .login
+                ?.uris
+                .toLoginIconData(
+                    isIconLoadingDisabled = true,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    usePasskeyDefaultIcon = true,
+                )
+
+        val expected = IconData.Local(iconRes = R.drawable.ic_login_item_passkey)
+
+        assertEquals(expected, actual)
+    }
+
     @Test
     fun `toLoginIconData should return a IconData Local type if no valid uris are found`() {
         val actual = listOf(
@@ -350,6 +443,7 @@ class VaultDataExtensionsTest {
             .toLoginIconData(
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                usePasskeyDefaultIcon = false,
             )
 
         val expected = IconData.Local(iconRes = R.drawable.ic_login_item)
@@ -358,6 +452,26 @@ class VaultDataExtensionsTest {
     }
 
     @Suppress("MaxLineLength")
+    @Test
+    fun `toLoginIconData should return a IconData Local type if no valid uris are found and usePasskeyDefaultIcon true`() {
+        val actual = listOf(
+            LoginUriView(
+                uri = "",
+                match = UriMatchType.HOST,
+                uriChecksum = null,
+            ),
+        )
+            .toLoginIconData(
+                isIconLoadingDisabled = false,
+                baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                usePasskeyDefaultIcon = true,
+            )
+
+        val expected = IconData.Local(iconRes = R.drawable.ic_login_item_passkey)
+
+        assertEquals(expected, actual)
+    }
+
     @Test
     fun `toLoginIconData should return a IconData Local type if an Android uri is detected`() {
         val actual = listOf(
@@ -370,6 +484,7 @@ class VaultDataExtensionsTest {
             .toLoginIconData(
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                usePasskeyDefaultIcon = false,
             )
 
         val expected = IconData.Local(iconRes = R.drawable.ic_android)
@@ -377,7 +492,6 @@ class VaultDataExtensionsTest {
         assertEquals(expected, actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toLoginIconData should return a IconData Local type if an iOS uri is detected`() {
         val actual = listOf(
@@ -390,6 +504,7 @@ class VaultDataExtensionsTest {
             .toLoginIconData(
                 isIconLoadingDisabled = false,
                 baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                usePasskeyDefaultIcon = false,
             )
 
         val expected = IconData.Local(iconRes = R.drawable.ic_ios)
@@ -397,7 +512,6 @@ class VaultDataExtensionsTest {
         assertEquals(expected, actual)
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toLoginIconData should return IconData Network type if isIconLoadingDisabled is false`() {
         mockkStatic(Uri::class)
@@ -415,6 +529,7 @@ class VaultDataExtensionsTest {
                 .toLoginIconData(
                     isIconLoadingDisabled = false,
                     baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    usePasskeyDefaultIcon = false,
                 )
 
         val expected = IconData.Network(
@@ -428,6 +543,36 @@ class VaultDataExtensionsTest {
     }
 
     @Suppress("MaxLineLength")
+    @Test
+    fun `toLoginIconData should return IconData Network type if isIconLoadingDisabled is false and usePasskeyDefaultIcon`() {
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri1.com"
+
+        val actual =
+            createMockCipherView(
+                number = 1,
+                cipherType = CipherType.LOGIN,
+            )
+                .login
+                ?.uris
+                .toLoginIconData(
+                    isIconLoadingDisabled = false,
+                    baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+                    usePasskeyDefaultIcon = true,
+                )
+
+        val expected = IconData.Network(
+            uri = "https://vault.bitwarden.com/icons/www.mockuri1.com/icon.png",
+            fallbackIconRes = R.drawable.ic_login_item_passkey,
+        )
+
+        assertEquals(expected, actual)
+
+        unmockkStatic(Uri::class)
+    }
+
     @Test
     fun `toViewState should only count deleted items for the trash count`() {
         val vaultData = VaultData(
@@ -466,7 +611,6 @@ class VaultDataExtensionsTest {
         )
     }
 
-    @Suppress("MaxLineLength")
     @Test
     fun `toViewState with over 100 no folder items should show no folder option`() {
         mockkStatic(Uri::class)

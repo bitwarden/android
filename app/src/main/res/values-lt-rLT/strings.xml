@@ -482,8 +482,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="code_sent">Kodas išsiųstas!</string>
   <string name="confirm_your_identity">Norint tęsti, patvirtinkite tapatybę.</string>
   <string name="export_vault_warning">Šiame eksporte yra jūsų saugyklos duomenys nešifruotu formatu. Neturėtumėte saugoti ar siųsti eksportuoto failo nesaugiais kanalais (pvz., el. paštu). Ištrinkite jį iš karto, kai baigsite naudoti.</string>
-  <string name="enc_export_key_warning">Šis eksportavimas užšifruoja jūsų duomenis naudojant paskyros šifravimo raktą. Jei kada nors pakeisite paskyros šifravimo raktą, turėtumėte eksportuoti dar kartą, nes negalėsite iššifruoti šio eksporto failo.</string>
-  <string name="enc_export_account_warning">Paskyros šifravimo raktai yra unikalūs kiekvienai „Bitwarden“ vartotojo paskyrai, todėl negalite importuoti šifruoto eksporto į kitą paskyrą.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Patvirtinkite saugyklos eksportavimą</string>
   <string name="warning">Įspėjimas</string>
   <string name="export_vault_failure">Eksportuojant saugyklą kilo problema. Jei problema išlieka, turėsite eksportuoti iš žiniatinklio saugyklos.</string>
@@ -925,4 +924,6 @@ Ar norite pereiti prie šios paskyros?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

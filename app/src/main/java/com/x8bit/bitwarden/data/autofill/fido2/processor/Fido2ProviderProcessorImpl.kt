@@ -25,7 +25,6 @@ import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -51,21 +50,22 @@ class Fido2ProviderProcessorImpl(
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<BeginCreateCredentialResponse, CreateCredentialException>,
     ) {
-        cancellationSignal.setOnCancelListener {
-            callback.onError(CreateCredentialCancellationException())
-            scope.cancel()
-        }
-
         val userId = authRepository.activeUserId
         if (userId == null) {
             callback.onError(CreateCredentialUnknownException("Active user is required."))
             return
         }
 
-        scope.launch {
+        val createCredentialJob = scope.launch {
             processCreateCredentialRequest(request = request)
                 ?.let { callback.onResult(it) }
                 ?: callback.onError(CreateCredentialUnknownException())
+        }
+        cancellationSignal.setOnCancelListener {
+            if (createCredentialJob.isActive) {
+                createCredentialJob.cancel()
+            }
+            callback.onError(CreateCredentialCancellationException())
         }
     }
 

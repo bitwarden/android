@@ -64,11 +64,12 @@ fun VaultData.toViewState(
     return if (filteredCipherViewList.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
+        val totpItems = filteredCipherViewList.filter { it.login?.totp != null }
         VaultState.ViewState.Content(
             totpItemsCount = if (isPremium) {
-                filteredCipherViewList.count { it.login?.totp != null }
+                totpItems.count()
             } else {
-                0
+                totpItems.count { it.organizationUseTotp }
             },
             loginItemsCount = filteredCipherViewList.count { it.type == CipherType.LOGIN },
             cardItemsCount = filteredCipherViewList.count { it.type == CipherType.CARD },
@@ -82,6 +83,7 @@ fun VaultData.toViewState(
                         hasMasterPassword = hasMasterPassword,
                         isIconLoadingDisabled = isIconLoadingDisabled,
                         baseIconUrl = baseIconUrl,
+                        isPremiumUser = isPremium,
                     )
                 },
             folderItems = filteredFolderViewList
@@ -115,6 +117,7 @@ fun VaultData.toViewState(
                         hasMasterPassword = hasMasterPassword,
                         isIconLoadingDisabled = isIconLoadingDisabled,
                         baseIconUrl = baseIconUrl,
+                        isPremiumUser = isPremium,
                     )
                 }
                 .takeIf { it.size < NO_FOLDER_ITEM_THRESHOLD }
@@ -145,13 +148,18 @@ fun VaultData.toViewState(
 fun List<LoginUriView>?.toLoginIconData(
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
+    usePasskeyDefaultIcon: Boolean,
 ): IconData {
-    val localIconData = IconData.Local(R.drawable.ic_login_item)
+    val defaultIconRes = if (usePasskeyDefaultIcon) {
+        R.drawable.ic_login_item_passkey
+    } else {
+        R.drawable.ic_login_item
+    }
 
     var uri = this
         ?.map { it.uri }
         ?.firstOrNull { uri -> uri?.contains(".") == true }
-        ?: return localIconData
+        ?: return IconData.Local(defaultIconRes)
 
     if (uri.startsWith(ANDROID_URI)) {
         return IconData.Local(R.drawable.ic_android)
@@ -162,7 +170,7 @@ fun List<LoginUriView>?.toLoginIconData(
     }
 
     if (isIconLoadingDisabled) {
-        return localIconData
+        return IconData.Local(defaultIconRes)
     }
 
     if (!uri.contains("://")) {
@@ -176,18 +184,19 @@ fun List<LoginUriView>?.toLoginIconData(
 
     return IconData.Network(
         uri = url,
-        fallbackIconRes = R.drawable.ic_login_item,
+        fallbackIconRes = defaultIconRes,
     )
 }
 
 /**
  * Transforms a [CipherView] into a [VaultState.ViewState.VaultItem].
  */
-@Suppress("MagicNumber")
+@Suppress("MagicNumber", "LongMethod")
 private fun CipherView.toVaultItemOrNull(
     hasMasterPassword: Boolean,
     isIconLoadingDisabled: Boolean,
     baseIconUrl: String,
+    isPremiumUser: Boolean,
 ): VaultState.ViewState.VaultItem? {
     val id = this.id ?: return null
     return when (type) {
@@ -198,8 +207,12 @@ private fun CipherView.toVaultItemOrNull(
             startIcon = login?.uris.toLoginIconData(
                 isIconLoadingDisabled = isIconLoadingDisabled,
                 baseIconUrl = baseIconUrl,
+                usePasskeyDefaultIcon = false,
             ),
-            overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
@@ -207,7 +220,10 @@ private fun CipherView.toVaultItemOrNull(
         CipherType.SECURE_NOTE -> VaultState.ViewState.VaultItem.SecureNote(
             id = id,
             name = name.asText(),
-            overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
@@ -219,7 +235,10 @@ private fun CipherView.toVaultItemOrNull(
             lastFourDigits = card?.number
                 ?.takeLast(4)
                 ?.asText(),
-            overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )
@@ -233,7 +252,10 @@ private fun CipherView.toVaultItemOrNull(
                 else -> "${identity?.firstName} ${identity?.lastName}"
             }
                 ?.asText(),
-            overflowOptions = toOverflowActions(hasMasterPassword = hasMasterPassword),
+            overflowOptions = toOverflowActions(
+                hasMasterPassword = hasMasterPassword,
+                isPremiumUser = isPremiumUser,
+            ),
             extraIconList = toLabelIcons(),
             shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
         )

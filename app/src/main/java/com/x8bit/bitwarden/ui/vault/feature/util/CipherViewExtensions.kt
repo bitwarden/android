@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.ui.vault.model.VaultTrailingIcon
  */
 fun CipherView.toOverflowActions(
     hasMasterPassword: Boolean,
+    isPremiumUser: Boolean,
 ): List<ListingItemOverflowAction.VaultAction> =
     this
         .id
@@ -36,7 +37,10 @@ fun CipherView.toOverflowActions(
                     .takeIf { this.viewPassword },
                 this.login?.totp
                     ?.let { ListingItemOverflowAction.VaultAction.CopyTotpClick(totpCode = it) }
-                    .takeIf { this.type == CipherType.LOGIN },
+                    .takeIf {
+                        this.type == CipherType.LOGIN &&
+                            (this.organizationUseTotp || isPremiumUser)
+                    },
                 this.card?.number?.let {
                     ListingItemOverflowAction.VaultAction.CopyNumberClick(
                         number = it,

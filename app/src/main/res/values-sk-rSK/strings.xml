@@ -482,8 +482,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="code_sent">Kód bol odoslaný!</string>
   <string name="confirm_your_identity">Ak chcete pokračovať, potvrďte svoju identitu.</string>
   <string name="export_vault_warning">Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať.</string>
-  <string name="enc_export_key_warning">Tento export zašifruje vaše údaje pomocou šifrovacieho kľúča vášho účtu. Ak niekedy budete rotovať šifrovací kľúč svojho účtu, mali by ste exportovať znova, pretože nebudete môcť dešifrovať tento exportovaný súbor.</string>
-  <string name="enc_export_account_warning">Šifrovacie kľúče účtu sú jedinečné pre každý používateľský účet Bitwarden, takže nemôžete importovať šifrovaný export do iného účtu.</string>
+  <string name="export_vault_file_pw_protect_info">Tento exportovaný súbor bude chránený heslom a na dešifrovanie bude potrebné heslo súboru.</string>
   <string name="export_vault_confirmation_title">Potvrdiť export trezoru</string>
   <string name="warning">Upozornenie</string>
   <string name="export_vault_failure">Exportovanie trezora zlyhalo. Ak problem pretrváva, skúste exportovať z Webového trezora.</string>
@@ -925,4 +924,6 @@ Chcete prepnúť na toto konto?</string>
   <string name="launch_web_authn">Spustiť WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Došlo k chybe pri spustení dvojfaktorového overovania WebAuthn</string>
   <string name="self_hosted_server_url">Adresa URL vlastného hostingu</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Operácia prístupového kľúča zlyhala, pretože používateľ sa nedá overiť.</string>
+  <string name="user_verification_direction">Overenie používateľa</string>
 </resources>

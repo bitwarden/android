@@ -240,6 +240,7 @@ fun createLoginContent(isEmpty: Boolean): VaultItemState.ViewState.Content.ItemT
         fido2CredentialCreationDateText = R.string.created_xy
             .asText("10/27/23", "12:00 PM")
             .takeUnless { isEmpty },
+        canViewTotpCode = true,
     )
 
 fun createIdentityContent(

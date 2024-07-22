@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk.model
 
+import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.vault.AttachmentView
 import com.bitwarden.vault.CardView
 import com.bitwarden.vault.CipherRepromptType
@@ -45,6 +46,7 @@ fun createMockCipherView(
     totp: String? = "mockTotp-$number",
     folderId: String? = "mockId-$number",
     clock: Clock = FIXED_CLOCK,
+    fido2Credentials: List<Fido2Credential>? = null,
 ): CipherView =
     CipherView(
         id = "mockId-$number",
@@ -59,6 +61,7 @@ fun createMockCipherView(
             number = number,
             totp = totp,
             clock = clock,
+            fido2Credentials = fido2Credentials,
         )
             .takeIf { cipherType == CipherType.LOGIN },
         creationDate = clock.instant(),
@@ -91,6 +94,7 @@ fun createMockLoginView(
     number: Int,
     totp: String? = "mockTotp-$number",
     clock: Clock = FIXED_CLOCK,
+    fido2Credentials: List<Fido2Credential>? = createMockSdkFido2CredentialList(number, clock),
 ): LoginView =
     LoginView(
         username = "mockUsername-$number",
@@ -99,7 +103,7 @@ fun createMockLoginView(
         autofillOnPageLoad = false,
         uris = listOf(createMockUriView(number = number)),
         totp = totp,
-        fido2Credentials = createMockSdkFido2CredentialList(number, clock),
+        fido2Credentials = fido2Credentials,
     )
 
 /**
@@ -131,6 +135,21 @@ fun createMockSdkFido2Credential(
     discoverable = "mockDiscoverable-$number",
     creationDate = clock.instant(),
 )
+
+/**
+ * Create a mock [Fido2CredentialAutofillView] with a given [number] and optional [cipherId].
+ */
+fun createMockFido2CredentialAutofillView(
+    number: Int,
+    cipherId: String? = null,
+): Fido2CredentialAutofillView =
+    Fido2CredentialAutofillView(
+        credentialId = "mockCredentialId-$number".encodeToByteArray(),
+        cipherId = cipherId ?: "mockCipherId-$number",
+        rpId = "mockRpId-$number",
+        userNameForUi = "mockUserNameForUi-$number",
+        userHandle = "mockUserHandle-$number".encodeToByteArray(),
+    )
 
 /**
  * Create a mock [LoginUriView] with a given [number].

@@ -1,12 +1,12 @@
 package com.x8bit.bitwarden.data.auth.repository
 
 import app.cash.turbine.test
-import com.bitwarden.bitwarden.AuthRequestMethod
-import com.bitwarden.bitwarden.AuthRequestResponse
-import com.bitwarden.bitwarden.InitUserCryptoMethod
-import com.bitwarden.bitwarden.RegisterKeyResponse
-import com.bitwarden.bitwarden.RegisterTdeKeyResponse
-import com.bitwarden.bitwarden.UpdatePasswordResponse
+import com.bitwarden.core.AuthRequestMethod
+import com.bitwarden.core.AuthRequestResponse
+import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.RegisterKeyResponse
+import com.bitwarden.core.RegisterTdeKeyResponse
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.crypto.RsaKeyPair
@@ -80,7 +80,6 @@ import com.x8bit.bitwarden.data.auth.repository.util.WebAuthResult
 import com.x8bit.bitwarden.data.auth.repository.util.toOrganizations
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.auth.repository.util.toUserState
-import com.x8bit.bitwarden.data.auth.repository.util.toUserStateJson
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
@@ -242,18 +241,12 @@ class AuthRepositoryTest {
 
     @BeforeEach
     fun beforeEach() {
-        mockkStatic(
-            GetTokenResponseJson.Success::toUserState,
-            RefreshTokenResponseJson::toUserStateJson,
-        )
+        mockkStatic(GetTokenResponseJson.Success::toUserState)
     }
 
     @AfterEach
     fun tearDown() {
-        unmockkStatic(
-            GetTokenResponseJson.Success::toUserState,
-            RefreshTokenResponseJson::toUserStateJson,
-        )
+        unmockkStatic(GetTokenResponseJson.Success::toUserState)
     }
 
     @Test
@@ -742,7 +735,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `refreshTokenSynchronously returns failure if not logged in`() = runTest {
+    fun `refreshAccessTokenSynchronously returns failure if not logged in`() = runTest {
         fakeAuthDiskSource.userState = null
 
         val result = repository.refreshAccessTokenSynchronously(USER_ID_1)
@@ -751,7 +744,7 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `refreshTokenSynchronously returns failure and logs out on failure`() = runTest {
+    fun `refreshAccessTokenSynchronously returns failure and logs out on failure`() = runTest {
         fakeAuthDiskSource.storeAccountTokens(
             userId = USER_ID_1,
             accountTokens = ACCOUNT_TOKENS_1,
@@ -768,7 +761,11 @@ class AuthRepositoryTest {
     }
 
     @Test
-    fun `refreshTokenSynchronously returns success and update user state on success`() = runTest {
+    fun `refreshAccessTokenSynchronously returns success and sets account tokens`() = runTest {
+        val updatedAccountTokens = AccountTokensJson(
+            accessToken = ACCESS_TOKEN_2,
+            refreshToken = REFRESH_TOKEN_2,
+        )
         fakeAuthDiskSource.storeAccountTokens(
             userId = USER_ID_1,
             accountTokens = ACCOUNT_TOKENS_1,
@@ -777,22 +774,16 @@ class AuthRepositoryTest {
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
         } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
-        every {
-            REFRESH_TOKEN_RESPONSE_JSON.toUserStateJson(
-                userId = USER_ID_1,
-                previousUserState = SINGLE_USER_STATE_1,
-            )
-        } returns SINGLE_USER_STATE_1
 
         val result = repository.refreshAccessTokenSynchronously(USER_ID_1)
 
         assertEquals(REFRESH_TOKEN_RESPONSE_JSON.asSuccess(), result)
+        fakeAuthDiskSource.assertAccountTokens(
+            userId = USER_ID_1,
+            accountTokens = updatedAccountTokens,
+        )
         coVerify(exactly = 1) {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
-            REFRESH_TOKEN_RESPONSE_JSON.toUserStateJson(
-                userId = USER_ID_1,
-                previousUserState = SINGLE_USER_STATE_1,
-            )
         }
     }
 
@@ -4674,12 +4665,6 @@ class AuthRepositoryTest {
         coEvery {
             identityService.refreshTokenSynchronously(REFRESH_TOKEN)
         } returns REFRESH_TOKEN_RESPONSE_JSON.asSuccess()
-        every {
-            REFRESH_TOKEN_RESPONSE_JSON.toUserStateJson(
-                userId = USER_ID_1,
-                previousUserState = SINGLE_USER_STATE_1,
-            )
-        } returns SINGLE_USER_STATE_1
 
         coEvery { vaultRepository.sync() } just runs
 

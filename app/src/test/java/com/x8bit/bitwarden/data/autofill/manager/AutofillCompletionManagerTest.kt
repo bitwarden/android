@@ -224,7 +224,7 @@ class AutofillCompletionManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `completeAutofill when filled partition, premium active user, a totp code, and totp generated succesfully should build a dataset, place it in a result Intent, copy totp, and finish the Activity`() {
+    fun `completeAutofill when filled partition, premium active user, a totp code, and totp generated successfully should build a dataset, place it in a result Intent, copy totp, and finish the Activity`() {
         val filledData: FilledData = mockk {
             every { filledPartitions } returns listOf(filledPartition)
         }
@@ -277,8 +277,94 @@ class AutofillCompletionManagerTest {
         verify {
             activity.setResult(Activity.RESULT_OK, resultIntent)
             activity.finish()
+            activity.intent
+            clipboardManager.setText(any<String>())
+            mockIntent.getAutofillAssistStructureOrNull()
+            autofillParser.parse(
+                autofillAppInfo = autofillAppInfo,
+                assistStructure = assistStructure,
+            )
+            filledPartition.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = autofillAppInfo,
+            )
+            settingsRepository.isAutoCopyTotpDisabled
+            createAutofillSelectionResultIntent(dataset = dataset)
+            Toast.makeText(
+                context,
+                R.string.verification_code_totp,
+                Toast.LENGTH_LONG,
+            )
+            toast.show()
+            organizationEventManager.trackEvent(
+                event = OrganizationEvent.CipherClientAutoFilled(cipherId = "cipherId"),
+            )
         }
+        coVerify {
+            filledDataBuilder.build(autofillRequest = fillableRequest)
+            vaultRepository.generateTotp(
+                time = any(),
+                totpCode = TOTP_CODE,
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `completeAutofill when filled partition, organization uses totp, a totp code, and totp generated successfully should build a dataset, place it in a result Intent, copy totp, and finish the Activity`() {
+        val filledData: FilledData = mockk {
+            every { filledPartitions } returns listOf(filledPartition)
+        }
+        val generateTotpResult = GenerateTotpResult.Success(
+            code = TOTP_RESULT_VALUE,
+            periodSeconds = 100,
+        )
+        every { activity.intent } returns mockIntent
+        every { mockIntent.getAutofillAssistStructureOrNull() } returns assistStructure
+        every {
+            autofillParser.parse(
+                autofillAppInfo = autofillAppInfo,
+                assistStructure = assistStructure,
+            )
+        } returns fillableRequest
+        every { cipherView.login?.totp } returns TOTP_CODE
+        every { cipherView.organizationUseTotp } returns true
+        mutableUserStateFlow.value = mockk {
+            every { activeAccount.isPremium } returns false
+        }
+        coEvery {
+            filledDataBuilder.build(autofillRequest = fillableRequest)
+        } returns filledData
+        every {
+            filledPartition.buildDataset(
+                authIntentSender = null,
+                autofillAppInfo = autofillAppInfo,
+            )
+        } returns dataset
+        every { settingsRepository.isAutoCopyTotpDisabled } returns false
+        every { createAutofillSelectionResultIntent(dataset = dataset) } returns resultIntent
+        coEvery {
+            vaultRepository.generateTotp(
+                time = any(),
+                totpCode = TOTP_CODE,
+            )
+        } returns generateTotpResult
+        every {
+            Toast.makeText(
+                context,
+                R.string.verification_code_totp,
+                Toast.LENGTH_LONG,
+            )
+        } returns toast
+
+        autofillCompletionManager.completeAutofill(
+            activity = activity,
+            cipherView = cipherView,
+        )
+
         verify {
+            activity.setResult(Activity.RESULT_OK, resultIntent)
+            activity.finish()
             activity.intent
             clipboardManager.setText(any<String>())
             mockIntent.getAutofillAssistStructureOrNull()
@@ -446,7 +532,7 @@ class AutofillCompletionManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `completeAutofill when filled partition, no premium active user, and totp code should build a dataset, place it in a result Intent, and finish the Activity`() {
+    fun `completeAutofill when filled partition, no premium active user, organization does not use totp, and totp code should build a dataset, place it in a result Intent, and finish the Activity`() {
         val filledData: FilledData = mockk {
             every { filledPartitions } returns listOf(filledPartition)
         }
@@ -459,6 +545,7 @@ class AutofillCompletionManagerTest {
             )
         } returns fillableRequest
         every { cipherView.login?.totp } returns TOTP_CODE
+        every { cipherView.organizationUseTotp } returns false
         coEvery {
             filledDataBuilder.build(autofillRequest = fillableRequest)
         } returns filledData
@@ -494,6 +581,7 @@ class AutofillCompletionManagerTest {
                 authIntentSender = null,
                 autofillAppInfo = autofillAppInfo,
             )
+            cipherView.organizationUseTotp
             settingsRepository.isAutoCopyTotpDisabled
             createAutofillSelectionResultIntent(dataset = dataset)
             organizationEventManager.trackEvent(

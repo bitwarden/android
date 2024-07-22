@@ -8,6 +8,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.util.getCompleteRegistrationDataIntentOrNull
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
@@ -45,9 +46,10 @@ class MainViewModel @Inject constructor(
     autofillSelectionManager: AutofillSelectionManager,
     private val specialCircumstanceManager: SpecialCircumstanceManager,
     private val garbageCollectionManager: GarbageCollectionManager,
+    private val fido2CredentialManager: Fido2CredentialManager,
     private val intentManager: IntentManager,
     settingsRepository: SettingsRepository,
-    vaultRepository: VaultRepository,
+    private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
@@ -228,6 +230,10 @@ class MainViewModel @Inject constructor(
             }
 
             fido2CredentialRequestData != null -> {
+                // Set the user's verification status when a new FIDO 2 request is received to force
+                // explicit verification if the user's vault is unlocked when the request is
+                // received.
+                fido2CredentialManager.isUserVerified = false
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Save(
                         fido2CredentialRequest = fido2CredentialRequestData,

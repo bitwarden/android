@@ -1,15 +1,19 @@
 package com.x8bit.bitwarden.data.vault.datasource.sdk
 
-import com.bitwarden.bitwarden.DerivePinKeyResponse
-import com.bitwarden.bitwarden.ExportFormat
-import com.bitwarden.bitwarden.InitOrgCryptoRequest
-import com.bitwarden.bitwarden.InitUserCryptoRequest
-import com.bitwarden.bitwarden.UpdatePasswordResponse
 import com.bitwarden.core.DateTime
+import com.bitwarden.core.DerivePinKeyResponse
+import com.bitwarden.core.InitOrgCryptoRequest
+import com.bitwarden.core.InitUserCryptoRequest
+import com.bitwarden.core.UpdatePasswordResponse
 import com.bitwarden.crypto.TrustDeviceResponse
+import com.bitwarden.exporters.ExportFormat
+import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAssertionResponse
+import com.bitwarden.fido.PublicKeyCredentialAuthenticatorAttestationResponse
 import com.bitwarden.sdk.BitwardenException
 import com.bitwarden.sdk.Client
 import com.bitwarden.sdk.ClientVault
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendView
 import com.bitwarden.vault.Attachment
@@ -25,7 +29,14 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.first
 import java.io.File
 
 /**
@@ -430,6 +441,87 @@ class VaultSdkSourceImpl(
                 ciphers = ciphers,
                 format = format,
             )
+    }
+
+    override suspend fun registerFido2Credential(
+        request: RegisterFido2CredentialRequest,
+        fido2CredentialStore: Fido2CredentialStore,
+    ): Result<PublicKeyCredentialAuthenticatorAttestationResponse> = runCatching {
+        callbackFlow {
+            try {
+                val client = getClient(request.userId)
+                    .platform()
+                    .fido2()
+                    .client(
+                        userInterface = Fido2CredentialRegistrationUserInterfaceImpl(
+                            selectedCipherView = request.selectedCipherView,
+                            isVerificationSupported = request.isUserVerificationSupported,
+                        ),
+                        credentialStore = fido2CredentialStore,
+                    )
+
+                val result = client
+                    .register(
+                        origin = request.origin,
+                        request = request.requestJson,
+                        clientData = request.clientData,
+                    )
+
+                send(result)
+                close()
+            } catch (e: BitwardenException) {
+                close(e)
+            }
+            awaitClose()
+        }
+            .first()
+    }
+
+    @Suppress("MaxLineLength")
+    override suspend fun authenticateFido2Credential(
+        request: AuthenticateFido2CredentialRequest,
+        fido2CredentialStore: Fido2CredentialStore,
+    ): Result<PublicKeyCredentialAuthenticatorAssertionResponse> = runCatching {
+        callbackFlow {
+            try {
+                val client = getClient(request.userId)
+                    .platform()
+                    .fido2()
+                    .client(
+                        userInterface = Fido2CredentialAuthenticationUserInterfaceImpl(
+                            selectedCipherView = request.selectedCipherView,
+                            isVerificationSupported = request.isUserVerificationSupported,
+                        ),
+                        credentialStore = fido2CredentialStore,
+                    )
+
+                val result = client.authenticate(
+                    origin = request.origin,
+                    request = request.requestJson,
+                    clientData = request.clientData,
+                )
+
+                send(result)
+                close()
+            } catch (e: BitwardenException) {
+                close(e)
+            }
+
+            awaitClose()
+        }
+            .first()
+    }
+
+    override suspend fun decryptFido2CredentialAutofillViews(
+        userId: String,
+        vararg cipherViews: CipherView,
+    ): Result<List<Fido2CredentialAutofillView>> = runCatching {
+        cipherViews.flatMap {
+            getClient(userId)
+                .platform()
+                .fido2()
+                .decryptFido2AutofillCredentials(it)
+        }
     }
 
     private suspend fun getClient(

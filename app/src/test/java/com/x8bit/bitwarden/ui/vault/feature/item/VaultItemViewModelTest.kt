@@ -397,6 +397,74 @@ class VaultItemViewModelTest : BaseViewModelTest() {
             }
 
         @Test
+        fun `on RestoreItemClick should prompt for master password when required`() = runTest {
+            val mockCipherView = mockk<CipherView> {
+                every {
+                    toViewState(
+                        previousState = any(),
+                        isPremiumUser = true,
+                        hasMasterPassword = true,
+                        totpCodeItemData = createTotpCodeData(),
+                    )
+                } returns DEFAULT_VIEW_STATE
+            }
+            mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+            mutableAuthCodeItemFlow.value = DataState.Loaded(data = createVerificationCodeItem())
+            val loginState = DEFAULT_STATE.copy(viewState = DEFAULT_VIEW_STATE)
+            val viewModel = createViewModel(state = loginState)
+            assertEquals(loginState, viewModel.stateFlow.value)
+
+            viewModel.trySendAction(VaultItemAction.Common.RestoreVaultItemClick)
+            assertEquals(
+                loginState.copy(
+                    dialog = VaultItemState.DialogState.MasterPasswordDialog(
+                        action = PasswordRepromptAction.RestoreItemClick,
+                    ),
+                ),
+                viewModel.stateFlow.value,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `on RestoreItemClick when no need to prompt for master password updates pendingCipher state correctly`() =
+            runTest {
+                val viewState =
+                    DEFAULT_VIEW_STATE.copy(common = DEFAULT_COMMON.copy(requiresReprompt = false))
+                val mockCipherView = mockk<CipherView> {
+                    every {
+                        toViewState(
+                            previousState = any(),
+                            isPremiumUser = true,
+                            hasMasterPassword = true,
+                            totpCodeItemData = createTotpCodeData(),
+                        )
+                    } returns viewState
+                }
+                mutableVaultItemFlow.value = DataState.Loaded(data = mockCipherView)
+                mutableAuthCodeItemFlow.value =
+                    DataState.Loaded(data = createVerificationCodeItem())
+                val loginState = DEFAULT_STATE.copy(viewState = viewState)
+                val viewModel = createViewModel(state = loginState)
+                assertEquals(loginState, viewModel.stateFlow.value)
+
+                // show dialog
+                viewModel.trySendAction(VaultItemAction.Common.RestoreVaultItemClick)
+                assertEquals(
+                    loginState.copy(dialog = VaultItemState.DialogState.RestoreItemDialog),
+                    viewModel.stateFlow.value,
+                )
+
+                // dismiss dialog
+                viewModel.trySendAction(VaultItemAction.Common.DismissDialogClick)
+                assertEquals(
+                    // setting this to be explicit.
+                    loginState.copy(dialog = null),
+                    viewModel.stateFlow.value,
+                )
+            }
+
+        @Test
         @Suppress("MaxLineLength")
         fun `ConfirmRestoreClick with RestoreCipherResult Success should should ShowToast and NavigateBack`() =
             runTest {
@@ -2539,6 +2607,7 @@ class VaultItemViewModelTest : BaseViewModelTest() {
                     periodSeconds = 30,
                 ),
                 fido2CredentialCreationDateText = null,
+                canViewTotpCode = true,
             )
 
         private val DEFAULT_CARD_TYPE: VaultItemState.ViewState.Content.ItemType.Card =

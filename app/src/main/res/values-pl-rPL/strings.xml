@@ -301,7 +301,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="may">Maj</string>
   <string name="middle_name">Drugie imię</string>
   <string name="mr">Pan</string>
-  <string name="mrs">Mrs</string>
+  <string name="mrs">Pani</string>
   <string name="ms">Pani</string>
   <string name="mx">Pan(i)</string>
   <string name="november">Listopad</string>
@@ -482,8 +482,7 @@ Skanowanie nastąpi automatycznie.</string>
   <string name="code_sent">Kod został wysłany!</string>
   <string name="confirm_your_identity">Potwierdź swoją tożsamość, aby kontynuować.</string>
   <string name="export_vault_warning">Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</string>
-  <string name="enc_export_key_warning">Dane eksportu zostaną zaszyfrowane za pomocą klucza szyfrowania konta. Jeśli kiedykolwiek zmienisz ten klucz, wyeksportuj dane ponownie, ponieważ nie będziesz w stanie odszyfrować tego pliku.</string>
-  <string name="enc_export_account_warning">Klucze szyfrowania konta są unikalne dla każdego użytkownika Bitwarden, więc nie możesz zaimportować zaszyfrowanego pliku eksportu na inne konto.</string>
+  <string name="export_vault_file_pw_protect_info">Plik będzie chroniony hasłem, które będzie wymagane do odszyfrowania pliku.</string>
   <string name="export_vault_confirmation_title">Potwierdź eksportowanie sejfu</string>
   <string name="warning">Ostrzeżenie</string>
   <string name="export_vault_failure">Wystąpił problem z wyeksportowaniem sejfu. Jeśli problem nadal występuje, musisz wyeksportować dane z sejfu internetowego.</string>
@@ -925,4 +924,6 @@ Czy chcesz przełączyć się na to konto?</string>
   <string name="launch_web_authn">Uruchom WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Wystąpił błąd podczas uruchamiania uwierzytelniania dwuskładnikowego WebAuthn</string>
   <string name="self_hosted_server_url">Adres URL własnejgo serwera</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Operacja Passkey nie powiodła się, ponieważ użytkownik nie mógł zostać zweryfikowany.</string>
+  <string name="user_verification_direction">Weryfikacja użytkownika</string>
 </resources>

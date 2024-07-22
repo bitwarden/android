@@ -484,8 +484,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="code_sent">קוד נשלח!</string>
   <string name="confirm_your_identity">אשר את זהותך כדי להמשיך.</string>
   <string name="export_vault_warning">הקובץ מכיל את פרטי הכספת שלך בפורמט לא מוצפן. מומלץ להעביר את הקובץ רק בדרכים מוצפנות, ומאוד לא מומלץ לשמור או לשלוח את הקובץ הזה בדרכים לא מוצפנות (כדוגמת סתם אימייל). מחק את הקובץ מיד לאחר שסיימת את השימוש בו.</string>
-  <string name="enc_export_key_warning">יצוא זה מצפין את המידע שלך בעזרת מפתח ההצפנה הנוכחי שלך. אם תחליף (rotate) את מפתחות ההצפנה של החשבון שלך, עליך לבצע ייצוא חדש משום שלא תוכל לפענח את הקובץ הקיים.</string>
-  <string name="enc_export_account_warning">מפתחות הצפנת חשבון ייחודיים לכל חשבון משתמש של Bitwarden, כך שלא ניתן לייבא ייצוא מוצפן לחשבון אחר.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">אישור ייצוא כספת</string>
   <string name="warning">אזהרה</string>
   <string name="export_vault_failure">היתה בעיה ביצוא הכספת שלך. אם הבעיה נמשכת, נסה לייצא את כספת הרשת במקום זאת.</string>
@@ -928,4 +927,6 @@ Do you want to switch to this account?</string>
   <string name="launch_web_authn">Launch WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">There was an error starting WebAuthn two factor authentication</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
+  <string name="user_verification_direction">User verification</string>
 </resources>

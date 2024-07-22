@@ -16,11 +16,13 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -29,6 +31,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.AccountSummary
 import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.components.model.IconRes
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.util.assertLockOrLogoutDialogIsDisplayed
 import com.x8bit.bitwarden.ui.util.assertLogoutConfirmationDialogIsDisplayed
@@ -51,6 +54,7 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.model.VaultFilterType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
 import io.mockk.every
+import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -82,8 +86,9 @@ class VaultItemListingScreenTest : BaseComposeTest() {
         every { launchUri(any()) } just runs
     }
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
-        every { completeFido2Create(any()) } just runs
+        every { completeFido2Registration(any()) } just runs
     }
+    private val biometricsManager: BiometricsManager = mockk()
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<VaultItemListingViewModel>(relaxed = true) {
@@ -100,6 +105,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewModel = viewModel,
                 intentManager = intentManager,
                 fido2CompletionManager = fido2CompletionManager,
+                biometricsManager = biometricsManager,
                 onNavigateBack = { onNavigateBackCalled = true },
                 onNavigateToVaultItem = { onNavigateToVaultItemId = it },
                 onNavigateToVaultAddItemScreen = { onNavigateToVaultAddItemScreenCalled = true },
@@ -352,6 +358,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no Sends in your account.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -381,12 +388,13 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `add an item button click should send AddItemClick action`() {
+    fun `Add an Item button click should send AddItemClick action`() {
         mutableStateFlow.update {
             it.copy(
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -487,6 +495,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -509,6 +518,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -525,7 +535,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `Add an item button should be displayed according to state`() {
+    fun `Add an Item button should be displayed according to state`() {
         mutableStateFlow.update { DEFAULT_STATE }
         composeTestRule
             .onNodeWithText(text = "Add an Item")
@@ -536,6 +546,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -549,6 +560,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = false,
+                    buttonText = "Add an Item".asText(),
                 ),
             )
         }
@@ -564,11 +576,15 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 viewState = VaultItemListingState.ViewState.NoItems(
                     message = "There are no items in your vault.".asText(),
                     shouldShowAddButton = true,
+                    buttonText = "Save passkey as new login".asText(),
                 ),
             )
         }
         composeTestRule
             .onNodeWithText(text = "There are no items in your vault.")
+            .assertIsDisplayed()
+        composeTestRule
+            .onNodeWithText(text = "Save passkey as new login")
             .assertIsDisplayed()
     }
 
@@ -1467,6 +1483,318 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .assertIsDisplayed()
             .assert(hasAnyAncestor(isDialog()))
     }
+
+    @Test
+    fun `fido2 master password prompt dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogTitle = "Master password confirmation"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogTitle).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2MasterPasswordPrompt(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2PasswordVerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Master password")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("password")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.MasterPasswordFido2VerificationSubmit(
+                    password = "password",
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 master password error dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogMessage = "Invalid master password. Try again."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2MasterPasswordError(
+                    title = null,
+                    message = dialogMessage.asText(),
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.RetryFido2PasswordVerificationClick(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `CompleteFido2Registration event should call Fido2CompletionManager with result`() {
+        val result = Fido2RegisterCredentialResult.Success("mockResponse")
+        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
+        verify {
+            fido2CompletionManager.completeFido2Registration(result)
+        }
+    }
+
+    @Test
+    fun `Fido2UserVerification event should perform user verification when it is supported`() {
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } just runs
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = createMockCipherView(number = 1),
+            ),
+        )
+        verify {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onSuccess should send UserVerificationSuccess action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every {
+            biometricsManager.promptUserVerification(
+                onSuccess = captureLambda(),
+                any(),
+                any(),
+                any(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationSuccess(selectedCipherView),
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onCancel should send UserVerificationCancelled action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                onCancel = captureLambda(),
+                any(),
+                any(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationCancelled,
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onLockOut should send UserVerificationLockOut action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                onLockOut = captureLambda(),
+                any(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationLockOut,
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onError should send UserVerificationFail action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                onError = captureLambda(),
+                any(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationFail,
+            )
+        }
+    }
+
+    @Test
+    fun `promptForUserVerification onNotSupported should send UserVerificationNotFailed action`() {
+        val selectedCipherView = createMockCipherView(number = 1)
+        every {
+            biometricsManager.promptUserVerification(
+                any(),
+                any(),
+                any(),
+                any(),
+                onNotSupported = captureLambda(),
+            )
+        } answers {
+            lambda<() -> Unit>().invoke()
+        }
+
+        mutableEventFlow.tryEmit(
+            VaultItemListingEvent.Fido2UserVerification(
+                isRequired = true,
+                selectedCipherView = selectedCipherView,
+            ),
+        )
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.UserVerificationNotSupported(
+                    selectedCipherId = selectedCipherView.id,
+                ),
+            )
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `OverwritePasskeyConfirmationPrompt should display based on dialog state and send ConfirmOverwriteExistingPasskeyClick on Ok click`() {
+        val stateWithDialog = DEFAULT_STATE
+            .copy(
+                dialogState = VaultItemListingState.DialogState.OverwritePasskeyConfirmationPrompt(
+                    cipherViewId = "mockCipherViewId",
+                ),
+            )
+
+        mutableStateFlow.value = stateWithDialog
+
+        composeTestRule
+            .onNodeWithText("Overwrite passkey?")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onNodeWithText("This item already contains a passkey. Are you sure you want to overwrite the current passkey?")
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+        composeTestRule
+            .onAllNodesWithText("Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.ConfirmOverwriteExistingPasskeyClick(
+                    cipherViewId = "mockCipherViewId",
+                ),
+            )
+        }
+    }
 }
 
 private val ACTIVE_ACCOUNT_SUMMARY = AccountSummary(
@@ -1515,6 +1843,7 @@ private val DEFAULT_STATE = VaultItemListingState(
     dialogState = null,
     policyDisablesSend = false,
     hasMasterPassword = true,
+    isPremium = false,
 )
 
 private val STATE_FOR_AUTOFILL = DEFAULT_STATE.copy(
@@ -1526,6 +1855,8 @@ private fun createDisplayItem(number: Int): VaultItemListingState.DisplayItem =
         id = "mockId-$number",
         title = "mockTitle-$number",
         titleTestTag = "SendNameLabel",
+        secondSubtitle = null,
+        secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "SendDateLabel",
         iconData = IconData.Local(R.drawable.ic_card_item),
@@ -1570,6 +1901,8 @@ private fun createCipherDisplayItem(number: Int): VaultItemListingState.DisplayI
         id = "mockId-$number",
         title = "mockTitle-$number",
         titleTestTag = "CipherNameLabel",
+        secondSubtitle = null,
+        secondSubtitleTestTag = null,
         subtitle = "mockSubtitle-$number",
         subtitleTestTag = "CipherSubTitleLabel",
         iconData = IconData.Local(R.drawable.ic_vault),
