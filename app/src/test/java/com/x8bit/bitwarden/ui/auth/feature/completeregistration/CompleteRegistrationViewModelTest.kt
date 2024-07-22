@@ -83,8 +83,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             completeRegistrationData = CompleteRegistrationData(
                 email = EMAIL,
                 verificationToken = TOKEN,
-                fromEmail = true,
-                region = Environment.Type.US
+                fromEmail = true
             ),
             Timestamp.now()
         )
@@ -560,7 +559,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             userEmail = EMAIL,
             emailVerificationToken = TOKEN,
             fromEmail = false,
-            region = Environment.Type.US,
             passwordInput = "",
             confirmPasswordInput = "",
             passwordHintInput = "",
@@ -572,7 +570,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             userEmail = EMAIL,
             emailVerificationToken = TOKEN,
             fromEmail = false,
-            region = Environment.Type.US,
             passwordInput = PASSWORD,
             confirmPasswordInput = PASSWORD,
             passwordHintInput = "",
