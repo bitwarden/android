@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenPinDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
@@ -184,17 +185,31 @@ fun VaultAddEditScreen(
                 )
             }
         },
-        onDismissFido2PasswordVerification = remember(viewModel) {
-            {
-                viewModel.trySendAction(
-                    action = VaultAddEditAction.Common.DismissFido2PasswordVerificationDialogClick,
-                )
-            }
-        },
         onRetryFido2PasswordVerification = remember(viewModel) {
             {
                 viewModel.trySendAction(
                     action = VaultAddEditAction.Common.RetryFido2PasswordVerificationClick,
+                )
+            }
+        },
+        onSubmitPinFido2Verification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.PinFido2VerificationSubmit(it),
+                )
+            }
+        },
+        onRetryFido2PinVerification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.RetryFido2PinVerificationClick,
+                )
+            }
+        },
+        onDismissFido2Verification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
                 )
             }
         },
@@ -326,6 +341,7 @@ fun VaultAddEditScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun VaultAddEditItemDialogs(
     dialogState: VaultAddEditState.DialogState?,
@@ -334,8 +350,10 @@ private fun VaultAddEditItemDialogs(
     onFido2ErrorDismiss: () -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
-    onDismissFido2PasswordVerification: () -> Unit,
     onRetryFido2PasswordVerification: () -> Unit,
+    onSubmitPinFido2Verification: (pin: String) -> Unit,
+    onRetryFido2PinVerification: () -> Unit,
+    onDismissFido2Verification: () -> Unit,
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
@@ -383,8 +401,8 @@ private fun VaultAddEditItemDialogs(
 
         is VaultAddEditState.DialogState.Fido2MasterPasswordPrompt -> {
             BitwardenMasterPasswordDialog(
-                onConfirmClick = { onSubmitMasterPasswordFido2Verification(it) },
-                onDismissRequest = onDismissFido2PasswordVerification,
+                onConfirmClick = onSubmitMasterPasswordFido2Verification,
+                onDismissRequest = onDismissFido2Verification,
             )
         }
 
@@ -395,6 +413,23 @@ private fun VaultAddEditItemDialogs(
                     message = R.string.invalid_master_password.asText(),
                 ),
                 onDismissRequest = onRetryFido2PasswordVerification,
+            )
+        }
+
+        is VaultAddEditState.DialogState.Fido2PinPrompt -> {
+            BitwardenPinDialog(
+                onConfirmClick = onSubmitPinFido2Verification,
+                onDismissRequest = onDismissFido2Verification,
+            )
+        }
+
+        is VaultAddEditState.DialogState.Fido2PinError -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = null,
+                    message = R.string.invalid_pin.asText(),
+                ),
+                onDismissRequest = onRetryFido2PinVerification,
             )
         }
 

@@ -240,7 +240,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.DismissFido2PasswordVerificationDialogClick,
+                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
             )
         }
 
@@ -250,7 +250,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                VaultAddEditAction.Common.DismissFido2PasswordVerificationDialogClick,
+                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
             )
         }
 
@@ -294,6 +294,85 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.RetryFido2PasswordVerificationClick,
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 pin prompt dialog should display based on state`() {
+        val dialogTitle = "Verify PIN"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogTitle).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.Fido2PinPrompt)
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogTitle)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("PIN")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.PinFido2VerificationSubmit(
+                    pin = "PIN",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 pin error dialog should display based on state`() {
+        val dialogMessage = "Invalid PIN. Try again."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.Fido2PinError)
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.RetryFido2PinVerificationClick,
             )
         }
     }
