@@ -218,4 +218,9 @@ class Fido2CredentialManagerImpl(
             e.asFailure()
         }
     }
+
+    override fun hasAuthenticationAttemptsRemaining(): Boolean =
+        authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
 }
+
+private const val MAX_AUTHENTICATION_ATTEMPTS = 5

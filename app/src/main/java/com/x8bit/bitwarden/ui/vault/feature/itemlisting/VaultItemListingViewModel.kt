@@ -972,7 +972,7 @@ class VaultItemListingViewModel @Inject constructor(
             is ValidatePasswordResult.Success -> {
                 if (!action.result.isValid) {
                     fido2CredentialManager.authenticationAttempts += 1
-                    if (fido2CredentialManager.authenticationAttempts < 5) {
+                    if (fido2CredentialManager.hasAuthenticationAttemptsRemaining()) {
                         mutableStateFlow.update {
                             it.copy(
                                 dialogState = VaultItemListingState

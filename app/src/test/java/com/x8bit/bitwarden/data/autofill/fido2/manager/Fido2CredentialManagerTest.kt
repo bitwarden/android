@@ -36,6 +36,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -561,6 +562,19 @@ class Fido2CredentialManagerTest {
                 result is Fido2RegisterCredentialResult.Error,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasAuthenticationAttemptsRemaining returns true when authenticationAttempts is less than 5`() {
+        assertTrue(fido2CredentialManager.hasAuthenticationAttemptsRemaining())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasAuthenticationAttemptsRemaining returns false when authenticationAttempts is greater than 5`() {
+        fido2CredentialManager.authenticationAttempts = 6
+        assertFalse(fido2CredentialManager.hasAuthenticationAttemptsRemaining())
+    }
 }
 
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"
