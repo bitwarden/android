@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResul
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
+import okhttp3.ResponseBody
 
 class IdentityServiceImpl(
     private val api: IdentityApi,
@@ -124,7 +125,7 @@ class IdentityServiceImpl(
 
     override suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson
-    ): Result<String?> {
+    ): Result<ResponseBody?> {
         return api.sendVerificationEmail(body = body)
     }
 }
