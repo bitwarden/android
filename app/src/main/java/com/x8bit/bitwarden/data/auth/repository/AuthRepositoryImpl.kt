@@ -1317,50 +1317,6 @@ class AuthRepositoryImpl(
             environmentUrlData = environmentRepository.environment.environmentUrlData,
         )
         val userId = userStateJson.activeUserId
-        authDiskSource.storeAccountTokens(
-            userId = userId,
-            accountTokens = AccountTokensJson(
-                accessToken = loginResponse.accessToken,
-                refreshToken = loginResponse.refreshToken,
-            ),
-        )
-        settingsRepository.hasUserLoggedInOrCreatedAccount = true
-        authDiskSource.userState = userStateJson
-        loginResponse.key?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the pending admin auth request.
-            authDiskSource.storeUserKey(userId = userId, userKey = it)
-        }
-        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
-
-        // If the user just authenticated with a two-factor code and selected the option to
-        // remember it, then the API response will return a token that will be used in place
-        // of the two-factor code on the next login attempt.
-        loginResponse.twoFactorToken?.let {
-            authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = it)
-        }
-
-        // Set the current organization identifier for use in JIT provisioning.
-        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
-            organizationIdentifier = orgIdentifier
-        }
-
-        // Handle the Trusted Device Encryption flow
-        loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions?.let { options ->
-            loginResponse.privateKey?.let { privateKey ->
-                handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
-                    trustedDeviceDecryptionOptions = options,
-                    userStateJson = userStateJson,
-                    privateKey = privateKey,
-                )
-            }
-        }
-
-        // Remove any cached data after successfully logging in.
-        identityTokenAuthModel = null
-        twoFactorResponse = null
-        resendEmailRequestJson = null
-        twoFactorDeviceData = null
 
         // Attempt to unlock the vault with password if possible.
         password?.let {
@@ -1427,6 +1383,51 @@ class AuthRepositoryImpl(
                 // time the user enters their master password and it is validated.
             }
         }
+
+        // Handle the Trusted Device Encryption flow
+        loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions?.let { options ->
+            loginResponse.privateKey?.let { privateKey ->
+                handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
+                    trustedDeviceDecryptionOptions = options,
+                    userStateJson = userStateJson,
+                    privateKey = privateKey,
+                )
+            }
+        }
+
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = AccountTokensJson(
+                accessToken = loginResponse.accessToken,
+                refreshToken = loginResponse.refreshToken,
+            ),
+        )
+        settingsRepository.hasUserLoggedInOrCreatedAccount = true
+        authDiskSource.userState = userStateJson
+        loginResponse.key?.let {
+            // Only set the value if it's present, since we may have set it already
+            // when we completed the pending admin auth request.
+            authDiskSource.storeUserKey(userId = userId, userKey = it)
+        }
+        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
+
+        // If the user just authenticated with a two-factor code and selected the option to
+        // remember it, then the API response will return a token that will be used in place
+        // of the two-factor code on the next login attempt.
+        loginResponse.twoFactorToken?.let {
+            authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = it)
+        }
+
+        // Set the current organization identifier for use in JIT provisioning.
+        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
+            organizationIdentifier = orgIdentifier
+        }
+
+        // Remove any cached data after successfully logging in.
+        identityTokenAuthModel = null
+        twoFactorResponse = null
+        resendEmailRequestJson = null
+        twoFactorDeviceData = null
 
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         vaultRepository.syncIfNecessary()
