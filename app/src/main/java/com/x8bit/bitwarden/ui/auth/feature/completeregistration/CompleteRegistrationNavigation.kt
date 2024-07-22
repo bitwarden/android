@@ -17,7 +17,7 @@ private const val COMPLETE_REGISTRATION_ROUTE =
     "$COMPLETE_REGISTRATION_PREFIX/{$EMAIL_ADDRESS}/{$VERIFICATION_TOKEN}/{$FROM_EMAIL}"
 
 /**
- * Class to retrieve login with device arguments from the [SavedStateHandle].
+ * Class to retrieve complete registration arguments from the [SavedStateHandle].
  */
 @OmitFromCoverage
 data class CompleteRegistrationArgs(

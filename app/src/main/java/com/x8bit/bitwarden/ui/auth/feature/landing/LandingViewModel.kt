@@ -160,7 +160,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClicked() {
-        // TODO ADD FEATURE FLAG email-verification
+        // TODO PM-9401: ADD FEATURE FLAG email-verification
         if (true)
             sendEvent(LandingEvent.NavigateToStartRegistration)
         else

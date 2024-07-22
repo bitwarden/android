@@ -15,7 +15,6 @@ private const val KEY_STATE = "state"
 /**
  * Models logic for the check email screen.
  */
-@Suppress("TooManyFunctions")
 @HiltViewModel
 class CheckEmailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -65,7 +64,7 @@ sealed class CheckEmailEvent {
     data object NavigateToEmailApp : CheckEmailEvent()
 
     /**
-     * Navigate to email app.
+     * Navigate to landing screen.
      */
     data object NavigateBackToLanding : CheckEmailEvent()
 }

@@ -294,7 +294,7 @@ sealed class StartRegistrationEvent {
     ) : StartRegistrationEvent()
 
     /**
-     * Navigates to the complete registration screen.
+     * Navigates to the check email screen.
      */
     data class NavigateToCheckEmail(
         val email: String,
@@ -326,7 +326,7 @@ sealed class StartRegistrationEvent {
  */
 sealed class StartRegistrationAction {
     /**
-     * User clicked submit.
+     * User clicked continue.
      */
     data object ContinueClick : StartRegistrationAction()
 

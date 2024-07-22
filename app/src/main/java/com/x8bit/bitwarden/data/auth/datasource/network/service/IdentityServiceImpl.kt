@@ -53,10 +53,7 @@ class IdentityServiceImpl(
             .registerFinish(body)
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
-                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                    code = 400,
-                    json = json,
-                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
                     codes = listOf(400, 429),
                     json = json,
                 ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
