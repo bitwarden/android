@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -44,6 +45,7 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
+    private val storedEmailVerificationUrls = mutableMapOf<String, EnvironmentUrlDataJson?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -224,6 +226,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
         storedAccountTokens[userId] = accountTokens
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
+    }
+
+    override fun getEmailVerificationUrls(userEmail: String): EnvironmentUrlDataJson? =
+        storedEmailVerificationUrls[userEmail]
+
+    override fun storeEmailVerificationUrls(userEmail: String, urls: EnvironmentUrlDataJson) {
+        storedEmailVerificationUrls[userEmail] = urls
     }
 
     /**
