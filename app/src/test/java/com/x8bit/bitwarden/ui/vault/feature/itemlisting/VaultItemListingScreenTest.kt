@@ -1673,6 +1673,80 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `fido2 pin set up dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogMessage = "Enter your PIN code."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2PinSetUpPrompt(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.DismissFido2VerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("PIN")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.PinFido2SetUpSubmit(
+                    pin = "PIN",
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 pin set up error dialog should display and function according to state`() {
+        val selectedCipherId = "selectedCipherId"
+        val dialogMessage = "The PIN field is required."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2PinSetUpError(
+                    title = null,
+                    message = dialogMessage.asText(),
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultItemListingsAction.PinFido2SetUpRetryClick(
+                    selectedCipherId = selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `CompleteFido2Registration event should call Fido2CompletionManager with result`() {
         val result = Fido2RegisterCredentialResult.Success("mockResponse")
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))

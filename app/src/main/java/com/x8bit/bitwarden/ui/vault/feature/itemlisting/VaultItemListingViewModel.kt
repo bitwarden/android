@@ -176,6 +176,7 @@ class VaultItemListingViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    @Suppress("LongMethod")
     override fun handleAction(action: VaultItemListingsAction) {
         when (action) {
             is VaultItemListingsAction.LockAccountClick -> handleLockAccountClick(action)
@@ -200,6 +201,12 @@ class VaultItemListingViewModel @Inject constructor(
 
             is VaultItemListingsAction.RetryFido2PinVerificationClick -> {
                 handleRetryFido2PinVerificationClick(action)
+            }
+
+            is VaultItemListingsAction.PinFido2SetUpSubmit -> handlePinFido2SetUpSubmit(action)
+
+            is VaultItemListingsAction.PinFido2SetUpRetryClick -> {
+                handlePinFido2SetUpRetryClick(action)
             }
 
             VaultItemListingsAction.DismissFido2VerificationDialogClick -> {
@@ -370,7 +377,13 @@ class VaultItemListingViewModel @Inject constructor(
             }
         } else {
             // Prompt the user to set up a PIN for their account.
-            // TODO: https://bitwarden.atlassian.net/browse/PM-9681
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = VaultItemListingState.DialogState.Fido2PinSetUpPrompt(
+                        selectedCipherId = selectedCipherId,
+                    ),
+                )
+            }
         }
     }
 
@@ -420,6 +433,44 @@ class VaultItemListingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 dialogState = VaultItemListingState.DialogState.Fido2PinPrompt(
+                    selectedCipherId = action.selectedCipherId,
+                ),
+            )
+        }
+    }
+
+    private fun handlePinFido2SetUpSubmit(action: VaultItemListingsAction.PinFido2SetUpSubmit) {
+        if (action.pin.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = VaultItemListingState.DialogState.Fido2PinSetUpError(
+                        title = null,
+                        message = R.string.validation_field_required.asText(R.string.pin.asText()),
+                        selectedCipherId = action.selectedCipherId,
+                    ),
+                )
+            }
+            return
+        }
+
+        // There's no need to ask the user whether or not they want to use their master password
+        // on login, and shouldRequireMasterPasswordOnRestart is hardcoded to false, because the
+        // user can only reach this part of the flow if they have no master password.
+        settingsRepository.storeUnlockPin(
+            pin = action.pin,
+            shouldRequireMasterPasswordOnRestart = false,
+        )
+
+        // After storing the PIN, the user can proceed with their original FIDO 2 request.
+        handleValidAuthentication(selectedCipherId = action.selectedCipherId)
+    }
+
+    private fun handlePinFido2SetUpRetryClick(
+        action: VaultItemListingsAction.PinFido2SetUpRetryClick,
+    ) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2PinSetUpPrompt(
                     selectedCipherId = action.selectedCipherId,
                 ),
             )
@@ -1496,6 +1547,25 @@ data class VaultItemListingState(
             val message: Text,
             val selectedCipherId: String,
         ) : DialogState()
+
+        /**
+         * Represents a dialog to prompt the user to set up a PIN for the FIDO 2 user
+         * verification flow.
+         */
+        @Parcelize
+        data class Fido2PinSetUpPrompt(
+            val selectedCipherId: String,
+        ) : DialogState()
+
+        /**
+         * Represents a dialog to alert the user that the PIN is a required field.
+         */
+        @Parcelize
+        data class Fido2PinSetUpError(
+            val title: Text?,
+            val message: Text,
+            val selectedCipherId: String,
+        ) : DialogState()
     }
 
     /**
@@ -1883,11 +1953,6 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
-     * Click to dismiss the FIDO 2 password or PIN verification dialog.
-     */
-    data object DismissFido2VerificationDialogClick : VaultItemListingsAction()
-
-    /**
      * Click to retry the FIDO 2 password verification.
      */
     data class RetryFido2PasswordVerificationClick(
@@ -1895,7 +1960,7 @@ sealed class VaultItemListingsAction {
     ) : VaultItemListingsAction()
 
     /**
-     * Click to submit the PIN for FIDO 2 verification.
+     * Click to submit the PIN for FIDO 2 user verification.
      */
     data class PinFido2VerificationSubmit(
         val pin: String,
@@ -1908,6 +1973,26 @@ sealed class VaultItemListingsAction {
     data class RetryFido2PinVerificationClick(
         val selectedCipherId: String,
     ) : VaultItemListingsAction()
+
+    /**
+     * Click to submit to set up a PIN for the FIDO 2 user verification flow.
+     */
+    data class PinFido2SetUpSubmit(
+        val pin: String,
+        val selectedCipherId: String,
+    ) : VaultItemListingsAction()
+
+    /**
+     * Click to retry setting up a PIN for the FIDO 2 user verification flow.
+     */
+    data class PinFido2SetUpRetryClick(
+        val selectedCipherId: String,
+    ) : VaultItemListingsAction()
+
+    /**
+     * Click to dismiss the FIDO 2 password or PIN verification dialog.
+     */
+    data object DismissFido2VerificationDialogClick : VaultItemListingsAction()
 
     /**
      * Click the refresh button.
