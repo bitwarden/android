@@ -5,10 +5,12 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthM
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
+import okhttp3.ResponseBody
 
 /**
  * Provides an API for querying identity endpoints.
@@ -64,4 +66,9 @@ interface IdentityService {
      * Send a verification email.
      */
     suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<ResponseBody?>
+
+    /**
+     * Register a new account to Bitwarden using email verification flow.
+     */
+    suspend fun registerFinish(body: RegisterFinishRequestJson): Result<RegisterResponseJson>
 }

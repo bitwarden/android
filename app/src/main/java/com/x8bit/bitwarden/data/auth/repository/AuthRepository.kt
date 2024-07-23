@@ -253,6 +253,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
+        emailVerificationToken: String? = null,
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,

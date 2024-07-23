@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
@@ -103,6 +104,21 @@ class IdentityServiceImpl(
             refreshToken = refreshToken,
         )
         .executeForResult()
+
+    @Suppress("MagicNumber")
+    override suspend fun registerFinish(body: RegisterFinishRequestJson): Result<RegisterResponseJson> =
+        api
+            .registerFinish(body)
+            .recoverCatching { throwable ->
+                val bitwardenError = throwable.toBitwardenError()
+                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                    codes = listOf(400, 429),
+                    json = json,
+                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
+                    code = 429,
+                    json = json,
+                ) ?: throw throwable
+            }
 
     override suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson,

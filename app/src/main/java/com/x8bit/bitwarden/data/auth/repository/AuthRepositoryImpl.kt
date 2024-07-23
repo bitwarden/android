@@ -16,6 +16,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJs
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
@@ -722,6 +723,7 @@ class AuthRepositoryImpl(
         email: String,
         masterPassword: String,
         masterPasswordHint: String?,
+        emailVerificationToken: String?,
         captchaToken: String?,
         shouldCheckDataBreaches: Boolean,
         isMasterPasswordStrong: Boolean,
@@ -750,21 +752,40 @@ class AuthRepositoryImpl(
                 kdf = kdf,
             )
             .flatMap { registerKeyResponse ->
-                identityService.register(
-                    body = RegisterRequestJson(
-                        email = email,
-                        masterPasswordHash = registerKeyResponse.masterPasswordHash,
-                        masterPasswordHint = masterPasswordHint,
-                        captchaResponse = captchaToken,
-                        key = registerKeyResponse.encryptedUserKey,
-                        keys = RegisterRequestJson.Keys(
-                            publicKey = registerKeyResponse.keys.public,
-                            encryptedPrivateKey = registerKeyResponse.keys.private,
+                if (emailVerificationToken == null) {
+                    identityService.register(
+                        body = RegisterRequestJson(
+                            email = email,
+                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
+                            masterPasswordHint = masterPasswordHint,
+                            captchaResponse = captchaToken,
+                            key = registerKeyResponse.encryptedUserKey,
+                            keys = RegisterRequestJson.Keys(
+                                publicKey = registerKeyResponse.keys.public,
+                                encryptedPrivateKey = registerKeyResponse.keys.private,
+                            ),
+                            kdfType = kdf.toKdfTypeJson(),
+                            kdfIterations = kdf.iterations,
                         ),
-                        kdfType = kdf.toKdfTypeJson(),
-                        kdfIterations = kdf.iterations,
-                    ),
-                )
+                    )
+                } else {
+                    identityService.registerFinish(
+                        body = RegisterFinishRequestJson(
+                            email = email,
+                            masterPasswordHash = registerKeyResponse.masterPasswordHash,
+                            masterPasswordHint = masterPasswordHint,
+                            emailVerificationToken = emailVerificationToken,
+                            captchaResponse = captchaToken,
+                            userSymmetricKey = registerKeyResponse.encryptedUserKey,
+                            userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                                publicKey = registerKeyResponse.keys.public,
+                                encryptedPrivateKey = registerKeyResponse.keys.private,
+                            ),
+                            kdfType = kdf.toKdfTypeJson(),
+                            kdfIterations = kdf.iterations,
+                        ),
+                    )
+                }
             }
             .fold(
                 onSuccess = {
