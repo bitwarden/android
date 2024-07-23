@@ -29,10 +29,12 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRespon
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
@@ -67,6 +69,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
@@ -120,6 +123,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -3354,6 +3358,40 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `register with email token Success should return Success`() = runTest {
+        coEvery { identityService.preLogin(EMAIL) } returns PRE_LOGIN_SUCCESS.asSuccess()
+        coEvery {
+            identityService.registerFinish(
+                body = RegisterFinishRequestJson(
+                    email = EMAIL,
+                    masterPasswordHash = PASSWORD_HASH,
+                    masterPasswordHint = null,
+                    emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+                    captchaResponse = null,
+                    userSymmetricKey = ENCRYPTED_USER_KEY,
+                    userAsymmetricKeys = RegisterFinishRequestJson.Keys(
+                        publicKey = PUBLIC_KEY,
+                        encryptedPrivateKey = PRIVATE_KEY,
+                    ),
+                    kdfType = KdfTypeJson.PBKDF2_SHA256,
+                    kdfIterations = DEFAULT_KDF_ITERATIONS.toUInt(),
+                ),
+            )
+        } returns RegisterResponseJson.Success(captchaBypassToken = CAPTCHA_KEY).asSuccess()
+
+        val result = repository.register(
+            email = EMAIL,
+            masterPassword = PASSWORD,
+            masterPasswordHint = null,
+            emailVerificationToken = EMAIL_VERIFICATION_TOKEN,
+            captchaToken = null,
+            shouldCheckDataBreaches = false,
+            isMasterPasswordStrong = true,
+        )
+        assertEquals(RegisterResult.Success(CAPTCHA_KEY), result)
+    }
+
+    @Test
     fun `resetPassword Success should return Success`() = runTest {
         val currentPassword = "currentPassword"
         val currentPasswordHash = "hashedCurrentPassword"
@@ -4898,10 +4936,81 @@ class AuthRepositoryTest {
         assertFalse(repository.validatePasswordAgainstPolicies(password = "letters"))
     }
 
+    @Test
+    fun `sendVerificationEmail success should return success`() = runTest {
+        coEvery {
+            identityService.sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = EMAIL,
+                    name = NAME,
+                    receiveMarketingEmails = true,
+                )
+            )
+        } returns EMAIL_VERIFICATION_TOKEN.toResponseBody().asSuccess()
+
+        var result = repository.sendVerificationEmail(
+            email = EMAIL,
+            name = NAME,
+            receiveMarketingEmails = true,
+        )
+        assertEquals(
+            SendVerificationEmailResult.Success(EMAIL_VERIFICATION_TOKEN),
+            result,
+        )
+    }
+
+    @Test
+    fun `sendVerificationEmail failure should return success if body null`() = runTest {
+        coEvery {
+            identityService.sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = EMAIL,
+                    name = NAME,
+                    receiveMarketingEmails = true,
+                )
+            )
+        } returns IllegalStateException("Unexpected null body!").asFailure()
+
+        var result = repository.sendVerificationEmail(
+            email = EMAIL,
+            name = NAME,
+            receiveMarketingEmails = true,
+        )
+        assertEquals(
+            SendVerificationEmailResult.Success(null),
+            result,
+        )
+    }
+
+    @Test
+    fun `sendVerificationEmail failure should return error`() = runTest {
+        coEvery {
+            identityService.sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = EMAIL,
+                    name = NAME,
+                    receiveMarketingEmails = true,
+                )
+            )
+        } returns Throwable("fail").asFailure()
+
+        var result = repository.sendVerificationEmail(
+            email = EMAIL,
+            name = NAME,
+            receiveMarketingEmails = true,
+        )
+        assertEquals(
+            SendVerificationEmailResult.Error(null),
+            result,
+        )
+    }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
+        private const val NAME = "Example Name"
         private const val EMAIL = "test@bitwarden.com"
         private const val EMAIL_2 = "test2@bitwarden.com"
+        private const val EMAIL_VERIFICATION_TOKEN = "thisisanawesometoken"
         private const val PASSWORD = "password"
         private const val PASSWORD_HASH = "passwordHash"
         private const val ACCESS_TOKEN = "accessToken"
