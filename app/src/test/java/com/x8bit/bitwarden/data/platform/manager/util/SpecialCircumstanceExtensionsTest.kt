@@ -44,6 +44,9 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.Fido2Save(
                 fido2CredentialRequest = mockk(),
             ),
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = mockk(),
+            ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
         )
@@ -86,6 +89,9 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.Fido2Save(
                 fido2CredentialRequest = mockk(),
             ),
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = mockk(),
+            ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
         )
@@ -111,6 +117,9 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = mockk(),
                 shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,

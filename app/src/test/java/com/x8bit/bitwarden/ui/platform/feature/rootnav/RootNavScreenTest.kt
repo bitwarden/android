@@ -151,5 +151,32 @@ class RootNavScreenTest : BaseComposeTest() {
                 navOptions = expectedNavOptions,
             )
         }
+
+        // Make sure navigating to vault unlocked for Fido2Save works as expected:
+        rootNavStateFlow.value =
+            RootNavState.VaultUnlockedForFido2Save(
+                activeUserId = "activeUserId",
+                fido2CredentialRequest = mockk(),
+            )
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "vault_item_listing_as_root/login",
+                navOptions = expectedNavOptions,
+            )
+        }
+
+        // Make sure navigating to vault unlocked for Fido2Assertion works as expected:
+        rootNavStateFlow.value =
+            RootNavState.VaultUnlockedForFido2Assertion(
+                activeUserId = "activeUserId",
+                fido2CredentialAssertionRequest = mockk(),
+            )
+        composeTestRule
+            .runOnIdle {
+                fakeNavHostController.assertLastNavigation(
+                    route = "vault_item_listing_as_root/login",
+                    navOptions = expectedNavOptions,
+                )
+            }
     }
 }
