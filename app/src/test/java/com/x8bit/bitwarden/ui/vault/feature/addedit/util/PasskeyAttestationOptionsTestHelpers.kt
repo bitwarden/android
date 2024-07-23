@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PublicKeyCredentialDescriptor
+import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 
 /**
  * Returns a mock FIDO 2 [PasskeyAttestationOptions] object to simulate a credential
@@ -10,7 +11,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.PublicKeyCredentialDescript
 @Suppress("MaxLineLength")
 fun createMockPasskeyAttestationOptions(
     number: Int,
-    userVerificationRequirement: PasskeyAttestationOptions.AuthenticatorSelectionCriteria.UserVerificationRequirement? = null,
+    userVerificationRequirement: UserVerificationRequirement? = null,
 ) = PasskeyAttestationOptions(
     authenticatorSelection = PasskeyAttestationOptions
         .AuthenticatorSelectionCriteria(userVerification = userVerificationRequirement),
