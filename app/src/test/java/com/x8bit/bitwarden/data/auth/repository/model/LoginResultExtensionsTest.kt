@@ -14,12 +14,14 @@ class LoginResultExtensionsTest {
     }
 
     @Test
+    @Suppress("MaxLineLength")
     fun `VaultUnlockResult with null error message as default maps to LoginResult Error with null message`() {
         val result = VaultUnlockResult.AuthenticationError().toLoginErrorResult()
         assertEquals(LoginResult.Error(errorMessage = null), result)
     }
 
     @Test
+    @Suppress("MaxLineLength")
     fun `VaultUnlockResult with no message value are mapped to LoginResult with null error message`() {
         val invalidStateResult = VaultUnlockResult.InvalidStateError.toLoginErrorResult()
         val genericErrorResult = VaultUnlockResult.GenericError.toLoginErrorResult()
