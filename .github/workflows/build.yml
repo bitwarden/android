@@ -91,7 +91,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: ["prod", "qa"]
+        variant: ["prod", "debug"]
         artifact: ["apk", "aab"]
     steps:
       - name: Check out repo
@@ -229,7 +229,7 @@ jobs:
           keyAlias:bitwarden-beta \
           keyPassword:${{ env.PLAY_BETA_KEY_PASSWORD }}
 
-      - name: Generate QA Play Store APKs
+      - name: Generate Debug Play Store APKs
         if: ${{ (matrix.variant != 'prod') && (matrix.artifact == 'apk') }}
         run: |
           bundle exec fastlane assembleDebugApks
