@@ -138,7 +138,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             coEvery {
                 sendVerificationEmail(
                     email = EMAIL,
-                    name= NAME,
+                    name = NAME,
                     receiveMarketingEmails = true,
                 )
             } returns SendVerificationEmailResult.Success(
@@ -175,7 +175,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             coEvery {
                 sendVerificationEmail(
                     email = EMAIL,
-                    name= NAME,
+                    name = NAME,
                     receiveMarketingEmails = true,
                 )
             } returns SendVerificationEmailResult.Error(errorMessage = "mock_error")
@@ -217,10 +217,10 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             coEvery {
                 sendVerificationEmail(
                     email = EMAIL,
-                    name= NAME,
+                    name = NAME,
                     receiveMarketingEmails = true,
                 )
-            } returns SendVerificationEmailResult.Success(emailVerificationToken = "verification_token",)
+            } returns SendVerificationEmailResult.Success(emailVerificationToken = "verification_token")
         }
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,
@@ -298,7 +298,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         )
         viewModel.stateFlow.test {
             awaitItem()
-            viewModel.trySendAction(StartRegistrationAction.EnvironmentTypeSelect(inputEnvironmentType))
+            viewModel.trySendAction(
+                StartRegistrationAction.EnvironmentTypeSelect(
+                    inputEnvironmentType
+                )
+            )
             assertEquals(
                 DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
                 awaitItem(),
@@ -315,7 +319,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             environmentRepository = fakeEnvironmentRepository
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(StartRegistrationAction.EnvironmentTypeSelect(inputEnvironmentType))
+            viewModel.trySendAction(
+                StartRegistrationAction.EnvironmentTypeSelect(
+                    inputEnvironmentType
+                )
+            )
             assertEquals(
                 StartRegistrationEvent.NavigateToEnvironment,
                 awaitItem(),
@@ -332,10 +340,12 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         )
         viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE.copy(
-                emailInput = "input",
-                isContinueButtonEnabled = true,
-            ), awaitItem())
+            assertEquals(
+                DEFAULT_STATE.copy(
+                    emailInput = "input",
+                    isContinueButtonEnabled = true,
+                ), awaitItem()
+            )
         }
     }
 

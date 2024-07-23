@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.CompleteRegistrationData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
@@ -56,7 +55,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
-    private val specialCircumstanceManager: SpecialCircumstanceManager = SpecialCircumstanceManagerImpl()
+    private val specialCircumstanceManager: SpecialCircumstanceManager =
+        SpecialCircumstanceManagerImpl()
 
     private var viewmodelVerifyEmailCalled = false
 
@@ -78,7 +78,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
 
     @Test
     fun `onCleared should erase specialCircumstance`() = runTest {
-        specialCircumstanceManager.specialCircumstance =  SpecialCircumstance.CompleteRegistration(
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.CompleteRegistration(
             completeRegistrationData = CompleteRegistrationData(
                 email = EMAIL,
                 verificationToken = TOKEN,
@@ -87,7 +87,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             System.currentTimeMillis()
         )
 
-        val viewModel =  CompleteRegistrationViewModel(
+        val viewModel = CompleteRegistrationViewModel(
             savedStateHandle = SavedStateHandle(mapOf("state" to DEFAULT_STATE)),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
@@ -98,51 +98,53 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CreateAccountClick with password below 12 chars should show password length dialog`() = runTest {
-        val input = "abcdefghikl"
-        coEvery {
-            mockAuthRepository.getPasswordStrength("test@test.com", input)
-        } returns PasswordStrengthResult.Error
-        val viewModel = createCompleteRegistrationViewModel()
-        viewModel.trySendAction(PasswordInputChange(input))
-        val expectedState = DEFAULT_STATE.copy(
-            passwordInput = input,
-            dialog = CompleteRegistrationDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_length_val_message_x.asText(12),
+    fun `CreateAccountClick with password below 12 chars should show password length dialog`() =
+        runTest {
+            val input = "abcdefghikl"
+            coEvery {
+                mockAuthRepository.getPasswordStrength("test@test.com", input)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel()
+            viewModel.trySendAction(PasswordInputChange(input))
+            val expectedState = DEFAULT_STATE.copy(
+                passwordInput = input,
+                dialog = CompleteRegistrationDialog.Error(
+                    BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.master_password_length_val_message_x.asText(12),
+                    ),
                 ),
-            ),
-        )
-        viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
-        viewModel.stateFlow.test {
-            assertEquals(expectedState, awaitItem())
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
         }
-    }
 
     @Test
-    fun `CreateAccountClick with passwords not matching should show password match dialog`() = runTest {
-        val input = "testtesttesttest"
-        coEvery {
-            mockAuthRepository.getPasswordStrength(EMAIL, input)
-        } returns PasswordStrengthResult.Error
-        val viewModel = createCompleteRegistrationViewModel()
-        viewModel.trySendAction(PasswordInputChange(input))
-        val expectedState = DEFAULT_STATE.copy(
-            userEmail = EMAIL,
-            passwordInput = input,
-            dialog = CompleteRegistrationDialog.Error(
-                BasicDialogState.Shown(
-                    title = R.string.an_error_has_occurred.asText(),
-                    message = R.string.master_password_confirmation_val_message.asText(),
+    fun `CreateAccountClick with passwords not matching should show password match dialog`() =
+        runTest {
+            val input = "testtesttesttest"
+            coEvery {
+                mockAuthRepository.getPasswordStrength(EMAIL, input)
+            } returns PasswordStrengthResult.Error
+            val viewModel = createCompleteRegistrationViewModel()
+            viewModel.trySendAction(PasswordInputChange(input))
+            val expectedState = DEFAULT_STATE.copy(
+                userEmail = EMAIL,
+                passwordInput = input,
+                dialog = CompleteRegistrationDialog.Error(
+                    BasicDialogState.Shown(
+                        title = R.string.an_error_has_occurred.asText(),
+                        message = R.string.master_password_confirmation_val_message.asText(),
+                    ),
                 ),
-            ),
-        )
-        viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
-        viewModel.stateFlow.test {
-            assertEquals(expectedState, awaitItem())
+            )
+            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+            viewModel.stateFlow.test {
+                assertEquals(expectedState, awaitItem())
+            }
         }
-    }
 
     @Test
     fun `CreateAccountClick with all inputs valid should show and hide loading dialog`() = runTest {
@@ -218,34 +220,35 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CreateAccountClick register returns CaptchaRequired should emit NavigateToCaptcha`() = runTest {
-        val mockkUri = mockk<Uri>()
-        every {
-            generateUriForCaptcha(captchaId = "mock_captcha_id")
-        } returns mockkUri
-        val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
-            coEvery {
-                register(
-                    email = EMAIL,
-                    masterPassword = PASSWORD,
-                    masterPasswordHint = null,
-                    emailVerificationToken = TOKEN,
-                    captchaToken = null,
-                    shouldCheckDataBreaches = false,
-                    isMasterPasswordStrong = true,
+    fun `CreateAccountClick register returns CaptchaRequired should emit NavigateToCaptcha`() =
+        runTest {
+            val mockkUri = mockk<Uri>()
+            every {
+                generateUriForCaptcha(captchaId = "mock_captcha_id")
+            } returns mockkUri
+            val repo = mockk<AuthRepository> {
+                every { captchaTokenResultFlow } returns flowOf()
+                coEvery {
+                    register(
+                        email = EMAIL,
+                        masterPassword = PASSWORD,
+                        masterPasswordHint = null,
+                        emailVerificationToken = TOKEN,
+                        captchaToken = null,
+                        shouldCheckDataBreaches = false,
+                        isMasterPasswordStrong = true,
+                    )
+                } returns RegisterResult.CaptchaRequired(captchaId = "mock_captcha_id")
+            }
+            val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
+                assertEquals(
+                    CompleteRegistrationEvent.NavigateToCaptcha(uri = mockkUri),
+                    awaitItem(),
                 )
-            } returns RegisterResult.CaptchaRequired(captchaId = "mock_captcha_id")
+            }
         }
-        val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
-        viewModel.eventFlow.test {
-            viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
-            assertEquals(
-                CompleteRegistrationEvent.NavigateToCaptcha(uri = mockkUri),
-                awaitItem(),
-            )
-        }
-    }
 
     @Test
     fun `CreateAccountClick register returns Success should emit NavigateToLogin`() = runTest {
@@ -369,7 +372,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isCheckDataBreachesToggled = true,
             )
 
-            val viewModel = createCompleteRegistrationViewModel(completeRegistrationState = initialState)
+            val viewModel =
+                createCompleteRegistrationViewModel(completeRegistrationState = initialState)
             viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
             viewModel.stateFlow.test {
                 assertEquals(
@@ -402,7 +406,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     passwordStrengthState = PasswordStrengthState.WEAK_1,
                     isCheckDataBreachesToggled = true,
                 )
-            val viewModel = createCompleteRegistrationViewModel(completeRegistrationState = initialState)
+            val viewModel =
+                createCompleteRegistrationViewModel(completeRegistrationState = initialState)
             viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
             viewModel.stateFlow.test {
                 assertEquals(
@@ -432,7 +437,10 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             DEFAULT_STATE.copy(fromEmail = true)
         )
         viewModel.eventFlow.test {
-            assertEquals(CompleteRegistrationEvent.ShowToast(R.string.email_verified.asText()), awaitItem())
+            assertEquals(
+                CompleteRegistrationEvent.ShowToast(R.string.email_verified.asText()),
+                awaitItem()
+            )
         }
     }
 

@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
-import android.net.Uri
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -55,7 +54,9 @@ class StartRegistrationScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             StartRegistrationScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
-                onNavigateToCompleteRegistration = { _, _ ->  onNavigateToCompleteRegistrationCalled = true },
+                onNavigateToCompleteRegistration = { _, _ ->
+                    onNavigateToCompleteRegistrationCalled = true
+                },
                 onNavigateToCheckEmail = { _ -> onNavigateToCheckEmailCalled = true },
                 onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
                 intentManager = intentManager,
@@ -78,18 +79,22 @@ class StartRegistrationScreenTest : BaseComposeTest() {
 
     @Test
     fun `onNavigateToCompleteRegistration event should invoke navigate to complete registration`() {
-        mutableEventFlow.tryEmit(StartRegistrationEvent.NavigateToCompleteRegistration(
-            email = "email",
-            verificationToken = "verificationToken"
-        ))
+        mutableEventFlow.tryEmit(
+            StartRegistrationEvent.NavigateToCompleteRegistration(
+                email = "email",
+                verificationToken = "verificationToken"
+            )
+        )
         assertTrue(onNavigateToCompleteRegistrationCalled)
     }
 
     @Test
     fun `NavigateToCheckEmail event should invoke navigate to check email`() {
-        mutableEventFlow.tryEmit(StartRegistrationEvent.NavigateToCheckEmail(
-            email = "email",
-        ))
+        mutableEventFlow.tryEmit(
+            StartRegistrationEvent.NavigateToCheckEmail(
+                email = "email",
+            )
+        )
         assertTrue(onNavigateToCheckEmailCalled)
     }
 

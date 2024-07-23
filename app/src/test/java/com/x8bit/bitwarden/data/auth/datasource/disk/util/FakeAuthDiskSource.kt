@@ -157,8 +157,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         storedOrganizationKeys[userId] = organizationKeys
     }
 
-
-
     override fun getOrganizations(
         userId: String,
     ): List<SyncResponseJson.Profile.Organization>? = storedOrganizations[userId]
