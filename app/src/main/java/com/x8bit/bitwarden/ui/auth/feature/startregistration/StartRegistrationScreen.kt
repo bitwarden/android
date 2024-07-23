@@ -346,7 +346,7 @@ private fun ReceiveMarketingEmailsSwitch(
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
         val strMarketingEmail =
-            stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
+            stringResource(id = R.string.get_advice_announcements_and_research_opportunities_from_bitwarden_in_your_inbox_unsubscribe_any_time)
         val strUnsubscribe = stringResource(id = R.string.unsubscribe)
         val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe, ignoreCase = true)
         val endIndexUnsubscribe = startIndexUnsubscribe + strUnsubscribe.length
