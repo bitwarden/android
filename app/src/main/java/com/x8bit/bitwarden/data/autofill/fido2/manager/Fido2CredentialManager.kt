@@ -4,6 +4,7 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 
 /**
@@ -37,6 +38,13 @@ interface Fido2CredentialManager {
     ): PasskeyAttestationOptions?
 
     /**
+     * Attempt to extract FIDO 2 passkey assertion options from the system [requestJson], or null.
+     */
+    fun getPasskeyAssertionOptionsOrNull(
+        requestJson: String,
+    ): PasskeyAssertionOptions?
+
+    /**
      * Register a new FIDO 2 credential to a users vault.
      */
     suspend fun registerFido2Credential(
@@ -44,4 +52,9 @@ interface Fido2CredentialManager {
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult
+
+    /**
+     * Whether or not the user has authentication attempts remaining.
+     */
+    fun hasAuthenticationAttemptsRemaining(): Boolean
 }

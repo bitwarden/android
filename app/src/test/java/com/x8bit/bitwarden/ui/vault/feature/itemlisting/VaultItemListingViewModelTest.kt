@@ -146,6 +146,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { isUserVerified = any() } just runs
         every { authenticationAttempts } returns 0
         every { authenticationAttempts = any() } just runs
+        every { hasAuthenticationAttemptsRemaining() } returns true
     }
 
     private val organizationEventManager = mockk<OrganizationEventManager> {
@@ -2471,7 +2472,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
         val selectedCipherId = "selectedCipherId"
         val password = "password"
-        every { fido2CredentialManager.authenticationAttempts } returns 5
+        every { fido2CredentialManager.hasAuthenticationAttemptsRemaining() } returns false
         coEvery {
             authRepository.validatePassword(password = password)
         } returns ValidatePasswordResult.Success(isValid = false)

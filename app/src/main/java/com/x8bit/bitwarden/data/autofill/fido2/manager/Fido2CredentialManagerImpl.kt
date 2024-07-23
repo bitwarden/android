@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.Digita
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -100,6 +101,17 @@ class Fido2CredentialManagerImpl(
     ): PasskeyAttestationOptions? =
         try {
             json.decodeFromString<PasskeyAttestationOptions>(requestJson)
+        } catch (e: SerializationException) {
+            null
+        } catch (e: IllegalArgumentException) {
+            null
+        }
+
+    override fun getPasskeyAssertionOptionsOrNull(
+        requestJson: String,
+    ): PasskeyAssertionOptions? =
+        try {
+            json.decodeFromString<PasskeyAssertionOptions>(requestJson)
         } catch (e: SerializationException) {
             null
         } catch (e: IllegalArgumentException) {
@@ -206,4 +218,9 @@ class Fido2CredentialManagerImpl(
             e.asFailure()
         }
     }
+
+    override fun hasAuthenticationAttemptsRemaining(): Boolean =
+        authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
 }
+
+private const val MAX_AUTHENTICATION_ATTEMPTS = 5

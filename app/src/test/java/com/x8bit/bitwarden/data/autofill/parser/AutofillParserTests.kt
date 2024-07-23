@@ -536,6 +536,66 @@ class AutofillParserTests {
         }
     }
 
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should choose first fillable AutofillView for partition when there is no focused view`() {
+        // Setup
+        setupAssistStructureWithAllAutofillViewTypes()
+        val cardAutofillView: AutofillView.Card = AutofillView.Card.ExpirationMonth(
+            data = AutofillView.Data(
+                autofillId = cardAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+            ),
+            monthValue = null,
+        )
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Username(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = false,
+                textValue = null,
+            ),
+        )
+        val autofillPartition = AutofillPartition.Card(
+            views = listOf(cardAutofillView),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = autofillPartition,
+            uri = URI,
+        )
+        every { cardViewNode.toAutofillView() } returns cardAutofillView
+        every { loginViewNode.toAutofillView() } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+        }
+    }
+
     @Test
     fun `parse should return empty inline suggestions when inline autofill is disabled`() {
         // Setup

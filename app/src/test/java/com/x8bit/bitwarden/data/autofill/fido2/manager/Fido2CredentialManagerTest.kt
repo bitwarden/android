@@ -13,6 +13,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
@@ -21,6 +22,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockPublicKeyAttestationResponse
+import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAttestationOptions
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -34,6 +36,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -57,6 +60,9 @@ class Fido2CredentialManagerTest {
         every {
             decodeFromString<PasskeyAttestationOptions>(any())
         } returns createMockPasskeyAttestationOptions(number = 1)
+        every {
+            decodeFromString<PasskeyAssertionOptions>(any())
+        } returns createMockPasskeyAssertionOptions(number = 1)
     }
     private val mockPrivilegedCallingAppInfo = mockk<CallingAppInfo> {
         every { packageName } returns "com.x8bit.bitwarden"
@@ -277,7 +283,7 @@ class Fido2CredentialManagerTest {
         }
 
     @Test
-    fun `getPasskeyCreateOptionsOrNull should return null when deserialization fails`() =
+    fun `getPasskeyAttestationOptionsOrNull should return null when deserialization fails`() =
         runTest {
             every {
                 json.decodeFromString<PasskeyAttestationOptions>(any())
@@ -291,12 +297,45 @@ class Fido2CredentialManagerTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `getPasskeyCreateOptionsOrNull should return null when IllegalArgumentException is thrown`() {
+    fun `getPasskeyAttestationOptionsOrNull should return null when IllegalArgumentException is thrown`() {
         every {
             json.decodeFromString<PasskeyAttestationOptions>(any())
         } throws IllegalArgumentException()
 
         assertNull(fido2CredentialManager.getPasskeyAttestationOptionsOrNull(requestJson = ""))
+    }
+
+    @Test
+    fun `getPasskeyAssertionOptionsOrNull should return options when deserialized`() = runTest {
+        assertEquals(
+            createMockPasskeyAssertionOptions(number = 1),
+            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
+                requestJson = "",
+            ),
+        )
+    }
+
+    @Test
+    fun `getPasskeyAssertionOptionsOrNull should return null when deserialization fails`() =
+        runTest {
+            every {
+                json.decodeFromString<PasskeyAssertionOptions>(any())
+            } throws SerializationException()
+            assertNull(
+                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
+                    requestJson = "",
+                ),
+            )
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `getPasskeyAssertionOptionsOrNull should return null when IllegalArgumentException is thrown`() {
+        every {
+            json.decodeFromString<PasskeyAssertionOptions>(any())
+        } throws IllegalArgumentException()
+
+        assertNull(fido2CredentialManager.getPasskeyAssertionOptionsOrNull(requestJson = ""))
     }
 
     @Suppress("MaxLineLength")
@@ -523,6 +562,19 @@ class Fido2CredentialManagerTest {
                 result is Fido2RegisterCredentialResult.Error,
             )
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasAuthenticationAttemptsRemaining returns true when authenticationAttempts is less than 5`() {
+        assertTrue(fido2CredentialManager.hasAuthenticationAttemptsRemaining())
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `hasAuthenticationAttemptsRemaining returns false when authenticationAttempts is greater than 5`() {
+        fido2CredentialManager.authenticationAttempts = 6
+        assertFalse(fido2CredentialManager.hasAuthenticationAttemptsRemaining())
+    }
 }
 
 private const val DEFAULT_APP_SIGNATURE = "0987654321ABCDEF"

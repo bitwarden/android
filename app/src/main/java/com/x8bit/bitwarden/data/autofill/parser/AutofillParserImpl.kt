@@ -64,6 +64,7 @@ class AutofillParserImpl(
     /**
      * Parse the [AssistStructure] into an [AutofillRequest].
      */
+    @Suppress("LongMethod")
     private fun parseInternal(
         assistStructure: AssistStructure,
         autofillAppInfo: AutofillAppInfo,
@@ -71,13 +72,24 @@ class AutofillParserImpl(
     ): AutofillRequest {
         // Parse the `assistStructure` into internal models.
         val traversalDataList = assistStructure.traverse()
-        // Flatten the autofill views for processing.
-        val autofillViews = traversalDataList
-            .map { it.autofillViews }
+        // Take only the autofill views from the node that currently has focus.
+        // Then remove all the fields that cannot be filled with data.
+        // We fallback to taking all the fillable views if nothing has focus.
+        val autofillViewsList = traversalDataList.map { it.autofillViews }
+        val autofillViews = autofillViewsList
+            .filter { views -> views.any { it.data.isFocused } }
             .flatten()
+            .filter { it !is AutofillView.Unused }
+            .takeUnless { it.isEmpty() }
+            ?: autofillViewsList
+                .flatten()
+                .filter { it !is AutofillView.Unused }
 
-        // Find the focused view.
-        val focusedView = autofillViews.firstOrNull { it.data.isFocused }
+        // Find the focused view, or fallback to the first fillable item on the screen (so
+        // we at least have something to hook into)
+        val focusedView = autofillViews
+            .firstOrNull { it.data.isFocused }
+            ?: autofillViews.firstOrNull()
 
         val packageName = traversalDataList.buildPackageNameOrNull(
             assistStructure = assistStructure,
@@ -108,6 +120,7 @@ class AutofillParserImpl(
 
             is AutofillView.Unused -> {
                 // The view is unfillable since the field is not meant to be used for autofill.
+                // This will never happen since we filter out all unused views above.
                 return AutofillRequest.Unfillable
             }
         }

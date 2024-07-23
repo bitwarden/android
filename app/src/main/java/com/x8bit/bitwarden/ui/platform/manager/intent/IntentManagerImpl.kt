@@ -52,6 +52,20 @@ private const val TEMP_CAMERA_IMAGE_DIR: String = "camera_temp"
 const val EXTRA_KEY_USER_ID: String = "user_id"
 
 /**
+ * Key for the credential id included in FIDO 2 provider "get entries".
+ *
+ * @see IntentManager.createFido2GetCredentialPendingIntent
+ */
+const val EXTRA_KEY_CREDENTIAL_ID: String = "credential_id"
+
+/**
+ * Key for the cipher id included in FIDO 2 provider "get entries".
+ *
+ * @see IntentManager.createFido2GetCredentialPendingIntent
+ */
+const val EXTRA_KEY_CIPHER_ID: String = "cipher_id"
+
+/**
  * The default implementation of the [IntentManager] for simplifying the handling of Android
  * Intents within a given context.
  */
@@ -208,6 +222,39 @@ class IntentManagerImpl(
         val intent = Intent(action)
             .setPackage(context.packageName)
             .putExtra(EXTRA_KEY_USER_ID, userId)
+
+        return PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ requestCode,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+    }
+
+    override fun createFido2GetCredentialPendingIntent(
+        action: String,
+        credentialId: String,
+        cipherId: String,
+        requestCode: Int,
+    ): PendingIntent {
+        val intent = Intent(action)
+            .setPackage(context.packageName)
+            .putExtra(EXTRA_KEY_CREDENTIAL_ID, credentialId)
+            .putExtra(EXTRA_KEY_CIPHER_ID, cipherId)
+
+        return PendingIntent.getActivity(
+            /* context = */ context,
+            /* requestCode = */ requestCode,
+            /* intent = */ intent,
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+        )
+    }
+
+    override fun createFido2UnlockPendingIntent(
+        action: String,
+        requestCode: Int,
+    ): PendingIntent {
+        val intent = Intent(action).setPackage(context.packageName)
 
         return PendingIntent.getActivity(
             /* context = */ context,

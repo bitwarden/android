@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.platform.components.content.BitwardenLoadingConten
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenMasterPasswordDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenOverwritePasskeyConfirmationDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -176,6 +177,27 @@ fun VaultAddEditScreen(
                 )
             }
         },
+        onSubmitMasterPasswordFido2Verification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.MasterPasswordFido2VerificationSubmit(it),
+                )
+            }
+        },
+        onDismissFido2PasswordVerification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.DismissFido2PasswordVerificationDialogClick,
+                )
+            }
+        },
+        onRetryFido2PasswordVerification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    action = VaultAddEditAction.Common.RetryFido2PasswordVerificationClick,
+                )
+            }
+        },
     )
 
     if (pendingDeleteCipher) {
@@ -311,6 +333,9 @@ private fun VaultAddEditItemDialogs(
     onAutofillDismissRequest: () -> Unit,
     onFido2ErrorDismiss: () -> Unit,
     onConfirmOverwriteExistingPasskey: () -> Unit,
+    onSubmitMasterPasswordFido2Verification: (password: String) -> Unit,
+    onDismissFido2PasswordVerification: () -> Unit,
+    onRetryFido2PasswordVerification: () -> Unit,
 ) {
     when (dialogState) {
         is VaultAddEditState.DialogState.Loading -> {
@@ -353,6 +378,23 @@ private fun VaultAddEditItemDialogs(
             BitwardenOverwritePasskeyConfirmationDialog(
                 onConfirmClick = onConfirmOverwriteExistingPasskey,
                 onDismissRequest = onDismissRequest,
+            )
+        }
+
+        is VaultAddEditState.DialogState.Fido2MasterPasswordPrompt -> {
+            BitwardenMasterPasswordDialog(
+                onConfirmClick = { onSubmitMasterPasswordFido2Verification(it) },
+                onDismissRequest = onDismissFido2PasswordVerification,
+            )
+        }
+
+        is VaultAddEditState.DialogState.Fido2MasterPasswordError -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = null,
+                    message = R.string.invalid_master_password.asText(),
+                ),
+                onDismissRequest = onRetryFido2PasswordVerification,
             )
         }
 
