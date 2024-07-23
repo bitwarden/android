@@ -60,6 +60,7 @@ class RootNavViewModel @Inject constructor(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
         val userState = action.userState
+        val specialCircumstance = action.specialCircumstance
         val updatedRootNavState = when {
             userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
                 !userState.activeAccount.isVaultUnlocked &&
@@ -69,12 +70,26 @@ class RootNavViewModel @Inject constructor(
 
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
+            specialCircumstance is SpecialCircumstance.CompleteRegistration -> {
+                // When the user is on the lock screen or already in the vault
+                if (userState?.activeAccount != null && !authRepository.hasPendingAccountAddition) {
+                    authRepository.hasPendingAccountAddition = true
+                    return
+                }
+                RootNavState.CompleteOngoingRegistration(
+                    email = specialCircumstance.completeRegistrationData.email,
+                    verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
+                    fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
+                    timestamp = specialCircumstance.timestamp
+                )
+            }
+
             userState == null ||
                 !userState.activeAccount.isLoggedIn ||
                 userState.hasPendingAccountAddition -> RootNavState.Auth
 
             userState.activeAccount.isVaultUnlocked -> {
-                when (val specialCircumstance = action.specialCircumstance) {
+                when (specialCircumstance) {
                     is SpecialCircumstance.AutofillSave -> {
                         RootNavState.VaultUnlockedForAutofillSave(
                             autofillSaveItem = specialCircumstance.autofillSaveItem,
@@ -105,6 +120,14 @@ class RootNavViewModel @Inject constructor(
                     SpecialCircumstance.VaultShortcut,
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
+
+                    is SpecialCircumstance.CompleteRegistration ->
+                        RootNavState.CompleteOngoingRegistration(
+                            email = specialCircumstance.completeRegistrationData.email,
+                            verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
+                            fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
+                            timestamp = specialCircumstance.timestamp
+                        )
                 }
             }
 
@@ -199,6 +222,17 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object VaultUnlockedForNewSend : RootNavState()
+
+    /**
+     * App should show the screen to complete an ongoing registration process.
+     */
+    @Parcelize
+    data class CompleteOngoingRegistration(
+        val email: String,
+        val verificationToken: String,
+        val fromEmail: Boolean,
+        val timestamp: Long,
+    ) : RootNavState()
 
     /**
      * App should show the auth confirmation screen for an unlocked user.

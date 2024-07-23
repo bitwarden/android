@@ -95,7 +95,9 @@ fun RootNavScreen(
     }
 
     val targetRoute = when (state) {
-        RootNavState.Auth -> AUTH_GRAPH_ROUTE
+        RootNavState.Auth,
+        is RootNavState.CompleteOngoingRegistration,
+        -> AUTH_GRAPH_ROUTE
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
         RootNavState.SetPassword -> SET_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
@@ -191,6 +193,18 @@ fun RootNavScreen(
                     vaultItemListingType = VaultItemListingType.Login,
                     navOptions = rootNavOptions,
                 )
+            }
+
+            is RootNavState.CompleteOngoingRegistration -> {
+                navController.navigateToAuthGraph(rootNavOptions)
+                // TODO add navigation to complete registration
+                /*
+                    navController.navigateToCompleteRegistration(
+                        emailAddress = currentState.email,
+                        verificationToken = currentState.verificationToken,
+                        fromEmail = currentState.fromEmail
+                    )
+                */
             }
         }
     }
