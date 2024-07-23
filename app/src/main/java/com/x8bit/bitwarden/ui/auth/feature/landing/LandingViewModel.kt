@@ -42,21 +42,26 @@ class LandingViewModel @Inject constructor(
             isContinueButtonEnabled = authRepository.rememberedEmailAddress != null,
             isRememberMeEnabled = authRepository.rememberedEmailAddress != null,
             selectedEnvironmentType = environmentRepository.environment.type,
+            selectedEnvironmentLabel = environmentRepository.environment.label,
             dialog = null,
             accountSummaries = authRepository.userStateFlow.value?.toAccountSummaries().orEmpty(),
         ),
 ) {
 
     /**
-     * Returns the [AccountSummary] from the current state that matches the current email input,
-     * of `null` if there is no match.
+     * Returns the [AccountSummary] from the current state that matches the current email input and
+     * the the current environment, or `null` if there is no match.
      */
     private val matchingAccountSummary: AccountSummary?
         get() {
             val currentEmail = state.emailInput
+            val currentEnvironmentLabel = state.selectedEnvironmentLabel
             val accountSummaries = state.accountSummaries
             return accountSummaries
-                .find { it.email == currentEmail }
+                .find {
+                    it.email == currentEmail &&
+                        it.environmentLabel == currentEnvironmentLabel
+                }
                 ?.takeUnless { !it.isLoggedIn }
         }
 
@@ -221,6 +226,7 @@ class LandingViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 selectedEnvironmentType = action.environment.type,
+                selectedEnvironmentLabel = action.environment.label,
             )
         }
     }
@@ -248,6 +254,7 @@ data class LandingState(
     val isContinueButtonEnabled: Boolean,
     val isRememberMeEnabled: Boolean,
     val selectedEnvironmentType: Environment.Type,
+    val selectedEnvironmentLabel: String,
     val dialog: DialogState?,
     val accountSummaries: List<AccountSummary>,
 ) : Parcelable {
