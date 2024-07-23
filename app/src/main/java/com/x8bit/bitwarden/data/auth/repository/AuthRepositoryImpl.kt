@@ -55,7 +55,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.model.ValidatePINResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
@@ -1106,18 +1106,18 @@ class AuthRepositoryImpl(
             }
     }
 
-    override suspend fun validatePIN(pin: String): ValidatePINResult {
+    override suspend fun validatePin(pin: String): ValidatePinResult {
         val activeAccount = authDiskSource
             .userState
             ?.activeAccount
             ?.profile
-            ?: return ValidatePINResult.Error
+            ?: return ValidatePinResult.Error
         val privateKey = authDiskSource
             .getPrivateKey(userId = activeAccount.userId)
-            ?: return ValidatePINResult.Error
+            ?: return ValidatePinResult.Error
         val pinProtectedUserKey = authDiskSource
             .getPinProtectedUserKey(userId = activeAccount.userId)
-            ?: return ValidatePINResult.Error
+            ?: return ValidatePinResult.Error
 
         // HACK: As the SDK doesn't provide a way to directly validate the pin yet, we instead
         // try to initialize the user crypto, and if it succeeds then the PIN is correct, otherwise
@@ -1139,15 +1139,15 @@ class AuthRepositoryImpl(
                 onSuccess = {
                     when (it) {
                         InitializeCryptoResult.Success -> {
-                            ValidatePINResult.Success(isValid = true)
+                            ValidatePinResult.Success(isValid = true)
                         }
 
                         InitializeCryptoResult.AuthenticationError -> {
-                            ValidatePINResult.Success(isValid = false)
+                            ValidatePinResult.Success(isValid = false)
                         }
                     }
                 },
-                onFailure = { ValidatePINResult.Error },
+                onFailure = { ValidatePinResult.Error },
             )
     }
 

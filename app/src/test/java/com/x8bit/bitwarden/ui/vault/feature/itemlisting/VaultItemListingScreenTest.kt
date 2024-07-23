@@ -1579,7 +1579,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `fido2 PIN prompt dialog should display and function according to state`() {
+    fun `fido2 pin prompt dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogTitle = "Verify PIN"
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -1587,7 +1587,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                dialogState = VaultItemListingState.DialogState.Fido2PINPrompt(
+                dialogState = VaultItemListingState.DialogState.Fido2PinPrompt(
                     selectedCipherId = selectedCipherId,
                 ),
             )
@@ -1629,7 +1629,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.PINFido2VerificationSubmit(
+                VaultItemListingsAction.PinFido2VerificationSubmit(
                     pin = "PIN",
                     selectedCipherId = selectedCipherId,
                 ),
@@ -1638,7 +1638,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `fido2 PIN error dialog should display and function according to state`() {
+    fun `fido2 pin error dialog should display and function according to state`() {
         val selectedCipherId = "selectedCipherId"
         val dialogMessage = "Invalid PIN. Try again."
         composeTestRule.onNode(isDialog()).assertDoesNotExist()
@@ -1646,7 +1646,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
 
         mutableStateFlow.update {
             it.copy(
-                dialogState = VaultItemListingState.DialogState.Fido2PINError(
+                dialogState = VaultItemListingState.DialogState.Fido2PinError(
                     title = null,
                     message = dialogMessage.asText(),
                     selectedCipherId = selectedCipherId,
@@ -1665,7 +1665,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
             .performClick()
         verify {
             viewModel.trySendAction(
-                VaultItemListingsAction.RetryFido2PINVerificationClick(
+                VaultItemListingsAction.RetryFido2PinVerificationClick(
                     selectedCipherId = selectedCipherId,
                 ),
             )

@@ -22,7 +22,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.model.ValidatePINResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -346,7 +346,7 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     /**
      * Validates the PIN for the current logged in user.
      */
-    suspend fun validatePIN(pin: String): ValidatePINResult
+    suspend fun validatePin(pin: String): ValidatePinResult
 
     /**
      * Validates the given [password] against the master password

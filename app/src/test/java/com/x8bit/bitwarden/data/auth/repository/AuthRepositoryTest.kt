@@ -70,8 +70,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
-import com.x8bit.bitwarden.data.auth.repository.model.ValidatePINResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -4649,20 +4649,20 @@ class AuthRepositoryTest {
         }
 
     @Test
-    fun `validatePIN returns ValidatePINResult Error when no active account found`() = runTest {
+    fun `validatePin returns ValidatePinResult Error when no active account found`() = runTest {
         val pin = "PIN"
         fakeAuthDiskSource.userState = null
 
-        val result = repository.validatePIN(pin = pin)
+        val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePINResult.Error,
+            ValidatePinResult.Error,
             result,
         )
     }
 
     @Test
-    fun `validatePIN returns ValidatePINResult Error when no private key found`() = runTest {
+    fun `validatePin returns ValidatePinResult Error when no private key found`() = runTest {
         val pin = "PIN"
         fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
         fakeAuthDiskSource.storePrivateKey(
@@ -4670,16 +4670,16 @@ class AuthRepositoryTest {
             privateKey = null,
         )
 
-        val result = repository.validatePIN(pin = pin)
+        val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePINResult.Error,
+            ValidatePinResult.Error,
             result,
         )
     }
 
     @Test
-    fun `validatePIN returns ValidatePINResult Error when no pin protected user key found`() =
+    fun `validatePin returns ValidatePinResult Error when no pin protected user key found`() =
         runTest {
             val pin = "PIN"
             val privateKey = "privateKey"
@@ -4693,16 +4693,16 @@ class AuthRepositoryTest {
                 pinProtectedUserKey = null,
             )
 
-            val result = repository.validatePIN(pin = pin)
+            val result = repository.validatePin(pin = pin)
 
             assertEquals(
-                ValidatePINResult.Error,
+                ValidatePinResult.Error,
                 result,
             )
         }
 
     @Test
-    fun `validatePIN returns ValidatePINResult Error when initialize crypto fails`() = runTest {
+    fun `validatePin returns ValidatePinResult Error when initialize crypto fails`() = runTest {
         val pin = "PIN"
         val privateKey = "privateKey"
         val pinProtectedUserKey = "pinProtectedUserKey"
@@ -4722,10 +4722,10 @@ class AuthRepositoryTest {
             )
         } returns Throwable().asFailure()
 
-        val result = repository.validatePIN(pin = pin)
+        val result = repository.validatePin(pin = pin)
 
         assertEquals(
-            ValidatePINResult.Error,
+            ValidatePinResult.Error,
             result,
         )
         coVerify {
@@ -4738,7 +4738,7 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePIN returns ValidatePINResult Success with valid false when initialize cryto returns AuthenticationError`() =
+    fun `validatePin returns ValidatePinResult Success with valid false when initialize cryto returns AuthenticationError`() =
         runTest {
             val pin = "PIN"
             val privateKey = "privateKey"
@@ -4759,10 +4759,10 @@ class AuthRepositoryTest {
                 )
             } returns InitializeCryptoResult.AuthenticationError.asSuccess()
 
-            val result = repository.validatePIN(pin = pin)
+            val result = repository.validatePin(pin = pin)
 
             assertEquals(
-                ValidatePINResult.Success(isValid = false),
+                ValidatePinResult.Success(isValid = false),
                 result,
             )
             coVerify {
@@ -4775,7 +4775,7 @@ class AuthRepositoryTest {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `validatePIN returns ValidatePINResult Success with valid true when initialize cryto returns Success`() =
+    fun `validatePin returns ValidatePinResult Success with valid true when initialize cryto returns Success`() =
         runTest {
             val pin = "PIN"
             val privateKey = "privateKey"
@@ -4796,10 +4796,10 @@ class AuthRepositoryTest {
                 )
             } returns InitializeCryptoResult.Success.asSuccess()
 
-            val result = repository.validatePIN(pin = pin)
+            val result = repository.validatePin(pin = pin)
 
             assertEquals(
-                ValidatePINResult.Success(isValid = true),
+                ValidatePinResult.Success(isValid = true),
                 result,
             )
             coVerify {

@@ -29,7 +29,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BitwardenPINDialog(
+fun BitwardenPinDialog(
     onConfirmClick: (masterPassword: String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
