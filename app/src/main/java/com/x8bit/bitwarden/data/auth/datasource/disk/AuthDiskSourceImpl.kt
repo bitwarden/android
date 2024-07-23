@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import android.content.SharedPreferences
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.datasource.disk.BaseEncryptedDiskSource
@@ -40,6 +41,7 @@ private const val TWO_FACTOR_TOKEN_KEY = "twoFactorToken"
 private const val MASTER_PASSWORD_HASH_KEY = "keyHash"
 private const val POLICIES_KEY = "policies"
 private const val SHOULD_TRUST_DEVICE_KEY = "shouldTrustDevice"
+private const val EMAIL_VERIFICATION_URLS = "emailVerificationUrls"
 
 /**
  * Primary implementation of [AuthDiskSource].
@@ -375,6 +377,24 @@ class AuthDiskSourceImpl(
         )
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
     }
+
+    override fun storeEmailVerificationUrls(
+        userEmail: String,
+        urls: EnvironmentUrlDataJson,
+    ) {
+        putString(
+            key = EMAIL_VERIFICATION_URLS.appendIdentifier(userEmail),
+            value = json.encodeToString(urls),
+        )
+    }
+
+    override fun getEmailVerificationUrls(
+        userEmail: String,
+    ): EnvironmentUrlDataJson? =
+        getString(key = EMAIL_VERIFICATION_URLS.appendIdentifier(userEmail))
+            ?.let {
+                json.decodeFromStringOrNull(it)
+            }
 
     private fun generateAndStoreUniqueAppId(): String =
         UUID

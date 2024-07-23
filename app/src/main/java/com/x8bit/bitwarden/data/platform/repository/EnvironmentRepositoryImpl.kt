@@ -4,6 +4,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EnvironmentDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrls
 import com.x8bit.bitwarden.data.platform.repository.util.toEnvironmentUrlsOrDefault
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,7 +19,7 @@ import kotlinx.coroutines.flow.stateIn
  */
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
-    authDiskSource: AuthDiskSource,
+    private val authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
 
@@ -55,4 +56,13 @@ class EnvironmentRepositoryImpl(
             }
             .launchIn(scope)
     }
+
+    override fun loadEnvironmentForEmail(userEmail: String): Boolean {
+        val urls = authDiskSource.getEmailVerificationUrls(userEmail) ?: return false
+        environment = urls.toEnvironmentUrls()
+        return true
+    }
+
+    override fun saveCurrentEnvironmentForEmail(userEmail: String) =
+        authDiskSource.storeEmailVerificationUrls(userEmail, environment.environmentUrlData)
 }

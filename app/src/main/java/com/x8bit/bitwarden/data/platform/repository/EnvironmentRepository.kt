@@ -16,4 +16,15 @@ interface EnvironmentRepository {
      * Emits updates that track [environment].
      */
     val environmentStateFlow: StateFlow<Environment>
+
+    /**
+     * Stores the current environment for the given [userEmail].
+     */
+    fun saveCurrentEnvironmentForEmail(userEmail: String)
+
+    /**
+     * Loads the environment for the given [userEmail].
+     * returns boolean indicates if the load was successful
+     */
+    fun loadEnvironmentForEmail(userEmail: String): Boolean
 }
