@@ -260,7 +260,7 @@ class VaultUnlockViewModel @Inject constructor(
             action.vaultUnlockResult is VaultUnlockResult.Success
 
         when (action.vaultUnlockResult) {
-            VaultUnlockResult.AuthenticationError -> {
+            is VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(

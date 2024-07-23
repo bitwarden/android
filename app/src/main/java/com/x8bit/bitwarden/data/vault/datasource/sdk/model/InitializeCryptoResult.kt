@@ -13,5 +13,7 @@ sealed class InitializeCryptoResult {
     /**
      * Incorrect password or key(s) provided.
      */
-    data object AuthenticationError : InitializeCryptoResult()
+    data class AuthenticationError(
+        val message: String? = null,
+    ) : InitializeCryptoResult()
 }

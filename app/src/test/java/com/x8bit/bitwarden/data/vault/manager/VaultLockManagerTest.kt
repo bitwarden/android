@@ -939,7 +939,7 @@ class VaultLockManagerTest {
                         ),
                     ),
                 )
-            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
+            } returns InitializeCryptoResult.AuthenticationError().asSuccess()
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
@@ -962,7 +962,7 @@ class VaultLockManagerTest {
                 organizationKeys = organizationKeys,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError, result)
+            assertEquals(VaultUnlockResult.AuthenticationError(), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
@@ -1016,7 +1016,7 @@ class VaultLockManagerTest {
                     userId = USER_ID,
                     request = InitOrgCryptoRequest(organizationKeys = organizationKeys),
                 )
-            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
+            } returns InitializeCryptoResult.AuthenticationError().asSuccess()
 
             assertEquals(
                 emptyList<VaultUnlockData>(),
@@ -1039,7 +1039,7 @@ class VaultLockManagerTest {
                 organizationKeys = organizationKeys,
             )
 
-            assertEquals(VaultUnlockResult.AuthenticationError, result)
+            assertEquals(VaultUnlockResult.AuthenticationError(), result)
             assertEquals(
                 emptyList<VaultUnlockData>(),
                 vaultLockManager.vaultUnlockDataStateFlow.value,
