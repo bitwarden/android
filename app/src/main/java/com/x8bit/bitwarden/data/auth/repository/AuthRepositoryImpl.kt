@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
@@ -50,6 +51,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
@@ -1155,6 +1157,30 @@ class AuthRepositoryImpl(
         password: String,
     ): Boolean = passwordPolicies
         .all { validatePasswordAgainstPolicy(password, it) }
+
+    override suspend fun sendVerificationEmail(
+        email: String,
+        name: String,
+        receiveMarketingEmails: Boolean,
+    ): SendVerificationEmailResult =
+        identityService.sendVerificationEmail(
+            SendVerificationEmailRequestJson(
+                email = email,
+                name = name,
+                receiveMarketingEmails = receiveMarketingEmails,
+            )
+        ).fold(
+            onSuccess = {
+                SendVerificationEmailResult.Success(it?.string())
+            },
+            onFailure = {
+                // error throw in [ResultCall] if response body is null
+                if (it is IllegalStateException) {
+                    return SendVerificationEmailResult.Success(null)
+                }
+                return SendVerificationEmailResult.Error(null)
+            }
+        )
 
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(

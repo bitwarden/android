@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.RequestOtpResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResendEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.ResetPasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
@@ -353,4 +354,13 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * policies for the current user.
      */
     suspend fun validatePasswordAgainstPolicies(password: String): Boolean
+
+    /**
+     * Send a verification email.
+     */
+    suspend fun sendVerificationEmail(
+        email: String,
+        name: String,
+        receiveMarketingEmails: Boolean,
+    ): SendVerificationEmailResult
 }
