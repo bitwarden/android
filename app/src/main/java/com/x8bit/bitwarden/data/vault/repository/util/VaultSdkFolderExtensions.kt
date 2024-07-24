@@ -2,9 +2,9 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import java.util.Locale
 
 /**
  * Converts a list of [SyncResponseJson.Folder] objects to a list of corresponding
@@ -25,15 +25,19 @@ fun SyncResponseJson.Folder.toEncryptedSdkFolder(): Folder =
     )
 
 /**
- * Sorts the data in alphabetical order by name.
- */
-@JvmName("toAlphabeticallySortedFolderList")
-fun List<FolderView>.sortAlphabetically(): List<FolderView> =
-    this.sortedBy { it.name.uppercase(Locale.getDefault()) }
-
-/**
  * Converts a Bitwarden SDK [Folder] objects to a corresponding
  * [SyncResponseJson.Folder] object.
  */
 fun Folder.toEncryptedNetworkFolder(): FolderJsonRequest =
     FolderJsonRequest(name = name)
+
+/**
+ * Sorts the data in alphabetical order by name.
+ */
+@JvmName("toAlphabeticallySortedFolderList")
+fun List<FolderView>.sortAlphabetically(): List<FolderView> {
+    val cipherMappedByName = this.associateBy { folderView -> folderView.name }
+    val sortedMapByName = cipherMappedByName
+        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
+    return sortedMapByName.values.toList()
+}

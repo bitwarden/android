@@ -4,6 +4,8 @@ import com.bitwarden.send.Send
 import com.bitwarden.send.SendFile
 import com.bitwarden.send.SendText
 import com.bitwarden.send.SendType
+import com.bitwarden.send.SendView
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -123,3 +125,14 @@ private fun SendTypeJson.toSdkSendType(): SendType =
         SendTypeJson.TEXT -> SendType.TEXT
         SendTypeJson.FILE -> SendType.FILE
     }
+
+/**
+ * Sorts the data in alphabetical order by name.
+ */
+@JvmName("toAlphabeticallySortedSendList")
+fun List<SendView>.sortAlphabetically(): List<SendView> {
+    val cipherMappedByName = this.associateBy { send -> send.name }
+    val sortedMapByName = cipherMappedByName
+        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
+    return sortedMapByName.values.toList()
+}

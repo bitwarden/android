@@ -65,11 +65,15 @@ class VaultSdkCollectionExtensionsTest {
             createMockCollectionView(1).copy(name = "c"),
             createMockCollectionView(1).copy(name = "B"),
             createMockCollectionView(1).copy(name = "z"),
+            createMockCollectionView(1).copy(name = "4"),
             createMockCollectionView(1).copy(name = "A"),
+            createMockCollectionView(1).copy(name = "#"),
             createMockCollectionView(1).copy(name = "D"),
         )
 
         val expected = listOf(
+            createMockCollectionView(1).copy(name = "#"),
+            createMockCollectionView(1).copy(name = "4"),
             createMockCollectionView(1).copy(name = "A"),
             createMockCollectionView(1).copy(name = "B"),
             createMockCollectionView(1).copy(name = "c"),

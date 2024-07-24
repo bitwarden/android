@@ -18,6 +18,7 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
@@ -29,7 +30,6 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.UriMatchTypeJson
 import java.time.ZoneOffset
 import java.time.ZonedDateTime
-import java.util.Locale
 
 /**
  * Converts a Bitwarden SDK [Cipher] object to a corresponding
@@ -553,8 +553,13 @@ fun FieldTypeJson.toSdkFieldType(): FieldType =
     }
 
 /**
- * Sorts the data in alphabetical order by name.
+ * Sorts the data in alphabetical order by name. Using lexicographical sorting but giving
+ * precedence to special characters over letters and digits.
  */
 @JvmName("toAlphabeticallySortedCipherList")
-fun List<CipherView>.sortAlphabetically(): List<CipherView> =
-    this.sortedBy { it.name.uppercase(Locale.getDefault()) }
+fun List<CipherView>.sortAlphabetically(): List<CipherView> {
+    val cipherMappedByName = this.associateBy { cipherView -> cipherView.name }
+    val sortedMapByName = cipherMappedByName
+        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
+    return sortedMapByName.values.toList()
+}
