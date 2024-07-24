@@ -38,14 +38,17 @@ class Fido2CompletionManagerTest {
         }
 
         @Test
-        fun `all functions are no-op`() {
+        fun `completeFido2Registration should perform no operations`() {
             val mockRegistrationResult = mockk<Fido2RegisterCredentialResult>()
             fido2CompletionManager.completeFido2Registration(mockRegistrationResult)
             verify {
                 mockRegistrationResult wasNot Called
                 mockActivity wasNot Called
             }
+        }
 
+        @Test
+        fun `completeFido2Assertion should perform no operations`() {
             val mockAssertionResult = mockk<Fido2CredentialAssertionResult>()
             fido2CompletionManager.completeFido2Assertion(mockAssertionResult)
             verify {
