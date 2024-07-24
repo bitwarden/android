@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
+import io.mockk.Called
 import io.mockk.MockKVerificationScope
 import io.mockk.Ordering
 import io.mockk.every
@@ -18,6 +19,7 @@ import io.mockk.unmockkObject
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 class Fido2CompletionManagerTest {
@@ -26,105 +28,135 @@ class Fido2CompletionManagerTest {
         every { setResult(Activity.RESULT_OK, any()) } just runs
         every { finish() } just runs
     }
-    private val fido2CompletionManager = Fido2CompletionManagerImpl(mockActivity)
+    private lateinit var fido2CompletionManager: Fido2CompletionManager
 
-    @BeforeEach
-    fun setUp() {
-        mockkConstructor(Intent::class)
-        mockkObject(PendingIntentHandler.Companion)
-        every {
-            PendingIntentHandler.setCreateCredentialException(any(), any())
-        } just runs
-    }
+    @Nested
+    inner class NoOpImplementation {
+        @BeforeEach
+        fun setUp() {
+            fido2CompletionManager = Fido2CompletionManagerUnsupportedApiImpl
+        }
 
-    @AfterEach
-    fun tearDown() {
-        unmockkConstructor(Intent::class)
-        unmockkObject(PendingIntentHandler.Companion)
-    }
+        @Test
+        fun `all functions are no-op`() {
+            val mockRegistrationResult = mockk<Fido2RegisterCredentialResult>()
+            fido2CompletionManager.completeFido2Registration(mockRegistrationResult)
+            verify {
+                mockRegistrationResult wasNot Called
+                mockActivity wasNot Called
+            }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `completeFido2Registration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
-        fido2CompletionManager
-            .completeFido2Registration(
-                Fido2RegisterCredentialResult.Success(
-                    registrationResponse = "registrationResponse",
-                ),
-            )
-
-        verifyActivityResultIsSetAndFinishedAfter {
-            PendingIntentHandler.setCreateCredentialResponse(any(), any())
+            val mockAssertionResult = mockk<Fido2CredentialAssertionResult>()
+            fido2CompletionManager.completeFido2Assertion(mockAssertionResult)
+            verify {
+                mockAssertionResult wasNot Called
+                mockActivity wasNot Called
+            }
         }
     }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
-        fido2CompletionManager
-            .completeFido2Registration(Fido2RegisterCredentialResult.Error)
+    @Nested
+    inner class DefaultImplementation {
 
-        verifyActivityResultIsSetAndFinishedAfter {
-            PendingIntentHandler.setCreateCredentialException(any(), any())
+        @BeforeEach
+        fun setUp() {
+            fido2CompletionManager = Fido2CompletionManagerImpl(mockActivity)
+            mockkConstructor(Intent::class)
+            mockkObject(PendingIntentHandler.Companion)
+            every {
+                PendingIntentHandler.setCreateCredentialException(any(), any())
+            } just runs
         }
-    }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Canclled`() {
-        fido2CompletionManager
-            .completeFido2Registration(Fido2RegisterCredentialResult.Cancelled)
-
-        verifyActivityResultIsSetAndFinishedAfter {
-            PendingIntentHandler.setCreateCredentialException(any(), any())
+        @AfterEach
+        fun tearDown() {
+            unmockkConstructor(Intent::class)
+            unmockkObject(PendingIntentHandler.Companion)
         }
-    }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `completeFido2Assertion should set GetCredentialResponse, set activity result, then finish activity when result is Success`() {
-        fido2CompletionManager
-            .completeFido2Assertion(Fido2CredentialAssertionResult.Success("responseJson"))
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Registration should set CreateCredentialResponse, set activity result, then finish activity when result is Success`() {
+            fido2CompletionManager
+                .completeFido2Registration(
+                    Fido2RegisterCredentialResult.Success(
+                        registrationResponse = "registrationResponse",
+                    ),
+                )
 
-        verifyActivityResultIsSetAndFinishedAfter {
-            PendingIntentHandler.setGetCredentialResponse(any(), any())
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setCreateCredentialResponse(any(), any())
+            }
         }
-    }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Error`() {
-        fido2CompletionManager
-            .completeFido2Assertion(Fido2CredentialAssertionResult.Error)
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Error`() {
+            fido2CompletionManager
+                .completeFido2Registration(Fido2RegisterCredentialResult.Error)
 
-        verifyActivityResultIsSetAndFinishedAfter {
-            PendingIntentHandler.setGetCredentialException(any(), any())
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setCreateCredentialException(any(), any())
+            }
         }
-    }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `completeFido2Assertion should set cancellation exception, set activity result, then finish activity when result is Cancelled`() {
-        fido2CompletionManager
-            .completeFido2Assertion(Fido2CredentialAssertionResult.Cancelled)
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Canclled`() {
+            fido2CompletionManager
+                .completeFido2Registration(Fido2RegisterCredentialResult.Cancelled)
 
-        verifyActivityResultIsSetAndFinishedAfter {
-            PendingIntentHandler.setGetCredentialException(any(), any())
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setCreateCredentialException(any(), any())
+            }
         }
-    }
 
-    /**
-     * Convenience function to ensure the given [calls] are performed before setting the
-     * [mockActivity] result and calling finish. This sequence is expected to be performed for all
-     * FIDO 2 operations triggered by [androidx.credentials.CredentialProvider] APIs.
-     */
-    private fun verifyActivityResultIsSetAndFinishedAfter(
-        calls: MockKVerificationScope.() -> Unit,
-    ) {
-        verify(Ordering.SEQUENCE) {
-            calls()
-            mockActivity.setResult(Activity.RESULT_OK, any())
-            mockActivity.finish()
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Assertion should set GetCredentialResponse, set activity result, then finish activity when result is Success`() {
+            fido2CompletionManager
+                .completeFido2Assertion(Fido2CredentialAssertionResult.Success("responseJson"))
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialResponse(any(), any())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Error`() {
+            fido2CompletionManager
+                .completeFido2Assertion(Fido2CredentialAssertionResult.Error)
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialException(any(), any())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2Assertion should set cancellation exception, set activity result, then finish activity when result is Cancelled`() {
+            fido2CompletionManager
+                .completeFido2Assertion(Fido2CredentialAssertionResult.Cancelled)
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialException(any(), any())
+            }
+        }
+
+        /**
+         * Convenience function to ensure the given [calls] are performed before setting the
+         * [mockActivity] result and calling finish. This sequence is expected to be performed for all
+         * FIDO 2 operations triggered by [androidx.credentials.CredentialProvider] APIs.
+         */
+        private fun verifyActivityResultIsSetAndFinishedAfter(
+            calls: MockKVerificationScope.() -> Unit,
+        ) {
+            verify(Ordering.SEQUENCE) {
+                calls()
+                mockActivity.setResult(Activity.RESULT_OK, any())
+                mockActivity.finish()
+            }
         }
     }
 }
