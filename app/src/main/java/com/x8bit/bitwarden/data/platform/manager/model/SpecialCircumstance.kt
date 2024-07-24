@@ -60,7 +60,7 @@ sealed class SpecialCircumstance : Parcelable {
 
     /**
      * The app was launched via the credential manager framework in order to authenticate a FIDO 2
-     * credential saved to their vault
+     * credential saved to the user's vault.
      */
     @Parcelize
     data class Fido2Assertion(

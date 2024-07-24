@@ -23,10 +23,10 @@ fun Intent.getFido2CredentialRequestOrNull(): Fido2CredentialRequest? {
         .retrieveProviderCreateCredentialRequest(this)
         ?: return null
 
-    val createPublicKeyRequest =
-        systemRequest.callingRequest
-            as? CreatePublicKeyCredentialRequest
-            ?: return null
+    val createPublicKeyRequest = systemRequest
+        .callingRequest
+        as? CreatePublicKeyCredentialRequest
+        ?: return null
 
     val userId = getStringExtra(EXTRA_KEY_USER_ID)
         ?: return null
