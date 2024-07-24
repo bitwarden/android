@@ -41,12 +41,16 @@ class VaultSdkFolderExtensionsTest {
         val list = listOf(
             createMockFolderView(1).copy(name = "c"),
             createMockFolderView(1).copy(name = "D"),
+            createMockFolderView(1).copy(name = "_"),
+            createMockFolderView(1).copy(name = "4"),
             createMockFolderView(1).copy(name = "B"),
             createMockFolderView(1).copy(name = "A"),
             createMockFolderView(1).copy(name = "z"),
         )
 
         val expected = listOf(
+            createMockFolderView(1).copy(name = "_"),
+            createMockFolderView(1).copy(name = "4"),
             createMockFolderView(1).copy(name = "A"),
             createMockFolderView(1).copy(name = "B"),
             createMockFolderView(1).copy(name = "c"),
