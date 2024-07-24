@@ -146,8 +146,8 @@ class Fido2CompletionManagerTest {
 
         /**
          * Convenience function to ensure the given [calls] are performed before setting the
-         * [mockActivity] result and calling finish. This sequence is expected to be performed for all
-         * FIDO 2 operations triggered by [androidx.credentials.CredentialProvider] APIs.
+         * [mockActivity] result and calling finish. This sequence is expected to be performed for
+         * all FIDO 2 operations triggered by [androidx.credentials.CredentialProvider] APIs.
          */
         private fun verifyActivityResultIsSetAndFinishedAfter(
             calls: MockKVerificationScope.() -> Unit,
