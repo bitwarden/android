@@ -1376,18 +1376,18 @@ class AuthRepositoryImpl(
                 (loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null)
             ) {
                 unlockVaultWithTdeOnLoginSuccess(
-                    loginResponse,
-                    userId,
-                    userStateJson,
-                    deviceData,
+                    loginResponse = loginResponse,
+                    userId = userId,
+                    userStateJson = userStateJson,
+                    deviceData = deviceData,
                 )
             } else {
                 password?.let {
                     unlockVaultWithPasswordOnLoginSuccess(
-                        loginResponse,
-                        userId,
-                        userStateJson,
-                        password,
+                        loginResponse = loginResponse,
+                        userId = userId,
+                        userStateJson = userStateJson,
+                        password = password,
                     )
                 }
             }
