@@ -18,6 +18,7 @@ import androidx.navigation.navOptions
 import com.x8bit.bitwarden.ui.auth.feature.auth.AUTH_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.auth.authGraph
 import com.x8bit.bitwarden.ui.auth.feature.auth.navigateToAuthGraph
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.navigateToCompleteRegistration
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.RESET_PASSWORD_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.navigateToResetPasswordGraph
 import com.x8bit.bitwarden.ui.auth.feature.resetpassword.resetPasswordDestination
@@ -198,14 +199,11 @@ fun RootNavScreen(
 
             is RootNavState.CompleteOngoingRegistration -> {
                 navController.navigateToAuthGraph(rootNavOptions)
-                // TODO add navigation to complete registration
-                /*
-                    navController.navigateToCompleteRegistration(
-                        emailAddress = currentState.email,
-                        verificationToken = currentState.verificationToken,
-                        fromEmail = currentState.fromEmail
-                    )
-                */
+                navController.navigateToCompleteRegistration(
+                    emailAddress = currentState.email,
+                    verificationToken = currentState.verificationToken,
+                    fromEmail = currentState.fromEmail
+                )
             }
         }
     }
