@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.BreachCountResult
 import com.x8bit.bitwarden.data.auth.repository.model.Organization
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
@@ -3186,6 +3187,25 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `UserVerificationNotSupported should display Fido2PinPrompt when user has pin`() {
+            val userState = createUserState()
+            mutableUserStateFlow.value = userState.copy(
+                accounts = listOf(
+                    userState.accounts.first().copy(
+                        vaultUnlockType = VaultUnlockType.PIN,
+                    ),
+                ),
+            )
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported)
+            verify { fido2CredentialManager.isUserVerified = false }
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2PinPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `UserVerificationNotSupported should display Fido2MasterPasswordPrompt when user has password but no pin`() {
             viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported)
             verify { fido2CredentialManager.isUserVerified = false }
@@ -3291,9 +3311,27 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
 
         @Test
-        fun `DismissFido2PasswordVerificationDialogClick should display Fido2ErrorDialog`() {
+        fun `RetryFido2PasswordVerificationClick should display Fido2MasterPasswordPrompt`() {
+            viewModel.trySendAction(VaultAddEditAction.Common.RetryFido2PasswordVerificationClick)
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2MasterPasswordPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `PinFido2VerificationSubmit should display Fido2Error when Pin verification fails`() {
+            val pin = "PIN"
+            coEvery {
+                authRepository.validatePin(pin = pin)
+            } returns ValidatePinResult.Error
+
             viewModel.trySendAction(
-                VaultAddEditAction.Common.DismissFido2PasswordVerificationDialogClick,
+                VaultAddEditAction.Common.PinFido2VerificationSubmit(
+                    pin = pin,
+                ),
             )
 
             assertEquals(
@@ -3303,14 +3341,100 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 ),
                 viewModel.stateFlow.value.dialog,
             )
+            coVerify {
+                authRepository.validatePin(pin = pin)
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `PinFido2VerificationSubmit should display Fido2PinError when user has retries remaining`() {
+            val pin = "PIN"
+            coEvery {
+                authRepository.validatePin(pin = pin)
+            } returns ValidatePinResult.Success(isValid = false)
+
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.PinFido2VerificationSubmit(
+                    pin = pin,
+                ),
+            )
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2PinError,
+                viewModel.stateFlow.value.dialog,
+            )
+            coVerify {
+                authRepository.validatePin(pin = pin)
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `PinFido2VerificationSubmit should display Fido2Error when user has no retries remaining`() {
+            val pin = "PIN"
+            every { fido2CredentialManager.hasAuthenticationAttemptsRemaining() } returns false
+            coEvery {
+                authRepository.validatePin(pin = pin)
+            } returns ValidatePinResult.Success(isValid = false)
+
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.PinFido2VerificationSubmit(
+                    pin = pin,
+                ),
+            )
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
+                ),
+                viewModel.stateFlow.value.dialog,
+            )
+            coVerify {
+                authRepository.validatePin(pin = pin)
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `PinFido2VerificationSubmit should register credential when pin authenticated successfully`() {
+            val pin = "PIN"
+            coEvery {
+                authRepository.validatePin(pin = pin)
+            } returns ValidatePinResult.Success(isValid = true)
+
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.PinFido2VerificationSubmit(
+                    pin = pin,
+                ),
+            )
+            coVerify {
+                authRepository.validatePin(pin = pin)
+            }
         }
 
         @Test
-        fun `RetryFido2PasswordVerificationClick should display Fido2MasterPasswordPrompt`() {
-            viewModel.trySendAction(VaultAddEditAction.Common.RetryFido2PasswordVerificationClick)
+        fun `RetryFido2PinVerificationClick should display Fido2PinPrompt`() {
+            viewModel.trySendAction(VaultAddEditAction.Common.RetryFido2PinVerificationClick)
 
             assertEquals(
-                VaultAddEditState.DialogState.Fido2MasterPasswordPrompt,
+                VaultAddEditState.DialogState.Fido2PinPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Test
+        fun `DismissFido2VerificationDialogClick should display Fido2ErrorDialog`() {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
+            )
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2Error(
+                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
+                        .asText(),
+                ),
                 viewModel.stateFlow.value.dialog,
             )
         }
