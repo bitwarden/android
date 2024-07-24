@@ -131,8 +131,9 @@ private fun SendTypeJson.toSdkSendType(): SendType =
  */
 @JvmName("toAlphabeticallySortedSendList")
 fun List<SendView>.sortAlphabetically(): List<SendView> {
-    val cipherMappedByName = this.associateBy { send -> send.name }
-    val sortedMapByName = cipherMappedByName
-        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
-    return sortedMapByName.values.toList()
+    return this.sortedWith(
+        comparator = { send1, send2 ->
+            CompareStringSpecialCharWithPrecedence.compare(send1.name, send2.name)
+        },
+    )
 }

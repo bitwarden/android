@@ -31,8 +31,9 @@ fun List<SyncResponseJson.Collection>.toEncryptedSdkCollectionList(): List<Colle
  */
 @JvmName("toAlphabeticallySortedCollectionList")
 fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
-    val cipherMappedByName = this.associateBy { collectionView -> collectionView.name }
-    val sortedMapByName = cipherMappedByName
-        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
-    return sortedMapByName.values.toList()
+    return this.sortedWith(
+        comparator = { collection1, collection2 ->
+            CompareStringSpecialCharWithPrecedence.compare(collection1.name, collection2.name)
+        },
+    )
 }

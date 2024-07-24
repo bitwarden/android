@@ -558,8 +558,9 @@ fun FieldTypeJson.toSdkFieldType(): FieldType =
  */
 @JvmName("toAlphabeticallySortedCipherList")
 fun List<CipherView>.sortAlphabetically(): List<CipherView> {
-    val cipherMappedByName = this.associateBy { cipherView -> cipherView.name }
-    val sortedMapByName = cipherMappedByName
-        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
-    return sortedMapByName.values.toList()
+    return this.sortedWith(
+        comparator = { cipher1, cipher2 ->
+            CompareStringSpecialCharWithPrecedence.compare(cipher1.name, cipher2.name)
+        },
+    )
 }

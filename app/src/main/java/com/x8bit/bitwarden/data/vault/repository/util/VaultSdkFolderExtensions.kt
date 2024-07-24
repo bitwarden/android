@@ -36,8 +36,9 @@ fun Folder.toEncryptedNetworkFolder(): FolderJsonRequest =
  */
 @JvmName("toAlphabeticallySortedFolderList")
 fun List<FolderView>.sortAlphabetically(): List<FolderView> {
-    val cipherMappedByName = this.associateBy { folderView -> folderView.name }
-    val sortedMapByName = cipherMappedByName
-        .toSortedMap(comparator = CompareStringSpecialCharWithPrecedence)
-    return sortedMapByName.values.toList()
+    return this.sortedWith(
+        comparator = { folder1, folder2 ->
+            CompareStringSpecialCharWithPrecedence.compare(folder1.name, folder2.name)
+        },
+    )
 }
