@@ -17,6 +17,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.PasswordStrengthState
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.AcceptPoliciesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.createaccount.CreateAccountAction.CloseClick
