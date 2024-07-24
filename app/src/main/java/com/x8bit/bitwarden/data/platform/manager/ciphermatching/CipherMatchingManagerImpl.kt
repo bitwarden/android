@@ -7,7 +7,7 @@ import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
-import com.x8bit.bitwarden.data.platform.util.getHostOrNull
+import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
 import com.x8bit.bitwarden.data.platform.util.regexOrNull
@@ -210,8 +210,8 @@ private fun LoginUriView.checkForMatch(
             UriMatchType.EXACT -> exactIfTrue(loginViewUri == matchUri)
 
             UriMatchType.HOST -> {
-                val loginUriHost = loginViewUri.getHostOrNull()
-                val matchUriHost = matchUri.getHostOrNull()
+                val loginUriHost = loginViewUri.getHostWithPortOrNull()
+                val matchUriHost = matchUri.getHostWithPortOrNull()
                 exactIfTrue(matchUriHost != null && loginUriHost == matchUriHost)
             }
 
