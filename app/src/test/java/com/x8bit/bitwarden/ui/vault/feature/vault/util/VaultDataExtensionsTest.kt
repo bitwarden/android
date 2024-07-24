@@ -612,6 +612,43 @@ class VaultDataExtensionsTest {
     }
 
     @Test
+    fun `toViewState should show content with trashed items only`() {
+        val vaultData = VaultData(
+            cipherViewList = listOf(
+                createMockCipherView(number = 1, isDeleted = true),
+                createMockCipherView(number = 2, isDeleted = true),
+            ),
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        )
+
+        val actual = vaultData.toViewState(
+            isPremium = true,
+            isIconLoadingDisabled = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = true,
+        )
+
+        assertEquals(
+            VaultState.ViewState.Content(
+                loginItemsCount = 0,
+                cardItemsCount = 0,
+                identityItemsCount = 0,
+                secureNoteItemsCount = 0,
+                favoriteItems = listOf(),
+                folderItems = listOf(),
+                collectionItems = listOf(),
+                noFolderItems = listOf(),
+                trashItemsCount = 2,
+                totpItemsCount = 0,
+            ),
+            actual,
+        )
+    }
+
+    @Test
     fun `toViewState with over 100 no folder items should show no folder option`() {
         mockkStatic(Uri::class)
         val uriMock = mockk<Uri>()
