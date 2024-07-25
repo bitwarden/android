@@ -14,9 +14,4 @@ sealed class Fido2CredentialAssertionResult {
      * Indicates there was an error and the assertion was not successful.
      */
     data object Error : Fido2CredentialAssertionResult()
-
-    /**
-     * Indicates assertion was cancelled by the user.
-     */
-    data object Cancelled : Fido2CredentialAssertionResult()
 }

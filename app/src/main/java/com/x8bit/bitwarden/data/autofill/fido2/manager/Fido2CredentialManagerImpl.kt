@@ -6,6 +6,8 @@ import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.DigitalAssetLinkResponseJson
 import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.service.DigitalAssetLinkService
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
@@ -20,8 +22,10 @@ import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
 import com.x8bit.bitwarden.data.platform.util.getSignatureFingerprintAsHexString
 import com.x8bit.bitwarden.data.platform.util.validatePrivilegedApp
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidAttestationResponse
+import com.x8bit.bitwarden.data.vault.datasource.sdk.util.toAndroidFido2PublicKeyCredential
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -31,6 +35,7 @@ private const val ALLOW_LIST_FILE_NAME = "fido2_privileged_allow_list.json"
 /**
  * Primary implementation of [Fido2CredentialManager].
  */
+@Suppress("TooManyFunctions")
 class Fido2CredentialManagerImpl(
     private val assetManager: AssetManager,
     private val digitalAssetLinkService: DigitalAssetLinkService,
@@ -117,6 +122,37 @@ class Fido2CredentialManagerImpl(
         } catch (e: IllegalArgumentException) {
             null
         }
+
+    override suspend fun authenticateFido2Credential(
+        userId: String,
+        request: Fido2CredentialAssertionRequest,
+        selectedCipherView: CipherView,
+    ): Fido2CredentialAssertionResult {
+        val callingAppInfo = request.callingAppInfo
+        val clientData = request.clientDataHash
+            ?.let { ClientData.DefaultWithCustomHash(hash = it) }
+            ?: ClientData.DefaultWithExtraData(androidPackageName = callingAppInfo.getAppOrigin())
+
+        return vaultSdkSource
+            .authenticateFido2Credential(
+                request = AuthenticateFido2CredentialRequest(
+                    userId = userId,
+                    origin = callingAppInfo.origin
+                        ?: callingAppInfo.getAppOrigin(),
+                    requestJson = """{"publicKey": ${request.requestJson}}""",
+                    clientData = clientData,
+                    selectedCipherView = selectedCipherView,
+                    isUserVerificationSupported = true,
+                ),
+                fido2CredentialStore = this,
+            )
+            .map { it.toAndroidFido2PublicKeyCredential() }
+            .mapCatching { json.encodeToString(it) }
+            .fold(
+                onSuccess = { Fido2CredentialAssertionResult.Success(it) },
+                onFailure = { Fido2CredentialAssertionResult.Error },
+            )
+    }
 
     private suspend fun validateCallingApplicationAssetLinks(
         fido2CredentialRequest: Fido2CredentialRequest,
