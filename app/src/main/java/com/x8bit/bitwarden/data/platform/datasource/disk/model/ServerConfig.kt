@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk.model
 
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
 
@@ -16,7 +15,6 @@ import java.time.ZonedDateTime
  */
 @Serializable
 data class ServerConfig(
-    @Contextual
     val lastSync: Long,
     val serverData: ConfigResponseJson,
 )
