@@ -16,5 +16,5 @@ interface ConfigDiskSource {
      * Emits updates that track [ConfigResponseJson]. This will replay the last known value,
      * if any.
      */
-    val serverConfigDataFlow: Flow<ConfigResponseJson?>
+    val serverConfigFlow: Flow<ConfigResponseJson?>
 }

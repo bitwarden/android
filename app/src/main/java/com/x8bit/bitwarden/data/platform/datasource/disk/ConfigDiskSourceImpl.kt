@@ -30,7 +30,7 @@ class ConfigDiskSourceImpl(
             mutableServerConfigFlow.tryEmit(value)
         }
 
-    override val serverConfigDataFlow: Flow<ConfigResponseJson?>
+    override val serverConfigFlow: Flow<ConfigResponseJson?>
         get() = mutableServerConfigFlow.onSubscription { emit(serverConfig) }
 
     private val mutableServerConfigFlow = bufferedMutableSharedFlow<ConfigResponseJson?>(replay = 1)
