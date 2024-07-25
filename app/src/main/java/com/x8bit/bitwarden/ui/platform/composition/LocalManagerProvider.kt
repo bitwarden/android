@@ -3,6 +3,7 @@
 package com.x8bit.bitwarden.ui.platform.composition
 
 import android.app.Activity
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocal
 import androidx.compose.runtime.CompositionLocalProvider
@@ -10,8 +11,10 @@ import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManager
 import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerImpl
+import com.x8bit.bitwarden.ui.autofill.fido2.manager.Fido2CompletionManagerUnsupportedApiImpl
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManagerImpl
 import com.x8bit.bitwarden.ui.platform.manager.exit.ExitManager
@@ -29,13 +32,19 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImp
 @Composable
 fun LocalManagerProvider(content: @Composable () -> Unit) {
     val activity = LocalContext.current as Activity
+    val fido2CompletionManager =
+        if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
+            Fido2CompletionManagerUnsupportedApiImpl
+        } else {
+            Fido2CompletionManagerImpl(activity)
+        }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),
         LocalIntentManager provides IntentManagerImpl(activity),
         LocalExitManager provides ExitManagerImpl(activity),
         LocalBiometricsManager provides BiometricsManagerImpl(activity),
         LocalNfcManager provides NfcManagerImpl(activity),
-        LocalFido2CompletionManager provides Fido2CompletionManagerImpl(activity),
+        LocalFido2CompletionManager provides fido2CompletionManager,
     ) {
         content()
     }

@@ -1085,7 +1085,7 @@ class VaultRepositoryImpl(
                         sendList = it.toEncryptedSdkSendList(),
                     )
                     .fold(
-                        onSuccess = { sends -> DataState.Loaded(sends) },
+                        onSuccess = { sends -> DataState.Loaded(sends.sortAlphabetically()) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }
