@@ -8,11 +8,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
  * UPSIDE_DOWN_CAKE (34). These versions do not support [androidx.credentials.CredentialProvider].
  */
 object Fido2CompletionManagerUnsupportedApiImpl : Fido2CompletionManager {
-    override fun completeFido2Registration(result: Fido2RegisterCredentialResult) {
-        // no-op
-    }
+    override fun completeFido2Registration(result: Fido2RegisterCredentialResult) = Unit
 
-    override fun completeFido2Assertion(result: Fido2CredentialAssertionResult) {
-        // no-op
-    }
+    override fun completeFido2Assertion(result: Fido2CredentialAssertionResult) = Unit
 }
