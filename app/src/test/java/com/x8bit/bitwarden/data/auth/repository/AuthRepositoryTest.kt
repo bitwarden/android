@@ -5062,7 +5062,7 @@ class AuthRepositoryTest {
                     userId = SINGLE_USER_STATE_1.activeUserId,
                     request = any(),
                 )
-            } returns InitializeCryptoResult.AuthenticationError.asSuccess()
+            } returns InitializeCryptoResult.AuthenticationError().asSuccess()
 
             val result = repository.validatePin(pin = pin)
 
