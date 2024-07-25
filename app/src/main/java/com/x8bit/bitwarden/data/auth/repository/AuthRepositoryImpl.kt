@@ -1141,7 +1141,7 @@ class AuthRepositoryImpl(
                             ValidatePinResult.Success(isValid = true)
                         }
 
-                        InitializeCryptoResult.AuthenticationError -> {
+                        is InitializeCryptoResult.AuthenticationError -> {
                             ValidatePinResult.Success(isValid = false)
                         }
                     }
