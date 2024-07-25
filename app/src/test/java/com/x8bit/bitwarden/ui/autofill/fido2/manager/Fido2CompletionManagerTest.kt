@@ -105,7 +105,7 @@ class Fido2CompletionManagerTest {
 
         @Suppress("MaxLineLength")
         @Test
-        fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Canclled`() {
+        fun `completeFido2Registration should set CreateCredentialException, set activity result, then finish activity when result is Cancelled`() {
             fido2CompletionManager
                 .completeFido2Registration(Fido2RegisterCredentialResult.Cancelled)
 
@@ -130,17 +130,6 @@ class Fido2CompletionManagerTest {
         fun `completeFido2Assertion should set GetCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
                 .completeFido2Assertion(Fido2CredentialAssertionResult.Error)
-
-            verifyActivityResultIsSetAndFinishedAfter {
-                PendingIntentHandler.setGetCredentialException(any(), any())
-            }
-        }
-
-        @Suppress("MaxLineLength")
-        @Test
-        fun `completeFido2Assertion should set cancellation exception, set activity result, then finish activity when result is Cancelled`() {
-            fido2CompletionManager
-                .completeFido2Assertion(Fido2CredentialAssertionResult.Cancelled)
 
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setGetCredentialException(any(), any())

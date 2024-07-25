@@ -9,7 +9,6 @@ import androidx.credentials.GetCredentialResponse
 import androidx.credentials.PublicKeyCredential
 import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
-import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
@@ -63,14 +62,6 @@ class Fido2CompletionManagerImpl(
         activity.also {
             val intent = Intent()
             when (result) {
-                Fido2CredentialAssertionResult.Cancelled -> {
-                    PendingIntentHandler
-                        .setGetCredentialException(
-                            intent = intent,
-                            exception = GetCredentialCancellationException(),
-                        )
-                }
-
                 Fido2CredentialAssertionResult.Error -> {
                     PendingIntentHandler
                         .setGetCredentialException(
