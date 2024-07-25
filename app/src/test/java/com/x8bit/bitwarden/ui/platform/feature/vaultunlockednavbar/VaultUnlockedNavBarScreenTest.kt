@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.navOptions
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.FakeNavHostController
@@ -16,7 +17,7 @@ import org.junit.Test
 class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
     private val fakeNavHostController = FakeNavHostController()
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultUnlockedNavBarEvent>()
-    private val mutableStateFlow = MutableStateFlow(Unit)
+    private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     val viewModel = mockk<VaultUnlockedNavBarViewModel>(relaxed = true) {
         every { eventFlow } returns mutableEventFlow
         every { stateFlow } returns mutableStateFlow
@@ -133,4 +134,25 @@ class VaultUnlockedNavBarScreenTest : BaseComposeTest() {
             }
         }
     }
+
+    @Test
+    fun `vault nav bar should update according to state`() {
+        composeTestRule.onNodeWithText("My vault").assertExists()
+        composeTestRule.onNodeWithText("Vaults").assertDoesNotExist()
+
+        mutableStateFlow.tryEmit(
+            VaultUnlockedNavBarState(
+                vaultNavBarLabelRes = R.string.vaults,
+                vaultNavBarContentDescriptionRes = R.string.vaults,
+            ),
+        )
+
+        composeTestRule.onNodeWithText("My vault").assertDoesNotExist()
+        composeTestRule.onNodeWithText("Vaults").assertExists()
+    }
 }
+
+private val DEFAULT_STATE = VaultUnlockedNavBarState(
+    vaultNavBarLabelRes = R.string.my_vault,
+    vaultNavBarContentDescriptionRes = R.string.my_vault,
+)
