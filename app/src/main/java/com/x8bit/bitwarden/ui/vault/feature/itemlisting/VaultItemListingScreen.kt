@@ -350,12 +350,9 @@ private fun VaultItemListingDialogs(
         }
 
         is VaultItemListingState.DialogState.Fido2PinSetUpPrompt -> {
-            var pin by rememberSaveable { mutableStateOf("") }
             PinInputDialog(
-                pin = pin,
-                onPinChange = { pin = it },
                 onCancelClick = onDismissFido2Verification,
-                onSubmitClick = {
+                onSubmitClick = { pin ->
                     onSubmitPinSetUpFido2Verification(pin, dialogState.selectedCipherId)
                 },
                 onDismissRequest = onDismissFido2Verification,
