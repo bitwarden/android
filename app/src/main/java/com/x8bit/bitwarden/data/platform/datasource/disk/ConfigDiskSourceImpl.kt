@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.platform.datasource.disk
 
 import android.content.SharedPreferences
-import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import kotlinx.coroutines.flow.Flow
@@ -20,7 +20,7 @@ class ConfigDiskSourceImpl(
 ) : BaseDiskSource(sharedPreferences = sharedPreferences),
     ConfigDiskSource {
 
-    override var serverConfig: ConfigResponseJson?
+    override var serverConfig: ServerConfig?
         get() = getString(key = SERVER_CONFIGURATIONS)?.let { json.decodeFromStringOrNull(it) }
         set(value) {
             putString(
@@ -30,8 +30,8 @@ class ConfigDiskSourceImpl(
             mutableServerConfigFlow.tryEmit(value)
         }
 
-    override val serverConfigFlow: Flow<ConfigResponseJson?>
+    override val serverConfigFlow: Flow<ServerConfig?>
         get() = mutableServerConfigFlow.onSubscription { emit(serverConfig) }
 
-    private val mutableServerConfigFlow = bufferedMutableSharedFlow<ConfigResponseJson?>(replay = 1)
+    private val mutableServerConfigFlow = bufferedMutableSharedFlow<ServerConfig?>(replay = 1)
 }

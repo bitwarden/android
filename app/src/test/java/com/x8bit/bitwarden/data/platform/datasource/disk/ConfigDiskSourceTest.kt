@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.datasource.disk
 import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
@@ -11,6 +12,8 @@ import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import java.time.Instant
+import java.time.ZonedDateTime
 
 class ConfigDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
@@ -65,7 +68,9 @@ class ConfigDiskSourceTest {
 }
 
 private const val SERVER_CONFIG_JSON = """
-{
+    {
+    "lastSync": 1698408000000,
+"serverData": {
   "object": null,
   "version": "2024.7.0",
   "gitHash": "25cf6119-dirty",
@@ -86,23 +91,28 @@ private const val SERVER_CONFIG_JSON = """
     "flexible-collections-v-1": false
   }
 }
+}
+
 """
-private val SERVER_CONFIG = ConfigResponseJson(
-    type = null,
-    version = "2024.7.0",
-    gitHash = "25cf6119-dirty",
-    server = ServerJson(
-        name = "example",
-        url = "https://localhost:8080",
-    ),
-    environment = EnvironmentJson(
-        cloudRegion = null,
-        vaultUrl = "https://localhost:8080",
-        apiUrl = "http://localhost:4000",
-        identityUrl = "http://localhost:33656",
-        notificationsUrl = "http://localhost:61840",
-        ssoUrl = "http://localhost:51822",
-    ),
-    featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
+private val SERVER_CONFIG = ServerConfig(
+    lastSync = Instant.parse("2023-10-27T12:00:00Z").toEpochMilli(),
+    serverData = ConfigResponseJson(
+        type = null,
+        version = "2024.7.0",
+        gitHash = "25cf6119-dirty",
+        server = ServerJson(
+            name = "example",
+            url = "https://localhost:8080",
+        ),
+        environment = EnvironmentJson(
+            cloudRegion = null,
+            vaultUrl = "https://localhost:8080",
+            apiUrl = "http://localhost:4000",
+            identityUrl = "http://localhost:33656",
+            notificationsUrl = "http://localhost:61840",
+            ssoUrl = "http://localhost:51822",
+        ),
+        featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
+    )
 )
 
