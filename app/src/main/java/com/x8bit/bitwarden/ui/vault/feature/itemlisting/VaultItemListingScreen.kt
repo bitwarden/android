@@ -51,6 +51,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalFido2CompletionManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.feature.search.model.SearchType
+import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.PinInputDialog
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.itemlisting.handlers.VaultItemListingHandlers
@@ -222,6 +223,23 @@ fun VaultItemListingScreen(
                 )
             }
         },
+        onSubmitPinSetUpFido2Verification = remember(viewModel) {
+            { pin, cipherId ->
+                viewModel.trySendAction(
+                    VaultItemListingsAction.PinFido2SetUpSubmit(
+                        pin = pin,
+                        selectedCipherId = cipherId,
+                    ),
+                )
+            }
+        },
+        onRetryPinSetUpFido2Verification = remember(viewModel) {
+            {
+                viewModel.trySendAction(
+                    VaultItemListingsAction.PinFido2SetUpRetryClick(it),
+                )
+            }
+        },
         onDismissFido2Verification = remember(viewModel) {
             {
                 viewModel.trySendAction(
@@ -248,9 +266,11 @@ private fun VaultItemListingDialogs(
     onDismissFido2ErrorDialog: () -> Unit,
     onConfirmOverwriteExistingPasskey: (cipherViewId: String) -> Unit,
     onSubmitMasterPasswordFido2Verification: (password: String, cipherId: String) -> Unit,
-    onRetryFido2PasswordVerification: (cipherViewId: String) -> Unit,
+    onRetryFido2PasswordVerification: (cipherId: String) -> Unit,
     onSubmitPinFido2Verification: (pin: String, cipherId: String) -> Unit,
     onRetryFido2PinVerification: (cipherViewId: String) -> Unit,
+    onSubmitPinSetUpFido2Verification: (pin: String, cipherId: String) -> Unit,
+    onRetryPinSetUpFido2Verification: (cipherId: String) -> Unit,
     onDismissFido2Verification: () -> Unit,
 ) {
     when (dialogState) {
@@ -325,6 +345,28 @@ private fun VaultItemListingDialogs(
                 ),
                 onDismissRequest = {
                     onRetryFido2PinVerification(dialogState.selectedCipherId)
+                },
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2PinSetUpPrompt -> {
+            PinInputDialog(
+                onCancelClick = onDismissFido2Verification,
+                onSubmitClick = { pin ->
+                    onSubmitPinSetUpFido2Verification(pin, dialogState.selectedCipherId)
+                },
+                onDismissRequest = onDismissFido2Verification,
+            )
+        }
+
+        is VaultItemListingState.DialogState.Fido2PinSetUpError -> {
+            BitwardenBasicDialog(
+                visibilityState = BasicDialogState.Shown(
+                    title = dialogState.title,
+                    message = dialogState.message,
+                ),
+                onDismissRequest = {
+                    onRetryPinSetUpFido2Verification(dialogState.selectedCipherId)
                 },
             )
         }
