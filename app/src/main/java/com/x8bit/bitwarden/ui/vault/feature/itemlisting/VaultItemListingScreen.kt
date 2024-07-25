@@ -165,6 +165,10 @@ fun VaultItemListingScreen(
                     },
                 )
             }
+
+            is VaultItemListingEvent.CompleteFido2Assertion -> {
+                fido2CompletionManager.completeFido2Assertion(event.result)
+            }
         }
     }
 
@@ -176,7 +180,7 @@ fun VaultItemListingScreen(
         onDismissFido2ErrorDialog = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2CreationErrorDialogClick,
+                    VaultItemListingsAction.DismissFido2ErrorDialogClick,
                 )
             }
         },
