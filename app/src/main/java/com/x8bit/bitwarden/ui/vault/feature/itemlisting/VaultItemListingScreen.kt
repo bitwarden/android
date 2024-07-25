@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.ui.vault.feature.itemlisting
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -441,7 +442,8 @@ private fun VaultItemListingScaffold(
                 FloatingActionButton(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     onClick = vaultItemListingHandlers.addVaultItemClick,
-                    modifier = Modifier.testTag("AddItemButton"),
+                    modifier = Modifier.testTag("AddItemButton")
+                        .systemBarsPadding(),
                 ) {
                     Icon(
                         painter = rememberVectorPainter(id = R.drawable.ic_plus),
