@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 
 /**
@@ -11,4 +12,9 @@ interface Fido2CompletionManager {
      * Completes the FIDO 2 registration process with the provided [result].
      */
     fun completeFido2Registration(result: Fido2RegisterCredentialResult)
+
+    /**
+     * Complete the FIDO 2 credential assertion process with the provided [result].
+     */
+    fun completeFido2Assertion(result: Fido2CredentialAssertionResult)
 }
