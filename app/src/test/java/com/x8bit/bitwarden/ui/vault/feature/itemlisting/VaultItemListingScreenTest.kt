@@ -16,6 +16,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -1747,11 +1748,45 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `fido2 error dialog should display and function according to state`() {
+        val dialogMessage = "Passkey error message"
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2OperationFail(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = dialogMessage.asText(),
+                )
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(VaultItemListingsAction.DismissFido2ErrorDialogClick)
+        }
+    }
+
+    @Test
     fun `CompleteFido2Registration event should call Fido2CompletionManager with result`() {
         val result = Fido2RegisterCredentialResult.Success("mockResponse")
         mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Registration(result))
         verify {
             fido2CompletionManager.completeFido2Registration(result)
+        }
+    }
+
+    @Test
+    fun `CompleteFido2Assertion event should call Fido2CompletionManager with result`() {
+        val result = Fido2CredentialAssertionResult.Success("mockResponse")
+        mutableEventFlow.tryEmit(VaultItemListingEvent.CompleteFido2Assertion(result))
+        verify {
+            fido2CompletionManager.completeFido2Assertion(result)
         }
     }
 
