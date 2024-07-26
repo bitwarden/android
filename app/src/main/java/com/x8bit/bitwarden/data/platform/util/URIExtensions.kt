@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.platform.util
 
-import android.content.Context
-import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.model.DomainName
 import java.net.URI
 
@@ -17,7 +16,7 @@ private const val IP_REGEX: String =
 /**
  * Parses the base domain from the URL. Returns null if unavailable.
  */
-fun URI.parseDomainOrNull(context: Context): String? {
+fun URI.parseDomainOrNull(resourceCacheManager: ResourceCacheManager): String? {
     val host = this.host ?: return null
     val isIpAddress = host.matches(IP_REGEX.toRegex())
 
@@ -25,7 +24,7 @@ fun URI.parseDomainOrNull(context: Context): String? {
         host
     } else {
         parseDomainNameOrNullInternal(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
             host = host,
         )
             ?.domain
@@ -35,13 +34,13 @@ fun URI.parseDomainOrNull(context: Context): String? {
 /**
  *  Parses a URL to get the breakdown of a URL's domain. Returns null if invalid.
  */
-fun URI.parseDomainNameOrNull(context: Context): DomainName? =
+fun URI.parseDomainNameOrNull(resourceCacheManager: ResourceCacheManager): DomainName? =
     this
         // URI is a platform type and host can be null.
         .host
         ?.let { nonNullHost ->
             parseDomainNameOrNullInternal(
-                context = context,
+                resourceCacheManager = resourceCacheManager,
                 host = nonNullHost,
             )
         }
@@ -53,21 +52,12 @@ fun URI.parseDomainNameOrNull(context: Context): DomainName? =
  */
 @Suppress("LongMethod")
 private fun parseDomainNameOrNullInternal(
-    context: Context,
+    resourceCacheManager: ResourceCacheManager,
     host: String,
 ): DomainName? {
-    val exceptionSuffixes = context
-        .resources
-        .getStringArray(R.array.exception_suffixes)
-        .toList()
-    val normalSuffixes = context
-        .resources
-        .getStringArray(R.array.normal_suffixes)
-        .toList()
-    val wildCardSuffixes = context
-        .resources
-        .getStringArray(R.array.wild_card_suffixes)
-        .toList()
+    val exceptionSuffixes = resourceCacheManager.domainExceptionSuffixes
+    val normalSuffixes = resourceCacheManager.domainNormalSuffixes
+    val wildCardSuffixes = resourceCacheManager.domainWildCardSuffixes
 
     // Split the host into parts separated by a period. Start with the last part and incrementally
     // add back the earlier parts to build a list of any matching domains in the data set.

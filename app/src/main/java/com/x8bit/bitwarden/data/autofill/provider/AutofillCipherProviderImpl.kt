@@ -21,7 +21,7 @@ private const val VAULT_LOCKED_TIMEOUT_MS: Long = 500L
 /**
  * The duration, in milliseconds, we should wait while retrieving ciphers before proceeding.
  */
-private const val GET_CIPHERS_TIMEOUT_MS: Long = 5_000L
+private const val GET_CIPHERS_TIMEOUT_MS: Long = 2_000L
 
 /**
  * The default [AutofillCipherProvider] implementation. This service is used for getting current
