@@ -148,6 +148,7 @@
   <string name="no_favorites">Kutxa gotorrean ez dago gogokorik.</string>
   <string name="no_items">Kutxa gotorrean ez dago elementurik.</string>
   <string name="no_items_tap">Kutxa gotorrean ez dago elementurik webgune/aplikazio honentzat. Sakatu bat gehitzeko.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Saio hasiera honek ez du ezarritako erabiltzaile izen edo pasahitzik.</string>
   <string name="ok_got_it">Ongi, aurrera!</string>
   <string name="option_defaults">Aukera lehenetsiak Bitwarden aplikazioaren pasahitzak sortzeko ataletik ezartzen dira.</string>

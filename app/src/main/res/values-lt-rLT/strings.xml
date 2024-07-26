@@ -148,6 +148,7 @@
   <string name="no_favorites">Jūsų saugykloje nėra mėgstamiausių.</string>
   <string name="no_items">Jūsų saugykloje nėra jokių elementų.</string>
   <string name="no_items_tap">Jūsų saugykloje nėra šios svetainės / programos elementų. Bakstelėkite, kad pridėtumėte.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Šiam prisijungimui nėra sukonfigūruotas vartotojo vardas arba slaptažodis.</string>
   <string name="ok_got_it">Gerai, supratau!</string>
   <string name="option_defaults">Numatytieji parinkčių nustatymai nustatomi naudojant pagrindinės „Bitwarden“ programos slaptažodžių generavimo įrankį.</string>

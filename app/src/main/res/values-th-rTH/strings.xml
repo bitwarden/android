@@ -148,6 +148,7 @@
   <string name="no_favorites">ไม่มีรายการโปรดในห้องนิรภัยของคุณ</string>
   <string name="no_items">ไม่มีรายการในห้องนิรภัยของคุณ</string>
   <string name="no_items_tap">ไม่มีรายการอยู่ในห้องนิรภัยของคุณสำหรับเว็บไซต์นี้ แตะเพื่อเพิ่ม</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">การเข้าสู่ระบบนี้ไม่มีการตั้งค่าชื่อผู้ใช้หรือรหัสผ่าน</string>
   <string name="ok_got_it">ตกลง, เข้าใจแล้ว</string>
   <string name="option_defaults">Option defaults are set from the main bitwarden app\'s password generator tool.</string>

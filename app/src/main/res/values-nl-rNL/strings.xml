@@ -148,6 +148,7 @@
   <string name="no_favorites">Er zijn geen favorieten in je kluis.</string>
   <string name="no_items">Er zijn geen items in je kluis.</string>
   <string name="no_items_tap">Er zijn geen items in je kluis voor deze website. Tik om er een toe te voegen.</string>
+  <string name="no_username">Geen gebruikersnaam</string>
   <string name="no_username_password_configured">Deze login bevat geen gebruikersnaam of wachtwoord.</string>
   <string name="ok_got_it">Ok, ik snap het!</string>
   <string name="option_defaults">De standaardwaarden zijn instelbaar vanaf de wachtwoordgenerator in de hoofdapplicatie.</string>

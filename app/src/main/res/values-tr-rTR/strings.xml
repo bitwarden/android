@@ -148,6 +148,7 @@
   <string name="no_favorites">Kasanızda hiç favoriniz yok.</string>
   <string name="no_items">Kasanızda hiç kayıt yok.</string>
   <string name="no_items_tap">Kasanızda bu siteye/uygulamaya ait hiç hesap yok. Eklemek isterseniz dokunun.</string>
+  <string name="no_username">Kullanıcı adı yok</string>
   <string name="no_username_password_configured">Bu hesaba ait kullanıcı adı veya parola kaydedilmemiş.</string>
   <string name="ok_got_it">Tamam, anladım!</string>
   <string name="option_defaults">Varsayılan ayarlar, ana Bitwarden uygulamasının parola üreticisi aracından ayarlanır.</string>
