@@ -1,10 +1,19 @@
 package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
+import androidx.credentials.provider.BeginGetCredentialResponse
 import androidx.credentials.provider.PendingIntentHandler
+import androidx.credentials.provider.PublicKeyCredentialEntry
+import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
 import io.mockk.Called
 import io.mockk.MockKVerificationScope
 import io.mockk.Ordering
@@ -13,11 +22,15 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkConstructor
 import io.mockk.mockkObject
+import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.unmockkConstructor
 import io.mockk.unmockkObject
+import io.mockk.unmockkStatic
 import io.mockk.verify
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -25,6 +38,7 @@ import org.junit.jupiter.api.Test
 class Fido2CompletionManagerTest {
 
     private val mockActivity = mockk<Activity> {
+        every { packageName } returns "packageName"
         every { setResult(Activity.RESULT_OK, any()) } just runs
         every { finish() } just runs
     }
@@ -56,6 +70,16 @@ class Fido2CompletionManagerTest {
                 mockActivity wasNot Called
             }
         }
+
+        @Test
+        fun `completeFido2GetCredentials should perform no operations`() {
+            val mockGetCredentialResult = mockk<Fido2GetCredentialResult>()
+            fido2CompletionManager.completeFido2GetCredentialRequest(mockGetCredentialResult)
+            verify {
+                mockGetCredentialResult wasNot Called
+                mockActivity wasNot Called
+            }
+        }
     }
 
     @Nested
@@ -69,12 +93,16 @@ class Fido2CompletionManagerTest {
             every {
                 PendingIntentHandler.setCreateCredentialException(any(), any())
             } just runs
+            every {
+                PendingIntentHandler.setBeginGetCredentialResponse(any(), any())
+            } just runs
         }
 
         @AfterEach
         fun tearDown() {
-            unmockkConstructor(Intent::class)
+            unmockkConstructor(Intent::class, PublicKeyCredentialEntry.Builder::class)
             unmockkObject(PendingIntentHandler.Companion)
+            unmockkStatic(PendingIntent::class)
         }
 
         @Suppress("MaxLineLength")
@@ -136,6 +164,105 @@ class Fido2CompletionManagerTest {
             }
         }
 
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2GetCredentials should set BeginGetCredentialResponse, set activity result, then finish activity when result is Success`() {
+            fido2CompletionManager
+                .completeFido2GetCredentialRequest(
+                    Fido2GetCredentialResult.Success(
+                        options = mockk(),
+                        credentials = emptyList(),
+                    ),
+                )
+
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setBeginGetCredentialResponse(any(), any())
+            }
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2GetCredentials should create a PublicKeyCredentialEntry when result is Success`() {
+            mockkConstructor(PublicKeyCredentialEntry.Builder::class)
+            mockkStatic(PendingIntent::class)
+
+            val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
+            val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
+            val mockFido2AutofillViewList = listOf(mockFido2AutofillView)
+            val mockIntent = setupMockCompletionIntent(mockFido2AutofillView, mockCredentialEntry)
+
+            fido2CompletionManager
+                .completeFido2GetCredentialRequest(
+                    Fido2GetCredentialResult.Success(
+                        options = mockk(),
+                        credentials = mockFido2AutofillViewList,
+                    ),
+                )
+
+            val responseSlot = slot<BeginGetCredentialResponse>()
+            verify {
+                PendingIntent.getActivity(mockActivity, any(), mockIntent, any())
+                anyConstructed<PublicKeyCredentialEntry.Builder>().build()
+                PendingIntentHandler.setBeginGetCredentialResponse(
+                    intent = any(),
+                    response = capture(responseSlot),
+                )
+            }
+
+            assertEquals(
+                listOf(mockCredentialEntry),
+                responseSlot.captured.credentialEntries,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2GetCredentials should set username to default value when userNameForUi is null`() {
+            mockkConstructor(PublicKeyCredentialEntry.Builder::class)
+            mockkStatic(PendingIntent::class)
+            val mockCredentialEntry = mockk<PublicKeyCredentialEntry>()
+            val mockFido2AutofillView = createMockFido2CredentialAutofillView(number = 1)
+                .copy(userNameForUi = null)
+            val mockFido2AutofillViewList = listOf(mockFido2AutofillView)
+            val mockIntent = setupMockCompletionIntent(mockFido2AutofillView, mockCredentialEntry)
+
+            every { mockActivity.getString(any()) } returns "No Username"
+
+            fido2CompletionManager
+                .completeFido2GetCredentialRequest(
+                    Fido2GetCredentialResult.Success(
+                        options = mockk(),
+                        credentials = mockFido2AutofillViewList,
+                    ),
+                )
+
+            val responseSlot = slot<BeginGetCredentialResponse>()
+            verify {
+                mockActivity.getString(R.string.no_username)
+                PendingIntent.getActivity(mockActivity, any(), mockIntent, any())
+                anyConstructed<PublicKeyCredentialEntry.Builder>().build()
+                PendingIntentHandler.setBeginGetCredentialResponse(
+                    intent = any(),
+                    response = capture(responseSlot),
+                )
+            }
+
+            assertEquals(
+                listOf(mockCredentialEntry),
+                responseSlot.captured.credentialEntries,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
+        fun `completeFido2GetCredentials should set GetCredentialException, set activity result, then finish activity when result is Error`() {
+            fido2CompletionManager
+                .completeFido2GetCredentialRequest(Fido2GetCredentialResult.Error)
+            verifyActivityResultIsSetAndFinishedAfter {
+                PendingIntentHandler.setGetCredentialException(any(), any())
+            }
+        }
+
         /**
          * Convenience function to ensure the given [calls] are performed before setting the
          * [mockActivity] result and calling finish. This sequence is expected to be performed for
@@ -149,6 +276,36 @@ class Fido2CompletionManagerTest {
                 mockActivity.setResult(Activity.RESULT_OK, any())
                 mockActivity.finish()
             }
+        }
+
+        private fun setupMockCompletionIntent(
+            mockFido2AutofillView1: Fido2CredentialAutofillView,
+            mockCredentialEntry1: PublicKeyCredentialEntry,
+        ): Intent {
+            val mockIntent1 = mockk<Intent> {
+                every {
+                    putExtra(
+                        EXTRA_KEY_CIPHER_ID,
+                        mockFido2AutofillView1.cipherId,
+                    )
+                } returns this
+                every {
+                    putExtra(
+                        EXTRA_KEY_CREDENTIAL_ID,
+                        mockFido2AutofillView1.credentialId.toString(),
+                    )
+                } returns this
+            }
+
+            every {
+                anyConstructed<PublicKeyCredentialEntry.Builder>()
+                    .build()
+            } returns mockCredentialEntry1
+            every { anyConstructed<Intent>().setPackage(any()) } returns mockIntent1
+            every {
+                PendingIntent.getActivity(mockActivity, any(), mockIntent1, any())
+            } returns mockk()
+            return mockIntent1
         }
     }
 }

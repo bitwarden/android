@@ -41,7 +41,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicInteger
 
 private const val CREATE_PASSKEY_INTENT = "com.x8bit.bitwarden.fido2.ACTION_CREATE_PASSKEY"
-private const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY"
+const val GET_PASSKEY_INTENT = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY"
 const val UNLOCK_ACCOUNT_INTENT = "com.x8bit.bitwarden.fido2.ACTION_UNLOCK_ACCOUNT"
 
 /**
@@ -225,6 +225,7 @@ class Fido2ProviderProcessorImpl(
             DecryptFido2CredentialAutofillViewResult.Error -> {
                 throw GetCredentialUnknownException("Error decrypting credentials.")
             }
+
             is DecryptFido2CredentialAutofillViewResult.Success -> {
                 result
                     .fido2CredentialAutofillViews
