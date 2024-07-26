@@ -88,6 +88,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
     }
     private val fido2CompletionManager: Fido2CompletionManager = mockk {
         every { completeFido2Registration(any()) } just runs
+        every { completeFido2Assertion(any()) } just runs
     }
     private val biometricsManager: BiometricsManager = mockk()
     private val mutableEventFlow = bufferedMutableSharedFlow<VaultItemListingEvent>()
