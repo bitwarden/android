@@ -1758,7 +1758,7 @@ class VaultItemListingScreenTest : BaseComposeTest() {
                 dialogState = VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = dialogMessage.asText(),
-                )
+                ),
             )
         }
 

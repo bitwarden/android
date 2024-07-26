@@ -182,7 +182,7 @@ class VaultItemListingViewModel @Inject constructor(
                 VaultItemListingsAction.Internal.VaultDataReceive(
                     it
                         .filterForAutofillIfNecessary()
-                        .filterForFido2CreationIfNecessary()
+                        .filterForFido2CreationIfNecessary(),
                 )
             }
             .onEach(::sendAction)

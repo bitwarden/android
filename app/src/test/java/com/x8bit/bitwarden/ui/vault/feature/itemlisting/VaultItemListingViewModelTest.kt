@@ -2195,12 +2195,13 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                     VaultItemListingEvent.CompleteFido2Assertion(
                         result = Fido2CredentialAssertionResult.Error,
                     ),
-                    awaitItem()
+                    awaitItem(),
                 )
                 assertNull(viewModel.stateFlow.value.dialogState)
             }
         }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `DismissFido2ErrorDialogClick should show general error dialog when no FIDO 2 request is present`() =
         runTest {
