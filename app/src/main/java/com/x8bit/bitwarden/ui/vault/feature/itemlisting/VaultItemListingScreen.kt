@@ -165,6 +165,10 @@ fun VaultItemListingScreen(
                     },
                 )
             }
+
+            is VaultItemListingEvent.CompleteFido2Assertion -> {
+                fido2CompletionManager.completeFido2Assertion(event.result)
+            }
         }
     }
 
@@ -176,7 +180,7 @@ fun VaultItemListingScreen(
         onDismissFido2ErrorDialog = remember(viewModel) {
             {
                 viewModel.trySendAction(
-                    VaultItemListingsAction.DismissFido2CreationErrorDialogClick,
+                    VaultItemListingsAction.DismissFido2ErrorDialogClick,
                 )
             }
         },
@@ -286,7 +290,7 @@ private fun VaultItemListingDialogs(
             visibilityState = LoadingDialogState.Shown(dialogState.message),
         )
 
-        is VaultItemListingState.DialogState.Fido2CreationFail -> BitwardenBasicDialog(
+        is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = dialogState.title,
                 message = dialogState.message,

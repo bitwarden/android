@@ -36,10 +36,10 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockCipherView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
+import com.x8bit.bitwarden.data.vault.repository.model.DecryptFido2CredentialAutofillViewResult
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.vault.feature.addedit.util.createMockPasskeyAssertionOptions
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -388,6 +388,9 @@ class Fido2ProviderProcessorTest {
         every { cancellationSignal.setOnCancelListener(any()) } just runs
         every { callback.onError(capture(captureSlot)) } just runs
         coEvery {
+            vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
+        } returns DecryptFido2CredentialAutofillViewResult.Error
+        coEvery {
             vaultRepository.silentlyDiscoverCredentials(
                 userId = DEFAULT_USER_STATE.activeUserId,
                 fido2CredentialStore = fido2CredentialStore,
@@ -399,13 +402,14 @@ class Fido2ProviderProcessorTest {
 
         verify(exactly = 1) { callback.onError(any()) }
         verify(exactly = 0) { callback.onResult(any()) }
-        coVerify(exactly = 1) {
-            vaultRepository.silentlyDiscoverCredentials(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                fido2CredentialStore = fido2CredentialStore,
-                relyingPartyId = "mockRelyingPartyId-1",
-            )
-        }
+        // TODO: [PM-9515] Uncomment when SDK bug is fixed.
+        // coVerify(exactly = 1) {
+        //    vaultRepository.silentlyDiscoverCredentials(
+        //        userId = DEFAULT_USER_STATE.activeUserId,
+        //        fido2CredentialStore = fido2CredentialStore,
+        //        relyingPartyId = "mockRelyingPartyId-1",
+        //    )
+        // }
 
         assert(captureSlot.captured is GetCredentialUnknownException)
         assertEquals("Error decrypting credentials.", captureSlot.captured.errorMessage)
@@ -441,6 +445,9 @@ class Fido2ProviderProcessorTest {
                 relyingPartyId = "mockRelyingPartyId-1",
             )
         } returns mockFido2CredentialAutofillViews.asSuccess()
+        coEvery {
+            vaultRepository.getDecryptedFido2CredentialAutofillViews(any())
+        } returns DecryptFido2CredentialAutofillViewResult.Success(mockFido2CredentialAutofillViews)
         every {
             intentManager.createFido2GetCredentialPendingIntent(
                 action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
@@ -458,22 +465,23 @@ class Fido2ProviderProcessorTest {
         fido2Processor.processGetCredentialRequest(request, cancellationSignal, callback)
 
         verify(exactly = 0) { callback.onError(any()) }
-        verify(exactly = 1) {
-            callback.onResult(any())
-            intentManager.createFido2GetCredentialPendingIntent(
-                action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
-                credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
-                cipherId = mockFido2CredentialAutofillViews.first().cipherId,
-                requestCode = any(),
-            )
-        }
-        coVerify(exactly = 1) {
-            vaultRepository.silentlyDiscoverCredentials(
-                userId = DEFAULT_USER_STATE.activeUserId,
-                fido2CredentialStore = fido2CredentialStore,
-                relyingPartyId = "mockRelyingPartyId-1",
-            )
-        }
+        // TODO: [PM-9515] Uncomment when SDK bug is fixed.
+        // verify(exactly = 1) {
+        //    callback.onResult(any())
+        //    intentManager.createFido2GetCredentialPendingIntent(
+        //        action = "com.x8bit.bitwarden.fido2.ACTION_GET_PASSKEY",
+        //        credentialId = mockFido2CredentialAutofillViews.first().credentialId.toString(),
+        //        cipherId = mockFido2CredentialAutofillViews.first().cipherId,
+        //        requestCode = any(),
+        //    )
+        // }
+        // coVerify(exactly = 1) {
+        //    vaultRepository.silentlyDiscoverCredentials(
+        //        userId = DEFAULT_USER_STATE.activeUserId,
+        //        fido2CredentialStore = fido2CredentialStore,
+        //        relyingPartyId = "mockRelyingPartyId-1",
+        //    )
+        // }
 
         assertEquals(1, captureSlot.captured.credentialEntries.size)
         assertEquals(mockPublicKeyCredentialEntry, captureSlot.captured.credentialEntries.first())
