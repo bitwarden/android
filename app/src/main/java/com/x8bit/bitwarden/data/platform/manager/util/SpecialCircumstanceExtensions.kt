@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.manager.util
 
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -19,6 +20,7 @@ fun SpecialCircumstance.toAutofillSaveItemOrNull(): AutofillSaveItem? =
         SpecialCircumstance.VaultShortcut -> null
         is SpecialCircumstance.Fido2Save -> null
         is SpecialCircumstance.Fido2Assertion -> null
+        is SpecialCircumstance.Fido2GetCredentials -> null
     }
 
 /**
@@ -34,6 +36,7 @@ fun SpecialCircumstance.toAutofillSelectionDataOrNull(): AutofillSelectionData? 
         SpecialCircumstance.VaultShortcut -> null
         is SpecialCircumstance.Fido2Save -> null
         is SpecialCircumstance.Fido2Assertion -> null
+        is SpecialCircumstance.Fido2GetCredentials -> null
     }
 
 /**
@@ -51,5 +54,14 @@ fun SpecialCircumstance.toFido2RequestOrNull(): Fido2CredentialRequest? =
 fun SpecialCircumstance.toFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? =
     when (this) {
         is SpecialCircumstance.Fido2Assertion -> this.fido2AssertionRequest
+        else -> null
+    }
+
+/**
+ * Returns [Fido2CredentialAssertionRequest] when contained in the given [SpecialCircumstance].
+ */
+fun SpecialCircumstance.toFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? =
+    when (this) {
+        is SpecialCircumstance.Fido2GetCredentials -> this.fido2GetCredentialsRequest
         else -> null
     }
