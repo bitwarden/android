@@ -183,7 +183,6 @@ class VaultItemListingViewModel @Inject constructor(
                     it
                         .filterForAutofillIfNecessary()
                         .filterForFido2CreationIfNecessary()
-                        .filterForFido2AssertionIfNecessary(),
                 )
             }
             .onEach(::sendAction)
@@ -1372,13 +1371,14 @@ class VaultItemListingViewModel @Inject constructor(
             )
         }
         val request = action.data
-        val ciphers = vaultRepository.ciphersStateFlow
+        val ciphers = vaultRepository
+            .ciphersStateFlow
             .value
             .data
             .orEmpty()
             .filter { it.isActiveWithFido2Credentials }
         if (request.cipherId.isNullOrEmpty()) {
-            observeVaultData()
+            showFido2ErrorDialog()
         } else {
             val selectedCipher = ciphers
                 .find { it.id == request.cipherId }
@@ -1516,24 +1516,6 @@ class VaultItemListingViewModel @Inject constructor(
     @Suppress("MaxLineLength")
     private suspend fun DataState<VaultData>.filterForFido2CreationIfNecessary(): DataState<VaultData> {
         val request = state.fido2CredentialRequest ?: return this
-        return this.map { vaultData ->
-            val matchUri = request.origin
-                ?: request.packageName
-                    .toAndroidAppUriString()
-
-            vaultData.copy(
-                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
-                    ciphers = vaultData.cipherViewList,
-                    matchUri = matchUri,
-                ),
-                fido2CredentialAutofillViewList = vaultData.toFido2CredentialAutofillViews(),
-            )
-        }
-    }
-
-    @Suppress("MaxLineLength")
-    private suspend fun DataState<VaultData>.filterForFido2AssertionIfNecessary(): DataState<VaultData> {
-        val request = state.fido2CredentialAssertionRequest ?: return this
         return this.map { vaultData ->
             val matchUri = request.origin
                 ?: request.packageName
