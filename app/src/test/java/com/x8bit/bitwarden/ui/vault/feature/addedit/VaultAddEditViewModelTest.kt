@@ -3217,6 +3217,34 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
         @Suppress("MaxLineLength")
         @Test
+        fun `UserVerificationNotSupported should display Fido2PinSetUpPrompt when user has no password or pin`() {
+            val userState = createUserState()
+            mutableUserStateFlow.value = userState.copy(
+                accounts = listOf(
+                    userState.accounts.first().copy(
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = true,
+                            hasMasterPassword = false,
+                            hasAdminApproval = true,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = true,
+                        ),
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(VaultAddEditAction.Common.UserVerificationNotSupported)
+
+            verify { fido2CredentialManager.isUserVerified = false }
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2PinSetUpPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Suppress("MaxLineLength")
+        @Test
         fun `MasterPasswordFido2VerificationSubmit should display Fido2Error when password verification fails`() {
             val password = "password"
             coEvery {
@@ -3420,6 +3448,47 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
 
             assertEquals(
                 VaultAddEditState.DialogState.Fido2PinPrompt,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Test
+        fun `PinFido2SetUpSubmit should display Fido2PinSetUpError for empty PIN`() {
+            val pin = ""
+            viewModel.trySendAction(VaultAddEditAction.Common.PinFido2SetUpSubmit(pin = pin))
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2PinSetUpError,
+                viewModel.stateFlow.value.dialog,
+            )
+        }
+
+        @Test
+        fun `PinFido2SetUpSubmit should save PIN and register credential for non-empty PIN`() {
+            val pin = "PIN"
+            every {
+                settingsRepository.storeUnlockPin(
+                    pin = pin,
+                    shouldRequireMasterPasswordOnRestart = false,
+                )
+            } just runs
+
+            viewModel.trySendAction(VaultAddEditAction.Common.PinFido2SetUpSubmit(pin = pin))
+
+            verify(exactly = 1) {
+                settingsRepository.storeUnlockPin(
+                    pin = pin,
+                    shouldRequireMasterPasswordOnRestart = false,
+                )
+            }
+         }
+
+        @Test
+        fun `PinFido2SetUpRetryClick should display Fido2PinSetUpPrompt`() {
+            viewModel.trySendAction(VaultAddEditAction.Common.PinFido2SetUpRetryClick)
+
+            assertEquals(
+                VaultAddEditState.DialogState.Fido2PinSetUpPrompt,
                 viewModel.stateFlow.value.dialog,
             )
         }

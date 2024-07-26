@@ -245,16 +245,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
-            )
-        }
-
-        composeTestRule
             .onAllNodesWithText(text = "Master password")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performTextInput("password")
@@ -324,16 +314,6 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         }
 
         composeTestRule
-            .onAllNodesWithText(text = "Cancel")
-            .filterToOne(hasAnyAncestor(isDialog()))
-            .performClick()
-        verify {
-            viewModel.trySendAction(
-                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
-            )
-        }
-
-        composeTestRule
             .onAllNodesWithText(text = "PIN")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performTextInput("PIN")
@@ -373,6 +353,75 @@ class VaultAddEditScreenTest : BaseComposeTest() {
         verify {
             viewModel.trySendAction(
                 VaultAddEditAction.Common.RetryFido2PinVerificationClick,
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 pin set up prompt dialog should display based on state`() {
+        val dialogMessage = "Enter your PIN code."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.Fido2PinSetUpPrompt)
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Cancel")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.DismissFido2VerificationDialogClick,
+            )
+        }
+
+        composeTestRule
+            .onAllNodesWithText(text = "PIN")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performTextInput("PIN")
+        composeTestRule
+            .onAllNodesWithText(text = "Submit")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.PinFido2SetUpSubmit(
+                    pin = "PIN",
+                ),
+            )
+        }
+    }
+
+    @Test
+    fun `fido2 pin set up error dialog should display based on state`() {
+        val dialogMessage = "The PIN field is required."
+        composeTestRule.onNode(isDialog()).assertDoesNotExist()
+        composeTestRule.onNodeWithText(dialogMessage).assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.Fido2PinSetUpError)
+        }
+
+        composeTestRule
+            .onNodeWithText(dialogMessage)
+            .assertIsDisplayed()
+            .assert(hasAnyAncestor(isDialog()))
+
+        composeTestRule
+            .onAllNodesWithText(text = "Ok")
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .performClick()
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.Common.PinFido2SetUpRetryClick,
             )
         }
     }
