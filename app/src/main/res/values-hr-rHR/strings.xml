@@ -148,6 +148,7 @@
   <string name="no_favorites">U tvom trezoru nema favorita.</string>
   <string name="no_items">U tvom trezoru nema stavki.</string>
   <string name="no_items_tap">U tvom trezoru nema stavki za ovu web stranicu. Dodirni za dodavanje.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Ova prijava nema definirano korisničko ime ili lozinku.</string>
   <string name="ok_got_it">U redu, razumijem!</string>
   <string name="option_defaults">Zadane postavke preuzete iz generatora lozinki glavne aplikacije Bitwarden.</string>

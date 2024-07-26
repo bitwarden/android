@@ -148,6 +148,7 @@
   <string name="no_favorites">Der er ingen favoritter i boksen.</string>
   <string name="no_items">Der er ingen emner i boksen.</string>
   <string name="no_items_tap">Der er ingen emner i boksen til webstedet/appen. Tryk for at tilføje emne.</string>
+  <string name="no_username">Intet Brugernavn</string>
   <string name="no_username_password_configured">Dette login har intet brugernavn eller adgangskode opsat.</string>
   <string name="ok_got_it">OK, forstået!</string>
   <string name="option_defaults">Standardindstillinger opsættes fra Bitwarden-appens adgangskodegeneratorværktøj.</string>

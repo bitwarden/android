@@ -148,6 +148,7 @@
   <string name="no_favorites">Es befinden sich keine Favoriten in deinem Tresor.</string>
   <string name="no_items">Keine Einträge in deinem Tresor.</string>
   <string name="no_items_tap">Es befinden sich keine Zugangsdaten für diese Webseite in deinem Tresor. Zum Hinzufügen tippen.</string>
+  <string name="no_username">Kein Benutzername</string>
   <string name="no_username_password_configured">Diese Zugangsdaten sind noch nicht konfiguriert.</string>
   <string name="ok_got_it">Ok, verstanden!</string>
   <string name="option_defaults">Die Standardeinstellungen können mit dem Passwortgenerator der Bitwarden App definiert werden.</string>

@@ -148,6 +148,7 @@
   <string name="no_favorites">Nincsenek kedvencek a széfedben.</string>
   <string name="no_items">Nincsenek elemek a széfben.</string>
   <string name="no_items_tap">Ehhez a webhelyhez vagy alkalmazáshoz nincs elem a széfben. Koppintás létrehozható egy.</string>
+  <string name="no_username">Nincs felhasználónév</string>
   <string name="no_username_password_configured">Ehhez a bejelentkezéshez nem lett felhasználónév vagy jelszó beállítva.</string>
   <string name="ok_got_it">Ok, megvan!</string>
   <string name="option_defaults">Az opció alapértelmezések a Bitwarden főalkalmazás jelszógeneráló eszközéből származnak.</string>

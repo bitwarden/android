@@ -148,6 +148,7 @@
   <string name="no_favorites">У вашем сефу нема фаворита.</string>
   <string name="no_items">У вашем сефу нема ставке.</string>
   <string name="no_items_tap">У вашем сефу нема ставке за ову веб локацију/апликацију. Додирните да бисте додали једну.</string>
+  <string name="no_username">Нема корисничког имена</string>
   <string name="no_username_password_configured">Ова пријава нема конфигурисано корисничко име или лозинку.</string>
   <string name="ok_got_it">У реду, схватам!</string>
   <string name="option_defaults">Подразумеване опције се постављају у главној Bitwarden апликацији у генератору лозинке.</string>
