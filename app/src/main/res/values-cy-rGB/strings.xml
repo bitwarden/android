@@ -148,6 +148,7 @@
   <string name="no_favorites">Does dim ffefrynnau yn eich cell.</string>
   <string name="no_items">Does dim eitemau yn eich cell.</string>
   <string name="no_items_tap">There are no items in your vault for this website/app. Tap to add one.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Does dim enw defnyddiwr na chyfrinair i\'r manylyn mewngofnodi hwn.</string>
   <string name="ok_got_it">Iawn, deall!</string>
   <string name="option_defaults">Option defaults are set from the main Bitwarden app\'s password generator tool.</string>

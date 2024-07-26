@@ -148,6 +148,7 @@
   <string name="no_favorites">Não existem favoritos no seu cofre.</string>
   <string name="no_items">Não existem itens no seu cofre.</string>
   <string name="no_items_tap">Não existem itens no seu cofre para este site/app. Toque para adicionar um.</string>
+  <string name="no_username">Sem nome de utilizador</string>
   <string name="no_username_password_configured">Esta credencial não tem um nome de utilizador ou palavra-passe configurados.</string>
   <string name="ok_got_it">Ok, percebido!</string>
   <string name="option_defaults">As predefinições das opções são definidas a partir da ferramenta principal de geração de palavras-passe da app Bitwarden.</string>
@@ -444,7 +445,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="default_uri_match_detection">Deteção de correspondência de URI predefinida</string>
   <string name="default_uri_match_detection_description">Escolha a forma predefinida como a deteção de correspondência de URI é tratada para credenciais ao executar ações como o preenchimento automático.</string>
   <string name="theme">Tema</string>
-  <string name="theme_description">Alterar o tema de cores da aplicação.</string>
+  <string name="theme_description">Altere o tema de cores da aplicação.</string>
   <string name="theme_default">Predefinido (Sistema)</string>
   <string name="default_dark_theme">Tema escuro predefinido</string>
   <string name="copy_notes">Copiar nota</string>

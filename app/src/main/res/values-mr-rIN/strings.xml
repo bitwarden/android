@@ -148,6 +148,7 @@
   <string name="no_favorites">There are no favorites in your vault.</string>
   <string name="no_items">There are no items in your vault.</string>
   <string name="no_items_tap">There are no items in your vault for this website/app. Tap to add one.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">This login does not have a username or password configured.</string>
   <string name="ok_got_it">Ok, got it!</string>
   <string name="option_defaults">Option defaults are set from the main Bitwarden app\'s password generator tool.</string>

@@ -148,6 +148,7 @@
   <string name="no_favorites">Anbarınızda heç bir sevimli yoxdur.</string>
   <string name="no_items">Anbarınızda heç bir element yoxdur.</string>
   <string name="no_items_tap">Anbarınızda bu veb sayt/tətbiq üçün heç bir element yoxdur. Əlavə etmək üçün toxunun.</string>
+  <string name="no_username">İstifadəçi adı yoxdur</string>
   <string name="no_username_password_configured">Bu giriş üçün heç bir istifadəçi adı və ya parol yoxdur.</string>
   <string name="ok_got_it">Yaxşı, anladım!</string>
   <string name="option_defaults">İlkin seçim dəyərləri, əsas Bitwarden tətbiqinin parol yaratma alətindən ayarlanır.</string>

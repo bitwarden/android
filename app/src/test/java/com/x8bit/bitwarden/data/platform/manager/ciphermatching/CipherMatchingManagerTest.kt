@@ -8,7 +8,7 @@ import com.bitwarden.vault.UriMatchType
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
-import com.x8bit.bitwarden.data.platform.util.getHostOrNull
+import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
 import com.x8bit.bitwarden.data.platform.util.isAndroidApp
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -357,7 +357,7 @@ class CipherMatchingManagerTest {
         with(uri) {
             every { isAndroidApp() } returns isAndroidApp
             every { getDomainOrNull(context = context) } returns this.takeIf { isAndroidApp }
-            every { getHostOrNull() } returns HOST
+            every { getHostWithPortOrNull() } returns HOST_WITH_PORT
             every {
                 getWebHostFromAndroidUriOrNull()
             } returns ANDROID_APP_WEB_URL.takeIf { isAndroidApp }
@@ -378,8 +378,8 @@ class CipherMatchingManagerTest {
             DEFAULT_LOGIN_VIEW_URI_FIVE.getDomainOrNull(context = context)
         } returns null
 
-        every { HOST_LOGIN_VIEW_URI_MATCHING.getHostOrNull() } returns HOST
-        every { HOST_LOGIN_VIEW_URI_NOT_MATCHING.getHostOrNull() } returns null
+        every { HOST_LOGIN_VIEW_URI_MATCHING.getHostWithPortOrNull() } returns HOST_WITH_PORT
+        every { HOST_LOGIN_VIEW_URI_NOT_MATCHING.getHostWithPortOrNull() } returns null
     }
 }
 
@@ -415,4 +415,4 @@ private const val DEFAULT_LOGIN_VIEW_URI_FIVE: String = "DEFAULT_LOGIN_VIEW_URI_
 // Setup state for host ciphers
 private const val HOST_LOGIN_VIEW_URI_MATCHING: String = "DEFAULT_LOGIN_VIEW_URI_MATCHING"
 private const val HOST_LOGIN_VIEW_URI_NOT_MATCHING: String = "DEFAULT_LOGIN_VIEW_URI_NOT_MATCHING"
-private const val HOST: String = "HOST"
+private const val HOST_WITH_PORT: String = "HOST_WITH_PORT"

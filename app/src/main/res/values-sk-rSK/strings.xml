@@ -148,6 +148,7 @@
   <string name="no_favorites">Vo vašom trezore nie sú žiadné obľúbené.</string>
   <string name="no_items">V trezore sa nenachádzajú žiadne položky.</string>
   <string name="no_items_tap">Pre túto stránku v trezore neexistujú žiadne prihlasovacie údaje. Kliknite pre pridanie.</string>
+  <string name="no_username">Žiadne používateľské meno</string>
   <string name="no_username_password_configured">Toto prihlásenie nemá nakonfigurované používateľské meno alebo heslo.</string>
   <string name="ok_got_it">Ok, rozumiem!</string>
   <string name="option_defaults">Predvolené možnosti sa nastavujú v nástroji na generovanie hesla v hlavnej bitwarden aplikácií.</string>

@@ -53,10 +53,20 @@ fun String.getDomainOrNull(context: Context): String? =
         ?.parseDomainOrNull(context = context)
 
 /**
- * Extract the host from this [String] if possible, otherwise return null.
+ * Extract the host with optional port from this [String] if possible, otherwise return null.
  */
 @OmitFromCoverage
-fun String.getHostOrNull(): String? = this.toUriOrNull()?.host
+fun String.getHostWithPortOrNull(): String? {
+    val uri = this.toUriOrNull() ?: return null
+    return uri.host?.let { host ->
+        val port = uri.port
+        if (port != -1) {
+            "$host:$port"
+        } else {
+            host
+        }
+    }
+}
 
 /**
  * Find the indices of the last occurrences of [substring] within this [String]. Return null if no

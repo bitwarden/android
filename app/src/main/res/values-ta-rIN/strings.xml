@@ -148,6 +148,7 @@
   <string name="no_favorites">உங்கள் பெட்டகத்தில் பிடித்தவை எவையுமில்லை.</string>
   <string name="no_items">உம் பெட்டகத்தில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="no_items_tap">உம் பெட்டகத்தில் இவ்வலைத்தளம்/செயலிக்கான உருப்படிகள் இல்லை. ஒன்றைச் சேர்க்க தட்டுக.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">இவ்வுள்நுழைவில் பயனர்பெயர் அ கடவுச்சொல் கட்டமைக்கப்படவில்லை.</string>
   <string name="ok_got_it">சரி, புரிந்தது!</string>
   <string name="option_defaults">விருப்ப இயல்புநிலைகள் முதன்மை Bitwarden செயலியின் கடவுச்சொல் உருவாக்கி கருவியிலிருந்து அமைக்கப்படுகிறது.</string>

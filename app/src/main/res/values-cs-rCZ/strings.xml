@@ -148,6 +148,7 @@
   <string name="no_favorites">Žádné oblíbené přihlašovací údaje.</string>
   <string name="no_items">Žádné položky.</string>
   <string name="no_items_tap">Pro tuto stránku neexistují žádné položky. Klepněte pro jejich přidání.</string>
+  <string name="no_username">Žádné uživatelské jméno</string>
   <string name="no_username_password_configured">Tyto přihlašovací údaje nemají nastavené uživatelské jméno nebo heslo.</string>
   <string name="ok_got_it">OK, rozumím!</string>
   <string name="option_defaults">Výchozí nastavení je převzato z nastavení generování hesel v aplikaci Bitwarden.</string>
