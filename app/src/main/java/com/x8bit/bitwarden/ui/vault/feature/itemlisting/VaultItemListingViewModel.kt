@@ -1348,7 +1348,7 @@ class VaultItemListingViewModel @Inject constructor(
         }
         mutableStateFlow.update {
             it.copy(
-                dialogState = VaultItemListingState.DialogState.Fido2CreationFail(
+                dialogState = VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = messageResId.asText(),
                 ),
@@ -1549,7 +1549,7 @@ class VaultItemListingViewModel @Inject constructor(
         fido2CredentialManager.authenticationAttempts = 0
         mutableStateFlow.update {
             it.copy(
-                dialogState = VaultItemListingState.DialogState.Fido2CreationFail(
+                dialogState = VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
@@ -1648,11 +1648,10 @@ data class VaultItemListingState(
         ) : DialogState()
 
         /**
-         * Represents a dialog indicating that the FIDO 2 credential creation flow was not
-         * successful.
+         * Represents a dialog indicating that a FIDO 2 credential operation encountered an error.
          */
         @Parcelize
-        data class Fido2CreationFail(
+        data class Fido2OperationFail(
             val title: Text,
             val message: Text,
         ) : DialogState()

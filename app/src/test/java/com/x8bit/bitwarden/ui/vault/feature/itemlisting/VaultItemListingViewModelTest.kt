@@ -363,7 +363,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -394,7 +394,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(VaultItemListingsAction.ItemClick(cipherView.id.orEmpty()))
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -1880,7 +1880,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         val viewModel = createVaultItemListingViewModel()
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 R.string.an_error_has_occurred.asText(),
                 R.string.generic_error_message.asText(),
             ),
@@ -1911,7 +1911,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkey_operation_failed_because_browser_is_not_privileged.asText(),
                 ),
@@ -1942,7 +1942,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkey_operation_failed_because_browser_signature_does_not_match.asText(),
                 ),
@@ -1973,7 +1973,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkeys_not_supported_for_this_app.asText(),
                 ),
@@ -2004,7 +2004,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkey_operation_failed_because_app_not_found_in_asset_links.asText(),
                 ),
@@ -2035,7 +2035,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkey_operation_failed_because_of_missing_asset_links.asText(),
                 ),
@@ -2066,7 +2066,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkey_operation_failed_because_app_could_not_be_verified.asText(),
                 ),
@@ -2417,7 +2417,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             val viewModel = createVaultItemListingViewModel()
             viewModel.eventFlow.test {
                 assertEquals(
-                    VaultItemListingState.DialogState.Fido2CreationFail(
+                    VaultItemListingState.DialogState.Fido2OperationFail(
                         title = R.string.an_error_has_occurred.asText(),
                         message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                             .asText(),
@@ -2464,7 +2464,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val viewModel = createVaultItemListingViewModel()
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
@@ -2522,7 +2522,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val viewModel = createVaultItemListingViewModel()
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
@@ -2554,7 +2554,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
             val viewModel = createVaultItemListingViewModel()
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                         .asText(),
@@ -2668,7 +2668,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         }
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -2685,7 +2685,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
             ),
@@ -2719,7 +2719,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -2751,7 +2751,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
@@ -2789,7 +2789,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     title = R.string.an_error_has_occurred.asText(),
                     message = R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),
@@ -2812,7 +2812,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -2925,7 +2925,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -2949,7 +2949,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
         verify { fido2CredentialManager.isUserVerified = false }
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3059,7 +3059,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3120,7 +3120,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3150,7 +3150,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3230,7 +3230,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3291,7 +3291,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3320,7 +3320,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3469,7 +3469,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         )
 
         assertEquals(
-            VaultItemListingState.DialogState.Fido2CreationFail(
+            VaultItemListingState.DialogState.Fido2OperationFail(
                 title = R.string.an_error_has_occurred.asText(),
                 message = R.string.passkey_operation_failed_because_user_could_not_be_verified
                     .asText(),
@@ -3536,7 +3536,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             )
 
             assertEquals(
-                VaultItemListingState.DialogState.Fido2CreationFail(
+                VaultItemListingState.DialogState.Fido2OperationFail(
                     R.string.an_error_has_occurred.asText(),
                     R.string.passkey_operation_failed_because_user_could_not_be_verified.asText(),
                 ),

@@ -290,7 +290,7 @@ private fun VaultItemListingDialogs(
             visibilityState = LoadingDialogState.Shown(dialogState.message),
         )
 
-        is VaultItemListingState.DialogState.Fido2CreationFail -> BitwardenBasicDialog(
+        is VaultItemListingState.DialogState.Fido2OperationFail -> BitwardenBasicDialog(
             visibilityState = BasicDialogState.Shown(
                 title = dialogState.title,
                 message = dialogState.message,
