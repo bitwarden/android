@@ -68,29 +68,29 @@ class ConfigDiskSourceTest {
 }
 
 private const val SERVER_CONFIG_JSON = """
-    {
-    "lastSync": 1698408000000,
-"serverData": {
-  "object": null,
-  "version": "2024.7.0",
-  "gitHash": "25cf6119-dirty",
-  "server": {
-   "name": "example",
-   "url": "https://localhost:8080"
-  },
-  "environment": {
-    "cloudRegion": null,
-    "vault": "https://localhost:8080",
-    "api": "http://localhost:4000",
-    "identity": "http://localhost:33656",
-    "notifications": "http://localhost:61840",
-    "sso": "http://localhost:51822"
-  },
-  "featureStates": {
-    "duo-redirect": true,
-    "flexible-collections-v-1": false
+{
+  "lastSync": 1698408000000,
+  "serverData": {
+    "object": null,
+    "version": "2024.7.0",
+    "gitHash": "25cf6119-dirty",
+    "server": {
+        "name": "example",
+        "url": "https://localhost:8080"
+    },
+    "environment": {
+        "cloudRegion": null,
+        "vault": "https://localhost:8080",
+        "api": "http://localhost:4000",
+        "identity": "http://localhost:33656",
+        "notifications": "http://localhost:61840",
+        "sso": "http://localhost:51822"
+    },
+    "featureStates": {
+        "duo-redirect": true,
+        "flexible-collections-v-1": false
+    }
   }
-}
 }
 
 """
