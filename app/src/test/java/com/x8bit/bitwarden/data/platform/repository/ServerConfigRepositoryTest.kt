@@ -13,11 +13,9 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
@@ -32,14 +30,6 @@ class ServerConfigRepositoryTest {
         dispatcherManager = fakeDispatcherManager
     )
 
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Test
     fun `getServerConfig should fetch a new server configuration with force refresh as true`() =
         runTest {
@@ -48,7 +38,7 @@ class ServerConfigRepositoryTest {
             } returns CONFIG_RESPONSE_JSON.copy(version = "NEW VERSION").asSuccess()
 
             val testConfig = SERVER_CONFIG.copy(
-                lastSync = Instant.now().toEpochMilli()
+                lastSync = Instant.now().toEpochMilli(),
             )
             fakeConfigDiskSource.serverConfig = testConfig
 
@@ -98,7 +88,7 @@ class ServerConfigRepositoryTest {
             val testConfig = SERVER_CONFIG.copy(
                 lastSync = Instant.now().plusSeconds(1000L).toEpochMilli(),
                 serverData = CONFIG_RESPONSE_JSON.copy(
-                    version = "new version!!"
+                    version = "new version!!",
                 )
             )
             fakeConfigDiskSource.serverConfig = testConfig
@@ -124,30 +114,11 @@ class ServerConfigRepositoryTest {
             assertEquals(fakeConfigDiskSource.serverConfig, awaitItem())
         }
     }
+}
 
-    private val SERVER_CONFIG = ServerConfig(
-        lastSync = Instant.parse("2023-10-27T12:00:00Z").toEpochMilli(),
-        serverData = ConfigResponseJson(
-            type = null,
-            version = "2024.7.0",
-            gitHash = "25cf6119-dirty",
-            server = ServerJson(
-                name = "example",
-                url = "https://localhost:8080",
-            ),
-            environment = EnvironmentJson(
-                cloudRegion = null,
-                vaultUrl = "https://localhost:8080",
-                apiUrl = "http://localhost:4000",
-                identityUrl = "http://localhost:33656",
-                notificationsUrl = "http://localhost:61840",
-                ssoUrl = "http://localhost:51822",
-            ),
-            featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
-        )
-    )
-
-    private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
+private val SERVER_CONFIG = ServerConfig(
+    lastSync = Instant.parse("2023-10-27T12:00:00Z").toEpochMilli(),
+    serverData = ConfigResponseJson(
         type = null,
         version = "2024.7.0",
         gitHash = "25cf6119-dirty",
@@ -165,4 +136,23 @@ class ServerConfigRepositoryTest {
         ),
         featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
     )
-}
+)
+
+private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
+    type = null,
+    version = "2024.7.0",
+    gitHash = "25cf6119-dirty",
+    server = ServerJson(
+        name = "example",
+        url = "https://localhost:8080",
+    ),
+    environment = EnvironmentJson(
+        cloudRegion = null,
+        vaultUrl = "https://localhost:8080",
+        apiUrl = "http://localhost:4000",
+        identityUrl = "http://localhost:33656",
+        notificationsUrl = "http://localhost:61840",
+        ssoUrl = "http://localhost:51822",
+    ),
+    featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
+)

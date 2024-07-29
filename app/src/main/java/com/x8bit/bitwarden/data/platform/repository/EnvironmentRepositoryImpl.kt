@@ -33,7 +33,7 @@ class EnvironmentRepositoryImpl(
         set(value) {
             environmentDiskSource.preAuthEnvironmentUrlData = value.environmentUrlData
             scope.launch {
-                /// Fetch new server configs on environment change
+                // Fetch new server configs on environment change
                 serverConfigRepository.getServerConfig(forceRefresh = true)
             }
         }
@@ -59,7 +59,7 @@ class EnvironmentRepositoryImpl(
                     ?.environmentUrlData
                     ?.let {
                         environmentDiskSource.preAuthEnvironmentUrlData = it
-                        /// Fetch new server configs on active account  change
+                        // Fetch new server configs on active account  change
                         serverConfigRepository.getServerConfig(forceRefresh = true)
                     }
             }

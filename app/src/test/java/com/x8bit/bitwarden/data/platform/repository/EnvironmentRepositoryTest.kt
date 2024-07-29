@@ -39,7 +39,7 @@ class EnvironmentRepositoryTest {
             coEvery { getConfig() } returns CONFIG_RESPONSE_JSON.asSuccess()
         },
         configDiskSource = fakeConfigDiskSource,
-        dispatcherManager = dispatcherManager
+        dispatcherManager = dispatcherManager,
     )
 
     private val fakeEnvironmentDiskSource = FakeEnvironmentDiskSource()
@@ -188,7 +188,7 @@ class EnvironmentRepositoryTest {
         )
         assertEquals(
             fakeConfigDiskSource.serverConfig!!.serverData,
-            CONFIG_RESPONSE_JSON
+            CONFIG_RESPONSE_JSON,
         )
 
         // Updating the environment for the active user to a null value leaves the current
@@ -206,7 +206,7 @@ class EnvironmentRepositoryTest {
         )
         assertEquals(
             fakeConfigDiskSource.serverConfig!!.serverData,
-            CONFIG_RESPONSE_JSON
+            CONFIG_RESPONSE_JSON,
         )
     }
 

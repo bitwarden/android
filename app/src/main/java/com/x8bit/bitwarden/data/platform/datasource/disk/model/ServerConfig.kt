@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
  * A higher-level wrapper around [ConfigResponseJson] that provides a timestamp
  * to check if a sync is necessary
  *
- * @property lastSync The [ZonedDateTime] of the last sync.
+ * @property lastSync The [Long] of the last sync.
  * @property serverData The raw [ConfigResponseJson] that contains specific data of the
  * server configuration
  *

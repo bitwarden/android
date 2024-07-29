@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import java.time.Instant
 
+/**
+ * Primary implementation of [ServerConfigRepositoryImpl].
+ */
 class ServerConfigRepositoryImpl(
     private val configDiskSource: ConfigDiskSource,
     private val configService: ConfigService,
@@ -21,7 +24,7 @@ class ServerConfigRepositoryImpl(
         val localConfig = configDiskSource.serverConfig
         val needsRefresh = localConfig == null || localConfig.let {
             Instant.ofEpochMilli(it.lastSync).isAfter(
-                Instant.now().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL)
+                Instant.now().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL),
             )
         }
 
@@ -30,7 +33,7 @@ class ServerConfigRepositoryImpl(
                 onSuccess = { configResponse ->
                     val serverConfig = ServerConfig(
                         lastSync = Instant.now().toEpochMilli(),
-                        serverData = configResponse
+                        serverData = configResponse,
                     )
                     configDiskSource.serverConfig = serverConfig
                     return serverConfig
