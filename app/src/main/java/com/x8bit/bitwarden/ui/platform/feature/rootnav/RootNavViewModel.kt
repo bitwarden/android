@@ -6,6 +6,7 @@ import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
@@ -109,6 +110,13 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
+                    is SpecialCircumstance.Fido2GetCredentials -> {
+                        RootNavState.VaultUnlockedForFido2GetCredentials(
+                            activeUserId = userState.activeUserId,
+                            fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
+                        )
+                    }
+
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
                     null,
@@ -209,6 +217,16 @@ sealed class RootNavState : Parcelable {
     data class VaultUnlockedForFido2Assertion(
         val activeUserId: String,
         val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest,
+    ) : RootNavState()
+
+    /**
+     * App should unlock the user's vault and retrieve FIDO 2 credentials associated to the relying
+     * party.
+     */
+    @Parcelize
+    data class VaultUnlockedForFido2GetCredentials(
+        val activeUserId: String,
+        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
     ) : RootNavState()
 
     /**

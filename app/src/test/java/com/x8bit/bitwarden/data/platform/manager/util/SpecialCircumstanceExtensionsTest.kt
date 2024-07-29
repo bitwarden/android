@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.util
 import android.content.pm.SigningInfo
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -46,6 +47,9 @@ class SpecialCircumstanceExtensionsTest {
             ),
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
+            ),
+            SpecialCircumstance.Fido2GetCredentials(
+                fido2GetCredentialsRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
@@ -92,6 +96,9 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
             ),
+            SpecialCircumstance.Fido2GetCredentials(
+                fido2GetCredentialsRequest = mockk(),
+            ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
         )
@@ -120,6 +127,9 @@ class SpecialCircumstanceExtensionsTest {
             ),
             SpecialCircumstance.Fido2Assertion(
                 fido2AssertionRequest = mockk(),
+            ),
+            SpecialCircumstance.Fido2GetCredentials(
+                fido2GetCredentialsRequest = mockk(),
             ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
@@ -184,11 +194,60 @@ class SpecialCircumstanceExtensionsTest {
             SpecialCircumstance.Fido2Save(
                 fido2CredentialRequest = mockk(),
             ),
+            SpecialCircumstance.Fido2GetCredentials(
+                fido2GetCredentialsRequest = mockk(),
+            ),
             SpecialCircumstance.GeneratorShortcut,
             SpecialCircumstance.VaultShortcut,
         )
             .forEach { specialCircumstance ->
                 assertNull(specialCircumstance.toFido2AssertionRequestOrNull())
+            }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toFido2GetCredentialsRequestOrNull should return a non-null value for Fido2GetCredentials`() {
+        val fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
+        assertEquals(
+            fido2GetCredentialsRequest,
+            SpecialCircumstance
+                .Fido2GetCredentials(
+                    fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                )
+                .toFido2GetCredentialsRequestOrNull(),
+        )
+    }
+
+    @Test
+    fun `toFido2GetCredentialsRequestOrNull should return a null value for other types`() {
+        listOf(
+            SpecialCircumstance.AutofillSelection(
+                autofillSelectionData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.AutofillSave(
+                autofillSaveItem = mockk(),
+            ),
+            SpecialCircumstance.ShareNewSend(
+                data = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = mockk(),
+                shouldFinishWhenComplete = true,
+            ),
+            SpecialCircumstance.Fido2Save(
+                fido2CredentialRequest = mockk(),
+            ),
+            SpecialCircumstance.Fido2Assertion(
+                fido2AssertionRequest = mockk(),
+            ),
+            SpecialCircumstance.GeneratorShortcut,
+            SpecialCircumstance.VaultShortcut,
+        )
+            .forEach { specialCircumstance ->
+                assertNull(specialCircumstance.toFido2GetCredentialsRequestOrNull())
             }
     }
 }
