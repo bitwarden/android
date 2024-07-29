@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,7 +11,6 @@ import androidx.credentials.exceptions.CreateCredentialCancellationException
 import androidx.credentials.exceptions.CreateCredentialUnknownException
 import androidx.credentials.exceptions.GetCredentialUnknownException
 import androidx.credentials.provider.BeginGetCredentialResponse
-import androidx.credentials.provider.CredentialEntry
 import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.x8bit.bitwarden.R
@@ -20,9 +18,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRes
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
-import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
-import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
+import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import kotlin.random.Random
 
 /**
@@ -32,6 +28,7 @@ import kotlin.random.Random
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class Fido2CompletionManagerImpl(
     private val activity: Activity,
+    private val intentManager: IntentManager,
 ) : Fido2CompletionManager {
 
     override fun completeFido2Registration(result: Fido2RegisterCredentialResult) {
@@ -97,36 +94,28 @@ class Fido2CompletionManagerImpl(
     }
 
     override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialsResult) {
-        val entries = mutableListOf<CredentialEntry>()
         val resultIntent = Intent()
         val responseBuilder = BeginGetCredentialResponse.Builder()
         when (result) {
             is Fido2GetCredentialsResult.Success -> {
-                result
+                val entries = result
                     .credentials
-                    .onEach { credential ->
-                        val credentialIntent = Intent(GET_PASSKEY_INTENT)
-                            .setPackage(activity.packageName)
-                            .putExtra(EXTRA_KEY_CIPHER_ID, credential.cipherId)
-                            .putExtra(EXTRA_KEY_CREDENTIAL_ID, credential.credentialId.toString())
-                        val pendingIntent = PendingIntent.getActivity(
-                            activity,
-                            Random.nextInt(),
-                            credentialIntent,
-                            PendingIntent.FLAG_UPDATE_CURRENT.toPendingIntentMutabilityFlag(),
+                    .map {
+                        val pendingIntent = intentManager.createFido2GetCredentialPendingIntent(
+                            action = GET_PASSKEY_INTENT,
+                            credentialId = it.credentialId.toString(),
+                            cipherId = it.cipherId,
+                            requestCode = Random.nextInt(),
                         )
-
-                        entries.add(
-                            PublicKeyCredentialEntry
-                                .Builder(
-                                    context = activity,
-                                    username = credential.userNameForUi
-                                        ?: activity.getString(R.string.no_username),
-                                    pendingIntent = pendingIntent,
-                                    beginGetPublicKeyCredentialOption = result.options,
-                                )
-                                .build(),
-                        )
+                        PublicKeyCredentialEntry
+                            .Builder(
+                                context = activity,
+                                username = it.userNameForUi
+                                    ?: activity.getString(R.string.no_username),
+                                pendingIntent = pendingIntent,
+                                beginGetPublicKeyCredentialOption = result.options,
+                            )
+                            .build()
                     }
 
                 PendingIntentHandler.setBeginGetCredentialResponse(

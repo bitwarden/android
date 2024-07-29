@@ -110,7 +110,8 @@ class VaultItemListingViewModel @Inject constructor(
             specialCircumstance as? SpecialCircumstance.Fido2GetCredentials
         val shouldFinishOnComplete = autofillSelectionData
             ?.shouldFinishWhenComplete
-            ?: (fido2CreationData != null || fido2AssertionData != null ||
+            ?: (fido2CreationData != null ||
+                fido2AssertionData != null ||
                 fido2GetCredentialsData != null)
         val dialogState = fido2CreationData
             ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) }

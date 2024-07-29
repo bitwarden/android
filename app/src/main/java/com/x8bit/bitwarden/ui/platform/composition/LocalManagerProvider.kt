@@ -30,17 +30,20 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImp
  * Helper [Composable] that wraps a [content] and provides manager classes via [CompositionLocal].
  */
 @Composable
-fun LocalManagerProvider(content: @Composable () -> Unit) {
+fun LocalManagerProvider(
+    content: @Composable () -> Unit,
+) {
     val activity = LocalContext.current as Activity
+    val fido2IntentManager: IntentManager = IntentManagerImpl(activity)
     val fido2CompletionManager =
         if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) {
             Fido2CompletionManagerUnsupportedApiImpl
         } else {
-            Fido2CompletionManagerImpl(activity)
+            Fido2CompletionManagerImpl(activity, fido2IntentManager)
         }
     CompositionLocalProvider(
         LocalPermissionsManager provides PermissionsManagerImpl(activity),
-        LocalIntentManager provides IntentManagerImpl(activity),
+        LocalIntentManager provides fido2IntentManager,
         LocalExitManager provides ExitManagerImpl(activity),
         LocalBiometricsManager provides BiometricsManagerImpl(activity),
         LocalNfcManager provides NfcManagerImpl(activity),
