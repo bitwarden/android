@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
 import app.cash.turbine.test
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
+import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
@@ -10,12 +12,15 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import io.mockk.verify
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
+    private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk {
+        every { userStateFlow } returns mutableUserStateFlow
         every { updateLastActiveTime() } just runs
     }
     private val specialCircumstancesManager: SpecialCircumstanceManager = mockk {
@@ -75,6 +80,47 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
         }
         verify(exactly = 0) {
             specialCircumstancesManager.specialCircumstance = null
+        }
+    }
+
+    @Test
+    fun `on init with no organizations should set correct vault label res`() = runTest {
+        val viewModel = createViewModel()
+        val expected = VaultUnlockedNavBarState(
+            vaultNavBarLabelRes = R.string.my_vault,
+            vaultNavBarContentDescriptionRes = R.string.my_vault,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                expected,
+                awaitItem(),
+            )
+        }
+    }
+
+    @Test
+    fun `on init with organizations should set correct vault label res`() = runTest {
+        val activeUserId = "activeUserId"
+        val account: UserState.Account = mockk {
+            every { userId } returns activeUserId
+            every { organizations } returns listOf(mockk())
+        }
+        mutableUserStateFlow.value = UserState(
+            activeUserId = activeUserId,
+            accounts = listOf(account),
+        )
+        val viewModel = createViewModel()
+        val expected = VaultUnlockedNavBarState(
+            vaultNavBarLabelRes = R.string.vaults,
+            vaultNavBarContentDescriptionRes = R.string.vaults,
+        )
+
+        viewModel.stateFlow.test {
+            assertEquals(
+                expected,
+                awaitItem(),
+            )
         }
     }
 
