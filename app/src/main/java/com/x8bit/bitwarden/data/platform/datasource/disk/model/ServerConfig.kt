@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.platform.datasource.disk.model
 
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
 
 /**
  * A higher-level wrapper around [ConfigResponseJson] that provides a timestamp
@@ -11,7 +10,6 @@ import java.time.ZonedDateTime
  * @property lastSync The [Long] of the last sync.
  * @property serverData The raw [ConfigResponseJson] that contains specific data of the
  * server configuration
- *
  */
 @Serializable
 data class ServerConfig(

@@ -27,7 +27,7 @@ class ServerConfigRepositoryTest {
     private val repository = ServerConfigRepositoryImpl(
         configDiskSource = fakeConfigDiskSource,
         configService = configService,
-        dispatcherManager = fakeDispatcherManager
+        dispatcherManager = fakeDispatcherManager,
     )
 
     @Test
@@ -89,7 +89,7 @@ class ServerConfigRepositoryTest {
                 lastSync = Instant.now().plusSeconds(1000L).toEpochMilli(),
                 serverData = CONFIG_RESPONSE_JSON.copy(
                     version = "new version!!",
-                )
+                ),
             )
             fakeConfigDiskSource.serverConfig = testConfig
 
@@ -135,7 +135,7 @@ private val SERVER_CONFIG = ServerConfig(
             ssoUrl = "http://localhost:51822",
         ),
         featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
-    )
+    ),
 )
 
 private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
@@ -154,5 +154,5 @@ private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
         notificationsUrl = "http://localhost:61840",
         ssoUrl = "http://localhost:51822",
     ),
-    featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false)
+    featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false),
 )

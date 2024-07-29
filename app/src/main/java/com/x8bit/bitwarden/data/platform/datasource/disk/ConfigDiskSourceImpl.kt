@@ -25,7 +25,7 @@ class ConfigDiskSourceImpl(
         set(value) {
             putString(
                 key = SERVER_CONFIGURATIONS,
-                value = value?.let { json.encodeToString(value) },
+                value = value?.let { json.encodeToString(it) },
             )
             mutableServerConfigFlow.tryEmit(value)
         }
