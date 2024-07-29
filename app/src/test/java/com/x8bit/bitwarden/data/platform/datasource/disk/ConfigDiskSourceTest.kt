@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.time.ZonedDateTime
 
 class ConfigDiskSourceTest {
     private val fakeSharedPreferences = FakeSharedPreferences()
