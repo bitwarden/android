@@ -246,12 +246,8 @@ class VaultSdkSourceImpl(
         cipherList: List<Cipher>,
     ): Result<List<CipherView>> =
         runCatching {
-            cipherList.map {
-                getClient(userId = userId)
-                    .vault()
-                    .ciphers()
-                    .decrypt(it)
-            }
+            val ciphers = getClient(userId = userId).vault().ciphers()
+            cipherList.map { ciphers.decrypt(cipher = it) }
         }
 
     override suspend fun decryptCollection(
@@ -291,11 +287,8 @@ class VaultSdkSourceImpl(
         sendList: List<Send>,
     ): Result<List<SendView>> =
         runCatching {
-            sendList.map {
-                getClient(userId = userId)
-                    .sends()
-                    .decrypt(it)
-            }
+            val sends = getClient(userId = userId).sends()
+            sendList.map { sends.decrypt(send = it) }
         }
 
     override suspend fun encryptFolder(
@@ -517,12 +510,8 @@ class VaultSdkSourceImpl(
         userId: String,
         vararg cipherViews: CipherView,
     ): Result<List<Fido2CredentialAutofillView>> = runCatching {
-        cipherViews.flatMap {
-            getClient(userId)
-                .platform()
-                .fido2()
-                .decryptFido2AutofillCredentials(it)
-        }
+        val fido2 = getClient(userId).platform().fido2()
+        cipherViews.flatMap { fido2.decryptFido2AutofillCredentials(cipherView = it) }
     }
 
     override suspend fun silentlyDiscoverCredentials(
