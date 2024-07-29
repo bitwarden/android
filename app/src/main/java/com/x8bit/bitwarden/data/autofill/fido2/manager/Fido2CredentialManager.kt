@@ -8,6 +8,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyGetCredentialsOptions
 
 /**
  * Responsible for managing FIDO 2 credential registration and authentication.
@@ -68,4 +69,11 @@ interface Fido2CredentialManager {
      * Whether or not the user has authentication attempts remaining.
      */
     fun hasAuthenticationAttemptsRemaining(): Boolean
+
+    /**
+     * Attempt to extract FIDO 2 passkey selection options from the provided [requestJson], or null.
+     */
+    fun getPasskeyGetCredentialsOptionsOrNull(
+        requestJson: String,
+    ): PasskeyGetCredentialsOptions?
 }

@@ -1250,6 +1250,15 @@ class VaultItemListingViewModel @Inject constructor(
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
         state.fido2GetCredentialsRequest
             ?.let { fido2GetCredentialsRequest ->
+                val relyingPartyId = fido2CredentialManager
+                    .getPasskeyGetCredentialsOptionsOrNull(
+                        requestJson = fido2GetCredentialsRequest.option.requestJson,
+                    )
+                    ?.relyingPartyId
+                    ?: run {
+                        showFido2ErrorDialog()
+                        return
+                    }
                 sendEvent(
                     VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
                         Fido2GetCredentialsResult.Success(
@@ -1257,6 +1266,7 @@ class VaultItemListingViewModel @Inject constructor(
                             credentials = vaultData
                                 .data
                                 .fido2CredentialAutofillViewList
+                                ?.filter { it.rpId == relyingPartyId }
                                 ?: emptyList(),
                         ),
                     ),

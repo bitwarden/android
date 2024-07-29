@@ -101,12 +101,13 @@ class Fido2CompletionManagerImpl(
                 val entries = result
                     .credentials
                     .map {
-                        val pendingIntent = intentManager.createFido2GetCredentialPendingIntent(
-                            action = GET_PASSKEY_INTENT,
-                            credentialId = it.credentialId.toString(),
-                            cipherId = it.cipherId,
-                            requestCode = Random.nextInt(),
-                        )
+                        val pendingIntent = intentManager
+                            .createFido2GetCredentialPendingIntent(
+                                action = GET_PASSKEY_INTENT,
+                                credentialId = it.credentialId.toString(),
+                                cipherId = it.cipherId,
+                                requestCode = Random.nextInt(),
+                            )
                         PublicKeyCredentialEntry
                             .Builder(
                                 context = activity,
@@ -117,16 +118,16 @@ class Fido2CompletionManagerImpl(
                             )
                             .build()
                     }
-
-                PendingIntentHandler.setBeginGetCredentialResponse(
-                    resultIntent,
-                    responseBuilder
-                        .setCredentialEntries(entries)
-                        // Clear the existing authentication action so it is not displayed if the
-                        // user does not have any matching credentials.
-                        .setAuthenticationActions(emptyList())
-                        .build(),
-                )
+                PendingIntentHandler
+                    .setBeginGetCredentialResponse(
+                        resultIntent,
+                        responseBuilder
+                            .setCredentialEntries(entries)
+                            // Explicitly clear any pending authentication actions since we only
+                            // display results from the active account.
+                            .setAuthenticationActions(emptyList())
+                            .build(),
+                    )
             }
 
             Fido2GetCredentialsResult.Error,

@@ -13,9 +13,11 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResu
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAssertionOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyGetCredentialsOptions
 import com.x8bit.bitwarden.data.platform.manager.AssetManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
+import com.x8bit.bitwarden.data.platform.util.decodeFromStringOrNull
 import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.platform.util.getAppOrigin
 import com.x8bit.bitwarden.data.platform.util.getAppSigningSignatureFingerprint
@@ -122,6 +124,11 @@ class Fido2CredentialManagerImpl(
         } catch (e: IllegalArgumentException) {
             null
         }
+
+    override fun getPasskeyGetCredentialsOptionsOrNull(
+        requestJson: String,
+    ): PasskeyGetCredentialsOptions? =
+        json.decodeFromStringOrNull<PasskeyGetCredentialsOptions>(requestJson)
 
     override suspend fun authenticateFido2Credential(
         userId: String,
