@@ -9,6 +9,8 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponse
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
+import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -16,19 +18,55 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
 class ServerConfigRepositoryTest {
     private val fakeDispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val fakeConfigDiskSource = FakeConfigDiskSource()
-    private val configService: ConfigService = mockk()
+    private val configService: ConfigService = mockk {
+        coEvery {
+            getConfig()
+        } returns CONFIG_RESPONSE_JSON.asSuccess()
+    }
+    private val environmentRepository = FakeEnvironmentRepository().apply {
+        environment = Environment.Us
+    }
+
+    @BeforeEach
+    fun setUp() {
+        fakeConfigDiskSource.serverConfig = null
+    }
 
     private val repository = ServerConfigRepositoryImpl(
         configDiskSource = fakeConfigDiskSource,
         configService = configService,
+        environmentRepository = environmentRepository,
         dispatcherManager = fakeDispatcherManager,
     )
+
+    @Test
+    fun `environmentRepository stateflow should trigger new server configuration`() = runTest {
+        val serverConfigBefore = fakeConfigDiskSource.serverConfig
+
+        // This should trigger a new server config to be fetched
+        environmentRepository.environment = Environment.Eu
+
+        repository.serverConfigStateFlow.test {
+            val newConfig = awaitItem()
+            assertNotEquals(
+                serverConfigBefore,
+                newConfig,
+            )
+
+            assertEquals(
+                SERVER_CONFIG.serverData,
+                newConfig!!.serverData,
+            )
+        }
+
+    }
 
     @Test
     fun `getServerConfig should fetch a new server configuration with force refresh as true`() =
@@ -61,10 +99,6 @@ class ServerConfigRepositoryTest {
     @Test
     fun `getServerConfig should fetch a new server configuration if there is none in state`() =
         runTest {
-            coEvery {
-                configService.getConfig()
-            } returns CONFIG_RESPONSE_JSON.asSuccess()
-
             assertEquals(
                 null,
                 fakeConfigDiskSource.serverConfig,
@@ -107,7 +141,6 @@ class ServerConfigRepositoryTest {
 
     @Test
     fun `serverConfigStateFlow should react to new server configurations`() = runTest {
-
         repository.getServerConfig(forceRefresh = true)
 
         repository.serverConfigStateFlow.test {
