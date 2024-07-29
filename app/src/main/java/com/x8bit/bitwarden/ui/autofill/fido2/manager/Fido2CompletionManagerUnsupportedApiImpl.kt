@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.autofill.fido2.manager
 
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 
 /**
@@ -11,4 +12,6 @@ object Fido2CompletionManagerUnsupportedApiImpl : Fido2CompletionManager {
     override fun completeFido2Registration(result: Fido2RegisterCredentialResult) = Unit
 
     override fun completeFido2Assertion(result: Fido2CredentialAssertionResult) = Unit
+
+    override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialResult) = Unit
 }
