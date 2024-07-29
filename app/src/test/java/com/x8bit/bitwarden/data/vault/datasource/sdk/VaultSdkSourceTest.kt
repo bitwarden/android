@@ -39,6 +39,7 @@ import com.bitwarden.vault.FolderView
 import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
+import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.util.asFailure
 import com.x8bit.bitwarden.data.platform.util.asSuccess
@@ -100,8 +101,10 @@ class VaultSdkSourceTest {
         every { destroyClient(any()) } just runs
     }
     private val mockFido2CredentialStore: Fido2CredentialStore = mockk()
+    private val fakeDispatcherManager = FakeDispatcherManager()
     private val vaultSdkSource: VaultSdkSource = VaultSdkSourceImpl(
         sdkClientManager = sdkClientManager,
+        dispatcherManager = fakeDispatcherManager,
     )
 
     @Test
