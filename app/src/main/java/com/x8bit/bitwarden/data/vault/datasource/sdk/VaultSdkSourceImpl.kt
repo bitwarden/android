@@ -29,15 +29,19 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
@@ -47,6 +51,7 @@ import java.io.File
 @Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(
     private val sdkClientManager: SdkClientManager,
+    private val dispatcherManager: DispatcherManager,
 ) : VaultSdkSource {
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
@@ -247,7 +252,9 @@ class VaultSdkSourceImpl(
     ): Result<List<CipherView>> =
         runCatching {
             val ciphers = getClient(userId = userId).vault().ciphers()
-            cipherList.map { ciphers.decrypt(cipher = it) }
+            withContext(context = dispatcherManager.default) {
+                cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
+            }
         }
 
     override suspend fun decryptCollection(
@@ -288,7 +295,9 @@ class VaultSdkSourceImpl(
     ): Result<List<SendView>> =
         runCatching {
             val sends = getClient(userId = userId).sends()
-            sendList.map { sends.decrypt(send = it) }
+            withContext(dispatcherManager.default) {
+                sendList.map { async { sends.decrypt(send = it) } }.awaitAll()
+            }
         }
 
     override suspend fun encryptFolder(
