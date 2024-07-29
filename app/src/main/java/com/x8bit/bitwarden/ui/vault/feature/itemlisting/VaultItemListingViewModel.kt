@@ -14,6 +14,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
@@ -104,9 +106,12 @@ class VaultItemListingViewModel @Inject constructor(
         val autofillSelectionData = specialCircumstance as? SpecialCircumstance.AutofillSelection
         val fido2CreationData = specialCircumstance as? SpecialCircumstance.Fido2Save
         val fido2AssertionData = specialCircumstance as? SpecialCircumstance.Fido2Assertion
+        val fido2GetCredentialsData =
+            specialCircumstance as? SpecialCircumstance.Fido2GetCredentials
         val shouldFinishOnComplete = autofillSelectionData
             ?.shouldFinishWhenComplete
-            ?: (fido2CreationData != null || fido2AssertionData != null)
+            ?: (fido2CreationData != null || fido2AssertionData != null ||
+                fido2GetCredentialsData != null)
         val dialogState = fido2CreationData
             ?.let { VaultItemListingState.DialogState.Loading(R.string.loading.asText()) }
         VaultItemListingState(
@@ -130,6 +135,7 @@ class VaultItemListingViewModel @Inject constructor(
             hasMasterPassword = userState.activeAccount.hasMasterPassword,
             fido2CredentialRequest = fido2CreationData?.fido2CredentialRequest,
             fido2CredentialAssertionRequest = fido2AssertionData?.fido2AssertionRequest,
+            fido2GetCredentialsRequest = fido2GetCredentialsData?.fido2GetCredentialsRequest,
             isPremium = userState.activeAccount.isPremium,
         )
     },
@@ -182,7 +188,8 @@ class VaultItemListingViewModel @Inject constructor(
                 VaultItemListingsAction.Internal.VaultDataReceive(
                     it
                         .filterForAutofillIfNecessary()
-                        .filterForFido2CreationIfNecessary(),
+                        .filterForFido2CreationIfNecessary()
+                        .filterForFidoGetCredentialsIfNecessary(),
                 )
             }
             .onEach(::sendAction)
@@ -1240,7 +1247,21 @@ class VaultItemListingViewModel @Inject constructor(
 
     private fun vaultLoadedReceive(vaultData: DataState.Loaded<VaultData>) {
         updateStateWithVaultData(vaultData = vaultData.data, clearDialogState = true)
-        sendEvent(VaultItemListingEvent.DismissPullToRefresh)
+        state.fido2GetCredentialsRequest
+            ?.let { fido2GetCredentialsRequest ->
+                sendEvent(
+                    VaultItemListingEvent.CompleteFido2GetCredentialsRequest(
+                        Fido2GetCredentialsResult.Success(
+                            options = fido2GetCredentialsRequest.option,
+                            credentials = vaultData
+                                .data
+                                .fido2CredentialAutofillViewList
+                                ?: emptyList(),
+                        ),
+                    ),
+                )
+            }
+            ?: sendEvent(VaultItemListingEvent.DismissPullToRefresh)
     }
 
     private fun vaultLoadingReceive() {
@@ -1532,6 +1553,27 @@ class VaultItemListingViewModel @Inject constructor(
     }
 
     /**
+     * Takes the given vault data and filters it for FIDO 2 credential selection.
+     */
+    @Suppress("MaxLineLength")
+    private suspend fun DataState<VaultData>.filterForFidoGetCredentialsIfNecessary(): DataState<VaultData> {
+        val request = state.fido2GetCredentialsRequest ?: return this
+        return this.map { vaultData ->
+            val matchUri = request.origin
+                ?: request.packageName
+                    .toAndroidAppUriString()
+
+            vaultData.copy(
+                cipherViewList = cipherMatchingManager.filterCiphersForMatches(
+                    ciphers = vaultData.cipherViewList,
+                    matchUri = matchUri,
+                ),
+                fido2CredentialAutofillViewList = vaultData.toFido2CredentialAutofillViews(),
+            )
+        }
+    }
+
+    /**
      * Decrypt and filter the fido 2 autofill credentials.
      */
     @Suppress("MaxLineLength")
@@ -1582,6 +1624,7 @@ data class VaultItemListingState(
     val autofillSelectionData: AutofillSelectionData? = null,
     val fido2CredentialRequest: Fido2CredentialRequest? = null,
     val fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest? = null,
+    val fido2GetCredentialsRequest: Fido2GetCredentialsRequest? = null,
     val shouldFinishOnComplete: Boolean = false,
     val hasMasterPassword: Boolean,
     val isPremium: Boolean,
@@ -2076,6 +2119,15 @@ sealed class VaultItemListingEvent {
      */
     data class CompleteFido2Assertion(
         val result: Fido2CredentialAssertionResult,
+    ) : VaultItemListingEvent()
+
+    /**
+     * FIDO 2 credential lookup result has been received and the process is ready to be completed.
+     *
+     * @property result The result of querying for matching FIDO 2 credentials.
+     */
+    data class CompleteFido2GetCredentialsRequest(
+        val result: Fido2GetCredentialsResult,
     ) : VaultItemListingEvent()
 }
 

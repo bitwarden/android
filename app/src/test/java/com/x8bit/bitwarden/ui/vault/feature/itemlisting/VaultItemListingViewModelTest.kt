@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
@@ -1369,6 +1370,89 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 )
                     .copy(
                         fido2CredentialRequest = fido2CredentialRequest,
+                        shouldFinishOnComplete = true,
+                    ),
+                viewModel.stateFlow.value,
+            )
+            coVerify {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                )
+                fido2CredentialManager.validateOrigin(any())
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `vaultDataStateFlow Loaded with Fido2GetCredentials special circumstance should update ViewState to Content with filtered data`() =
+        runTest {
+            setupMockUri()
+
+            val cipherView1 = createMockCipherView(
+                number = 1,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+            val cipherView2 = createMockCipherView(
+                number = 2,
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+
+            coEvery {
+                vaultRepository.getDecryptedFido2CredentialAutofillViews(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                )
+            } returns DecryptFido2CredentialAutofillViewResult.Success(emptyList())
+
+            mockFilteredCiphers = listOf(cipherView1)
+
+            val fido2GetCredentialRequest = Fido2GetCredentialsRequest(
+                requestJson = "{}",
+                packageName = "com.x8bit.bitwarden",
+                signingInfo = SigningInfo(),
+                origin = "mockOrigin",
+                candidateQueryData = mockk(),
+                clientDataHash = mockk(),
+                id = "mockId",
+            )
+
+            specialCircumstanceManager.specialCircumstance =
+                SpecialCircumstance.Fido2GetCredentials(
+                    fido2GetCredentialsRequest = fido2GetCredentialRequest,
+                )
+            val dataState = DataState.Loaded(
+                data = VaultData(
+                    cipherViewList = listOf(cipherView1, cipherView2),
+                    folderViewList = listOf(createMockFolderView(number = 1)),
+                    collectionViewList = listOf(createMockCollectionView(number = 1)),
+                    sendViewList = listOf(createMockSendView(number = 1)),
+                ),
+            )
+
+            val viewModel = createVaultItemListingViewModel()
+
+            mutableVaultDataStateFlow.value = dataState
+
+            assertEquals(
+                createVaultItemListingState(
+                    viewState = VaultItemListingState.ViewState.Content(
+                        displayCollectionList = emptyList(),
+                        displayItemList = listOf(
+                            createMockDisplayItemForCipher(number = 1)
+                                .copy(
+                                    secondSubtitleTestTag = "PasskeySite",
+                                    subtitleTestTag = "PasskeyName",
+                                    iconData = IconData.Network(
+                                        uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                        fallbackIconRes = R.drawable.ic_login_item_passkey,
+                                    ),
+                                    isFido2Creation = true,
+                                ),
+                        ),
+                        displayFolderList = emptyList(),
+                    ),
+                )
+                    .copy(
+                        fido2GetCredentialsRequest = fido2GetCredentialRequest,
                         shouldFinishOnComplete = true,
                     ),
                 viewModel.stateFlow.value,

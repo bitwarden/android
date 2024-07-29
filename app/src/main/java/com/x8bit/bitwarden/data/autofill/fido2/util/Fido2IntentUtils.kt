@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Build
 import androidx.credentials.CreatePublicKeyCredentialRequest
 import androidx.credentials.GetPublicKeyCredentialOption
+import androidx.credentials.provider.BeginGetPublicKeyCredentialOption
 import androidx.credentials.provider.PendingIntentHandler
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.platform.util.isBuildVersionBelow
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CREDENTIAL_ID
@@ -70,5 +72,36 @@ fun Intent.getFido2AssertionRequestOrNull(): Fido2CredentialAssertionRequest? {
         packageName = systemRequest.callingAppInfo.packageName,
         signingInfo = systemRequest.callingAppInfo.signingInfo,
         origin = systemRequest.callingAppInfo.origin,
+    )
+}
+
+/**
+ * Checks if this [Intent] contains a [Fido2GetCredentialsRequest] related to an ongoing FIDO 2
+ * credential lookup process.
+ */
+fun Intent.getFido2GetCredentialsRequestOrNull(): Fido2GetCredentialsRequest? {
+    if (isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)) return null
+
+    val systemRequest = PendingIntentHandler
+        .retrieveBeginGetCredentialRequest(this)
+        ?: return null
+
+    val option: BeginGetPublicKeyCredentialOption = systemRequest
+        .beginGetCredentialOptions
+        .firstNotNullOfOrNull { it as? BeginGetPublicKeyCredentialOption }
+        ?: return null
+
+    val callingAppInfo = systemRequest
+        .callingAppInfo
+        ?: return null
+
+    return Fido2GetCredentialsRequest(
+        candidateQueryData = option.candidateQueryData,
+        id = option.id,
+        requestJson = option.requestJson,
+        clientDataHash = option.clientDataHash,
+        packageName = callingAppInfo.packageName,
+        signingInfo = callingAppInfo.signingInfo,
+        origin = callingAppInfo.origin,
     )
 }

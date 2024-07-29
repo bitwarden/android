@@ -17,7 +17,7 @@ import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
@@ -96,12 +96,12 @@ class Fido2CompletionManagerImpl(
         }
     }
 
-    override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialResult) {
+    override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialsResult) {
         val entries = mutableListOf<CredentialEntry>()
         val resultIntent = Intent()
         val responseBuilder = BeginGetCredentialResponse.Builder()
         when (result) {
-            is Fido2GetCredentialResult.Success -> {
+            is Fido2GetCredentialsResult.Success -> {
                 result
                     .credentials
                     .onEach { credential ->
@@ -128,15 +128,19 @@ class Fido2CompletionManagerImpl(
                                 .build(),
                         )
                     }
+
                 PendingIntentHandler.setBeginGetCredentialResponse(
                     resultIntent,
                     responseBuilder
                         .setCredentialEntries(entries)
+                        // Clear the existing authentication action so it is not displayed if the
+                        // user does not have any matching credentials.
+                        .setAuthenticationActions(emptyList())
                         .build(),
                 )
             }
 
-            Fido2GetCredentialResult.Error,
+            Fido2GetCredentialsResult.Error,
             -> {
                 PendingIntentHandler.setGetCredentialException(
                     resultIntent,

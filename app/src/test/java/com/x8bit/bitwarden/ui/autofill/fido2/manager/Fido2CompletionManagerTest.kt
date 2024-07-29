@@ -9,7 +9,7 @@ import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockFido2CredentialAutofillView
 import com.x8bit.bitwarden.ui.platform.manager.intent.EXTRA_KEY_CIPHER_ID
@@ -73,7 +73,7 @@ class Fido2CompletionManagerTest {
 
         @Test
         fun `completeFido2GetCredentials should perform no operations`() {
-            val mockGetCredentialResult = mockk<Fido2GetCredentialResult>()
+            val mockGetCredentialResult = mockk<Fido2GetCredentialsResult>()
             fido2CompletionManager.completeFido2GetCredentialRequest(mockGetCredentialResult)
             verify {
                 mockGetCredentialResult wasNot Called
@@ -169,7 +169,7 @@ class Fido2CompletionManagerTest {
         fun `completeFido2GetCredentials should set BeginGetCredentialResponse, set activity result, then finish activity when result is Success`() {
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
-                    Fido2GetCredentialResult.Success(
+                    Fido2GetCredentialsResult.Success(
                         options = mockk(),
                         credentials = emptyList(),
                     ),
@@ -193,7 +193,7 @@ class Fido2CompletionManagerTest {
 
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
-                    Fido2GetCredentialResult.Success(
+                    Fido2GetCredentialsResult.Success(
                         options = mockk(),
                         credentials = mockFido2AutofillViewList,
                     ),
@@ -230,7 +230,7 @@ class Fido2CompletionManagerTest {
 
             fido2CompletionManager
                 .completeFido2GetCredentialRequest(
-                    Fido2GetCredentialResult.Success(
+                    Fido2GetCredentialsResult.Success(
                         options = mockk(),
                         credentials = mockFido2AutofillViewList,
                     ),
@@ -257,7 +257,7 @@ class Fido2CompletionManagerTest {
         @Test
         fun `completeFido2GetCredentials should set GetCredentialException, set activity result, then finish activity when result is Error`() {
             fido2CompletionManager
-                .completeFido2GetCredentialRequest(Fido2GetCredentialResult.Error)
+                .completeFido2GetCredentialRequest(Fido2GetCredentialsResult.Error)
             verifyActivityResultIsSetAndFinishedAfter {
                 PendingIntentHandler.setGetCredentialException(any(), any())
             }

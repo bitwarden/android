@@ -10,6 +10,7 @@ import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
@@ -184,6 +185,7 @@ class MainViewModel @Inject constructor(
         val hasVaultShortcut = intent.isMyVaultShortcut
         val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
         val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
+        val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 specialCircumstanceManager.specialCircumstance =
@@ -244,6 +246,13 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.Fido2Assertion(
                         fido2AssertionRequest = fido2CredentialAssertionRequest,
+                    )
+            }
+
+            fido2GetCredentialsRequest != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.Fido2GetCredentials(
+                        fido2GetCredentialsRequest = fido2GetCredentialsRequest,
                     )
             }
 
