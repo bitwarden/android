@@ -30,6 +30,8 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -90,12 +92,12 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun providesCipherMatchingManager(
-        @ApplicationContext context: Context,
+        resourceCacheManager: ResourceCacheManager,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
     ): CipherMatchingManager =
         CipherMatchingManagerImpl(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )
@@ -229,4 +231,10 @@ object PlatformManagerModule {
         environmentRepository = environmentRepository,
         restrictionsManager = requireNotNull(context.getSystemService()),
     )
+
+    @Provides
+    @Singleton
+    fun provideResourceCacheManager(
+        @ApplicationContext context: Context,
+    ): ResourceCacheManager = ResourceCacheManagerImpl(context = context)
 }

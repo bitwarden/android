@@ -196,7 +196,7 @@ class AutofillCipherProviderTest {
 
             testScheduler.runCurrent()
             assertFalse(actual.isCompleted)
-            testScheduler.advanceTimeBy(delayTimeMillis = 5_000L)
+            testScheduler.advanceTimeBy(delayTimeMillis = 2_000L)
             testScheduler.runCurrent()
 
             // Verify
@@ -268,7 +268,7 @@ class AutofillCipherProviderTest {
 
             testScheduler.runCurrent()
             assertFalse(actual.isCompleted)
-            testScheduler.advanceTimeBy(delayTimeMillis = 5_000L)
+            testScheduler.advanceTimeBy(delayTimeMillis = 2_000L)
             testScheduler.runCurrent()
 
             // Verify
