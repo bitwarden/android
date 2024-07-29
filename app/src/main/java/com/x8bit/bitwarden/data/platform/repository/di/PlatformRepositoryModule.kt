@@ -35,11 +35,13 @@ object PlatformRepositoryModule {
     fun provideServerConfigRepository(
         configDiskSource: ConfigDiskSource,
         configService: ConfigService,
+        environmentRepository: EnvironmentRepository,
         dispatcherManager: DispatcherManager,
     ): ServerConfigRepository =
         ServerConfigRepositoryImpl(
             configDiskSource = configDiskSource,
             configService = configService,
+            environmentRepository = environmentRepository,
             dispatcherManager = dispatcherManager,
         )
 
@@ -47,13 +49,11 @@ object PlatformRepositoryModule {
     @Singleton
     fun provideEnvironmentRepository(
         environmentDiskSource: EnvironmentDiskSource,
-        serverConfigRepository: ServerConfigRepository,
         authDiskSource: AuthDiskSource,
         dispatcherManager: DispatcherManager,
     ): EnvironmentRepository =
         EnvironmentRepositoryImpl(
             environmentDiskSource = environmentDiskSource,
-            serverConfigRepository = serverConfigRepository,
             authDiskSource = authDiskSource,
             dispatcherManager = dispatcherManager,
         )

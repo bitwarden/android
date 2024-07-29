@@ -19,7 +19,6 @@ import kotlinx.coroutines.launch
  */
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
-    private val serverConfigRepository: ServerConfigRepository,
     authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
@@ -32,10 +31,6 @@ class EnvironmentRepositoryImpl(
             .toEnvironmentUrlsOrDefault()
         set(value) {
             environmentDiskSource.preAuthEnvironmentUrlData = value.environmentUrlData
-            scope.launch {
-                // Fetch new server configs on environment change
-                serverConfigRepository.getServerConfig(forceRefresh = true)
-            }
         }
 
     override val environmentStateFlow: StateFlow<Environment>
@@ -59,8 +54,6 @@ class EnvironmentRepositoryImpl(
                     ?.environmentUrlData
                     ?.let {
                         environmentDiskSource.preAuthEnvironmentUrlData = it
-                        // Fetch new server configs on active account  change
-                        serverConfigRepository.getServerConfig(forceRefresh = true)
                     }
             }
             .launchIn(scope)
