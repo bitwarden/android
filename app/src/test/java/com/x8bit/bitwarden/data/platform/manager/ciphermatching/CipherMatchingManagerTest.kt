@@ -1,10 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
-import android.content.Context
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.LoginView
 import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
@@ -33,7 +33,7 @@ class CipherMatchingManagerTest {
     private lateinit var cipherMatchingManager: CipherMatchingManager
 
     // Setup dependencies
-    private val context: Context = mockk()
+    private val resourceCacheManager: ResourceCacheManager = mockk()
     private val settingsRepository: SettingsRepository = mockk {
         every { defaultUriMatchType } returns DEFAULT_URI_MATCH_TYPE
     }
@@ -172,7 +172,7 @@ class CipherMatchingManagerTest {
             String::getWebHostFromAndroidUriOrNull,
         )
         cipherMatchingManager = CipherMatchingManagerImpl(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )
@@ -333,7 +333,7 @@ class CipherMatchingManagerTest {
             )
             with(uri) {
                 every { isAndroidApp() } returns false
-                every { getDomainOrNull(context = context) } returns this
+                every { getDomainOrNull(resourceCacheManager = resourceCacheManager) } returns this
                 every { getWebHostFromAndroidUriOrNull() } returns null
             }
 
@@ -356,26 +356,30 @@ class CipherMatchingManagerTest {
     ) {
         with(uri) {
             every { isAndroidApp() } returns isAndroidApp
-            every { getDomainOrNull(context = context) } returns this.takeIf { isAndroidApp }
+            every {
+                getDomainOrNull(resourceCacheManager = resourceCacheManager)
+            } returns this.takeIf { isAndroidApp }
             every { getHostWithPortOrNull() } returns HOST_WITH_PORT
             every {
                 getWebHostFromAndroidUriOrNull()
             } returns ANDROID_APP_WEB_URL.takeIf { isAndroidApp }
         }
         every {
-            DEFAULT_LOGIN_VIEW_URI_ONE.getDomainOrNull(context = context)
+            DEFAULT_LOGIN_VIEW_URI_ONE.getDomainOrNull(resourceCacheManager = resourceCacheManager)
         } returns DEFAULT_LOGIN_VIEW_URI_ONE
         every {
-            DEFAULT_LOGIN_VIEW_URI_TWO.getDomainOrNull(context = context)
+            DEFAULT_LOGIN_VIEW_URI_TWO.getDomainOrNull(resourceCacheManager = resourceCacheManager)
         } returns null
         every {
-            DEFAULT_LOGIN_VIEW_URI_THREE.getDomainOrNull(context = context)
+            DEFAULT_LOGIN_VIEW_URI_THREE.getDomainOrNull(
+                resourceCacheManager = resourceCacheManager,
+            )
         } returns uri
         every {
-            DEFAULT_LOGIN_VIEW_URI_FOUR.getDomainOrNull(context = context)
+            DEFAULT_LOGIN_VIEW_URI_FOUR.getDomainOrNull(resourceCacheManager = resourceCacheManager)
         } returns "bitwarden.com"
         every {
-            DEFAULT_LOGIN_VIEW_URI_FIVE.getDomainOrNull(context = context)
+            DEFAULT_LOGIN_VIEW_URI_FIVE.getDomainOrNull(resourceCacheManager = resourceCacheManager)
         } returns null
 
         every { HOST_LOGIN_VIEW_URI_MATCHING.getHostWithPortOrNull() } returns HOST_WITH_PORT
