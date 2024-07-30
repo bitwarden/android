@@ -169,6 +169,10 @@ fun VaultItemListingScreen(
             is VaultItemListingEvent.CompleteFido2Assertion -> {
                 fido2CompletionManager.completeFido2Assertion(event.result)
             }
+
+            is VaultItemListingEvent.CompleteFido2GetCredentialsRequest -> {
+                fido2CompletionManager.completeFido2GetCredentialRequest(event.result)
+            }
         }
     }
 

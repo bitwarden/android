@@ -6,7 +6,7 @@ import com.bitwarden.fido.Fido2CredentialAutofillView
 /**
  * Represents the result of a FIDO 2 Get Credentials request.
  */
-sealed class Fido2GetCredentialResult {
+sealed class Fido2GetCredentialsResult {
     /**
      * Indicates credentials were successfully queried.
      *
@@ -17,10 +17,10 @@ sealed class Fido2GetCredentialResult {
     data class Success(
         val options: BeginGetPublicKeyCredentialOption,
         val credentials: List<Fido2CredentialAutofillView>,
-    ) : Fido2GetCredentialResult()
+    ) : Fido2GetCredentialsResult()
 
     /**
      * Indicates an error was encountered when querying for matching credentials.
      */
-    data object Error : Fido2GetCredentialResult()
+    data object Error : Fido2GetCredentialsResult()
 }

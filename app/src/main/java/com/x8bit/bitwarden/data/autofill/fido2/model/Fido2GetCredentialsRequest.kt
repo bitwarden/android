@@ -23,7 +23,7 @@ data class Fido2GetCredentialsRequest(
     val callingAppInfo: CallingAppInfo
         get() = CallingAppInfo(packageName, signingInfo, origin)
 
-    val getCredentialsRequest: BeginGetPublicKeyCredentialOption
+    val option: BeginGetPublicKeyCredentialOption
         get() = BeginGetPublicKeyCredentialOption(
             candidateQueryData,
             id,

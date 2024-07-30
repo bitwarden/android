@@ -15,7 +15,7 @@ import androidx.credentials.provider.PendingIntentHandler
 import androidx.credentials.provider.PublicKeyCredentialEntry
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
-import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.processor.GET_PASSKEY_INTENT
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -93,11 +93,11 @@ class Fido2CompletionManagerImpl(
         }
     }
 
-    override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialResult) {
+    override fun completeFido2GetCredentialRequest(result: Fido2GetCredentialsResult) {
         val resultIntent = Intent()
         val responseBuilder = BeginGetCredentialResponse.Builder()
         when (result) {
-            is Fido2GetCredentialResult.Success -> {
+            is Fido2GetCredentialsResult.Success -> {
                 val entries = result
                     .credentials
                     .map {
@@ -130,7 +130,7 @@ class Fido2CompletionManagerImpl(
                     )
             }
 
-            Fido2GetCredentialResult.Error,
+            Fido2GetCredentialsResult.Error,
             -> {
                 PendingIntentHandler.setGetCredentialException(
                     resultIntent,
