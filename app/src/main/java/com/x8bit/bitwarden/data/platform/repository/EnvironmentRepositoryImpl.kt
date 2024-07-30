@@ -51,9 +51,7 @@ class EnvironmentRepositoryImpl(
                     ?.activeAccount
                     ?.settings
                     ?.environmentUrlData
-                    ?.let {
-                        environmentDiskSource.preAuthEnvironmentUrlData = it
-                    }
+                    ?.let { environmentDiskSource.preAuthEnvironmentUrlData = it }
             }
             .launchIn(scope)
     }

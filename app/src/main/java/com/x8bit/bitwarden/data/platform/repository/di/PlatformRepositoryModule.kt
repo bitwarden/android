@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.time.Clock
 import javax.inject.Singleton
 
 /**
@@ -35,12 +36,14 @@ object PlatformRepositoryModule {
     fun provideServerConfigRepository(
         configDiskSource: ConfigDiskSource,
         configService: ConfigService,
+        clock: Clock,
         environmentRepository: EnvironmentRepository,
         dispatcherManager: DispatcherManager,
     ): ServerConfigRepository =
         ServerConfigRepositoryImpl(
             configDiskSource = configDiskSource,
             configService = configService,
+            clock = clock,
             environmentRepository = environmentRepository,
             dispatcherManager = dispatcherManager,
         )

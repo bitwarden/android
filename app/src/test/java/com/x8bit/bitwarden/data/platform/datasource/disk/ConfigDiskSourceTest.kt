@@ -4,23 +4,20 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
+import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
 class ConfigDiskSourceTest {
-    private val fakeSharedPreferences = FakeSharedPreferences()
+    private val json = PlatformNetworkModule.providesJson()
 
-    private val json = Json {
-        ignoreUnknownKeys = true
-        explicitNulls = true
-    }
+    private val fakeSharedPreferences = FakeSharedPreferences()
 
     private val configDiskSource = ConfigDiskSourceImpl(
         sharedPreferences = fakeSharedPreferences,
@@ -70,7 +67,6 @@ private const val SERVER_CONFIG_JSON = """
 {
   "lastSync": 1698408000000,
   "serverData": {
-    "object": null,
     "version": "2024.7.0",
     "gitHash": "25cf6119-dirty",
     "server": {
@@ -78,7 +74,6 @@ private const val SERVER_CONFIG_JSON = """
         "url": "https://localhost:8080"
     },
     "environment": {
-        "cloudRegion": null,
         "vault": "https://localhost:8080",
         "api": "http://localhost:4000",
         "identity": "http://localhost:33656",

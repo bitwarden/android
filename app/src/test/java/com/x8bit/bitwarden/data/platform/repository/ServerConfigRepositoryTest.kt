@@ -18,9 +18,12 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
 import java.time.Instant
+import java.time.ZoneOffset
 
 class ServerConfigRepositoryTest {
     private val fakeDispatcherManager: DispatcherManager = FakeDispatcherManager()
@@ -30,39 +33,47 @@ class ServerConfigRepositoryTest {
             getConfig()
         } returns CONFIG_RESPONSE_JSON.asSuccess()
     }
+
     private val environmentRepository = FakeEnvironmentRepository().apply {
         environment = Environment.Us
     }
+
+    private val fixedClock: Clock = Clock.fixed(
+        Instant.parse("2023-10-27T12:00:00Z"),
+        ZoneOffset.UTC,
+    )
+
+    private val repository = ServerConfigRepositoryImpl(
+        configDiskSource = fakeConfigDiskSource,
+        configService = configService,
+        clock = fixedClock,
+        environmentRepository = environmentRepository,
+        dispatcherManager = fakeDispatcherManager,
+    )
 
     @BeforeEach
     fun setUp() {
         fakeConfigDiskSource.serverConfig = null
     }
 
-    private val repository = ServerConfigRepositoryImpl(
-        configDiskSource = fakeConfigDiskSource,
-        configService = configService,
-        environmentRepository = environmentRepository,
-        dispatcherManager = fakeDispatcherManager,
-    )
-
     @Test
     fun `environmentRepository stateflow should trigger new server configuration`() = runTest {
-        val serverConfigBefore = fakeConfigDiskSource.serverConfig
+        assertNull(
+            fakeConfigDiskSource.serverConfig,
+        )
 
         // This should trigger a new server config to be fetched
         environmentRepository.environment = Environment.Eu
 
         repository.serverConfigStateFlow.test {
             val newConfig = awaitItem()
-            assertNotEquals(
-                serverConfigBefore,
+            assertNotNull(
                 newConfig,
             )
 
             assertEquals(
-                SERVER_CONFIG.serverData,
-                newConfig!!.serverData,
+                SERVER_CONFIG,
+                newConfig,
             )
         }
     }
@@ -74,32 +85,30 @@ class ServerConfigRepositoryTest {
                 configService.getConfig()
             } returns CONFIG_RESPONSE_JSON.copy(version = "NEW VERSION").asSuccess()
 
-            val testConfig = SERVER_CONFIG.copy(
-                lastSync = Instant.now().toEpochMilli(),
+            fakeConfigDiskSource.serverConfig = SERVER_CONFIG.copy(
+                lastSync = fixedClock.instant().toEpochMilli(),
             )
-            fakeConfigDiskSource.serverConfig = testConfig
 
             assertNotNull(
                 fakeConfigDiskSource.serverConfig,
             )
             assertEquals(
-                fakeConfigDiskSource.serverConfig!!.serverData,
-                SERVER_CONFIG.serverData,
+                fakeConfigDiskSource.serverConfig,
+                SERVER_CONFIG,
             )
 
             repository.getServerConfig(forceRefresh = true)
 
             assertNotEquals(
-                fakeConfigDiskSource.serverConfig!!.serverData,
-                SERVER_CONFIG.serverData,
+                fakeConfigDiskSource.serverConfig,
+                SERVER_CONFIG,
             )
         }
 
     @Test
     fun `getServerConfig should fetch a new server configuration if there is none in state`() =
         runTest {
-            assertEquals(
-                null,
+            assertNull(
                 fakeConfigDiskSource.serverConfig,
             )
 
@@ -110,8 +119,8 @@ class ServerConfigRepositoryTest {
             )
 
             assertEquals(
-                fakeConfigDiskSource.serverConfig!!.serverData,
-                SERVER_CONFIG.serverData,
+                fakeConfigDiskSource.serverConfig,
+                SERVER_CONFIG,
             )
         }
 
@@ -119,7 +128,7 @@ class ServerConfigRepositoryTest {
     fun `getServerConfig should return state server config if refresh is not necessary`() =
         runTest {
             val testConfig = SERVER_CONFIG.copy(
-                lastSync = Instant.now().plusSeconds(1000L).toEpochMilli(),
+                lastSync = fixedClock.instant().plusSeconds(1000L).toEpochMilli(),
                 serverData = CONFIG_RESPONSE_JSON.copy(
                     version = "new version!!",
                 ),

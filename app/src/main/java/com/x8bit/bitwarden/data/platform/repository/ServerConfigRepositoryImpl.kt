@@ -19,7 +19,7 @@ import java.time.Instant
 class ServerConfigRepositoryImpl(
     private val configDiskSource: ConfigDiskSource,
     private val configService: ConfigService,
-    private val clock: Clock = Clock.systemDefaultZone(),
+    private val clock: Clock,
     environmentRepository: EnvironmentRepository,
     dispatcherManager: DispatcherManager,
 ) : ServerConfigRepository {
@@ -60,7 +60,8 @@ class ServerConfigRepositoryImpl(
     }
 
     override val serverConfigStateFlow: StateFlow<ServerConfig?>
-        get() = configDiskSource.serverConfigFlow
+        get() = configDiskSource
+            .serverConfigFlow
             .stateIn(
                 scope = unconfinedScope,
                 started = SharingStarted.Eagerly,
