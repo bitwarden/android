@@ -1397,6 +1397,11 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 fido2Credentials = createMockSdkFido2CredentialList(number = 1),
             )
 
+            every {
+                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(any())
+            } returns createMockPasskeyAssertionOptions(
+                number = 1,
+            )
             coEvery {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
@@ -1411,7 +1416,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 signingInfo = SigningInfo(),
                 origin = "mockOrigin",
                 candidateQueryData = mockk(),
-                clientDataHash = mockk(),
+                clientDataHash = byteArrayOf(0),
                 id = "mockId",
             )
 
@@ -1440,12 +1445,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                             createMockDisplayItemForCipher(number = 1)
                                 .copy(
                                     secondSubtitleTestTag = "PasskeySite",
-                                    subtitleTestTag = "PasskeyName",
-                                    iconData = IconData.Network(
-                                        uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
-                                        fallbackIconRes = R.drawable.ic_login_item_passkey,
-                                    ),
-                                    isFido2Creation = true,
                                 ),
                         ),
                         displayFolderList = emptyList(),
@@ -1461,7 +1460,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 vaultRepository.getDecryptedFido2CredentialAutofillViews(
                     cipherViewList = listOf(cipherView1, cipherView2),
                 )
-                fido2CredentialManager.validateOrigin(any())
             }
         }
 

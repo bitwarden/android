@@ -499,7 +499,7 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `on ReceiveFirstIntent with fido2 get credentials request data should st the special circumstance to Fido2GetCredentials`() {
+    fun `on ReceiveFirstIntent with fido2 get credentials request data should set the special circumstance to Fido2GetCredentials`() {
         val viewModel = createViewModel()
         val mockGetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
         val mockIntent = createMockFido2GetCredentialsIntent(mockGetCredentialsRequest)

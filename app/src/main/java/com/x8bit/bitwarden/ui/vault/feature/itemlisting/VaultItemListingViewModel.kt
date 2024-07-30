@@ -1251,7 +1251,7 @@ class VaultItemListingViewModel @Inject constructor(
         state.fido2GetCredentialsRequest
             ?.let { fido2GetCredentialsRequest ->
                 val relyingPartyId = fido2CredentialManager
-                    .getPasskeyGetCredentialsOptionsOrNull(
+                    .getPasskeyAssertionOptionsOrNull(
                         requestJson = fido2GetCredentialsRequest.option.requestJson,
                     )
                     ?.relyingPartyId
