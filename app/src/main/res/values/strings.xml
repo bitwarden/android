@@ -926,4 +926,6 @@ Do you want to switch to this account?</string>
   <string name="self_hosted_server_url">Self-hosted server URL</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
   <string name="user_verification_direction">User verification</string>
+  <string name="remove_passkey">Remove passkey</string>
+  <string name="passkey_removed">Passkey removed</string>
 </resources>

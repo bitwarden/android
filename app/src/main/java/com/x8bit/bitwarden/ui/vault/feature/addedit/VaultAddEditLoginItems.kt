@@ -92,6 +92,8 @@ fun LazyListScope.vaultAddEditLoginItems(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
+                canViewPassword = loginState.canViewPassword,
+                loginItemTypeHandlers = loginItemTypeHandlers,
             )
         }
     }
@@ -518,13 +520,30 @@ private fun PasswordRow(
 private fun PasskeyField(
     creationDateTime: Text,
     modifier: Modifier = Modifier,
+    canViewPassword: Boolean,
+    loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
 ) {
-    BitwardenTextField(
+    BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.passkey),
         value = creationDateTime.invoke(),
         onValueChange = { },
         readOnly = true,
         singleLine = true,
         modifier = modifier,
+        actions = {
+            if(canViewPassword){
+                BitwardenIconButtonWithResource(
+                    iconRes = IconResource(
+                        iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),
+                        contentDescription = stringResource(id = R.string.remove_passkey),
+                    ),
+                    onClick = {
+                        loginItemTypeHandlers.onClearFido2CredentialClick()
+                    },
+                    modifier = Modifier
+                        .testTag("RemovePasskeyButton"),
+                )
+            }
+        }
     )
 }
