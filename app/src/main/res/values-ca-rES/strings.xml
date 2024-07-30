@@ -148,6 +148,7 @@
   <string name="no_favorites">No hi ha cap preferit a la vostra caixa forta.</string>
   <string name="no_items">No hi ha cap element a la vostra caixa forta.</string>
   <string name="no_items_tap">No hi ha elements a la vostra caixa forta per a aquest lloc web/aplicació. Toqueu per afegir-ne un.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Aquest inici de sessió no té un nom d\'usuari o contrasenya configurats.</string>
   <string name="ok_got_it">D\'acord, ho entenc!</string>
   <string name="option_defaults">Els valors per defecte s\'estableixen des de l\'aplicació principal de Bitwarden al generador de contrasenyes.</string>
@@ -482,6 +483,7 @@ L\'escaneig es farà automàticament.</string>
   <string name="code_sent">Codi enviat!</string>
   <string name="confirm_your_identity">Confirmeu la vostra identitat per continuar.</string>
   <string name="export_vault_warning">Aquesta exportació conté les dades de la vostra caixa forta en un format no xifrat. No hauríeu d\'emmagatzemar o enviar el fitxer exportat a través de canals no segurs (com ara el correu electrònic). Elimineu-lo immediatament després d\'haver acabat d\'usar-lo.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirma l\'exportació de la Caixa forta</string>
   <string name="warning">Advertiment</string>
   <string name="export_vault_failure">S\'ha produït un problema en exportar la caixa forta. Si el problema continua, haureu d’exportar-la des del web.</string>

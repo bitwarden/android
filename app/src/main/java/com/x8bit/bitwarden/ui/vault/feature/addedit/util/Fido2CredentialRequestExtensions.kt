@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.ui.vault.feature.addedit.util
 
-import com.x8bit.bitwarden.data.autofill.fido2.datasource.network.model.PublicKeyCredentialCreationOptions
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.PasskeyAttestationOptions
 import com.x8bit.bitwarden.data.platform.util.toUriOrNull
 import com.x8bit.bitwarden.ui.platform.base.util.toAndroidAppUriString
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
@@ -13,7 +13,7 @@ import java.util.UUID
  * [VaultAddEditState.ViewState.Content] during FIDO 2 credential creation.
  */
 fun Fido2CredentialRequest.toDefaultAddTypeContent(
-    creationOptions: PublicKeyCredentialCreationOptions?,
+    attestationOptions: PasskeyAttestationOptions?,
     isIndividualVaultDisabled: Boolean,
 ): VaultAddEditState.ViewState.Content {
 
@@ -23,12 +23,12 @@ fun Fido2CredentialRequest.toDefaultAddTypeContent(
         ?: packageName
             .toAndroidAppUriString()
 
-    val rpName = creationOptions
+    val rpName = attestationOptions
         ?.relyingParty
         ?.name
         .orEmpty()
 
-    val username = creationOptions
+    val username = attestationOptions
         ?.user
         ?.name
         .orEmpty()

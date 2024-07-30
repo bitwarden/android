@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.auth.repository
 import android.os.SystemClock
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
+import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
@@ -54,6 +55,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
@@ -87,6 +89,7 @@ import com.x8bit.bitwarden.data.platform.util.flatMap
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
@@ -1103,6 +1106,51 @@ class AuthRepositoryImpl(
             }
     }
 
+    override suspend fun validatePin(pin: String): ValidatePinResult {
+        val activeAccount = authDiskSource
+            .userState
+            ?.activeAccount
+            ?.profile
+            ?: return ValidatePinResult.Error
+        val privateKey = authDiskSource
+            .getPrivateKey(userId = activeAccount.userId)
+            ?: return ValidatePinResult.Error
+        val pinProtectedUserKey = authDiskSource
+            .getPinProtectedUserKey(userId = activeAccount.userId)
+            ?: return ValidatePinResult.Error
+
+        // HACK: As the SDK doesn't provide a way to directly validate the pin yet, we instead
+        // try to initialize the user crypto, and if it succeeds then the PIN is correct, otherwise
+        // the PIN is incorrect.
+        return vaultSdkSource
+            .initializeCrypto(
+                userId = activeAccount.userId,
+                request = InitUserCryptoRequest(
+                    kdfParams = activeAccount.toSdkParams(),
+                    email = activeAccount.email,
+                    privateKey = privateKey,
+                    method = InitUserCryptoMethod.Pin(
+                        pin = pin,
+                        pinProtectedUserKey = pinProtectedUserKey,
+                    ),
+                ),
+            )
+            .fold(
+                onSuccess = {
+                    when (it) {
+                        InitializeCryptoResult.Success -> {
+                            ValidatePinResult.Success(isValid = true)
+                        }
+
+                        InitializeCryptoResult.AuthenticationError -> {
+                            ValidatePinResult.Success(isValid = false)
+                        }
+                    }
+                },
+                onFailure = { ValidatePinResult.Error },
+            )
+    }
+
     override suspend fun validatePasswordAgainstPolicies(
         password: String,
     ): Boolean = passwordPolicies
@@ -1317,50 +1365,6 @@ class AuthRepositoryImpl(
             environmentUrlData = environmentRepository.environment.environmentUrlData,
         )
         val userId = userStateJson.activeUserId
-        authDiskSource.storeAccountTokens(
-            userId = userId,
-            accountTokens = AccountTokensJson(
-                accessToken = loginResponse.accessToken,
-                refreshToken = loginResponse.refreshToken,
-            ),
-        )
-        settingsRepository.hasUserLoggedInOrCreatedAccount = true
-        authDiskSource.userState = userStateJson
-        loginResponse.key?.let {
-            // Only set the value if it's present, since we may have set it already
-            // when we completed the pending admin auth request.
-            authDiskSource.storeUserKey(userId = userId, userKey = it)
-        }
-        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
-
-        // If the user just authenticated with a two-factor code and selected the option to
-        // remember it, then the API response will return a token that will be used in place
-        // of the two-factor code on the next login attempt.
-        loginResponse.twoFactorToken?.let {
-            authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = it)
-        }
-
-        // Set the current organization identifier for use in JIT provisioning.
-        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
-            organizationIdentifier = orgIdentifier
-        }
-
-        // Handle the Trusted Device Encryption flow
-        loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions?.let { options ->
-            loginResponse.privateKey?.let { privateKey ->
-                handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
-                    trustedDeviceDecryptionOptions = options,
-                    userStateJson = userStateJson,
-                    privateKey = privateKey,
-                )
-            }
-        }
-
-        // Remove any cached data after successfully logging in.
-        identityTokenAuthModel = null
-        twoFactorResponse = null
-        resendEmailRequestJson = null
-        twoFactorDeviceData = null
 
         // Attempt to unlock the vault with password if possible.
         password?.let {
@@ -1427,6 +1431,51 @@ class AuthRepositoryImpl(
                 // time the user enters their master password and it is validated.
             }
         }
+
+        // Handle the Trusted Device Encryption flow
+        loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions?.let { options ->
+            loginResponse.privateKey?.let { privateKey ->
+                handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
+                    trustedDeviceDecryptionOptions = options,
+                    userStateJson = userStateJson,
+                    privateKey = privateKey,
+                )
+            }
+        }
+
+        authDiskSource.storeAccountTokens(
+            userId = userId,
+            accountTokens = AccountTokensJson(
+                accessToken = loginResponse.accessToken,
+                refreshToken = loginResponse.refreshToken,
+            ),
+        )
+        settingsRepository.hasUserLoggedInOrCreatedAccount = true
+        authDiskSource.userState = userStateJson
+        loginResponse.key?.let {
+            // Only set the value if it's present, since we may have set it already
+            // when we completed the pending admin auth request.
+            authDiskSource.storeUserKey(userId = userId, userKey = it)
+        }
+        authDiskSource.storePrivateKey(userId = userId, privateKey = loginResponse.privateKey)
+
+        // If the user just authenticated with a two-factor code and selected the option to
+        // remember it, then the API response will return a token that will be used in place
+        // of the two-factor code on the next login attempt.
+        loginResponse.twoFactorToken?.let {
+            authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = it)
+        }
+
+        // Set the current organization identifier for use in JIT provisioning.
+        if (loginResponse.userDecryptionOptions?.hasMasterPassword == false) {
+            organizationIdentifier = orgIdentifier
+        }
+
+        // Remove any cached data after successfully logging in.
+        identityTokenAuthModel = null
+        twoFactorResponse = null
+        resendEmailRequestJson = null
+        twoFactorDeviceData = null
 
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         vaultRepository.syncIfNecessary()

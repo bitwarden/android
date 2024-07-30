@@ -148,6 +148,7 @@
   <string name="no_favorites">Daar is geen gunstelinge in u kluis nie.</string>
   <string name="no_items">Daar is geen items in u kluis nie.</string>
   <string name="no_items_tap">Daar is geen items in u kluis vir hierdie webwerf/toep nie. Tik om een toe te voeg.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Hierdie aantekening bevat geen gebruikersnaam of wagwoord nie.</string>
   <string name="ok_got_it">Goed, het dit!</string>
   <string name="option_defaults">Opsieverstekke is vanaf die Bitwarden-toep se wagwoordgenereerder instelbaar.</string>
@@ -482,6 +483,7 @@ Skandering gebeur outomaties.</string>
   <string name="code_sent">Kode verstuur!</string>
   <string name="confirm_your_identity">Bevestig u identiteit om voort te gaan.</string>
   <string name="export_vault_warning">Hierdie uitstuur bevat u kluisdata in ’n ongeënkripteerde formaat. U behoort dit nie oor onbeveiligde kanale (soos e-pos) te bewaar of verstuur nie. Skrap dit sodra u dit klaar gebruik het.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Bevestig kluisuitstuur</string>
   <string name="warning">Waarskuwing</string>
   <string name="export_vault_failure">Daar was ’n probleem met die uitstuur van u kluis. Indien die probeem voortduur moet u vanuit die webkluis uitstuur.</string>

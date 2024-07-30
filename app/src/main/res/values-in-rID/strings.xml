@@ -148,6 +148,7 @@
   <string name="no_favorites">Tidak ada favorit di brankas Anda.</string>
   <string name="no_items">Tidak ada item di brankas Anda.</string>
   <string name="no_items_tap">Tidak ada item untuk situs ini di brankas Anda. Ketuk untuk menambahkan.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Info masuk ini tidak memiliki nama pengguna atau sandi yang dikonfigurasi.</string>
   <string name="ok_got_it">Oke, saya mengerti!</string>
   <string name="option_defaults">Pilihan baku diatur dari alat pembuat sandi utama aplikasi Bitwarden.</string>
@@ -482,6 +483,7 @@ Proses pindai akan terjadi secara otomatis.</string>
   <string name="code_sent">Kode Terkirim!</string>
   <string name="confirm_your_identity">Konfirmasi identitas Anda untuk melanjutkan.</string>
   <string name="export_vault_warning">Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti emel). Hapus segera setelah Anda selesai menggunakannya.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Konfirmasi Ekspor Vault</string>
   <string name="warning">Peringatan</string>
   <string name="export_vault_failure">Terjadi masalah saat mengekspor vault Anda. Jika masalah terus berlanjut, Anda harus mengekspor dari brankas web.</string>

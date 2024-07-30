@@ -148,6 +148,7 @@
   <string name="no_favorites">هیج علاقه مندی در گاوصندوقتان موجود نیست.</string>
   <string name="no_items">هیج موردی در گاوصندوقتان موجود نیست.</string>
   <string name="no_items_tap">هیج علاقه مندی برای این وب‌سایت در گاوصندوقتان موجود نیست. برای افزودن ضربه بزنید.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">این ورود هیچ نام کاربری و کلمه عبور پیکربندی شده ای ندارد.</string>
   <string name="ok_got_it">باشه، فهمیدم!</string>
   <string name="option_defaults">گزینه های پیش‌فرض از ابزار تولید کلمه عبور Bitwarden تنظیم می‌شود.</string>
@@ -482,6 +483,7 @@
   <string name="code_sent">کد ارسال شد!</string>
   <string name="confirm_your_identity">برای ادامه، هویت خود را تأیید کنید.</string>
   <string name="export_vault_warning">این برون ریزی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی نا امن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه کارتان با آن تمام شد، آن را حذف کنید.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">برون ریزی گاوصندوق را تأیید کنید</string>
   <string name="warning">هشدار</string>
   <string name="export_vault_failure">هنگام برون ریزی گاوصندوق شما مشکلی پیش آمد. اگر مشکل همچنان ادامه داشت، باید از گاوصندوق وب برون ریزی بگیرید.</string>

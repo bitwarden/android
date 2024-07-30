@@ -148,6 +148,7 @@
   <string name="no_favorites">உங்கள் பெட்டகத்தில் பிடித்தவை எவையுமில்லை.</string>
   <string name="no_items">உம் பெட்டகத்தில் உருப்படிகள் ஏதுமில்லை.</string>
   <string name="no_items_tap">உம் பெட்டகத்தில் இவ்வலைத்தளம்/செயலிக்கான உருப்படிகள் இல்லை. ஒன்றைச் சேர்க்க தட்டுக.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">இவ்வுள்நுழைவில் பயனர்பெயர் அ கடவுச்சொல் கட்டமைக்கப்படவில்லை.</string>
   <string name="ok_got_it">சரி, புரிந்தது!</string>
   <string name="option_defaults">விருப்ப இயல்புநிலைகள் முதன்மை Bitwarden செயலியின் கடவுச்சொல் உருவாக்கி கருவியிலிருந்து அமைக்கப்படுகிறது.</string>
@@ -482,6 +483,7 @@
   <string name="code_sent">குறியீடு அனுப்பப்பட்டது!</string>
   <string name="confirm_your_identity">தொடர உம் அடையாளத்தை உறுதிசெய்.</string>
   <string name="export_vault_warning">இவ்வேற்றுமதி உம் பெட்டக தரவை மறையாக்கப்படா வடிவில் கொண்டுள்ளது. சேமிக்கவோ பாதுகாப்பற்ற தடங்களில் (மின்னஞ்சல் போன்றவை) அனுப்பவோ கூடாது. பயன்படுத்தியவுடன் அழித்துவிடவும்.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">பெட்டக ஏற்றுமதியை உறுதிசெய்</string>
   <string name="warning">எச்சரிக்கை</string>
   <string name="export_vault_failure">உம் பெட்டகத்தை ஏற்றுமதி செய்வதில் ஒரு சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து ஏற்றுமதி செய்ய வேண்டும்.</string>

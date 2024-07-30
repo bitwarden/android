@@ -148,6 +148,7 @@
   <string name="no_favorites">אין מועדפים בכספת שלך.</string>
   <string name="no_items">אין פריטים בכספת שלך.</string>
   <string name="no_items_tap">אין פרטים בכספת שלך עבור אתר/אפליקציה זו. לחץ כאן להוספת פריט.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">פרטי הכניסה הללו לא מכילים שם משתמש או סיסמה.</string>
   <string name="ok_got_it">אוקי, הבנתי!</string>
   <string name="option_defaults">ברירות המחדל נקבעו דרך הגדרות כלי מחולל הסיסמאות של Bitwarden.</string>
@@ -484,6 +485,7 @@ Bitwarden בעזרת פתיחת חלון \"הגדרות\".</string>
   <string name="code_sent">קוד נשלח!</string>
   <string name="confirm_your_identity">אשר את זהותך כדי להמשיך.</string>
   <string name="export_vault_warning">הקובץ מכיל את פרטי הכספת שלך בפורמט לא מוצפן. מומלץ להעביר את הקובץ רק בדרכים מוצפנות, ומאוד לא מומלץ לשמור או לשלוח את הקובץ הזה בדרכים לא מוצפנות (כדוגמת סתם אימייל). מחק את הקובץ מיד לאחר שסיימת את השימוש בו.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">אישור ייצוא כספת</string>
   <string name="warning">אזהרה</string>
   <string name="export_vault_failure">היתה בעיה ביצוא הכספת שלך. אם הבעיה נמשכת, נסה לייצא את כספת הרשת במקום זאת.</string>

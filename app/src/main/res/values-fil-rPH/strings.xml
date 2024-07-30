@@ -148,6 +148,7 @@
   <string name="no_favorites">Wala kang paborito sa vault mo.</string>
   <string name="no_items">Walang laman ang vault mo.</string>
   <string name="no_items_tap">Walang item sa vault mo para sa website/app na ito. Pindutin para magdagdag.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Walang nakatakdang username o password ang login na ito.</string>
   <string name="ok_got_it">Sige, kuha ko na!</string>
   <string name="option_defaults">Mula ang mga default na opsyon sa kagamitan panggawa ng password ng pangunahing Bitwarden app.</string>
@@ -482,6 +483,7 @@ Awtomatikong itong magsa-scan.</string>
   <string name="code_sent">Ipinadala ang code!</string>
   <string name="confirm_your_identity">Kumpirmahin ang pagkakakilanlan mo para tumuloy.</string>
   <string name="export_vault_warning">Naglalaman ng unencrypted vault data mo ang export na ito. Hindi mo dapat ilagay o ipadala ang file gamit ang hindi ligtas na mga paraan (tulad ng email). Burahin ito kaagad pagkagamit.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Kumpirmahin ang pag-export ng vault</string>
   <string name="warning">Babala</string>
   <string name="export_vault_failure">Nagkaproblema sa pag-e-export ng vault mo. Kung paulit-ulit nang nagkakaproblema, sa web vault ka dapat mag-export.</string>

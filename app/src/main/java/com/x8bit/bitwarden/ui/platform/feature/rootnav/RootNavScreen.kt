@@ -107,6 +107,8 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForNewSend,
         is RootNavState.VaultUnlockedForAuthRequest,
         is RootNavState.VaultUnlockedForFido2Save,
+        is RootNavState.VaultUnlockedForFido2Assertion,
+        is RootNavState.VaultUnlockedForFido2GetCredentials,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -185,7 +187,10 @@ fun RootNavScreen(
                 )
             }
 
-            is RootNavState.VaultUnlockedForFido2Save -> {
+            is RootNavState.VaultUnlockedForFido2Save,
+            is RootNavState.VaultUnlockedForFido2Assertion,
+            is RootNavState.VaultUnlockedForFido2GetCredentials,
+            -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultItemListingAsRoot(
                     vaultItemListingType = VaultItemListingType.Login,

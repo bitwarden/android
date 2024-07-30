@@ -19,7 +19,7 @@ data class VaultItemListingUserVerificationHandlers(
     val onUserVerificationLockOut: () -> Unit,
     val onUserVerificationFail: () -> Unit,
     val onUserVerificationCancelled: () -> Unit,
-    val onUserVerificationNotSupported: () -> Unit,
+    val onUserVerificationNotSupported: (selectedCipherId: String?) -> Unit,
 ) {
     companion object {
 
@@ -47,8 +47,12 @@ data class VaultItemListingUserVerificationHandlers(
                 onUserVerificationCancelled = {
                     viewModel.trySendAction(VaultItemListingsAction.UserVerificationCancelled)
                 },
-                onUserVerificationNotSupported = {
-                    viewModel.trySendAction(VaultItemListingsAction.UserVerificationNotSupported)
+                onUserVerificationNotSupported = { selectedCipherId ->
+                    viewModel.trySendAction(
+                        VaultItemListingsAction.UserVerificationNotSupported(
+                            selectedCipherId = selectedCipherId,
+                        ),
+                    )
                 },
             )
     }

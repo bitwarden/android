@@ -25,13 +25,13 @@
   <string name="favorites">Suosikit</string>
   <string name="file_bug_report">Lähetä virheilmoitus</string>
   <string name="file_bug_report_description">Avaa ongelma GitHub-sivullamme.</string>
-  <string name="fingerprint_direction">Käytä todennukseen sormenjälkeäsi.</string>
+  <string name="fingerprint_direction">Tunnistaudu sormenjäljelläsi.</string>
   <string name="folder">Kansio</string>
-  <string name="folder_created">Uusi kansio luotu.</string>
-  <string name="folder_deleted">Kansio poistettiin</string>
+  <string name="folder_created">Uusi kansio luotiin.</string>
+  <string name="folder_deleted">Kansio poistettiin.</string>
   <string name="folder_none">Ei kansiota</string>
   <string name="folders">Kansiot</string>
-  <string name="folder_updated">Kansio tallennettiin</string>
+  <string name="folder_updated">Kansio tallennettiin.</string>
   <string name="go_to_website">Avaa sivusto</string>
   <string name="help_and_feedback">Tuki ja palaute</string>
   <string name="hide">Piilota</string>
@@ -41,7 +41,7 @@
   <string name="invalid_pin">Virheellinen PIN-koodi. Yritä uudelleen.</string>
   <string name="launch">Avaa</string>
   <string name="log_in">Kirjaudu</string>
-  <string name="log_in_noun">Kirjautuminen</string>
+  <string name="log_in_noun">Kirjautumistieto</string>
   <string name="log_out">Kirjaudu ulos</string>
   <string name="logout_confirmation">Haluatko varmasti kirjautua ulos?</string>
   <string name="remove_account">Poista tili</string>
@@ -120,7 +120,7 @@
   <string name="import_items">Tuo kohteita</string>
   <string name="import_items_confirmation">Voit tuoda kerralla kaikki kohteesi bitwarden.com-verkkoholvissa. Haluatko käydä sivustolla nyt?</string>
   <string name="import_items_description">Tuo kohteesi muista salasanojen hallintapalveluista kerralla.</string>
-  <string name="last_sync">Viimeisin synkronointi:</string>
+  <string name="last_sync">Edellinen synkronointi:</string>
   <string name="length">Pituus</string>
   <string name="lock">Lukitse</string>
   <string name="fifteen_minutes">15 minuuttia</string>
@@ -130,10 +130,10 @@
   <string name="immediately">Välittömästi</string>
   <string name="vault_timeout">Holvin aikakatkaisu</string>
   <string name="vault_timeout_action">Holvin aikakatkaisutoiminto</string>
-  <string name="vault_timeout_log_out_confirmation">Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</string>
+  <string name="vault_timeout_log_out_confirmation">Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua tunnistautumisen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</string>
   <string name="logging_in">Kirjaudutaan sisään…</string>
   <string name="login_or_create_new_account">Käytä salattua holviasi kirjautumalla sisään tai luo uusi tili.</string>
-  <string name="manage">Hallinta</string>
+  <string name="manage">Hallitse</string>
   <string name="master_password_confirmation_val_message">Salasanan vahvistus ei täsmää.</string>
   <string name="master_password_description">Pääsalasanalla pääset käsiksi holviisi. On erittäin tärkeää, että muistat pääsalasanasi, koska sen palautus ei ole mahdollista, jos unohdat sen.</string>
   <string name="master_password_hint">Pääsalasanan vihje (valinnainen)</string>
@@ -148,6 +148,7 @@
   <string name="no_favorites">Holvissasi ei ole suosikkeja.</string>
   <string name="no_items">Holvissasi ei ole kohteita.</string>
   <string name="no_items_tap">Holvissasi ei ole kohteita tälle sivustolle/sovellukselle. Lisää kohde napauttamalla.</string>
+  <string name="no_username">Ei käyttäjätunnusta</string>
   <string name="no_username_password_configured">Kirjautumistiedolle ei ole määritetty käyttäjätunnusta tai salasanaa.</string>
   <string name="ok_got_it">Ymmärrän!</string>
   <string name="option_defaults">Oletusvalinnat määritetään pääsovelluksen salasanageneraattorista.</string>
@@ -195,7 +196,7 @@
   <string name="bitwarden_autofill_service_open_accessibility_settings">Avaa \"Esteettömyys\" -asetukset</string>
   <string name="bitwarden_autofill_service_step1">1. Valitse esteettömyysasetusten \"Palvelut\" -otsikon alta ”Bitwarden”.</string>
   <string name="bitwarden_autofill_service_step2">2. Kytke asetus käyttöön ja hyväksy painanalla \"OK\".</string>
-  <string name="disabled">Poistettu käytöstä</string>
+  <string name="disabled">Ei käytössä</string>
   <string name="enabled">Käytössä</string>
   <string name="off" tools:override="true">Ei käytössä</string>
   <string name="on" tools:override="true">Käytössä</string>
@@ -204,8 +205,8 @@
   <string name="autofill">Automaattitäyttö</string>
   <string name="autofill_or_view">Haluatko täyttää kohteen automaattisesti vai tarkastella sitä?</string>
   <string name="bitwarden_autofill_service_match_confirm">Haluatko varmasti täyttää kohteen automaattisesti? Se ei vastaa osoitetta \"%1$s\" täysin.</string>
-  <string name="matching_items">Tunnistetut kohteet</string>
-  <string name="possible_matching_items">Mahdollisesti tunnistetut kohteet</string>
+  <string name="matching_items">Sopivat kohteet</string>
+  <string name="possible_matching_items">Mahdollisesti sopivat kohteet</string>
   <string name="search">Etsi</string>
   <string name="bitwarden_autofill_service_search">Etsit automaattisesti täytettävää kohdetta osoitteelle ”%1$s”.</string>
   <string name="learn_org">Lisätietoja organisaatioista</string>
@@ -219,7 +220,7 @@
   <string name="remember_me">Muista minut</string>
   <string name="send_verification_code_again">Lähetä todennuskoodi sähköpostitse uudelleen</string>
   <string name="two_step_login_options">Kaksivaiheisen kirjautumisen asetukset</string>
-  <string name="use_another_two_step_method">Käytä eri kaksivaiheisen kirjautumisen todennusmenetelmää</string>
+  <string name="use_another_two_step_method">Käytä vaihtoehtoista todennustapaa</string>
   <string name="verification_email_not_sent">Todennussähköpostin lähetys ei onnistunut. Yritä uudelleen.</string>
   <string name="verification_email_sent">Todennussähköposti lähetettiin</string>
   <string name="yubi_key_instruction">Jatka asettamalla YubiKey NEO -todennuslaite laitteen taustaa vasten tai kytke YubiKey-todennuslaite laitteen USB-porttiin ja paina sen painiketta.</string>
@@ -239,9 +240,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="scan_qr_title">Skannaa QR-koodi</string>
   <string name="camera">Kamera</string>
   <string name="photos">Kuvat</string>
-  <string name="copy_totp">Kopioi TOTP-todennuskoodi</string>
-  <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen todennuksen avaimen, kopioidaan TOTP-todennuskoodi leikepöydälle kohteen automaattisen täytön yhteydessä.</string>
-  <string name="copy_totp_automatically">TOTP-koodin kopiointi</string>
+  <string name="copy_totp">Kopioi TOTP-koodi</string>
+  <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen kirjautumisen todennusavaimen, kopioidaan TOTP-koodi leikepöydälle kohteen automaattisen täytön yhteydessä.</string>
+  <string name="copy_totp_automatically">Kopioi TOTP-koodi automaattisesti</string>
   <string name="premium_required">Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</string>
   <string name="attachement_added">Tiedostoliite lisätty</string>
   <string name="attachment_deleted">Tiedostoliite poistettiin</string>
@@ -482,6 +483,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="code_sent">Koodi lähetettiin!</string>
   <string name="confirm_your_identity">Jatka vahvistamalla henkilöllisyytesi.</string>
   <string name="export_vault_warning">Tämä vienti sisältää holvisi tiedot salaamattomassa muodossa. Sinun ei tulisi säilyttää tai lähettää vietyä tiedostoa suojaamattomien kanavien (kuten sähköpostin) välityksellä. Poista se välittömästi kun sille ei enää ole käyttöä.</string>
+  <string name="export_vault_file_pw_protect_info">Tämä vientitiedosto suojataan salasanalla, joka on syötettävä salauksen purkamiseksi.</string>
   <string name="export_vault_confirmation_title">Vahvista holvin vienti</string>
   <string name="warning">Varoitus</string>
   <string name="export_vault_failure">Holvin viennissä oli ongelma. Jos ongelma jatkuu, sinun on tehtävä vienti verkkoholvin kautta.</string>
@@ -503,8 +505,8 @@ Koodi skannataan automaattisesti.</string>
   <string name="do_you_really_want_to_permanently_delete_cipher">Haluatko varmasti poistaa pysyvästi? Toiminnon peruminen ei ole mahdollista.</string>
   <string name="do_you_really_want_to_restore_cipher">Haluatko varmasti palauttaa kohteen?</string>
   <string name="do_you_really_want_to_soft_delete_cipher">Haluatko varmasti siirtää roskakoriin?</string>
-  <string name="account_biometric_invalidated">Biometrinen avaus on poistettu käytöstä tältä tililtä, kunnes pääsalasana on vahvistettu.</string>
-  <string name="account_biometric_invalidated_extension">Automaattisen täytön biometrinen avaus on poistettu käytöstä tältä tililtä, kunnes pääsalasana on vahvistettu.</string>
+  <string name="account_biometric_invalidated">Biometrinen avaus on poistettu tililtä käytöstä, kunnes pääsalasana on vahvistettu.</string>
+  <string name="account_biometric_invalidated_extension">Automaattitäytön biometrinen avaus on poistettu tililtä käytöstä, kunnes pääsalasana on vahvistettu.</string>
   <string name="enable_sync_on_refresh">Synkronoi holvi päivityksen yhteydessä</string>
   <string name="enable_sync_on_refresh_description">Holvi synkronoidaan myös alasveto-eleellä suoritettavan päivityksen yhteydessä.</string>
   <string name="log_in_sso">Yrityksen kertakirjautuminen (SSO)</string>
@@ -679,7 +681,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="enter_key_manually">Syötä se manuaalisesti</string>
   <string name="add_totp">Lisää TOTP</string>
   <string name="setup_totp">Määritä TOTP</string>
-  <string name="once_the_key_is_successfully_entered">Kun koodi on syötetty oikein, tallenna avain
+  <string name="once_the_key_is_successfully_entered">Kun avain on syötetty oikein, tallenna se
 turvallisesti valitsemalla \"Lisää TOTP\"</string>
   <string name="never_lock_warning">Käyttämällä lukitusasetusta \"Ei koskaan\"? Tallentuu holvisi salausavain laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin.</string>
   <string name="environment_page_urls_error">Yksi tai useampi syötetyistä URL-osoitteista on virheellinen. Tarkista virheet ja yritä tallennusta uudelleen.</string>
@@ -923,6 +925,6 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="launch_web_authn">Avaa WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Virhe aloitettaessa kaksivaiheista WebAuthn-tunnistautumista</string>
   <string name="self_hosted_server_url">Itse ylläpidetyn palvelimen URL</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Suojausavaintoiminto epäonnistui, koska käyttäjää ei voitu vahvistaa.</string>
+  <string name="user_verification_direction">Käyttäjän vahvistus</string>
 </resources>

@@ -148,6 +148,7 @@
   <string name="no_favorites">Jūsų saugykloje nėra mėgstamiausių.</string>
   <string name="no_items">Jūsų saugykloje nėra jokių elementų.</string>
   <string name="no_items_tap">Jūsų saugykloje nėra šios svetainės / programos elementų. Bakstelėkite, kad pridėtumėte.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Šiam prisijungimui nėra sukonfigūruotas vartotojo vardas arba slaptažodis.</string>
   <string name="ok_got_it">Gerai, supratau!</string>
   <string name="option_defaults">Numatytieji parinkčių nustatymai nustatomi naudojant pagrindinės „Bitwarden“ programos slaptažodžių generavimo įrankį.</string>
@@ -482,6 +483,7 @@ Nuskaitymas vyks automatiškai.</string>
   <string name="code_sent">Kodas išsiųstas!</string>
   <string name="confirm_your_identity">Norint tęsti, patvirtinkite tapatybę.</string>
   <string name="export_vault_warning">Šiame eksporte yra jūsų saugyklos duomenys nešifruotu formatu. Neturėtumėte saugoti ar siųsti eksportuoto failo nesaugiais kanalais (pvz., el. paštu). Ištrinkite jį iš karto, kai baigsite naudoti.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Patvirtinkite saugyklos eksportavimą</string>
   <string name="warning">Įspėjimas</string>
   <string name="export_vault_failure">Eksportuojant saugyklą kilo problema. Jei problema išlieka, turėsite eksportuoti iš žiniatinklio saugyklos.</string>

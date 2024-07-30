@@ -6,6 +6,8 @@ import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
+import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.sdk.Fido2CredentialStore
 import com.bitwarden.send.Send
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
@@ -538,6 +540,18 @@ class VaultRepositoryImpl(
             )
     }
 
+    override suspend fun silentlyDiscoverCredentials(
+        userId: String,
+        fido2CredentialStore: Fido2CredentialStore,
+        relyingPartyId: String,
+    ): Result<List<Fido2CredentialAutofillView>> =
+        vaultSdkSource
+            .silentlyDiscoverCredentials(
+                userId = userId,
+                fido2CredentialStore = fido2CredentialStore,
+                relyingPartyId = relyingPartyId,
+            )
+
     override fun emitTotpCodeResult(totpCodeResult: TotpCodeResult) {
         mutableTotpCodeResultFlow.tryEmit(totpCodeResult)
     }
@@ -980,9 +994,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<CipherView>>> =
         vaultDiskSource
             .getCiphers(userId = userId)
-            .onStart {
-                mutableCiphersStateFlow.value = DataState.Loading
-            }
+            .onStart { mutableCiphersStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1003,7 +1015,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<DomainsData>> =
         vaultDiskSource
             .getDomains(userId = userId)
-            .onStart { mutableDomainsStateFlow.value = DataState.Loading }
+            .onStart { mutableDomainsStateFlow.updateToPendingOrLoading() }
             .map {
                 DataState.Loaded(
                     data = it.toDomainsData(),
@@ -1016,7 +1028,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<FolderView>>> =
         vaultDiskSource
             .getFolders(userId = userId)
-            .onStart { mutableFoldersStateFlow.value = DataState.Loading }
+            .onStart { mutableFoldersStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1037,7 +1049,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<CollectionView>>> =
         vaultDiskSource
             .getCollections(userId = userId)
-            .onStart { mutableCollectionsStateFlow.value = DataState.Loading }
+            .onStart { mutableCollectionsStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1062,7 +1074,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<SendData>> =
         vaultDiskSource
             .getSends(userId = userId)
-            .onStart { mutableSendDataStateFlow.value = DataState.Loading }
+            .onStart { mutableSendDataStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1071,7 +1083,7 @@ class VaultRepositoryImpl(
                         sendList = it.toEncryptedSdkSendList(),
                     )
                     .fold(
-                        onSuccess = { sends -> DataState.Loaded(sends) },
+                        onSuccess = { sends -> DataState.Loaded(sends.sortAlphabetically()) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }

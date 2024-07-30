@@ -148,6 +148,7 @@
   <string name="no_favorites">لا توجد عناصر مفضلة في خزنتك.</string>
   <string name="no_items">لا توجد عناصر في خزنتك.</string>
   <string name="no_items_tap">لا توجد في خزنتك عناصر لهذا الموقع/التطبيق. انقر لإضافة واحد.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">لا يحتوي هذا المعرّف على اسم مستخدم أو كلمة مرور تم تكوينها.</string>
   <string name="ok_got_it">حسنا، فهمت!</string>
   <string name="option_defaults">يتم تعيين الخيارات الافتراضية من أداة إنشاء كلمة المرور في تطبيق Bitwarden الرئيسي.</string>
@@ -482,6 +483,7 @@
   <string name="code_sent">تم إرسال الرمز</string>
   <string name="confirm_your_identity">قم بتأكيد هويتك للمتابعة.</string>
   <string name="export_vault_warning">يحتوي هذا التصدير على بيانات خزنتك بتنسيق غير مشفر. لا يجب عليك تخزين أو إرسال الملف الذي تم تصديره عبر قنوات غير آمنة (مثل البريد الإلكتروني). احذفه مباشرة بعد انتهائك من استخدامه.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">تأكيد تصدير الخزنة</string>
   <string name="warning">تحذير</string>
   <string name="export_vault_failure">كانت هناك مشكلة في تصدير خزنتك. إذا استمرت المشكلة، ستحتاج إلى التصدير من خزانة الويب.</string>

@@ -148,6 +148,7 @@
   <string name="no_favorites">У вашым сховішчы адсутнічаюць абраныя.</string>
   <string name="no_items">У вашым сховішчы адсутнічаюць элементы.</string>
   <string name="no_items_tap">У вашым сховішчы адсутнічаюць элементы для гэтага вэб-сайта або праграмы. Дакраніцеся, каб дадаць.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Гэты лагін не мае сканфігураванага імя карыстальніка або пароля.</string>
   <string name="ok_got_it">Зразумела!</string>
   <string name="option_defaults">Прадвызначаныя параметры прызначаюцца ў генератары пароляў асноўнай праграмы Bitwarden.</string>
@@ -481,6 +482,7 @@
   <string name="code_sent">Код адпраўлены!</string>
   <string name="confirm_your_identity">Пацвердзіце сваю асобу для працягу.</string>
   <string name="export_vault_warning">Пры экспартаванні файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць або адпраўляць па неабароненых каналах (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Пацвердзіць экспартаванне сховішча</string>
   <string name="warning">Папярэджанне</string>
   <string name="export_vault_failure">Узнікла праблема падчас экспартавання вашага сховішча. Калі праблема захаваецца, экспартуйце свае даныя з вэб-сховішча.</string>

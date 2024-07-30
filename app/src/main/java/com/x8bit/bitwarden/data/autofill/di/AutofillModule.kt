@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessor
 import com.x8bit.bitwarden.data.autofill.processor.AutofillProcessorImpl
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProvider
 import com.x8bit.bitwarden.data.autofill.provider.AutofillCipherProviderImpl
+import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
 import com.x8bit.bitwarden.data.platform.manager.clipboard.BitwardenClipboardManager
@@ -72,6 +73,7 @@ object AutofillModule {
             organizationEventManager = organizationEventManager,
         )
 
+    @Singleton
     @Provides
     fun providesAutofillParser(
         settingsRepository: SettingsRepository,
@@ -80,6 +82,7 @@ object AutofillModule {
             settingsRepository = settingsRepository,
         )
 
+    @Singleton
     @Provides
     fun providesAutofillCipherProvider(
         authRepository: AuthRepository,
@@ -92,6 +95,7 @@ object AutofillModule {
             vaultRepository = vaultRepository,
         )
 
+    @Singleton
     @Provides
     fun providesAutofillProcessor(
         dispatcherManager: DispatcherManager,
@@ -101,6 +105,7 @@ object AutofillModule {
         policyManager: PolicyManager,
         saveInfoBuilder: SaveInfoBuilder,
         settingsRepository: SettingsRepository,
+        crashLogsManager: CrashLogsManager,
     ): AutofillProcessor =
         AutofillProcessorImpl(
             dispatcherManager = dispatcherManager,
@@ -110,8 +115,10 @@ object AutofillModule {
             policyManager = policyManager,
             saveInfoBuilder = saveInfoBuilder,
             settingsRepository = settingsRepository,
+            crashLogsManager = crashLogsManager,
         )
 
+    @Singleton
     @Provides
     fun providesFillDataBuilder(
         autofillCipherProvider: AutofillCipherProvider,
@@ -119,6 +126,7 @@ object AutofillModule {
         autofillCipherProvider = autofillCipherProvider,
     )
 
+    @Singleton
     @Provides
     fun providesFillResponseBuilder(): FillResponseBuilder = FillResponseBuilderImpl()
 

@@ -148,6 +148,7 @@
   <string name="no_favorites">No hay favoritos en tu caja fuerte.</string>
   <string name="no_items">No hay elementos en tu caja fuerte.</string>
   <string name="no_items_tap">No hay elementos en tu caja fuerte para este sitio web o aplicación. Pulsa para añadir uno.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Esta entrada no tiene usuario y contraseña configurados.</string>
   <string name="ok_got_it">¡Entendido!</string>
   <string name="option_defaults">Lo valores por defecto se establecen desde la aplicación principal de Bitwarden en la herramienta de generador de contraseñas.</string>
@@ -482,6 +483,7 @@ El escaneo se realizará automáticamente.</string>
   <string name="code_sent">¡Código Enviado!</string>
   <string name="confirm_your_identity">Confirme su identidad para continuar.</string>
   <string name="export_vault_warning">Ésta exportación contiene sus datos de la caja fuerte en un formato no cifrado. No debería almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínelo inmediatamente cuando termine de utilizarlo.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirmar exportación de la caja fuerte</string>
   <string name="warning">Advertencia</string>
   <string name="export_vault_failure">Hubo un problema al exportar su caja fuerte. Si el problema persiste, deberá exportar desde la caja fuerte en la web.</string>

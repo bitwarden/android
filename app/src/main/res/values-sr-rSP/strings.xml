@@ -148,6 +148,7 @@
   <string name="no_favorites">У вашем сефу нема фаворита.</string>
   <string name="no_items">У вашем сефу нема ставке.</string>
   <string name="no_items_tap">У вашем сефу нема ставке за ову веб локацију/апликацију. Додирните да бисте додали једну.</string>
+  <string name="no_username">Нема корисничког имена</string>
   <string name="no_username_password_configured">Ова пријава нема конфигурисано корисничко име или лозинку.</string>
   <string name="ok_got_it">У реду, схватам!</string>
   <string name="option_defaults">Подразумеване опције се постављају у главној Bitwarden апликацији у генератору лозинке.</string>
@@ -482,6 +483,7 @@
   <string name="code_sent">Код послат!</string>
   <string name="confirm_your_identity">Да бисте наставили потврдите ваш идентитет.</string>
   <string name="export_vault_warning">Овај извоз садржи податке сефа у нешифрираном формату. Не бисте смели да сачувате или шаљете извезену датотеку преко несигурних канала (као што је имејл). Избришите датотеку одмах након што завршите са коришћењем.</string>
+  <string name="export_vault_file_pw_protect_info">Овај извоз ће бити заштићен лозинком и захтеваће лозинку датотеке за дешифровање.</string>
   <string name="export_vault_confirmation_title">Потврдите извоз сефа</string>
   <string name="warning">Упозорење</string>
   <string name="export_vault_failure">Дошло је до проблема при извозу сефа. Ако се проблем настави, мораћете да извезете из веб сефа.</string>
@@ -924,6 +926,6 @@
   <string name="launch_web_authn">Покренути WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Дошло је до грешке при покретању WebAuthn двофакторске аутентификације</string>
   <string name="self_hosted_server_url">УРЛ сервера који се самостално хостује</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">Операција лозинке није успела јер корисник није могао да се верификује.</string>
+  <string name="user_verification_direction">Верификација корисника</string>
 </resources>

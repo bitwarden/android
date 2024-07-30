@@ -148,6 +148,7 @@
   <string name="no_favorites">Det finns inga favoriter i ditt valv.</string>
   <string name="no_items">Det finns inga objekt i ditt valv.</string>
   <string name="no_items_tap">Det finns inga objekt i ditt valv för den här webbplatsen. Tryck för att skapa ett.</string>
+  <string name="no_username">Inget användarnamn</string>
   <string name="no_username_password_configured">Den här inloggningen har inte ett användarnamn eller lösenord angivet.</string>
   <string name="ok_got_it">Ok, fattar!</string>
   <string name="option_defaults">Standardinställningar ställs in genom Bitwarden-appens lösenordsgenerator-verktyg.</string>
@@ -483,6 +484,7 @@ Skanningen sker automatiskt.</string>
   <string name="code_sent">Kod har skickats!</string>
   <string name="confirm_your_identity">Bekräfta din identitet för att fortsätta.</string>
   <string name="export_vault_warning">Denna export innehåller ditt valv i ett okrypterat format. Du bör inte lagra eller skicka den exporterade filen över osäkra kanaler (t.ex. e-post). Radera den omedelbart när du är färdig med den.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Bekräfta export av valv</string>
   <string name="warning">Varning</string>
   <string name="export_vault_failure">Det gick inte att exportera ditt valv. Om problemet kvarstår måste du exportera från webbvalvet istället.</string>

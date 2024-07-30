@@ -148,6 +148,7 @@
   <string name="no_favorites">तिजोरी में कोई मनपसंद आइटम नहीं है।</string>
   <string name="no_items">तिजोरी में कोई आइटम नहीं है।</string>
   <string name="no_items_tap">इस वेबसाइट/ऐप के लिए तिजोरी में कोई आइटम नहीं है। आइटम बनाने के लिए दबाएं।</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">इस लॉगइन में कोई यूजरनेम या पासवर्ड नहीं है।</string>
   <string name="ok_got_it">ठीक है, समझ गए!</string>
   <string name="option_defaults">ऑप्शन के डिफॉल्ट मेन बिटवार्डन ऐप के पासवर्ड जेनरेटर टूल से सेट होते है।</string>
@@ -481,6 +482,7 @@
   <string name="code_sent">कोड भेजा गया!</string>
   <string name="confirm_your_identity">Confirm your identity to continue.</string>
   <string name="export_vault_warning">This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirm vault export</string>
   <string name="warning">खबरदार</string>
   <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\'ll need to export from the web vault.</string>

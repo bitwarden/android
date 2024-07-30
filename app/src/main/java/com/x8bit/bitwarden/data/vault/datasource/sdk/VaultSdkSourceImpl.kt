@@ -29,14 +29,19 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
@@ -46,6 +51,7 @@ import java.io.File
 @Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(
     private val sdkClientManager: SdkClientManager,
+    private val dispatcherManager: DispatcherManager,
 ) : VaultSdkSource {
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
@@ -245,11 +251,9 @@ class VaultSdkSourceImpl(
         cipherList: List<Cipher>,
     ): Result<List<CipherView>> =
         runCatching {
-            cipherList.map {
-                getClient(userId = userId)
-                    .vault()
-                    .ciphers()
-                    .decrypt(it)
+            val ciphers = getClient(userId = userId).vault().ciphers()
+            withContext(context = dispatcherManager.default) {
+                cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
             }
         }
 
@@ -290,10 +294,9 @@ class VaultSdkSourceImpl(
         sendList: List<Send>,
     ): Result<List<SendView>> =
         runCatching {
-            sendList.map {
-                getClient(userId = userId)
-                    .sends()
-                    .decrypt(it)
+            val sends = getClient(userId = userId).sends()
+            withContext(dispatcherManager.default) {
+                sendList.map { async { sends.decrypt(send = it) } }.awaitAll()
             }
         }
 
@@ -516,12 +519,23 @@ class VaultSdkSourceImpl(
         userId: String,
         vararg cipherViews: CipherView,
     ): Result<List<Fido2CredentialAutofillView>> = runCatching {
-        cipherViews.flatMap {
-            getClient(userId)
-                .platform()
-                .fido2()
-                .decryptFido2AutofillCredentials(it)
-        }
+        val fido2 = getClient(userId).platform().fido2()
+        cipherViews.flatMap { fido2.decryptFido2AutofillCredentials(cipherView = it) }
+    }
+
+    override suspend fun silentlyDiscoverCredentials(
+        userId: String,
+        fido2CredentialStore: Fido2CredentialStore,
+        relyingPartyId: String,
+    ): Result<List<Fido2CredentialAutofillView>> = runCatching {
+        getClient(userId)
+            .platform()
+            .fido2()
+            .authenticator(
+                userInterface = Fido2CredentialSearchUserInterfaceImpl(),
+                credentialStore = fido2CredentialStore,
+            )
+            .silentlyDiscoverCredentials(relyingPartyId)
     }
 
     private suspend fun getClient(

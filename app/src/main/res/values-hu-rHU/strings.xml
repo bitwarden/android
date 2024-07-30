@@ -148,6 +148,7 @@
   <string name="no_favorites">Nincsenek kedvencek a széfedben.</string>
   <string name="no_items">Nincsenek elemek a széfben.</string>
   <string name="no_items_tap">Ehhez a webhelyhez vagy alkalmazáshoz nincs elem a széfben. Koppintás létrehozható egy.</string>
+  <string name="no_username">Nincs felhasználónév</string>
   <string name="no_username_password_configured">Ehhez a bejelentkezéshez nem lett felhasználónév vagy jelszó beállítva.</string>
   <string name="ok_got_it">Ok, megvan!</string>
   <string name="option_defaults">Az opció alapértelmezések a Bitwarden főalkalmazás jelszógeneráló eszközéből származnak.</string>
@@ -481,6 +482,7 @@
   <string name="code_sent">A kód elküldésre került.</string>
   <string name="confirm_your_identity">A folytatáshoz meg kell erősíteni a személyazonosságot.</string>
   <string name="export_vault_warning">Az exportált széfadatok titkosítatlan formátumban kerülnek elmentésre. Ne tároljuk sehol, illetve ne küldjük el senkinek a fájlt nem biztonságos felületeken (például email). Használat után azonnal töröljük.</string>
+  <string name="export_vault_file_pw_protect_info">Ez a fájl exportálás jelszóval védett és a visszafejtéshez a fájl jelszó megadása szükséges.</string>
   <string name="export_vault_confirmation_title">Széf export megerősítése</string>
   <string name="warning">Figyelmeztetés</string>
   <string name="export_vault_failure">Hiba lépett fel exportálás közben. Ha a hiba továbbra is fennáll, próbáluk exportálni a webes felületen.</string>
@@ -922,6 +924,6 @@ Szeretnénk átváltani erre a fiókra?</string>
   <string name="launch_web_authn">WebAuthn indítása</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Hiba történt a WebAuthn kétfaktoros hitelesítés indításakor.</string>
   <string name="self_hosted_server_url">Saját üzemeltetésű szerver webcím</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">A belépőkulcs művelet nem sikerült, mert az alkalmazás nem lett ellenőrizve.</string>
+  <string name="user_verification_direction">Felhasználó ellenőrzés</string>
 </resources>

@@ -148,6 +148,7 @@
   <string name="no_favorites">Det er ingen favorittar i kvelvet ditt.</string>
   <string name="no_items">Det er ingen oppføringar i kvelvet ditt.</string>
   <string name="no_items_tap">Det er ingen oppføringar i kvelvet ditt for denne nettstaden/appen. Trykk for å leggja ei til.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Denne innskrivinga har ikkje sett opp brukarnamn eller passord.</string>
   <string name="ok_got_it">Greitt, skjønar!</string>
   <string name="option_defaults">Option defaults are set from the main Bitwarden app\'s password generator tool.</string>
@@ -482,6 +483,7 @@ Skanning skjer automatisk.</string>
   <string name="code_sent">Kode sendt!</string>
   <string name="confirm_your_identity">Stadfest identiteten din for å fortsetje.</string>
   <string name="export_vault_warning">This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Stadfest eksportering av kvelv</string>
   <string name="warning">Åtvaring</string>
   <string name="export_vault_failure">There was a problem exporting your vault.  If the problem persists, you\'ll need to export from the web vault.</string>

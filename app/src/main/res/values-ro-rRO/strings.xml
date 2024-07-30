@@ -148,6 +148,7 @@
   <string name="no_favorites">Nu există niciun favorit în seiful dvs.</string>
   <string name="no_items">Nu există niciun articol în seiful dvs.</string>
   <string name="no_items_tap">Nu sunt articole în seif pentru acest site/aplicație. Atingeți pentru a adăuga unul.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Această autentificare nu are un nume de utilizator sau parolă configurate.</string>
   <string name="ok_got_it">Ok, am înțeles!</string>
   <string name="option_defaults">Opțiunile implicite sunt setate din instrumentul principal de generare de parole al aplicației Bitwarden.</string>
@@ -482,6 +483,7 @@ Scanarea se va face automat.</string>
   <string name="code_sent">Cod trimis!</string>
   <string name="confirm_your_identity">Confirmați-vă identitatea pentru a continua.</string>
   <string name="export_vault_warning">Acest export conține datele dvs. din seif în format necriptat. Nu ar trebui să stocați sau să trimiteți fișierul pe canale nesecurizate (cum ar fi e-mail). Ștergeți-l imediat după ce nu îl mai folosiți.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirmare export seif</string>
   <string name="warning">Avertisment</string>
   <string name="export_vault_failure">A apărut o problemă la exportul seifului dvs. Dacă problema persistă, va trebui să exportați din seiful web.</string>

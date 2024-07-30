@@ -148,6 +148,7 @@
   <string name="no_favorites">Der er ingen favoritter i boksen.</string>
   <string name="no_items">Der er ingen emner i boksen.</string>
   <string name="no_items_tap">Der er ingen emner i boksen til webstedet/appen. Tryk for at tilføje emne.</string>
+  <string name="no_username">Intet Brugernavn</string>
   <string name="no_username_password_configured">Dette login har intet brugernavn eller adgangskode opsat.</string>
   <string name="ok_got_it">OK, forstået!</string>
   <string name="option_defaults">Standardindstillinger opsættes fra Bitwarden-appens adgangskodegeneratorværktøj.</string>
@@ -482,6 +483,7 @@ Skanning vil ske automatisk.</string>
   <string name="code_sent">Kode sendt!</string>
   <string name="confirm_your_identity">Bekræft identiteten for at fortsætte.</string>
   <string name="export_vault_warning">Denne eksport indeholder boksdataene i ukrypteret form. Den eksporterede fil bør derfor ikke gemmes eller sendes via usikre kanaler (f.eks. e-mail). Slet den så snart, at den ikke længere skal bruges.</string>
+  <string name="export_vault_file_pw_protect_info">Denne fileksport adgangskodebeskyttes, og dekryptering vil kræve filadgangskoden.</string>
   <string name="export_vault_confirmation_title">Bekræft eksport af boks</string>
   <string name="warning">Advarsel</string>
   <string name="export_vault_failure">Et problem opstod under eksporten af boksen. Fortsætter problemet, eksportér i stedet fra web-boksen.</string>

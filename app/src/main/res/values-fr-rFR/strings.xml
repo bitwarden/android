@@ -148,6 +148,7 @@
   <string name="no_favorites">Il n\'y a aucun favori dans votre coffre.</string>
   <string name="no_items">Il n\'y a aucun élément dans votre coffre.</string>
   <string name="no_items_tap">Il n\'y a aucun élément dans votre coffre pour ce site web/app. Appuyez pour en ajouter un.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Cet identifiant n\'a pas de nom d\'utilisateur ou de mot de passe configuré.</string>
   <string name="ok_got_it">Ok, compris !</string>
   <string name="option_defaults">Les options par défaut sont définies depuis l\'outil de génération de mot de passe de l\'application principale Bitwarden.</string>
@@ -482,6 +483,7 @@ La numérisation se fera automatiquement.</string>
   <string name="code_sent">Code envoyé !</string>
   <string name="confirm_your_identity">Confirmez votre identité pour continuer.</string>
   <string name="export_vault_warning">Cet export contient vos données de coffre dans un format non chiffré. Vous ne devriez pas stocker ou envoyer le fichier exporté par des canaux non sécurisés (comme le courriel). Supprimez-le immédiatement dès que vous avez fini de l\'utiliser.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Confirmez l\'export du coffre</string>
   <string name="warning">Avertissement</string>
   <string name="export_vault_failure">Un problème est survenu lors de l\'exportation de votre coffre. Si le problème persiste, vous devrez l\'exporter depuis le coffre web.</string>

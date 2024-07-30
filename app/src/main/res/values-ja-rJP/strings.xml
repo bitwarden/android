@@ -148,6 +148,7 @@
   <string name="no_favorites">保管庫にお気に入りはありません。</string>
   <string name="no_items">保管庫にアイテムはありません。</string>
   <string name="no_items_tap">保管庫にこのウェブサイトのアイテムはありません。タップで追加します。</string>
+  <string name="no_username">ユーザー名なし</string>
   <string name="no_username_password_configured">このログイン情報はユーザー名やパスワードが設定されていません。</string>
   <string name="ok_got_it">分かりました!</string>
   <string name="option_defaults">デフォルトのオプションはメインの Bitwarden アプリのパスワード生成ツールから設定されます。</string>
@@ -482,6 +483,7 @@
   <string name="code_sent">確認コードを送信しました。</string>
   <string name="confirm_your_identity">続行するには本人確認を行ってください。</string>
   <string name="export_vault_warning">このエクスポートデータは暗号化されていない形式の保管庫データを含んでいます。メールなどのセキュリティ保護されていない方法で共有したり保管したりしないでください。使用した後はすぐに削除してください。</string>
+  <string name="export_vault_file_pw_protect_info">このファイルのエクスポートはパスワードで保護され、復号するにはファイルのパスワードが必要になります。</string>
   <string name="export_vault_confirmation_title">保管庫のエクスポートの確認</string>
   <string name="warning">注意</string>
   <string name="export_vault_failure">保管庫のエクスポート時に問題が発生しました。問題が続くようであれば、ウェブ保管庫からエクスポートしてください。</string>
@@ -923,6 +925,6 @@
   <string name="launch_web_authn">WebAuthn を起動</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">WebAuthn 2要素認証の開始時にエラーが発生しました</string>
   <string name="self_hosted_server_url">自己ホスト型サーバー URL</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">ユーザーを確認できなかったため、パスキーの操作に失敗しました。</string>
+  <string name="user_verification_direction">ユーザー認証</string>
 </resources>

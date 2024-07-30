@@ -1,10 +1,11 @@
 package com.x8bit.bitwarden.data.platform.manager.ciphermatching
 
-import android.content.Context
 import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.LoginUriView
 import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
+import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getHostWithPortOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
@@ -13,7 +14,6 @@ import com.x8bit.bitwarden.data.platform.util.regexOrNull
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DomainsData
 import com.x8bit.bitwarden.ui.platform.feature.settings.autofill.util.toSdkUriMatchType
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.mapNotNull
 import kotlin.text.RegexOption
 import kotlin.text.isNullOrBlank
@@ -22,11 +22,16 @@ import kotlin.text.matches
 import kotlin.text.startsWith
 
 /**
+ * The duration, in milliseconds, we should wait while retrieving domain data before we proceed.
+ */
+private const val GET_DOMAINS_TIMEOUT_MS: Long = 1_000L
+
+/**
  * The default [CipherMatchingManager] implementation. This class is responsible for matching
  * ciphers based on special criteria.
  */
 class CipherMatchingManagerImpl(
-    private val context: Context,
+    private val resourceCacheManager: ResourceCacheManager,
     private val settingsRepository: SettingsRepository,
     private val vaultRepository: VaultRepository,
 ) : CipherMatchingManager {
@@ -37,12 +42,13 @@ class CipherMatchingManagerImpl(
         val equivalentDomainsData = vaultRepository
             .domainsStateFlow
             .mapNotNull { it.data }
-            .first()
+            .firstWithTimeoutOrNull(timeMillis = GET_DOMAINS_TIMEOUT_MS)
+            ?: return emptyList()
 
         val isAndroidApp = matchUri.isAndroidApp()
         val defaultUriMatchType = settingsRepository.defaultUriMatchType.toSdkUriMatchType()
         val domain = matchUri
-            .getDomainOrNull(context = context)
+            .getDomainOrNull(resourceCacheManager = resourceCacheManager)
             ?.lowercase()
 
         // Retrieve domains that are considered equivalent to the specified matchUri for cipher
@@ -61,8 +67,8 @@ class CipherMatchingManagerImpl(
         ciphers
             .forEach { cipherView ->
                 val matchResult = checkForCipherMatch(
+                    resourceCacheManager = resourceCacheManager,
                     cipherView = cipherView,
-                    context = context,
                     defaultUriMatchType = defaultUriMatchType,
                     isAndroidApp = isAndroidApp,
                     matchUri = matchUri,
@@ -136,7 +142,7 @@ private fun getMatchingDomains(
  * provide details on the match quality.
  *
  * @param cipherView The cipher to be judged for a match.
- * @param context A context for getting string resources.
+ * @param resourceCacheManager The [ResourceCacheManager] for fetching cached resources.
  * @param defaultUriMatchType The global default [UriMatchType].
  * @param isAndroidApp Whether or not the [matchUri] belongs to an Android app.
  * @param matchingDomains The set of domains that match the domain of [matchUri].
@@ -144,8 +150,8 @@ private fun getMatchingDomains(
  */
 @Suppress("LongParameterList")
 private fun checkForCipherMatch(
+    resourceCacheManager: ResourceCacheManager,
     cipherView: CipherView,
-    context: Context,
     defaultUriMatchType: UriMatchType,
     isAndroidApp: Boolean,
     matchingDomains: MatchingDomains,
@@ -156,7 +162,7 @@ private fun checkForCipherMatch(
         ?.uris
         ?.map { loginUriView ->
             loginUriView.checkForMatch(
-                context = context,
+                resourceCacheManager = resourceCacheManager,
                 defaultUriMatchType = defaultUriMatchType,
                 isAndroidApp = isAndroidApp,
                 matchingDomains = matchingDomains,
@@ -174,14 +180,14 @@ private fun checkForCipherMatch(
 /**
  * Check to see how well this [LoginUriView] matches [matchUri].
  *
- * @param context A context for getting app information.
+ * @param resourceCacheManager The [ResourceCacheManager] for fetching cached resources.
  * @param defaultUriMatchType The global default [UriMatchType].
  * @param isAndroidApp Whether or not the [matchUri] belongs to an Android app.
  * @param matchingDomains The set of domains that match the domain of [matchUri].
  * @param matchUri The uri that this [LoginUriView] is being matched to.
  */
 private fun LoginUriView.checkForMatch(
-    context: Context,
+    resourceCacheManager: ResourceCacheManager,
     defaultUriMatchType: UriMatchType,
     isAndroidApp: Boolean,
     matchingDomains: MatchingDomains,
@@ -194,7 +200,7 @@ private fun LoginUriView.checkForMatch(
         when (matchType) {
             UriMatchType.DOMAIN -> {
                 checkUriForDomainMatch(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                     isAndroidApp = isAndroidApp,
                     matchingDomains = matchingDomains,
                     uri = loginViewUri,
@@ -228,8 +234,8 @@ private fun LoginUriView.checkForMatch(
  * Check to see if [uri] matches [matchingDomains] in some way.
  */
 private fun checkUriForDomainMatch(
+    resourceCacheManager: ResourceCacheManager,
     isAndroidApp: Boolean,
-    context: Context,
     matchingDomains: MatchingDomains,
     uri: String,
 ): MatchResult = when {
@@ -237,7 +243,7 @@ private fun checkUriForDomainMatch(
     isAndroidApp && matchingDomains.fuzzyMatches.contains(uri) -> MatchResult.FUZZY
     else -> {
         val domain = uri
-            .getDomainOrNull(context = context)
+            .getDomainOrNull(resourceCacheManager = resourceCacheManager)
             ?.lowercase()
 
         // We only care about fuzzy matches if we are isAndroidApp is true because the fuzzu

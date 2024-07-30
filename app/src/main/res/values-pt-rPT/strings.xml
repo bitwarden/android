@@ -70,7 +70,7 @@
   <string name="uri">URI</string>
   <string name="use_fingerprint_to_unlock">Utilizar a impressão digital para desbloquear</string>
   <string name="username">Nome de utilizador</string>
-  <string name="validation_field_required">O campo %1$s é necessário.</string>
+  <string name="validation_field_required">O campo %1$s é obrigatório.</string>
   <string name="value_has_been_copied">%1$s copiado(a)</string>
   <string name="verify_fingerprint">Verificar a impressão digital</string>
   <string name="verify_master_password">Verificar a palavra-passe mestra</string>
@@ -148,6 +148,7 @@
   <string name="no_favorites">Não existem favoritos no seu cofre.</string>
   <string name="no_items">Não existem itens no seu cofre.</string>
   <string name="no_items_tap">Não existem itens no seu cofre para este site/app. Toque para adicionar um.</string>
+  <string name="no_username">Sem nome de utilizador</string>
   <string name="no_username_password_configured">Esta credencial não tem um nome de utilizador ou palavra-passe configurados.</string>
   <string name="ok_got_it">Ok, percebido!</string>
   <string name="option_defaults">As predefinições das opções são definidas a partir da ferramenta principal de geração de palavras-passe da app Bitwarden.</string>
@@ -444,7 +445,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="default_uri_match_detection">Deteção de correspondência de URI predefinida</string>
   <string name="default_uri_match_detection_description">Escolha a forma predefinida como a deteção de correspondência de URI é tratada para credenciais ao executar ações como o preenchimento automático.</string>
   <string name="theme">Tema</string>
-  <string name="theme_description">Alterar o tema de cores da aplicação.</string>
+  <string name="theme_description">Altere o tema de cores da aplicação.</string>
   <string name="theme_default">Predefinido (Sistema)</string>
   <string name="default_dark_theme">Tema escuro predefinido</string>
   <string name="copy_notes">Copiar nota</string>
@@ -482,6 +483,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="code_sent">Código enviado!</string>
   <string name="confirm_your_identity">Confirme a sua identidade para continuar.</string>
   <string name="export_vault_warning">Esta exportação contém os dados do seu cofre num formato não encriptado. Não deve armazenar ou enviar o ficheiro exportado através de canais não seguros (como o e-mail). Elimine-o imediatamente após terminar a sua utilização.</string>
+  <string name="export_vault_file_pw_protect_info">A exportação deste ficheiro será protegida por uma palavra-passe e exigirá a palavra-passe do ficheiro para ser desencriptada.</string>
   <string name="export_vault_confirmation_title">Confirmar a exportação do cofre</string>
   <string name="warning">Aviso</string>
   <string name="export_vault_failure">Ocorreu um problema ao exportar o seu cofre. Se o problema persistir, terá de exportar a partir do cofre Web.</string>
@@ -712,9 +714,9 @@ A leitura será efetuada automaticamente.</string>
   <string name="catch_all_email">E-mail de captura geral</string>
   <string name="forwarded_email_alias">Alias de e-mail reencaminhado</string>
   <string name="random_word">Palavra aleatória</string>
-  <string name="email_required_parenthesis">E-mail (necessário)</string>
-  <string name="domain_name_required_parenthesis">Nome do domínio (necessário)</string>
-  <string name="api_key_required_parenthesis">Chave da API (necessário)</string>
+  <string name="email_required_parenthesis">E-mail (obrigatório)</string>
+  <string name="domain_name_required_parenthesis">Nome do domínio (obrigatório)</string>
+  <string name="api_key_required_parenthesis">Chave da API (obrigatório)</string>
   <string name="service">Serviço</string>
   <string name="addy_io">addy.io</string>
   <string name="firefox_relay">Firefox Relay</string>
@@ -726,7 +728,7 @@ A leitura será efetuada automaticamente.</string>
   <string name="are_you_sure_you_want_to_overwrite_the_current_username">Tem a certeza de que pretende substituir o nome de utilizador atual?</string>
   <string name="generate_username">Gerar nome de utilizador</string>
   <string name="email_type">Tipo de e-mail</string>
-  <string name="website_required">Site (necessário)</string>
+  <string name="website_required">Site (obrigatório)</string>
   <string name="unknown_x_error_message">Ocorreu um erro desconhecido (%1$s).</string>
   <string name="plus_addressed_email_description">Utilize as capacidades de subendereçamento do seu fornecedor de e-mail</string>
   <string name="catch_all_email_description">Utilize a caixa de entrada de captura geral configurada para o seu domínio.</string>
@@ -876,7 +878,7 @@ Pretende mudar para esta conta?</string>
   <string name="choose_a_login_to_save_this_passkey_to">Escolha uma credencial para guardar esta chave de acesso</string>
   <string name="save_passkey_as_new_login">Guardar a chave de acesso como uma nova credencial</string>
   <string name="save_passkey">Guardar a chave de acesso</string>
-  <string name="passkeys_for_x">Chave de acesso para %1$s</string>
+  <string name="passkeys_for_x">Chaves de acesso para %1$s</string>
   <string name="passwords_for_x">Palavra-passe para %1$s</string>
   <string name="overwrite_passkey">Substituir chave de acesso?</string>
   <string name="this_item_already_contains_a_passkey_are_you_sure_you_want_to_overwrite_the_current_passkey">Este item já contém uma chave de acesso. Tem a certeza de que pretende substituir a chave de acesso atual?</string>
@@ -887,7 +889,7 @@ Pretende mudar para esta conta?</string>
   <string name="verification_required_for_this_action_set_up_an_unlock_method_in_bitwarden_to_continue">É necessária uma verificação para esta ação. Configure um método de desbloqueio no Bitwarden para continuar.</string>
   <string name="error_creating_passkey">Erro ao criar chave de acesso</string>
   <string name="error_reading_passkey">Erro ao ler chave de acesso</string>
-  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Houve um problema ao criar uma chave de acesso para %1$s. Tente novamente mais tarde.</string>
+  <string name="there_was_a_problem_creating_a_passkey_for_x_try_again_later">Ocorreu um problema ao criar uma chave de acesso para %1$s. Tente novamente mais tarde.</string>
   <string name="there_was_a_problem_reading_a_passkey_for_x_try_again_later">Houve um problema ao ler a sua chave de acesso para %1$s. Tente novamente mais tarde.</string>
   <string name="verifying_identity_ellipsis">A verificar identidade...</string>
   <string name="passwords">Palavras-passe</string>
@@ -922,6 +924,6 @@ Pretende mudar para esta conta?</string>
   <string name="launch_web_authn">Iniciar o WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Ocorreu um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
   <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da chave de acesso falhou porque o utilizador não pôde ser verificado.</string>
+  <string name="user_verification_direction">Verificação do utilizador</string>
 </resources>

@@ -148,6 +148,7 @@
   <string name="no_favorites">Kasanızda hiç favoriniz yok.</string>
   <string name="no_items">Kasanızda hiç kayıt yok.</string>
   <string name="no_items_tap">Kasanızda bu siteye/uygulamaya ait hiç hesap yok. Eklemek isterseniz dokunun.</string>
+  <string name="no_username">Kullanıcı adı yok</string>
   <string name="no_username_password_configured">Bu hesaba ait kullanıcı adı veya parola kaydedilmemiş.</string>
   <string name="ok_got_it">Tamam, anladım!</string>
   <string name="option_defaults">Varsayılan ayarlar, ana Bitwarden uygulamasının parola üreticisi aracından ayarlanır.</string>
@@ -482,6 +483,7 @@ Kod otomatik olarak taranacaktır.</string>
   <string name="code_sent">Kod gönderildi!</string>
   <string name="confirm_your_identity">Devam etmek için kimliğinizi doğrulayın.</string>
   <string name="export_vault_warning">Dışa aktarılan dosyadaki verileriniz şifrelenmemiş olacak. Bu dosyayı güvensiz yöntemlerle (örn. e-posta) göndermemeli ve saklamamalısınız. İşiniz bittikten sonra dosyayı hemen silin.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">Kasayı dışa aktarmayı onaylayın</string>
   <string name="warning">Uyarı</string>
   <string name="export_vault_failure">Kasanızı dışa aktarırken bir sorun oluştu. Sorun devam ederse web kasasından dışa aktarmanız gerekir.</string>

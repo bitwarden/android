@@ -55,7 +55,7 @@ class Fido2CredentialRequestExtensionsTest {
                 origin = null,
             )
                 .toDefaultAddTypeContent(
-                    creationOptions = createMockPublicKeyCredentialCreationOptions(1),
+                    attestationOptions = createMockPasskeyAttestationOptions(1),
                     isIndividualVaultDisabled = false,
                 ),
         )
@@ -91,7 +91,7 @@ class Fido2CredentialRequestExtensionsTest {
                 origin = "www.test.com",
             )
                 .toDefaultAddTypeContent(
-                    creationOptions = createMockPublicKeyCredentialCreationOptions(number = 1),
+                    attestationOptions = createMockPasskeyAttestationOptions(number = 1),
                     isIndividualVaultDisabled = false,
                 ),
         )

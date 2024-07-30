@@ -148,6 +148,7 @@
   <string name="no_favorites">보관함에 추가한 즐겨찾기가 없습니다.</string>
   <string name="no_items">보관함에 추가한 항목이 없습니다.</string>
   <string name="no_items_tap">보관함에 이 웹사이트에 대한 항목이 없습니다. 추가하려면 누르세요.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">이 로그인에는 사용자 이름 또는 비밀번호가 등록되어 있지 않습니다.</string>
   <string name="ok_got_it">네, 알겠습니다!</string>
   <string name="option_defaults">옵션 기본값은 Bitwarden 앱의 비밀번호 생성기에서 설정할 수 있습니다.</string>
@@ -482,6 +483,7 @@
   <string name="code_sent">코드가 전송되었습니다!</string>
   <string name="confirm_your_identity">계속하려면 암호를 확인하세요.</string>
   <string name="export_vault_warning">내보내기는 보관함 데이터가 암호화되지 않은 형식으로 포함됩니다. 내보낸 파일을 안전하지 않은 채널(예: 이메일)을 통해 저장하거나 보내지 마십시오. 사용이 끝난 후에는 즉시 삭제하십시오.</string>
+  <string name="export_vault_file_pw_protect_info">This file export will be password protected and require the file password to decrypt.</string>
   <string name="export_vault_confirmation_title">보관함 내보내기 확인</string>
   <string name="warning">경고</string>
   <string name="export_vault_failure">보관함을 내보내던 도중 문제가 생겼습니다. 계속 문제가 생긴다면 웹 보관함에서 내보내셔야 합니다.</string>

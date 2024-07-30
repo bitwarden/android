@@ -6,11 +6,22 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.autofill.model.AutofillCipher
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
+import com.x8bit.bitwarden.data.platform.util.firstWithTimeoutOrNull
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
 import com.x8bit.bitwarden.data.vault.repository.util.statusFor
-import kotlinx.coroutines.flow.first
+
+/**
+ * The duration, in milliseconds, we should wait while waiting for the vault status to not be
+ * 'UNLOCKING' before proceeding.
+ */
+private const val VAULT_LOCKED_TIMEOUT_MS: Long = 500L
+
+/**
+ * The duration, in milliseconds, we should wait while retrieving ciphers before proceeding.
+ */
+private const val GET_CIPHERS_TIMEOUT_MS: Long = 2_000L
 
 /**
  * The default [AutofillCipherProvider] implementation. This service is used for getting current
@@ -28,9 +39,11 @@ class AutofillCipherProviderImpl(
 
         // Wait for any unlocking actions to finish. This can be relevant on startup for Never lock
         // accounts.
-        vaultRepository.vaultUnlockDataStateFlow.first {
-            it.statusFor(userId) != VaultUnlockData.Status.UNLOCKING
-        }
+        vaultRepository
+            .vaultUnlockDataStateFlow
+            .firstWithTimeoutOrNull(timeMillis = VAULT_LOCKED_TIMEOUT_MS) {
+                it.statusFor(userId = userId) != VaultUnlockData.Status.UNLOCKING
+            }
 
         return !vaultRepository.isVaultUnlocked(userId = userId)
     }
@@ -105,6 +118,6 @@ class AutofillCipherProviderImpl(
         vaultRepository
             .ciphersStateFlow
             .takeUnless { isVaultLocked() }
-            ?.first { it.data != null }
+            ?.firstWithTimeoutOrNull(timeMillis = GET_CIPHERS_TIMEOUT_MS) { it.data != null }
             ?.data
 }

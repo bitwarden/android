@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.vault.datasource.sdk.di
 import com.bitwarden.sdk.Fido2CredentialStore
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
@@ -26,9 +27,11 @@ object VaultSdkModule {
     @Singleton
     fun providesVaultSdkSource(
         sdkClientManager: SdkClientManager,
+        dispatcherManager: DispatcherManager,
     ): VaultSdkSource =
         VaultSdkSourceImpl(
             sdkClientManager = sdkClientManager,
+            dispatcherManager = dispatcherManager,
         )
 
     @Provides
