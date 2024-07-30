@@ -37,21 +37,24 @@ class ServerConfigRepositoryImpl(
 
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         val localConfig = configDiskSource.serverConfig
-        val needsRefresh = localConfig == null || localConfig.let {
-            Instant.ofEpochMilli(it.lastSync).isAfter(
-                clock.instant().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL),
-            )
-        }
+        val needsRefresh = localConfig == null ||
+            Instant
+                .ofEpochMilli(localConfig.lastSync)
+                .isAfter(
+                    clock.instant().plusSeconds(MINIMUM_CONFIG_SYNC_INTERVAL_SEC),
+                )
 
         if (needsRefresh || forceRefresh) {
-            configService.getConfig().onSuccess { configResponse ->
-                val serverConfig = ServerConfig(
-                    lastSync = clock.instant().toEpochMilli(),
-                    serverData = configResponse,
-                )
-                configDiskSource.serverConfig = serverConfig
-                return serverConfig
-            }
+            configService
+                .getConfig()
+                .onSuccess { configResponse ->
+                    val serverConfig = ServerConfig(
+                        lastSync = clock.instant().toEpochMilli(),
+                        serverData = configResponse,
+                    )
+                    configDiskSource.serverConfig = serverConfig
+                    return serverConfig
+                }
         }
 
         // If we are unable to retrieve a configuration from the server,
@@ -69,6 +72,6 @@ class ServerConfigRepositoryImpl(
             )
 
     companion object {
-        private const val MINIMUM_CONFIG_SYNC_INTERVAL: Long = 60 * 60
+        private const val MINIMUM_CONFIG_SYNC_INTERVAL_SEC: Long = 60 * 60
     }
 }
