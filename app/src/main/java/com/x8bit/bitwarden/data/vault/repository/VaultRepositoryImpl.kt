@@ -108,7 +108,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
@@ -139,7 +138,6 @@ class VaultRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     pushManager: PushManager,
     private val clock: Clock,
-    private val json: Json,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
