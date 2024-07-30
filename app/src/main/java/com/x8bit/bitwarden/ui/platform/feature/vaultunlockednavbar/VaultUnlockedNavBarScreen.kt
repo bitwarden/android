@@ -20,7 +20,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,8 +63,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -112,14 +109,6 @@ fun VaultUnlockedNavBarScreen(
                 }
             }
         }
-    }
-    LaunchedEffect(Unit) {
-        navController
-            .currentBackStackEntryFlow
-            .onEach {
-                viewModel.trySendAction(VaultUnlockedNavBarAction.BackStackUpdate)
-            }
-            .launchIn(this)
     }
 
     VaultUnlockedNavBarScaffold(

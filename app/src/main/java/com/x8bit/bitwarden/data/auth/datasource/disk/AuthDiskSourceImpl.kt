@@ -28,7 +28,6 @@ private const val UNIQUE_APP_ID_KEY = "appId"
 private const val REMEMBERED_EMAIL_ADDRESS_KEY = "rememberedEmail"
 private const val REMEMBERED_ORG_IDENTIFIER_KEY = "rememberedOrgIdentifier"
 private const val STATE_KEY = "state"
-private const val LAST_ACTIVE_TIME_KEY = "lastActiveTime"
 private const val INVALID_UNLOCK_ATTEMPTS_KEY = "invalidUnlockAttempts"
 private const val MASTER_KEY_ENCRYPTION_USER_KEY = "masterKeyEncryptedUserKey"
 private const val MASTER_KEY_ENCRYPTION_PRIVATE_KEY = "encPrivateKey"
@@ -111,7 +110,6 @@ class AuthDiskSourceImpl(
             .onSubscription { emit(userState) }
 
     override fun clearData(userId: String) {
-        storeLastActiveTimeMillis(userId = userId, lastActiveTimeMillis = null)
         storeInvalidUnlockAttempts(userId = userId, invalidUnlockAttempts = null)
         storeUserKey(userId = userId, userKey = null)
         storeUserAutoUnlockKey(userId = userId, userAutoUnlockKey = null)
@@ -136,19 +134,6 @@ class AuthDiskSourceImpl(
 
     override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
         putBoolean(SHOULD_TRUST_DEVICE_KEY.appendIdentifier(userId), shouldTrustDevice)
-    }
-
-    override fun getLastActiveTimeMillis(userId: String): Long? =
-        getLong(key = LAST_ACTIVE_TIME_KEY.appendIdentifier(userId))
-
-    override fun storeLastActiveTimeMillis(
-        userId: String,
-        lastActiveTimeMillis: Long?,
-    ) {
-        putLong(
-            key = LAST_ACTIVE_TIME_KEY.appendIdentifier(userId),
-            value = lastActiveTimeMillis,
-        )
     }
 
     override fun getInvalidUnlockAttempts(userId: String): Int? =
