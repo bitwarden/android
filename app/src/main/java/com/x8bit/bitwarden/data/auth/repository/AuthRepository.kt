@@ -136,6 +136,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     fun clearPendingAccountDeletion()
 
     /**
+     * Whether or not the welcome carousel should be displayed, based on the feature flag and
+     * whether the user has ever logged in or created an account before.
+     */
+    suspend fun getShowWelcomeCarousel(): Boolean
+
+    /**
      * Attempt to delete the current account using the [masterPassword] and log them out
      * upon success.
      */

@@ -4505,6 +4505,15 @@ class AuthRepositoryTest {
     }
 
     @Test
+    fun `hasUserLoggedInOrCreatedAccount should return value from settings repository`() {
+        every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
+        assertTrue(repository.hasUserLoggedInOrCreatedAccount)
+
+        every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns false
+        assertFalse(repository.hasUserLoggedInOrCreatedAccount)
+    }
+
+    @Test
     fun `getOrganizationDomainSsoDetails Failure should return Failure `() = runTest {
         val email = "test@gmail.com"
         val throwable = Throwable()

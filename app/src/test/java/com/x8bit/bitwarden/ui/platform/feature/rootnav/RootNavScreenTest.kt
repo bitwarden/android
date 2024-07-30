@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.platform.feature.rootnav
 
 import androidx.navigation.navOptions
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
+import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.FakeNavHostController
 import io.mockk.every
@@ -64,7 +65,9 @@ class RootNavScreenTest : BaseComposeTest() {
         assertFalse(isSplashScreenRemoved)
 
         // Make sure navigating to Auth works as expected:
-        rootNavStateFlow.value = RootNavState.Auth
+        rootNavStateFlow.value = RootNavState.Auth(
+            startDestination = LANDING_ROUTE,
+        )
         composeTestRule.runOnIdle {
             fakeNavHostController.assertLastNavigation(
                 route = "auth_graph",
