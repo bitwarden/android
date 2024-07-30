@@ -17,7 +17,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -66,14 +65,9 @@ class ServerConfigRepositoryTest {
         environmentRepository.environment = Environment.Eu
 
         repository.serverConfigStateFlow.test {
-            val newConfig = awaitItem()
-            assertNotNull(
-                newConfig,
-            )
-
             assertEquals(
                 SERVER_CONFIG,
-                newConfig,
+                awaitItem(),
             )
         }
     }
@@ -89,9 +83,6 @@ class ServerConfigRepositoryTest {
                 lastSync = fixedClock.instant().toEpochMilli(),
             )
 
-            assertNotNull(
-                fakeConfigDiskSource.serverConfig,
-            )
             assertEquals(
                 fakeConfigDiskSource.serverConfig,
                 SERVER_CONFIG,
@@ -113,10 +104,6 @@ class ServerConfigRepositoryTest {
             )
 
             repository.getServerConfig(forceRefresh = false)
-
-            assertNotNull(
-                fakeConfigDiskSource.serverConfig,
-            )
 
             assertEquals(
                 fakeConfigDiskSource.serverConfig,
