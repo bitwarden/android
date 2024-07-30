@@ -148,6 +148,7 @@
   <string name="no_favorites">No hay favoritos en tu caja fuerte.</string>
   <string name="no_items">No hay elementos en tu caja fuerte.</string>
   <string name="no_items_tap">No hay elementos en tu caja fuerte para este sitio web o aplicación. Pulsa para añadir uno.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Esta entrada no tiene usuario y contraseña configurados.</string>
   <string name="ok_got_it">¡Entendido!</string>
   <string name="option_defaults">Lo valores por defecto se establecen desde la aplicación principal de Bitwarden en la herramienta de generador de contraseñas.</string>

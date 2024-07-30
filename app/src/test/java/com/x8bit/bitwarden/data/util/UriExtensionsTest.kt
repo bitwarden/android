@@ -1,8 +1,6 @@
 package com.x8bit.bitwarden.data.util
 
-import android.content.Context
-import android.content.res.Resources
-import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.manager.model.DomainName
 import com.x8bit.bitwarden.data.platform.util.parseDomainNameOrNull
 import com.x8bit.bitwarden.data.platform.util.parseDomainOrNull
@@ -14,13 +12,10 @@ import org.junit.jupiter.api.Test
 import java.net.URI
 
 class UriExtensionsTest {
-    private val resources: Resources = mockk {
-        every { getStringArray(R.array.exception_suffixes) } returns emptyArray()
-        every { getStringArray(R.array.normal_suffixes) } returns emptyArray()
-        every { getStringArray(R.array.wild_card_suffixes) } returns emptyArray()
-    }
-    private val context: Context = mockk {
-        every { this@mockk.resources } returns this@UriExtensionsTest.resources
+    private val resourceCacheManager: ResourceCacheManager = mockk {
+        every { domainExceptionSuffixes } returns emptyList()
+        every { domainNormalSuffixes } returns emptyList()
+        every { domainWildCardSuffixes } returns emptyList()
     }
 
     @Test
@@ -32,7 +27,7 @@ class UriExtensionsTest {
 
         // Test
         val actual = uri.parseDomainOrNull(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
         )
 
         // Verify
@@ -49,7 +44,7 @@ class UriExtensionsTest {
 
         // Test
         val actual = uri.parseDomainOrNull(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
         )
 
         // Verify
@@ -66,7 +61,7 @@ class UriExtensionsTest {
 
         // Test
         val actual = uri.parseDomainOrNull(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
         )
 
         // Verify
@@ -83,9 +78,7 @@ class UriExtensionsTest {
             "example.uk",
             null,
         )
-        every {
-            resources.getStringArray(R.array.exception_suffixes)
-        } returns arrayOf("co.uk", "uk")
+        every { resourceCacheManager.domainExceptionSuffixes } returns listOf("co.uk", "uk")
 
         // Test & Verify
         listOf(
@@ -100,7 +93,7 @@ class UriExtensionsTest {
 
                 // Test
                 val actual = uri.parseDomainOrNull(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                 )
 
                 // Verify
@@ -118,10 +111,7 @@ class UriExtensionsTest {
             "example.uk",
             null,
         )
-        every { resources.getStringArray(R.array.exception_suffixes) } returns arrayOf(
-            "co.uk",
-            "uk",
-        )
+        every { resourceCacheManager.domainExceptionSuffixes } returns listOf("co.uk", "uk")
 
         // Test & Verify
         listOf(
@@ -136,7 +126,7 @@ class UriExtensionsTest {
 
                 // Test
                 val actual = uri.parseDomainOrNull(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                 )
 
                 // Verify
@@ -154,10 +144,9 @@ class UriExtensionsTest {
             "example.foo.amazonaws.com",
             null,
         )
-        every { resources.getStringArray(R.array.wild_card_suffixes) } returns arrayOf(
-            "compute.amazonaws.com",
-            "amazonaws.com",
-        )
+        every {
+            resourceCacheManager.domainWildCardSuffixes
+        } returns listOf("compute.amazonaws.com", "amazonaws.com")
 
         // Test & Verify
         listOf(
@@ -172,7 +161,7 @@ class UriExtensionsTest {
 
                 // Test
                 val actual = uri.parseDomainOrNull(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                 )
 
                 // Verify
@@ -189,7 +178,7 @@ class UriExtensionsTest {
 
         // Test
         val actual = uri.parseDomainNameOrNull(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
         )
 
         // Verify
@@ -218,10 +207,7 @@ class UriExtensionsTest {
             ),
             null,
         )
-        every { resources.getStringArray(R.array.exception_suffixes) } returns arrayOf(
-            "co.uk",
-            "uk",
-        )
+        every { resourceCacheManager.domainExceptionSuffixes } returns listOf("co.uk", "uk")
 
         // Test & Verify
         listOf(
@@ -236,7 +222,7 @@ class UriExtensionsTest {
 
                 // Test
                 val actual = uri.parseDomainNameOrNull(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                 )
 
                 // Verify
@@ -266,10 +252,7 @@ class UriExtensionsTest {
             ),
             null,
         )
-        every { resources.getStringArray(R.array.exception_suffixes) } returns arrayOf(
-            "co.uk",
-            "uk",
-        )
+        every { resourceCacheManager.domainExceptionSuffixes } returns listOf("co.uk", "uk")
 
         // Test & Verify
         listOf(
@@ -284,7 +267,7 @@ class UriExtensionsTest {
 
                 // Test
                 val actual = uri.parseDomainNameOrNull(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                 )
 
                 // Verify
@@ -314,10 +297,9 @@ class UriExtensionsTest {
             ),
             null,
         )
-        every { resources.getStringArray(R.array.wild_card_suffixes) } returns arrayOf(
-            "compute.amazonaws.com",
-            "amazonaws.com",
-        )
+        every {
+            resourceCacheManager.domainWildCardSuffixes
+        } returns listOf("compute.amazonaws.com", "amazonaws.com")
 
         // Test & Verify
         listOf(
@@ -332,7 +314,7 @@ class UriExtensionsTest {
 
                 // Test
                 val actual = uri.parseDomainNameOrNull(
-                    context = context,
+                    resourceCacheManager = resourceCacheManager,
                 )
 
                 // Verify

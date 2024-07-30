@@ -148,6 +148,7 @@
   <string name="no_favorites">तिजोरी में कोई मनपसंद आइटम नहीं है।</string>
   <string name="no_items">तिजोरी में कोई आइटम नहीं है।</string>
   <string name="no_items_tap">इस वेबसाइट/ऐप के लिए तिजोरी में कोई आइटम नहीं है। आइटम बनाने के लिए दबाएं।</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">इस लॉगइन में कोई यूजरनेम या पासवर्ड नहीं है।</string>
   <string name="ok_got_it">ठीक है, समझ गए!</string>
   <string name="option_defaults">ऑप्शन के डिफॉल्ट मेन बिटवार्डन ऐप के पासवर्ड जेनरेटर टूल से सेट होते है।</string>

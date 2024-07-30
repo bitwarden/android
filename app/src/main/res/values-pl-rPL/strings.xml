@@ -148,6 +148,7 @@
   <string name="no_favorites">Brak ulubionych w sejfie.</string>
   <string name="no_items">Brak elementów w sejfie.</string>
   <string name="no_items_tap">Brak elementów dla tej strony w sejfie. Dotknij, aby je dodać.</string>
+  <string name="no_username">Brak nazwy użytkownika</string>
   <string name="no_username_password_configured">Dane logowania nie posiadają skonfigurowanej nazwy użytkownika lub hasła.</string>
   <string name="ok_got_it">Ok, rozumiem!</string>
   <string name="option_defaults">Opcje domyślne są pobierane z narzędzia generatora haseł głównej aplikacji Bitwarden.</string>

@@ -305,6 +305,9 @@ class VaultAddEditViewModel @Inject constructor(
                 handleRetryFido2PinVerificationClick()
             }
 
+            is VaultAddEditAction.Common.PinFido2SetUpSubmit -> handlePinFido2SetUpSubmit(action)
+            VaultAddEditAction.Common.PinFido2SetUpRetryClick -> handlePinFido2SetUpRetryClick()
+
             VaultAddEditAction.Common.DismissFido2VerificationDialogClick -> {
                 handleDismissFido2VerificationDialogClick()
             }
@@ -644,7 +647,9 @@ class VaultAddEditViewModel @Inject constructor(
             }
         } else {
             // Prompt the user to set up a PIN for their account.
-            // TODO: https://bitwarden.atlassian.net/browse/PM-9681
+            mutableStateFlow.update {
+                it.copy(dialog = VaultAddEditState.DialogState.Fido2PinSetUpPrompt)
+            }
         }
     }
 
@@ -683,6 +688,32 @@ class VaultAddEditViewModel @Inject constructor(
     private fun handleRetryFido2PinVerificationClick() {
         mutableStateFlow.update {
             it.copy(dialog = VaultAddEditState.DialogState.Fido2PinPrompt)
+        }
+    }
+
+    private fun handlePinFido2SetUpSubmit(action: VaultAddEditAction.Common.PinFido2SetUpSubmit) {
+        if (action.pin.isBlank()) {
+            mutableStateFlow.update {
+                it.copy(dialog = VaultAddEditState.DialogState.Fido2PinSetUpError)
+            }
+            return
+        }
+
+        // There's no need to ask the user whether or not they want to use their master password
+        // on login, and shouldRequireMasterPasswordOnRestart is hardcoded to false, because the
+        // user can only reach this part of the flow if they have no master password.
+        settingsRepository.storeUnlockPin(
+            pin = action.pin,
+            shouldRequireMasterPasswordOnRestart = false,
+        )
+
+        // After storing the PIN, the user can proceed with their original FIDO 2 request.
+        handleValidAuthentication()
+    }
+
+    private fun handlePinFido2SetUpRetryClick() {
+        mutableStateFlow.update {
+            it.copy(dialog = VaultAddEditState.DialogState.Fido2PinSetUpPrompt)
         }
     }
 
@@ -2273,6 +2304,19 @@ data class VaultAddEditState(
          */
         @Parcelize
         data object Fido2PinError : DialogState()
+
+        /**
+         * Displays a dialog to prompt the user to set up a PIN as part of the FIDO 2
+         * user verification flow.
+         */
+        @Parcelize
+        data object Fido2PinSetUpPrompt : DialogState()
+
+        /**
+         * Displays a dialog to alert the user that the PIN is a required field.
+         */
+        @Parcelize
+        data object Fido2PinSetUpError : DialogState()
     }
 }
 
@@ -2562,6 +2606,18 @@ sealed class VaultAddEditAction {
          * The user has clicked to retry their FIDO 2 PIN verification.
          */
         data object RetryFido2PinVerificationClick : Common()
+
+        /**
+         * The user has clicked to submit a PIN to set up for the FIDO 2 user verification flow.
+         */
+        data class PinFido2SetUpSubmit(
+            val pin: String,
+        ) : Common()
+
+        /**
+         * The user has clicked to retry setting up a PIN for the FIDO 2 user verification flow.
+         */
+        data object PinFido2SetUpRetryClick : Common()
 
         /**
          * The user has clicked to dismiss the FIDO 2 password or PIN verification dialog.

@@ -3,6 +3,7 @@ package com.x8bit.bitwarden.data.platform.manager.model
 import android.os.Parcelable
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
 import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
@@ -65,6 +66,15 @@ sealed class SpecialCircumstance : Parcelable {
     @Parcelize
     data class Fido2Assertion(
         val fido2AssertionRequest: Fido2CredentialAssertionRequest,
+    ) : SpecialCircumstance()
+
+    /**
+     * The app was launched via the credential manager framework request to retrieve passkeys
+     * associated with the requesting entity.
+     */
+    @Parcelize
+    data class Fido2GetCredentials(
+        val fido2GetCredentialsRequest: Fido2GetCredentialsRequest,
     ) : SpecialCircumstance()
 
     /**

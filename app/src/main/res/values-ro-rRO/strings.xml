@@ -148,6 +148,7 @@
   <string name="no_favorites">Nu există niciun favorit în seiful dvs.</string>
   <string name="no_items">Nu există niciun articol în seiful dvs.</string>
   <string name="no_items_tap">Nu sunt articole în seif pentru acest site/aplicație. Atingeți pentru a adăuga unul.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Această autentificare nu are un nume de utilizator sau parolă configurate.</string>
   <string name="ok_got_it">Ok, am înțeles!</string>
   <string name="option_defaults">Opțiunile implicite sunt setate din instrumentul principal de generare de parole al aplicației Bitwarden.</string>
