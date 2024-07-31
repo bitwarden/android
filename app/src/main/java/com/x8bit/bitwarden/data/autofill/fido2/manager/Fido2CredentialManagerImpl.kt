@@ -54,19 +54,24 @@ class Fido2CredentialManagerImpl(
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult {
-        val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
-            fido2CredentialRequest.callingAppInfo.getAppSigningSignatureFingerprint()
-                ?.let { ClientData.DefaultWithCustomHash(hash = it) }
-                ?: return Fido2RegisterCredentialResult.Error
-        } else {
-            ClientData.DefaultWithExtraData(
-                androidPackageName = fido2CredentialRequest
+        val clientData =
+            if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
+                fido2CredentialRequest
                     .callingAppInfo
-                    .getAppOrigin(),
-            )
-        }
-        val origin = fido2CredentialRequest.origin
-            ?: fido2CredentialRequest.callingAppInfo.getAppOrigin()
+                    .getAppSigningSignatureFingerprint()
+                    ?.let { ClientData.DefaultWithCustomHash(hash = it) }
+                    ?: return Fido2RegisterCredentialResult.Error
+            } else {
+                ClientData.DefaultWithExtraData(
+                    androidPackageName = fido2CredentialRequest
+                        .callingAppInfo
+                        .packageName,
+                )
+            }
+        val origin = fido2CredentialRequest
+            .origin
+            ?: getOriginUrlFromAttestationOptionsOrNull(fido2CredentialRequest.requestJson)
+            ?: return Fido2RegisterCredentialResult.Error
 
         return vaultSdkSource
             .registerFido2Credential(
@@ -132,13 +137,15 @@ class Fido2CredentialManagerImpl(
         val clientData = request.clientDataHash
             ?.let { ClientData.DefaultWithCustomHash(hash = it) }
             ?: ClientData.DefaultWithExtraData(androidPackageName = callingAppInfo.getAppOrigin())
+        val origin = request.origin
+            ?: getOriginUrlFromAssertionOptionsOrNull(request.requestJson)
+            ?: return Fido2CredentialAssertionResult.Error
 
         return vaultSdkSource
             .authenticateFido2Credential(
                 request = AuthenticateFido2CredentialRequest(
                     userId = userId,
-                    origin = callingAppInfo.origin
-                        ?: callingAppInfo.getAppOrigin(),
+                    origin = origin,
                     requestJson = """{"publicKey": ${request.requestJson}}""",
                     clientData = clientData,
                     selectedCipherView = selectedCipherView,
@@ -257,6 +264,18 @@ class Fido2CredentialManagerImpl(
 
     override fun hasAuthenticationAttemptsRemaining(): Boolean =
         authenticationAttempts < MAX_AUTHENTICATION_ATTEMPTS
+
+    private fun getOriginUrlFromAssertionOptionsOrNull(requestJson: String) =
+        getPasskeyAssertionOptionsOrNull(requestJson)
+            ?.relyingPartyId
+            ?.let { "$HTTPS$it" }
+
+    private fun getOriginUrlFromAttestationOptionsOrNull(requestJson: String) =
+        getPasskeyAttestationOptionsOrNull(requestJson)
+            ?.relyingParty
+            ?.id
+            ?.let { "$HTTPS$it" }
 }
 
 private const val MAX_AUTHENTICATION_ATTEMPTS = 5
+private const val HTTPS = "https://"
