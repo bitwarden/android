@@ -54,8 +54,7 @@ class Fido2CredentialManagerImpl(
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult {
-        val clientData =
-            if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
+        val clientData = if (fido2CredentialRequest.callingAppInfo.isOriginPopulated()) {
                 fido2CredentialRequest
                     .callingAppInfo
                     .getAppSigningSignatureFingerprint()
