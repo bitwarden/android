@@ -544,6 +544,6 @@ private fun PasskeyField(
                         .testTag("RemovePasskeyButton"),
                 )
             }
-        }
+        },
     )
 }
