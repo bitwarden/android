@@ -37,6 +37,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.TotpCodeResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateCipherResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
@@ -2358,8 +2359,7 @@ sealed class VaultAddEditEvent {
     /**
      * Navigate the user to the tooltip URI.
      */
-    data object NavigateToTooltipUri :
-        VaultAddEditEvent()
+    data object NavigateToTooltipUri : VaultAddEditEvent()
 
     /**
      * Navigate to the QR code scan screen.
@@ -2385,7 +2385,7 @@ sealed class VaultAddEditEvent {
      */
     data class CompleteFido2Registration(
         val result: Fido2RegisterCredentialResult,
-    ) : VaultAddEditEvent()
+    ) : BackgroundEvent, VaultAddEditEvent()
 
     /**
      * Perform user verification for a FIDO 2 credential operation.
@@ -2394,7 +2394,7 @@ sealed class VaultAddEditEvent {
      */
     data class Fido2UserVerification(
         val isRequired: Boolean,
-    ) : VaultAddEditEvent()
+    ) : BackgroundEvent, VaultAddEditEvent()
 }
 
 /**
