@@ -31,7 +31,7 @@ data class ConfigResponseJson(
     val environment: EnvironmentJson?,
 
     @SerialName("featureStates")
-    val featureStates: Map<String, Boolean>?,
+    val featureStates: Map<String, String>?,
 ) {
     /**
      * Represents a server in the configuration response.
