@@ -657,12 +657,6 @@ class VaultItemListingViewModel @Inject constructor(
                     ),
                 )
             }
-
-            null -> {
-                // Per WebAuthn spec, members should be ignored when invalid. Since the request
-                // violates spec, we display an error and terminate the operation.
-                showFido2ErrorDialog()
-            }
         }
     }
 
@@ -1449,10 +1443,6 @@ class VaultItemListingViewModel @Inject constructor(
 
             UserVerificationRequirement.REQUIRED -> {
                 sendUserVerificationEvent(isRequired = true, selectedCipher = selectedCipher)
-            }
-
-            null -> {
-                showFido2ErrorDialog()
             }
         }
     }
