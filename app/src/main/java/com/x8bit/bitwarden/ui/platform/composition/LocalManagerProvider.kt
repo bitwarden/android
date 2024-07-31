@@ -30,7 +30,9 @@ import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManagerImp
  * Helper [Composable] that wraps a [content] and provides manager classes via [CompositionLocal].
  */
 @Composable
-fun LocalManagerProvider(content: @Composable () -> Unit) {
+fun LocalManagerProvider(
+    content: @Composable () -> Unit,
+) {
     val activity = LocalContext.current as Activity
     val fido2IntentManager: IntentManager = IntentManagerImpl(activity)
     val fido2CompletionManager =

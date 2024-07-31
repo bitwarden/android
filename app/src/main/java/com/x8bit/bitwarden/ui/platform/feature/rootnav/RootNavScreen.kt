@@ -47,8 +47,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListi
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -67,15 +65,6 @@ fun RootNavScreen(
     val isNotSplashScreen = state != RootNavState.Splash
     LaunchedEffect(isNotSplashScreen) {
         if (isNotSplashScreen) onSplashScreenRemoved()
-    }
-
-    LaunchedEffect(Unit) {
-        navController
-            .currentBackStackEntryFlow
-            .onEach {
-                viewModel.trySendAction(RootNavAction.BackStackUpdate)
-            }
-            .launchIn(this)
     }
 
     NavHost(

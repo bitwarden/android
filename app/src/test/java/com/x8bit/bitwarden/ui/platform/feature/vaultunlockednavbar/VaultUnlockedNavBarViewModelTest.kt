@@ -21,7 +21,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository: AuthRepository = mockk {
         every { userStateFlow } returns mutableUserStateFlow
-        every { updateLastActiveTime() } just runs
     }
     private val specialCircumstancesManager: SpecialCircumstanceManager = mockk {
         every { specialCircumstance = null } just runs
@@ -158,13 +157,6 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
             viewModel.trySendAction(VaultUnlockedNavBarAction.SettingsTabClick)
             assertEquals(VaultUnlockedNavBarEvent.NavigateToSettingsScreen, awaitItem())
         }
-    }
-
-    @Test
-    fun `BackStackUpdate should call updateLastActiveTime`() {
-        val viewModel = createViewModel()
-        viewModel.trySendAction(VaultUnlockedNavBarAction.BackStackUpdate)
-        verify { authRepository.updateLastActiveTime() }
     }
 
     private fun createViewModel() =
