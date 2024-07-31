@@ -61,6 +61,6 @@ private val CONFIG_RESPONSE = ConfigResponseJson(
         ssoUrl = "ssoUrl",
     ),
     featureStates = mapOf(
-        "feature one" to false,
+        "feature one" to "false",
     ),
 )

@@ -1,0 +1,52 @@
+package com.x8bit.bitwarden.data.platform.repository.util
+
+import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
+import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
+import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
+import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
+import kotlinx.coroutines.flow.StateFlow
+import java.time.Instant
+
+class FakeServerConfigRepository(
+    private val configDiskSource: ConfigDiskSource,
+) : ServerConfigRepository {
+    override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
+        if (forceRefresh) {
+            return SERVER_CONFIG
+        }
+
+        return configDiskSource.serverConfig
+    }
+
+    override val serverConfigStateFlow: StateFlow<ServerConfig?>
+        get() = configDiskSource
+            .serverConfigFlow
+            as StateFlow<ServerConfig?>
+}
+
+private val SERVER_CONFIG = ServerConfig(
+    lastSync = Instant.parse("2023-10-27T12:00:00Z").toEpochMilli(),
+    serverData = ConfigResponseJson(
+        type = null,
+        version = "2024.7.0",
+        gitHash = "25cf6119-dirty",
+        server = ServerJson(
+            name = "example",
+            url = "https://localhost:8080",
+        ),
+        environment = EnvironmentJson(
+            cloudRegion = null,
+            vaultUrl = "https://localhost:8080",
+            apiUrl = "http://localhost:4000",
+            identityUrl = "http://localhost:33656",
+            notificationsUrl = "http://localhost:61840",
+            ssoUrl = "http://localhost:51822",
+        ),
+        featureStates = mapOf(
+            "email-verification" to "true",
+            "flexible-collections-v-1" to "false",
+        ),
+    ),
+)

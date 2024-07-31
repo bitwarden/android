@@ -162,7 +162,7 @@ private val SERVER_CONFIG = ServerConfig(
             notificationsUrl = "http://localhost:61840",
             ssoUrl = "http://localhost:51822",
         ),
-        featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false),
+        featureStates = mapOf("duo-redirect" to "true", "flexible-collections-v-1" to "false"),
     ),
 )
 
@@ -182,5 +182,5 @@ private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
         notificationsUrl = "http://localhost:61840",
         ssoUrl = "http://localhost:51822",
     ),
-    featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false),
+    featureStates = mapOf("duo-redirect" to "true", "flexible-collections-v-1" to "false"),
 )
