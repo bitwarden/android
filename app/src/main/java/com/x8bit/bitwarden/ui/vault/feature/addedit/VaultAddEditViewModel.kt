@@ -2717,7 +2717,6 @@ sealed class VaultAddEditAction {
              */
             data class PasswordVisibilityChange(val isVisible: Boolean) : LoginType()
 
-
             /**
              * Represents the action to clear the fido2 credential.
              */

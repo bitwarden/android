@@ -119,7 +119,7 @@ data class VaultAddEditLoginTypeHandlers(
                 },
                 onClearFido2CredentialClick = {
                     viewModel.trySendAction(
-                    VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick
+                        VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick
                     )
                 }
             )

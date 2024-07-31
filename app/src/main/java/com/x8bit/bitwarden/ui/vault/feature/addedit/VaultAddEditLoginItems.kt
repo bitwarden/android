@@ -531,7 +531,7 @@ private fun PasskeyField(
         singleLine = true,
         modifier = modifier,
         actions = {
-            if(canViewPassword){
+            if (canViewPassword) {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
                         iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),
