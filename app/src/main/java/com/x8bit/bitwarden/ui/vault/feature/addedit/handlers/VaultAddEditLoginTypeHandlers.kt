@@ -24,7 +24,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
  * @property onPasswordVisibilityChange Handles the action when the password visibility button is
  * clicked.
- * @property onClearFido2CredentialClick Handles the action when the clear Fido2 credential button is clicked.
+ * @property onClearFido2CredentialClick Handles the action when the clear Fido2 credential button
+ * is clicked.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditLoginTypeHandlers(
