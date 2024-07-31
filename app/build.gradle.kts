@@ -67,6 +67,11 @@ android {
         create("beta") {
             initWith(buildTypes.getByName("release"))
             applicationIdSuffix = ".beta"
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
         release {
             isDebuggable = false
