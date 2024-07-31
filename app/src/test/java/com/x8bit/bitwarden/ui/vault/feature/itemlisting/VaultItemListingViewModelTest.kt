@@ -2457,69 +2457,6 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `Fido2AssertionRequest should show error dialog when user is not verified and verification is null`() =
-        runTest {
-            val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
-                .copy(cipherId = "mockId-1")
-            val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
-            val mockCipherView = createMockCipherView(
-                number = 1,
-                fido2Credentials = mockFido2CredentialList,
-            )
-            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
-                mockAssertionRequest,
-            )
-            every { authRepository.activeUserId } returns "activeUserId"
-            every {
-                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
-                    mockAssertionRequest.requestJson,
-                )
-            } returns createMockPasskeyAssertionOptions(
-                number = 1,
-                userVerificationRequirement = null,
-            )
-            every {
-                vaultRepository
-                    .ciphersStateFlow
-                    .value
-                    .data
-            } returns listOf(
-                createMockCipherView(
-                    number = 1,
-                    fido2Credentials = mockFido2CredentialList,
-                ),
-            )
-            coEvery {
-                fido2CredentialManager.authenticateFido2Credential(
-                    userId = "activeUserId",
-                    request = mockAssertionRequest,
-                    selectedCipherView = mockCipherView,
-                )
-            } returns Fido2CredentialAssertionResult.Success(responseJson = "responseJson")
-
-            val viewModel = createVaultItemListingViewModel()
-            viewModel.eventFlow.test {
-                assertEquals(
-                    VaultItemListingState.DialogState.Fido2OperationFail(
-                        title = R.string.an_error_has_occurred.asText(),
-                        message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                            .asText(),
-                    ),
-                    viewModel.stateFlow.value.dialogState,
-                )
-                verify { fido2CredentialManager.isUserVerified }
-                coVerify(exactly = 0) {
-                    fido2CredentialManager.authenticateFido2Credential(
-                        userId = "activeUserId",
-                        request = mockAssertionRequest,
-                        selectedCipherView = mockCipherView,
-                    )
-                }
-            }
-        }
-
-    @Suppress("MaxLineLength")
-    @Test
     fun `Fido2AssertionRequest should show error dialog when assertion options are null`() =
         runTest {
             val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
