@@ -11,6 +11,10 @@ import kotlinx.coroutines.flow.onEach
 
 /**
  * Convenience method for observing event flow from [BaseViewModel].
+ *
+ * By default, events will only be consumed when the associated screen is
+ * resumed, to avoid bugs like duplicate navigation calls. To override
+ * this behavior, a given event type can implement [BackgroundEvent].
  */
 @Composable
 fun <E> EventsEffect(
