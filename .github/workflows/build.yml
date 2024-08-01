@@ -28,6 +28,7 @@ on:
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   JAVA_VERSION: 17
+  GITHUB_ACTION_RUN_URL: "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 jobs:
   build:
@@ -355,6 +356,7 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleasePlayStoreToFirebase \
+          actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
           service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
 
       - name: Publish beta artifacts to Firebase
@@ -363,6 +365,7 @@ jobs:
           APP_PLAY_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_play_prod_firebase-creds.json
         run: |
           bundle exec fastlane distributeBetaPlayStoreToFirebase \
+          actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
           service_credentials_file:${{ env.APP_PLAY_FIREBASE_CREDS_PATH }}
 
       - name: Verify Play Store credentials
@@ -526,4 +529,5 @@ jobs:
           APP_FDROID_FIREBASE_CREDS_PATH: ${{ github.workspace }}/secrets/app_fdroid_firebase-creds.json
         run: |
           bundle exec fastlane distributeReleaseFDroidToFirebase \
+          actionUrl:${{ env.GITHUB_ACTION_RUN_URL }} \
           service_credentials_file:${{ env.APP_FDROID_FIREBASE_CREDS_PATH }}
