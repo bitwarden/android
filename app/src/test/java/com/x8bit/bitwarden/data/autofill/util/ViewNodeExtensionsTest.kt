@@ -27,11 +27,14 @@ class ViewNodeExtensionsTest {
         autofillType = AUTOFILL_TYPE,
         isFocused = expectedIsFocused,
         textValue = TEXT_VALUE,
+        hasPasswordTerms = false,
     )
     private val testAutofillValue: AutofillValue = mockk()
 
     private val viewNode: AssistStructure.ViewNode = mockk {
         every { this@mockk.autofillId } returns expectedAutofillId
+        every { this@mockk.idEntry } returns null
+        every { this@mockk.hint } returns null
         every { this@mockk.autofillOptions } returns AUTOFILL_OPTIONS_ARRAY
         every { this@mockk.autofillType } returns AUTOFILL_TYPE
         every { this@mockk.autofillValue } returns testAutofillValue
@@ -275,23 +278,6 @@ class ViewNodeExtensionsTest {
         assertTrue(actual)
     }
 
-    @Test
-    fun `isPasswordField returns true when supportedHint is null and hint is supported`() {
-        SUPPORTED_RAW_PASSWORD_HINTS
-            .forEach { hint ->
-                // Setup
-                every { viewNode.hint } returns hint
-
-                // Test
-                val actual = viewNode.isPasswordField(
-                    supportedHint = null,
-                )
-
-                // Verify
-                assertTrue(actual)
-            }
-    }
-
     @Suppress("MaxLineLength")
     @Test
     fun `isPasswordField returns true when hints aren't supported, isPasswordInputType, isValidField, and isn't username`() {
@@ -451,6 +437,50 @@ class ViewNodeExtensionsTest {
 
         // Verify
         assertTrue(actual)
+    }
+
+    @Test
+    fun `hasPasswordTerms returns true when idEntry contains a raw password term`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+
+        // Test
+        val actual = viewNode.hasPasswordTerms()
+
+        // Verify
+        assertFalse(actual)
+
+        SUPPORTED_RAW_PASSWORD_HINTS.map {
+            every { viewNode.idEntry } returns it
+
+            // Test
+            val actual = viewNode.hasPasswordTerms()
+
+            // Verify
+            assertTrue(actual)
+        }
+    }
+
+    @Test
+    fun `hasPasswordTerms returns true when hint contains a raw password term`() {
+        every { viewNode.idEntry } returns null
+        every { viewNode.hint } returns null
+
+        // Test
+        val actual = viewNode.hasPasswordTerms()
+
+        // Verify
+        assertFalse(actual)
+
+        SUPPORTED_RAW_PASSWORD_HINTS.map {
+            every { viewNode.hint } returns it
+
+            // Test
+            val actual = viewNode.hasPasswordTerms()
+
+            // Verify
+            assertTrue(actual)
+        }
     }
 
     @Test
