@@ -81,8 +81,8 @@ private const val SERVER_CONFIG_JSON = """
         "sso": "http://localhost:51822"
     },
     "featureStates": {
-        "duo-redirect": true,
-        "flexible-collections-v-1": false
+        "duo-redirect": "true",
+        "flexible-collections-v-1": "false"
     }
   }
 }
