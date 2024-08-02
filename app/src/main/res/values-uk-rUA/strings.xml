@@ -263,7 +263,7 @@
   <string name="formatted_incorrectly">%1$s має некоректне форматування.</string>
   <string name="identity_url">URL-адреса сервера ідентифікації</string>
   <string name="self_hosted_environment">Середовище власного хостингу</string>
-  <string name="self_hosted_environment_footer">Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden.</string>
+  <string name="self_hosted_environment_footer">Вкажіть основну URL-адресу вашого встановлення Bitwarden на власному хостингу.</string>
   <string name="server_url">URL-адреса сервера</string>
   <string name="web_vault_url">URL-адреса сервера вебсховища</string>
   <string name="bitwarden_autofill_service_notification_content_old">Торкніться цього сповіщення для перегляду записів з вашого сховища.</string>

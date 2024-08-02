@@ -430,9 +430,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="thirty_minutes">30 minuuttia</string>
   <string name="set_pin_description">Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetus tyhjentyy, jos kirjaudut kokonaan ulos sovelluksesta.</string>
   <string name="logged_in_as_on">Kirjautui palvelimelle %2$s tunnuksella %1$s.</string>
-  <string name="vault_locked_master_password">Holvi on lukittu. Jatka vahvistamalla pääsalasanasi.</string>
-  <string name="vault_locked_pin">Holvi on lukittu. Jatka vahvistamalla PIN-koodisi.</string>
-  <string name="vault_locked_identity">Holvi on lukittu. Jatka vahvistamalla henkilöllisyytesi.</string>
+  <string name="vault_locked_master_password">Holvisi on lukittu. Jatka vahvistamalla pääsalasanasi.</string>
+  <string name="vault_locked_pin">Holvisi on lukittu. Jatka vahvistamalla PIN-koodisi.</string>
+  <string name="vault_locked_identity">Holvisi on lukittu. Jatka vahvistamalla henkilöllisyytesi.</string>
   <string name="dark">Tumma</string>
   <string name="light">Vaalea</string>
   <string name="five_minutes">5 minuuttia</string>
@@ -752,7 +752,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="log_in_with_another_device">Laitteella kirjautuminen</string>
   <string name="log_in_initiated">Kirjautuminen aloitettu</string>
   <string name="a_notification_has_been_sent_to_your_device">Laitteellesi on lähetetty ilmoitus.</string>
-  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että holvisi on avattu ja tunnistelauseke täsmää toisella laitteella.</string>
+  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että vahvistavan laitteen holvi on avattu ja että se näyttää saman tunnistelausekkeen.</string>
   <string name="resend_notification">Lähetä ilmoitus uudelleen</string>
   <string name="need_another_option">Tarvitsetko toisen vaihtoehdon?</string>
   <string name="view_all_login_options">Näytä kaikki kirjautumisvaihtoehdot</string>
