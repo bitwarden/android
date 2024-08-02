@@ -62,7 +62,7 @@ class FeatureFlagManagerTest {
     @Test
     fun `getFeatureFlag Boolean should return value if exists`() = runTest {
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
+            key = FlagKey.EmailVerification,
             forceRefresh = true,
         )
         assertTrue(flagValue)
@@ -79,7 +79,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
+            key = FlagKey.EmailVerification,
             forceRefresh = false,
         )
         assertFalse(flagValue)
@@ -96,7 +96,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.DummyInt,
+            key = FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -117,7 +117,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.DummyInt,
+            key = FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -138,7 +138,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.DummyString,
+            key = FlagKey.DummyString,
             forceRefresh = false,
         )
 
@@ -159,7 +159,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.DummyString,
+            key = FlagKey.DummyString,
             forceRefresh = false,
         )
 
@@ -174,7 +174,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
+            key = FlagKey.EmailVerification,
             forceRefresh = false,
         )
 
@@ -188,7 +188,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.DummyInt,
+            key = FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -203,7 +203,7 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.DummyString,
+            key = FlagKey.DummyString,
             forceRefresh = false,
         )
 
