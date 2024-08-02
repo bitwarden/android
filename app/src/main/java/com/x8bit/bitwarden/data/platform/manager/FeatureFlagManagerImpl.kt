@@ -1,13 +1,9 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 
 private const val CIPHER_KEY_ENCRYPTION_KEY = "enableCipherKeyEncryption"
 
@@ -16,61 +12,84 @@ private const val CIPHER_KEY_ENCRYPTION_KEY = "enableCipherKeyEncryption"
  */
 class FeatureFlagManagerImpl(
     private val serverConfigRepository: ServerConfigRepository,
-    private val configDiskSource: ConfigDiskSource,
-    dispatcherManager: DispatcherManager,
 ) : FeatureFlagManager {
-
-    private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
     override val featureFlagsLocal: Map<String, Boolean>
         get() = mapOf(CIPHER_KEY_ENCRYPTION_KEY to true)
 
-    override val featureFlagsServerStateFlow: StateFlow<Map<String, String>?>
-        get() = configDiskSource
-            .serverConfigFlow
+    override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> =
+        serverConfigRepository
+            .serverConfigStateFlow
             .map { serverConfig ->
-                serverConfig?.serverData?.featureStates
+                getFlagValueOrDefault(serverConfig, key)
             }
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = configDiskSource.serverConfig?.serverData?.featureStates,
-            )
 
-    override suspend fun getFeatureFlag(
-        key: FlagKey,
-        defaultValue: Boolean,
+    override suspend fun <T : Any> getFeatureFlag(
+        key: FlagKey<T>,
         forceRefresh: Boolean,
-    ): Boolean {
-        return getFlagStringValueOrNull(key, forceRefresh)?.toBoolean() ?: defaultValue
-    }
-
-    override suspend fun getFeatureFlag(
-        key: FlagKey,
-        defaultValue: Int,
-        forceRefresh: Boolean,
-    ): Int {
-        return getFlagStringValueOrNull(key, forceRefresh)?.toInt() ?: defaultValue
-    }
-
-    override suspend fun getFeatureFlag(
-        key: FlagKey,
-        defaultValue: String?,
-        forceRefresh: Boolean,
-    ): String? {
-        return getFlagStringValueOrNull(key, forceRefresh) ?: defaultValue
-    }
-
-    private suspend fun getFlagStringValueOrNull(key: FlagKey, forceRefresh: Boolean): String? {
+    ): T {
         val configuration = serverConfigRepository.getServerConfig(forceRefresh)
-        return configuration?.serverData?.featureStates?.get(key.stringValue)
+        return getFlagValueOrDefault(configuration, key)
+    }
+
+    private fun <T : Any> getFlagValueOrDefault(
+        configuration: ServerConfig?,
+        key: FlagKey<T>,
+    ): T {
+        val defaultValue = key.defaultValue
+        return configuration
+            ?.serverData
+            ?.featureStates
+            ?.get(key.stringValue)
+            ?.let {
+                try {
+                    // Suppressed since we are checking the type before doing the cast
+                    @Suppress("UNCHECKED_CAST")
+                    when (defaultValue::class) {
+                        Boolean::class -> it.toBoolean() as? T
+                        String::class -> it as? T
+                        Int::class -> it.toInt() as? T
+                        else -> defaultValue
+                    }
+                } catch (ex: ClassCastException) {
+                    defaultValue
+                } catch (ex: NumberFormatException) {
+                    defaultValue
+                }
+            } ?: defaultValue
     }
 }
 
 /**
- * Enum to hold feature flag keys.
- * [stringValue] corresponds to the string value of a give key
+ * Class to hold feature flag keys.
+ * @property [stringValue] corresponds to the string value of a give key
+ * @property [defaultValue] corresponds to default value of the flag of type [T]
  */
-enum class FlagKey(val stringValue: String) {
-    EmailVerification("email-verification"),
+sealed class FlagKey<out T : Any> {
+    abstract val stringValue: String
+    abstract val defaultValue: T
+
+    /**
+     * Data object holding the key for Email Verification feature
+     */
+    data object EmailVerification : FlagKey<Boolean>() {
+        override val stringValue: String = "email-verification"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
+     * Data object holding the key for an Int flag to be used in tests
+     */
+    data object DummyInt : FlagKey<Int>() {
+        override val stringValue: String = "email-verification"
+        override val defaultValue: Int = Int.MIN_VALUE
+    }
+
+    /**
+     * Data object holding the key for an String flag to be used in tests
+     */
+    data object DummyString : FlagKey<String>() {
+        override val stringValue: String = "email-verification"
+        override val defaultValue: String = "defaultValue"
+    }
 }

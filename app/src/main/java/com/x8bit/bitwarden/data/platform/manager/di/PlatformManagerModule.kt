@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.core.content.getSystemService
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
-import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.EventDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
@@ -141,15 +140,11 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
-    fun providesBitwardenFeatureFlagManager(
+    fun providesFeatureFlagManager(
         serverConfigRepository: ServerConfigRepository,
-        configDiskSource: ConfigDiskSource,
-        dispatcherManager: DispatcherManager,
     ): FeatureFlagManager =
         FeatureFlagManagerImpl(
             serverConfigRepository = serverConfigRepository,
-            configDiskSource = configDiskSource,
-            dispatcherManager = dispatcherManager,
         )
 
     @Provides

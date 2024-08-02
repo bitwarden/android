@@ -1,29 +1,33 @@
 package com.x8bit.bitwarden.data.platform.repository.util
 
-import com.x8bit.bitwarden.data.platform.datasource.disk.ConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.Instant
 
-class FakeServerConfigRepository(
-    private val configDiskSource: ConfigDiskSource,
-) : ServerConfigRepository {
+class FakeServerConfigRepository : ServerConfigRepository {
+    var serverConfigValue: ServerConfig?
+        get() = mutableServerConfigFlow.value
+        set(value) {
+             mutableServerConfigFlow.value = value
+         }
+
+    val mutableServerConfigFlow = MutableStateFlow<ServerConfig?>(SERVER_CONFIG)
+
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         if (forceRefresh) {
             return SERVER_CONFIG
         }
 
-        return configDiskSource.serverConfig
+        return serverConfigValue
     }
 
     override val serverConfigStateFlow: StateFlow<ServerConfig?>
-        get() = configDiskSource
-            .serverConfigFlow
-            as StateFlow<ServerConfig?>
+        get() = mutableServerConfigFlow
 }
 
 private val SERVER_CONFIG = ServerConfig(

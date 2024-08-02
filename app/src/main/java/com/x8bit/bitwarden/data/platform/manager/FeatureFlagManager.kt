@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Manages the available feature flags for the Bitwarden application.
@@ -12,40 +12,18 @@ interface FeatureFlagManager {
     val featureFlagsLocal: Map<String, Boolean>
 
     /**
-     * Emits updates that track server-related feature flags.
+     * Returns a flow emitting the value of flag [key] which is of generic type [T].
+     * If the value of the flag cannot be retrieved, the default value of [key] will be returned
      */
-    val featureFlagsServerStateFlow: StateFlow<Map<String, String>?>
+    fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T>
 
     /**
-     * Get value for feature flag with [FlagKey] and returns it as [Boolean].
-     * If no value is found the the given key [defaultValue] will be returned.
+     * Get value for feature flag with [key] and returns it as generic type [T].
+     * If no value is found the the given [key] its default value will be returned.
      * Cached flags can be invalidated with [forceRefresh]
      */
-    suspend fun getFeatureFlag(
-        key: FlagKey,
-        defaultValue: Boolean = false,
-        forceRefresh: Boolean = false,
-    ): Boolean
-
-    /**
-     * Get value for feature flag with [FlagKey] and returns it as [Int].
-     * If no value is found the the given key [defaultValue] will be returned.
-     * Cached flags can be invalidated with [forceRefresh]
-     */
-    suspend fun getFeatureFlag(
-        key: FlagKey,
-        defaultValue: Int = 0,
-        forceRefresh: Boolean = false,
-    ): Int
-
-    /**
-     * Get value for feature flag with [FlagKey] and returns it as [String].
-     * If no value is found the the given key [defaultValue] will be returned.
-     * Cached flags can be invalidated with [forceRefresh]
-     */
-    suspend fun getFeatureFlag(
-        key: FlagKey,
-        defaultValue: String? = null,
-        forceRefresh: Boolean = false,
-    ): String?
+    suspend fun <T : Any> getFeatureFlag(
+        key: FlagKey<T>,
+        forceRefresh: Boolean,
+    ): T
 }

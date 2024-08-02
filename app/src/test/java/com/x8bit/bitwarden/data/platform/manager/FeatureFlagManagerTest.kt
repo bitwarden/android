@@ -1,13 +1,10 @@
 package com.x8bit.bitwarden.data.platform.manager
 
 import app.cash.turbine.test
-import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.model.ServerConfig
-import com.x8bit.bitwarden.data.platform.datasource.disk.util.FakeConfigDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
-import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.util.FakeServerConfigRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -19,17 +16,10 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import java.time.Instant
 
 class FeatureFlagManagerTest {
-    private val fakeDispatcherManager: DispatcherManager = FakeDispatcherManager()
-    private val fakeConfigDiskSource = FakeConfigDiskSource()
-
-    private val fakeServerConfigRepository = FakeServerConfigRepository(
-        fakeConfigDiskSource,
-    )
+    private val fakeServerConfigRepository = FakeServerConfigRepository()
 
     private var manager = FeatureFlagManagerImpl(
         serverConfigRepository = fakeServerConfigRepository,
-        configDiskSource = fakeConfigDiskSource,
-        dispatcherManager = fakeDispatcherManager,
     )
 
     @Test
@@ -42,15 +32,16 @@ class FeatureFlagManagerTest {
     }
 
     @Test
-    fun `ConfigDiskSource flow with value should trigger new flags`() = runTest {
+    fun `ServerConfigRepository flow with value should trigger new flags`() = runTest {
+        fakeServerConfigRepository.serverConfigValue = null
         assertNull(
-            fakeConfigDiskSource.serverConfig,
+            fakeServerConfigRepository.serverConfigValue,
         )
 
         // This should trigger a new server config to be fetched
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG
 
-        manager.featureFlagsServerStateFlow.test {
+        manager.getFeatureFlagFlow(FlagKey.EmailVerification).test {
             assertNotNull(
                 awaitItem(),
             )
@@ -58,12 +49,11 @@ class FeatureFlagManagerTest {
     }
 
     @Test
-    fun `ConfigDiskSource flow with null should trigger null value`() = runTest {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG
-        fakeConfigDiskSource.serverConfig = null
+    fun `ConfigDiskSource flow with null should trigger default flag value value`() = runTest {
+        fakeServerConfigRepository.mutableServerConfigFlow.tryEmit(null)
 
-        manager.featureFlagsServerStateFlow.test {
-            assertNull(
+        manager.getFeatureFlagFlow(FlagKey.EmailVerification).test {
+            assertFalse(
                 awaitItem(),
             )
         }
@@ -73,7 +63,6 @@ class FeatureFlagManagerTest {
     fun `getFeatureFlag Boolean should return value if exists`() = runTest {
         val flagValue = manager.getFeatureFlag(
             FlagKey.EmailVerification,
-            defaultValue = false,
             forceRefresh = true,
         )
         assertTrue(flagValue)
@@ -81,7 +70,7 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `getFeatureFlag Boolean should return default value if doesn't exists`() = runTest {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG.copy(
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
@@ -91,7 +80,6 @@ class FeatureFlagManagerTest {
 
         val flagValue = manager.getFeatureFlag(
             FlagKey.EmailVerification,
-            defaultValue = false,
             forceRefresh = false,
         )
         assertFalse(flagValue)
@@ -99,7 +87,7 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `getFeatureFlag Int should return value if exists`() = runTest {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG.copy(
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
@@ -108,8 +96,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
-            defaultValue = 0,
+            FlagKey.DummyInt,
             forceRefresh = false,
         )
 
@@ -121,7 +108,7 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `getFeatureFlag Int should return default value if doesn't exists`() = runTest {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG.copy(
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
@@ -130,20 +117,19 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
-            defaultValue = 10,
+            FlagKey.DummyInt,
             forceRefresh = false,
         )
 
         assertEquals(
-            10,
+            Int.MIN_VALUE,
             flagValue,
         )
     }
 
     @Test
     fun `getFeatureFlag String should return value if exists`() = runTest {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG.copy(
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
@@ -152,8 +138,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
-            defaultValue = "",
+            FlagKey.DummyString,
             forceRefresh = false,
         )
 
@@ -165,7 +150,7 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `getFeatureFlag String should return default value if doesn't exists`() = runTest {
-        fakeConfigDiskSource.serverConfig = SERVER_CONFIG.copy(
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
@@ -174,8 +159,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
-            defaultValue = "defaultValue",
+            FlagKey.DummyString,
             forceRefresh = false,
         )
 
@@ -187,42 +171,39 @@ class FeatureFlagManagerTest {
 
     @Test
     fun `getFeatureFlag Boolean should return default value if no flags available`() = runTest {
-        fakeConfigDiskSource.serverConfig = null
+        fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
             FlagKey.EmailVerification,
-            defaultValue = true,
             forceRefresh = false,
         )
 
-        assertTrue(
+        assertFalse(
             flagValue,
         )
     }
 
     @Test
     fun `getFeatureFlag Int should return default value if no flags available`() = runTest {
-        fakeConfigDiskSource.serverConfig = null
+        fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
-            defaultValue = 10,
+            FlagKey.DummyInt,
             forceRefresh = false,
         )
 
         assertEquals(
-            10,
+            Int.MIN_VALUE,
             flagValue,
         )
     }
 
     @Test
     fun `getFeatureFlag String should return default value if no flags available`() = runTest {
-        fakeConfigDiskSource.serverConfig = null
+        fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            FlagKey.EmailVerification,
-            defaultValue = "defaultValue",
+            FlagKey.DummyString,
             forceRefresh = false,
         )
 
