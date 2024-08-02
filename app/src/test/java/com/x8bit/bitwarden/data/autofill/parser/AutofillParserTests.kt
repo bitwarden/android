@@ -205,6 +205,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -271,6 +272,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -281,6 +283,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -330,6 +333,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -340,6 +344,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Login(
@@ -355,6 +360,60 @@ class AutofillParserTests {
         )
         every { cardViewNode.toAutofillView() } returns cardAutofillView
         every { loginViewNode.toAutofillView() } returns loginAutofillView
+
+        // Test
+        val actual = parser.parse(
+            autofillAppInfo = autofillAppInfo,
+            fillRequest = fillRequest,
+        )
+
+        // Verify
+        assertEquals(expected, actual)
+        verify(exactly = 1) {
+            fillRequest.getInlinePresentationSpecs(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            fillRequest.getMaxInlineSuggestionsCount(
+                autofillAppInfo = autofillAppInfo,
+                isInlineAutofillEnabled = true,
+            )
+            any<List<ViewNodeTraversalData>>().buildPackageNameOrNull(assistStructure)
+            any<List<ViewNodeTraversalData>>().buildUriOrNull(PACKAGE_NAME)
+        }
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `parse should have Password AutofillView when the Password field is invalid, contains no other Password fields, and contains a password term`() {
+        // Setup
+        every { assistStructure.windowNodeCount } returns 1
+        every { assistStructure.getWindowNodeAt(0) } returns loginWindowNode
+        val unusedAutofillView: AutofillView.Unused = AutofillView.Unused(
+            data = AutofillView.Data(
+                autofillId = loginAutofillId,
+                autofillOptions = emptyList(),
+                autofillType = AUTOFILL_TYPE,
+                isFocused = true,
+                textValue = null,
+                hasPasswordTerms = true,
+            ),
+        )
+        val loginAutofillView: AutofillView.Login = AutofillView.Login.Password(
+            data = unusedAutofillView.data,
+        )
+        val autofillPartition = AutofillPartition.Login(
+            views = listOf(loginAutofillView),
+        )
+        val expected = AutofillRequest.Fillable(
+            ignoreAutofillIds = emptyList(),
+            inlinePresentationSpecs = inlinePresentationSpecs,
+            maxInlineSuggestionsCount = MAX_INLINE_SUGGESTION_COUNT,
+            packageName = PACKAGE_NAME,
+            partition = autofillPartition,
+            uri = URI,
+        )
+        every { loginViewNode.toAutofillView() } returns unusedAutofillView
 
         // Test
         val actual = parser.parse(
@@ -420,6 +479,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val loginUsernameAutofillView: AutofillView.Login = AutofillView.Login.Username(
@@ -429,6 +489,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val loginPasswordAutofillView: AutofillView.Login = AutofillView.Login.Password(
@@ -438,6 +499,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Login(
@@ -488,6 +550,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -498,6 +561,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -548,6 +612,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -558,6 +623,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = false,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -608,6 +674,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -618,6 +685,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -668,6 +736,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -678,6 +747,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val autofillPartition = AutofillPartition.Card(
@@ -727,6 +797,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
             monthValue = null,
         )
@@ -737,6 +808,7 @@ class AutofillParserTests {
                 autofillType = AUTOFILL_TYPE,
                 isFocused = true,
                 textValue = null,
+                hasPasswordTerms = false,
             ),
         )
         val remoteBlockList = listOf(
