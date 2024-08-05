@@ -21,43 +21,40 @@ class FeatureFlagManagerImpl(
         serverConfigRepository
             .serverConfigStateFlow
             .map { serverConfig ->
-                getFlagValueOrDefault(serverConfig, key)
+                serverConfig.getFlagValueOrDefault(key = key)
             }
 
     override suspend fun <T : Any> getFeatureFlag(
         key: FlagKey<T>,
         forceRefresh: Boolean,
-    ): T {
-        val configuration = serverConfigRepository.getServerConfig(forceRefresh)
-        return getFlagValueOrDefault(configuration, key)
-    }
+    ): T =
+        serverConfigRepository
+            .getServerConfig(forceRefresh = forceRefresh)
+            .getFlagValueOrDefault(key = key)
+}
 
-    private fun <T : Any> getFlagValueOrDefault(
-        configuration: ServerConfig?,
-        key: FlagKey<T>,
-    ): T {
-        val defaultValue = key.defaultValue
-        return configuration
-            ?.serverData
-            ?.featureStates
-            ?.get(key.stringValue)
-            ?.let {
-                try {
-                    // Suppressed since we are checking the type before doing the cast
-                    @Suppress("UNCHECKED_CAST")
-                    when (defaultValue::class) {
-                        Boolean::class -> it.toBoolean() as? T
-                        String::class -> it as? T
-                        Int::class -> it.toInt() as? T
-                        else -> defaultValue
-                    }
-                } catch (ex: ClassCastException) {
-                    defaultValue
-                } catch (ex: NumberFormatException) {
-                    defaultValue
+private fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
+    val defaultValue = key.defaultValue
+    return this?.serverData
+        ?.featureStates
+        ?.get(key.stringValue)
+        ?.let {
+            try {
+                // Suppressed since we are checking the type before doing the cast
+                @Suppress("UNCHECKED_CAST")
+                when (defaultValue::class) {
+                    Boolean::class -> it.toBoolean() as? T
+                    String::class -> it as? T
+                    Int::class -> it.toInt() as? T
+                    else -> defaultValue
                 }
-            } ?: defaultValue
-    }
+            } catch (ex: ClassCastException) {
+                defaultValue
+            } catch (ex: NumberFormatException) {
+                defaultValue
+            }
+        }
+        ?: defaultValue
 }
 
 /**
