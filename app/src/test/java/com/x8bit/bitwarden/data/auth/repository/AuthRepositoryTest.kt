@@ -2208,7 +2208,7 @@ class AuthRepositoryTest {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `login with device get token succeeds should return Success, update AuthState, update stored keys, and sync`() =
+    fun `login with device get token succeeds should return Success, update AuthState, update stored keys, and sync with MasteryKey`() =
         runTest {
             val successResponse = GET_TOKEN_RESPONSE_SUCCESS
             coEvery {
@@ -2725,6 +2725,97 @@ class AuthRepositoryTest {
                     uniqueAppId = UNIQUE_APP_ID,
                 )
                 vaultRepository.syncIfNecessary()
+            }
+            assertEquals(
+                SINGLE_USER_STATE_1,
+                fakeAuthDiskSource.userState,
+            )
+            verify { settingsRepository.setDefaultsIfNecessary(userId = USER_ID_1) }
+        }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `login with device get token succeeds should return Success, update AuthState, update stored keys, and sync with UserKey`() =
+        runTest {
+            val successResponse = GET_TOKEN_RESPONSE_SUCCESS
+            coEvery {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+            } returns successResponse.asSuccess()
+            coEvery { vaultRepository.syncIfNecessary() } just runs
+            every {
+                GET_TOKEN_RESPONSE_SUCCESS.toUserState(
+                    previousUserState = null,
+                    environmentUrlData = EnvironmentUrlDataJson.DEFAULT_US,
+                )
+            } returns SINGLE_USER_STATE_1
+            coEvery {
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.privateKey!!,
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                        method = AuthRequestMethod.UserKey(
+                            protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
+                        ),
+                    ),
+                )
+            } returns VaultUnlockResult.Success
+            val result = repository.login(
+                email = EMAIL,
+                requestId = DEVICE_REQUEST_ID,
+                accessCode = DEVICE_ACCESS_CODE,
+                asymmetricalKey = DEVICE_ASYMMETRICAL_KEY,
+                requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                masterPasswordHash = null,
+                captchaToken = null,
+            )
+            assertEquals(LoginResult.Success, result)
+            assertEquals(AuthState.Authenticated(ACCESS_TOKEN), repository.authStateFlow.value)
+            fakeAuthDiskSource.assertPrivateKey(
+                userId = USER_ID_1,
+                privateKey = "privateKey",
+            )
+            fakeAuthDiskSource.assertUserKey(
+                userId = USER_ID_1,
+                userKey = "key",
+            )
+            coVerify {
+                identityService.getToken(
+                    email = EMAIL,
+                    authModel = IdentityTokenAuthModel.AuthRequest(
+                        username = EMAIL,
+                        authRequestId = DEVICE_REQUEST_ID,
+                        accessCode = DEVICE_ACCESS_CODE,
+                    ),
+                    captchaToken = null,
+                    uniqueAppId = UNIQUE_APP_ID,
+                )
+                vaultRepository.syncIfNecessary()
+                vaultRepository.unlockVault(
+                    userId = USER_ID_1,
+                    email = EMAIL,
+                    kdf = ACCOUNT_1.profile.toSdkParams(),
+                    privateKey = successResponse.privateKey!!,
+                    organizationKeys = null,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = DEVICE_REQUEST_PRIVATE_KEY,
+                        method = AuthRequestMethod.UserKey(
+                            protectedUserKey = DEVICE_ASYMMETRICAL_KEY,
+                        ),
+                    ),
+                )
             }
             assertEquals(
                 SINGLE_USER_STATE_1,
