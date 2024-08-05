@@ -10,7 +10,7 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
  */
 fun createMockPasskeyAssertionOptions(
     number: Int,
-    userVerificationRequirement: UserVerificationRequirement? =
+    userVerificationRequirement: UserVerificationRequirement =
         UserVerificationRequirement.PREFERRED,
 ) = PasskeyAssertionOptions(
     challenge = "mockChallenge-$number",

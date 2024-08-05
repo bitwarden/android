@@ -16,5 +16,5 @@ data class PasskeyAssertionOptions(
     @SerialName("rpId")
     val relyingPartyId: String?,
     @SerialName("userVerification")
-    val userVerification: UserVerificationRequirement?,
+    val userVerification: UserVerificationRequirement = UserVerificationRequirement.PREFERRED,
 )

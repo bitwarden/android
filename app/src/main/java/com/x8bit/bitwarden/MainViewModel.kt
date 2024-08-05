@@ -112,6 +112,10 @@ class MainViewModel @Inject constructor(
             .onEach {
                 when (it) {
                     is VaultStateEvent.Locked -> {
+                        // Similar to account switching, triggering this action too soon can
+                        // interfere with animations or navigation logic, so we will delay slightly.
+                        @Suppress("MagicNumber")
+                        delay(500)
                         trySendAction(MainAction.Internal.VaultUnlockStateChange)
                     }
 

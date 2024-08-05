@@ -1050,51 +1050,6 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
             }
         }
 
-    @Suppress("MaxLineLength")
-    @Test
-    fun `in add mode during fido2, SaveClick should show Fido2ErrorDialog when user is not verified and registration user verification option is null`() =
-        runTest {
-            val fido2CredentialRequest = createMockFido2CredentialRequest(number = 1)
-            val stateWithName = createVaultAddItemState(
-                vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
-                commonContentViewState = createCommonContentViewState(
-                    name = "mockName-1",
-                ),
-            )
-                .copy(shouldExitOnSave = true)
-            specialCircumstanceManager.specialCircumstance =
-                SpecialCircumstance.Fido2Save(
-                    fido2CredentialRequest = fido2CredentialRequest,
-                )
-            every {
-                fido2CredentialManager.getPasskeyAttestationOptionsOrNull(
-                    requestJson = fido2CredentialRequest.requestJson,
-                )
-            } returns createMockPasskeyAttestationOptions(
-                number = 1,
-                userVerificationRequirement = null,
-            )
-            mutableVaultDataFlow.value = DataState.Loaded(
-                createVaultData(),
-            )
-            val viewModel = createAddVaultItemViewModel(
-                createSavedStateHandleWithState(
-                    state = stateWithName,
-                    vaultAddEditType = VaultAddEditType.AddItem(VaultItemCipherType.LOGIN),
-                ),
-            )
-
-            viewModel.trySendAction(VaultAddEditAction.Common.SaveClick)
-
-            assertEquals(
-                VaultAddEditState.DialogState.Fido2Error(
-                    message = R.string.passkey_operation_failed_because_user_could_not_be_verified
-                        .asText(),
-                ),
-                viewModel.stateFlow.value.dialog,
-            )
-        }
-
     @Test
     fun `in add mode, createCipherInOrganization success should ShowToast and NavigateBack`() =
         runTest {
