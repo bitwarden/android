@@ -25,7 +25,6 @@ import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
-import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.SyncCipherDeleteData
@@ -117,7 +116,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.json.Json
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -140,7 +138,6 @@ class VaultRepositoryTest {
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
     )
-    private val json: Json = PlatformNetworkModule.providesJson()
     private val dispatcherManager: DispatcherManager = FakeDispatcherManager()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any(), any()) } just runs
@@ -226,7 +223,6 @@ class VaultRepositoryTest {
         fileManager = fileManager,
         clock = clock,
         userLogoutManager = userLogoutManager,
-        json = json,
     )
 
     @BeforeEach

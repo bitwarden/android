@@ -11,7 +11,8 @@ import com.x8bit.bitwarden.data.autofill.fido2.model.UserVerificationRequirement
 @Suppress("MaxLineLength")
 fun createMockPasskeyAttestationOptions(
     number: Int,
-    userVerificationRequirement: UserVerificationRequirement? = null,
+    userVerificationRequirement: UserVerificationRequirement =
+        UserVerificationRequirement.PREFERRED,
 ) = PasskeyAttestationOptions(
     authenticatorSelection = PasskeyAttestationOptions
         .AuthenticatorSelectionCriteria(userVerification = userVerificationRequirement),

@@ -54,7 +54,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             VaultUnlockedNavBarAction.SendTabClick -> handleSendTabClicked()
             VaultUnlockedNavBarAction.SettingsTabClick -> handleSettingsTabClicked()
             VaultUnlockedNavBarAction.VaultTabClick -> handleVaultTabClicked()
-            VaultUnlockedNavBarAction.BackStackUpdate -> handleBackStackUpdate()
         }
     }
     // #region BottomTabViewModel Action Handlers
@@ -84,10 +83,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
      */
     private fun handleSettingsTabClicked() {
         sendEvent(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
-    }
-
-    private fun handleBackStackUpdate() {
-        authRepository.updateLastActiveTime()
     }
     // #endregion BottomTabViewModel Action Handlers
 }
@@ -123,11 +118,6 @@ sealed class VaultUnlockedNavBarAction {
      * click Settings tab.
      */
     data object SettingsTabClick : VaultUnlockedNavBarAction()
-
-    /**
-     * Indicates the backstack has changed.
-     */
-    data object BackStackUpdate : VaultUnlockedNavBarAction()
 }
 
 /**
