@@ -9,7 +9,7 @@ class SdkClientManagerImpl(
     private val featureFlagManager: FeatureFlagManager,
     private val clientProvider: suspend () -> Client = {
         Client(settings = null).apply {
-            platform().loadFlags(featureFlagManager.featureFlagsLocal)
+            platform().loadFlags(featureFlagManager.sdkFeatureFlags)
         }
     },
 ) : SdkClientManager {

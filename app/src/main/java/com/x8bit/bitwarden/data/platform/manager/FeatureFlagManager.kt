@@ -9,7 +9,7 @@ interface FeatureFlagManager {
     /**
      * Returns a map of constant feature flags that are only used locally.
      */
-    val featureFlagsLocal: Map<String, Boolean>
+    val sdkFeatureFlags: Map<String, Boolean>
 
     /**
      * Returns a flow emitting the value of flag [key] which is of generic type [T].

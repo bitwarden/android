@@ -14,7 +14,7 @@ class FeatureFlagManagerImpl(
     private val serverConfigRepository: ServerConfigRepository,
 ) : FeatureFlagManager {
 
-    override val featureFlagsLocal: Map<String, Boolean>
+    override val sdkFeatureFlags: Map<String, Boolean>
         get() = mapOf(CIPHER_KEY_ENCRYPTION_KEY to true)
 
     override fun <T : Any> getFeatureFlagFlow(key: FlagKey<T>): Flow<T> =
