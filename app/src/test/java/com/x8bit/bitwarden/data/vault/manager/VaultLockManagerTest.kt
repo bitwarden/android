@@ -12,6 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
+import com.x8bit.bitwarden.data.auth.manager.model.LogoutResult
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
@@ -37,7 +38,9 @@ import io.mockk.runs
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -64,9 +67,12 @@ class VaultLockManagerTest {
     private val vaultSdkSource: VaultSdkSource = mockk {
         every { clearCrypto(userId = any()) } just runs
     }
+
+    private val mutableLogoutResultFlow = MutableSharedFlow<LogoutResult>()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any()) } just runs
         every { softLogout(any()) } just runs
+        every { logoutResultFlow } returns mutableLogoutResultFlow.asSharedFlow()
     }
     private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val mutableVaultTimeoutStateFlow =
@@ -195,7 +201,6 @@ class VaultLockManagerTest {
         mutableVaultTimeoutActionStateFlow.value = VaultTimeoutAction.LOGOUT
         MOCK_TIMEOUTS.forEach { vaultTimeout ->
             resetTest(vaultTimeout = vaultTimeout)
-
             fakeAppForegroundManager.appForegroundState = AppForegroundState.BACKGROUNDED
             // Advance by 6 minutes. Only actions with a timeout less than this will be triggered.
             testDispatcher.scheduler.advanceTimeBy(delayTimeMillis = 6 * 60 * 1000L)
@@ -210,7 +215,6 @@ class VaultLockManagerTest {
                 VaultTimeout.FourHours,
                 is VaultTimeout.Custom,
                 -> {
-                    assertTrue(vaultLockManager.isVaultUnlocked(USER_ID))
                     verify(exactly = 0) { userLogoutManager.softLogout(any()) }
                 }
 
@@ -219,7 +223,6 @@ class VaultLockManagerTest {
                 VaultTimeout.OneMinute,
                 VaultTimeout.FiveMinutes,
                 -> {
-                    assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
                     verify(exactly = 1) { userLogoutManager.softLogout(USER_ID) }
                 }
             }
@@ -455,8 +458,6 @@ class VaultLockManagerTest {
                 VaultTimeout.FourHours,
                 is VaultTimeout.Custom,
                 -> {
-                    assertTrue(vaultLockManager.isVaultUnlocked(activeUserId))
-                    assertTrue(vaultLockManager.isVaultUnlocked(inactiveUserId))
                     verify(exactly = 0) { userLogoutManager.softLogout(any()) }
                 }
 
@@ -465,8 +466,6 @@ class VaultLockManagerTest {
                 VaultTimeout.OneMinute,
                 VaultTimeout.FiveMinutes,
                 -> {
-                    assertTrue(vaultLockManager.isVaultUnlocked(activeUserId))
-                    assertFalse(vaultLockManager.isVaultUnlocked(inactiveUserId))
                     verify(exactly = 0) { userLogoutManager.softLogout(activeUserId) }
                     verify(exactly = 1) { userLogoutManager.softLogout(inactiveUserId) }
                 }
@@ -1367,6 +1366,20 @@ class VaultLockManagerTest {
                 vaultSdkSource.getUserEncryptionKey(userId = USER_ID)
             }
         }
+
+    @Test
+    fun `When new LogoutResult is observed set the vault to locked for that user`() = runTest {
+        verifyUnlockedVault(USER_ID)
+
+        vaultLockManager.vaultStateEventFlow.test {
+            mutableLogoutResultFlow.emit(LogoutResult(loggedOutUserId = USER_ID))
+            assertEquals(VaultStateEvent.Locked(userId = USER_ID), awaitItem())
+            assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
+        }
+        verify(exactly = 1) {
+            vaultSdkSource.clearCrypto(USER_ID)
+        }
+    }
 
     /**
      * Resets the verification call count for the given [mock] while leaving all other mocked

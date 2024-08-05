@@ -93,6 +93,7 @@ class VaultLockManagerImpl(
         observeAppForegroundChanges()
         observeUserSwitchingChanges()
         observeVaultTimeoutChanges()
+        observeUserLogoutResults()
     }
 
     override fun isVaultUnlocked(userId: String): Boolean =
@@ -229,7 +230,7 @@ class VaultLockManagerImpl(
         )
 
         if (invalidUnlockAttempts >= MAXIMUM_INVALID_UNLOCK_ATTEMPTS) {
-            userLogoutManager.logout(userId)
+            userLogoutManager.logout(userId = userId)
         }
     }
 
@@ -370,6 +371,15 @@ class VaultLockManagerImpl(
             .launchIn(unconfinedScope)
     }
 
+    private fun observeUserLogoutResults() {
+        userLogoutManager
+            .logoutResultFlow
+            .onEach {
+                setVaultToLocked(it.loggedOutUserId)
+            }
+            .launchIn(unconfinedScope)
+    }
+
     private fun vaultTimeoutChangesForUserFlow(userId: String) =
         settingsRepository
             .getVaultTimeoutStateFlow(userId = userId)
@@ -440,13 +450,11 @@ class VaultLockManagerImpl(
         userId: String,
         checkTimeoutReason: CheckTimeoutReason,
     ) {
-        val accounts = authDiskSource.userAccountTokens
         // Check if the user is already logged out. If this is the case no need to check timeout.
         // This is required in the case that an account has been "soft logged out" and has an
         // immediate time interval timeout. Without this check it would be automatically switch
         // the active user back to an authenticated user if one exists.
-        if ((accounts.find { it.userId == userId }?.isLoggedIn) == false) return
-
+        if (isUserLoggedOut(userId = userId)) return
         val vaultTimeout = settingsRepository.getVaultTimeoutStateFlow(userId = userId).value
         val vaultTimeoutAction = settingsRepository
             .getVaultTimeoutActionStateFlow(userId = userId)
@@ -523,7 +531,6 @@ class VaultLockManagerImpl(
             }
 
             VaultTimeoutAction.LOGOUT -> {
-                setVaultToLocked(userId = userId)
                 userLogoutManager.softLogout(userId = userId)
             }
         }
@@ -546,6 +553,11 @@ class VaultLockManagerImpl(
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
+    }
+
+    private fun isUserLoggedOut(userId: String): Boolean {
+        val accounts = authDiskSource.userAccountTokens
+        return (accounts.find { it.userId == userId }?.isLoggedIn) == false
     }
 
     /**
