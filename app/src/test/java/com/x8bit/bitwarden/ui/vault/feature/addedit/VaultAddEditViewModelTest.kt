@@ -2152,6 +2152,42 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                 viewModel.stateFlow.value,
             )
         }
+
+        @Test
+        fun `ClearFido2CredentialClick call should clear the fido2 credential`() {
+            val viewModel = createAddVaultItemViewModel(
+                savedStateHandle = createSavedStateHandleWithState(
+                    state = createVaultAddItemState(
+                        typeContentViewState = createLoginTypeContentViewState(
+                            fido2CredentialCreationDateTime = R.string.created_xy.asText(
+                                "05/08/24",
+                                "14:30 PM",
+                            ),
+                        ),
+                    ),
+                    vaultAddEditType = VaultAddEditType.EditItem(DEFAULT_EDIT_ITEM_ID),
+                ),
+            )
+
+            val expectedState = loginInitialState.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = createCommonContentViewState(),
+                    isIndividualVaultDisabled = false,
+                    type = createLoginTypeContentViewState(
+                        fido2CredentialCreationDateTime = null,
+                    ),
+                ),
+            )
+
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick,
+            )
+
+            assertEquals(
+                expectedState,
+                viewModel.stateFlow.value,
+            )
+        }
     }
 
     @Nested
@@ -3481,7 +3517,7 @@ class VaultAddEditViewModelTest : BaseViewModelTest() {
                     shouldRequireMasterPasswordOnRestart = false,
                 )
             }
-         }
+        }
 
         @Test
         fun `PinFido2SetUpRetryClick should display Fido2PinSetUpPrompt`() {

@@ -92,7 +92,7 @@ fun LazyListScope.vaultAddEditLoginItems(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                canViewPassword = loginState.canViewPassword,
+                canRemovePasskey = loginState.canViewPassword,
                 loginItemTypeHandlers = loginItemTypeHandlers,
             )
         }
@@ -520,7 +520,7 @@ private fun PasswordRow(
 private fun PasskeyField(
     creationDateTime: Text,
     modifier: Modifier = Modifier,
-    canViewPassword: Boolean,
+    canRemovePasskey: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
 ) {
     BitwardenTextFieldWithActions(
@@ -531,7 +531,7 @@ private fun PasskeyField(
         singleLine = true,
         modifier = modifier,
         actions = {
-            if (canViewPassword) {
+            if (canRemovePasskey) {
                 BitwardenIconButtonWithResource(
                     iconRes = IconResource(
                         iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),

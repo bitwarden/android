@@ -1047,6 +1047,7 @@ class VaultAddEditViewModel @Inject constructor(
         updateLoginContent { loginType ->
             loginType.copy(fido2CredentialCreationDateTime = null)
         }
+        sendEvent(event = VaultAddEditEvent.ShowToast(R.string.passkey_removed.asText()))
     }
 
     private fun handlePasswordVisibilityChange(
