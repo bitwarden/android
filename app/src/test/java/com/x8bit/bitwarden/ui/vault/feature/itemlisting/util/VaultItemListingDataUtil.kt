@@ -108,7 +108,7 @@ fun createMockDisplayItemForCipher(
                 optionsTestTag = "CipherOptionsButton",
                 isAutofill = false,
                 isFido2Creation = false,
-                shouldShowMasterPasswordReprompt = requiresPasswordReprompt,
+                shouldShowMasterPasswordReprompt = false,
                 iconTestTag = "SecureNoteCipherIcon",
             )
         }
@@ -185,7 +185,7 @@ fun createMockDisplayItemForCipher(
                     ListingItemOverflowAction.VaultAction.ViewClick(cipherId = "mockId-$number"),
                     ListingItemOverflowAction.VaultAction.EditClick(
                         cipherId = "mockId-$number",
-                        requiresPasswordReprompt = true,
+                        requiresPasswordReprompt = requiresPasswordReprompt,
                     ),
                 ),
                 optionsTestTag = "CipherOptionsButton",
