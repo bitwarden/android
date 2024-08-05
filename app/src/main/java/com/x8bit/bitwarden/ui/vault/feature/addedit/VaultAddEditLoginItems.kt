@@ -519,9 +519,9 @@ private fun PasswordRow(
 @Composable
 private fun PasskeyField(
     creationDateTime: Text,
-    modifier: Modifier = Modifier,
     canRemovePasskey: Boolean,
     loginItemTypeHandlers: VaultAddEditLoginTypeHandlers,
+    modifier: Modifier = Modifier,
 ) {
     BitwardenTextFieldWithActions(
         label = stringResource(id = R.string.passkey),
@@ -537,9 +537,7 @@ private fun PasskeyField(
                         iconPainter = rememberVectorPainter(id = R.drawable.ic_minus),
                         contentDescription = stringResource(id = R.string.remove_passkey),
                     ),
-                    onClick = {
-                        loginItemTypeHandlers.onClearFido2CredentialClick()
-                    },
+                    onClick = loginItemTypeHandlers.onClearFido2CredentialClick,
                     modifier = Modifier
                         .testTag("RemovePasskeyButton"),
                 )
