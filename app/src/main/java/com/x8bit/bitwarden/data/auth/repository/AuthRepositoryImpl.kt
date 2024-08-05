@@ -1371,10 +1371,10 @@ class AuthRepositoryImpl(
                 return@userStateTransaction vaultUnlockError.toLoginErrorResult()
             },
         ) {
+            val isDeviceUnlockAvailable = deviceData != null ||
+                loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
             // if possible attempt to unlock the vault with trusted device data
-            if ((deviceData != null) ||
-                (loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null)
-            ) {
+            if (isDeviceUnlockAvailable) {
                 unlockVaultWithTdeOnLoginSuccess(
                     loginResponse = loginResponse,
                     userId = userId,
@@ -1484,23 +1484,21 @@ class AuthRepositoryImpl(
         password: String?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with password if possible.
-        return password?.let {
-            if (loginResponse.privateKey != null && loginResponse.key != null) {
-                vaultRepository.unlockVault(
-                    userId = userId,
-                    email = userStateJson.activeAccount.profile.email,
-                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                    userKey = loginResponse.key,
-                    privateKey = loginResponse.privateKey,
-                    masterPassword = it,
-                    // We can separately unlock vault for organization data after
-                    // receiving the sync response if this data is currently absent.
-                    organizationKeys = null,
-                )
-            } else {
-                null
-            }
-        }
+        // Attempt to unlock the vault with password if possible.
+        val masterPassword = password ?: return null
+        val privateKey = loginResponse.privateKey ?: return null
+        val key = loginResponse.key ?: return null
+        return vaultRepository.unlockVault(
+            userId = userId,
+            email = userStateJson.activeAccount.profile.email,
+            kdf = userStateJson.activeAccount.profile.toSdkParams(),
+            userKey = key,
+            privateKey = privateKey,
+            masterPassword = masterPassword,
+            // We can separately unlock vault for organization data after
+            // receiving the sync response if this data is currently absent.
+            organizationKeys = null,
+        )
     }
 
     /**
@@ -1512,14 +1510,11 @@ class AuthRepositoryImpl(
         userStateJson: UserStateJson,
         deviceData: DeviceDataModel?,
     ): VaultUnlockResult? {
-
-        var vaultUnlockResult: VaultUnlockResult? = null
-
         // Attempt to unlock the vault with auth request if possible.
         // These values will only be null during the Just-in-Time provisioning flow.
         if (loginResponse.privateKey != null && loginResponse.key != null) {
             deviceData?.let { model ->
-                vaultUnlockResult = vaultRepository.unlockVault(
+                return vaultRepository.unlockVault(
                     userId = userId,
                     email = userStateJson.activeAccount.profile.email,
                     kdf = userStateJson.activeAccount.profile.toSdkParams(),
@@ -1546,14 +1541,12 @@ class AuthRepositoryImpl(
             }
         }
 
-        if (vaultUnlockResult == null) {
-            // Handle the Trusted Device Encryption flow
-            loginResponse
+        // Handle the Trusted Device Encryption flow
+        return loginResponse
                 .userDecryptionOptions
                 ?.trustedDeviceUserDecryptionOptions
                 ?.let { options ->
                     loginResponse.privateKey?.let { privateKey ->
-                        vaultUnlockResult =
                             unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
                                 options = options,
                                 userStateJson = userStateJson,
@@ -1561,9 +1554,6 @@ class AuthRepositoryImpl(
                             )
                     }
                 }
-        }
-
-        return vaultUnlockResult
     }
 
     /**
@@ -1580,8 +1570,9 @@ class AuthRepositoryImpl(
         val deviceKey = authDiskSource.getDeviceKey(userId = userId)
         if (deviceKey == null) {
             // A null device key means this device is not trusted.
-            val pendingRequest =
-                authDiskSource.getPendingAuthRequest(userId = userId) ?: return null
+            val pendingRequest = authDiskSource
+                .getPendingAuthRequest(userId = userId)
+                ?: return null
             authRequestManager
                 .getAuthRequestIfApproved(pendingRequest.requestId)
                 .getOrNull()
@@ -1653,10 +1644,7 @@ class AuthRepositoryImpl(
         onVaultUnlockError: (VaultUnlockError) -> Unit,
         block: () -> VaultUnlockResult?,
     ) {
-        val result = block.invoke()
-        (result as? VaultUnlockError)?.let {
-            onVaultUnlockError.invoke(it)
-        }
+        (block() as? VaultUnlockError)?.also(onVaultUnlockError)
     }
 
     //endregion LoginCommon
