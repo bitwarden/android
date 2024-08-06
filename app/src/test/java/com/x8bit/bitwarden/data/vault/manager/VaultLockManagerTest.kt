@@ -12,7 +12,7 @@ import com.x8bit.bitwarden.data.auth.datasource.disk.util.FakeAuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.sdk.AuthSdkSource
 import com.x8bit.bitwarden.data.auth.manager.TrustedDeviceManager
 import com.x8bit.bitwarden.data.auth.manager.UserLogoutManager
-import com.x8bit.bitwarden.data.auth.manager.model.LogoutResult
+import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.auth.repository.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
 import com.x8bit.bitwarden.data.platform.manager.model.AppForegroundState
@@ -68,11 +68,11 @@ class VaultLockManagerTest {
         every { clearCrypto(userId = any()) } just runs
     }
 
-    private val mutableLogoutResultFlow = MutableSharedFlow<LogoutResult>()
+    private val mutableLogoutResultFlow = MutableSharedFlow<LogoutEvent>()
     private val userLogoutManager: UserLogoutManager = mockk {
         every { logout(any()) } just runs
         every { softLogout(any()) } just runs
-        every { logoutResultFlow } returns mutableLogoutResultFlow.asSharedFlow()
+        every { logoutEventFlow } returns mutableLogoutResultFlow.asSharedFlow()
     }
     private val trustedDeviceManager: TrustedDeviceManager = mockk()
     private val mutableVaultTimeoutStateFlow =
@@ -1372,7 +1372,7 @@ class VaultLockManagerTest {
         verifyUnlockedVault(USER_ID)
 
         vaultLockManager.vaultStateEventFlow.test {
-            mutableLogoutResultFlow.emit(LogoutResult(loggedOutUserId = USER_ID))
+            mutableLogoutResultFlow.emit(LogoutEvent(loggedOutUserId = USER_ID))
             assertEquals(VaultStateEvent.Locked(userId = USER_ID), awaitItem())
             assertFalse(vaultLockManager.isVaultUnlocked(USER_ID))
         }

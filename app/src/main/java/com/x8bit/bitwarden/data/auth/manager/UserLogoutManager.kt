@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.manager
 
-import com.x8bit.bitwarden.data.auth.manager.model.LogoutResult
+import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import kotlinx.coroutines.flow.SharedFlow
 
 /**
@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.SharedFlow
 interface UserLogoutManager {
 
     /**
-     * Observable flow of [LogoutResult]s
+     * Observable flow of [LogoutEvent]s
      */
-    val logoutResultFlow: SharedFlow<LogoutResult>
+    val logoutEventFlow: SharedFlow<LogoutEvent>
 
     /**
      * Completely logs out the given [userId], removing all data.

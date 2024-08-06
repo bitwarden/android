@@ -373,7 +373,7 @@ class VaultLockManagerImpl(
 
     private fun observeUserLogoutResults() {
         userLogoutManager
-            .logoutResultFlow
+            .logoutEventFlow
             .onEach {
                 setVaultToLocked(it.loggedOutUserId)
             }

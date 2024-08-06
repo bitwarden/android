@@ -5,7 +5,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
-import com.x8bit.bitwarden.data.auth.manager.model.LogoutResult
+import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
@@ -38,9 +38,9 @@ class UserLogoutManagerImpl(
     private val scope = CoroutineScope(dispatcherManager.unconfined)
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
-    private val mutableLogoutResultFlow: MutableSharedFlow<LogoutResult> =
+    private val mutableLogoutEventFlow: MutableSharedFlow<LogoutEvent> =
         bufferedMutableSharedFlow()
-    override val logoutResultFlow: SharedFlow<LogoutResult> = mutableLogoutResultFlow.asSharedFlow()
+    override val logoutEventFlow: SharedFlow<LogoutEvent> = mutableLogoutEventFlow.asSharedFlow()
 
     override fun logout(userId: String, isExpired: Boolean) {
         authDiskSource.userState ?: return
@@ -61,7 +61,7 @@ class UserLogoutManagerImpl(
         }
 
         clearData(userId = userId)
-        mutableLogoutResultFlow.tryEmit(LogoutResult(loggedOutUserId = userId))
+        mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 
     override fun softLogout(userId: String) {
@@ -77,7 +77,7 @@ class UserLogoutManagerImpl(
         switchUserIfAvailable(currentUserId = userId, removeCurrentUserFromAccounts = false)
 
         clearData(userId = userId)
-        mutableLogoutResultFlow.tryEmit(LogoutResult(loggedOutUserId = userId))
+        mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
 
         // Restore data that is still required
         settingsDiskSource.apply {
