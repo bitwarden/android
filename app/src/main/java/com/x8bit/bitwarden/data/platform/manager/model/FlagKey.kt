@@ -26,6 +26,14 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
+     * Data object holding the feature flag key for the new onboarding feature
+     */
+    data object OnboardingFlow : FlagKey<Boolean>() {
+        override val keyName: String = "native-create-account-flow"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
      * Data object holding the key for an Int flag to be used in tests
      */
     data object DummyInt : FlagKey<Int>() {
