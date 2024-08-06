@@ -532,6 +532,81 @@ class VaultItemListingDataExtensionsTest {
         )
     }
 
+    @Test
+    @Suppress("MaxLineLength")
+    fun `toViewState should transform a list of CipherViews into a ViewState with correct value for repromt`() {
+        mockkStatic(CipherView::subtitle)
+        mockkStatic(Uri::class)
+        val uriMock = mockk<Uri>()
+        every { any<CipherView>().subtitle } returns null
+        every { Uri.parse(any()) } returns uriMock
+        every { uriMock.host } returns "www.mockuri.com"
+
+        val cipherViewList = listOf(
+            createMockCipherView(
+                number = 1,
+                isDeleted = false,
+                cipherType = CipherType.LOGIN,
+                folderId = "mockId-1",
+                fido2Credentials = createMockSdkFido2CredentialList(number = 1),
+            )
+                .copy(reprompt = CipherRepromptType.PASSWORD),
+        )
+        val fido2CredentialAutofillViews = listOf(
+            createMockFido2CredentialAutofillView(
+                cipherId = "mockId-1",
+                number = 1,
+            ),
+        )
+
+        val result = VaultData(
+            cipherViewList = cipherViewList,
+            collectionViewList = listOf(),
+            folderViewList = listOf(),
+            sendViewList = listOf(),
+        ).toViewState(
+            itemListingType = VaultItemListingState.ItemListingType.Vault.Folder("mockId-1"),
+            vaultFilterType = VaultFilterType.AllVaults,
+            hasMasterPassword = false,
+            baseIconUrl = Environment.Us.environmentUrlData.baseIconUrl,
+            isIconLoadingDisabled = false,
+            autofillSelectionData = AutofillSelectionData(
+                type = AutofillSelectionData.Type.LOGIN,
+                uri = null,
+            ),
+            fido2CreationData = null,
+            fido2CredentialAutofillViews = fido2CredentialAutofillViews,
+            isPremiumUser = true,
+        )
+
+        assertEquals(
+            VaultItemListingState.ViewState.Content(
+                displayCollectionList = emptyList(),
+                displayItemList = listOf(
+                    createMockDisplayItemForCipher(
+                        number = 1,
+                        cipherType = CipherType.LOGIN,
+                        subtitle = null,
+                        requiresPasswordReprompt = false,
+                    )
+                        .copy(
+                            secondSubtitle = "mockRpId-1",
+                            secondSubtitleTestTag = "PasskeySite",
+                            subtitleTestTag = "PasskeyName",
+                            iconData = IconData.Network(
+                                uri = "https://vault.bitwarden.com/icons/www.mockuri.com/icon.png",
+                                fallbackIconRes = R.drawable.ic_login_item_passkey,
+                            ),
+                            isAutofill = true,
+                            shouldShowMasterPasswordReprompt = false,
+                        ),
+                ),
+                displayFolderList = emptyList(),
+            ),
+            result,
+        )
+    }
+
     @Suppress("MaxLineLength")
     @Test
     fun `toViewState should transform an empty list of CipherViews into a NoItems ViewState with the appropriate data`() {
