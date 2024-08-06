@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.data.platform.manager
 
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import kotlinx.coroutines.flow.Flow
 
 /**
