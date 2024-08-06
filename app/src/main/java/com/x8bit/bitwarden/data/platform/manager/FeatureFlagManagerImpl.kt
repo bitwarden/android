@@ -38,7 +38,7 @@ private fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
     val defaultValue = key.defaultValue
     return this?.serverData
         ?.featureStates
-        ?.get(key.stringValue)
+        ?.get(key.keyName)
         ?.let {
             try {
                 // Suppressed since we are checking the type before doing the cast

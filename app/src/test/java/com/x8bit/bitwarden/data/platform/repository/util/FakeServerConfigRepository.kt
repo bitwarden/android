@@ -17,7 +17,7 @@ class FakeServerConfigRepository : ServerConfigRepository {
              mutableServerConfigFlow.value = value
          }
 
-    val mutableServerConfigFlow = MutableStateFlow<ServerConfig?>(SERVER_CONFIG)
+    private val mutableServerConfigFlow = MutableStateFlow<ServerConfig?>(SERVER_CONFIG)
 
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         if (forceRefresh) {
