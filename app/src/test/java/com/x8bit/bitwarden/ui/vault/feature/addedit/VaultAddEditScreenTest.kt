@@ -917,6 +917,58 @@ class VaultAddEditScreenTest : BaseComposeTest() {
     }
 
     @Test
+    fun `in ItemType_Login state the Passkey should change according to state`() {
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                        fido2CredentialCreationDateTime = "fido2Credentials".asText(),
+                        canViewPassword = false,
+                    ),
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        composeTestRule
+            .onNodeWithTextAfterScroll("Passkey")
+            .assertTextEquals("Passkey", "fido2Credentials")
+            .assertIsEnabled()
+        composeTestRule
+            .onNodeWithContentDescription("Remove passkey", ignoreCase = true)
+            .assertDoesNotExist()
+
+        mutableStateFlow.update {
+            it.copy(
+                viewState = VaultAddEditState.ViewState.Content(
+                    common = VaultAddEditState.ViewState.Content.Common(),
+                    type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                        fido2CredentialCreationDateTime = "fido2Credentials".asText(),
+                        canViewPassword = true,
+                    ),
+                    isIndividualVaultDisabled = false,
+                ),
+            )
+        }
+
+        // Click on Remove Passkey button
+        composeTestRule
+            .onNodeWithTextAfterScroll("Passkey")
+            .assertExists()
+        composeTestRule
+            .onNodeWithContentDescription("Remove passkey")
+            .assertIsDisplayed()
+            .performClick()
+
+        verify {
+            viewModel.trySendAction(
+                VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick,
+            )
+        }
+    }
+
+    @Test
     fun `in ItemType_Login state the totp text field should be present based on state`() {
         mutableStateFlow.update { currentState ->
             updateLoginType(currentState) { copy(totp = "TestCode") }
