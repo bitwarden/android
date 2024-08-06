@@ -9,7 +9,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
-import retrofit2.Response.success
 import java.lang.reflect.Type
 
 /**
@@ -23,57 +22,27 @@ class ResultCall<T>(
 
     override fun clone(): Call<Result<T>> = ResultCall(backingCall, successType)
 
-    @Suppress("UNCHECKED_CAST")
-    private fun createResult(body: T?): Result<T> {
-        return when {
-            body != null -> body.asSuccess()
-            successType == Unit::class.java -> (Unit as T).asSuccess()
-            else -> IllegalStateException("Unexpected null body!").asFailure()
-        }
-    }
-
     override fun enqueue(callback: Callback<Result<T>>): Unit = backingCall.enqueue(
         object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                val body = response.body()
-                val result: Result<T> = if (!response.isSuccessful) {
-                    HttpException(response).asFailure()
-                } else {
-                    createResult(body)
-                }
-                callback.onResponse(this@ResultCall, success(result))
+                callback.onResponse(this@ResultCall, Response.success(response.toResult()))
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                val result: Result<T> = t.asFailure()
-                callback.onResponse(this@ResultCall, success(result))
+                callback.onResponse(this@ResultCall, Response.success(t.asFailure()))
             }
         },
     )
 
-    /**
-     * Synchronously send the request and return its response as a [Result].
-     */
-    fun executeForResult(): Result<T> = requireNotNull(execute().body())
-
     @Suppress("TooGenericExceptionCaught")
-    override fun execute(): Response<Result<T>> {
-        val response = try {
-            backingCall.execute()
+    override fun execute(): Response<Result<T>> =
+        try {
+            Response.success(backingCall.execute().toResult())
         } catch (ioException: IOException) {
-            return success(ioException.asFailure())
+            Response.success(ioException.asFailure())
         } catch (runtimeException: RuntimeException) {
-            return success(runtimeException.asFailure())
+            Response.success(runtimeException.asFailure())
         }
-
-        return success(
-            if (!response.isSuccessful) {
-                HttpException(response).asFailure()
-            } else {
-                createResult(response.body())
-            },
-        )
-    }
 
     override fun isCanceled(): Boolean = backingCall.isCanceled
 
@@ -82,4 +51,22 @@ class ResultCall<T>(
     override fun request(): Request = backingCall.request()
 
     override fun timeout(): Timeout = backingCall.timeout()
+
+    /**
+     * Synchronously send the request and return its response as a [Result].
+     */
+    fun executeForResult(): Result<T> = requireNotNull(execute().body())
+
+    private fun Response<T>.toResult(): Result<T> =
+        if (!this.isSuccessful) {
+            HttpException(this).asFailure()
+        } else {
+            val body = this.body()
+            @Suppress("UNCHECKED_CAST")
+            when {
+                body != null -> body.asSuccess()
+                successType == Unit::class.java -> (Unit as T).asSuccess()
+                else -> IllegalStateException("Unexpected null body!").asFailure()
+            }
+        }
 }
