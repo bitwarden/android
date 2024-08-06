@@ -11,6 +11,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
@@ -18,7 +19,6 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
-import com.x8bit.bitwarden.ui.platform.feature.search.sortAlphabetically
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
@@ -362,6 +362,16 @@ private fun SendView.toDisplayItem(
         autofillSelectionOptions = emptyList(),
         shouldDisplayMasterPasswordReprompt = false,
     )
+
+/**
+ * Sort a list of [SearchState.DisplayItem] by their titles alphabetically giving digits and
+ * special characters higher precedence.
+ */
+private fun List<SearchState.DisplayItem>.sortAlphabetically(): List<SearchState.DisplayItem> {
+    return this.sortedWith { item1, item2 ->
+        CompareStringSpecialCharWithPrecedence.compare(item1.title, item2.title)
+    }
+}
 
 private enum class SortPriority {
     HIGH,
