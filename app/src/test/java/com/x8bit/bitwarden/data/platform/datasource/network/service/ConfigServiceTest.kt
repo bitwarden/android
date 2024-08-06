@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.api.ConfigApi
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonPrimitive
 import okhttp3.mockwebserver.MockResponse
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -61,6 +62,6 @@ private val CONFIG_RESPONSE = ConfigResponseJson(
         ssoUrl = "ssoUrl",
     ),
     featureStates = mapOf(
-        "feature one" to "false",
+        "feature one" to JsonPrimitive(false),
     ),
 )

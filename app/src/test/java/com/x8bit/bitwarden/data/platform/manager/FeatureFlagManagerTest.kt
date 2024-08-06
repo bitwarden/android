@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponse
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.x8bit.bitwarden.data.platform.repository.util.FakeServerConfigRepository
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -74,7 +75,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("flag-example" to "123"),
+                    featureStates = mapOf("flag-example" to JsonPrimitive(123)),
                 ),
         )
 
@@ -91,7 +92,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("email-verification" to "123"),
+                    featureStates = mapOf("email-verification" to JsonPrimitive(123)),
                 ),
         )
 
@@ -112,7 +113,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("flag-example" to "123"),
+                    featureStates = mapOf("flag-example" to JsonPrimitive(123)),
                 ),
         )
 
@@ -133,7 +134,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("email-verification" to "niceValue"),
+                    featureStates = mapOf("email-verification" to JsonPrimitive("niceValue")),
                 ),
         )
 
@@ -154,7 +155,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("flag-example" to "niceValue"),
+                    featureStates = mapOf("flag-example" to JsonPrimitive("niceValue")),
                 ),
         )
 
@@ -233,8 +234,8 @@ private val SERVER_CONFIG = ServerConfig(
             ssoUrl = "http://localhost:51822",
         ),
         featureStates = mapOf(
-            "email-verification" to "true",
-            "flexible-collections-v-1" to "false",
+            "email-verification" to JsonPrimitive(true),
+            "flexible-collections-v-1" to JsonPrimitive(false),
         ),
     ),
 )

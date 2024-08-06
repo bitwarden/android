@@ -7,6 +7,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponse
 import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.json.JsonPrimitive
 import java.time.Instant
 
 class FakeServerConfigRepository : ServerConfigRepository {
@@ -49,8 +50,9 @@ private val SERVER_CONFIG = ServerConfig(
             ssoUrl = "http://localhost:51822",
         ),
         featureStates = mapOf(
-            "email-verification" to "true",
-            "flexible-collections-v-1" to "false",
+            "duo-redirect" to JsonPrimitive(true),
+            "flexible-collections-v-1" to JsonPrimitive(false),
+            "email-verification" to JsonPrimitive(true),
         ),
     ),
 )

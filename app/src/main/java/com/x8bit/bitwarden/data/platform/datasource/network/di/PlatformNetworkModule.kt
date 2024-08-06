@@ -102,8 +102,5 @@ object PlatformNetworkModule {
 
         // Respect model default property values.
         coerceInputValues = true
-
-        // Allow unquoted json keys and values to be parsed
-        isLenient = true
     }
 }

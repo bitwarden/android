@@ -15,6 +15,7 @@ import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -162,7 +163,10 @@ private val SERVER_CONFIG = ServerConfig(
             notificationsUrl = "http://localhost:61840",
             ssoUrl = "http://localhost:51822",
         ),
-        featureStates = mapOf("duo-redirect" to "true", "flexible-collections-v-1" to "false"),
+        featureStates = mapOf(
+            "duo-redirect" to JsonPrimitive(true),
+            "flexible-collections-v-1" to JsonPrimitive(false),
+        ),
     ),
 )
 
@@ -182,5 +186,8 @@ private val CONFIG_RESPONSE_JSON = ConfigResponseJson(
         notificationsUrl = "http://localhost:61840",
         ssoUrl = "http://localhost:51822",
     ),
-    featureStates = mapOf("duo-redirect" to "true", "flexible-collections-v-1" to "false"),
+    featureStates = mapOf(
+        "duo-redirect" to JsonPrimitive(true),
+        "flexible-collections-v-1" to JsonPrimitive(false),
+    ),
 )

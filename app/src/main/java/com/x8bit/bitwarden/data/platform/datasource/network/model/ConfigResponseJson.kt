@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.platform.datasource.network.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Represents the response model for configuration data fetched from the server.
@@ -31,7 +32,7 @@ data class ConfigResponseJson(
     val environment: EnvironmentJson?,
 
     @SerialName("featureStates")
-    val featureStates: Map<String, String>?,
+    val featureStates: Map<String, JsonPrimitive>?,
 ) {
     /**
      * Represents a server in the configuration response.
