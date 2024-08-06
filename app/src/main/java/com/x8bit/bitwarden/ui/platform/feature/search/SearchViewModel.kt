@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.DataState
 import com.x8bit.bitwarden.data.platform.repository.util.baseIconUrl
 import com.x8bit.bitwarden.data.platform.repository.util.baseWebSendUrl
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
@@ -726,9 +727,14 @@ data class SearchState(
          */
         @Parcelize
         data class Content(
-            val displayItems: List<DisplayItem>,
+            private val displayItems: List<DisplayItem>,
         ) : ViewState() {
             override val hasVaultFilter: Boolean get() = true
+
+            val displayItemsSorted: List<DisplayItem>
+                get() = displayItems.sortedWith { item1, item2 ->
+                    CompareStringSpecialCharWithPrecedence.compare(item1.title, item2.title)
+                }
         }
 
         /**
@@ -800,6 +806,16 @@ data class SearchState(
         val autofillSelectionOptions: List<AutofillSelectionOption>,
         val shouldDisplayMasterPasswordReprompt: Boolean,
     ) : Parcelable
+}
+
+/**
+ * Sort a list of [SearchState.DisplayItem] by their titles alphabetically giving digits and
+ * special characters higher precedence.
+ */
+fun List<SearchState.DisplayItem>.sortAlphabetically(): List<SearchState.DisplayItem> {
+    return this.sortedWith { item1, item2 ->
+        CompareStringSpecialCharWithPrecedence.compare(item1.title, item2.title)
+    }
 }
 
 /**

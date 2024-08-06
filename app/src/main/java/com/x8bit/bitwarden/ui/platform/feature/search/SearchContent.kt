@@ -107,7 +107,7 @@ fun SearchContent(
     LazyColumn(
         modifier = modifier,
     ) {
-        items(viewState.displayItems) {
+        items(viewState.displayItemsSorted) {
             BitwardenListItem(
                 startIcon = it.iconData,
                 label = it.title,
