@@ -44,9 +44,9 @@ private fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
                 // Suppressed since we are checking the type before doing the cast
                 @Suppress("UNCHECKED_CAST")
                 when (defaultValue::class) {
-                    Boolean::class -> it.content.toBoolean() as? T
-                    String::class -> it.content as? T
-                    Int::class -> it.content.toInt() as? T
+                    Boolean::class -> it.content.toBoolean() as T
+                    String::class -> it.content as T
+                    Int::class -> it.content.toInt() as T
                     else -> defaultValue
                 }
             } catch (ex: ClassCastException) {
