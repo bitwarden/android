@@ -160,7 +160,8 @@ fun List<CipherView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
-                ).sortAlphabetically(),
+                )
+                    .sortAlphabetically(),
             )
         }
 
@@ -315,7 +316,8 @@ fun List<SendView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseWebSendUrl = baseWebSendUrl,
                     clock = clock,
-                ).sortAlphabetically(),
+                )
+                    .sortAlphabetically(),
             )
         }
 
@@ -335,7 +337,7 @@ private fun List<SendView>.toDisplayItemList(
             baseWebSendUrl = baseWebSendUrl,
             clock = clock,
         )
-    }.sortAlphabetically()
+    }
 
 private fun SendView.toDisplayItem(
     baseWebSendUrl: String,
