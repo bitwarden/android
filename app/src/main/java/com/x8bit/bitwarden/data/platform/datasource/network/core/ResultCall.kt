@@ -12,6 +12,11 @@ import retrofit2.Response
 import java.lang.reflect.Type
 
 /**
+ * The integer code value for a "No Content" response.
+ */
+private const val NO_CONTENT_RESPONSE_CODE: Int = 204
+
+/**
  * A [Call] for wrapping a network request into a [Result].
  */
 class ResultCall<T>(
@@ -64,8 +69,13 @@ class ResultCall<T>(
             val body = this.body()
             @Suppress("UNCHECKED_CAST")
             when {
+                // We got a nonnull T as the body, just return it.
                 body != null -> body.asSuccess()
+                // We expected the body to be null since the successType is Unit, just return Unit.
                 successType == Unit::class.java -> (Unit as T).asSuccess()
+                // We allow null for 204's, just return null.
+                this.code() == NO_CONTENT_RESPONSE_CODE -> (null as T).asSuccess()
+                // All other null bodies result in an error.
                 else -> IllegalStateException("Unexpected null body!").asFailure()
             }
         }
