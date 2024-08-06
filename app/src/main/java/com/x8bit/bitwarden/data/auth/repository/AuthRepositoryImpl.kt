@@ -1484,7 +1484,6 @@ class AuthRepositoryImpl(
         password: String?,
     ): VaultUnlockResult? {
         // Attempt to unlock the vault with password if possible.
-        // Attempt to unlock the vault with password if possible.
         val masterPassword = password ?: return null
         val privateKey = loginResponse.privateKey ?: return null
         val key = loginResponse.key ?: return null
@@ -1543,22 +1542,22 @@ class AuthRepositoryImpl(
 
         // Handle the Trusted Device Encryption flow
         return loginResponse
-                .userDecryptionOptions
-                ?.trustedDeviceUserDecryptionOptions
-                ?.let { options ->
-                    loginResponse.privateKey?.let { privateKey ->
-                            unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
-                                options = options,
-                                userStateJson = userStateJson,
-                                privateKey = privateKey,
-                            )
-                    }
+            .userDecryptionOptions
+            ?.trustedDeviceUserDecryptionOptions
+            ?.let { options ->
+                loginResponse.privateKey?.let { privateKey ->
+                    unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
+                        options = options,
+                        userStateJson = userStateJson,
+                        privateKey = privateKey,
+                    )
                 }
+            }
     }
 
     /**
-     * A helper method to handle the [TrustedDeviceUserDecryptionOptionsJson] specific to TDE.
-     * also store the necessary keys when appropriate.
+     * A helper method to handle the [TrustedDeviceUserDecryptionOptionsJson] specific to TDE
+     * and store the necessary keys when appropriate.
      */
     private suspend fun unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
         options: TrustedDeviceUserDecryptionOptionsJson,
