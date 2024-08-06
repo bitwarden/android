@@ -10,10 +10,16 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2GetCredentialsRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialAssertionRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2CredentialRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.createMockFido2GetCredentialsRequest
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManagerImpl
 import com.x8bit.bitwarden.data.autofill.model.AutofillSaveItem
@@ -472,6 +478,48 @@ class MainViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
+    fun `on ReceiveFirstIntent with FIDO 2 assertion request data should set the special circumstance to Fido2Assertion`() {
+        val viewModel = createViewModel()
+        val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
+        val fido2AssertionIntent = createMockFido2AssertionIntent(mockAssertionRequest)
+
+        every { intentManager.getShareDataFromIntent(fido2AssertionIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = fido2AssertionIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.Fido2Assertion(mockAssertionRequest),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on ReceiveFirstIntent with fido2 get credentials request data should set the special circumstance to Fido2GetCredentials`() {
+        val viewModel = createViewModel()
+        val mockGetCredentialsRequest = createMockFido2GetCredentialsRequest(number = 1)
+        val mockIntent = createMockFido2GetCredentialsIntent(mockGetCredentialsRequest)
+
+        every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+
+        viewModel.trySendAction(
+            MainAction.ReceiveFirstIntent(
+                intent = mockIntent,
+            ),
+        )
+
+        assertEquals(
+            SpecialCircumstance.Fido2GetCredentials(mockGetCredentialsRequest),
+            specialCircumstanceManager.specialCircumstance,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
     fun `on ReceiveNewIntent with share data should set the special circumstance to ShareNewSend`() {
         val viewModel = createViewModel()
         val mockIntent = mockk<Intent>()
@@ -692,6 +740,33 @@ private fun createMockFido2RegistrationIntent(
     every { getPasswordlessRequestDataIntentOrNull() } returns null
     every { getAutofillSelectionDataOrNull() } returns null
     every { getAutofillSaveItemOrNull() } returns null
+    every { isMyVaultShortcut } returns false
+    every { isPasswordGeneratorShortcut } returns false
+}
+
+private fun createMockFido2AssertionIntent(
+    fido2CredentialAssertionRequest: Fido2CredentialAssertionRequest =
+        createMockFido2CredentialAssertionRequest(number = 1),
+): Intent = mockk<Intent> {
+    every { getFido2AssertionRequestOrNull() } returns fido2CredentialAssertionRequest
+    every { getPasswordlessRequestDataIntentOrNull() } returns null
+    every { getAutofillSelectionDataOrNull() } returns null
+    every { getAutofillSaveItemOrNull() } returns null
+    every { isMyVaultShortcut } returns false
+    every { isPasswordGeneratorShortcut } returns false
+}
+
+private fun createMockFido2GetCredentialsIntent(
+    fido2GetCredentialsRequest: Fido2GetCredentialsRequest = createMockFido2GetCredentialsRequest(
+        number = 1,
+    ),
+): Intent = mockk<Intent> {
+    every { getFido2GetCredentialsRequestOrNull() } returns fido2GetCredentialsRequest
+    every { getPasswordlessRequestDataIntentOrNull() } returns null
+    every { getAutofillSelectionDataOrNull() } returns null
+    every { getAutofillSaveItemOrNull() } returns null
+    every { getFido2CredentialRequestOrNull() } returns null
+    every { getFido2AssertionRequestOrNull() } returns null
     every { isMyVaultShortcut } returns false
     every { isPasswordGeneratorShortcut } returns false
 }

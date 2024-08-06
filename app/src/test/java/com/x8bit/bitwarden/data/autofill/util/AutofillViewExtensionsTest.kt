@@ -25,6 +25,7 @@ class AutofillViewExtensionsTest {
         autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = false,
         textValue = null,
+        hasPasswordTerms = false,
     )
 
     @BeforeEach

@@ -148,6 +148,7 @@
   <string name="no_favorites">هیج علاقه مندی در گاوصندوقتان موجود نیست.</string>
   <string name="no_items">هیج موردی در گاوصندوقتان موجود نیست.</string>
   <string name="no_items_tap">هیج علاقه مندی برای این وب‌سایت در گاوصندوقتان موجود نیست. برای افزودن ضربه بزنید.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">این ورود هیچ نام کاربری و کلمه عبور پیکربندی شده ای ندارد.</string>
   <string name="ok_got_it">باشه، فهمیدم!</string>
   <string name="option_defaults">گزینه های پیش‌فرض از ابزار تولید کلمه عبور Bitwarden تنظیم می‌شود.</string>

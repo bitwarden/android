@@ -22,6 +22,8 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
@@ -30,6 +32,8 @@ import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.PushManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.ciphermatching.CipherMatchingManager
@@ -45,8 +49,8 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -90,12 +94,12 @@ object PlatformManagerModule {
     @Provides
     @Singleton
     fun providesCipherMatchingManager(
-        @ApplicationContext context: Context,
+        resourceCacheManager: ResourceCacheManager,
         settingsRepository: SettingsRepository,
         vaultRepository: VaultRepository,
     ): CipherMatchingManager =
         CipherMatchingManagerImpl(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
             settingsRepository = settingsRepository,
             vaultRepository = vaultRepository,
         )
@@ -136,8 +140,17 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
+    fun providesFeatureFlagManager(
+        serverConfigRepository: ServerConfigRepository,
+    ): FeatureFlagManager =
+        FeatureFlagManagerImpl(
+            serverConfigRepository = serverConfigRepository,
+        )
+
+    @Provides
+    @Singleton
     fun provideSdkClientManager(
-        featureFlagManager: BitwardenFeatureFlagManager,
+        featureFlagManager: FeatureFlagManager,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
     )
@@ -229,4 +242,10 @@ object PlatformManagerModule {
         environmentRepository = environmentRepository,
         restrictionsManager = requireNotNull(context.getSystemService()),
     )
+
+    @Provides
+    @Singleton
+    fun provideResourceCacheManager(
+        @ApplicationContext context: Context,
+    ): ResourceCacheManager = ResourceCacheManagerImpl(context = context)
 }

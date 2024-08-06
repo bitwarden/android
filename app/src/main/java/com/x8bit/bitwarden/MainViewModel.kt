@@ -8,7 +8,9 @@ import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.util.getPasswordlessRequestDataIntentOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.manager.Fido2CredentialManager
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2AssertionRequestOrNull
 import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2CredentialRequestOrNull
+import com.x8bit.bitwarden.data.autofill.fido2.util.getFido2GetCredentialsRequestOrNull
 import com.x8bit.bitwarden.data.autofill.manager.AutofillSelectionManager
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSaveItemOrNull
 import com.x8bit.bitwarden.data.autofill.util.getAutofillSelectionDataOrNull
@@ -110,6 +112,10 @@ class MainViewModel @Inject constructor(
             .onEach {
                 when (it) {
                     is VaultStateEvent.Locked -> {
+                        // Similar to account switching, triggering this action too soon can
+                        // interfere with animations or navigation logic, so we will delay slightly.
+                        @Suppress("MagicNumber")
+                        delay(500)
                         trySendAction(MainAction.Internal.VaultUnlockStateChange)
                     }
 
@@ -170,6 +176,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
+    @Suppress("LongMethod")
     private fun handleIntent(
         intent: Intent,
         isFirstIntent: Boolean,
@@ -181,6 +188,8 @@ class MainViewModel @Inject constructor(
         val hasGeneratorShortcut = intent.isPasswordGeneratorShortcut
         val hasVaultShortcut = intent.isMyVaultShortcut
         val fido2CredentialRequestData = intent.getFido2CredentialRequestOrNull()
+        val fido2CredentialAssertionRequest = intent.getFido2AssertionRequestOrNull()
+        val fido2GetCredentialsRequest = intent.getFido2GetCredentialsRequestOrNull()
         when {
             passwordlessRequestData != null -> {
                 specialCircumstanceManager.specialCircumstance =
@@ -235,6 +244,20 @@ class MainViewModel @Inject constructor(
                 ) {
                     authRepository.switchAccount(fido2CredentialRequestData.userId)
                 }
+            }
+
+            fido2CredentialAssertionRequest != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.Fido2Assertion(
+                        fido2AssertionRequest = fido2CredentialAssertionRequest,
+                    )
+            }
+
+            fido2GetCredentialsRequest != null -> {
+                specialCircumstanceManager.specialCircumstance =
+                    SpecialCircumstance.Fido2GetCredentials(
+                        fido2GetCredentialsRequest = fido2GetCredentialsRequest,
+                    )
             }
 
             hasGeneratorShortcut -> {

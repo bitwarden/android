@@ -47,8 +47,6 @@ import com.x8bit.bitwarden.ui.vault.feature.itemlisting.navigateToVaultItemListi
 import com.x8bit.bitwarden.ui.vault.model.VaultAddEditType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
 import com.x8bit.bitwarden.ui.vault.model.VaultItemListingType
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -67,15 +65,6 @@ fun RootNavScreen(
     val isNotSplashScreen = state != RootNavState.Splash
     LaunchedEffect(isNotSplashScreen) {
         if (isNotSplashScreen) onSplashScreenRemoved()
-    }
-
-    LaunchedEffect(Unit) {
-        navController
-            .currentBackStackEntryFlow
-            .onEach {
-                viewModel.trySendAction(RootNavAction.BackStackUpdate)
-            }
-            .launchIn(this)
     }
 
     NavHost(
@@ -107,6 +96,8 @@ fun RootNavScreen(
         is RootNavState.VaultUnlockedForNewSend,
         is RootNavState.VaultUnlockedForAuthRequest,
         is RootNavState.VaultUnlockedForFido2Save,
+        is RootNavState.VaultUnlockedForFido2Assertion,
+        is RootNavState.VaultUnlockedForFido2GetCredentials,
         -> VAULT_UNLOCKED_GRAPH_ROUTE
     }
     val currentRoute = navController.currentDestination?.rootLevelRoute()
@@ -185,7 +176,10 @@ fun RootNavScreen(
                 )
             }
 
-            is RootNavState.VaultUnlockedForFido2Save -> {
+            is RootNavState.VaultUnlockedForFido2Save,
+            is RootNavState.VaultUnlockedForFido2Assertion,
+            is RootNavState.VaultUnlockedForFido2GetCredentials,
+            -> {
                 navController.navigateToVaultUnlockedGraph(rootNavOptions)
                 navController.navigateToVaultItemListingAsRoot(
                     vaultItemListingType = VaultItemListingType.Login,

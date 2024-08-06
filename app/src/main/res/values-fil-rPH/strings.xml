@@ -148,6 +148,7 @@
   <string name="no_favorites">Wala kang paborito sa vault mo.</string>
   <string name="no_items">Walang laman ang vault mo.</string>
   <string name="no_items_tap">Walang item sa vault mo para sa website/app na ito. Pindutin para magdagdag.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Walang nakatakdang username o password ang login na ito.</string>
   <string name="ok_got_it">Sige, kuha ko na!</string>
   <string name="option_defaults">Mula ang mga default na opsyon sa kagamitan panggawa ng password ng pangunahing Bitwarden app.</string>

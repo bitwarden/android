@@ -417,7 +417,7 @@ private fun UnlockWithPinRow(
 ) {
     var shouldShowPinInputDialog by rememberSaveable { mutableStateOf(false) }
     var shouldShowPinConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    var pin by rememberSaveable { mutableStateOf("") }
+    var pin by remember { mutableStateOf("") }
     BitwardenWideSwitch(
         label = stringResource(id = R.string.unlock_with_pin),
         isChecked = isUnlockWithPinEnabled,
@@ -439,8 +439,6 @@ private fun UnlockWithPinRow(
     when {
         shouldShowPinInputDialog -> {
             PinInputDialog(
-                pin = pin,
-                onPinChange = { pin = it },
                 onCancelClick = {
                     shouldShowPinInputDialog = false
                     onUnlockWithPinToggleAction(
@@ -449,6 +447,7 @@ private fun UnlockWithPinRow(
                     pin = ""
                 },
                 onSubmitClick = {
+                    pin = it
                     if (pin.isNotEmpty()) {
                         shouldShowPinInputDialog = false
                         if (isUnlockWithPasswordEnabled) {

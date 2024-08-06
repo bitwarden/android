@@ -148,6 +148,7 @@
   <string name="no_favorites">你的密码库中没有任何收藏。</string>
   <string name="no_items">您的密码库中没有任何项目。</string>
   <string name="no_items_tap">您的密码库中没有此网站/应用的登录项目。点击添加一个。</string>
+  <string name="no_username">无用户名</string>
   <string name="no_username_password_configured">此登录没有已配置的用户名或者密码。</string>
   <string name="ok_got_it">好的，我知道了！</string>
   <string name="option_defaults">选项默认值是通过 Bitwarden 应用程序的密码生成工具设置的。</string>

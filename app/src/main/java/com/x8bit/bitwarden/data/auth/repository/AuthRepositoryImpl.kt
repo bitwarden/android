@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.auth.repository
 
-import android.os.SystemClock
 import com.bitwarden.core.AuthRequestMethod
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
@@ -58,8 +57,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserAccountTokens
 import com.x8bit.bitwarden.data.auth.repository.model.UserOrganizations
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
@@ -143,7 +142,6 @@ class AuthRepositoryImpl(
     private val policyManager: PolicyManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
-    private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : AuthRepository,
     AuthRequestManager by authRequestManager {
     /**
@@ -708,14 +706,6 @@ class AuthRepositoryImpl(
         hasPendingAccountAddition = false
 
         return SwitchAccountResult.AccountSwitched
-    }
-
-    override fun updateLastActiveTime() {
-        val userId = activeUserId ?: return
-        authDiskSource.storeLastActiveTimeMillis(
-            userId = userId,
-            lastActiveTimeMillis = elapsedRealtimeMillisProvider(),
-        )
     }
 
     @Suppress("LongMethod")

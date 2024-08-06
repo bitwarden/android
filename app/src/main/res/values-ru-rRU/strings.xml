@@ -148,6 +148,7 @@
   <string name="no_favorites">В вашем хранилище нет избранного.</string>
   <string name="no_items">В вашем хранилище нет элементов.</string>
   <string name="no_items_tap">В вашем хранилище нет элементов для этого сайта/приложения. Нажмите чтобы добавить.</string>
+  <string name="no_username">Нет имени пользователя</string>
   <string name="no_username_password_configured">У логина не заданы имя пользователя и пароль.</string>
   <string name="ok_got_it">Понятно!</string>
   <string name="option_defaults">Настройки по умолчанию задаются из генератора паролей основного приложения Bitwarden.</string>

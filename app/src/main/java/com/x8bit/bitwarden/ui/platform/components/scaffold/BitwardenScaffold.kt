@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -52,7 +53,11 @@ fun BitwardenScaffold(
         topBar = topBar,
         bottomBar = bottomBar,
         snackbarHost = snackbarHost,
-        floatingActionButton = floatingActionButton,
+        floatingActionButton = {
+            Box(modifier = Modifier.navigationBarsPadding()) {
+                floatingActionButton()
+            }
+        },
         floatingActionButtonPosition = floatingActionButtonPosition,
         containerColor = containerColor,
         contentColor = contentColor,

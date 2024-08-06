@@ -222,8 +222,6 @@ class AuthRepositoryTest {
         } returns mutableActivePolicyFlow
     }
 
-    private var elapsedRealtimeMillis = 123456789L
-
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
         devicesService = devicesService,
@@ -242,7 +240,6 @@ class AuthRepositoryTest {
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
         policyManager = policyManager,
-        elapsedRealtimeMillisProvider = { elapsedRealtimeMillis },
     )
 
     @BeforeEach
@@ -4408,21 +4405,6 @@ class AuthRepositoryTest {
             repository.userStateFlow.value,
         )
         assertFalse(repository.hasPendingAccountAddition)
-    }
-
-    @Test
-    fun `updateLastActiveTime should update the last active time for the current user`() {
-        val userId = USER_ID_1
-        fakeAuthDiskSource.userState = SINGLE_USER_STATE_1
-
-        assertNull(fakeAuthDiskSource.getLastActiveTimeMillis(userId = userId))
-
-        repository.updateLastActiveTime()
-
-        assertEquals(
-            elapsedRealtimeMillis,
-            fakeAuthDiskSource.getLastActiveTimeMillis(userId = userId),
-        )
     }
 
     @Test
