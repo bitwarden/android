@@ -4,6 +4,7 @@ import android.content.pm.SigningInfo
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -2696,6 +2697,123 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value.dialogState,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Fido2AssertionRequest should prompt for master password when passkey is protected and user has master password`() {
+        val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
+            .copy(cipherId = "mockId-1")
+        val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
+        specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
+            mockAssertionRequest,
+        )
+        every { fido2CredentialManager.isUserVerified } returns true
+        every {
+            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
+                mockAssertionRequest.requestJson,
+            )
+        } returns createMockPasskeyAssertionOptions(
+            number = 1,
+            userVerificationRequirement = UserVerificationRequirement.PREFERRED,
+        )
+        every {
+            vaultRepository
+                .ciphersStateFlow
+                .value
+                .data
+        } returns listOf(
+            createMockCipherView(
+                number = 1,
+                fido2Credentials = mockFido2CredentialList,
+                repromptType = CipherRepromptType.PASSWORD,
+            ),
+        )
+        every {
+            fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
+                mockAssertionRequest.requestJson,
+            )
+        } returns createMockPasskeyAssertionOptions(number = 1)
+        every { authRepository.activeUserId } returns null
+
+        val viewModel = createVaultItemListingViewModel()
+
+        assertEquals(
+            VaultItemListingState.DialogState.Fido2MasterPasswordPrompt(
+                selectedCipherId = mockAssertionRequest.cipherId!!,
+            ),
+            viewModel.stateFlow.value.dialogState,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `Fido2AssertionRequest should not re-prompt master password when user does not have a master password`() =
+        runTest {
+            val mockAssertionRequest = createMockFido2CredentialAssertionRequest(number = 1)
+                .copy(cipherId = "mockId-1")
+            val mockFido2CredentialList = createMockSdkFido2CredentialList(number = 1)
+            val mockCipherView = createMockCipherView(
+                number = 1,
+                fido2Credentials = mockFido2CredentialList,
+                repromptType = CipherRepromptType.PASSWORD,
+            )
+            mutableUserStateFlow.value = DEFAULT_USER_STATE.copy(
+                accounts = listOf(
+                    DEFAULT_ACCOUNT.copy(
+                        vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+
+                        trustedDevice = UserState.TrustedDevice(
+                            isDeviceTrusted = true,
+                            hasMasterPassword = false,
+                            hasAdminApproval = true,
+                            hasLoginApprovingDevice = true,
+                            hasResetPasswordPermission = true,
+                        ),
+                    ),
+                ),
+            )
+
+            specialCircumstanceManager.specialCircumstance = SpecialCircumstance.Fido2Assertion(
+                mockAssertionRequest,
+            )
+            every { fido2CredentialManager.isUserVerified } returns true
+            every {
+                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
+                    mockAssertionRequest.requestJson,
+                )
+            } returns createMockPasskeyAssertionOptions(
+                number = 1,
+                userVerificationRequirement = UserVerificationRequirement.PREFERRED,
+            )
+            every {
+                vaultRepository
+                    .ciphersStateFlow
+                    .value
+                    .data
+            } returns listOf(mockCipherView)
+            every {
+                fido2CredentialManager.getPasskeyAssertionOptionsOrNull(
+                    mockAssertionRequest.requestJson,
+                )
+            } returns createMockPasskeyAssertionOptions(number = 1)
+            coEvery {
+                fido2CredentialManager.authenticateFido2Credential(
+                    DEFAULT_USER_STATE.activeUserId,
+                    mockAssertionRequest,
+                    mockCipherView,
+                )
+            } returns Fido2CredentialAssertionResult.Success("responseJson")
+
+            createVaultItemListingViewModel()
+
+            coVerify {
+                fido2CredentialManager.authenticateFido2Credential(
+                    userId = any(),
+                    request = any(),
+                    selectedCipherView = any(),
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
