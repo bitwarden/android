@@ -21,7 +21,7 @@ sealed class FlagKey<out T : Any> {
      * Data object holding the key for an Int flag to be used in tests
      */
     data object DummyInt : FlagKey<Int>() {
-        override val keyName: String = "email-verification"
+        override val keyName: String = "dummy-int"
         override val defaultValue: Int = Int.MIN_VALUE
     }
 
@@ -29,7 +29,7 @@ sealed class FlagKey<out T : Any> {
      * Data object holding the key for an String flag to be used in tests
      */
     data object DummyString : FlagKey<String>() {
-        override val keyName: String = "email-verification"
+        override val keyName: String = "dummy-string"
         override val defaultValue: String = "defaultValue"
     }
 }

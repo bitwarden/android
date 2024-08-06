@@ -94,7 +94,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("email-verification" to JsonPrimitive(123)),
+                    featureStates = mapOf("dummy-int" to JsonPrimitive(123)),
                 ),
         )
 
@@ -136,7 +136,7 @@ class FeatureFlagManagerTest {
             serverData = SERVER_CONFIG
                 .serverData
                 .copy(
-                    featureStates = mapOf("email-verification" to JsonPrimitive("niceValue")),
+                    featureStates = mapOf("dummy-string" to JsonPrimitive("niceValue")),
                 ),
         )
 
