@@ -18,6 +18,14 @@ sealed class FlagKey<out T : Any> {
     }
 
     /**
+     * Data object holding the feature flag key for the Onboarding Carousel feature
+     */
+    data object OnboardingCarousel : FlagKey<Boolean>() {
+        override val keyName: String = "native-carousel-flow"
+        override val defaultValue: Boolean = false
+    }
+
+    /**
      * Data object holding the key for an Int flag to be used in tests
      */
     data object DummyInt : FlagKey<Int>() {
