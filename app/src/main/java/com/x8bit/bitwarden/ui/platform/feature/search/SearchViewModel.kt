@@ -727,14 +727,9 @@ data class SearchState(
          */
         @Parcelize
         data class Content(
-            private val displayItems: List<DisplayItem>,
+            val displayItems: List<DisplayItem>,
         ) : ViewState() {
             override val hasVaultFilter: Boolean get() = true
-
-            val displayItemsSorted: List<DisplayItem>
-                get() = displayItems.sortedWith { item1, item2 ->
-                    CompareStringSpecialCharWithPrecedence.compare(item1.title, item2.title)
-                }
         }
 
         /**

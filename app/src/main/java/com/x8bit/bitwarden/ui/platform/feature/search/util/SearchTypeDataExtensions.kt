@@ -18,6 +18,7 @@ import com.x8bit.bitwarden.ui.platform.components.model.IconData
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchState
 import com.x8bit.bitwarden.ui.platform.feature.search.SearchTypeData
 import com.x8bit.bitwarden.ui.platform.feature.search.model.AutofillSelectionOption
+import com.x8bit.bitwarden.ui.platform.feature.search.sortAlphabetically
 import com.x8bit.bitwarden.ui.platform.util.toFormattedPattern
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toLabelIcons
 import com.x8bit.bitwarden.ui.tools.feature.send.util.toOverflowActions
@@ -159,7 +160,7 @@ fun List<CipherView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
-                ),
+                ).sortAlphabetically(),
             )
         }
 
@@ -314,7 +315,7 @@ fun List<SendView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseWebSendUrl = baseWebSendUrl,
                     clock = clock,
-                ),
+                ).sortAlphabetically(),
             )
         }
 
@@ -334,7 +335,7 @@ private fun List<SendView>.toDisplayItemList(
             baseWebSendUrl = baseWebSendUrl,
             clock = clock,
         )
-    }
+    }.sortAlphabetically()
 
 private fun SendView.toDisplayItem(
     baseWebSendUrl: String,
