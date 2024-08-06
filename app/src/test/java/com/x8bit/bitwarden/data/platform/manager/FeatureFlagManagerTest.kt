@@ -51,15 +51,16 @@ class FeatureFlagManagerTest {
     }
 
     @Test
-    fun `ConfigDiskSource flow with null should trigger default flag value value`() = runTest {
-        fakeServerConfigRepository.mutableServerConfigFlow.tryEmit(null)
+    fun `ServerConfigRepository flow with null should trigger default flag value value`() =
+        runTest {
+            fakeServerConfigRepository.serverConfigValue = null
 
-        manager.getFeatureFlagFlow(FlagKey.EmailVerification).test {
-            assertFalse(
-                awaitItem(),
-            )
+            manager.getFeatureFlagFlow(FlagKey.EmailVerification).test {
+                assertFalse(
+                    awaitItem(),
+                )
+            }
         }
-    }
 
     @Test
     fun `getFeatureFlag Boolean should return value if exists`() = runTest {
@@ -151,25 +152,26 @@ class FeatureFlagManagerTest {
     }
 
     @Test
-    fun `getFeatureFlag String should return default value if doesn't exists`() = runTest {
-        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
-            serverData = SERVER_CONFIG
-                .serverData
-                .copy(
-                    featureStates = mapOf("flag-example" to JsonPrimitive("niceValue")),
-                ),
-        )
+    fun `getFeatureFlag String should return default value if doesn't exists`() =
+        runTest {
+            fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
+                serverData = SERVER_CONFIG
+                    .serverData
+                    .copy(
+                        featureStates = mapOf("flag-example" to JsonPrimitive("niceValue")),
+                    ),
+            )
 
-        val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyString,
-            forceRefresh = false,
-        )
+            val flagValue = manager.getFeatureFlag(
+                key = FlagKey.DummyString,
+                forceRefresh = false,
+            )
 
-        assertEquals(
-            "defaultValue",
-            flagValue,
-        )
-    }
+            assertEquals(
+                "defaultValue",
+                flagValue,
+            )
+        }
 
     @Test
     fun `getFeatureFlag Boolean should return default value if no flags available`() = runTest {
