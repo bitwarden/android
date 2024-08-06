@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import com.x8bit.bitwarden.ui.platform.base.util.composableWithStayTransitions
 
-const val WELCOME_ROUTE: String = "welcome"
+private const val WELCOME_ROUTE: String = "welcome"
 
 /**
  * Navigate to the welcome screen.
