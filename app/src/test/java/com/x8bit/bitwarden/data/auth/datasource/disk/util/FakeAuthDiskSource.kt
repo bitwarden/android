@@ -27,7 +27,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
-    private val storedLastActiveTimeMillis = mutableMapOf<String, Long?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
     private val storedPrivateKeys = mutableMapOf<String, String?>()
@@ -55,7 +54,6 @@ class FakeAuthDiskSource : AuthDiskSource {
         get() = mutableUserStateFlow.onSubscription { emit(userState) }
 
     override fun clearData(userId: String) {
-        storedLastActiveTimeMillis.remove(userId)
         storedInvalidUnlockAttempts.remove(userId)
         storedUserKeys.remove(userId)
         storedPrivateKeys.remove(userId)
@@ -79,16 +77,6 @@ class FakeAuthDiskSource : AuthDiskSource {
 
     override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
         storedShouldTrustDevice[userId] = shouldTrustDevice
-    }
-
-    override fun getLastActiveTimeMillis(userId: String): Long? =
-        storedLastActiveTimeMillis[userId]
-
-    override fun storeLastActiveTimeMillis(
-        userId: String,
-        lastActiveTimeMillis: Long?,
-    ) {
-        storedLastActiveTimeMillis[userId] = lastActiveTimeMillis
     }
 
     override fun getInvalidUnlockAttempts(userId: String): Int? =
@@ -238,13 +226,6 @@ class FakeAuthDiskSource : AuthDiskSource {
      */
     fun assertAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
         assertEquals(accountTokens, this.storedAccountTokens[userId])
-    }
-
-    /**
-     * Assert that the [lastActiveTimeMillis] was stored successfully using the [userId].
-     */
-    fun assertLastActiveTimeMillis(userId: String, lastActiveTimeMillis: Long?) {
-        assertEquals(lastActiveTimeMillis, storedLastActiveTimeMillis[userId])
     }
 
     /**

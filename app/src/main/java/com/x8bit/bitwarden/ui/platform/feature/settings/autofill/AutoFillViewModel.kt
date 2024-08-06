@@ -35,6 +35,7 @@ class AutoFillViewModel @Inject constructor(
             isCopyTotpAutomaticallyEnabled = !settingsRepository.isAutoCopyTotpDisabled,
             isUseInlineAutoFillEnabled = settingsRepository.isInlineAutofillEnabled,
             showInlineAutofillOption = !isBuildVersionBelow(Build.VERSION_CODES.R),
+            showPasskeyManagementRow = !isBuildVersionBelow(Build.VERSION_CODES.UPSIDE_DOWN_CAKE),
             defaultUriMatchType = settingsRepository.defaultUriMatchType,
         ),
 ) {
@@ -61,6 +62,7 @@ class AutoFillViewModel @Inject constructor(
         is AutoFillAction.DefaultUriMatchTypeSelect -> handleDefaultUriMatchTypeSelect(action)
         AutoFillAction.BlockAutoFillClick -> handleBlockAutoFillClick()
         is AutoFillAction.UseInlineAutofillClick -> handleUseInlineAutofillClick(action)
+        AutoFillAction.PasskeyManagementClick -> handlePasskeyManagementClick()
         is AutoFillAction.Internal.AutofillEnabledUpdateReceive -> {
             handleAutofillEnabledUpdateReceive(action)
         }
@@ -95,6 +97,10 @@ class AutoFillViewModel @Inject constructor(
         mutableStateFlow.update { it.copy(isUseInlineAutoFillEnabled = action.isEnabled) }
     }
 
+    private fun handlePasskeyManagementClick() {
+        sendEvent(AutoFillEvent.NavigateToSettings)
+    }
+
     private fun handleDefaultUriMatchTypeSelect(action: AutoFillAction.DefaultUriMatchTypeSelect) {
         settingsRepository.defaultUriMatchType = action.defaultUriMatchType
         mutableStateFlow.update {
@@ -125,6 +131,7 @@ data class AutoFillState(
     val isCopyTotpAutomaticallyEnabled: Boolean,
     val isUseInlineAutoFillEnabled: Boolean,
     val showInlineAutofillOption: Boolean,
+    val showPasskeyManagementRow: Boolean,
     val defaultUriMatchType: UriMatchType,
 ) : Parcelable {
 
@@ -154,6 +161,11 @@ sealed class AutoFillEvent {
      * Navigate to block auto fill screen.
      */
     data object NavigateToBlockAutoFill : AutoFillEvent()
+
+    /**
+     * Navigate to device settings.
+     */
+    data object NavigateToSettings : AutoFillEvent()
 
     /**
      * Displays a toast with the given [Text].
@@ -211,6 +223,11 @@ sealed class AutoFillAction {
     data class UseInlineAutofillClick(
         val isEnabled: Boolean,
     ) : AutoFillAction()
+
+    /**
+     * User clicked passkey management button.
+     */
+    data object PasskeyManagementClick : AutoFillAction()
 
     /**
      * Internal actions.

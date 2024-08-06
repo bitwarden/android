@@ -46,6 +46,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.GenerateTotpResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.VaultData
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
@@ -656,12 +657,6 @@ class VaultItemListingViewModel @Inject constructor(
                         selectedCipherView = cipherView,
                     ),
                 )
-            }
-
-            null -> {
-                // Per WebAuthn spec, members should be ignored when invalid. Since the request
-                // violates spec, we display an error and terminate the operation.
-                showFido2ErrorDialog()
             }
         }
     }
@@ -1450,10 +1445,6 @@ class VaultItemListingViewModel @Inject constructor(
             UserVerificationRequirement.REQUIRED -> {
                 sendUserVerificationEvent(isRequired = true, selectedCipher = selectedCipher)
             }
-
-            null -> {
-                showFido2ErrorDialog()
-            }
         }
     }
 
@@ -2112,7 +2103,7 @@ sealed class VaultItemListingEvent {
      */
     data class CompleteFido2Registration(
         val result: Fido2RegisterCredentialResult,
-    ) : VaultItemListingEvent()
+    ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
      * Perform user verification for a FIDO 2 credential operation.
@@ -2120,7 +2111,7 @@ sealed class VaultItemListingEvent {
     data class Fido2UserVerification(
         val isRequired: Boolean,
         val selectedCipherView: CipherView,
-    ) : VaultItemListingEvent()
+    ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
      * FIDO 2 credential assertion result has been received and the process is ready to be
@@ -2130,7 +2121,7 @@ sealed class VaultItemListingEvent {
      */
     data class CompleteFido2Assertion(
         val result: Fido2CredentialAssertionResult,
-    ) : VaultItemListingEvent()
+    ) : BackgroundEvent, VaultItemListingEvent()
 
     /**
      * FIDO 2 credential lookup result has been received and the process is ready to be completed.
@@ -2139,7 +2130,7 @@ sealed class VaultItemListingEvent {
      */
     data class CompleteFido2GetCredentialsRequest(
         val result: Fido2GetCredentialsResult,
-    ) : VaultItemListingEvent()
+    ) : BackgroundEvent, VaultItemListingEvent()
 }
 
 /**

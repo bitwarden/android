@@ -25,7 +25,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
+    authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
@@ -48,13 +48,8 @@ class RootNavViewModel @Inject constructor(
 
     override fun handleAction(action: RootNavAction) {
         when (action) {
-            is RootNavAction.BackStackUpdate -> handleBackStackUpdate()
             is RootNavAction.Internal.UserStateUpdateReceive -> handleUserStateUpdateReceive(action)
         }
-    }
-
-    private fun handleBackStackUpdate() {
-        authRepository.updateLastActiveTime()
     }
 
     @Suppress("CyclomaticComplexMethod", "MaxLineLength")
@@ -246,11 +241,6 @@ sealed class RootNavState : Parcelable {
  * Models root level navigation actions.
  */
 sealed class RootNavAction {
-
-    /**
-     * Indicates the backstack has changed.
-     */
-    data object BackStackUpdate : RootNavAction()
 
     /**
      * Internal ViewModel actions.

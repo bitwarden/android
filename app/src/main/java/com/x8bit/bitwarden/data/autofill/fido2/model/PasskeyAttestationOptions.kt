@@ -32,7 +32,7 @@ data class PasskeyAttestationOptions(
         @SerialName("residentKey")
         val residentKeyRequirement: ResidentKeyRequirement? = null,
         @SerialName("userVerification")
-        val userVerification: UserVerificationRequirement? = null,
+        val userVerification: UserVerificationRequirement = UserVerificationRequirement.PREFERRED,
     ) {
         /**
          * Enum class representing the types of attachments associated with selection criteria.
