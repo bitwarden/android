@@ -84,9 +84,11 @@ import com.x8bit.bitwarden.data.auth.repository.util.toUserState
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
 import com.x8bit.bitwarden.data.platform.base.FakeDispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.model.NotificationLogoutData
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
@@ -217,6 +219,7 @@ class AuthRepositoryTest {
             getActivePoliciesFlow(type = PolicyTypeJson.MASTER_PASSWORD)
         } returns mutableActivePolicyFlow
     }
+    private val featureFlagManager: FeatureFlagManager = mockk()
 
     private val repository = AuthRepositoryImpl(
         accountsService = accountsService,
@@ -236,6 +239,7 @@ class AuthRepositoryTest {
         dispatcherManager = dispatcherManager,
         pushManager = pushManager,
         policyManager = policyManager,
+        featureFlagManager = featureFlagManager,
     )
 
     @BeforeEach
@@ -4504,13 +4508,26 @@ class AuthRepositoryTest {
         }
     }
 
+    @Suppress("MaxLineLength")
     @Test
-    fun `hasUserLoggedInOrCreatedAccount should return value from settings repository`() {
-        every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
-        assertTrue(repository.hasUserLoggedInOrCreatedAccount)
-
+    fun `getShowWelcomeCarousel should return value from settings repository and feature flag manager`() = runTest {
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns false
-        assertFalse(repository.hasUserLoggedInOrCreatedAccount)
+        coEvery {
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, true)
+        } returns true
+        assertTrue(repository.getShowWelcomeCarousel())
+
+        every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
+        coEvery {
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, true)
+        } returns true
+        assertFalse(repository.getShowWelcomeCarousel())
+
+        every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
+        coEvery {
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, true)
+        } returns false
+        assertFalse(repository.getShowWelcomeCarousel())
     }
 
     @Test

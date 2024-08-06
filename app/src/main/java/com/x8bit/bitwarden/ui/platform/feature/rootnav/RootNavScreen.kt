@@ -135,7 +135,7 @@ fun RootNavScreen(
     LaunchedEffect(state) {
         when (val currentState = state) {
             RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
-            RootNavState.AuthWithWelcome ->  navController.navigateToWelcome(rootNavOptions)
+            RootNavState.AuthWithWelcome -> navController.navigateToWelcome(rootNavOptions)
             RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)

@@ -11,9 +11,8 @@ import com.x8bit.bitwarden.data.autofill.model.AutofillSelectionData
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
-import com.x8bit.bitwarden.ui.auth.feature.welcome.WELCOME_ROUTE
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,7 +23,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
-        every { hasUserLoggedInOrCreatedAccount } returns true
+        coEvery { getShowWelcomeCarousel() } returns false
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
 
@@ -33,19 +32,19 @@ class RootNavViewModelTest : BaseViewModelTest() {
         mutableUserStateFlow.tryEmit(null)
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.Auth(startDestination = LANDING_ROUTE),
+            RootNavState.Auth,
             viewModel.stateFlow.value,
         )
     }
 
     @Suppress("MaxLineLength")
     @Test
-    fun `when there are no accounts and the user has not logged on before the nav state should be Auth with start destination welcome`() {
-        every { authRepository.hasUserLoggedInOrCreatedAccount } returns false
+    fun `when there are no accounts and the user has not logged on before the nav state should be Auth with the welcome route`() {
+        coEvery { authRepository.getShowWelcomeCarousel() } returns true
         mutableUserStateFlow.tryEmit(null)
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.Auth(startDestination = WELCOME_ROUTE),
+            RootNavState.AuthWithWelcome,
             viewModel.stateFlow.value,
         )
     }
@@ -76,7 +75,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.Auth(startDestination = LANDING_ROUTE),
+            RootNavState.Auth,
             viewModel.stateFlow.value,
         )
     }
@@ -242,7 +241,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.Auth(startDestination = LANDING_ROUTE),
+            RootNavState.Auth,
             viewModel.stateFlow.value,
         )
     }
@@ -275,7 +274,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel()
         assertEquals(
-            RootNavState.Auth(startDestination = LANDING_ROUTE),
+            RootNavState.Auth,
             viewModel.stateFlow.value,
         )
     }

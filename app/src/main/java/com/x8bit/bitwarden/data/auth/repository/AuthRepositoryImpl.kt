@@ -81,6 +81,7 @@ import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -392,7 +393,7 @@ class AuthRepositoryImpl(
         !settingsRepository.hasUserLoggedInOrCreatedAccount &&
             featureFlagManager.getFeatureFlag(
                 key = FlagKey.OnboardingCarousel,
-                forceRefresh = false,
+                forceRefresh = true,
             )
 
     override suspend fun deleteAccountWithMasterPassword(
