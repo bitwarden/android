@@ -13,6 +13,7 @@ import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.SecureNoteView
 import com.bitwarden.vault.UriMatchType
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkFido2CredentialList
 import com.x8bit.bitwarden.ui.vault.feature.addedit.VaultAddEditState
 import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
@@ -674,6 +675,58 @@ class VaultAddItemStateExtensionsTest {
                 ),
             ),
             result,
+        )
+    }
+
+    @Test
+    fun `toLoginView should transform Login ItemType to LoginView deleting fido2Credentials with original cipher`() {
+        val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
+            type = CipherType.LOGIN,
+            notes = null,
+            fields = emptyList(),
+            login = LoginView(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+                passwordRevisionDate = Instant.MIN,
+                uris = null,
+                totp = null,
+                autofillOnPageLoad = false,
+                fido2Credentials = createMockSdkFido2CredentialList(1),
+            ),
+        )
+
+        val viewState = VaultAddEditState.ViewState.Content(
+            common = VaultAddEditState.ViewState.Content.Common(
+                originalCipher = cipherView,
+                name = "mockName-1",
+                customFieldData = emptyList(),
+                masterPasswordReprompt = true
+            ),
+            isIndividualVaultDisabled = false,
+            type = VaultAddEditState.ViewState.Content.ItemType.Login(
+                username = "mockUsername-1",
+                password = "mockPassword-1",
+                totp = null,
+                fido2CredentialCreationDateTime = null,
+            ),
+        )
+
+        val result = viewState.toCipherView();
+
+        assertEquals(
+            cipherView.copy(
+                name = "mockName-1",
+                login = LoginView(
+                    username = "mockUsername-1",
+                    password = "mockPassword-1",
+                    totp = null,
+                    fido2Credentials = null,
+                    uris = null,
+                    passwordRevisionDate = Instant.MIN,
+                    autofillOnPageLoad = false
+                )
+            ),
+            result
         )
     }
 }
