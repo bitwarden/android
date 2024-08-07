@@ -87,6 +87,10 @@ interface IntentManager {
      */
     fun createDocumentIntent(fileName: String): Intent
 
+    fun createTileIntent(extra: String): Intent
+
+    fun createTilePendingIntent(tileIntent: Intent): PendingIntent
+
     /**
      * Creates a pending intent to use when providing [androidx.credentials.provider.CreateEntry]
      * instances for FIDO 2 credential creation.

@@ -178,6 +178,28 @@
                 android:value="true" />
         </service>
 
+        <service
+            android:name="com.x8bit.bitwarden.ui.platform.feature.tiles.GeneratorTileService"
+            android:exported="true"
+            android:label="@string/password_generator"
+            android:icon="@drawable/ic_generator"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name="com.x8bit.bitwarden.ui.platform.feature.tiles.MyVaultTileService"
+            android:exported="true"
+            android:label="@string/my_vault"
+            android:icon="@drawable/ic_notification"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <meta-data
             android:name="android.content.APP_RESTRICTIONS"
             android:resource="@xml/app_restrictions" />

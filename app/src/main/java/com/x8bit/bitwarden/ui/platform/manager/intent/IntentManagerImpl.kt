@@ -20,8 +20,10 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.credentials.CredentialManager
 import com.x8bit.bitwarden.BuildConfig
+import com.x8bit.bitwarden.MainActivity
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
@@ -214,6 +216,24 @@ class IntentManagerImpl(
             addCategory(Intent.CATEGORY_OPENABLE)
             putExtra(Intent.EXTRA_TITLE, fileName)
         }
+
+    override fun createTileIntent(data: String): Intent {
+        return Intent(
+            context,
+            MainActivity::class.java,
+        )
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .setData(data.toUri())
+    }
+
+    override fun createTilePendingIntent(tileIntent: Intent): PendingIntent {
+        return PendingIntent.getActivity(
+            context,
+            0,
+            tileIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+    }
 
     override fun createFido2CreationPendingIntent(
         action: String,
