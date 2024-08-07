@@ -1626,7 +1626,8 @@ class AuthRepositoryImpl(
             // The value for the organization keys here will typically be null. We can separately
             // unlock the vault for organization data after receiving the sync response if this
             // data is currently absent. These keys may be present during certain multi-phase login
-            // processes.
+            // processes or if we needed to delete the user's token due to an encrypted data
+            // corruption issue and they are forced to log back in.
             organizationKeys = authDiskSource.getOrganizationKeys(userId = userId),
         )
     }
