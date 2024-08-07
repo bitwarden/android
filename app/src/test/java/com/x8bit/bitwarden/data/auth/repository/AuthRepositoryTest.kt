@@ -4513,19 +4513,19 @@ class AuthRepositoryTest {
     fun `getShowWelcomeCarousel should return value from settings repository and feature flag manager`() = runTest {
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns false
         coEvery {
-            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, true)
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, false)
         } returns true
         assertTrue(repository.getShowWelcomeCarousel())
 
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
         coEvery {
-            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, true)
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, false)
         } returns true
         assertFalse(repository.getShowWelcomeCarousel())
 
         every { settingsRepository.hasUserLoggedInOrCreatedAccount } returns true
         coEvery {
-            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, true)
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel, false)
         } returns false
         assertFalse(repository.getShowWelcomeCarousel())
     }

@@ -393,7 +393,7 @@ class AuthRepositoryImpl(
         !settingsRepository.hasUserLoggedInOrCreatedAccount &&
             featureFlagManager.getFeatureFlag(
                 key = FlagKey.OnboardingCarousel,
-                forceRefresh = true,
+                forceRefresh = false,
             )
 
     override suspend fun deleteAccountWithMasterPassword(
