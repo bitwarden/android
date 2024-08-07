@@ -14,6 +14,7 @@ import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.model.UnlockType
+import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.emptyInputDialogMessage
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.util.unlockScreenErrorMessage
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
@@ -202,6 +203,18 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleUnlockClick() {
         val activeUserId = authRepository.activeUserId ?: return
+
+        if (state.input.isEmpty()) {
+            mutableStateFlow.update {
+                it.copy(
+                    dialog = VaultUnlockState.VaultUnlockDialog.Error(
+                        it.vaultUnlockType.emptyInputDialogMessage,
+                    ),
+                )
+            }
+            return
+        }
+
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
             val vaultUnlockResult = when (state.vaultUnlockType) {
