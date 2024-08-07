@@ -440,7 +440,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithMasterPassword(password)
-        } returns VaultUnlockResult.AuthenticationError
+        } returns VaultUnlockResult.AuthenticationError()
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
@@ -577,7 +577,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithPin(pin)
-        } returns VaultUnlockResult.AuthenticationError
+        } returns VaultUnlockResult.AuthenticationError()
 
         viewModel.trySendAction(VaultUnlockAction.UnlockClick)
         assertEquals(
@@ -726,7 +726,7 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         val viewModel = createViewModel(state = initialState)
         coEvery {
             vaultRepository.unlockVaultWithBiometrics()
-        } returns VaultUnlockResult.AuthenticationError
+        } returns VaultUnlockResult.AuthenticationError()
 
         viewModel.trySendAction(VaultUnlockAction.BiometricsUnlockSuccess(CIPHER))
 

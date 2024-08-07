@@ -13,15 +13,22 @@ sealed class VaultUnlockResult {
     /**
      * Incorrect password provided.
      */
-    data object AuthenticationError : VaultUnlockResult()
+    data class AuthenticationError(
+        val message: String? = null,
+    ) : VaultUnlockResult(), VaultUnlockError
 
     /**
      * Unable to access user state information.
      */
-    data object InvalidStateError : VaultUnlockResult()
+    data object InvalidStateError : VaultUnlockResult(), VaultUnlockError
 
     /**
      * Generic error thrown by Bitwarden SDK.
      */
-    data object GenericError : VaultUnlockResult()
+    data object GenericError : VaultUnlockResult(), VaultUnlockError
 }
+
+/**
+ * Sealed interface to denote that a [VaultUnlockResult] is an error result.
+ */
+sealed interface VaultUnlockError

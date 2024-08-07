@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponse
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.EnvironmentJson
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.json.JsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -106,6 +107,9 @@ private val SERVER_CONFIG = ServerConfig(
             notificationsUrl = "http://localhost:61840",
             ssoUrl = "http://localhost:51822",
         ),
-        featureStates = mapOf("duo-redirect" to true, "flexible-collections-v-1" to false),
+        featureStates = mapOf(
+            "duo-redirect" to JsonPrimitive(true),
+            "flexible-collections-v-1" to JsonPrimitive(false),
+        ),
     ),
 )

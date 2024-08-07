@@ -22,6 +22,8 @@ import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManager
 import com.x8bit.bitwarden.data.platform.manager.BiometricsEncryptionManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.CrashLogsManagerImpl
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManagerImpl
 import com.x8bit.bitwarden.data.platform.manager.NetworkConnectionManager
@@ -47,8 +49,8 @@ import com.x8bit.bitwarden.data.platform.manager.garbage.GarbageCollectionManage
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManagerImpl
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
-import com.x8bit.bitwarden.data.vault.datasource.sdk.BitwardenFeatureFlagManager
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import dagger.Module
 import dagger.Provides
@@ -138,8 +140,17 @@ object PlatformManagerModule {
 
     @Provides
     @Singleton
+    fun providesFeatureFlagManager(
+        serverConfigRepository: ServerConfigRepository,
+    ): FeatureFlagManager =
+        FeatureFlagManagerImpl(
+            serverConfigRepository = serverConfigRepository,
+        )
+
+    @Provides
+    @Singleton
     fun provideSdkClientManager(
-        featureFlagManager: BitwardenFeatureFlagManager,
+        featureFlagManager: FeatureFlagManager,
     ): SdkClientManager = SdkClientManagerImpl(
         featureFlagManager = featureFlagManager,
     )

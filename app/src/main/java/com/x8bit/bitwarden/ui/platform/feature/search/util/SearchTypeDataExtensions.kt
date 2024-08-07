@@ -11,6 +11,7 @@ import com.bitwarden.vault.CipherView
 import com.bitwarden.vault.CollectionView
 import com.bitwarden.vault.FolderView
 import com.x8bit.bitwarden.R
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.platform.util.subtitle
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.removeDiacritics
@@ -159,7 +160,8 @@ fun List<CipherView>.toViewState(
                     isIconLoadingDisabled = isIconLoadingDisabled,
                     isAutofill = isAutofill,
                     isPremiumUser = isPremiumUser,
-                ),
+                )
+                    .sortAlphabetically(),
             )
         }
 
@@ -314,7 +316,8 @@ fun List<SendView>.toViewState(
                 displayItems = toDisplayItemList(
                     baseWebSendUrl = baseWebSendUrl,
                     clock = clock,
-                ),
+                )
+                    .sortAlphabetically(),
             )
         }
 
@@ -359,6 +362,16 @@ private fun SendView.toDisplayItem(
         autofillSelectionOptions = emptyList(),
         shouldDisplayMasterPasswordReprompt = false,
     )
+
+/**
+ * Sort a list of [SearchState.DisplayItem] by their titles alphabetically giving digits and
+ * special characters higher precedence.
+ */
+private fun List<SearchState.DisplayItem>.sortAlphabetically(): List<SearchState.DisplayItem> {
+    return this.sortedWith { item1, item2 ->
+        CompareStringSpecialCharWithPrecedence.compare(item1.title, item2.title)
+    }
+}
 
 private enum class SortPriority {
     HIGH,

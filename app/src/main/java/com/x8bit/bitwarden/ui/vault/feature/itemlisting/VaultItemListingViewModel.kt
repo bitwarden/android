@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.bitwarden.fido.Fido2CredentialAutofillView
+import com.bitwarden.vault.CipherRepromptType
 import com.bitwarden.vault.CipherView
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
@@ -1413,7 +1414,24 @@ class VaultItemListingViewModel @Inject constructor(
                     showFido2ErrorDialog()
                     return
                 }
-            verifyUserAndAuthenticateCredential(request, selectedCipher)
+
+            if (state.hasMasterPassword &&
+                selectedCipher.reprompt == CipherRepromptType.PASSWORD
+            ) {
+                repromptMasterPasswordForFido2Assertion(request.cipherId)
+            } else {
+                verifyUserAndAuthenticateCredential(request, selectedCipher)
+            }
+        }
+    }
+
+    private fun repromptMasterPasswordForFido2Assertion(cipherId: String) {
+        mutableStateFlow.update {
+            it.copy(
+                dialogState = VaultItemListingState.DialogState.Fido2MasterPasswordPrompt(
+                    selectedCipherId = cipherId,
+                ),
+            )
         }
     }
 
