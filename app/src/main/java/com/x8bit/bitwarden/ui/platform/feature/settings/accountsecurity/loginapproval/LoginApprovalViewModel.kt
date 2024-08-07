@@ -138,7 +138,7 @@ class LoginApprovalViewModel @Inject constructor(
         when (action.result) {
             is AuthRequestResult.Success -> {
                 sendEvent(LoginApprovalEvent.ShowToast(R.string.login_approved.asText()))
-                sendEvent(LoginApprovalEvent.NavigateBack)
+                sendEventBasedOnSpecialCircumstance()
             }
 
             is AuthRequestResult.Error -> {
@@ -195,7 +195,7 @@ class LoginApprovalViewModel @Inject constructor(
         when (action.result) {
             is AuthRequestResult.Success -> {
                 sendEvent(LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()))
-                sendEvent(LoginApprovalEvent.NavigateBack)
+                sendEventBasedOnSpecialCircumstance()
             }
 
             is AuthRequestResult.Error -> {
@@ -207,11 +207,17 @@ class LoginApprovalViewModel @Inject constructor(
     }
 
     private fun closeScreen() {
-        if (state.specialCircumstance?.shouldFinishWhenComplete == true) {
-            sendEvent(LoginApprovalEvent.ExitApp)
+        sendEventBasedOnSpecialCircumstance()
+    }
+
+    private fun sendEventBasedOnSpecialCircumstance() {
+        val event = if (state.specialCircumstance?.shouldFinishWhenComplete == true) {
+            LoginApprovalEvent.ExitApp
         } else {
-            sendEvent(LoginApprovalEvent.NavigateBack)
+            LoginApprovalEvent.NavigateBack
         }
+
+        sendEvent(event)
     }
 }
 
