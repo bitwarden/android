@@ -73,7 +73,7 @@ data class WelcomeState(
         @Parcelize
         data object CardOne : WelcomeCard() {
             override val imageRes: Int = R.drawable.welcome_1
-            override val titleRes: Int = R.string.welcome_title_1
+            override val titleRes: Int = R.string.privacy_protected
             override val messageRes: Int = R.string.welcome_message_1
         }
 
@@ -83,7 +83,7 @@ data class WelcomeState(
         @Parcelize
         data object CardTwo : WelcomeCard() {
             override val imageRes: Int = R.drawable.welcome_2
-            override val titleRes: Int = R.string.welcome_title_2
+            override val titleRes: Int = R.string.never_guess_again
             override val messageRes: Int = R.string.welcome_message_2
         }
 
@@ -93,7 +93,7 @@ data class WelcomeState(
         @Parcelize
         data object CardThree : WelcomeCard() {
             override val imageRes: Int = R.drawable.welcome_3
-            override val titleRes: Int = R.string.welcome_title_3
+            override val titleRes: Int = R.string.level_up_your_logins
             override val messageRes: Int = R.string.welcome_message_3
         }
 
@@ -103,7 +103,7 @@ data class WelcomeState(
         @Parcelize
         data object CardFour : WelcomeCard() {
             override val imageRes: Int = R.drawable.welcome_4
-            override val titleRes: Int = R.string.welcome_title_4
+            override val titleRes: Int = R.string.your_data_when_and_where_you_need_it
             override val messageRes: Int = R.string.welcome_message_4
         }
     }
