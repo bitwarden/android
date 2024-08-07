@@ -141,6 +141,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
         every { isIconLoadingDisabled } returns false
         every { isIconLoadingDisabledFlow } returns mutableIsIconLoadingDisabledFlow
         every { getPullToRefreshEnabledFlow() } returns mutablePullToRefreshEnabledFlow
+        every { isUnlockWithPinEnabled } returns false
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
     private val policyManager: PolicyManager = mockk {
@@ -3107,6 +3108,7 @@ class VaultItemListingViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
+        every { settingsRepository.isUnlockWithPinEnabled } returns true
 
         viewModel.trySendAction(
             VaultItemListingsAction.UserVerificationNotSupported(
