@@ -73,7 +73,7 @@ data class WelcomeState(
         @Parcelize
         data object CardOne : WelcomeCard() {
             override val imageRes: Int = R.drawable.welcome_1
-            override val titleRes: Int = R.string.privacy_protected
+            override val titleRes: Int = R.string.privacy_prioritized
             override val messageRes: Int = R.string.welcome_message_1
         }
 
