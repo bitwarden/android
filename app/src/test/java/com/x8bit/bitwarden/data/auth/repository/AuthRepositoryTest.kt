@@ -409,10 +409,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -475,10 +477,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -1465,10 +1469,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -1508,10 +1514,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -1548,10 +1556,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.AuthenticationError(expectedErrorMessage)
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -1592,10 +1602,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
             }
 
@@ -1678,10 +1690,9 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = any(),
+                    initUserCryptoMethod = any(),
                     privateKey = any(),
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
             }
         }
@@ -1715,10 +1726,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
             } returns VaultUnlockResult.Success
             coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -1756,10 +1769,12 @@ class AuthRepositoryTest {
                     userId = USER_ID_1,
                     email = EMAIL,
                     kdf = ACCOUNT_1.profile.toSdkParams(),
-                    userKey = successResponse.key!!,
+                    initUserCryptoMethod = InitUserCryptoMethod.Password(
+                        password = PASSWORD,
+                        userKey = successResponse.key!!,
+                    ),
                     privateKey = successResponse.privateKey!!,
                     organizationKeys = null,
-                    masterPassword = PASSWORD,
                 )
                 vaultRepository.syncIfNecessary()
             }
@@ -1908,10 +1923,12 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key!!,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = PASSWORD,
+                    userKey = successResponse.key!!,
+                ),
                 privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
-                masterPassword = PASSWORD,
             )
         } returns VaultUnlockResult.Success
         coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -1996,10 +2013,12 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key!!,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = PASSWORD,
+                    userKey = successResponse.key!!,
+                ),
                 privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
-                masterPassword = PASSWORD,
             )
         } returns VaultUnlockResult.InvalidStateError
         every {
@@ -2055,10 +2074,12 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key!!,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = PASSWORD,
+                    userKey = successResponse.key!!,
+                ),
                 privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
-                masterPassword = PASSWORD,
             )
         } returns VaultUnlockResult.Success
         coEvery { vaultRepository.syncIfNecessary() } just runs
@@ -2095,10 +2116,12 @@ class AuthRepositoryTest {
                 userId = USER_ID_1,
                 email = EMAIL,
                 kdf = ACCOUNT_1.profile.toSdkParams(),
-                userKey = successResponse.key!!,
+                initUserCryptoMethod = InitUserCryptoMethod.Password(
+                    password = PASSWORD,
+                    userKey = successResponse.key!!,
+                ),
                 privateKey = successResponse.privateKey!!,
                 organizationKeys = null,
-                masterPassword = PASSWORD,
             )
             vaultRepository.syncIfNecessary()
         }
