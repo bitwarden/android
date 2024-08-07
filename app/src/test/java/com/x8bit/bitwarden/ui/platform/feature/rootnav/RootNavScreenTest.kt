@@ -73,6 +73,15 @@ class RootNavScreenTest : BaseComposeTest() {
         }
         assertTrue(isSplashScreenRemoved)
 
+        // Make sure navigating to Auth with the welcome route works as expected:
+        rootNavStateFlow.value = RootNavState.AuthWithWelcome
+        composeTestRule.runOnIdle {
+            fakeNavHostController.assertLastNavigation(
+                route = "welcome",
+                navOptions = expectedNavOptions,
+            )
+        }
+
         // Make sure navigating to vault locked works as expected:
         rootNavStateFlow.value = RootNavState.VaultLocked
         composeTestRule.runOnIdle {

@@ -77,9 +77,11 @@ import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -140,6 +142,7 @@ class AuthRepositoryImpl(
     private val trustedDeviceManager: TrustedDeviceManager,
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
+    private val featureFlagManager: FeatureFlagManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
@@ -317,6 +320,10 @@ class AuthRepositoryImpl(
 
     override val organizations: List<SyncResponseJson.Profile.Organization>
         get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
+
+    override val showWelcomeCarousel: Boolean
+        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount &&
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
 
     init {
         pushManager
