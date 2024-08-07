@@ -22,6 +22,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
+        every { showWelcomeCarousel } returns false
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
 
