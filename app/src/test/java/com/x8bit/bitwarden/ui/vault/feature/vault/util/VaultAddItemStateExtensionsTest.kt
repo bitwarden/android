@@ -678,6 +678,7 @@ class VaultAddItemStateExtensionsTest {
         )
     }
 
+    @Suppress("MaxLineLength")
     @Test
     fun `toLoginView should transform Login ItemType to LoginView deleting fido2Credentials with original cipher`() {
         val cipherView = DEFAULT_BASE_CIPHER_VIEW.copy(
@@ -700,7 +701,7 @@ class VaultAddItemStateExtensionsTest {
                 originalCipher = cipherView,
                 name = "mockName-1",
                 customFieldData = emptyList(),
-                masterPasswordReprompt = true
+                masterPasswordReprompt = true,
             ),
             isIndividualVaultDisabled = false,
             type = VaultAddEditState.ViewState.Content.ItemType.Login(
@@ -711,7 +712,7 @@ class VaultAddItemStateExtensionsTest {
             ),
         )
 
-        val result = viewState.toCipherView();
+        val result = viewState.toCipherView()
 
         assertEquals(
             cipherView.copy(
@@ -723,10 +724,10 @@ class VaultAddItemStateExtensionsTest {
                     fido2Credentials = null,
                     uris = null,
                     passwordRevisionDate = Instant.MIN,
-                    autofillOnPageLoad = false
-                )
+                    autofillOnPageLoad = false,
+                ),
             ),
-            result
+            result,
         )
     }
 }
