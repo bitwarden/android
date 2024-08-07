@@ -131,15 +131,15 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     val organizations: List<SyncResponseJson.Profile.Organization>
 
     /**
-     * Clears the pending deletion state that occurs when the an account is successfully deleted.
-     */
-    fun clearPendingAccountDeletion()
-
-    /**
      * Whether or not the welcome carousel should be displayed, based on the feature flag and
      * whether the user has ever logged in or created an account before.
      */
-    suspend fun getShowWelcomeCarousel(): Boolean
+    val showWelcomeCarousel: Boolean
+
+    /**
+     * Clears the pending deletion state that occurs when the an account is successfully deleted.
+     */
+    fun clearPendingAccountDeletion()
 
     /**
      * Attempt to delete the current account using the [masterPassword] and log them out

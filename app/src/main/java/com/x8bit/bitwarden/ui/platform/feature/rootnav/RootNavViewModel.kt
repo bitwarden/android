@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -57,80 +56,78 @@ class RootNavViewModel @Inject constructor(
     private fun handleUserStateUpdateReceive(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
-        viewModelScope.launch {
-            val userState = action.userState
-            val updatedRootNavState = when {
-                userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
-                    !userState.activeAccount.isVaultUnlocked &&
-                    !userState.activeAccount.hasManualUnlockMechanism -> RootNavState.TrustedDevice
+        val userState = action.userState
+        val updatedRootNavState = when {
+            userState?.activeAccount?.trustedDevice?.isDeviceTrusted == false &&
+                !userState.activeAccount.isVaultUnlocked &&
+                !userState.activeAccount.hasManualUnlockMechanism -> RootNavState.TrustedDevice
 
-                userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
+            userState?.activeAccount?.needsMasterPassword == true -> RootNavState.SetPassword
 
-                userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
+            userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
-                userState == null ||
-                    !userState.activeAccount.isLoggedIn ||
-                    userState.hasPendingAccountAddition -> {
-                    if (authRepository.getShowWelcomeCarousel()) {
-                        RootNavState.AuthWithWelcome
-                    } else {
-                        RootNavState.Auth
-                    }
+            userState == null ||
+                !userState.activeAccount.isLoggedIn ||
+                userState.hasPendingAccountAddition -> {
+                if (authRepository.showWelcomeCarousel) {
+                    RootNavState.AuthWithWelcome
+                } else {
+                    RootNavState.Auth
                 }
-
-                userState.activeAccount.isVaultUnlocked -> {
-                    when (val specialCircumstance = action.specialCircumstance) {
-                        is SpecialCircumstance.AutofillSave -> {
-                            RootNavState.VaultUnlockedForAutofillSave(
-                                autofillSaveItem = specialCircumstance.autofillSaveItem,
-                            )
-                        }
-
-                        is SpecialCircumstance.AutofillSelection -> {
-                            RootNavState.VaultUnlockedForAutofillSelection(
-                                activeUserId = userState.activeAccount.userId,
-                                type = specialCircumstance.autofillSelectionData.type,
-                            )
-                        }
-
-                        is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
-
-                        is SpecialCircumstance.PasswordlessRequest -> {
-                            RootNavState.VaultUnlockedForAuthRequest
-                        }
-
-                        is SpecialCircumstance.Fido2Save -> {
-                            RootNavState.VaultUnlockedForFido2Save(
-                                activeUserId = userState.activeUserId,
-                                fido2CredentialRequest = specialCircumstance.fido2CredentialRequest,
-                            )
-                        }
-
-                        is SpecialCircumstance.Fido2Assertion -> {
-                            RootNavState.VaultUnlockedForFido2Assertion(
-                                activeUserId = userState.activeUserId,
-                                fido2CredentialAssertionRequest = specialCircumstance.fido2AssertionRequest,
-                            )
-                        }
-
-                        is SpecialCircumstance.Fido2GetCredentials -> {
-                            RootNavState.VaultUnlockedForFido2GetCredentials(
-                                activeUserId = userState.activeUserId,
-                                fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
-                            )
-                        }
-
-                        SpecialCircumstance.GeneratorShortcut,
-                        SpecialCircumstance.VaultShortcut,
-                        null,
-                        -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
-                    }
-                }
-
-                else -> RootNavState.VaultLocked
             }
-            mutableStateFlow.update { updatedRootNavState }
+
+            userState.activeAccount.isVaultUnlocked -> {
+                when (val specialCircumstance = action.specialCircumstance) {
+                    is SpecialCircumstance.AutofillSave -> {
+                        RootNavState.VaultUnlockedForAutofillSave(
+                            autofillSaveItem = specialCircumstance.autofillSaveItem,
+                        )
+                    }
+
+                    is SpecialCircumstance.AutofillSelection -> {
+                        RootNavState.VaultUnlockedForAutofillSelection(
+                            activeUserId = userState.activeAccount.userId,
+                            type = specialCircumstance.autofillSelectionData.type,
+                        )
+                    }
+
+                    is SpecialCircumstance.ShareNewSend -> RootNavState.VaultUnlockedForNewSend
+
+                    is SpecialCircumstance.PasswordlessRequest -> {
+                        RootNavState.VaultUnlockedForAuthRequest
+                    }
+
+                    is SpecialCircumstance.Fido2Save -> {
+                        RootNavState.VaultUnlockedForFido2Save(
+                            activeUserId = userState.activeUserId,
+                            fido2CredentialRequest = specialCircumstance.fido2CredentialRequest,
+                        )
+                    }
+
+                    is SpecialCircumstance.Fido2Assertion -> {
+                        RootNavState.VaultUnlockedForFido2Assertion(
+                            activeUserId = userState.activeUserId,
+                            fido2CredentialAssertionRequest = specialCircumstance.fido2AssertionRequest,
+                        )
+                    }
+
+                    is SpecialCircumstance.Fido2GetCredentials -> {
+                        RootNavState.VaultUnlockedForFido2GetCredentials(
+                            activeUserId = userState.activeUserId,
+                            fido2GetCredentialsRequest = specialCircumstance.fido2GetCredentialsRequest,
+                        )
+                    }
+
+                    SpecialCircumstance.GeneratorShortcut,
+                    SpecialCircumstance.VaultShortcut,
+                    null,
+                    -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
+                }
+            }
+
+            else -> RootNavState.VaultLocked
         }
+        mutableStateFlow.update { updatedRootNavState }
     }
 }
 

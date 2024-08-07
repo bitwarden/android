@@ -321,6 +321,10 @@ class AuthRepositoryImpl(
     override val organizations: List<SyncResponseJson.Profile.Organization>
         get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
 
+    override val showWelcomeCarousel: Boolean
+        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount &&
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
+
     init {
         pushManager
             .syncOrgKeysFlow
@@ -388,13 +392,6 @@ class AuthRepositoryImpl(
     override fun clearPendingAccountDeletion() {
         mutableHasPendingAccountDeletionStateFlow.value = false
     }
-
-    override suspend fun getShowWelcomeCarousel(): Boolean =
-        !settingsRepository.hasUserLoggedInOrCreatedAccount &&
-            featureFlagManager.getFeatureFlag(
-                key = FlagKey.OnboardingCarousel,
-                forceRefresh = false,
-            )
 
     override suspend fun deleteAccountWithMasterPassword(
         masterPassword: String,
