@@ -32,6 +32,12 @@ class FeatureFlagManagerImpl(
         serverConfigRepository
             .getServerConfig(forceRefresh = forceRefresh)
             .getFlagValueOrDefault(key = key)
+
+    override fun <T : Any> getFeatureFlag(key: FlagKey<T>): T =
+        serverConfigRepository
+            .serverConfigStateFlow
+            .value
+            .getFlagValueOrDefault(key = key)
 }
 
 private fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {

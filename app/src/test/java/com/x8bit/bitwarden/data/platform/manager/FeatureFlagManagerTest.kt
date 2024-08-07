@@ -216,6 +216,42 @@ class FeatureFlagManagerTest {
             flagValue,
         )
     }
+
+    @Test
+    fun `synchronous getFeatureFlag should return stored value when present`() {
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
+            serverData = SERVER_CONFIG.serverData.copy(
+                featureStates = mapOf("dummy-int" to JsonPrimitive(true)),
+            ),
+        )
+
+        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyInt)
+
+        assertEquals(Int.MIN_VALUE, flagValue)
+    }
+
+    @Test
+    fun `synchronous getFeatureFlag should return default value if flag is incorrect type`() {
+        val value = "nonDefaultValue"
+        fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG.copy(
+            serverData = SERVER_CONFIG.serverData.copy(
+                featureStates = mapOf("dummy-string" to JsonPrimitive(value)),
+            ),
+        )
+
+        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyString)
+
+        assertEquals(value, flagValue)
+    }
+
+    @Test
+    fun `synchronous getFeatureFlag should return default value if no flags available`() {
+        fakeServerConfigRepository.serverConfigValue = null
+
+        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyString)
+
+        assertEquals("defaultValue", flagValue)
+    }
 }
 
 private val SERVER_CONFIG = ServerConfig(
