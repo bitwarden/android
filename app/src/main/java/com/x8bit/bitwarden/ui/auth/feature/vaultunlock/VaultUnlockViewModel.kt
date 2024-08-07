@@ -208,6 +208,9 @@ class VaultUnlockViewModel @Inject constructor(
 
     private fun handleUnlockClick() {
         val activeUserId = authRepository.activeUserId ?: return
+
+        if (state.input.isEmpty()) return
+
         mutableStateFlow.update { it.copy(dialog = VaultUnlockState.VaultUnlockDialog.Loading) }
         viewModelScope.launch {
             val vaultUnlockResult = when (state.vaultUnlockType) {

@@ -431,6 +431,22 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    fun `on UnlockClick for empty password should ignore the action`() {
+        val password = ""
+        val initialState = DEFAULT_STATE.copy(
+            input = password,
+            vaultUnlockType = VaultUnlockType.MASTER_PASSWORD,
+        )
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
     fun `on UnlockClick for password unlock should display error dialog on AuthenticationError`() {
         val password = "abcd1234"
         val initialState = DEFAULT_STATE.copy(
@@ -643,6 +659,22 @@ class VaultUnlockViewModelTest : BaseViewModelTest() {
         coVerify {
             vaultRepository.unlockVaultWithPin(pin)
         }
+    }
+
+    @Test
+    fun `on UnlockClick for empty PIN should ignore the action`() {
+        val pin = ""
+        val initialState = DEFAULT_STATE.copy(
+            input = pin,
+            vaultUnlockType = VaultUnlockType.PIN,
+        )
+        val viewModel = createViewModel(state = initialState)
+
+        viewModel.trySendAction(VaultUnlockAction.UnlockClick)
+        assertEquals(
+            initialState,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
