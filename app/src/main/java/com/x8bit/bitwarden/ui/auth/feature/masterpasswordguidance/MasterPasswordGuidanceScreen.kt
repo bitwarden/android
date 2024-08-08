@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -181,6 +182,7 @@ private fun TryGeneratorCard(
                 painter = rememberVectorPainter(id = R.drawable.ic_generator),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(
@@ -205,7 +207,9 @@ private fun TryGeneratorCard(
                 painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.align(Alignment.CenterVertically),
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .size(16.dp),
             )
         }
     }
@@ -217,7 +221,7 @@ private fun BulletTextRow(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
     ) {
