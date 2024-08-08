@@ -1192,7 +1192,7 @@ class AuthRepositoryImpl(
                 email = email,
                 name = name,
                 receiveMarketingEmails = receiveMarketingEmails,
-            )
+            ),
         ).fold(
             onSuccess = {
                 SendVerificationEmailResult.Success(it?.string())
@@ -1203,7 +1203,7 @@ class AuthRepositoryImpl(
                     return SendVerificationEmailResult.Success(null)
                 }
                 return SendVerificationEmailResult.Error(null)
-            }
+            },
         )
 
     @Suppress("CyclomaticComplexMethod")

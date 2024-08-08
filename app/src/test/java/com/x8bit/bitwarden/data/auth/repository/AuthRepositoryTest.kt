@@ -5383,7 +5383,7 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     name = NAME,
                     receiveMarketingEmails = true,
-                )
+                ),
             )
         } returns EMAIL_VERIFICATION_TOKEN.toResponseBody().asSuccess()
 
@@ -5406,7 +5406,7 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     name = NAME,
                     receiveMarketingEmails = true,
-                )
+                ),
             )
         } returns IllegalStateException("Unexpected null body!").asFailure()
 
@@ -5429,7 +5429,7 @@ class AuthRepositoryTest {
                     email = EMAIL,
                     name = NAME,
                     receiveMarketingEmails = true,
-                )
+                ),
             )
         } returns Throwable("fail").asFailure()
 

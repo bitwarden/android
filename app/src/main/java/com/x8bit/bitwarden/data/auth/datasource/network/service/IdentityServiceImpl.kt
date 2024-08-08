@@ -106,7 +106,9 @@ class IdentityServiceImpl(
         .executeForResult()
 
     @Suppress("MagicNumber")
-    override suspend fun registerFinish(body: RegisterFinishRequestJson): Result<RegisterResponseJson> =
+    override suspend fun registerFinish(
+        body: RegisterFinishRequestJson,
+    ): Result<RegisterResponseJson> =
         api
             .registerFinish(body)
             .recoverCatching { throwable ->
