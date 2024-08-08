@@ -52,7 +52,8 @@ import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
-import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithBiometricsSwitch
+import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenUnlockWithPinSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalBiometricsManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
@@ -196,9 +197,9 @@ fun AccountSecurityScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            UnlockWithBiometricsRow(
-                isChecked = state.isUnlockWithBiometricsEnabled,
-                showBiometricsPrompt = showBiometricsPrompt,
+            BitwardenUnlockWithBiometricsSwitch(
+                isBiometricsSupported = biometricsManager.isBiometricsSupported,
+                isChecked = state.isUnlockWithBiometricsEnabled || showBiometricsPrompt,
                 onDisableBiometrics = remember(viewModel) {
                     {
                         viewModel.trySendAction(
@@ -211,17 +212,16 @@ fun AccountSecurityScreen(
                 onEnableBiometrics = remember(viewModel) {
                     { viewModel.trySendAction(AccountSecurityAction.EnableBiometricsClick) }
                 },
-                biometricsManager = biometricsManager,
                 modifier = Modifier
                     .testTag("UnlockWithBiometricsSwitch")
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
             )
-            UnlockWithPinRow(
+            BitwardenUnlockWithPinSwitch(
                 isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
                 isUnlockWithPinEnabled = state.isUnlockWithPinEnabled,
                 onUnlockWithPinToggleAction = remember(viewModel) {
-                    { viewModel.trySendAction(it) }
+                    { viewModel.trySendAction(AccountSecurityAction.UnlockWithPinToggle(it)) }
                 },
                 modifier = Modifier
                     .testTag("UnlockWithPinSwitch")
@@ -377,149 +377,6 @@ private fun AccountSecurityDialogs(
         )
 
         null -> Unit
-    }
-}
-
-@Composable
-private fun UnlockWithBiometricsRow(
-    isChecked: Boolean,
-    showBiometricsPrompt: Boolean,
-    onDisableBiometrics: () -> Unit,
-    onEnableBiometrics: () -> Unit,
-    biometricsManager: BiometricsManager,
-    modifier: Modifier = Modifier,
-) {
-    if (!biometricsManager.isBiometricsSupported) return
-    BitwardenWideSwitch(
-        modifier = modifier,
-        label = stringResource(
-            id = R.string.unlock_with,
-            stringResource(id = R.string.biometrics),
-        ),
-        isChecked = isChecked || showBiometricsPrompt,
-        onCheckedChange = { toggled ->
-            if (toggled) {
-                onEnableBiometrics()
-            } else {
-                onDisableBiometrics()
-            }
-        },
-    )
-}
-
-@Suppress("LongMethod")
-@Composable
-private fun UnlockWithPinRow(
-    isUnlockWithPasswordEnabled: Boolean,
-    isUnlockWithPinEnabled: Boolean,
-    onUnlockWithPinToggleAction: (AccountSecurityAction.UnlockWithPinToggle) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var shouldShowPinInputDialog by rememberSaveable { mutableStateOf(false) }
-    var shouldShowPinConfirmationDialog by rememberSaveable { mutableStateOf(false) }
-    var pin by remember { mutableStateOf("") }
-    BitwardenWideSwitch(
-        label = stringResource(id = R.string.unlock_with_pin),
-        isChecked = isUnlockWithPinEnabled,
-        onCheckedChange = { isChecked ->
-            if (isChecked) {
-                onUnlockWithPinToggleAction(
-                    AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
-                )
-                shouldShowPinInputDialog = true
-            } else {
-                onUnlockWithPinToggleAction(
-                    AccountSecurityAction.UnlockWithPinToggle.Disabled,
-                )
-            }
-        },
-        modifier = modifier,
-    )
-
-    when {
-        shouldShowPinInputDialog -> {
-            PinInputDialog(
-                onCancelClick = {
-                    shouldShowPinInputDialog = false
-                    onUnlockWithPinToggleAction(
-                        AccountSecurityAction.UnlockWithPinToggle.Disabled,
-                    )
-                    pin = ""
-                },
-                onSubmitClick = {
-                    pin = it
-                    if (pin.isNotEmpty()) {
-                        shouldShowPinInputDialog = false
-                        if (isUnlockWithPasswordEnabled) {
-                            shouldShowPinConfirmationDialog = true
-                            onUnlockWithPinToggleAction(
-                                AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
-                            )
-                        } else {
-                            onUnlockWithPinToggleAction(
-                                AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                                    pin = pin,
-                                    shouldRequireMasterPasswordOnRestart = false,
-                                ),
-                            )
-                        }
-                    } else {
-                        shouldShowPinInputDialog = false
-                        onUnlockWithPinToggleAction(
-                            AccountSecurityAction.UnlockWithPinToggle.Disabled,
-                        )
-                    }
-                },
-                onDismissRequest = {
-                    shouldShowPinInputDialog = false
-                    onUnlockWithPinToggleAction(
-                        AccountSecurityAction.UnlockWithPinToggle.Disabled,
-                    )
-                    pin = ""
-                },
-            )
-        }
-
-        shouldShowPinConfirmationDialog -> {
-            BitwardenTwoButtonDialog(
-                title = stringResource(id = R.string.unlock_with_pin),
-                message = stringResource(id = R.string.pin_require_master_password_restart),
-                confirmButtonText = stringResource(id = R.string.yes),
-                dismissButtonText = stringResource(id = R.string.no),
-                onConfirmClick = {
-                    shouldShowPinConfirmationDialog = false
-                    onUnlockWithPinToggleAction(
-                        AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                            pin = pin,
-                            shouldRequireMasterPasswordOnRestart = true,
-                        ),
-                    )
-                    pin = ""
-                },
-                onDismissClick = {
-                    shouldShowPinConfirmationDialog = false
-                    onUnlockWithPinToggleAction(
-                        AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                            pin = pin,
-                            shouldRequireMasterPasswordOnRestart = false,
-                        ),
-                    )
-                    pin = ""
-                },
-                onDismissRequest = {
-                    // Dismissing the dialog is the same as requiring a master password
-                    // confirmation.
-                    shouldShowPinConfirmationDialog = false
-                    onUnlockWithPinToggleAction(
-                        AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                            pin = pin,
-                            shouldRequireMasterPasswordOnRestart = true,
-                        ),
-                    )
-                    pin = ""
-                },
-            )
-        }
     }
 }
 

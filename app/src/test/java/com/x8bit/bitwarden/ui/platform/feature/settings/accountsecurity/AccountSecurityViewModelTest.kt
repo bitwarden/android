@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -458,7 +459,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { settingsRepository.clearUnlockPin() } just runs
         val viewModel = createViewModel(initialState = initialState)
         viewModel.trySendAction(
-            AccountSecurityAction.UnlockWithPinToggle.Disabled,
+            AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
         )
         assertEquals(
             initialState.copy(isUnlockWithPinEnabled = false),
@@ -478,7 +479,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         every { settingsRepository.vaultTimeoutAction = VaultTimeoutAction.LOGOUT } just runs
         val viewModel = createViewModel(initialState = initialState)
         viewModel.trySendAction(
-            AccountSecurityAction.UnlockWithPinToggle.Disabled,
+            AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.Disabled),
         )
         assertEquals(
             initialState.copy(
@@ -500,7 +501,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
         )
         val viewModel = createViewModel(initialState = initialState)
         viewModel.trySendAction(
-            AccountSecurityAction.UnlockWithPinToggle.PendingEnabled,
+            AccountSecurityAction.UnlockWithPinToggle(UnlockWithPinState.PendingEnabled),
         )
         assertEquals(
             initialState.copy(isUnlockWithPinEnabled = true),
@@ -518,9 +519,11 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
 
         val viewModel = createViewModel(initialState = initialState)
         viewModel.trySendAction(
-            AccountSecurityAction.UnlockWithPinToggle.Enabled(
-                pin = "1234",
-                shouldRequireMasterPasswordOnRestart = true,
+            AccountSecurityAction.UnlockWithPinToggle(
+                UnlockWithPinState.Enabled(
+                    pin = "1234",
+                    shouldRequireMasterPasswordOnRestart = true,
+                ),
             ),
         )
         assertEquals(
