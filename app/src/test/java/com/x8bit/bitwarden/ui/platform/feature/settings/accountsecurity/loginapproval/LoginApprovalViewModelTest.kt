@@ -193,19 +193,19 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `When approval request is successful, should emit ExitApp when shouldFinishWhenComplete is true`() =
         runTest {
-            every {
-                mockSpecialCircumstanceManager.specialCircumstance
-            } returns SpecialCircumstance.PasswordlessRequest(
+            val specialCircumstance = SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = PasswordlessRequestData(
                     loginRequestId = REQUEST_ID,
                     userId = USER_ID,
                 ),
                 shouldFinishWhenComplete = true,
             )
+            every {
+                mockSpecialCircumstanceManager.specialCircumstance
+            } returns specialCircumstance
             val viewModel = createViewModel(
                 state = DEFAULT_STATE.copy(
-                    specialCircumstance = mockSpecialCircumstanceManager.specialCircumstance
-                        as? SpecialCircumstance.PasswordlessRequest
+                    specialCircumstance = specialCircumstance,
                 )
             )
             coEvery {
@@ -216,7 +216,6 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                     isApproved = true,
                 )
             } returns AuthRequestResult.Success(AUTH_REQUEST)
-
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
@@ -263,19 +262,19 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     @Suppress("MaxLineLength")
     fun `When deny request is successful, should emit ExitApp when shouldFinishWhenComplete is true`() =
         runTest {
-            every {
-                mockSpecialCircumstanceManager.specialCircumstance
-            } returns SpecialCircumstance.PasswordlessRequest(
+            val specialCircumstance = SpecialCircumstance.PasswordlessRequest(
                 passwordlessRequestData = PasswordlessRequestData(
                     loginRequestId = REQUEST_ID,
                     userId = USER_ID,
                 ),
                 shouldFinishWhenComplete = true,
             )
+            every {
+                mockSpecialCircumstanceManager.specialCircumstance
+            } returns specialCircumstance
             val viewModel = createViewModel(
                 state = DEFAULT_STATE.copy(
-                    specialCircumstance = mockSpecialCircumstanceManager.specialCircumstance
-                        as? SpecialCircumstance.PasswordlessRequest
+                    specialCircumstance = specialCircumstance,
                 )
             )
             coEvery {
@@ -286,7 +285,6 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
                     isApproved = false,
                 )
             } returns AuthRequestResult.Success(AUTH_REQUEST)
-
 
             viewModel.eventFlow.test {
                 viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)

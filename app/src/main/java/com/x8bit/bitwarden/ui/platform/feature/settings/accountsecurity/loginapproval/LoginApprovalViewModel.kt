@@ -108,7 +108,7 @@ class LoginApprovalViewModel @Inject constructor(
     }
 
     private fun handleCloseClicked() {
-        closeScreen()
+        sendClosingEvent()
     }
 
     private fun handleDeclineRequestClicked() {
@@ -138,7 +138,7 @@ class LoginApprovalViewModel @Inject constructor(
         when (action.result) {
             is AuthRequestResult.Success -> {
                 sendEvent(LoginApprovalEvent.ShowToast(R.string.login_approved.asText()))
-                sendEventBasedOnSpecialCircumstance()
+                sendClosingEvent()
             }
 
             is AuthRequestResult.Error -> {
@@ -184,7 +184,7 @@ class LoginApprovalViewModel @Inject constructor(
             AuthRequestUpdatesResult.Declined,
             AuthRequestUpdatesResult.Expired,
             -> {
-                closeScreen()
+                sendClosingEvent()
             }
         }
     }
@@ -195,7 +195,7 @@ class LoginApprovalViewModel @Inject constructor(
         when (action.result) {
             is AuthRequestResult.Success -> {
                 sendEvent(LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()))
-                sendEventBasedOnSpecialCircumstance()
+                sendClosingEvent()
             }
 
             is AuthRequestResult.Error -> {
@@ -206,11 +206,7 @@ class LoginApprovalViewModel @Inject constructor(
         }
     }
 
-    private fun closeScreen() {
-        sendEventBasedOnSpecialCircumstance()
-    }
-
-    private fun sendEventBasedOnSpecialCircumstance() {
+    private fun sendClosingEvent() {
         val event = if (state.specialCircumstance?.shouldFinishWhenComplete == true) {
             LoginApprovalEvent.ExitApp
         } else {
