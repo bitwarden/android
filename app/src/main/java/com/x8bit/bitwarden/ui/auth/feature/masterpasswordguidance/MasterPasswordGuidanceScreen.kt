@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordguidance
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -91,7 +91,6 @@ fun MasterPasswordGuidanceScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Column(
                 modifier = Modifier
@@ -103,7 +102,6 @@ fun MasterPasswordGuidanceScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(all = 24.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
 
                     Text(
@@ -111,6 +109,7 @@ fun MasterPasswordGuidanceScreen(
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -142,6 +141,7 @@ fun MasterPasswordGuidanceScreen(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(16.dp))
             TryGeneratorCard(
                 onCardClicked = remember(viewModel) {
                     {
@@ -177,16 +177,15 @@ private fun TryGeneratorCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_generator),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
             )
+            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.weight(TWO_THIRDS_WEIGHT),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(
                     text = stringResource(
@@ -195,12 +194,14 @@ private fun TryGeneratorCard(
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = stringResource(R.string.try_it_out),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
             }
+            Spacer(modifier = Modifier.width(16.dp))
             Icon(
                 painter = rememberVectorPainter(id = R.drawable.ic_navigate_next),
                 contentDescription = null,
