@@ -185,7 +185,7 @@ private fun TryGeneratorCard(
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(
-                modifier = Modifier.weight(weight = 1f, fill = false),
+                modifier = Modifier.weight(weight = 1f),
             ) {
                 Text(
                     text = stringResource(
