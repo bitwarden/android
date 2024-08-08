@@ -164,10 +164,9 @@ private fun TryGeneratorCard(
     Card(
         onClick = onCardClicked,
         shape = RoundedCornerShape(size = 16.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .then(modifier),
+            .wrapContentHeight(),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
         ),
@@ -218,10 +217,9 @@ private fun BulletTextRow(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        Modifier
+        modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .then(modifier),
+            .padding(horizontal = 8.dp),
     ) {
         Text(
             text = BULLET_TWO_TAB,
