@@ -265,7 +265,7 @@ private fun TermsAndPrivacyText(
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
         val strTermsAndPrivacy = stringResource(
-            id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy
+            id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
         )
         val strTerms = stringResource(id = R.string.terms_of_service)
         val strPrivacy = stringResource(id = R.string.privacy_policy)
