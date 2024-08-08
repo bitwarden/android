@@ -66,10 +66,16 @@ class VaultDiskSourceImpl(
             ciphersDao
                 .getAllCiphers(userId = userId)
                 .map { entities ->
-                    entities.map { entity ->
-                        withContext(dispatcherManager.default) {
-                            json.decodeFromString<SyncResponseJson.Cipher>(entity.cipherJson)
-                        }
+                    withContext(context = dispatcherManager.default) {
+                        entities
+                            .map { entity ->
+                                async {
+                                    json.decodeFromString<SyncResponseJson.Cipher>(
+                                        string = entity.cipherJson,
+                                    )
+                                }
+                            }
+                            .awaitAll()
                     }
                 },
         )
@@ -180,10 +186,14 @@ class VaultDiskSourceImpl(
             sendsDao
                 .getAllSends(userId = userId)
                 .map { entities ->
-                    entities.map { entity ->
-                        withContext(dispatcherManager.default) {
-                            json.decodeFromString<SyncResponseJson.Send>(entity.sendJson)
-                        }
+                    withContext(context = dispatcherManager.default) {
+                        entities
+                            .map { entity ->
+                                async {
+                                    json.decodeFromString<SyncResponseJson.Send>(entity.sendJson)
+                                }
+                            }
+                            .awaitAll()
                     }
                 },
         )

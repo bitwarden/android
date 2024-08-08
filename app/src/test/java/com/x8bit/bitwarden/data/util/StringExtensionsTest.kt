@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.util
 
-import android.content.Context
+import com.x8bit.bitwarden.data.platform.manager.ResourceCacheManager
 import com.x8bit.bitwarden.data.platform.util.findLastSubstringIndicesOrNull
 import com.x8bit.bitwarden.data.platform.util.getDomainOrNull
 import com.x8bit.bitwarden.data.platform.util.getWebHostFromAndroidUriOrNull
@@ -74,21 +74,21 @@ class StringExtensionsTest {
     fun `getDomainOrNull should invoke parseDomainOrNull when URI is created`() {
         // Setup
         mockkStatic(URI::parseDomainOrNull)
-        val context: Context = mockk()
+        val resourceCacheManager: ResourceCacheManager = mockk()
         val expected = "google.com"
         every {
-            any<URI>().parseDomainOrNull(context = context)
+            any<URI>().parseDomainOrNull(resourceCacheManager = resourceCacheManager)
         } returns expected
 
         // Test
         val actual = "www.google.com".getDomainOrNull(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
         )
 
         // Verify
         assertEquals(expected, actual)
         verify(exactly = 1) {
-            any<URI>().parseDomainOrNull(context = context)
+            any<URI>().parseDomainOrNull(resourceCacheManager = resourceCacheManager)
         }
     }
 
@@ -96,17 +96,17 @@ class StringExtensionsTest {
     fun `getDomainOrNull should not invoke parseDomainOrNull when URI is not created`() {
         // Setup
         mockkStatic(URI::parseDomainOrNull)
-        val context: Context = mockk()
+        val resourceCacheManager: ResourceCacheManager = mockk()
 
         // Test
         val actual = "not a URI".getDomainOrNull(
-            context = context,
+            resourceCacheManager = resourceCacheManager,
         )
 
         // Verify
         assertNull(actual)
         verify(exactly = 0) {
-            any<URI>().parseDomainOrNull(context = context)
+            any<URI>().parseDomainOrNull(resourceCacheManager = resourceCacheManager)
         }
     }
 

@@ -71,8 +71,12 @@ interface IdentityApi {
     suspend fun register(@Body body: RegisterRequestJson): Result<RegisterResponseJson.Success>
 
     @POST("/accounts/register/finish")
-    suspend fun registerFinish(@Body body: RegisterFinishRequestJson): Result<RegisterResponseJson.Success>
+    suspend fun registerFinish(
+        @Body body: RegisterFinishRequestJson,
+    ): Result<RegisterResponseJson.Success>
 
     @POST("/accounts/register/send-verification-email")
-    suspend fun sendVerificationEmail(@Body body: SendVerificationEmailRequestJson): Result<ResponseBody?>
+    suspend fun sendVerificationEmail(
+        @Body body: SendVerificationEmailRequestJson,
+    ): Result<ResponseBody?>
 }

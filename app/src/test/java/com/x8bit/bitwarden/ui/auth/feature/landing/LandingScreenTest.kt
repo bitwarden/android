@@ -475,6 +475,7 @@ private val DEFAULT_STATE = LandingState(
     isContinueButtonEnabled = true,
     isRememberMeEnabled = false,
     selectedEnvironmentType = Environment.Type.US,
+    selectedEnvironmentLabel = Environment.Us.label,
     dialog = null,
     accountSummaries = emptyList(),
 )

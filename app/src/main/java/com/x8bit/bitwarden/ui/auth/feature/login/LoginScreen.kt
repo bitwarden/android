@@ -238,6 +238,7 @@ private fun LoginScreenContent(
             .verticalScroll(rememberScrollState()),
     ) {
         BitwardenPasswordField(
+            autoFocus = true,
             modifier = Modifier
                 .testTag("MasterPasswordEntry")
                 .padding(horizontal = 16.dp)

@@ -161,8 +161,28 @@ private fun AssistStructure.traverse(): List<ViewNodeTraversalData> =
             windowNode
                 .rootViewNode
                 ?.traverse()
+                ?.updateForMissingPasswordFields()
                 ?.updateForMissingUsernameFields()
         }
+
+/**
+ * This helper function updates the [ViewNodeTraversalData] if necessary for missing password
+ * fields that were marked invalid because they contained a specific `hint` or `idEntry`. If the
+ * current `ViewNodeTraversalData` contains at least one password fields, we do not add any fields.
+ */
+private fun ViewNodeTraversalData.updateForMissingPasswordFields(): ViewNodeTraversalData =
+    if (this.autofillViews.none { it is AutofillView.Login.Password }) {
+        this.copyAndMapAutofillViews { _, autofillView ->
+            if (autofillView is AutofillView.Unused && autofillView.data.hasPasswordTerms) {
+                AutofillView.Login.Password(data = autofillView.data)
+            } else {
+                autofillView
+            }
+        }
+    } else {
+        // We already have password fields available, so no need to add more.
+        this
+    }
 
 /**
  * This helper function updates the [ViewNodeTraversalData] if necessary for missing username
@@ -177,31 +197,41 @@ private fun ViewNodeTraversalData.updateForMissingUsernameFields(): ViewNodeTrav
     return if (passwordPositions.any() &&
         this.autofillViews.none { it is AutofillView.Login.Username }
     ) {
-        val updatedAutofillViews = autofillViews.mapIndexed { index, autofillView ->
+        this.copyAndMapAutofillViews { index, autofillView ->
             if (autofillView is AutofillView.Unused && passwordPositions.contains(index + 1)) {
                 AutofillView.Login.Username(data = autofillView.data)
             } else {
                 autofillView
             }
         }
-        val previousUnusedIds = autofillViews
-            .filterIsInstance<AutofillView.Unused>()
-            .map { it.data.autofillId }
-            .toSet()
-        val currentUnusedIds = updatedAutofillViews
-            .filterIsInstance<AutofillView.Unused>()
-            .map { it.data.autofillId }
-            .toSet()
-        val unignoredAutofillIds = previousUnusedIds - currentUnusedIds
-        this.copy(
-            autofillViews = updatedAutofillViews,
-            ignoreAutofillIds = this.ignoreAutofillIds - unignoredAutofillIds,
-        )
     } else {
         // We already have username fields available or there are no password fields, so no need
         // to search for them.
         this
     }
+}
+
+/**
+ * This helper function loops through all the [ViewNodeTraversalData.autofillViews] and returns the
+ * fully updated `ViewNodeTraversalData`.
+ */
+private fun ViewNodeTraversalData.copyAndMapAutofillViews(
+    mapper: (index: Int, autofillView: AutofillView) -> AutofillView,
+): ViewNodeTraversalData {
+    val updatedAutofillViews = autofillViews.mapIndexed(mapper)
+    val previousUnusedIds = autofillViews
+        .filterIsInstance<AutofillView.Unused>()
+        .map { it.data.autofillId }
+        .toSet()
+    val currentUnusedIds = updatedAutofillViews
+        .filterIsInstance<AutofillView.Unused>()
+        .map { it.data.autofillId }
+        .toSet()
+    val unignoredAutofillIds = previousUnusedIds - currentUnusedIds
+    return this.copy(
+        autofillViews = updatedAutofillViews,
+        ignoreAutofillIds = this.ignoreAutofillIds - unignoredAutofillIds,
+    )
 }
 
 /**

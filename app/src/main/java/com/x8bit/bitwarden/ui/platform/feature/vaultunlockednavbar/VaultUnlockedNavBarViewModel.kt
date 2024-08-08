@@ -1,5 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.feature.vaultunlockednavbar
 
+import androidx.annotation.StringRes
+import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.manager.model.SpecialCircumstance
@@ -14,8 +16,21 @@ import javax.inject.Inject
 class VaultUnlockedNavBarViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     specialCircumstancesManager: SpecialCircumstanceManager,
-) : BaseViewModel<Unit, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
-    initialState = Unit,
+) : BaseViewModel<VaultUnlockedNavBarState, VaultUnlockedNavBarEvent, VaultUnlockedNavBarAction>(
+    initialState = run {
+        val hasOrganization = authRepository
+            .userStateFlow
+            .value
+            ?.activeAccount
+            ?.organizations
+            ?.isNotEmpty()
+            ?: false
+        val vaultRes = if (hasOrganization) R.string.vaults else R.string.my_vault
+        VaultUnlockedNavBarState(
+            vaultNavBarLabelRes = vaultRes,
+            vaultNavBarContentDescriptionRes = vaultRes,
+        )
+    },
 ) {
     init {
         when (specialCircumstancesManager.specialCircumstance) {
@@ -39,7 +54,6 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
             VaultUnlockedNavBarAction.SendTabClick -> handleSendTabClicked()
             VaultUnlockedNavBarAction.SettingsTabClick -> handleSettingsTabClicked()
             VaultUnlockedNavBarAction.VaultTabClick -> handleVaultTabClicked()
-            VaultUnlockedNavBarAction.BackStackUpdate -> handleBackStackUpdate()
         }
     }
     // #region BottomTabViewModel Action Handlers
@@ -70,12 +84,16 @@ class VaultUnlockedNavBarViewModel @Inject constructor(
     private fun handleSettingsTabClicked() {
         sendEvent(VaultUnlockedNavBarEvent.NavigateToSettingsScreen)
     }
-
-    private fun handleBackStackUpdate() {
-        authRepository.updateLastActiveTime()
-    }
     // #endregion BottomTabViewModel Action Handlers
 }
+
+/**
+ * Models state for the [VaultUnlockedNavBarViewModel].
+ */
+data class VaultUnlockedNavBarState(
+    @StringRes val vaultNavBarLabelRes: Int,
+    @StringRes val vaultNavBarContentDescriptionRes: Int,
+)
 
 /**
  * Models actions for the bottom tab of the vault unlocked portion of the app.
@@ -100,11 +118,6 @@ sealed class VaultUnlockedNavBarAction {
      * click Settings tab.
      */
     data object SettingsTabClick : VaultUnlockedNavBarAction()
-
-    /**
-     * Indicates the backstack has changed.
-     */
-    data object BackStackUpdate : VaultUnlockedNavBarAction()
 }
 
 /**

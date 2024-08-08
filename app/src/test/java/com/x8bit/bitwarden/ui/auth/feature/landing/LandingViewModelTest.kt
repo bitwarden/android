@@ -196,7 +196,7 @@ class LandingViewModelTest : BaseViewModelTest() {
 
     @Suppress("MaxLineLength")
     @Test
-    fun `ContinueButtonClick with an email input matching an existing account that is logged in should show the account already added dialog`() {
+    fun `ContinueButtonClick with an email input matching an existing account on same environment that is logged in should show the account already added dialog`() {
         val rememberedEmail = "active@bitwarden.com"
         val activeAccount = UserState.Account(
             userId = "activeUserId",
@@ -245,6 +245,63 @@ class LandingViewModelTest : BaseViewModelTest() {
             viewModel.stateFlow.value,
         )
     }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `ContinueButtonClick with an email input matching an existing account on different environment that is logged in should emit NavigateToLogin`() =
+        runTest {
+            val rememberedEmail = "active@bitwarden.com"
+            val activeAccount = UserState.Account(
+                userId = "activeUserId",
+                name = "name",
+                email = rememberedEmail,
+                avatarColorHex = "avatarColorHex",
+                environment = Environment.Us,
+                isPremium = true,
+                isLoggedIn = true,
+                isVaultUnlocked = true,
+                needsPasswordReset = false,
+                isBiometricsEnabled = false,
+                organizations = emptyList(),
+                needsMasterPassword = false,
+                trustedDevice = null,
+            )
+            val userState = UserState(
+                activeUserId = "activeUserId",
+                accounts = listOf(activeAccount),
+            )
+            val viewModel = createViewModel(
+                rememberedEmail = rememberedEmail,
+                userState = userState,
+            )
+            val accountSummaries = userState.toAccountSummaries()
+            val initialState = DEFAULT_STATE.copy(
+                emailInput = rememberedEmail,
+                isContinueButtonEnabled = true,
+                isRememberMeEnabled = true,
+                accountSummaries = accountSummaries,
+            )
+            assertEquals(
+                initialState,
+                viewModel.stateFlow.value,
+            )
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(Environment.Eu.type))
+                assertEquals(
+                    initialState.copy(
+                        selectedEnvironmentLabel = Environment.Eu.label,
+                        selectedEnvironmentType = Environment.Eu.type,
+                    ),
+                    viewModel.stateFlow.value,
+                )
+                viewModel.trySendAction(LandingAction.ContinueButtonClick)
+                assertEquals(
+                    LandingEvent.NavigateToLogin(rememberedEmail),
+                    awaitItem(),
+                )
+            }
+        }
 
     @Suppress("MaxLineLength")
     @Test
@@ -382,7 +439,10 @@ class LandingViewModelTest : BaseViewModelTest() {
             awaitItem()
             viewModel.trySendAction(LandingAction.EnvironmentTypeSelect(inputEnvironmentType))
             assertEquals(
-                DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
+                DEFAULT_STATE.copy(
+                    selectedEnvironmentType = Environment.Type.EU,
+                    selectedEnvironmentLabel = Environment.Eu.label,
+                ),
                 awaitItem(),
             )
         }
@@ -494,6 +554,7 @@ class LandingViewModelTest : BaseViewModelTest() {
             isContinueButtonEnabled = false,
             isRememberMeEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
+            selectedEnvironmentLabel = Environment.Us.label,
             dialog = null,
             accountSummaries = emptyList(),
         )
