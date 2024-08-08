@@ -935,4 +935,6 @@ Do you want to switch to this account?</string>
   <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>
   <string name="your_data_when_and_where_you_need_it">Your data, when and where you need it</string>
   <string name="welcome_message_4">Save unlimited passwords across unlimited devices with Bitwarden mobile, browser, and desktop apps.</string>
+  <string name="remove_passkey">Remove passkey</string>
+  <string name="passkey_removed">Passkey removed</string>
 </resources>
