@@ -31,7 +31,7 @@ fun createMockFido2CredentialAutofillView(
 ): Fido2CredentialAutofillView = Fido2CredentialAutofillView(
     credentialId = "mockCredentialId-$number".toByteArray(),
     cipherId = "mockCipherId-$number",
-    rpId = "mockRpId-$number",
+    rpId = "mockRelyingPartyId-$number",
     userNameForUi = "mockUserNameForUi-$number",
     userHandle = "mockUserHandle-$number".toByteArray(),
 )

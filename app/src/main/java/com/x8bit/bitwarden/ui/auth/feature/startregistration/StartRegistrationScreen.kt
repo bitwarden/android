@@ -49,11 +49,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
@@ -111,13 +115,13 @@ fun StartRegistrationScreen(
             is StartRegistrationEvent.NavigateToCompleteRegistration -> {
                 onNavigateToCompleteRegistration(
                     event.email,
-                    event.verificationToken
+                    event.verificationToken,
                 )
             }
 
             is StartRegistrationEvent.NavigateToCheckEmail -> {
                 onNavigateToCheckEmail(
-                    event.email
+                    event.email,
                 )
             }
 
@@ -158,7 +162,7 @@ fun StartRegistrationScreen(
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(CloseClick) }
-                }
+                },
             )
         },
     ) { innerPadding ->
@@ -187,7 +191,7 @@ fun StartRegistrationScreen(
                 labelText = stringResource(id = R.string.creating_on),
                 selectedOption = state.selectedEnvironmentType,
                 onOptionSelected = remember(viewModel) {
-                    { viewModel.trySendAction(StartRegistrationAction.EnvironmentTypeSelect(it)) }
+                    { viewModel.trySendAction(EnvironmentTypeSelect(it)) }
                 },
                 modifier = Modifier
                     .testTag("RegionSelectorDropdown")
@@ -214,15 +218,15 @@ fun StartRegistrationScreen(
                     onCheckedChange = remember(viewModel) {
                         {
                             viewModel.trySendAction(
-                                StartRegistrationAction.ReceiveMarketingEmailsToggle(
-                                    it
-                                )
+                                ReceiveMarketingEmailsToggle(
+                                    it,
+                                ),
                             )
                         }
                     },
                     onUnsubscribeClick = remember(viewModel) {
-                        { viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick) }
-                    }
+                        { viewModel.trySendAction(UnsubscribeMarketingEmailsClick) }
+                    },
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -230,7 +234,7 @@ fun StartRegistrationScreen(
             BitwardenFilledButton(
                 label = stringResource(id = R.string.continue_text),
                 onClick = remember(viewModel) {
-                    { viewModel.trySendAction(StartRegistrationAction.ContinueClick) }
+                    { viewModel.trySendAction(ContinueClick) }
                 },
                 isEnabled = state.isContinueButtonEnabled,
                 modifier = Modifier
@@ -260,8 +264,9 @@ private fun TermsAndPrivacyText(
     onPrivacyPolicyClick: () -> Unit,
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-        val strTermsAndPrivacy =
-            stringResource(id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy)
+        val strTermsAndPrivacy = stringResource(
+            id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
+        )
         val strTerms = stringResource(id = R.string.terms_of_service)
         val strPrivacy = stringResource(id = R.string.privacy_policy)
         val startIndexTerms = strTermsAndPrivacy.indexOf(strTerms)
@@ -272,40 +277,40 @@ private fun TermsAndPrivacyText(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
             ),
             start = 0,
-            end = strTermsAndPrivacy.length
+            end = strTermsAndPrivacy.length,
         )
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             ),
             start = startIndexTerms,
-            end = endIndexTerms
+            end = endIndexTerms,
         )
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             ),
             start = startIndexPrivacy,
-            end = endIndexPrivacy
+            end = endIndexPrivacy,
         )
         addStringAnnotation(
             tag = "URL",
             annotation = strTerms,
             start = startIndexTerms,
-            end = endIndexTerms
+            end = endIndexTerms,
         )
         addStringAnnotation(
             tag = "URL",
             annotation = strPrivacy,
             start = startIndexPrivacy,
-            end = endIndexPrivacy
+            end = endIndexPrivacy,
         )
     }
     Row(
@@ -326,12 +331,13 @@ private fun TermsAndPrivacyText(
                     annotatedLinkString
                         .getStringAnnotations("URL", it, it)
                         .firstOrNull()?.let { stringAnnotation ->
-                            if (stringAnnotation.item == termsUrl)
+                            if (stringAnnotation.item == termsUrl) {
                                 onTermsClick()
-                            else
+                            } else {
                                 onPrivacyPolicyClick()
+                            }
                         }
-                }
+                },
             )
         }
     }
@@ -345,8 +351,8 @@ private fun ReceiveMarketingEmailsSwitch(
     onUnsubscribeClick: () -> Unit,
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-        val strMarketingEmail =
-            stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
+        @Suppress("MaxLineLength")
+        val strMarketingEmail = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
         val strUnsubscribe = stringResource(id = R.string.unsubscribe)
         val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe, ignoreCase = true)
         val endIndexUnsubscribe = startIndexUnsubscribe + strUnsubscribe.length
@@ -354,25 +360,25 @@ private fun ReceiveMarketingEmailsSwitch(
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
             ),
             start = 0,
-            end = strMarketingEmail.length
+            end = strMarketingEmail.length,
         )
         addStyle(
             style = SpanStyle(
                 color = MaterialTheme.colorScheme.primary,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             ),
             start = startIndexUnsubscribe,
-            end = endIndexUnsubscribe
+            end = endIndexUnsubscribe,
         )
         addStringAnnotation(
             tag = "URL",
             annotation = strUnsubscribe,
             start = startIndexUnsubscribe,
-            end = endIndexUnsubscribe
+            end = endIndexUnsubscribe,
         )
     }
     Row(
@@ -408,10 +414,8 @@ private fun ReceiveMarketingEmailsSwitch(
                         .firstOrNull()?.let {
                             onUnsubscribeClick()
                         }
-                }
+                },
             )
         }
     }
 }
-
-

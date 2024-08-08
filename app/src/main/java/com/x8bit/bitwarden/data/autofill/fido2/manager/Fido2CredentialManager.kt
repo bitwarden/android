@@ -1,6 +1,8 @@
 package com.x8bit.bitwarden.data.autofill.fido2.manager
 
 import com.bitwarden.vault.CipherView
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionRequest
+import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialAssertionResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2CredentialRequest
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2RegisterCredentialResult
 import com.x8bit.bitwarden.data.autofill.fido2.model.Fido2ValidateOriginResult
@@ -52,6 +54,15 @@ interface Fido2CredentialManager {
         fido2CredentialRequest: Fido2CredentialRequest,
         selectedCipherView: CipherView,
     ): Fido2RegisterCredentialResult
+
+    /**
+     * Authenticate a FIDO credential against a cipher in the users vault.
+     */
+    suspend fun authenticateFido2Credential(
+        userId: String,
+        request: Fido2CredentialAssertionRequest,
+        selectedCipherView: CipherView,
+    ): Fido2CredentialAssertionResult
 
     /**
      * Whether or not the user has authentication attempts remaining.

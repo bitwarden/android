@@ -82,8 +82,8 @@ class StartRegistrationScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(
             StartRegistrationEvent.NavigateToCompleteRegistration(
                 email = "email",
-                verificationToken = "verificationToken"
-            )
+                verificationToken = "verificationToken",
+            ),
         )
         assertTrue(onNavigateToCompleteRegistrationCalled)
     }
@@ -93,7 +93,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
         mutableEventFlow.tryEmit(
             StartRegistrationEvent.NavigateToCheckEmail(
                 email = "email",
-            )
+            ),
         )
         assertTrue(onNavigateToCheckEmailCalled)
     }

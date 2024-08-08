@@ -4,7 +4,6 @@ import android.net.Uri
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -108,7 +107,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import retrofit2.HttpException
 import java.time.Clock
 import java.time.temporal.ChronoUnit
@@ -139,7 +137,6 @@ class VaultRepositoryImpl(
     private val userLogoutManager: UserLogoutManager,
     pushManager: PushManager,
     private val clock: Clock,
-    private val json: Json,
     dispatcherManager: DispatcherManager,
 ) : VaultRepository,
     CipherManager by cipherManager,
@@ -609,27 +606,6 @@ class VaultRepositoryImpl(
         )
     }
 
-    override suspend fun unlockVault(
-        userId: String,
-        masterPassword: String,
-        email: String,
-        kdf: Kdf,
-        userKey: String,
-        privateKey: String,
-        organizationKeys: Map<String, String>?,
-    ): VaultUnlockResult =
-        unlockVault(
-            userId = userId,
-            email = email,
-            kdf = kdf,
-            privateKey = privateKey,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
-                password = masterPassword,
-                userKey = userKey,
-            ),
-            organizationKeys = organizationKeys,
-        )
-
     override suspend fun createSend(
         sendView: SendView,
         fileUri: Uri?,
@@ -994,9 +970,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<CipherView>>> =
         vaultDiskSource
             .getCiphers(userId = userId)
-            .onStart {
-                mutableCiphersStateFlow.value = DataState.Loading
-            }
+            .onStart { mutableCiphersStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1017,7 +991,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<DomainsData>> =
         vaultDiskSource
             .getDomains(userId = userId)
-            .onStart { mutableDomainsStateFlow.value = DataState.Loading }
+            .onStart { mutableDomainsStateFlow.updateToPendingOrLoading() }
             .map {
                 DataState.Loaded(
                     data = it.toDomainsData(),
@@ -1030,7 +1004,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<FolderView>>> =
         vaultDiskSource
             .getFolders(userId = userId)
-            .onStart { mutableFoldersStateFlow.value = DataState.Loading }
+            .onStart { mutableFoldersStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1051,7 +1025,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<List<CollectionView>>> =
         vaultDiskSource
             .getCollections(userId = userId)
-            .onStart { mutableCollectionsStateFlow.value = DataState.Loading }
+            .onStart { mutableCollectionsStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1076,7 +1050,7 @@ class VaultRepositoryImpl(
     ): Flow<DataState<SendData>> =
         vaultDiskSource
             .getSends(userId = userId)
-            .onStart { mutableSendDataStateFlow.value = DataState.Loading }
+            .onStart { mutableSendDataStateFlow.updateToPendingOrLoading() }
             .map {
                 waitUntilUnlocked(userId = userId)
                 vaultSdkSource
@@ -1085,7 +1059,7 @@ class VaultRepositoryImpl(
                         sendList = it.toEncryptedSdkSendList(),
                     )
                     .fold(
-                        onSuccess = { sends -> DataState.Loaded(sends) },
+                        onSuccess = { sends -> DataState.Loaded(sends.sortAlphabetically()) },
                         onFailure = { throwable -> DataState.Error(throwable) },
                     )
             }

@@ -148,6 +148,7 @@
   <string name="no_favorites">Daar is geen gunstelinge in u kluis nie.</string>
   <string name="no_items">Daar is geen items in u kluis nie.</string>
   <string name="no_items_tap">Daar is geen items in u kluis vir hierdie webwerf/toep nie. Tik om een toe te voeg.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Hierdie aantekening bevat geen gebruikersnaam of wagwoord nie.</string>
   <string name="ok_got_it">Goed, het dit!</string>
   <string name="option_defaults">Opsieverstekke is vanaf die Bitwarden-toep se wagwoordgenereerder instelbaar.</string>

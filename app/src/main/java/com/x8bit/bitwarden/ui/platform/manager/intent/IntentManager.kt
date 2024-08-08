@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.platform.manager.intent
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
@@ -36,6 +37,11 @@ interface IntentManager {
      * Starts the application's settings activity.
      */
     fun startApplicationDetailsSettingsActivity()
+
+    /**
+     * Starts the credential manager settings.
+     */
+    fun startCredentialManagerSettings(context: Context)
 
     /**
      * Start an activity to view the given [uri] in an external browser.

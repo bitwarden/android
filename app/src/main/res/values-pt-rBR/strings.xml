@@ -148,6 +148,7 @@
   <string name="no_favorites">Não existem favoritos no seu cofre.</string>
   <string name="no_items">Não existem itens no seu cofre.</string>
   <string name="no_items_tap">Não existem itens no seu cofre para este site. Toque para adicionar um.</string>
+  <string name="no_username">Sem Nome de Usuário</string>
   <string name="no_username_password_configured">Esta credencial não tem um nome de usuário ou senha configurados.</string>
   <string name="ok_got_it">Ok, entendi!</string>
   <string name="option_defaults">As opções padrões são definidas a partir da ferramenta de geração de senha do aplicativo Bitwarden.</string>
@@ -924,6 +925,6 @@ Você deseja mudar para esta conta?</string>
   <string name="launch_web_authn">Iniciar WebAuthn</string>
   <string name="there_was_an_error_starting_web_authn_two_factor_authentication">Houve um erro ao iniciar a autenticação de dois fatores WebAuthn</string>
   <string name="self_hosted_server_url">URL do servidor auto-hospedado</string>
-  <string name="passkey_operation_failed_because_user_could_not_be_verified">Passkey operation failed because user could not be verified.</string>
-  <string name="user_verification_direction">User verification</string>
+  <string name="passkey_operation_failed_because_user_could_not_be_verified">A operação da senha falhou porque o usuário não pôde ser verificado.</string>
+  <string name="user_verification_direction">Verificação de usuário</string>
 </resources>

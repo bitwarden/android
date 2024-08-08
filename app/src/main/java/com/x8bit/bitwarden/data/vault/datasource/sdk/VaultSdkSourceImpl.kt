@@ -29,15 +29,19 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.PasswordHistoryView
 import com.bitwarden.vault.TotpResponse
 import com.x8bit.bitwarden.data.platform.manager.SdkClientManager
+import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.AuthenticateFido2CredentialRequest
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialAuthenticationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialRegistrationUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.Fido2CredentialSearchUserInterfaceImpl
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.RegisterFido2CredentialRequest
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import java.io.File
 
 /**
@@ -47,6 +51,7 @@ import java.io.File
 @Suppress("TooManyFunctions")
 class VaultSdkSourceImpl(
     private val sdkClientManager: SdkClientManager,
+    private val dispatcherManager: DispatcherManager,
 ) : VaultSdkSource {
     override fun clearCrypto(userId: String) {
         sdkClientManager.destroyClient(userId = userId)
@@ -87,7 +92,7 @@ class VaultSdkSourceImpl(
         runCatching {
             getClient(userId = userId)
                 .auth()
-                .approveAuthRequest(publicKey)
+                .approveAuthRequest(publicKey = publicKey)
         }
 
     override suspend fun getResetPasswordKey(
@@ -114,7 +119,7 @@ class VaultSdkSourceImpl(
         runCatching {
             getClient(userId = userId)
                 .platform()
-                .userFingerprint(userId)
+                .userFingerprint(fingerprintMaterial = userId)
         }
 
     override suspend fun initializeCrypto(
@@ -129,7 +134,7 @@ class VaultSdkSourceImpl(
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
                 // The only truly expected error from the SDK is an incorrect key/password.
-                InitializeCryptoResult.AuthenticationError
+                InitializeCryptoResult.AuthenticationError(message = exception.message)
             }
         }
 
@@ -145,7 +150,9 @@ class VaultSdkSourceImpl(
                 InitializeCryptoResult.Success
             } catch (exception: BitwardenException) {
                 // The only truly expected error from the SDK is for incorrect keys.
-                InitializeCryptoResult.AuthenticationError
+                InitializeCryptoResult.AuthenticationError(
+                    message = exception.message,
+                )
             }
         }
 
@@ -156,7 +163,7 @@ class VaultSdkSourceImpl(
         runCatching {
             getClient(userId = userId)
                 .sends()
-                .encrypt(sendView)
+                .encrypt(send = sendView)
         }
 
     override suspend fun encryptBuffer(
@@ -217,7 +224,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .ciphers()
-                .encrypt(cipherView)
+                .encrypt(cipherView = cipherView)
         }
 
     override suspend fun decryptCipher(
@@ -228,7 +235,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .ciphers()
-                .decrypt(cipher)
+                .decrypt(cipher = cipher)
         }
 
     override suspend fun decryptCipherListCollection(
@@ -237,8 +244,9 @@ class VaultSdkSourceImpl(
     ): Result<List<CipherListView>> =
         runCatching {
             getClient(userId = userId)
-                .vault().ciphers()
-                .decryptList(cipherList)
+                .vault()
+                .ciphers()
+                .decryptList(ciphers = cipherList)
         }
 
     override suspend fun decryptCipherList(
@@ -246,11 +254,9 @@ class VaultSdkSourceImpl(
         cipherList: List<Cipher>,
     ): Result<List<CipherView>> =
         runCatching {
-            cipherList.map {
-                getClient(userId = userId)
-                    .vault()
-                    .ciphers()
-                    .decrypt(it)
+            val ciphers = getClient(userId = userId).vault().ciphers()
+            withContext(context = dispatcherManager.default) {
+                cipherList.map { async { ciphers.decrypt(cipher = it) } }.awaitAll()
             }
         }
 
@@ -262,7 +268,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .collections()
-                .decrypt(collection)
+                .decrypt(collection = collection)
         }
 
     override suspend fun decryptCollectionList(
@@ -273,7 +279,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .collections()
-                .decryptList(collectionList)
+                .decryptList(collections = collectionList)
         }
 
     override suspend fun decryptSend(
@@ -283,7 +289,7 @@ class VaultSdkSourceImpl(
         runCatching {
             getClient(userId = userId)
                 .sends()
-                .decrypt(send)
+                .decrypt(send = send)
         }
 
     override suspend fun decryptSendList(
@@ -291,10 +297,9 @@ class VaultSdkSourceImpl(
         sendList: List<Send>,
     ): Result<List<SendView>> =
         runCatching {
-            sendList.map {
-                getClient(userId = userId)
-                    .sends()
-                    .decrypt(it)
+            val sends = getClient(userId = userId).sends()
+            withContext(dispatcherManager.default) {
+                sendList.map { async { sends.decrypt(send = it) } }.awaitAll()
             }
         }
 
@@ -306,7 +311,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .folders()
-                .encrypt(folder)
+                .encrypt(folder = folder)
         }
 
     override suspend fun decryptFolder(
@@ -317,7 +322,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .folders()
-                .decrypt(folder)
+                .decrypt(folder = folder)
         }
 
     override suspend fun decryptFolderList(
@@ -328,7 +333,7 @@ class VaultSdkSourceImpl(
             getClient(userId = userId)
                 .vault()
                 .folders()
-                .decryptList(folderList)
+                .decryptList(folders = folderList)
         }
 
     override suspend fun decryptFile(
@@ -357,7 +362,7 @@ class VaultSdkSourceImpl(
         getClient(userId = userId)
             .vault()
             .passwordHistory()
-            .encrypt(passwordHistory)
+            .encrypt(passwordHistory = passwordHistory)
     }
 
     override suspend fun decryptPasswordHistoryList(
@@ -367,7 +372,7 @@ class VaultSdkSourceImpl(
         getClient(userId = userId)
             .vault()
             .passwordHistory()
-            .decryptList(passwordHistoryList)
+            .decryptList(list = passwordHistoryList)
     }
 
     override suspend fun generateTotp(
@@ -426,7 +431,7 @@ class VaultSdkSourceImpl(
     ): Result<UpdatePasswordResponse> = runCatching {
         getClient(userId = userId)
             .crypto()
-            .updatePassword(newPassword)
+            .updatePassword(newPassword = newPassword)
     }
 
     override suspend fun exportVaultDataToString(
@@ -517,12 +522,8 @@ class VaultSdkSourceImpl(
         userId: String,
         vararg cipherViews: CipherView,
     ): Result<List<Fido2CredentialAutofillView>> = runCatching {
-        cipherViews.flatMap {
-            getClient(userId)
-                .platform()
-                .fido2()
-                .decryptFido2AutofillCredentials(it)
-        }
+        val fido2 = getClient(userId = userId).platform().fido2()
+        cipherViews.flatMap { fido2.decryptFido2AutofillCredentials(cipherView = it) }
     }
 
     override suspend fun silentlyDiscoverCredentials(

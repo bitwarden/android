@@ -4,20 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class CheckEmailModelTest : BaseViewModelTest() {
-    @BeforeEach
-    fun setUp() {
-    }
-
-    @AfterEach
-    fun tearDown() {
-    }
-
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
@@ -29,7 +19,7 @@ class CheckEmailModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should pull from handle when present`() = runTest {
         val expectedState = DEFAULT_STATE.copy(
-            email = "another@email.com"
+            email = "another@email.com",
         )
         val viewModel = createViewModel(expectedState)
         viewModel.stateFlow.test {

@@ -87,7 +87,7 @@ fun CheckEmailScreen(
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
                     { viewModel.trySendAction(CheckEmailAction.CloseTap) }
-                }
+                },
             )
         },
     ) { innerPadding ->
@@ -122,17 +122,18 @@ fun CheckEmailScreen(
             )
             Spacer(modifier = Modifier.height(16.dp))
 
+            @Suppress("MaxLineLength")
             val descriptionAnnotatedString = CreateAnnotatedString(
                 mainText = stringResource(
                     id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
-                    state.email
+                    state.email,
                 ),
                 highlightText = state.email,
                 highlightSpanStyle = SpanStyle(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Bold,
+                ),
             )
             Text(
                 text = descriptionAnnotatedString,
@@ -156,11 +157,13 @@ fun CheckEmailScreen(
             Spacer(modifier = Modifier.height(32.dp))
             Column(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 val goBackAnnotatedString = CreateAnnotatedString(
-                    mainText = stringResource(id = R.string.no_email_go_back_to_edit_your_email_address),
-                    highlightText = stringResource(id = R.string.go_back)
+                    mainText = stringResource(
+                        id = R.string.no_email_go_back_to_edit_your_email_address,
+                    ),
+                    highlightText = stringResource(id = R.string.go_back),
                 )
                 ClickableText(
                     text = goBackAnnotatedString,
@@ -170,12 +173,14 @@ fun CheckEmailScreen(
                             .firstOrNull()?.let {
                                 viewModel.trySendAction(CheckEmailAction.CloseTap)
                             }
-                    }
+                    },
                 )
                 Spacer(modifier = Modifier.height(32.dp))
                 val logInAnnotatedString = CreateAnnotatedString(
-                    mainText = stringResource(id = R.string.or_log_in_you_may_already_have_an_account),
-                    highlightText = stringResource(id = R.string.log_in)
+                    mainText = stringResource(
+                        id = R.string.or_log_in_you_may_already_have_an_account,
+                    ),
+                    highlightText = stringResource(id = R.string.log_in),
                 )
                 ClickableText(
                     text = logInAnnotatedString,
@@ -185,7 +190,7 @@ fun CheckEmailScreen(
                             .firstOrNull()?.let {
                                 viewModel.trySendAction(CheckEmailAction.LoginTap)
                             }
-                    }
+                    },
                 )
             }
             Spacer(modifier = Modifier.navigationBarsPadding())
@@ -199,12 +204,12 @@ private fun CreateAnnotatedString(
     highlightText: String,
     mainSpanStyle: SpanStyle = SpanStyle(
         color = MaterialTheme.colorScheme.onSurface,
-        fontSize = MaterialTheme.typography.bodyMedium.fontSize
+        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
     ),
     highlightSpanStyle: SpanStyle = SpanStyle(
         color = MaterialTheme.colorScheme.primary,
         fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-        fontWeight = FontWeight.Bold
+        fontWeight = FontWeight.Bold,
     ),
 ): AnnotatedString {
     return buildAnnotatedString {
@@ -214,18 +219,18 @@ private fun CreateAnnotatedString(
         addStyle(
             style = mainSpanStyle,
             start = 0,
-            end = mainText.length
+            end = mainText.length,
         )
         addStyle(
             style = highlightSpanStyle,
             start = startIndex,
-            end = endIndex
+            end = endIndex,
         )
         addStringAnnotation(
             tag = "URL",
             annotation = highlightText,
             start = startIndex,
-            end = endIndex
+            end = endIndex,
         )
     }
 }

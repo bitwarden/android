@@ -9,12 +9,19 @@ import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
 import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResult
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.data.platform.repository.model.Environment.Type
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.UpdatedEnvironmentReceive
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.isValidEmail
@@ -43,7 +50,7 @@ class StartRegistrationViewModel @Inject constructor(
         ?: StartRegistrationState(
             emailInput = "",
             nameInput = "",
-            isReceiveMarketingEmailsToggled = environmentRepository.environment.type == Environment.Type.US,
+            isReceiveMarketingEmailsToggled = environmentRepository.environment.type == Type.US,
             isContinueButtonEnabled = false,
             selectedEnvironmentType = environmentRepository.environment.type,
             dialog = null,
@@ -61,7 +68,7 @@ class StartRegistrationViewModel @Inject constructor(
             .environmentStateFlow
             .onEach { environment ->
                 sendAction(
-                    StartRegistrationAction.Internal.UpdatedEnvironmentReceive(environment = environment),
+                    UpdatedEnvironmentReceive(environment = environment),
                 )
             }
             .launchIn(viewModelScope)
@@ -69,34 +76,34 @@ class StartRegistrationViewModel @Inject constructor(
 
     override fun handleAction(action: StartRegistrationAction) {
         when (action) {
-            is StartRegistrationAction.ContinueClick -> handleContinueClick()
+            is ContinueClick -> handleContinueClick()
             is EmailInputChange -> handleEmailInputChanged(action)
             is NameInputChange -> handleNameInputChanged(action)
             is CloseClick -> handleCloseClick()
             is ErrorDialogDismiss -> handleDialogDismiss()
-            is StartRegistrationAction.ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
-                action
+            is ReceiveMarketingEmailsToggle -> handleReceiveMarketingEmailsToggle(
+                action,
             )
 
             is PrivacyPolicyClick -> handlePrivacyPolicyClick()
             is TermsClick -> handleTermsClick()
-            is StartRegistrationAction.UnsubscribeMarketingEmailsClick -> handleUnsubscribeMarketingEmailsClick()
-            is StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult -> {
+            is UnsubscribeMarketingEmailsClick -> handleUnsubscribeMarketingEmailsClick()
+            is ReceiveSendVerificationEmailResult -> {
                 handleReceiveSendVerificationEmailResult(action)
             }
 
-            is StartRegistrationAction.EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
-            is StartRegistrationAction.Internal.UpdatedEnvironmentReceive -> {
+            is EnvironmentTypeSelect -> handleEnvironmentTypeSelect(action)
+            is UpdatedEnvironmentReceive -> {
                 handleUpdatedEnvironmentReceive(action)
             }
         }
     }
 
-    private fun handleEnvironmentTypeSelect(action: StartRegistrationAction.EnvironmentTypeSelect) {
+    private fun handleEnvironmentTypeSelect(action: EnvironmentTypeSelect) {
         val environment = when (action.environmentType) {
-            Environment.Type.US -> Environment.Us
-            Environment.Type.EU -> Environment.Eu
-            Environment.Type.SELF_HOSTED -> {
+            Type.US -> Environment.Us
+            Type.EU -> Environment.Eu
+            Type.SELF_HOSTED -> {
                 // Launch the self-hosted screen and select the full environment details there.
                 sendEvent(StartRegistrationEvent.NavigateToEnvironment)
                 return
@@ -109,7 +116,7 @@ class StartRegistrationViewModel @Inject constructor(
     }
 
     private fun handleUpdatedEnvironmentReceive(
-        action: StartRegistrationAction.Internal.UpdatedEnvironmentReceive,
+        action: UpdatedEnvironmentReceive,
     ) {
         mutableStateFlow.update {
             it.copy(
@@ -126,7 +133,7 @@ class StartRegistrationViewModel @Inject constructor(
     private fun handleUnsubscribeMarketingEmailsClick() =
         sendEvent(StartRegistrationEvent.NavigateToUnsubscribe)
 
-    private fun handleReceiveMarketingEmailsToggle(action: StartRegistrationAction.ReceiveMarketingEmailsToggle) {
+    private fun handleReceiveMarketingEmailsToggle(action: ReceiveMarketingEmailsToggle) {
         mutableStateFlow.update {
             it.copy(isReceiveMarketingEmailsToggled = action.newState)
         }
@@ -146,7 +153,7 @@ class StartRegistrationViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 emailInput = action.input,
-                isContinueButtonEnabled = action.input.isNotBlank()
+                isContinueButtonEnabled = action.input.isNotBlank(),
             )
         }
     }
@@ -155,7 +162,7 @@ class StartRegistrationViewModel @Inject constructor(
         mutableStateFlow.update {
             it.copy(
                 nameInput = action.input,
-                isContinueButtonEnabled = state.emailInput.isNotBlank()
+                isContinueButtonEnabled = state.emailInput.isNotBlank(),
             )
         }
     }
@@ -194,14 +201,16 @@ class StartRegistrationViewModel @Inject constructor(
                 receiveMarketingEmails = state.isReceiveMarketingEmailsToggled,
             )
             sendAction(
-                StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult(
+                ReceiveSendVerificationEmailResult(
                     sendVerificationEmailResult = result,
                 ),
             )
         }
     }
 
-    private fun handleReceiveSendVerificationEmailResult(result: StartRegistrationAction.Internal.ReceiveSendVerificationEmailResult) {
+    private fun handleReceiveSendVerificationEmailResult(
+        result: ReceiveSendVerificationEmailResult,
+    ) {
         when (val sendVerificationEmailResult = result.sendVerificationEmailResult) {
 
             is SendVerificationEmailResult.Error -> {
@@ -210,7 +219,9 @@ class StartRegistrationViewModel @Inject constructor(
                         dialog = StartRegistrationDialog.Error(
                             BasicDialogState.Shown(
                                 title = R.string.an_error_has_occurred.asText(),
-                                message = sendVerificationEmailResult.errorMessage?.asText()
+                                message = sendVerificationEmailResult
+                                    .errorMessage
+                                    ?.asText()
                                     ?: R.string.generic_error_message.asText(),
                             ),
                         ),
@@ -221,23 +232,23 @@ class StartRegistrationViewModel @Inject constructor(
             is SendVerificationEmailResult.Success -> {
                 environmentRepository.saveCurrentEnvironmentForEmail(state.emailInput)
                 mutableStateFlow.update { it.copy(dialog = null) }
-                if (sendVerificationEmailResult.emailVerificationToken == null)
+                if (sendVerificationEmailResult.emailVerificationToken == null) {
                     sendEvent(
                         StartRegistrationEvent.NavigateToCheckEmail(
-                            email = state.emailInput
-                        )
+                            email = state.emailInput,
+                        ),
                     )
-                else
+                } else {
                     sendEvent(
                         StartRegistrationEvent.NavigateToCompleteRegistration(
                             email = state.emailInput,
-                            verificationToken = sendVerificationEmailResult.emailVerificationToken
-                        )
+                            verificationToken = sendVerificationEmailResult.emailVerificationToken,
+                        ),
                     )
+                }
             }
         }
     }
-
 }
 
 /**
@@ -249,7 +260,7 @@ data class StartRegistrationState(
     val nameInput: String,
     val isReceiveMarketingEmailsToggled: Boolean,
     val isContinueButtonEnabled: Boolean,
-    val selectedEnvironmentType: Environment.Type,
+    val selectedEnvironmentType: Type,
     val dialog: StartRegistrationDialog?,
 ) : Parcelable
 
@@ -349,7 +360,7 @@ sealed class StartRegistrationAction {
      * Indicates that the selection from the region drop down has changed.
      */
     data class EnvironmentTypeSelect(
-        val environmentType: Environment.Type,
+        val environmentType: Type,
     ) : StartRegistrationAction()
 
     /**

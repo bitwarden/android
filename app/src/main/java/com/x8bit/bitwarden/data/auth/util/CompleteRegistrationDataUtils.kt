@@ -19,6 +19,6 @@ fun Intent.getCompleteRegistrationDataIntentOrNull(): CompleteRegistrationData? 
     return CompleteRegistrationData(
         email = email,
         verificationToken = verificationToken,
-        fromEmail = fromEmail
+        fromEmail = fromEmail,
     )
 }

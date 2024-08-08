@@ -94,6 +94,7 @@ fun AssistStructure.ViewNode.toAutofillView(): AutofillView? =
                     autofillType = this.autofillType,
                     isFocused = this.isFocused,
                     textValue = this.autofillValue?.extractTextValue(),
+                    hasPasswordTerms = this.hasPasswordTerms(),
                 )
                 buildAutofillView(
                     autofillOptions = autofillOptions,
@@ -171,8 +172,6 @@ fun AssistStructure.ViewNode.isPasswordField(
 ): Boolean {
     if (supportedHint == View.AUTOFILL_HINT_PASSWORD) return true
 
-    if (this.hint?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true) return true
-
     val isInvalidField = this.idEntry?.containsAnyTerms(IGNORED_RAW_HINTS) == true ||
         this.hint?.containsAnyTerms(IGNORED_RAW_HINTS) == true
     val isUsernameField = this.isUsernameField(supportedHint)
@@ -182,6 +181,13 @@ fun AssistStructure.ViewNode.isPasswordField(
         .htmlInfo
         .isPasswordField()
 }
+
+/**
+ * Check whether this [AssistStructure.ViewNode] includes any password specific terms.
+ */
+fun AssistStructure.ViewNode.hasPasswordTerms(): Boolean =
+    this.idEntry?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true ||
+        this.hint?.containsAnyTerms(SUPPORTED_RAW_PASSWORD_HINTS) == true
 
 /**
  * Check whether this [AssistStructure.ViewNode] represents a username field.

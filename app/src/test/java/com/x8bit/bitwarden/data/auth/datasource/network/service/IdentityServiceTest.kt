@@ -589,5 +589,5 @@ private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
 private val SEND_VERIFICATION_EMAIL_REQUEST_JSON = SendVerificationEmailRequestJson(
     email = "email@example.com",
     name = "Name Example",
-    receiveMarketingEmails = true
+    receiveMarketingEmails = true,
 )

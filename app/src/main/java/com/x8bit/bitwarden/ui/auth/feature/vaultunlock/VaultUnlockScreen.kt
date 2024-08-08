@@ -196,6 +196,7 @@ fun VaultUnlockScreen(
                             .testTag(state.vaultUnlockType.unlockScreenInputTestTag)
                             .padding(horizontal = 16.dp)
                             .fillMaxWidth(),
+                        autoFocus = state.showKeyboard,
                     )
                     Spacer(modifier = Modifier.height(24.dp))
                     Text(
