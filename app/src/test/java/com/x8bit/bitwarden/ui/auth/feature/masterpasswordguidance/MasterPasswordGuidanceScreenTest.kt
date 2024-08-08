@@ -24,7 +24,6 @@ class MasterPasswordGuidanceScreenTest : BaseComposeTest() {
 
     @Before
     fun setup() {
-        resetVars()
         composeTestRule.setContent {
             MasterPasswordGuidanceScreen(
                 onNavigateBack = { onNavigateBackCalled = true },
@@ -64,11 +63,5 @@ class MasterPasswordGuidanceScreenTest : BaseComposeTest() {
         assertFalse(onNavigateToGeneratorCalled)
         mutableEventFlow.tryEmit(MasterPasswordGuidanceEvent.NavigateToPasswordGenerator)
         assertTrue(onNavigateToGeneratorCalled)
-    }
-
-    // region helper functions
-    private fun resetVars() {
-        onNavigateToGeneratorCalled = false
-        onNavigateBackCalled = false
     }
 }

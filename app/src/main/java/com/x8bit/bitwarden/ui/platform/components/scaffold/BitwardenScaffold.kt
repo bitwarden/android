@@ -1,7 +1,9 @@
 package com.x8bit.bitwarden.ui.platform.components.scaffold
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.navigationBars
@@ -63,17 +65,20 @@ fun BitwardenScaffold(
         contentColor = contentColor,
         contentWindowInsets = contentWindowInsets,
         content = { paddingValues ->
-            Box {
-                content(paddingValues)
+            Column {
+                Box {
+                    content(paddingValues)
 
-                pullToRefreshState?.let {
-                    PullToRefreshContainer(
-                        state = it,
-                        modifier = Modifier
-                            .padding(paddingValues)
-                            .align(Alignment.TopCenter),
-                    )
+                    pullToRefreshState?.let {
+                        PullToRefreshContainer(
+                            state = it,
+                            modifier = Modifier
+                                .padding(paddingValues)
+                                .align(Alignment.TopCenter),
+                        )
+                    }
                 }
+                Spacer(modifier = Modifier.navigationBarsPadding())
             }
         },
     )

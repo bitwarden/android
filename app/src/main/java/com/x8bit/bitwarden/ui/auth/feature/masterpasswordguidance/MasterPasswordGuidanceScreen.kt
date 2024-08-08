@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -93,7 +94,7 @@ fun MasterPasswordGuidanceScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Column(
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(size = 4.dp))
                     .background(MaterialTheme.colorScheme.surfaceContainerLowest),
@@ -120,7 +121,7 @@ fun MasterPasswordGuidanceScreen(
                 }
                 HorizontalDivider()
                 Column(
-                    Modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 24.dp, vertical = 16.dp),
                 ) {
@@ -150,6 +151,7 @@ fun MasterPasswordGuidanceScreen(
                     }
                 },
             )
+            Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
@@ -157,13 +159,15 @@ fun MasterPasswordGuidanceScreen(
 @Composable
 private fun TryGeneratorCard(
     onCardClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         onClick = onCardClicked,
         shape = RoundedCornerShape(size = 16.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight(),
+            .wrapContentHeight()
+            .then(modifier),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceContainerLowest,
         ),
@@ -210,11 +214,13 @@ private fun TryGeneratorCard(
 @Composable
 private fun BulletTextRow(
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(horizontal = 8.dp)
+            .then(modifier),
     ) {
         Text(
             text = BULLET_TWO_TAB,
