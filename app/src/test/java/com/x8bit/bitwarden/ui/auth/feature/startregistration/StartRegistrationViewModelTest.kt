@@ -11,7 +11,20 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateBack
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToCompleteRegistration
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToEnvironment
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToUnsubscribe
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
@@ -57,7 +70,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         assertEquals(DEFAULT_STATE, viewModel.stateFlow.value)
     }
@@ -70,13 +83,13 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
             isReceiveMarketingEmailsToggled = false,
             isContinueButtonEnabled = false,
             selectedEnvironmentType = Environment.Type.US,
-            dialog = null
+            dialog = null,
         )
         val handle = SavedStateHandle(mapOf("state" to savedState))
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = handle,
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         assertEquals(savedState, viewModel.stateFlow.value)
     }
@@ -86,7 +99,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         val input = "a"
         viewModel.trySendAction(EmailInputChange(input))
@@ -100,7 +113,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.trySendAction(StartRegistrationAction.ContinueClick)
+        viewModel.trySendAction(ContinueClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -111,7 +124,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         val input = " "
         viewModel.trySendAction(EmailInputChange(input))
@@ -125,7 +138,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 ),
             ),
         )
-        viewModel.trySendAction(StartRegistrationAction.ContinueClick)
+        viewModel.trySendAction(ContinueClick)
         viewModel.stateFlow.test {
             assertEquals(expectedState, awaitItem())
         }
@@ -142,25 +155,25 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     receiveMarketingEmails = true,
                 )
             } returns SendVerificationEmailResult.Success(
-                emailVerificationToken = "verification_token"
+                emailVerificationToken = "verification_token",
             )
         }
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,
             authRepository = repo,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         turbineScope {
             val stateFlow = viewModel.stateFlow.testIn(backgroundScope)
             val eventFlow = viewModel.eventFlow.testIn(backgroundScope)
             assertEquals(VALID_INPUT_STATE, stateFlow.awaitItem())
-            viewModel.trySendAction(StartRegistrationAction.ContinueClick)
+            viewModel.trySendAction(ContinueClick)
             assertEquals(
                 VALID_INPUT_STATE.copy(dialog = StartRegistrationDialog.Loading),
                 stateFlow.awaitItem(),
             )
             assertEquals(
-                StartRegistrationEvent.NavigateToCompleteRegistration(EMAIL, "verification_token"),
+                NavigateToCompleteRegistration(EMAIL, "verification_token"),
                 eventFlow.awaitItem(),
             )
             // Make sure loading dialog is hidden:
@@ -183,11 +196,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,
             authRepository = repo,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.stateFlow.test {
             assertEquals(VALID_INPUT_STATE, awaitItem())
-            viewModel.trySendAction(StartRegistrationAction.ContinueClick)
+            viewModel.trySendAction(ContinueClick)
             assertEquals(
                 VALID_INPUT_STATE.copy(dialog = StartRegistrationDialog.Loading),
                 awaitItem(),
@@ -220,17 +233,22 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                     name = NAME,
                     receiveMarketingEmails = true,
                 )
-            } returns SendVerificationEmailResult.Success(emailVerificationToken = "verification_token")
+            } returns SendVerificationEmailResult.Success(
+                emailVerificationToken = "verification_token",
+            )
         }
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = validInputHandle,
             authRepository = repo,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(StartRegistrationAction.ContinueClick)
+            viewModel.trySendAction(ContinueClick)
             assertEquals(
-                StartRegistrationEvent.NavigateToCompleteRegistration(EMAIL, "verification_token"),
+                NavigateToCompleteRegistration(
+                    email = EMAIL,
+                    verificationToken = "verification_token",
+                ),
                 awaitItem(),
             )
         }
@@ -241,11 +259,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(CloseClick)
-            assertEquals(StartRegistrationEvent.NavigateBack, awaitItem())
+            assertEquals(NavigateBack, awaitItem())
         }
     }
 
@@ -254,11 +272,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(StartRegistrationAction.PrivacyPolicyClick)
-            assertEquals(StartRegistrationEvent.NavigateToPrivacyPolicy, awaitItem())
+            viewModel.trySendAction(PrivacyPolicyClick)
+            assertEquals(NavigateToPrivacyPolicy, awaitItem())
         }
     }
 
@@ -267,11 +285,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(StartRegistrationAction.TermsClick)
-            assertEquals(StartRegistrationEvent.NavigateToTerms, awaitItem())
+            viewModel.trySendAction(TermsClick)
+            assertEquals(NavigateToTerms, awaitItem())
         }
     }
 
@@ -280,11 +298,11 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(StartRegistrationAction.UnsubscribeMarketingEmailsClick)
-            assertEquals(StartRegistrationEvent.NavigateToUnsubscribe, awaitItem())
+            viewModel.trySendAction(UnsubscribeMarketingEmailsClick)
+            assertEquals(NavigateToUnsubscribe, awaitItem())
         }
     }
 
@@ -294,14 +312,14 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.stateFlow.test {
             awaitItem()
             viewModel.trySendAction(
-                StartRegistrationAction.EnvironmentTypeSelect(
-                    inputEnvironmentType
-                )
+                EnvironmentTypeSelect(
+                    inputEnvironmentType,
+                ),
             )
             assertEquals(
                 DEFAULT_STATE.copy(selectedEnvironmentType = Environment.Type.EU),
@@ -316,16 +334,16 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
             viewModel.trySendAction(
-                StartRegistrationAction.EnvironmentTypeSelect(
-                    inputEnvironmentType
-                )
+                EnvironmentTypeSelect(
+                    inputEnvironmentType,
+                ),
             )
             assertEquals(
-                StartRegistrationEvent.NavigateToEnvironment,
+                NavigateToEnvironment,
                 awaitItem(),
             )
         }
@@ -336,7 +354,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.trySendAction(EmailInputChange("input"))
         viewModel.stateFlow.test {
@@ -344,7 +362,7 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
                 DEFAULT_STATE.copy(
                     emailInput = "input",
                     isContinueButtonEnabled = true,
-                ), awaitItem()
+                ), awaitItem(),
             )
         }
     }
@@ -354,9 +372,9 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
-        viewModel.trySendAction(StartRegistrationAction.NameInputChange("input"))
+        viewModel.trySendAction(NameInputChange("input"))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(nameInput = "input"), awaitItem())
         }
@@ -367,9 +385,9 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
-            environmentRepository = fakeEnvironmentRepository
+            environmentRepository = fakeEnvironmentRepository,
         )
-        viewModel.trySendAction(StartRegistrationAction.ReceiveMarketingEmailsToggle(false))
+        viewModel.trySendAction(ReceiveMarketingEmailsToggle(false))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(isReceiveMarketingEmailsToggled = false), awaitItem())
         }

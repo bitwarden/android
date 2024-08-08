@@ -69,7 +69,7 @@ fun NavGraphBuilder.authGraph(
                 // TODO ADD NAVIGATION TO CHECK EMAIL
                 // navController.navigateToCheckEmail(emailAddress)
             },
-            onNavigateToEnvironment = { navController.navigateToEnvironment() }
+            onNavigateToEnvironment = { navController.navigateToEnvironment() },
         )
         enterpriseSignOnDestination(
             onNavigateBack = { navController.popBackStack() },
@@ -93,7 +93,7 @@ fun NavGraphBuilder.authGraph(
             onNavigateToEnvironment = {
                 navController.navigateToEnvironment()
             },
-            onNavigateToStartRegistration = { navController.navigateToStartRegistration() }
+            onNavigateToStartRegistration = { navController.navigateToStartRegistration() },
         )
         welcomeDestination(
             onNavigateToCreateAccount = { navController.navigateToCreateAccount() },
