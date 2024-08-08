@@ -182,7 +182,7 @@ private fun TryGeneratorCard(
                 painter = rememberVectorPainter(id = R.drawable.ic_generator),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(
