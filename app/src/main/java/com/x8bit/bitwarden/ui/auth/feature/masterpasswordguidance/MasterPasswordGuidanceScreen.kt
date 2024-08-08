@@ -44,7 +44,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 private const val BULLET_TWO_TAB = "\u2022\t\t"
-private const val TWO_THIRDS_WEIGHT = 0.66f
 
 /**
  * The top level composable for the Master Password Guidance screen.
@@ -186,7 +185,7 @@ private fun TryGeneratorCard(
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(
-                modifier = Modifier.weight(TWO_THIRDS_WEIGHT),
+                modifier = Modifier.weight(weight = 1f, fill = false),
             ) {
                 Text(
                     text = stringResource(
