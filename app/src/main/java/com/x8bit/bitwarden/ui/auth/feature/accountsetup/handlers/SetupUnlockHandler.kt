@@ -14,6 +14,7 @@ data class SetupUnlockHandler(
     val onUnlockWithPinToggle: (UnlockWithPinState) -> Unit,
     val onContinueClick: () -> Unit,
     val onSetUpLaterClick: () -> Unit,
+    val unlockWithBiometricToggle: () -> Unit,
 ) {
     companion object {
         /**
@@ -35,6 +36,11 @@ data class SetupUnlockHandler(
                 },
                 onContinueClick = { viewModel.trySendAction(SetupUnlockAction.ContinueClick) },
                 onSetUpLaterClick = { viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick) },
+                unlockWithBiometricToggle = {
+                    viewModel.trySendAction(
+                        SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true),
+                    )
+                },
             )
     }
 }
