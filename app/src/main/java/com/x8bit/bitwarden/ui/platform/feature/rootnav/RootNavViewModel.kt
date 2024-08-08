@@ -77,7 +77,7 @@ class RootNavViewModel @Inject constructor(
                     email = specialCircumstance.completeRegistrationData.email,
                     verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
                     fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
-                    timestamp = specialCircumstance.timestamp
+                    timestamp = specialCircumstance.timestamp,
                 )
             }
 
@@ -143,7 +143,7 @@ class RootNavViewModel @Inject constructor(
                             email = specialCircumstance.completeRegistrationData.email,
                             verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
                             fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
-                            timestamp = specialCircumstance.timestamp
+                            timestamp = specialCircumstance.timestamp,
                         )
                 }
             }

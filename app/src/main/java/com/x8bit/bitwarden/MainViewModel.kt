@@ -207,7 +207,7 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.CompleteRegistration(
                         completeRegistrationData = completeRegistrationData,
-                        timestamp = System.currentTimeMillis()
+                        timestamp = System.currentTimeMillis(),
                     )
             }
 
