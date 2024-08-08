@@ -76,7 +76,7 @@ fun NavGraphBuilder.authGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateBackToLanding = {
                 navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
-            })
+            },)
         enterpriseSignOnDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToSetPassword = { navController.navigateToSetPassword() },

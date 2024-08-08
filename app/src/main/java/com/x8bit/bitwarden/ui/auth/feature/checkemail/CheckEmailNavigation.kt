@@ -42,11 +42,11 @@ fun NavGraphBuilder.checkEmailDestination(
         route = CHECK_EMAIL_ROUTE,
         arguments = listOf(
             navArgument(EMAIL) { type = NavType.StringType },
-        )
+        ),
     ) {
         CheckEmailScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateBackToLanding = onNavigateBackToLanding
+            onNavigateBackToLanding = onNavigateBackToLanding,
         )
     }
 }
