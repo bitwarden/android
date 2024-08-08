@@ -65,20 +65,17 @@ fun BitwardenScaffold(
         contentColor = contentColor,
         contentWindowInsets = contentWindowInsets,
         content = { paddingValues ->
-            Column {
-                Box {
-                    content(paddingValues)
+            Box {
+                content(paddingValues)
 
-                    pullToRefreshState?.let {
-                        PullToRefreshContainer(
-                            state = it,
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .align(Alignment.TopCenter),
-                        )
-                    }
+                pullToRefreshState?.let {
+                    PullToRefreshContainer(
+                        state = it,
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .align(Alignment.TopCenter),
+                    )
                 }
-                Spacer(modifier = Modifier.navigationBarsPadding())
             }
         },
     )
