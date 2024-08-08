@@ -23,8 +23,8 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.auth.repository.model.SetPasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.SwitchAccountResult
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
-import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
+import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
@@ -130,6 +130,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * The organization for the active user.
      */
     val organizations: List<SyncResponseJson.Profile.Organization>
+
+    /**
+     * Whether or not the welcome carousel should be displayed, based on the feature flag and
+     * whether the user has ever logged in or created an account before.
+     */
+    val showWelcomeCarousel: Boolean
 
     /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
@@ -239,11 +245,6 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
      * Switches to the account corresponding to the given [userId] if possible.
      */
     fun switchAccount(userId: String): SwitchAccountResult
-
-    /**
-     * Updates the "last active time" for the current user.
-     */
-    fun updateLastActiveTime()
 
     /**
      * Attempt to register a new account with the given parameters.

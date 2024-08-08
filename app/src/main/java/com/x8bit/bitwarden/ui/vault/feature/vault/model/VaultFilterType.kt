@@ -31,7 +31,7 @@ sealed class VaultFilterType : Parcelable {
     }
 
     /**
-     * Only data from the user's personal vault shoudl be present.
+     * Only data from the user's personal vault should be present.
      */
     @Parcelize
     data object MyVault : VaultFilterType() {

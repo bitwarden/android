@@ -9,6 +9,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import java.security.GeneralSecurityException
+import java.security.KeyStore
 import javax.inject.Singleton
 
 /**
@@ -35,14 +37,57 @@ object PreferenceModule {
     fun provideEncryptedSharedPreferences(
         application: Application,
     ): SharedPreferences =
-        EncryptedSharedPreferences
-            .create(
-                application,
-                "${application.packageName}_encrypted_preferences",
-                MasterKey.Builder(application)
-                    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                    .build(),
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
-            )
+        @Suppress("TooGenericExceptionCaught")
+        try {
+            getEncryptedSharedPreferences(application = application)
+        } catch (e: GeneralSecurityException) {
+            // Handle when a bad master key or key-set has been attempted
+            destroyEncryptedSharedPreferencesAndRebuild(application = application)
+        } catch (e: RuntimeException) {
+            // Handle KeystoreExceptions that get wrapped up in a RuntimeException
+            destroyEncryptedSharedPreferencesAndRebuild(application = application)
+        }
+
+    /**
+     * Completely destroys the keystore master key and encrypted shared preferences file. This will
+     * cause all users to be logged out since the access and refresh tokens will be removed.
+     *
+     * This is not desirable and should only be called if we have completely failed to access our
+     * encrypted shared preferences instance.
+     */
+    private fun destroyEncryptedSharedPreferencesAndRebuild(
+        application: Application,
+    ): SharedPreferences {
+        // Delete the master key
+        KeyStore.getInstance(KeyStore.getDefaultType()).run {
+            load(null)
+            deleteEntry(MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+        }
+        // Deletes the encrypted shared preferences file
+        application.deleteSharedPreferences(application.encryptedSharedPreferencesName)
+        // Attempts to create the encrypted shared preferences instance
+        return getEncryptedSharedPreferences(application = application)
+    }
+
+    /**
+     * Helper method to get the app's encrypted shared preferences instance.
+     */
+    private fun getEncryptedSharedPreferences(
+        application: Application,
+    ): SharedPreferences =
+        EncryptedSharedPreferences.create(
+            application,
+            application.encryptedSharedPreferencesName,
+            MasterKey.Builder(application)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build(),
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
+        )
+
+    /**
+     * Helper method to get the app's encrypted shared preferences name.
+     */
+    private val Application.encryptedSharedPreferencesName: String
+        get() = "${packageName}_encrypted_preferences"
 }

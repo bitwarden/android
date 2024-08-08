@@ -148,6 +148,7 @@
   <string name="no_favorites">لا توجد عناصر مفضلة في خزنتك.</string>
   <string name="no_items">لا توجد عناصر في خزنتك.</string>
   <string name="no_items_tap">لا توجد في خزنتك عناصر لهذا الموقع/التطبيق. انقر لإضافة واحد.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">لا يحتوي هذا المعرّف على اسم مستخدم أو كلمة مرور تم تكوينها.</string>
   <string name="ok_got_it">حسنا، فهمت!</string>
   <string name="option_defaults">يتم تعيين الخيارات الافتراضية من أداة إنشاء كلمة المرور في تطبيق Bitwarden الرئيسي.</string>

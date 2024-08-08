@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.provider.Settings
 import android.webkit.MimeTypeMap
@@ -19,6 +20,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.runtime.Composable
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.credentials.CredentialManager
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.autofill.util.toPendingIntentMutabilityFlag
@@ -115,6 +117,12 @@ class IntentManagerImpl(
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         intent.data = Uri.parse("package:" + context.packageName)
         startActivity(intent = intent)
+    }
+
+    override fun startCredentialManagerSettings(context: Context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            CredentialManager.create(context).createSettingsPendingIntent().send()
+        }
     }
 
     override fun launchUri(uri: Uri) {

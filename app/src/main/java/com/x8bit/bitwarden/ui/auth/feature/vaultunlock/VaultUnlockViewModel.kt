@@ -260,7 +260,7 @@ class VaultUnlockViewModel @Inject constructor(
             action.vaultUnlockResult is VaultUnlockResult.Success
 
         when (action.vaultUnlockResult) {
-            VaultUnlockResult.AuthenticationError -> {
+            is VaultUnlockResult.AuthenticationError -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialog = VaultUnlockState.VaultUnlockDialog.Error(
@@ -353,6 +353,11 @@ data class VaultUnlockState(
      * Indicates if we should display the button login with biometrics.
      */
     val showBiometricLogin: Boolean get() = isBiometricEnabled && isBiometricsValid
+
+    /**
+     * Indicates if we want force focus on Master Password \ PIN input field and show keyboard.
+     */
+    val showKeyboard: Boolean get() = !showBiometricLogin && !hideInput
 
     /**
      * Represents the various dialogs the vault unlock screen can display.

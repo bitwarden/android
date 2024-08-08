@@ -337,7 +337,8 @@ private fun CipherView.toDisplayItem(
         optionsTestTag = "CipherOptionsButton",
         isAutofill = isAutofill,
         isFido2Creation = isFido2Creation,
-        shouldShowMasterPasswordReprompt = reprompt == CipherRepromptType.PASSWORD,
+        shouldShowMasterPasswordReprompt = (reprompt == CipherRepromptType.PASSWORD) &&
+            hasMasterPassword,
     )
 
 private fun CipherView.toSecondSubtitle(fido2CredentialRpId: String?): String? =

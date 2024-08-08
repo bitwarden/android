@@ -24,7 +24,7 @@ class EnvironmentDiskSourceImpl(
         set(value) {
             putString(
                 key = PRE_AUTH_URLS_KEY,
-                value = value?.let { json.encodeToString(value) },
+                value = value?.let { json.encodeToString(it) },
             )
             mutableEnvironmentUrlDataFlow.tryEmit(value)
         }

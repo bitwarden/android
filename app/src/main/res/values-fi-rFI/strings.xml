@@ -130,7 +130,7 @@
   <string name="immediately">Välittömästi</string>
   <string name="vault_timeout">Holvin aikakatkaisu</string>
   <string name="vault_timeout_action">Holvin aikakatkaisutoiminto</string>
-  <string name="vault_timeout_log_out_confirmation">Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</string>
+  <string name="vault_timeout_log_out_confirmation">Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua tunnistautumisen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</string>
   <string name="logging_in">Kirjaudutaan sisään…</string>
   <string name="login_or_create_new_account">Käytä salattua holviasi kirjautumalla sisään tai luo uusi tili.</string>
   <string name="manage">Hallitse</string>
@@ -148,6 +148,7 @@
   <string name="no_favorites">Holvissasi ei ole suosikkeja.</string>
   <string name="no_items">Holvissasi ei ole kohteita.</string>
   <string name="no_items_tap">Holvissasi ei ole kohteita tälle sivustolle/sovellukselle. Lisää kohde napauttamalla.</string>
+  <string name="no_username">Ei käyttäjätunnusta</string>
   <string name="no_username_password_configured">Kirjautumistiedolle ei ole määritetty käyttäjätunnusta tai salasanaa.</string>
   <string name="ok_got_it">Ymmärrän!</string>
   <string name="option_defaults">Oletusvalinnat määritetään pääsovelluksen salasanageneraattorista.</string>
@@ -219,7 +220,7 @@
   <string name="remember_me">Muista minut</string>
   <string name="send_verification_code_again">Lähetä todennuskoodi sähköpostitse uudelleen</string>
   <string name="two_step_login_options">Kaksivaiheisen kirjautumisen asetukset</string>
-  <string name="use_another_two_step_method">Käytä eri kaksivaiheisen kirjautumisen todennusmenetelmää</string>
+  <string name="use_another_two_step_method">Käytä vaihtoehtoista todennustapaa</string>
   <string name="verification_email_not_sent">Todennussähköpostin lähetys ei onnistunut. Yritä uudelleen.</string>
   <string name="verification_email_sent">Todennussähköposti lähetettiin</string>
   <string name="yubi_key_instruction">Jatka asettamalla YubiKey NEO -todennuslaite laitteen taustaa vasten tai kytke YubiKey-todennuslaite laitteen USB-porttiin ja paina sen painiketta.</string>
@@ -239,9 +240,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="scan_qr_title">Skannaa QR-koodi</string>
   <string name="camera">Kamera</string>
   <string name="photos">Kuvat</string>
-  <string name="copy_totp">Kopioi TOTP-todennuskoodi</string>
-  <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen todennuksen avaimen, kopioidaan TOTP-todennuskoodi leikepöydälle kohteen automaattisen täytön yhteydessä.</string>
-  <string name="copy_totp_automatically">TOTP-koodin kopiointi</string>
+  <string name="copy_totp">Kopioi TOTP-koodi</string>
+  <string name="copy_totp_automatically_description">Jos kirjautumistieto sisältää kaksivaiheisen kirjautumisen todennusavaimen, kopioidaan TOTP-koodi leikepöydälle kohteen automaattisen täytön yhteydessä.</string>
+  <string name="copy_totp_automatically">Kopioi TOTP-koodi automaattisesti</string>
   <string name="premium_required">Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</string>
   <string name="attachement_added">Tiedostoliite lisätty</string>
   <string name="attachment_deleted">Tiedostoliite poistettiin</string>
@@ -429,9 +430,9 @@ Koodi skannataan automaattisesti.</string>
   <string name="thirty_minutes">30 minuuttia</string>
   <string name="set_pin_description">Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetus tyhjentyy, jos kirjaudut kokonaan ulos sovelluksesta.</string>
   <string name="logged_in_as_on">Kirjautui palvelimelle %2$s tunnuksella %1$s.</string>
-  <string name="vault_locked_master_password">Holvi on lukittu. Jatka vahvistamalla pääsalasanasi.</string>
-  <string name="vault_locked_pin">Holvi on lukittu. Jatka vahvistamalla PIN-koodisi.</string>
-  <string name="vault_locked_identity">Holvi on lukittu. Jatka vahvistamalla henkilöllisyytesi.</string>
+  <string name="vault_locked_master_password">Holvisi on lukittu. Jatka vahvistamalla pääsalasanasi.</string>
+  <string name="vault_locked_pin">Holvisi on lukittu. Jatka vahvistamalla PIN-koodisi.</string>
+  <string name="vault_locked_identity">Holvisi on lukittu. Jatka vahvistamalla henkilöllisyytesi.</string>
   <string name="dark">Tumma</string>
   <string name="light">Vaalea</string>
   <string name="five_minutes">5 minuuttia</string>
@@ -680,7 +681,7 @@ Koodi skannataan automaattisesti.</string>
   <string name="enter_key_manually">Syötä se manuaalisesti</string>
   <string name="add_totp">Lisää TOTP</string>
   <string name="setup_totp">Määritä TOTP</string>
-  <string name="once_the_key_is_successfully_entered">Kun koodi on syötetty oikein, tallenna avain
+  <string name="once_the_key_is_successfully_entered">Kun avain on syötetty oikein, tallenna se
 turvallisesti valitsemalla \"Lisää TOTP\"</string>
   <string name="never_lock_warning">Käyttämällä lukitusasetusta \"Ei koskaan\"? Tallentuu holvisi salausavain laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin.</string>
   <string name="environment_page_urls_error">Yksi tai useampi syötetyistä URL-osoitteista on virheellinen. Tarkista virheet ja yritä tallennusta uudelleen.</string>
@@ -751,7 +752,7 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="log_in_with_another_device">Laitteella kirjautuminen</string>
   <string name="log_in_initiated">Kirjautuminen aloitettu</string>
   <string name="a_notification_has_been_sent_to_your_device">Laitteellesi on lähetetty ilmoitus.</string>
-  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että holvisi on avattu ja tunnistelauseke täsmää toisella laitteella.</string>
+  <string name="please_make_sure_your_vault_is_unlocked_and_the_fingerprint_phrase_matches_on_the_other_device">Varmista, että vahvistavan laitteen holvi on avattu ja että se näyttää saman tunnistelausekkeen.</string>
   <string name="resend_notification">Lähetä ilmoitus uudelleen</string>
   <string name="need_another_option">Tarvitsetko toisen vaihtoehdon?</string>
   <string name="view_all_login_options">Näytä kaikki kirjautumisvaihtoehdot</string>

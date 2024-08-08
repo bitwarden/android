@@ -20,7 +20,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +31,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -63,8 +63,6 @@ import com.x8bit.bitwarden.ui.vault.feature.vault.VAULT_GRAPH_ROUTE
 import com.x8bit.bitwarden.ui.vault.feature.vault.navigateToVaultGraph
 import com.x8bit.bitwarden.ui.vault.feature.vault.vaultGraph
 import com.x8bit.bitwarden.ui.vault.model.VaultItemCipherType
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 
 /**
@@ -88,6 +86,8 @@ fun VaultUnlockedNavBarScreen(
     onNavigateToPendingRequests: () -> Unit,
     onNavigateToPasswordHistory: () -> Unit,
 ) {
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+
     EventsEffect(viewModel = viewModel) { event ->
         navController.apply {
             val navOptions = vaultUnlockedNavBarScreenNavOptions()
@@ -110,16 +110,9 @@ fun VaultUnlockedNavBarScreen(
             }
         }
     }
-    LaunchedEffect(Unit) {
-        navController
-            .currentBackStackEntryFlow
-            .onEach {
-                viewModel.trySendAction(VaultUnlockedNavBarAction.BackStackUpdate)
-            }
-            .launchIn(this)
-    }
 
     VaultUnlockedNavBarScaffold(
+        state = state,
         navController = navController,
         onNavigateToVaultItem = onNavigateToVaultItem,
         onNavigateToVaultEditItem = onNavigateToVaultEditItem,
@@ -155,6 +148,7 @@ fun VaultUnlockedNavBarScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Suppress("LongMethod")
 private fun VaultUnlockedNavBarScaffold(
+    state: VaultUnlockedNavBarState,
     navController: NavHostController,
     vaultTabClickedAction: () -> Unit,
     sendTabClickedAction: () -> Unit,
@@ -184,6 +178,7 @@ private fun VaultUnlockedNavBarScaffold(
             Box {
                 var appBarHeightPx by remember { mutableIntStateOf(0) }
                 VaultBottomAppBar(
+                    state = state,
                     navController = navController,
                     vaultTabClickedAction = vaultTabClickedAction,
                     sendTabClickedAction = sendTabClickedAction,
@@ -254,6 +249,7 @@ private fun VaultUnlockedNavBarScaffold(
 @Suppress("LongMethod")
 @Composable
 private fun VaultBottomAppBar(
+    state: VaultUnlockedNavBarState,
     navController: NavHostController,
     vaultTabClickedAction: () -> Unit,
     sendTabClickedAction: () -> Unit,
@@ -266,7 +262,10 @@ private fun VaultBottomAppBar(
         modifier = modifier,
     ) {
         val destinations = listOf(
-            VaultUnlockedNavBarTab.Vault,
+            VaultUnlockedNavBarTab.Vault(
+                labelRes = state.vaultNavBarLabelRes,
+                contentDescriptionRes = state.vaultNavBarContentDescriptionRes,
+            ),
             VaultUnlockedNavBarTab.Send,
             VaultUnlockedNavBarTab.Generator,
             VaultUnlockedNavBarTab.Settings,
@@ -303,7 +302,7 @@ private fun VaultBottomAppBar(
                 selected = isSelected,
                 onClick = {
                     when (destination) {
-                        VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
+                        is VaultUnlockedNavBarTab.Vault -> vaultTabClickedAction()
                         VaultUnlockedNavBarTab.Send -> sendTabClickedAction()
                         VaultUnlockedNavBarTab.Generator -> generatorTabClickedAction()
                         VaultUnlockedNavBarTab.Settings -> settingsTabClickedAction()
@@ -396,11 +395,12 @@ private sealed class VaultUnlockedNavBarTab : Parcelable {
      * Show the Vault screen.
      */
     @Parcelize
-    data object Vault : VaultUnlockedNavBarTab() {
+    data class Vault(
+        override val labelRes: Int,
+        override val contentDescriptionRes: Int,
+    ) : VaultUnlockedNavBarTab() {
         override val iconResSelected get() = R.drawable.ic_vault_filled
         override val iconRes get() = R.drawable.ic_vault
-        override val labelRes get() = R.string.my_vault
-        override val contentDescriptionRes get() = R.string.my_vault
         override val route get() = VAULT_GRAPH_ROUTE
         override val testTag get() = "VaultTab"
     }

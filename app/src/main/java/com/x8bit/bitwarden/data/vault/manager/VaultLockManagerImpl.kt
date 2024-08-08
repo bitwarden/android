@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.data.vault.manager
 
-import android.os.SystemClock
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
 import com.bitwarden.core.InitUserCryptoRequest
@@ -32,6 +31,8 @@ import com.x8bit.bitwarden.data.vault.repository.util.toVaultUnlockResult
 import com.x8bit.bitwarden.data.vault.repository.util.update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -48,9 +49,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-private const val SECONDS_PER_MINUTE = 60
-private const val MILLISECONDS_PER_SECOND = 1000
+import kotlin.time.Duration.Companion.minutes
 
 /**
  * The number of times a user may fail to unlock before they are automatically logged out.
@@ -70,12 +69,15 @@ class VaultLockManagerImpl(
     private val userLogoutManager: UserLogoutManager,
     private val trustedDeviceManager: TrustedDeviceManager,
     dispatcherManager: DispatcherManager,
-    private val elapsedRealtimeMillisProvider: () -> Long = { SystemClock.elapsedRealtime() },
 ) : VaultLockManager {
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
+    /**
+     * This [Map] tracks all active timeout [Job]s that are running using the user ID as the key.
+     */
+    private val userIdTimerJobMap = mutableMapOf<String, Job>()
+
     private val activeUserId: String? get() = authDiskSource.userState?.activeUserId
-    private val userIds: Set<String> get() = authDiskSource.userState?.accounts?.keys.orEmpty()
 
     private val mutableVaultUnlockDataStateFlow =
         MutableStateFlow<List<VaultUnlockData>>(emptyList())
@@ -91,6 +93,7 @@ class VaultLockManagerImpl(
         observeAppForegroundChanges()
         observeUserSwitchingChanges()
         observeVaultTimeoutChanges()
+        observeUserLogoutResults()
     }
 
     override fun isVaultUnlocked(userId: String): Boolean =
@@ -227,7 +230,7 @@ class VaultLockManagerImpl(
         )
 
         if (invalidUnlockAttempts >= MAXIMUM_INVALID_UNLOCK_ATTEMPTS) {
-            userLogoutManager.logout(userId)
+            userLogoutManager.logout(userId = userId)
         }
     }
 
@@ -307,29 +310,35 @@ class VaultLockManagerImpl(
             .onEach { appForegroundState ->
                 when (appForegroundState) {
                     AppForegroundState.BACKGROUNDED -> {
-                        activeUserId?.let { updateLastActiveTime(userId = it) }
+                        handleOnBackground()
                     }
 
                     AppForegroundState.FOREGROUNDED -> {
-                        userIds.forEach { userId ->
-                            // If first foreground, clear the elapsed values so the timeout action
-                            // is always performed.
-                            if (isFirstForeground) {
-                                authDiskSource.storeLastActiveTimeMillis(
-                                    userId = userId,
-                                    lastActiveTimeMillis = null,
-                                )
-                            }
-                            checkForVaultTimeout(
-                                userId = userId,
-                                isAppRestart = isFirstForeground,
-                            )
-                        }
+                        handleOnForeground(isFirstForeground = isFirstForeground)
                         isFirstForeground = false
                     }
                 }
             }
             .launchIn(unconfinedScope)
+    }
+
+    private fun handleOnBackground() {
+        val userId = activeUserId ?: return
+        checkForVaultTimeout(
+            userId = userId,
+            checkTimeoutReason = CheckTimeoutReason.APP_BACKGROUNDED,
+        )
+    }
+
+    private fun handleOnForeground(isFirstForeground: Boolean) {
+        val userId = activeUserId ?: return
+        userIdTimerJobMap[userId]?.cancel()
+        if (isFirstForeground) {
+            checkForVaultTimeout(
+                userId = userId,
+                checkTimeoutReason = CheckTimeoutReason.APP_RESTARTED,
+            )
+        }
     }
 
     private fun observeUserSwitchingChanges() {
@@ -358,6 +367,15 @@ class VaultLockManagerImpl(
                 userIds
                     .map { userId -> vaultTimeoutChangesForUserFlow(userId = userId) }
                     .merge()
+            }
+            .launchIn(unconfinedScope)
+    }
+
+    private fun observeUserLogoutResults() {
+        userLogoutManager
+            .logoutEventFlow
+            .onEach {
+                setVaultToLocked(it.loggedOutUserId)
             }
             .launchIn(unconfinedScope)
     }
@@ -415,17 +433,13 @@ class VaultLockManagerImpl(
         previousActiveUserId: String,
         currentActiveUserId: String,
     ) {
+        // Make sure to clear the now-active user's timeout job.
+        userIdTimerJobMap[currentActiveUserId]?.cancel()
         // Check if the user's timeout action should be performed as we switch away.
-        checkForVaultTimeout(userId = previousActiveUserId)
-
-        // Set the last active time for the previous user.
-        updateLastActiveTime(userId = previousActiveUserId)
-
-        // Check if the vault timeout action should be performed for the current user
-        checkForVaultTimeout(userId = currentActiveUserId)
-
-        // Set the last active time for the current user.
-        updateLastActiveTime(userId = currentActiveUserId)
+        checkForVaultTimeout(
+            userId = previousActiveUserId,
+            checkTimeoutReason = CheckTimeoutReason.USER_CHANGED,
+        )
     }
 
     /**
@@ -434,27 +448,19 @@ class VaultLockManagerImpl(
      */
     private fun checkForVaultTimeout(
         userId: String,
-        isAppRestart: Boolean = false,
+        checkTimeoutReason: CheckTimeoutReason,
     ) {
-        val accounts = authDiskSource.userAccountTokens
-        /**
-         * Check if the user is already logged out. If this is the case no need to check timeout.
-         * This is required in the case that an account has been "soft logged out" and has an
-         * immediate time interval time out. Without this check it would be automatically switch
-         * the active user back to an authenticated user if one exists.
-         */
-        if ((accounts.find { it.userId == userId }?.isLoggedIn) == false) {
-            return
-        }
-
-        val currentTimeMillis = elapsedRealtimeMillisProvider()
-        val lastActiveTimeMillis = authDiskSource.getLastActiveTimeMillis(userId = userId) ?: 0
+        // Check if the user is already logged out. If this is the case no need to check timeout.
+        // This is required in the case that an account has been "soft logged out" and has an
+        // immediate time interval timeout. Without this check it would be automatically switch
+        // the active user back to an authenticated user if one exists.
+        if (isUserLoggedOut(userId = userId)) return
         val vaultTimeout = settingsRepository.getVaultTimeoutStateFlow(userId = userId).value
         val vaultTimeoutAction = settingsRepository
             .getVaultTimeoutActionStateFlow(userId = userId)
             .value
 
-        val vaultTimeoutInMinutes = when (vaultTimeout) {
+        when (vaultTimeout) {
             VaultTimeout.Never -> {
                 // No action to take for Never timeout.
                 return
@@ -462,38 +468,72 @@ class VaultLockManagerImpl(
 
             VaultTimeout.OnAppRestart -> {
                 // If this is an app restart, trigger the timeout action; otherwise ignore.
-                if (isAppRestart) 0 else return
+                if (checkTimeoutReason == CheckTimeoutReason.APP_RESTARTED) {
+                    // On restart the vault should be locked already but we may need to soft-logout
+                    // the user.
+                    handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+                }
             }
 
-            else -> vaultTimeout.vaultTimeoutInMinutes ?: return
-        }
-        val vaultTimeoutInMillis = vaultTimeoutInMinutes *
-            SECONDS_PER_MINUTE *
-            MILLISECONDS_PER_SECOND
-        if (currentTimeMillis - lastActiveTimeMillis >= vaultTimeoutInMillis) {
-            // Perform lock / logout!
-            when (vaultTimeoutAction) {
-                VaultTimeoutAction.LOCK -> {
-                    setVaultToLocked(userId = userId)
-                }
+            else -> {
+                // Only perform action for users losing "fully active" status in some way.
+                when (checkTimeoutReason) {
+                    // Don't perform delayed actions when first starting the app
+                    CheckTimeoutReason.APP_RESTARTED -> Unit
 
-                VaultTimeoutAction.LOGOUT -> {
-                    setVaultToLocked(userId = userId)
-                    userLogoutManager.softLogout(userId = userId)
+                    // User no longer active or engaging with the app.
+                    CheckTimeoutReason.APP_BACKGROUNDED,
+                    CheckTimeoutReason.USER_CHANGED,
+                    -> {
+                        handleTimeoutActionWithDelay(
+                            userId = userId,
+                            vaultTimeoutAction = vaultTimeoutAction,
+                            delayInMs = vaultTimeout
+                                .vaultTimeoutInMinutes
+                                ?.minutes
+                                ?.inWholeMilliseconds
+                                ?: 0L,
+                        )
+                    }
                 }
             }
         }
     }
 
     /**
-     * Sets the "last active time" for the given [userId] to the current time.
+     * Performs the [VaultTimeoutAction] for the given [userId] after the [delayInMs] has passed.
+     *
+     * @see handleTimeoutAction
      */
-    private fun updateLastActiveTime(userId: String) {
-        val elapsedRealtimeMillis = elapsedRealtimeMillisProvider()
-        authDiskSource.storeLastActiveTimeMillis(
-            userId = userId,
-            lastActiveTimeMillis = elapsedRealtimeMillis,
-        )
+    private fun handleTimeoutActionWithDelay(
+        userId: String,
+        vaultTimeoutAction: VaultTimeoutAction,
+        delayInMs: Long,
+    ) {
+        userIdTimerJobMap[userId]?.cancel()
+        userIdTimerJobMap[userId] = unconfinedScope.launch {
+            delay(timeMillis = delayInMs)
+            handleTimeoutAction(userId = userId, vaultTimeoutAction = vaultTimeoutAction)
+        }
+    }
+
+    /**
+     * Performs a lock or soft-logout operation for the given [userId] based on the provided
+     * [VaultTimeoutAction].
+     */
+    private fun handleTimeoutAction(
+        userId: String,
+        vaultTimeoutAction: VaultTimeoutAction,
+    ) {
+        when (vaultTimeoutAction) {
+            VaultTimeoutAction.LOCK -> {
+                setVaultToLocked(userId = userId)
+            }
+
+            VaultTimeoutAction.LOGOUT -> {
+                userLogoutManager.softLogout(userId = userId)
+            }
+        }
     }
 
     private suspend fun unlockVaultForUser(
@@ -513,5 +553,19 @@ class VaultLockManagerImpl(
             initUserCryptoMethod = initUserCryptoMethod,
             organizationKeys = organizationKeys,
         )
+    }
+
+    private fun isUserLoggedOut(userId: String): Boolean {
+        val accounts = authDiskSource.userAccountTokens
+        return (accounts.find { it.userId == userId }?.isLoggedIn) == false
+    }
+
+    /**
+     * Helper enum that indicates the reason we are checking for timeout.
+     */
+    private enum class CheckTimeoutReason {
+        APP_BACKGROUNDED,
+        APP_RESTARTED,
+        USER_CHANGED,
     }
 }

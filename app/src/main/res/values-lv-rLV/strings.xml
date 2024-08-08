@@ -148,6 +148,7 @@
   <string name="no_favorites">Glabātavas izlasē nav vienumu.</string>
   <string name="no_items">Glabātavā nav vienumu.</string>
   <string name="no_items_tap">Glabātāvā nav vienumu, ko izmantot šajā tīmekļvietnē/lietotnē. Piesist, lai pievienotu.</string>
+  <string name="no_username">Nav lietotājvārda</string>
   <string name="no_username_password_configured">Šajā pieteikšanās vienumā nav norādīts lietotājvārds vai parole.</string>
   <string name="ok_got_it">Labi, sapratu!</string>
   <string name="option_defaults">Iespēju noklusējuma vērtības tiek iegūtas no galvenās Bitwarden lietotnes paroļu veidotāja rīka.</string>

@@ -38,6 +38,7 @@ import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenSelectionDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.row.BitwardenSelectionRow
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
+import com.x8bit.bitwarden.ui.platform.components.row.BitwardenExternalLinkRow
 import com.x8bit.bitwarden.ui.platform.components.row.BitwardenTextRow
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenWideSwitch
@@ -78,6 +79,10 @@ fun AutoFillScreen(
 
             AutoFillEvent.NavigateToBlockAutoFill -> {
                 onNavigateToBlockAutoFillScreen()
+            }
+
+            AutoFillEvent.NavigateToSettings -> {
+                intentManager.startCredentialManagerSettings(context)
             }
         }
     }
@@ -148,6 +153,22 @@ fun AutoFillScreen(
                         .fillMaxWidth()
                         .testTag("InlineAutofillSwitch")
                         .padding(horizontal = 16.dp),
+                )
+            }
+            if (state.showPasskeyManagementRow) {
+                BitwardenExternalLinkRow(
+                    text = stringResource(id = R.string.passkey_management),
+                    description = stringResource(
+                        id = R.string.passkey_management_explanation_long,
+                    ),
+                    onConfirmClick = remember(viewModel) {
+                        { viewModel.trySendAction(AutoFillAction.PasskeyManagementClick) }
+                    },
+                    dialogTitle = stringResource(id = R.string.continue_to_device_settings),
+                    dialogMessage = stringResource(
+                        id = R.string.set_bitwarden_as_passkey_manager_description,
+                    ),
+                    withDivider = false,
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))

@@ -61,7 +61,7 @@ fun VaultData.toViewState(
     val noFolderItems = filteredCipherViewList
         .filter { it.folderId.isNullOrBlank() }
 
-    return if (filteredCipherViewList.isEmpty()) {
+    return if (filteredCipherViewListWithDeletedItems.isEmpty()) {
         VaultState.ViewState.NoItems
     } else {
         val totpItems = filteredCipherViewList.filter { it.login?.totp != null }

@@ -148,6 +148,7 @@
   <string name="no_favorites">保管庫にお気に入りはありません。</string>
   <string name="no_items">保管庫にアイテムはありません。</string>
   <string name="no_items_tap">保管庫にこのウェブサイトのアイテムはありません。タップで追加します。</string>
+  <string name="no_username">ユーザー名なし</string>
   <string name="no_username_password_configured">このログイン情報はユーザー名やパスワードが設定されていません。</string>
   <string name="ok_got_it">分かりました!</string>
   <string name="option_defaults">デフォルトのオプションはメインの Bitwarden アプリのパスワード生成ツールから設定されます。</string>

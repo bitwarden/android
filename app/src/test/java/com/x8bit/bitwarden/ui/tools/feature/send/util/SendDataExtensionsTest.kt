@@ -55,8 +55,8 @@ class SendDataExtensionsTest {
         val textSendView = createMockSendView(number = 2, type = SendType.TEXT)
         val fileSendView = createMockSendView(number = 1, type = SendType.FILE)
         val list = listOf(
-            textSendView,
             fileSendView,
+            textSendView,
         )
         val textSendViewUrl1 = "www.test.com/#/send/mockAccessId-1/mockKey-1"
         val textSendViewUrl2 = "www.test.com/#/send/mockAccessId-2/mockKey-2"

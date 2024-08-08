@@ -148,6 +148,7 @@
   <string name="no_favorites">പ്രിയങ്കരങ്ങൾ ഒന്നും നിങ്ങളുടെ വാൾട്ടിൽ ഇല്ല.</string>
   <string name="no_items">നിങ്ങളുടെ വാൾട്ടിൽ ഇനങ്ങളൊന്നുമില്ല.</string>
   <string name="no_items_tap">നിങ്ങളുടെ വാൾട്ടിൽ ഈ വെബ്സൈറ്റിന്റെയോ/അപ്പിന്റെയോ ഇനങ്ങൾ ഒന്നും ഇല്ല.ഒരെണ്ണം ചേർക്കാൻ ടാപ്പുചെയ്യുക.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">ഈ പ്രവേശനത്തിന് ഒരു ഉപയോക്തൃനാമമോ പാസ്‌വേഡോ ക്രമീകരിച്ചിട്ടില്ല.</string>
   <string name="ok_got_it">ശരി, മനസ്സിലായി!</string>
   <string name="option_defaults">പ്രധാന Bitwarden അപ്ലിക്കേഷന്റെ പാസ്‌വേഡ് ജനറേറ്റർ ഉപകരണത്തിൽ നിന്ന് ഓപ്‌ഷൻ സ്ഥിരസ്ഥിതികൾ സജ്ജമാക്കുക.</string>

@@ -74,6 +74,7 @@ class FilledDataExtensionsTest {
                         autofillType = View.AUTOFILL_TYPE_TEXT,
                         isFocused = true,
                         textValue = null,
+                        hasPasswordTerms = false,
                     ),
                 ),
             ),

@@ -148,6 +148,7 @@
   <string name="no_favorites">Det er ingen favoritter i hvelvet ditt.</string>
   <string name="no_items">Det er ingen gjenstander i hvelvet ditt.</string>
   <string name="no_items_tap">Det er ingen oppføringer i ditt hvelv for dette nettstedet. Trykk for å legge til en.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Denne innloggingen har verken et brukernavn eller passord satt opp.</string>
   <string name="ok_got_it">OK, skjønner!</string>
   <string name="option_defaults">Alternativenes standardvalg er bestemt av passordgeneratorverktøyet til Bitwarden sin hovedapp.</string>
