@@ -264,8 +264,9 @@ private fun TermsAndPrivacyText(
     onPrivacyPolicyClick: () -> Unit,
 ) {
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-        @Suppress("MaxLineLength")
-        val strTermsAndPrivacy = stringResource(id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy)
+        val strTermsAndPrivacy = stringResource(
+            id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy
+        )
         val strTerms = stringResource(id = R.string.terms_of_service)
         val strPrivacy = stringResource(id = R.string.privacy_policy)
         val startIndexTerms = strTermsAndPrivacy.indexOf(strTerms)
