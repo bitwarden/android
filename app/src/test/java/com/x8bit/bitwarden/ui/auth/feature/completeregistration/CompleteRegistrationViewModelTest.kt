@@ -82,16 +82,16 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             completeRegistrationData = CompleteRegistrationData(
                 email = EMAIL,
                 verificationToken = TOKEN,
-                fromEmail = true
+                fromEmail = true,
             ),
-            System.currentTimeMillis()
+            System.currentTimeMillis(),
         )
 
         val viewModel = CompleteRegistrationViewModel(
             savedStateHandle = SavedStateHandle(mapOf("state" to DEFAULT_STATE)),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
-            specialCircumstance = specialCircumstanceManager
+            specialCircumstance = specialCircumstanceManager,
         )
         viewModel.onCleared()
         assertTrue(specialCircumstanceManager.specialCircumstance == null)
@@ -332,7 +332,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                 isCheckDataBreachesToggled = true,
             )
             val viewModel = createCompleteRegistrationViewModel(
-                completeRegistrationState = initialState
+                completeRegistrationState = initialState,
             )
             viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
             viewModel.stateFlow.test {
@@ -434,12 +434,12 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `On init should show toast if from email is true`() = runTest {
         val viewModel = createCompleteRegistrationViewModel(
-            DEFAULT_STATE.copy(fromEmail = true)
+            DEFAULT_STATE.copy(fromEmail = true),
         )
         viewModel.eventFlow.test {
             assertEquals(
                 CompleteRegistrationEvent.ShowToast(R.string.email_verified.asText()),
-                awaitItem()
+                awaitItem(),
             )
         }
     }
@@ -555,7 +555,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
             savedStateHandle = SavedStateHandle(mapOf("state" to completeRegistrationState)),
             authRepository = authRepository,
             environmentRepository = fakeEnvironmentRepository,
-            specialCircumstance = specialCircumstanceManager
+            specialCircumstance = specialCircumstanceManager,
         )
 
     companion object {

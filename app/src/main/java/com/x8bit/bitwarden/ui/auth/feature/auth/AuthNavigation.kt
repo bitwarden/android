@@ -65,7 +65,7 @@ fun NavGraphBuilder.authGraph(
                 navController.navigateToCompleteRegistration(
                     emailAddress = emailAddress,
                     verificationToken = verificationToken,
-                    fromEmail = false
+                    fromEmail = false,
                 )
             },
             onNavigateToCheckEmail = { emailAddress ->
@@ -77,7 +77,7 @@ fun NavGraphBuilder.authGraph(
             onNavigateBack = { navController.popBackStack() },
             onNavigateBackToLanding = {
                 navController.popBackStack(route = LANDING_ROUTE, inclusive = false)
-            })
+            },)
         completeRegistrationDestination(
             onNavigateBack = { navController.popBackStack() },
             onNavigateToLanding = {

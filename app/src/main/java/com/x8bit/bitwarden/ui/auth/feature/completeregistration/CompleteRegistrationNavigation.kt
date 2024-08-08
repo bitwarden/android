@@ -28,7 +28,7 @@ data class CompleteRegistrationArgs(
     constructor(savedStateHandle: SavedStateHandle) : this(
         emailAddress = checkNotNull(savedStateHandle.get<String>(EMAIL_ADDRESS)),
         verificationToken = checkNotNull(savedStateHandle.get<String>(VERIFICATION_TOKEN)),
-        fromEmail = checkNotNull(savedStateHandle.get<Boolean>(FROM_EMAIL))
+        fromEmail = checkNotNull(savedStateHandle.get<Boolean>(FROM_EMAIL)),
     )
 }
 
@@ -43,7 +43,7 @@ fun NavController.navigateToCompleteRegistration(
 ) {
     this.navigate(
         "$COMPLETE_REGISTRATION_PREFIX/$emailAddress/$verificationToken/$fromEmail",
-        navOptions
+        navOptions,
     )
 }
 
@@ -64,7 +64,7 @@ fun NavGraphBuilder.completeRegistrationDestination(
     ) {
         CompleteRegistrationScreen(
             onNavigateBack = onNavigateBack,
-            onNavigateToLanding = onNavigateToLanding
+            onNavigateToLanding = onNavigateToLanding,
         )
     }
 }

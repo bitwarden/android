@@ -17,7 +17,9 @@ import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFl
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CreateAccountClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
@@ -143,7 +145,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Ok")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(CompleteRegistrationAction.ErrorDialogDismiss) }
+        verify { viewModel.trySendAction(ErrorDialogDismiss) }
     }
 
     @Test
@@ -155,7 +157,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .onAllNodesWithText("No")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(CompleteRegistrationAction.ErrorDialogDismiss) }
+        verify { viewModel.trySendAction(ErrorDialogDismiss) }
     }
 
     @Test
@@ -167,7 +169,7 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
             .onAllNodesWithText("Yes")
             .filterToOne(hasAnyAncestor(isDialog()))
             .performClick()
-        verify { viewModel.trySendAction(CompleteRegistrationAction.ContinueWithBreachedPasswordClick) }
+        verify { viewModel.trySendAction(ContinueWithBreachedPasswordClick) }
     }
 
     @Test

@@ -90,11 +90,16 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun verifyEmailAddress() {
-        if (!state.fromEmail)
+        if (!state.fromEmail) {
             return
+        }
 
         viewModelScope.launch {
-            sendEvent(CompleteRegistrationEvent.ShowToast(message = R.string.email_verified.asText()))
+            sendEvent(
+                CompleteRegistrationEvent.ShowToast(
+                    message = R.string.email_verified.asText(),
+                ),
+            )
         }
     }
 

@@ -35,6 +35,7 @@ import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistra
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CreateAccountClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
@@ -141,7 +142,7 @@ fun CompleteRegistrationScreen(
                     BitwardenTextButton(
                         label = stringResource(id = R.string.create_account),
                         onClick = remember(viewModel) {
-                            { viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick) }
+                            { viewModel.trySendAction(CreateAccountClick) }
                         },
                         modifier = Modifier.testTag("CreateAccountButton"),
                     )
@@ -157,10 +158,12 @@ fun CompleteRegistrationScreen(
                 .verticalScroll(rememberScrollState()),
         ) {
             Spacer(modifier = Modifier.height(16.dp))
+
+            @Suppress("MaxLineLength")
             Text(
                 text = stringResource(
                     id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
-                    state.userEmail
+                    state.userEmail,
                 ),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
