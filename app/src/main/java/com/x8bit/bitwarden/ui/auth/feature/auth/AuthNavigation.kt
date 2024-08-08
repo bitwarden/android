@@ -20,6 +20,7 @@ import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.loginWithDeviceDestination
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
+import com.x8bit.bitwarden.ui.auth.feature.masterpasswordguidance.masterPasswordGuidanceDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHintDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
@@ -122,6 +123,12 @@ fun NavGraphBuilder.authGraph(
         )
         twoFactorLoginDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+        masterPasswordGuidanceDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToGeneratePassword = {
+                // TODO [PM-10619](https://bitwarden.atlassian.net/browse/PM-10619)
+            },
         )
     }
 }
