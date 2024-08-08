@@ -8,6 +8,11 @@ import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
  */
 fun InitializeCryptoResult.toVaultUnlockResult(): VaultUnlockResult =
     when (this) {
-        InitializeCryptoResult.AuthenticationError -> VaultUnlockResult.AuthenticationError
+        is InitializeCryptoResult.AuthenticationError -> {
+            VaultUnlockResult.AuthenticationError(
+                message = this.message,
+            )
+        }
+
         InitializeCryptoResult.Success -> VaultUnlockResult.Success
     }

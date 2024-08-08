@@ -46,7 +46,6 @@ private fun List<SendView>.toSendContent(
                     shareUrl = sendView.toSendUrl(baseWebSendUrl),
                     hasPassword = sendView.hasPassword,
                 )
-            }
-            .sortedBy { it.name },
+            },
     )
 }

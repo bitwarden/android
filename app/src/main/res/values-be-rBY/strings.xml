@@ -148,6 +148,7 @@
   <string name="no_favorites">У вашым сховішчы адсутнічаюць абраныя.</string>
   <string name="no_items">У вашым сховішчы адсутнічаюць элементы.</string>
   <string name="no_items_tap">У вашым сховішчы адсутнічаюць элементы для гэтага вэб-сайта або праграмы. Дакраніцеся, каб дадаць.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Гэты лагін не мае сканфігураванага імя карыстальніка або пароля.</string>
   <string name="ok_got_it">Зразумела!</string>
   <string name="option_defaults">Прадвызначаныя параметры прызначаюцца ў генератары пароляў асноўнай праграмы Bitwarden.</string>

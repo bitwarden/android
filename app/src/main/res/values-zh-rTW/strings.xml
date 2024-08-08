@@ -148,6 +148,7 @@
   <string name="no_favorites">您的密碼庫中沒有收藏。</string>
   <string name="no_items">您的密碼庫中沒有登入資料。</string>
   <string name="no_items_tap">您的密碼庫中沒有此網站/程式的登入資料。點選新增一個。</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">此登入資料沒有使用者名稱或密碼。</string>
   <string name="ok_got_it">好的，我知道了！</string>
   <string name="option_defaults">選項預設值是透過 Bitwarden 程式的密碼產生器設定的。</string>

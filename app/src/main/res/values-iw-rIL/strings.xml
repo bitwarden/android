@@ -148,6 +148,7 @@
   <string name="no_favorites">אין מועדפים בכספת שלך.</string>
   <string name="no_items">אין פריטים בכספת שלך.</string>
   <string name="no_items_tap">אין פרטים בכספת שלך עבור אתר/אפליקציה זו. לחץ כאן להוספת פריט.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">פרטי הכניסה הללו לא מכילים שם משתמש או סיסמה.</string>
   <string name="ok_got_it">אוקי, הבנתי!</string>
   <string name="option_defaults">ברירות המחדל נקבעו דרך הגדרות כלי מחולל הסיסמאות של Bitwarden.</string>

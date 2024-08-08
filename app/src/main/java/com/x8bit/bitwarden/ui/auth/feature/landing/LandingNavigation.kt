@@ -30,7 +30,7 @@ fun NavGraphBuilder.landingDestination(
             onNavigateToCreateAccount = onNavigateToCreateAccount,
             onNavigateToLogin = onNavigateToLogin,
             onNavigateToEnvironment = onNavigateToEnvironment,
-            onNavigateToStartRegistration = onNavigateToStartRegistration
+            onNavigateToStartRegistration = onNavigateToStartRegistration,
         )
     }
 }

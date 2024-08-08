@@ -148,6 +148,7 @@
   <string name="no_favorites">보관함에 추가한 즐겨찾기가 없습니다.</string>
   <string name="no_items">보관함에 추가한 항목이 없습니다.</string>
   <string name="no_items_tap">보관함에 이 웹사이트에 대한 항목이 없습니다. 추가하려면 누르세요.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">이 로그인에는 사용자 이름 또는 비밀번호가 등록되어 있지 않습니다.</string>
   <string name="ok_got_it">네, 알겠습니다!</string>
   <string name="option_defaults">옵션 기본값은 Bitwarden 앱의 비밀번호 생성기에서 설정할 수 있습니다.</string>

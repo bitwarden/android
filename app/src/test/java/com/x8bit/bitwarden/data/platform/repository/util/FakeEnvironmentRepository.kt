@@ -20,7 +20,7 @@ class FakeEnvironmentRepository : EnvironmentRepository {
         }
     override val environmentStateFlow: StateFlow<Environment>
         get() = mutableEnvironmentStateFlow.asStateFlow()
-    
+
     override fun saveCurrentEnvironmentForEmail(userEmail: String) {
         saveCurrentEnvironmentForEmailCalled = true
     }

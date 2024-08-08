@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.vault.repository
 
 import android.net.Uri
 import com.bitwarden.core.DateTime
-import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -186,23 +185,6 @@ interface VaultRepository : CipherManager, VaultLockManager {
      */
     suspend fun unlockVaultWithPin(
         pin: String,
-    ): VaultUnlockResult
-
-    /**
-     * Attempt to unlock the vault with the specified user information.
-     *
-     * Note that when [organizationKeys] is absent, no attempt will be made to unlock the vault
-     * for organization data.
-     */
-    @Suppress("LongParameterList")
-    suspend fun unlockVault(
-        userId: String,
-        masterPassword: String,
-        email: String,
-        kdf: Kdf,
-        userKey: String,
-        privateKey: String,
-        organizationKeys: Map<String, String>?,
     ): VaultUnlockResult
 
     /**

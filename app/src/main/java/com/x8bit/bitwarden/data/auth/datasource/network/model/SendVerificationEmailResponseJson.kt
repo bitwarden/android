@@ -3,6 +3,9 @@ package com.x8bit.bitwarden.data.auth.datasource.network.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * The response body for sending a verification email.
+ */
 @Serializable
 sealed class SendVerificationEmailResponseJson {
 

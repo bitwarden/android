@@ -43,6 +43,7 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.toggle.BitwardenSwitch
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * The top level composable for the Reset Password screen.
@@ -230,26 +231,28 @@ private fun TrustedDeviceDialogs(
 @Preview
 @Composable
 private fun TrustedDeviceScaffold_preview() {
-    TrustedDeviceScaffold(
-        state = TrustedDeviceState(
-            dialogState = null,
-            isRemembered = false,
-            emailAddress = "email@bitwarden.com",
-            environmentLabel = "vault.bitwarden.pw",
-            showContinueButton = false,
-            showOtherDeviceButton = true,
-            showRequestAdminButton = true,
-            showMasterPasswordButton = true,
-        ),
-        handlers = TrustedDeviceHandlers(
-            onBackClick = {},
-            onDismissDialog = {},
-            onRememberToggle = {},
-            onContinueClick = {},
-            onApproveWithAdminClick = {},
-            onApproveWithDeviceClick = {},
-            onApproveWithPasswordClick = {},
-            onNotYouButtonClick = {},
-        ),
-    )
+    BitwardenTheme {
+        TrustedDeviceScaffold(
+            state = TrustedDeviceState(
+                dialogState = null,
+                isRemembered = false,
+                emailAddress = "email@bitwarden.com",
+                environmentLabel = "vault.bitwarden.pw",
+                showContinueButton = false,
+                showOtherDeviceButton = true,
+                showRequestAdminButton = true,
+                showMasterPasswordButton = true,
+            ),
+            handlers = TrustedDeviceHandlers(
+                onBackClick = {},
+                onDismissDialog = {},
+                onRememberToggle = {},
+                onContinueClick = {},
+                onApproveWithAdminClick = {},
+                onApproveWithDeviceClick = {},
+                onApproveWithPasswordClick = {},
+                onNotYouButtonClick = {},
+            ),
+        )
+    }
 }

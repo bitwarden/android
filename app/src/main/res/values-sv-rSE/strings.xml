@@ -148,6 +148,7 @@
   <string name="no_favorites">Det finns inga favoriter i ditt valv.</string>
   <string name="no_items">Det finns inga objekt i ditt valv.</string>
   <string name="no_items_tap">Det finns inga objekt i ditt valv för den här webbplatsen. Tryck för att skapa ett.</string>
+  <string name="no_username">Inget användarnamn</string>
   <string name="no_username_password_configured">Den här inloggningen har inte ett användarnamn eller lösenord angivet.</string>
   <string name="ok_got_it">Ok, fattar!</string>
   <string name="option_defaults">Standardinställningar ställs in genom Bitwarden-appens lösenordsgenerator-verktyg.</string>

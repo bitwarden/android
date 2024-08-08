@@ -148,6 +148,7 @@
   <string name="no_favorites">Det er ingen favorittar i kvelvet ditt.</string>
   <string name="no_items">Det er ingen oppføringar i kvelvet ditt.</string>
   <string name="no_items_tap">Det er ingen oppføringar i kvelvet ditt for denne nettstaden/appen. Trykk for å leggja ei til.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Denne innskrivinga har ikkje sett opp brukarnamn eller passord.</string>
   <string name="ok_got_it">Greitt, skjønar!</string>
   <string name="option_defaults">Option defaults are set from the main Bitwarden app\'s password generator tool.</string>

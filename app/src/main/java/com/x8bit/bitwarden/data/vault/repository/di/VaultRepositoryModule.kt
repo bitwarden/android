@@ -21,7 +21,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.json.Json
 import java.time.Clock
 import javax.inject.Singleton
 
@@ -51,7 +50,6 @@ object VaultRepositoryModule {
         pushManager: PushManager,
         userLogoutManager: UserLogoutManager,
         clock: Clock,
-        json: Json,
     ): VaultRepository = VaultRepositoryImpl(
         syncService = syncService,
         sendsService = sendsService,
@@ -69,6 +67,5 @@ object VaultRepositoryModule {
         pushManager = pushManager,
         userLogoutManager = userLogoutManager,
         clock = clock,
-        json = json,
     )
 }

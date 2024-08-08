@@ -148,6 +148,7 @@
   <string name="no_favorites">No hi ha cap preferit a la vostra caixa forta.</string>
   <string name="no_items">No hi ha cap element a la vostra caixa forta.</string>
   <string name="no_items_tap">No hi ha elements a la vostra caixa forta per a aquest lloc web/aplicació. Toqueu per afegir-ne un.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Aquest inici de sessió no té un nom d\'usuari o contrasenya configurats.</string>
   <string name="ok_got_it">D\'acord, ho entenc!</string>
   <string name="option_defaults">Els valors per defecte s\'estableixen des de l\'aplicació principal de Bitwarden al generador de contrasenyes.</string>

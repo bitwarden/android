@@ -2,8 +2,8 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
+import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
-import java.util.Locale
 
 /**
  * Converts a [SyncResponseJson.Collection] object to a corresponding Bitwarden SDK [Collection]
@@ -30,5 +30,10 @@ fun List<SyncResponseJson.Collection>.toEncryptedSdkCollectionList(): List<Colle
  * Sorts the data in alphabetical order by name.
  */
 @JvmName("toAlphabeticallySortedCollectionList")
-fun List<CollectionView>.sortAlphabetically(): List<CollectionView> =
-    this.sortedBy { it.name.uppercase(Locale.getDefault()) }
+fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
+    return this.sortedWith(
+        comparator = { collection1, collection2 ->
+            CompareStringSpecialCharWithPrecedence.compare(collection1.name, collection2.name)
+        },
+    )
+}
