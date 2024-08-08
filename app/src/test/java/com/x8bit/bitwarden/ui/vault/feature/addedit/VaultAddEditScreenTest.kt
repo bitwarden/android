@@ -936,7 +936,7 @@ class VaultAddEditScreenTest : BaseComposeTest() {
             .assertTextEquals("Passkey", "fido2Credentials")
             .assertIsEnabled()
         composeTestRule
-            .onNodeWithContentDescription("Remove passkey", ignoreCase = true)
+            .onNodeWithContentDescription("Remove passkey")
             .assertDoesNotExist()
 
         mutableStateFlow.update {
