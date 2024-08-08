@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.vault.feature.qrcodescan
 
-import android.content.res.Configuration
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.Toast
@@ -59,6 +58,7 @@ import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.util.isPortrait
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzer
 import com.x8bit.bitwarden.ui.vault.feature.qrcodescan.util.QrCodeAnalyzerImpl
 import java.util.concurrent.Executors
@@ -80,8 +80,6 @@ fun QrCodeScanScreen(
     qrCodeAnalyzer.onQrCodeScanned = remember(viewModel) {
         { viewModel.trySendAction(QrCodeScanAction.QrCodeScanReceive(it)) }
     }
-
-    val orientation = LocalConfiguration.current.orientation
 
     val context = LocalContext.current
 
@@ -129,20 +127,16 @@ fun QrCodeScanScreen(
             modifier = Modifier.padding(innerPadding),
         )
 
-        when (orientation) {
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                LandscapeQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                    modifier = Modifier.padding(innerPadding),
-                )
-            }
-
-            else -> {
-                PortraitQRCodeContent(
-                    onEnterCodeManuallyClick = onEnterCodeManuallyClick,
-                    modifier = Modifier.padding(innerPadding),
-                )
-            }
+        if (LocalConfiguration.current.isPortrait) {
+            PortraitQRCodeContent(
+                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                modifier = Modifier.padding(innerPadding),
+            )
+        } else {
+            LandscapeQRCodeContent(
+                onEnterCodeManuallyClick = onEnterCodeManuallyClick,
+                modifier = Modifier.padding(innerPadding),
+            )
         }
     }
 }

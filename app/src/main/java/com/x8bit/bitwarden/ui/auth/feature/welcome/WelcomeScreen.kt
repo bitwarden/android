@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.welcome
 
-import android.content.res.Configuration
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -46,6 +45,7 @@ import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
  * Top level composable for the welcome screen.
@@ -107,7 +107,7 @@ private fun WelcomeScreenContent(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = !LocalConfiguration.current.isPortrait
     val horizontalPadding = if (isLandscape) 128.dp else 16.dp
 
     LaunchedEffect(pagerState.currentPage) {
