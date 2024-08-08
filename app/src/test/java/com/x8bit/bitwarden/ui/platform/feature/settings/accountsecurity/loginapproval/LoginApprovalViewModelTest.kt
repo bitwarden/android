@@ -206,7 +206,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 state = DEFAULT_STATE.copy(
                     specialCircumstance = specialCircumstance,
-                )
+                ),
             )
             coEvery {
                 mockAuthRepository.updateAuthRequest(
@@ -275,7 +275,7 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             val viewModel = createViewModel(
                 state = DEFAULT_STATE.copy(
                     specialCircumstance = specialCircumstance,
-                )
+                ),
             )
             coEvery {
                 mockAuthRepository.updateAuthRequest(
