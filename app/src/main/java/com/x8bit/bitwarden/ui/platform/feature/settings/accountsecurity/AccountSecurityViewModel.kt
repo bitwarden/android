@@ -21,6 +21,7 @@ import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -258,21 +259,21 @@ class AccountSecurityViewModel @Inject constructor(
 
     private fun handleUnlockWithPinToggle(action: AccountSecurityAction.UnlockWithPinToggle) {
         mutableStateFlow.update {
-            it.copy(isUnlockWithPinEnabled = action.isUnlockWithPinEnabled)
+            it.copy(isUnlockWithPinEnabled = action.unlockWithPinState.isUnlockWithPinEnabled)
         }
 
-        when (action) {
-            AccountSecurityAction.UnlockWithPinToggle.PendingEnabled -> Unit
-            AccountSecurityAction.UnlockWithPinToggle.Disabled -> {
+        when (val state = action.unlockWithPinState) {
+            UnlockWithPinState.PendingEnabled -> Unit
+            UnlockWithPinState.Disabled -> {
                 settingsRepository.clearUnlockPin()
                 validateVaultTimeoutAction()
             }
 
-            is AccountSecurityAction.UnlockWithPinToggle.Enabled -> {
+            is UnlockWithPinState.Enabled -> {
                 settingsRepository.storeUnlockPin(
-                    pin = action.pin,
+                    pin = state.pin,
                     shouldRequireMasterPasswordOnRestart =
-                    action.shouldRequireMasterPasswordOnRestart,
+                    state.shouldRequireMasterPasswordOnRestart,
                 )
             }
         }
@@ -563,37 +564,9 @@ sealed class AccountSecurityAction {
     /**
      * User toggled the unlock with pin switch.
      */
-    sealed class UnlockWithPinToggle : AccountSecurityAction() {
-        /**
-         * Whether or not the action represents PIN unlocking being enabled.
-         */
-        abstract val isUnlockWithPinEnabled: Boolean
-
-        /**
-         * The toggle was disabled.
-         */
-        data object Disabled : UnlockWithPinToggle() {
-            override val isUnlockWithPinEnabled: Boolean get() = false
-        }
-
-        /**
-         * The toggle was enabled but the behavior is pending confirmation.
-         */
-        data object PendingEnabled : UnlockWithPinToggle() {
-            override val isUnlockWithPinEnabled: Boolean get() = true
-        }
-
-        /**
-         * The toggle was enabled and the user's [pin] and [shouldRequireMasterPasswordOnRestart]
-         * preference were confirmed.
-         */
-        data class Enabled(
-            val pin: String,
-            val shouldRequireMasterPasswordOnRestart: Boolean,
-        ) : UnlockWithPinToggle() {
-            override val isUnlockWithPinEnabled: Boolean get() = true
-        }
-    }
+    data class UnlockWithPinToggle(
+        val unlockWithPinState: UnlockWithPinState,
+    ) : AccountSecurityAction()
 
     /**
      * Models actions that can be sent by the view model itself.

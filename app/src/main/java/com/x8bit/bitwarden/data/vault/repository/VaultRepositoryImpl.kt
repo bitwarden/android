@@ -4,7 +4,6 @@ import android.net.Uri
 import com.bitwarden.core.DateTime
 import com.bitwarden.core.InitOrgCryptoRequest
 import com.bitwarden.core.InitUserCryptoMethod
-import com.bitwarden.crypto.Kdf
 import com.bitwarden.exporters.ExportFormat
 import com.bitwarden.fido.Fido2CredentialAutofillView
 import com.bitwarden.sdk.Fido2CredentialStore
@@ -606,27 +605,6 @@ class VaultRepositoryImpl(
             ),
         )
     }
-
-    override suspend fun unlockVault(
-        userId: String,
-        masterPassword: String,
-        email: String,
-        kdf: Kdf,
-        userKey: String,
-        privateKey: String,
-        organizationKeys: Map<String, String>?,
-    ): VaultUnlockResult =
-        unlockVault(
-            userId = userId,
-            email = email,
-            kdf = kdf,
-            privateKey = privateKey,
-            initUserCryptoMethod = InitUserCryptoMethod.Password(
-                password = masterPassword,
-                userKey = userKey,
-            ),
-            organizationKeys = organizationKeys,
-        )
 
     override suspend fun createSend(
         sendView: SendView,

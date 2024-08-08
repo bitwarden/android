@@ -5,14 +5,19 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.manager.model.LogoutEvent
 import com.x8bit.bitwarden.data.platform.datasource.disk.PushDiskSource
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.GeneratorDiskSource
 import com.x8bit.bitwarden.data.tools.generator.datasource.disk.PasswordHistoryDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.disk.VaultDiskSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -33,6 +38,10 @@ class UserLogoutManagerImpl(
     private val scope = CoroutineScope(dispatcherManager.unconfined)
     private val mainScope = CoroutineScope(dispatcherManager.main)
 
+    private val mutableLogoutEventFlow: MutableSharedFlow<LogoutEvent> =
+        bufferedMutableSharedFlow()
+    override val logoutEventFlow: SharedFlow<LogoutEvent> = mutableLogoutEventFlow.asSharedFlow()
+
     override fun logout(userId: String, isExpired: Boolean) {
         authDiskSource.userState ?: return
 
@@ -52,6 +61,7 @@ class UserLogoutManagerImpl(
         }
 
         clearData(userId = userId)
+        mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
     }
 
     override fun softLogout(userId: String) {
@@ -67,6 +77,7 @@ class UserLogoutManagerImpl(
         switchUserIfAvailable(currentUserId = userId, removeCurrentUserFromAccounts = false)
 
         clearData(userId = userId)
+        mutableLogoutEventFlow.tryEmit(LogoutEvent(loggedOutUserId = userId))
 
         // Restore data that is still required
         settingsDiskSource.apply {

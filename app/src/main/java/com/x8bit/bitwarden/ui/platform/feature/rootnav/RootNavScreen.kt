@@ -29,6 +29,7 @@ import com.x8bit.bitwarden.ui.auth.feature.trusteddevice.trustedDeviceGraph
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.VAULT_UNLOCK_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.navigateToVaultUnlock
 import com.x8bit.bitwarden.ui.auth.feature.vaultunlock.vaultUnlockDestination
+import com.x8bit.bitwarden.ui.auth.feature.welcome.navigateToWelcome
 import com.x8bit.bitwarden.ui.platform.feature.rootnav.util.toVaultItemListingType
 import com.x8bit.bitwarden.ui.platform.feature.settings.accountsecurity.loginapproval.navigateToLoginApproval
 import com.x8bit.bitwarden.ui.platform.feature.splash.SPLASH_ROUTE
@@ -85,6 +86,7 @@ fun RootNavScreen(
 
     val targetRoute = when (state) {
         RootNavState.Auth -> AUTH_GRAPH_ROUTE
+        RootNavState.AuthWithWelcome -> AUTH_GRAPH_ROUTE
         RootNavState.ResetPassword -> RESET_PASSWORD_ROUTE
         RootNavState.SetPassword -> SET_PASSWORD_ROUTE
         RootNavState.Splash -> SPLASH_ROUTE
@@ -133,6 +135,7 @@ fun RootNavScreen(
     LaunchedEffect(state) {
         when (val currentState = state) {
             RootNavState.Auth -> navController.navigateToAuthGraph(rootNavOptions)
+            RootNavState.AuthWithWelcome -> navController.navigateToWelcome(rootNavOptions)
             RootNavState.ResetPassword -> navController.navigateToResetPasswordGraph(rootNavOptions)
             RootNavState.SetPassword -> navController.navigateToSetPassword(rootNavOptions)
             RootNavState.Splash -> navController.navigateToSplash(rootNavOptions)

@@ -6,6 +6,7 @@ import com.bitwarden.core.InitUserCryptoRequest
 import com.bitwarden.crypto.HashPurpose
 import com.bitwarden.crypto.Kdf
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
+import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.ForcePasswordResetReason
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
@@ -61,6 +62,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.ValidatePasswordResult
 import com.x8bit.bitwarden.data.auth.repository.model.ValidatePinResult
 import com.x8bit.bitwarden.data.auth.repository.model.VaultUnlockType
 import com.x8bit.bitwarden.data.auth.repository.model.VerifyOtpResult
+import com.x8bit.bitwarden.data.auth.repository.model.toLoginErrorResult
 import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.DuoCallbackTokenResult
 import com.x8bit.bitwarden.data.auth.repository.util.SsoCallbackResult
@@ -78,9 +80,11 @@ import com.x8bit.bitwarden.data.auth.repository.util.userSwitchingChangesFlow
 import com.x8bit.bitwarden.data.auth.util.KdfParamsConstants.DEFAULT_PBKDF2_ITERATIONS
 import com.x8bit.bitwarden.data.auth.util.YubiKeyResult
 import com.x8bit.bitwarden.data.auth.util.toSdkParams
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
 import com.x8bit.bitwarden.data.platform.manager.PolicyManager
 import com.x8bit.bitwarden.data.platform.manager.PushManager
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.manager.util.getActivePolicies
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.SettingsRepository
@@ -94,6 +98,7 @@ import com.x8bit.bitwarden.data.vault.datasource.sdk.VaultSdkSource
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.InitializeCryptoResult
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockData
+import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockError
 import com.x8bit.bitwarden.data.vault.repository.model.VaultUnlockResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -140,6 +145,7 @@ class AuthRepositoryImpl(
     private val trustedDeviceManager: TrustedDeviceManager,
     private val userLogoutManager: UserLogoutManager,
     private val policyManager: PolicyManager,
+    private val featureFlagManager: FeatureFlagManager,
     pushManager: PushManager,
     dispatcherManager: DispatcherManager,
 ) : AuthRepository,
@@ -317,6 +323,10 @@ class AuthRepositoryImpl(
 
     override val organizations: List<SyncResponseJson.Profile.Organization>
         get() = activeUserId?.let { authDiskSource.getOrganizations(it) }.orEmpty()
+
+    override val showWelcomeCarousel: Boolean
+        get() = !settingsRepository.hasUserLoggedInOrCreatedAccount &&
+            featureFlagManager.getFeatureFlag(FlagKey.OnboardingCarousel)
 
     init {
         pushManager
@@ -512,18 +522,21 @@ class AuthRepositoryImpl(
         val userId = profile.userId
         val privateKey = authDiskSource.getPrivateKey(userId = userId)
             ?: return LoginResult.Error(errorMessage = null)
-        vaultRepository.unlockVault(
-            userId = userId,
-            email = profile.email,
-            kdf = profile.toSdkParams(),
-            privateKey = privateKey,
-            initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                requestPrivateKey = requestPrivateKey,
-                method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
-            ),
-            // We should already have the org keys from the login sync.
-            organizationKeys = authDiskSource.getOrganizationKeys(userId = userId),
-        )
+
+        checkForVaultUnlockError(
+            onVaultUnlockError = { error ->
+                return error.toLoginErrorResult()
+            },
+        ) {
+            unlockVault(
+                accountProfile = profile,
+                privateKey = privateKey,
+                initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                    requestPrivateKey = requestPrivateKey,
+                    method = AuthRequestMethod.UserKey(protectedUserKey = asymmetricalKey),
+                ),
+            )
+        }
 
         authDiskSource.storeUserKey(userId = userId, userKey = asymmetricalKey)
         vaultRepository.syncIfNecessary()
@@ -970,9 +983,9 @@ class AuthRepositoryImpl(
                         )
                     }
 
-                    VaultUnlockResult.AuthenticationError,
-                    VaultUnlockResult.GenericError,
+                    is VaultUnlockResult.AuthenticationError,
                     VaultUnlockResult.InvalidStateError,
+                    VaultUnlockResult.GenericError,
                     -> {
                         IllegalStateException("Failed to unlock vault").asFailure()
                     }
@@ -1155,7 +1168,7 @@ class AuthRepositoryImpl(
                             ValidatePinResult.Success(isValid = true)
                         }
 
-                        InitializeCryptoResult.AuthenticationError -> {
+                        is InitializeCryptoResult.AuthenticationError -> {
                             ValidatePinResult.Success(isValid = false)
                         }
                     }
@@ -1403,22 +1416,32 @@ class AuthRepositoryImpl(
         )
         val userId = userStateJson.activeUserId
 
-        // Attempt to unlock the vault with password if possible.
-        password?.let {
-            if (loginResponse.privateKey != null && loginResponse.key != null) {
-                vaultRepository.unlockVault(
-                    userId = userId,
-                    email = userStateJson.activeAccount.profile.email,
-                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                    userKey = loginResponse.key,
-                    privateKey = loginResponse.privateKey,
-                    masterPassword = it,
-                    // We can separately unlock vault for organization data after
-                    // receiving the sync response if this data is currently absent.
-                    organizationKeys = null,
+        checkForVaultUnlockError(
+            onVaultUnlockError = { vaultUnlockError ->
+                return@userStateTransaction vaultUnlockError.toLoginErrorResult()
+            },
+        ) {
+            val isDeviceUnlockAvailable = deviceData != null ||
+                loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions != null
+            // if possible attempt to unlock the vault with trusted device data
+            if (isDeviceUnlockAvailable) {
+                unlockVaultWithTdeOnLoginSuccess(
+                    loginResponse = loginResponse,
+                    userStateJson = userStateJson,
+                    deviceData = deviceData,
                 )
+            } else {
+                password?.let {
+                    unlockVaultWithPasswordOnLoginSuccess(
+                        loginResponse = loginResponse,
+                        userStateJson = userStateJson,
+                        password = it,
+                    )
+                }
             }
+        }
 
+        password?.let {
             // Save the master password hash.
             authSdkSource
                 .hashPassword(
@@ -1436,48 +1459,6 @@ class AuthRepositoryImpl(
 
             // Cache the password to verify against any password policies after the sync completes.
             passwordsToCheckMap.put(userId, it)
-        }
-
-        // Attempt to unlock the vault with auth request if possible.
-        // These values will only be null during the Just-in-Time provisioning flow.
-        if (loginResponse.privateKey != null && loginResponse.key != null) {
-            deviceData?.let { model ->
-                vaultRepository.unlockVault(
-                    userId = userId,
-                    email = userStateJson.activeAccount.profile.email,
-                    kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                    privateKey = loginResponse.privateKey,
-                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                        requestPrivateKey = model.privateKey,
-                        method = model
-                            .masterPasswordHash
-                            ?.let {
-                                AuthRequestMethod.MasterKey(
-                                    protectedMasterKey = model.asymmetricalKey,
-                                    authRequestKey = loginResponse.key,
-                                )
-                            }
-                            ?: AuthRequestMethod.UserKey(protectedUserKey = model.asymmetricalKey),
-                    ),
-                    // We can separately unlock vault for organization data after
-                    // receiving the sync response if this data is currently absent.
-                    organizationKeys = null,
-                )
-                // We are purposely not storing the master password hash here since it is not
-                // formatted in in a manner that we can use. We will store it properly the next
-                // time the user enters their master password and it is validated.
-            }
-        }
-
-        // Handle the Trusted Device Encryption flow
-        loginResponse.userDecryptionOptions?.trustedDeviceUserDecryptionOptions?.let { options ->
-            loginResponse.privateKey?.let { privateKey ->
-                handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
-                    trustedDeviceDecryptionOptions = options,
-                    userStateJson = userStateJson,
-                    privateKey = privateKey,
-                )
-            }
         }
 
         authDiskSource.storeAccountTokens(
@@ -1513,77 +1494,10 @@ class AuthRepositoryImpl(
         twoFactorResponse = null
         resendEmailRequestJson = null
         twoFactorDeviceData = null
-
         settingsRepository.setDefaultsIfNecessary(userId = userId)
         vaultRepository.syncIfNecessary()
         hasPendingAccountAddition = false
         LoginResult.Success
-    }
-
-    /**
-     * A helper method to handle the [TrustedDeviceUserDecryptionOptionsJson] specific to TDE.
-     */
-    private suspend fun handleLoginCommonSuccessTrustedDeviceUserDecryptionOptions(
-        trustedDeviceDecryptionOptions: TrustedDeviceUserDecryptionOptionsJson,
-        userStateJson: UserStateJson,
-        privateKey: String,
-    ) {
-        val userId = userStateJson.activeUserId
-        val deviceKey = authDiskSource.getDeviceKey(userId = userId)
-        if (deviceKey == null) {
-            // A null device key means this device is not trusted.
-            val pendingRequest = authDiskSource.getPendingAuthRequest(userId = userId) ?: return
-            authRequestManager
-                .getAuthRequestIfApproved(pendingRequest.requestId)
-                .getOrNull()
-                ?.let { request ->
-                    // For approved requests the key will always be present.
-                    val userKey = requireNotNull(request.key)
-                    vaultRepository.unlockVault(
-                        userId = userId,
-                        email = userStateJson.activeAccount.profile.email,
-                        kdf = userStateJson.activeAccount.profile.toSdkParams(),
-                        privateKey = privateKey,
-                        initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
-                            requestPrivateKey = pendingRequest.requestPrivateKey,
-                            method = AuthRequestMethod.UserKey(protectedUserKey = userKey),
-                        ),
-                        // We can separately unlock vault for organization data after
-                        // receiving the sync response if this data is currently absent.
-                        organizationKeys = null,
-                    )
-                    authDiskSource.storeUserKey(userId = userId, userKey = userKey)
-                }
-            authDiskSource.storePendingAuthRequest(
-                userId = userId,
-                pendingAuthRequest = null,
-            )
-            return
-        }
-
-        val encryptedPrivateKey = trustedDeviceDecryptionOptions.encryptedPrivateKey
-        val encryptedUserKey = trustedDeviceDecryptionOptions.encryptedUserKey
-        if (encryptedPrivateKey == null || encryptedUserKey == null) {
-            // If we have a device key but server is missing private key and user key, we
-            // need to clear the device key and let the user go through the TDE flow again.
-            authDiskSource.storeDeviceKey(userId = userId, deviceKey = null)
-            return
-        }
-        vaultRepository.unlockVault(
-            userId = userId,
-            email = userStateJson.activeAccount.profile.email,
-            kdf = userStateJson.activeAccount.profile.toSdkParams(),
-            privateKey = privateKey,
-            initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
-                deviceKey = deviceKey,
-                protectedDevicePrivateKey = encryptedPrivateKey,
-                deviceProtectedUserKey = encryptedUserKey,
-            ),
-            // We can separately unlock vault for organization data after
-            // receiving the sync response if this data is currently absent.
-            organizationKeys = null,
-        )
-        authDiskSource.storeUserKey(userId = userId, userKey = encryptedUserKey)
     }
 
     /**
@@ -1609,6 +1523,182 @@ class AuthRepositoryImpl(
         // If this error was received, it also means any cached two-factor token is invalid.
         authDiskSource.storeTwoFactorToken(email = email, twoFactorToken = null)
         return LoginResult.TwoFactorRequired
+    }
+
+    /**
+     * Attempt to unlock the current user's vault with password data.
+     */
+    private suspend fun unlockVaultWithPasswordOnLoginSuccess(
+        loginResponse: GetTokenResponseJson.Success,
+        userStateJson: UserStateJson,
+        password: String?,
+    ): VaultUnlockResult? {
+        // Attempt to unlock the vault with password if possible.
+        val masterPassword = password ?: return null
+        val privateKey = loginResponse.privateKey ?: return null
+        val key = loginResponse.key ?: return null
+        return unlockVault(
+            accountProfile = userStateJson.activeAccount.profile,
+            privateKey = privateKey,
+            initUserCryptoMethod = InitUserCryptoMethod.Password(
+                password = masterPassword,
+                userKey = key,
+            ),
+        )
+    }
+
+    /**
+     * Attempt to unlock the current user's vault with trusted device specific data.
+     */
+    private suspend fun unlockVaultWithTdeOnLoginSuccess(
+        loginResponse: GetTokenResponseJson.Success,
+        userStateJson: UserStateJson,
+        deviceData: DeviceDataModel?,
+    ): VaultUnlockResult? {
+        // Attempt to unlock the vault with auth request if possible.
+        // These values will only be null during the Just-in-Time provisioning flow.
+        if (loginResponse.privateKey != null && loginResponse.key != null) {
+            deviceData?.let { model ->
+                return unlockVault(
+                    accountProfile = userStateJson.activeAccount.profile,
+                    privateKey = loginResponse.privateKey,
+                    initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                        requestPrivateKey = model.privateKey,
+                        method = model
+                            .masterPasswordHash
+                            ?.let {
+                                AuthRequestMethod.MasterKey(
+                                    protectedMasterKey = model.asymmetricalKey,
+                                    authRequestKey = loginResponse.key,
+                                )
+                            }
+                            ?: AuthRequestMethod.UserKey(protectedUserKey = model.asymmetricalKey),
+                    ),
+                )
+                // We are purposely not storing the master password hash here since it is not
+                // formatted in in a manner that we can use. We will store it properly the next
+                // time the user enters their master password and it is validated.
+            }
+        }
+
+        // Handle the Trusted Device Encryption flow
+        return loginResponse
+            .userDecryptionOptions
+            ?.trustedDeviceUserDecryptionOptions
+            ?.let { options ->
+                loginResponse.privateKey?.let { privateKey ->
+                    unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
+                        options = options,
+                        userStateJson = userStateJson,
+                        privateKey = privateKey,
+                    )
+                }
+            }
+    }
+
+    /**
+     * A helper method to handle the [TrustedDeviceUserDecryptionOptionsJson] specific to TDE
+     * and store the necessary keys when appropriate.
+     */
+    private suspend fun unlockVaultWithTrustedDeviceUserDecryptionOptionsAndStoreKeys(
+        options: TrustedDeviceUserDecryptionOptionsJson,
+        userStateJson: UserStateJson,
+        privateKey: String,
+    ): VaultUnlockResult? {
+        var vaultUnlockResult: VaultUnlockResult? = null
+        val userId = userStateJson.activeUserId
+        val deviceKey = authDiskSource.getDeviceKey(userId = userId)
+        if (deviceKey == null) {
+            // A null device key means this device is not trusted.
+            val pendingRequest = authDiskSource
+                .getPendingAuthRequest(userId = userId)
+                ?: return null
+            authRequestManager
+                .getAuthRequestIfApproved(pendingRequest.requestId)
+                .getOrNull()
+                ?.let { request ->
+                    // For approved requests the key will always be present.
+                    val userKey = requireNotNull(request.key)
+                    vaultUnlockResult = unlockVault(
+                        accountProfile = userStateJson.activeAccount.profile,
+                        privateKey = privateKey,
+                        initUserCryptoMethod = InitUserCryptoMethod.AuthRequest(
+                            requestPrivateKey = pendingRequest.requestPrivateKey,
+                            method = AuthRequestMethod.UserKey(protectedUserKey = userKey),
+                        ),
+                    )
+                    authDiskSource.storeUserKey(userId = userId, userKey = userKey)
+                }
+            authDiskSource.storePendingAuthRequest(
+                userId = userId,
+                pendingAuthRequest = null,
+            )
+            return vaultUnlockResult
+        }
+
+        val encryptedPrivateKey = options.encryptedPrivateKey
+        val encryptedUserKey = options.encryptedUserKey
+
+        if (encryptedPrivateKey == null || encryptedUserKey == null) {
+            // If we have a device key but server is missing private key and user key, we
+            // need to clear the device key and let the user go through the TDE flow again.
+            authDiskSource.storeDeviceKey(userId = userId, deviceKey = null)
+            return null
+        }
+
+        vaultUnlockResult = unlockVault(
+            accountProfile = userStateJson.activeAccount.profile,
+            privateKey = privateKey,
+            initUserCryptoMethod = InitUserCryptoMethod.DeviceKey(
+                deviceKey = deviceKey,
+                protectedDevicePrivateKey = encryptedPrivateKey,
+                deviceProtectedUserKey = encryptedUserKey,
+            ),
+        )
+
+        if (vaultUnlockResult is VaultUnlockResult.Success) {
+            authDiskSource.storeUserKey(userId = userId, userKey = encryptedUserKey)
+        }
+        return vaultUnlockResult
+    }
+
+    /**
+     * A helper function to unlock the vault for the user associated with the [accountProfile].
+     */
+    private suspend fun unlockVault(
+        accountProfile: AccountJson.Profile,
+        privateKey: String,
+        initUserCryptoMethod: InitUserCryptoMethod,
+    ): VaultUnlockResult {
+        val userId = accountProfile.userId
+        return vaultRepository.unlockVault(
+            userId = userId,
+            email = accountProfile.email,
+            kdf = accountProfile.toSdkParams(),
+            privateKey = privateKey,
+            initUserCryptoMethod = initUserCryptoMethod,
+            // The value for the organization keys here will typically be null. We can separately
+            // unlock the vault for organization data after receiving the sync response if this
+            // data is currently absent. These keys may be present during certain multi-phase login
+            // processes or if we needed to delete the user's token due to an encrypted data
+            // corruption issue and they are forced to log back in.
+            organizationKeys = authDiskSource.getOrganizationKeys(userId = userId),
+        )
+    }
+
+    /**
+     * A helper function to check for a vault unlock related error when logging in.
+     *
+     * @param onVaultUnlockError a lambda function to be invoked in the event a [VaultUnlockError]
+     * is produced via the passed in [block]
+     * @param block a lambda representing logic which produces either a [VaultUnlockResult] which
+     * is castable to [VaultUnlockError] or `null`
+     */
+    private inline fun checkForVaultUnlockError(
+        onVaultUnlockError: (VaultUnlockError) -> Unit,
+        block: () -> VaultUnlockResult?,
+    ) {
+        (block() as? VaultUnlockError)?.also(onVaultUnlockError)
     }
 
     //endregion LoginCommon

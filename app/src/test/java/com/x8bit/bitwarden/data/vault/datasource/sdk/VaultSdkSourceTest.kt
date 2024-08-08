@@ -330,11 +330,13 @@ class VaultSdkSourceTest {
     }
 
     @Test
-    fun `initializeUserCrypto with BitwardenException failure should return AuthenticationError`() =
+    @Suppress("MaxLineLength")
+    fun `initializeUserCrypto with BitwardenException failure should return AuthenticationError with message`() =
         runBlocking {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitUserCryptoRequest>()
-            val expectedException = BitwardenException.E(message = "")
+            val expectedErrorMessage = "Whoopsy"
+            val expectedException = BitwardenException.E(message = expectedErrorMessage)
             coEvery {
                 clientCrypto.initializeUserCrypto(
                     req = mockInitCryptoRequest,
@@ -345,7 +347,7 @@ class VaultSdkSourceTest {
                 request = mockInitCryptoRequest,
             )
             assertEquals(
-                InitializeCryptoResult.AuthenticationError.asSuccess(),
+                InitializeCryptoResult.AuthenticationError(expectedErrorMessage).asSuccess(),
                 result,
             )
             coVerify {
@@ -409,11 +411,13 @@ class VaultSdkSourceTest {
     }
 
     @Test
-    fun `initializeOrgCrypto with BitwardenException failure should return AuthenticationError`() =
+    @Suppress("MaxLineLength")
+    fun `initializeOrgCrypto with BitwardenException failure should return AuthenticationError with correct message`() =
         runBlocking {
             val userId = "userId"
             val mockInitCryptoRequest = mockk<InitOrgCryptoRequest>()
-            val expectedException = BitwardenException.E(message = "")
+            val expectedErrorMessage = "Whoopsy2"
+            val expectedException = BitwardenException.E(message = expectedErrorMessage)
             coEvery {
                 clientCrypto.initializeOrgCrypto(
                     req = mockInitCryptoRequest,
@@ -424,7 +428,7 @@ class VaultSdkSourceTest {
                 request = mockInitCryptoRequest,
             )
             assertEquals(
-                InitializeCryptoResult.AuthenticationError.asSuccess(),
+                InitializeCryptoResult.AuthenticationError(expectedErrorMessage).asSuccess(),
                 result,
             )
             coVerify {

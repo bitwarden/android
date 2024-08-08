@@ -25,7 +25,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RootNavViewModel @Inject constructor(
-    authRepository: AuthRepository,
+    private val authRepository: AuthRepository,
     specialCircumstanceManager: SpecialCircumstanceManager,
 ) : BaseViewModel<RootNavState, Unit, RootNavAction>(
     initialState = RootNavState.Splash,
@@ -52,7 +52,7 @@ class RootNavViewModel @Inject constructor(
         }
     }
 
-    @Suppress("CyclomaticComplexMethod", "MaxLineLength")
+    @Suppress("CyclomaticComplexMethod", "MaxLineLength", "LongMethod")
     private fun handleUserStateUpdateReceive(
         action: RootNavAction.Internal.UserStateUpdateReceive,
     ) {
@@ -68,7 +68,13 @@ class RootNavViewModel @Inject constructor(
 
             userState == null ||
                 !userState.activeAccount.isLoggedIn ||
-                userState.hasPendingAccountAddition -> RootNavState.Auth
+                userState.hasPendingAccountAddition -> {
+                if (authRepository.showWelcomeCarousel) {
+                    RootNavState.AuthWithWelcome
+                } else {
+                    RootNavState.Auth
+                }
+            }
 
             userState.activeAccount.isVaultUnlocked -> {
                 when (val specialCircumstance = action.specialCircumstance) {
@@ -134,6 +140,12 @@ sealed class RootNavState : Parcelable {
      */
     @Parcelize
     data object Auth : RootNavState()
+
+    /**
+     * App should show auth nav graph starting with the welcome carousel.
+     */
+    @Parcelize
+    data object AuthWithWelcome : RootNavState()
 
     /**
      * App should show reset password graph.

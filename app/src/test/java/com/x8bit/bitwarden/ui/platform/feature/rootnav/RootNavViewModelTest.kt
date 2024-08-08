@@ -22,6 +22,7 @@ class RootNavViewModelTest : BaseViewModelTest() {
     private val mutableUserStateFlow = MutableStateFlow<UserState?>(null)
     private val authRepository = mockk<AuthRepository> {
         every { userStateFlow } returns mutableUserStateFlow
+        every { showWelcomeCarousel } returns false
     }
     private val specialCircumstanceManager = SpecialCircumstanceManagerImpl()
 
@@ -29,7 +30,22 @@ class RootNavViewModelTest : BaseViewModelTest() {
     fun `when there are no accounts the nav state should be Auth`() {
         mutableUserStateFlow.tryEmit(null)
         val viewModel = createViewModel()
-        assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
+        assertEquals(
+            RootNavState.Auth,
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `when there are no accounts and the user has not logged on before the nav state should be Auth with the welcome route`() {
+        every { authRepository.showWelcomeCarousel } returns true
+        mutableUserStateFlow.tryEmit(null)
+        val viewModel = createViewModel()
+        assertEquals(
+            RootNavState.AuthWithWelcome,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -57,7 +73,10 @@ class RootNavViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
-        assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
+        assertEquals(
+            RootNavState.Auth,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
@@ -220,7 +239,10 @@ class RootNavViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
-        assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
+        assertEquals(
+            RootNavState.Auth,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Suppress("MaxLineLength")
@@ -250,7 +272,10 @@ class RootNavViewModelTest : BaseViewModelTest() {
             ),
         )
         val viewModel = createViewModel()
-        assertEquals(RootNavState.Auth, viewModel.stateFlow.value)
+        assertEquals(
+            RootNavState.Auth,
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test

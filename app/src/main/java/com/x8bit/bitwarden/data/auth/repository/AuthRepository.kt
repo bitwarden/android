@@ -132,6 +132,12 @@ interface AuthRepository : AuthenticatorProvider, AuthRequestManager {
     val organizations: List<SyncResponseJson.Profile.Organization>
 
     /**
+     * Whether or not the welcome carousel should be displayed, based on the feature flag and
+     * whether the user has ever logged in or created an account before.
+     */
+    val showWelcomeCarousel: Boolean
+
+    /**
      * Clears the pending deletion state that occurs when the an account is successfully deleted.
      */
     fun clearPendingAccountDeletion()
