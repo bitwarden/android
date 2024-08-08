@@ -73,6 +73,7 @@ object AutofillModule {
             organizationEventManager = organizationEventManager,
         )
 
+    @Singleton
     @Provides
     fun providesAutofillParser(
         settingsRepository: SettingsRepository,
@@ -81,6 +82,7 @@ object AutofillModule {
             settingsRepository = settingsRepository,
         )
 
+    @Singleton
     @Provides
     fun providesAutofillCipherProvider(
         authRepository: AuthRepository,
@@ -93,6 +95,7 @@ object AutofillModule {
             vaultRepository = vaultRepository,
         )
 
+    @Singleton
     @Provides
     fun providesAutofillProcessor(
         dispatcherManager: DispatcherManager,
@@ -115,6 +118,7 @@ object AutofillModule {
             crashLogsManager = crashLogsManager,
         )
 
+    @Singleton
     @Provides
     fun providesFillDataBuilder(
         autofillCipherProvider: AutofillCipherProvider,
@@ -122,6 +126,7 @@ object AutofillModule {
         autofillCipherProvider = autofillCipherProvider,
     )
 
+    @Singleton
     @Provides
     fun providesFillResponseBuilder(): FillResponseBuilder = FillResponseBuilderImpl()
 

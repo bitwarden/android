@@ -148,6 +148,7 @@
   <string name="no_favorites">Tidak ada favorit di brankas Anda.</string>
   <string name="no_items">Tidak ada item di brankas Anda.</string>
   <string name="no_items_tap">Tidak ada item untuk situs ini di brankas Anda. Ketuk untuk menambahkan.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Info masuk ini tidak memiliki nama pengguna atau sandi yang dikonfigurasi.</string>
   <string name="ok_got_it">Oke, saya mengerti!</string>
   <string name="option_defaults">Pilihan baku diatur dari alat pembuat sandi utama aplikasi Bitwarden.</string>

@@ -148,6 +148,7 @@
   <string name="no_favorites">Няма любими записи в трезора.</string>
   <string name="no_items">Няма записи в трезора.</string>
   <string name="no_items_tap">Няма записи в трезора за този сайт или програма. Натиснете, за да добавите.</string>
+  <string name="no_username">Няма потребителско име</string>
   <string name="no_username_password_configured">Името или паролата липсват в този запис за вход.</string>
   <string name="ok_got_it">Добре, разбрах!</string>
   <string name="option_defaults">Стандартните настройки се задават от екрана на Битуорден за създаване на пароли.</string>

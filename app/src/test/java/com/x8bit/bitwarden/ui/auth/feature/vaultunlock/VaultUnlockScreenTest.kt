@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.ui.auth.feature.vaultunlock
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasAnyAncestor
@@ -415,6 +416,15 @@ class VaultUnlockScreenTest : BaseComposeTest() {
             .performScrollTo()
             .performClick()
         verify { viewModel.trySendAction(VaultUnlockAction.UnlockClick) }
+    }
+
+    @Test
+    fun `state with input and without biometrics should request focus on input field`() {
+        mutableStateFlow.update { it.copy(hideInput = false, isBiometricEnabled = false) }
+        composeTestRule
+            .onNodeWithText("Master password")
+            .performScrollTo()
+            .assertIsFocused()
     }
 
     @Test

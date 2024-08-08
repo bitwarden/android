@@ -304,12 +304,23 @@ class VaultSdkCipherExtensionsTest {
             createMockCipherView(1).copy(name = "c"),
             createMockCipherView(1).copy(name = "B"),
             createMockCipherView(1).copy(name = "z"),
+            createMockCipherView(1).copy(name = "8"),
+            createMockCipherView(1).copy(name = "7"),
+            createMockCipherView(1).copy(name = "_"),
             createMockCipherView(1).copy(name = "A"),
             createMockCipherView(1).copy(name = "D"),
+            createMockCipherView(1).copy(name = "AbA"),
+            createMockCipherView(1).copy(name = "aAb"),
+
         )
 
         val expected = listOf(
+            createMockCipherView(1).copy(name = "_"),
+            createMockCipherView(1).copy(name = "7"),
+            createMockCipherView(1).copy(name = "8"),
             createMockCipherView(1).copy(name = "A"),
+            createMockCipherView(1).copy(name = "aAb"),
+            createMockCipherView(1).copy(name = "AbA"),
             createMockCipherView(1).copy(name = "B"),
             createMockCipherView(1).copy(name = "c"),
             createMockCipherView(1).copy(name = "D"),

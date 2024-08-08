@@ -148,6 +148,7 @@
   <string name="no_favorites">Hoidlas ei ole lemmikuid.</string>
   <string name="no_items">Hoidlas ei ole kirjeid.</string>
   <string name="no_items_tap">Hoidlas puudub selle veebilehe konto. Vajuta konto lisamiseks.</string>
+  <string name="no_username">No Username</string>
   <string name="no_username_password_configured">Selle konto jaoks on kasutajanimi või parool seadistamata.</string>
   <string name="ok_got_it">Ok, sain aru!</string>
   <string name="option_defaults">Vaikeväärtused on seatud Bitwardeni paroolide genereerimise tööriista poolt.</string>

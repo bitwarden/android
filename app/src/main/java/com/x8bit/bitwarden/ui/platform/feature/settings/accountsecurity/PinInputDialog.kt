@@ -14,6 +14,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,8 +39,6 @@ import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 /**
  * A dialog for setting a user's PIN.
  *
- * @param pin The current value of the PIN.
- * @param onPinChange A callback for internal changes to the PIN.
  * @param onCancelClick A callback for when the "Cancel" button is clicked.
  * @param onSubmitClick A callback for when the "Submit" button is clicked.
  * @param onDismissRequest A callback for when the dialog is requesting to be dismissed.
@@ -45,12 +47,11 @@ import com.x8bit.bitwarden.ui.platform.components.util.maxDialogHeight
 @Suppress("LongMethod")
 @Composable
 fun PinInputDialog(
-    pin: String,
-    onPinChange: (String) -> Unit,
     onCancelClick: () -> Unit,
-    onSubmitClick: () -> Unit,
+    onSubmitClick: (String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
+    var pin by remember { mutableStateOf("") }
     Dialog(
         onDismissRequest = onDismissRequest,
     ) {
@@ -107,7 +108,7 @@ fun PinInputDialog(
                 BitwardenTextField(
                     label = stringResource(id = R.string.pin),
                     value = pin,
-                    onValueChange = onPinChange,
+                    onValueChange = { pin = it },
                     keyboardType = KeyboardType.Number,
                     modifier = Modifier
                         .testTag("AlertInputField")
@@ -135,7 +136,7 @@ fun PinInputDialog(
 
                 BitwardenFilledButton(
                     label = stringResource(id = R.string.submit),
-                    onClick = onSubmitClick,
+                    onClick = { onSubmitClick(pin) },
                     modifier = Modifier.testTag("AcceptAlertButton"),
                 )
             }

@@ -15,6 +15,7 @@ class AutofillPartitionExtensionsTest {
         autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = false,
         textValue = null,
+        hasPasswordTerms = false,
     )
     private val autofillDataValidText: AutofillView.Data = AutofillView.Data(
         autofillId = mockk(),
@@ -22,6 +23,7 @@ class AutofillPartitionExtensionsTest {
         autofillType = View.AUTOFILL_TYPE_TEXT,
         isFocused = false,
         textValue = TEXT_VALUE,
+        hasPasswordTerms = false,
     )
 
     @Test

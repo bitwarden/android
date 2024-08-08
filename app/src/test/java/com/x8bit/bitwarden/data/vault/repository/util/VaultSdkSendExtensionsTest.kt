@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSend
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockSendJsonRequest
+import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSendView
 import com.x8bit.bitwarden.data.vault.datasource.sdk.model.createMockSdkSend
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -48,6 +49,35 @@ class VaultSdkSendExtensionsTest {
                 createMockSdkSend(number = 2),
             ),
             sdkSends,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `toSortAlphabetically should sort SendView by name`() {
+        val list = listOf(
+            createMockSendView(1).copy(name = "c"),
+            createMockSendView(1).copy(name = "B"),
+            createMockSendView(1).copy(name = "z"),
+            createMockSendView(1).copy(name = "4"),
+            createMockSendView(1).copy(name = "A"),
+            createMockSendView(1).copy(name = "#"),
+            createMockSendView(1).copy(name = "D"),
+        )
+
+        val expected = listOf(
+            createMockSendView(1).copy(name = "#"),
+            createMockSendView(1).copy(name = "4"),
+            createMockSendView(1).copy(name = "A"),
+            createMockSendView(1).copy(name = "B"),
+            createMockSendView(1).copy(name = "c"),
+            createMockSendView(1).copy(name = "D"),
+            createMockSendView(1).copy(name = "z"),
+        )
+
+        assertEquals(
+            expected,
+            list.sortAlphabetically(),
         )
     }
 }

@@ -23,6 +23,7 @@ import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
  * @param text The label for the row as a [String].
  * @param onConfirmClick The callback when the confirm button of the dialog is clicked.
  * @param modifier The modifier to be applied to the layout.
+ * @param description An optional description label to be displayed below the [text].
  * @param withDivider Indicates if a divider should be drawn on the bottom of the row, defaults
  * to `true`.
  * @param dialogTitle The title of the dialog displayed when the user clicks this item.
@@ -37,6 +38,7 @@ fun BitwardenExternalLinkRow(
     text: String,
     onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier,
+    description: String? = null,
     withDivider: Boolean = true,
     dialogTitle: String,
     dialogMessage: String,
@@ -46,6 +48,7 @@ fun BitwardenExternalLinkRow(
     var shouldShowDialog by rememberSaveable { mutableStateOf(false) }
     BitwardenTextRow(
         text = text,
+        description = description,
         onClick = { shouldShowDialog = true },
         modifier = modifier,
         withDivider = withDivider,

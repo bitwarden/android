@@ -30,7 +30,7 @@ import com.x8bit.bitwarden.ui.platform.components.field.BitwardenPasswordField
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun BitwardenPinDialog(
-    onConfirmClick: (masterPassword: String) -> Unit,
+    onConfirmClick: (pin: String) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     var pin by remember { mutableStateOf("") }
