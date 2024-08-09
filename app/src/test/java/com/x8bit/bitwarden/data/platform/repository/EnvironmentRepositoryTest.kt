@@ -185,7 +185,10 @@ class EnvironmentRepositoryTest {
 
         assertEquals(
             Environment.Eu.environmentUrlData,
-            fakeEnvironmentDiskSource.getPreAuthEnvironmentUrlDataForEmail(userEmail = "email@example.com"),
+            fakeEnvironmentDiskSource
+                .getPreAuthEnvironmentUrlDataForEmail(
+                    userEmail = "email@example.com",
+                ),
         )
     }
 
