@@ -190,6 +190,44 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
     }
 
     @Test
+    @Suppress("MaxLineLength")
+    fun `When approval request is successful, should emit ExitApp when shouldFinishWhenComplete is true`() =
+        runTest {
+            val specialCircumstance = SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = PasswordlessRequestData(
+                    loginRequestId = REQUEST_ID,
+                    userId = USER_ID,
+                ),
+                shouldFinishWhenComplete = true,
+            )
+            every {
+                mockSpecialCircumstanceManager.specialCircumstance
+            } returns specialCircumstance
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    specialCircumstance = specialCircumstance,
+                ),
+            )
+            coEvery {
+                mockAuthRepository.updateAuthRequest(
+                    requestId = REQUEST_ID,
+                    masterPasswordHash = PASSWORD_HASH,
+                    publicKey = PUBLIC_KEY,
+                    isApproved = true,
+                )
+            } returns AuthRequestResult.Success(AUTH_REQUEST)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(LoginApprovalAction.ApproveRequestClick)
+                assertEquals(
+                    LoginApprovalEvent.ShowToast(R.string.login_approved.asText()),
+                    awaitItem(),
+                )
+                assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+        }
+
+    @Test
     fun `on DeclineRequestClick should deny auth request`() = runTest {
         val viewModel = createViewModel()
         coEvery {
@@ -219,6 +257,44 @@ class LoginApprovalViewModelTest : BaseViewModelTest() {
             )
         }
     }
+
+    @Test
+    @Suppress("MaxLineLength")
+    fun `When deny request is successful, should emit ExitApp when shouldFinishWhenComplete is true`() =
+        runTest {
+            val specialCircumstance = SpecialCircumstance.PasswordlessRequest(
+                passwordlessRequestData = PasswordlessRequestData(
+                    loginRequestId = REQUEST_ID,
+                    userId = USER_ID,
+                ),
+                shouldFinishWhenComplete = true,
+            )
+            every {
+                mockSpecialCircumstanceManager.specialCircumstance
+            } returns specialCircumstance
+            val viewModel = createViewModel(
+                state = DEFAULT_STATE.copy(
+                    specialCircumstance = specialCircumstance,
+                ),
+            )
+            coEvery {
+                mockAuthRepository.updateAuthRequest(
+                    requestId = REQUEST_ID,
+                    masterPasswordHash = PASSWORD_HASH,
+                    publicKey = PUBLIC_KEY,
+                    isApproved = false,
+                )
+            } returns AuthRequestResult.Success(AUTH_REQUEST)
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(LoginApprovalAction.DeclineRequestClick)
+                assertEquals(
+                    LoginApprovalEvent.ShowToast(R.string.log_in_denied.asText()),
+                    awaitItem(),
+                )
+                assertEquals(LoginApprovalEvent.ExitApp, awaitItem())
+            }
+        }
 
     @Test
     fun `on ErrorDialogDismiss should update state`() = runTest {

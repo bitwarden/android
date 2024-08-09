@@ -934,6 +934,10 @@ class VaultAddEditViewModel @Inject constructor(
             is VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange -> {
                 handlePasswordVisibilityChange(action)
             }
+
+            VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick -> {
+                handleLoginClearFido2Credential()
+            }
         }
     }
 
@@ -1032,6 +1036,13 @@ class VaultAddEditViewModel @Inject constructor(
         updateLoginContent { loginType ->
             loginType.copy(totp = null)
         }
+    }
+
+    private fun handleLoginClearFido2Credential() {
+        updateLoginContent { loginType ->
+            loginType.copy(fido2CredentialCreationDateTime = null)
+        }
+        sendEvent(event = VaultAddEditEvent.ShowToast(R.string.passkey_removed.asText()))
     }
 
     private fun handlePasswordVisibilityChange(
@@ -2700,6 +2711,11 @@ sealed class VaultAddEditAction {
              * @property isVisible The new password visibility state.
              */
             data class PasswordVisibilityChange(val isVisible: Boolean) : LoginType()
+
+            /**
+             * Represents the action to clear the fido2 credential.
+             */
+            data object ClearFido2CredentialClick : LoginType()
         }
 
         /**
