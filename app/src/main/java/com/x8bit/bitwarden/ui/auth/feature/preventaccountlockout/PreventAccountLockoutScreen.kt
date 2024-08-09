@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -74,9 +76,13 @@ fun PreventAccountLockoutScreen(
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier
+                .padding(innerPadding)
+                .verticalScroll(rememberScrollState()),
         ) {
-            NeverLoseAccessContent()
+            NeverLoseAccessContent(
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
@@ -88,43 +94,48 @@ private fun NeverLoseAccessContent(
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 16.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(size = 4.dp))
             .background(MaterialTheme.colorScheme.surfaceContainerLowest),
     ) {
-        Column(
-            modifier = Modifier.padding(24.dp),
-        ) {
-            Text(
-                text = stringResource(R.string.never_lose_access_to_your_vault),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = stringResource(
-                    R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
-                ),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(R.string.never_lose_access_to_your_vault),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
 
+            modifier = Modifier.padding(horizontal = 24.dp),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(
+                R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
+            ),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 24.dp),
+        )
+        Spacer(modifier = Modifier.height(24.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        Spacer(modifier = Modifier.height(16.dp))
         AccountRecoveryTipRow(
             title = stringResource(R.string.create_a_hint),
             description = stringResource(
                 R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
             ),
             icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(16.dp))
         HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        Spacer(modifier = Modifier.height(16.dp))
         AccountRecoveryTipRow(
             title = stringResource(R.string.write_your_password_down),
             description = stringResource(R.string.keep_it_secret_keep_it_safe),
             icon = rememberVectorPainter(id = R.drawable.ic_edit),
+            modifier = Modifier.padding(horizontal = 16.dp),
         )
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
@@ -136,7 +147,7 @@ private fun AccountRecoveryTipRow(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.padding(16.dp),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
