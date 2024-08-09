@@ -78,11 +78,11 @@ fun PreventAccountLockoutScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
         ) {
-            NeverLoseAccessContent(
-                modifier = Modifier.padding(horizontal = 16.dp),
-            )
+            NeverLoseAccessContent()
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
