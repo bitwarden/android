@@ -117,6 +117,7 @@ private val COMPAT_BROWSERS: List<String> = listOf(
     "com.sec.android.app.sbrowser.beta",
     "com.stoutner.privacybrowser.free",
     "com.stoutner.privacybrowser.standard",
+    "com.tencent.mtt",
     "com.vivaldi.browser",
     "com.vivaldi.browser.snapshot",
     "com.vivaldi.browser.sopranos",
