@@ -14,6 +14,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
+import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import com.x8bit.bitwarden.ui.platform.manager.biometrics.BiometricsManager
 import com.x8bit.bitwarden.ui.util.assertNoDialogExists
@@ -21,6 +22,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -28,13 +30,27 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.robolectric.annotation.Config
+import javax.crypto.Cipher
 
 class SetupUnlockScreenTest : BaseComposeTest() {
 
     private var onNavigateToSetupAutofillCalled = false
 
+    private val captureBiometricsSuccess = slot<(cipher: Cipher?) -> Unit>()
+    private val captureBiometricsCancel = slot<() -> Unit>()
+    private val captureBiometricsLockOut = slot<() -> Unit>()
+    private val captureBiometricsError = slot<() -> Unit>()
     private val biometricsManager: BiometricsManager = mockk {
         every { isBiometricsSupported } returns true
+        every {
+            promptBiometrics(
+                onSuccess = capture(captureBiometricsSuccess),
+                onCancel = capture(captureBiometricsCancel),
+                onLockOut = capture(captureBiometricsLockOut),
+                onError = capture(captureBiometricsError),
+                cipher = CIPHER,
+            )
+        } just runs
     }
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -111,6 +127,90 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             .performClick()
         verify(exactly = 1) {
             viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = false))
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should un-toggle on cancel`() {
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        mutableEventFlow.tryEmit(SetupUnlockEvent.ShowBiometricsPrompt(cipher = CIPHER))
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsCancel.captured()
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should un-toggle on error`() {
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        mutableEventFlow.tryEmit(SetupUnlockEvent.ShowBiometricsPrompt(cipher = CIPHER))
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsError.captured()
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should un-toggle on lock out`() {
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        mutableEventFlow.tryEmit(SetupUnlockEvent.ShowBiometricsPrompt(cipher = CIPHER))
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsLockOut.captured()
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 0) {
+            viewModel.trySendAction(any())
+        }
+    }
+
+    @Test
+    fun `on unlock with biometrics toggle should send UnlockWithBiometricToggle on success`() {
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        mutableEventFlow.tryEmit(SetupUnlockEvent.ShowBiometricsPrompt(cipher = CIPHER))
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOn()
+        captureBiometricsSuccess.captured(CIPHER)
+        composeTestRule
+            .onNodeWithText(text = "Unlock with Biometrics")
+            .performScrollTo()
+            .assertIsOff()
+        verify(exactly = 1) {
+            viewModel.trySendAction(SetupUnlockAction.UnlockWithBiometricToggle(isEnabled = true))
         }
     }
 
@@ -469,10 +569,32 @@ class SetupUnlockScreenTest : BaseComposeTest() {
             viewModel.trySendAction(SetupUnlockAction.SetUpLaterClick)
         }
     }
+
+    @Test
+    fun `Loading Dialog should be displayed according to state`() {
+        val title = "title"
+        composeTestRule.assertNoDialogExists()
+
+        mutableStateFlow.update {
+            it.copy(dialogState = SetupUnlockState.DialogState.Loading(title = title.asText()))
+        }
+        composeTestRule
+            .onAllNodesWithText(text = title)
+            .filterToOne(hasAnyAncestor(isDialog()))
+            .assertIsDisplayed()
+
+        mutableStateFlow.update { it.copy(dialogState = null) }
+        composeTestRule.assertNoDialogExists()
+    }
 }
 
+private const val DEFAULT_USER_ID: String = "user_id"
 private val DEFAULT_STATE: SetupUnlockState = SetupUnlockState(
+    userId = DEFAULT_USER_ID,
     isUnlockWithPinEnabled = false,
     isUnlockWithPasswordEnabled = true,
     isUnlockWithBiometricsEnabled = false,
+    dialogState = null,
 )
+
+private val CIPHER = mockk<Cipher>()
