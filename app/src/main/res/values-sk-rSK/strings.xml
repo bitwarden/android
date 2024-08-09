@@ -51,7 +51,7 @@
   <string name="master_password">Hlavné heslo</string>
   <string name="more">Viac</string>
   <string name="my_vault">Môj trezor</string>
-  <string name="authenticator">Authenticator</string>
+  <string name="authenticator">Overovateľ</string>
   <string name="name">Meno</string>
   <string name="no">Nie</string>
   <string name="notes">Poznámky</string>
@@ -287,7 +287,7 @@ Skenovanie prebehne automaticky.</string>
   <string name="company">Spoločnosť</string>
   <string name="country">Krajina</string>
   <string name="december">December</string>
-  <string name="dr">Dr</string>
+  <string name="dr">Dr.</string>
   <string name="expiration_month">Mesiac expirácie</string>
   <string name="expiration_year">Rok expirácie</string>
   <string name="february">Február</string>
@@ -927,4 +927,29 @@ Chcete prepnúť na toto konto?</string>
   <string name="self_hosted_server_url">Adresa URL vlastného hostingu</string>
   <string name="passkey_operation_failed_because_user_could_not_be_verified">Operácia prístupového kľúča zlyhala, pretože používateľ sa nedá overiť.</string>
   <string name="user_verification_direction">Overenie používateľa</string>
+  <string name="privacy_prioritized">Dôvera na prvom mieste</string>
+  <string name="welcome_message_1">Ukladajte prihlasovacie údaje, karty a identity do zabezpečeného trezoru. Bitwarden používa end-to-end šifrovanie s nulovou na ochranu toho, čo je pre vás dôležité.</string>
+  <string name="never_guess_again">Už nemusíte hádať</string>
+  <string name="welcome_message_2">Nastavte si odomykanie biometrickými údajmi a automatické vypĺňanie na prihlasovanie do účtov bez zadávania jediného písmena.</string>
+  <string name="level_up_your_logins">Posuňte prihlasovanie na vyššiu úroveň</string>
+  <string name="welcome_message_3">Pomocou generátora vytvorte a uložte silné a jedinečné heslá pre všetky svoje účty.</string>
+  <string name="your_data_when_and_where_you_need_it">Vaše údaje, kedykoľvek a kdekoľvek ich potrebujete</string>
+  <string name="welcome_message_4">Ukladajte neobmedzený počet hesiel na neobmedzenom počte zariadení pomocou mobilných aplikácií, prehliadačov a desktopových aplikácií Bitwardenu.</string>
+  <string name="remove_passkey">Remove passkey</string>
+  <string name="passkey_removed">Passkey removed</string>
+  <string name="what_makes_a_password_strong">What makes a password strong?</string>
+  <string name="the_longer_your_password_the_more_difficult_to_hack">The longer your password, the more difficult it is to hack. The minimum for account creation is 12 characters but if you do 14 characters, the time to crack your password would be centuries!</string>
+  <string name="the_strongest_passwords_are_usually">The strongest passwords are usually:</string>
+  <string name="twelve_or_more_characters">12 or more characters</string>
+  <string name="random_and_complex_using_numbers_and_special_characters">Random and complex, using numbers and special characters</string>
+  <string name="totally_different_from_your_other_passwords">Totally different from your other passwords</string>
+  <string name="use_the_generator_to_create_a_strong_unique_password">Use the generator to create a strong, unique password</string>
+  <string name="try_it_out">Try it out</string>
+  <string name="account_setup">Account setup</string>
+  <string name="set_up_unlock">Set up unlock</string>
+  <string name="set_up_later">Set up later</string>
+  <string name="set_up_unlock_later">Set up unlock later?</string>
+  <string name="you_can_return_to_complete_this_step_anytime_from_account_security_in_settings">You can return to complete this step anytime from Account Security in Settings.</string>
+  <string name="confirm">Confirm</string>
+  <string name="set_up_biometrics_or_choose_a_pin_code_to_quickly_access_your_vault_and_autofill_your_logins">Set up biometrics or choose a PIN code to quickly access your vault and AutoFill your logins.</string>
 </resources>
