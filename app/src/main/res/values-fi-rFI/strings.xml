@@ -929,7 +929,6 @@ Haluatko vaihtaa tähän tiliin?</string>
   <string name="user_verification_direction">Käyttäjän vahvistus</string>
   <string name="privacy_prioritized">Privacy, prioritized</string>
   <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
-  <string name="never_guess_again">Never guess again</string>
   <string name="welcome_message_2">Määritä biometrinen avaus ja automaattitäyttö kirjautuaksesi tileillesi kirjoittamatta yhtään kirjainta.</string>
   <string name="level_up_your_logins">Nosta kirjautumisesi uudelle tasolle</string>
   <string name="welcome_message_3">Käytä generaattoria luodaksesi ja tallentaaksesi vahvoja, ainutlaatuisia salasanoja kaikille tileillesi.</string>

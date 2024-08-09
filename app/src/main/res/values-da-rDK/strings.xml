@@ -929,7 +929,6 @@ Skift til denne konto?</string>
   <string name="user_verification_direction">Brugerbekræftelse</string>
   <string name="privacy_prioritized">Fortrolighed, prioriteret</string>
   <string name="welcome_message_1">Gem logins, kort og identiteter i den sikre boks. Bitwarden bruger nul-viden, ende-til-ende kryptering til at beskytte brugerens vigtigt ting.</string>
-  <string name="never_guess_again">Aldrig gætte igen</string>
   <string name="welcome_message_2">Opsæt biometrisk oplåsning og autofyld for at logge ind på konti uden at skrive ét enkelt bogstav.</string>
   <string name="level_up_your_logins">Forstærk logins</string>
   <string name="welcome_message_3">Brug generatoren til at oprette og gemme stærke, unikke adgangskoder til alle kontiene.</string>

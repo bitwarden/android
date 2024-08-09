@@ -929,7 +929,6 @@ Wilt u naar dit account wisselen?</string>
   <string name="user_verification_direction">Gebruikersverificatie</string>
   <string name="privacy_prioritized">Privacy, geprioriteerd</string>
   <string name="welcome_message_1">Logins, kaarten en identiteiten in je beveiligde kluis opslaan. Bitwarden gebruikt zero-knowledge, end-to-end versleuteling om te beschermen wat belangrijk voor jou is.</string>
-  <string name="never_guess_again">Nooit meer raden</string>
   <string name="welcome_message_2">Biometrische ontgrendelen en automatisch invullen instellen zodat je kunt inloggen op je accounts zonder één letter te typen.</string>
   <string name="level_up_your_logins">Versterk je logins</string>
   <string name="welcome_message_3">Gebruik de generator voor het aanmaken en bewaren van sterke, unieke wachtwoorden voor al je accounts.</string>

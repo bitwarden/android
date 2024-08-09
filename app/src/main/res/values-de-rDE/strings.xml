@@ -928,7 +928,6 @@ Möchtest du zu diesem Konto wechseln?</string>
   <string name="user_verification_direction">Benutzer-Verifizierung</string>
   <string name="privacy_prioritized">Datenschutz, priorisiert</string>
   <string name="welcome_message_1">Speichere Zugangsdaten, Karten und Identitäten in deinem sicheren Tresor. Bitwarden verwendet Zero-Knowledge und Ende-zu-Ende-Verschlüsselung, um das zu schützen, was für dich wichtig ist.</string>
-  <string name="never_guess_again">Nie wieder raten</string>
   <string name="welcome_message_2">Richte biometrisches Entsperren und Auto-Ausfüllen ein, um dich ohne einen einzigen Buchstaben einzugeben bei deinen Konten anzumelden.</string>
   <string name="level_up_your_logins">Optimiere deine Zugangsdaten</string>
   <string name="welcome_message_3">Verwende den Generator, um einzigartige Passwörter für alle deine Konten zu erstellen und zu speichern.</string>

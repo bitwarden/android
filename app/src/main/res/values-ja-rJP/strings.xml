@@ -929,7 +929,6 @@
   <string name="user_verification_direction">ユーザー認証</string>
   <string name="privacy_prioritized">プライバシーが最優先</string>
   <string name="welcome_message_1">ログイン情報、カード、ID を安全な保管庫に保存します。Bitwarden はゼロ知識、エンドツーエンドの暗号化を使用して、あなたにとって重要なものを保護します。</string>
-  <string name="never_guess_again">もう覚えなくて大丈夫</string>
   <string name="welcome_message_2">生体認証のロック解除と自動入力を設定して、文字を何も入力せずにアカウントにログインします。</string>
   <string name="level_up_your_logins">ログインをレベルアップ</string>
   <string name="welcome_message_3">パスワード生成を使用して、すべてのアカウントで強力な一意のパスワードを作成して保存できます。</string>

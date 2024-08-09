@@ -48,7 +48,7 @@ class WelcomeScreenTest : BaseComposeTest() {
             .onNodeWithText("Privacy, prioritized")
             .assertDoesNotExist()
         composeTestRule
-            .onNodeWithText("Never guess again")
+            .onNodeWithText("Quick and easy login")
             .assertExists()
             .assertIsDisplayed()
 
@@ -72,7 +72,7 @@ class WelcomeScreenTest : BaseComposeTest() {
             .onNodeWithText("Privacy, prioritized")
             .assertDoesNotExist()
         composeTestRule
-            .onNodeWithText("Never guess again")
+            .onNodeWithText("Quick and easy login")
             .assertExists()
             .assertIsDisplayed()
 
