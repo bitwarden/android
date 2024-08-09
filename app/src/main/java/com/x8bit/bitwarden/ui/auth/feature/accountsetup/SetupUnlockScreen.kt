@@ -39,6 +39,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.auth.feature.accountsetup.handlers.SetupUnlockHandler
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
@@ -121,9 +122,6 @@ private fun SetupUnlockScreenContent(
     biometricsManager: BiometricsManager,
     config: Configuration = LocalConfiguration.current,
 ) {
-    val marginHorizontal = remember(config.orientation) {
-        if (config.isPortrait) 16.dp else 48.dp
-    }
     Column(
         modifier = modifier.verticalScroll(state = rememberScrollState()),
     ) {
@@ -142,7 +140,7 @@ private fun SetupUnlockScreenContent(
             modifier = Modifier
                 .testTag(tag = "UnlockWithBiometricsSwitch")
                 .fillMaxWidth()
-                .padding(horizontal = marginHorizontal),
+                .standardHorizontalMargin(),
         )
         BitwardenUnlockWithPinSwitch(
             isUnlockWithPasswordEnabled = state.isUnlockWithPasswordEnabled,
@@ -151,7 +149,7 @@ private fun SetupUnlockScreenContent(
             modifier = Modifier
                 .testTag(tag = "UnlockWithPinSwitch")
                 .fillMaxWidth()
-                .padding(horizontal = marginHorizontal),
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(height = 24.dp))
@@ -162,7 +160,7 @@ private fun SetupUnlockScreenContent(
             modifier = Modifier
                 .testTag(tag = "ContinueButton")
                 .fillMaxWidth()
-                .padding(horizontal = marginHorizontal),
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(height = 12.dp))
@@ -170,7 +168,7 @@ private fun SetupUnlockScreenContent(
             onConfirmClick = handler.onSetUpLaterClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = marginHorizontal),
+                .standardHorizontalMargin(),
         )
 
         Spacer(modifier = Modifier.height(height = 12.dp))
@@ -216,7 +214,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
         painter = rememberVectorPainter(id = R.drawable.account_setup),
         contentDescription = null,
         modifier = Modifier
-            .padding(horizontal = 16.dp)
+            .standardHorizontalMargin()
             .size(size = 100.dp)
             .align(alignment = Alignment.CenterHorizontally),
     )
@@ -229,7 +227,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .standardHorizontalMargin(),
     )
 
     Spacer(modifier = Modifier.height(height = 8.dp))
@@ -243,7 +241,7 @@ private fun ColumnScope.SetupUnlockHeaderPortrait() {
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .standardHorizontalMargin(),
     )
 }
 
@@ -254,7 +252,7 @@ private fun SetupUnlockHeaderLandscape(
     Row(
         modifier = modifier
             .padding(horizontal = 112.dp)
-            .padding(horizontal = 48.dp),
+            .standardHorizontalMargin(),
     ) {
         Image(
             painter = rememberVectorPainter(id = R.drawable.account_setup),
