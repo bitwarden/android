@@ -147,7 +147,9 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register failure with Invalid json should be Invalid`() = runTest {
-        val response = MockResponse().setResponseCode(400).setBody(INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON)
+        val response = MockResponse().setResponseCode(400).setBody(
+            INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON,
+        )
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
