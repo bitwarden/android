@@ -155,7 +155,7 @@ class EnvironmentRepositoryTest {
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
 
-        fakeAuthDiskSource.storeEmailVerificationUrls(
+        fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
             userEmail = "email@example.com",
             environmentUrlDataJson,
         )
@@ -177,7 +177,7 @@ class EnvironmentRepositoryTest {
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
 
         repository.environment = Environment.Eu
-        fakeAuthDiskSource.storeEmailVerificationUrls(
+        fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
             userEmail = "email@example.com",
             environmentUrlDataJson,)
 
@@ -185,7 +185,7 @@ class EnvironmentRepositoryTest {
 
         assertEquals(
             Environment.Eu.environmentUrlData,
-            fakeAuthDiskSource.getEmailVerificationUrls(userEmail = "email@example.com"),
+            fakeEnvironmentDiskSource.getPreAuthEnvironmentUrlDataForEmail(userEmail = "email@example.com"),
         )
     }
 
@@ -207,6 +207,8 @@ class EnvironmentRepositoryTest {
 }
 
 private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
+    private val storedEmailVerificationUrls = mutableMapOf<String, EnvironmentUrlDataJson?>()
+
     override var preAuthEnvironmentUrlData: EnvironmentUrlDataJson? = null
         set(value) {
             field = value
@@ -216,6 +218,16 @@ private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
     override val preAuthEnvironmentUrlDataFlow: Flow<EnvironmentUrlDataJson?>
         get() = mutablePreAuthEnvironmentUrlDataFlow
             .onSubscription { emit(preAuthEnvironmentUrlData) }
+
+    override fun getPreAuthEnvironmentUrlDataForEmail(userEmail: String): EnvironmentUrlDataJson? =
+        storedEmailVerificationUrls[userEmail]
+
+    override fun storePreAuthEnvironmentUrlDataForEmail(
+        userEmail: String,
+        urls: EnvironmentUrlDataJson,
+    ) {
+        storedEmailVerificationUrls[userEmail] = urls
+    }
 
     private val mutablePreAuthEnvironmentUrlDataFlow =
         bufferedMutableSharedFlow<EnvironmentUrlDataJson?>(replay = 1)

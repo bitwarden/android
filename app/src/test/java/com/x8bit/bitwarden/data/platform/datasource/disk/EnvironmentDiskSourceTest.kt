@@ -4,8 +4,11 @@ import androidx.core.content.edit
 import app.cash.turbine.test
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
+import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
@@ -60,6 +63,45 @@ class EnvironmentDiskSourceTest {
                 assertEquals(ENVIRONMENT_URL_DATA, awaitItem())
             }
         }
+
+    @Test
+    fun `getPreAuthEnvironmentUrlDataForEmail should pull from SharedPreferences`() {
+        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
+        val mockUserEmail = "mockUserEmail"
+        val mockUrls = Environment.Us.environmentUrlData
+        fakeSharedPreferences
+            .edit {
+                putString(
+                    "${emailVerificationUrlsBaseKey}_$mockUserEmail",
+                    json.encodeToString(mockUrls),
+                )
+            }
+        val actual = environmentDiskSource
+            .getPreAuthEnvironmentUrlDataForEmail(userEmail = mockUserEmail)
+        assertEquals(
+            mockUrls,
+            actual,
+        )
+    }
+
+    @Test
+    fun `storePreAuthEnvironmentUrlDataForEmail should update SharedPreferences`() {
+        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
+        val mockUserEmail = "mockUserEmail"
+        val mockUrls = Environment.Us.environmentUrlData
+        environmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
+            userEmail = mockUserEmail,
+            urls = mockUrls,
+        )
+        val actual = fakeSharedPreferences.getString(
+            "${emailVerificationUrlsBaseKey}_$mockUserEmail",
+            null,
+        )
+        assertEquals(
+            json.encodeToJsonElement(mockUrls),
+            json.parseToJsonElement(requireNotNull(actual)),
+        )
+    }
 }
 
 private const val ENVIRONMENT_URL_DATA_JSON = """

@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -246,14 +245,4 @@ interface AuthDiskSource {
      * Stores the [accountTokens] for the given [userId].
      */
     fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?)
-
-    /**
-     * Gets the pre authentication urls for the given [userEmail].
-     */
-    fun getEmailVerificationUrls(userEmail: String): EnvironmentUrlDataJson?
-
-    /**
-     * Stores the [urls] for the given [userEmail].
-     */
-    fun storeEmailVerificationUrls(userEmail: String, urls: EnvironmentUrlDataJson)
 }

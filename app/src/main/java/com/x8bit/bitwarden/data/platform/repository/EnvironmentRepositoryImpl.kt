@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.stateIn
  */
 class EnvironmentRepositoryImpl(
     private val environmentDiskSource: EnvironmentDiskSource,
-    private val authDiskSource: AuthDiskSource,
+    authDiskSource: AuthDiskSource,
     dispatcherManager: DispatcherManager,
 ) : EnvironmentRepository {
 
@@ -58,14 +58,17 @@ class EnvironmentRepositoryImpl(
     }
 
     override fun loadEnvironmentForEmail(userEmail: String): Boolean {
-        val urls = authDiskSource
-            .getEmailVerificationUrls(userEmail)
+        val urls = environmentDiskSource
+            .getPreAuthEnvironmentUrlDataForEmail(userEmail)
             ?: return false
         environment = urls.toEnvironmentUrls()
         return true
     }
 
     override fun saveCurrentEnvironmentForEmail(userEmail: String) =
-        authDiskSource
-            .storeEmailVerificationUrls(userEmail, environment.environmentUrlData)
+        environmentDiskSource
+            .storePreAuthEnvironmentUrlDataForEmail(
+                userEmail,
+                environment.environmentUrlData,
+            )
 }
