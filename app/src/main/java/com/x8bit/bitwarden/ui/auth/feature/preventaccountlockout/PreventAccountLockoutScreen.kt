@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
@@ -79,7 +80,7 @@ fun PreventAccountLockoutScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
+                .standardHorizontalMargin()
                 .verticalScroll(rememberScrollState()),
         ) {
             NeverLoseAccessContent()
