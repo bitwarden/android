@@ -156,11 +156,11 @@ class EnvironmentRepositoryTest {
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
 
         fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
-            userEmail = "email@example.com",
+            userEmail = EMAIL,
             environmentUrlDataJson,
         )
 
-        repository.loadEnvironmentForEmail(userEmail = "email@example.com")
+        repository.loadEnvironmentForEmail(userEmail = EMAIL)
 
         assertEquals(
             environment,
@@ -178,16 +178,16 @@ class EnvironmentRepositoryTest {
 
         repository.environment = Environment.Eu
         fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
-            userEmail = "email@example.com",
+            userEmail = EMAIL,
             environmentUrlDataJson,)
 
-        repository.saveCurrentEnvironmentForEmail(userEmail = "email@example.com")
+        repository.saveCurrentEnvironmentForEmail(userEmail = EMAIL)
 
         assertEquals(
             Environment.Eu.environmentUrlData,
             fakeEnvironmentDiskSource
                 .getPreAuthEnvironmentUrlDataForEmail(
-                    userEmail = "email@example.com",
+                    userEmail = EMAIL,
                 ),
         )
     }
@@ -207,6 +207,10 @@ class EnvironmentRepositoryTest {
                 ),
             ),
         )
+
+    companion object {
+        private const val EMAIL = "email@example.com"
+    }
 }
 
 private class FakeEnvironmentDiskSource : EnvironmentDiskSource {

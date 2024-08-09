@@ -28,11 +28,9 @@ class EnvironmentDiskSourceTest {
 
     @Test
     fun `preAuthEnvironmentUrlData should pull from and update SharedPreferences`() {
-        val environmentKey = "bwPreferencesStorage:preAuthEnvironmentUrls"
-
         // Shared preferences and the repository start with the same value.
         assertNull(environmentDiskSource.preAuthEnvironmentUrlData)
-        assertNull(fakeSharedPreferences.getString(environmentKey, null))
+        assertNull(fakeSharedPreferences.getString(PRE_AUTH_URLS_KEY, null))
 
         // Updating the repository updates shared preferences
         environmentDiskSource.preAuthEnvironmentUrlData = ENVIRONMENT_URL_DATA
@@ -41,12 +39,12 @@ class EnvironmentDiskSourceTest {
                 ENVIRONMENT_URL_DATA_JSON,
             ),
             json.parseToJsonElement(
-                fakeSharedPreferences.getString(environmentKey, null)!!,
+                fakeSharedPreferences.getString(PRE_AUTH_URLS_KEY, null)!!,
             ),
         )
 
         // Update SharedPreferences updates the repository
-        fakeSharedPreferences.edit { putString(environmentKey, null) }
+        fakeSharedPreferences.edit { putString(PRE_AUTH_URLS_KEY, null) }
         assertNull(environmentDiskSource.preAuthEnvironmentUrlData)
     }
 
@@ -66,18 +64,16 @@ class EnvironmentDiskSourceTest {
 
     @Test
     fun `getPreAuthEnvironmentUrlDataForEmail should pull from SharedPreferences`() {
-        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
-        val mockUserEmail = "mockUserEmail"
         val mockUrls = Environment.Us.environmentUrlData
         fakeSharedPreferences
             .edit {
                 putString(
-                    "${emailVerificationUrlsBaseKey}_$mockUserEmail",
+                    "${EMAIL_VERIFICATION_URLS_KEY}_$EMAIL",
                     json.encodeToString(mockUrls),
                 )
             }
         val actual = environmentDiskSource
-            .getPreAuthEnvironmentUrlDataForEmail(userEmail = mockUserEmail)
+            .getPreAuthEnvironmentUrlDataForEmail(userEmail = EMAIL)
         assertEquals(
             mockUrls,
             actual,
@@ -86,21 +82,24 @@ class EnvironmentDiskSourceTest {
 
     @Test
     fun `storePreAuthEnvironmentUrlDataForEmail should update SharedPreferences`() {
-        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
-        val mockUserEmail = "mockUserEmail"
         val mockUrls = Environment.Us.environmentUrlData
         environmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
-            userEmail = mockUserEmail,
+            userEmail = EMAIL,
             urls = mockUrls,
         )
         val actual = fakeSharedPreferences.getString(
-            "${emailVerificationUrlsBaseKey}_$mockUserEmail",
+            "${EMAIL_VERIFICATION_URLS_KEY}_$EMAIL",
             null,
         )
         assertEquals(
             json.encodeToJsonElement(mockUrls),
             json.parseToJsonElement(requireNotNull(actual)),
         )
+    }
+    companion object {
+        private const val EMAIL = "email@example.com"
+        private const val EMAIL_VERIFICATION_URLS_KEY = "bwPreferencesStorage:emailVerificationUrls"
+        private const val PRE_AUTH_URLS_KEY = "bwPreferencesStorage:preAuthEnvironmentUrls"
     }
 }
 
