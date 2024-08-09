@@ -51,9 +51,14 @@ private fun compareCharsSpecialCharsWithPrecedence(c1: Char, c2: Char): Int {
  * same case return 0 to indicate they are the same.
  */
 private fun compareLettersLowerCaseFirst(c1: Char, c2: Char): Int {
-    require(c1.isLetter())
-    require(c2.isLetter())
-    require(c1.equals(other = c2, ignoreCase = true))
+    require(
+        value = c1.isLetter() &&
+            c2.isLetter() &&
+            c1.equals(other = c2, ignoreCase = true),
+    ) {
+        "Both character must be the same letter, case does not matter."
+    }
+
     return when {
         !c1.isLowerCase() && c2.isLowerCase() -> 1
         c1.isLowerCase() && !c2.isLowerCase() -> -1
