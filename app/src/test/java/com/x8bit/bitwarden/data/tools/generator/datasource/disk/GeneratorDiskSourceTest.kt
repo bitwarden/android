@@ -29,6 +29,7 @@ class GeneratorDiskSourceTest {
         val userId = "userId"
 
         val passcodeOptions = PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -81,6 +82,7 @@ class GeneratorDiskSourceTest {
     fun `getPasscodeGenerationOptions should return correct options when available`() {
         val userId = "user123"
         val options = PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -118,6 +120,7 @@ class GeneratorDiskSourceTest {
     fun `storePasscodeGenerationOptions should correctly store options`() {
         val userId = "user123"
         val options = PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,

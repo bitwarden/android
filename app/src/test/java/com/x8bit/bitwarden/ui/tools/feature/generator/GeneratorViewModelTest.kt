@@ -253,6 +253,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val initialState = viewModel.stateFlow.value
 
             val updatedPasswordOptions = PasscodeGenerationOptions(
+                type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
                 length = 14,
                 allowAmbiguousChar = false,
                 hasNumbers = true,
@@ -331,6 +332,7 @@ class GeneratorViewModelTest : BaseViewModelTest() {
             val initialState = viewModel.stateFlow.value
 
             val updatedPassphraseOptions = PasscodeGenerationOptions(
+                type = PasscodeGenerationOptions.PasscodeType.PASSPHRASE,
                 length = 14,
                 allowAmbiguousChar = false,
                 hasNumbers = true,
