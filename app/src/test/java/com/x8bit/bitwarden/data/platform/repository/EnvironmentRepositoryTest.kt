@@ -147,6 +147,48 @@ class EnvironmentRepositoryTest {
         }
     }
 
+    @Test
+    fun `loadEnvironmentForEmail should update the environment`() = runTest {
+        val environmentUrlDataJson = mockk<EnvironmentUrlDataJson>()
+        val environment = mockk<Environment> {
+            every { environmentUrlData } returns environmentUrlDataJson
+        }
+        every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
+
+        fakeAuthDiskSource.storeEmailVerificationUrls(
+            userEmail = "email@example.com",
+            environmentUrlDataJson,
+        )
+
+        repository.loadEnvironmentForEmail(userEmail = "email@example.com")
+
+        assertEquals(
+            environment,
+            repository.environment,
+        )
+    }
+
+    @Test
+    fun `saveCurrentEnvironmentForEmail should save the environment`() = runTest {
+        val environmentUrlDataJson = mockk<EnvironmentUrlDataJson>()
+        val environment = mockk<Environment> {
+            every { environmentUrlData } returns environmentUrlDataJson
+        }
+        every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
+
+        repository.environment = Environment.Eu
+        fakeAuthDiskSource.storeEmailVerificationUrls(
+            userEmail = "email@example.com",
+            environmentUrlDataJson,)
+
+        repository.saveCurrentEnvironmentForEmail(userEmail = "email@example.com")
+
+        assertEquals(
+            Environment.Eu.environmentUrlData,
+            fakeAuthDiskSource.getEmailVerificationUrls(userEmail = "email@example.com"),
+        )
+    }
+
     private fun getMockUserState(
         environmentForActiveUser: EnvironmentUrlDataJson?,
     ): UserStateJson =
