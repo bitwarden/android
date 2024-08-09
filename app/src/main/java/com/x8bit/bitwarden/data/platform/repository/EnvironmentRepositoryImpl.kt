@@ -68,7 +68,7 @@ class EnvironmentRepositoryImpl(
     override fun saveCurrentEnvironmentForEmail(userEmail: String) =
         environmentDiskSource
             .storePreAuthEnvironmentUrlDataForEmail(
-                userEmail,
-                environment.environmentUrlData,
+                userEmail = userEmail,
+                urls = environment.environmentUrlData,
             )
 }

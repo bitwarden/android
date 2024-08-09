@@ -215,11 +215,9 @@ class EnvironmentRepositoryTest {
                 ),
             ),
         )
-
-    companion object {
-        private const val EMAIL = "email@example.com"
-    }
 }
+
+private const val EMAIL = "email@example.com"
 
 private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
     private val storedEmailVerificationUrls = mutableMapOf<String, EnvironmentUrlDataJson?>()

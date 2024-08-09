@@ -96,12 +96,11 @@ class EnvironmentDiskSourceTest {
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }
-    companion object {
-        private const val EMAIL = "email@example.com"
-        private const val EMAIL_VERIFICATION_URLS_KEY = "bwPreferencesStorage:emailVerificationUrls"
-        private const val PRE_AUTH_URLS_KEY = "bwPreferencesStorage:preAuthEnvironmentUrls"
-    }
 }
+
+private const val EMAIL = "email@example.com"
+private const val EMAIL_VERIFICATION_URLS_KEY = "bwPreferencesStorage:emailVerificationUrls"
+private const val PRE_AUTH_URLS_KEY = "bwPreferencesStorage:preAuthEnvironmentUrls"
 
 private const val ENVIRONMENT_URL_DATA_JSON = """
     {
