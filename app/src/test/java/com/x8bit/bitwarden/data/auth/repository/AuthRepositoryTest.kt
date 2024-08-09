@@ -5385,7 +5385,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns EMAIL_VERIFICATION_TOKEN.toResponseBody().asSuccess()
+        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
 
         var result = repository.sendVerificationEmail(
             email = EMAIL,
@@ -5408,9 +5408,9 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns IllegalStateException("Unexpected null body!").asFailure()
+        } returns null.asSuccess()
 
-        var result = repository.sendVerificationEmail(
+        val result = repository.sendVerificationEmail(
             email = EMAIL,
             name = NAME,
             receiveMarketingEmails = true,
@@ -5433,7 +5433,7 @@ class AuthRepositoryTest {
             )
         } returns Throwable("fail").asFailure()
 
-        var result = repository.sendVerificationEmail(
+        val result = repository.sendVerificationEmail(
             email = EMAIL,
             name = NAME,
             receiveMarketingEmails = true,

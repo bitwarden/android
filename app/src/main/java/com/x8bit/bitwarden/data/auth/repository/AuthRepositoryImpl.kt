@@ -1187,24 +1187,22 @@ class AuthRepositoryImpl(
         name: String,
         receiveMarketingEmails: Boolean,
     ): SendVerificationEmailResult =
-        identityService.sendVerificationEmail(
-            SendVerificationEmailRequestJson(
-                email = email,
-                name = name,
-                receiveMarketingEmails = receiveMarketingEmails,
-            ),
-        ).fold(
-            onSuccess = {
-                SendVerificationEmailResult.Success(it?.string())
-            },
-            onFailure = {
-                // error throw in [ResultCall] if response body is null
-                if (it is IllegalStateException) {
-                    return SendVerificationEmailResult.Success(null)
-                }
-                return SendVerificationEmailResult.Error(null)
-            },
-        )
+        identityService
+            .sendVerificationEmail(
+                SendVerificationEmailRequestJson(
+                    email = email,
+                    name = name,
+                    receiveMarketingEmails = receiveMarketingEmails,
+                ),
+            )
+            .fold(
+                onSuccess = {
+                    SendVerificationEmailResult.Success(it)
+                },
+                onFailure = {
+                    SendVerificationEmailResult.Error(null)
+                },
+            )
 
     @Suppress("CyclomaticComplexMethod")
     private suspend fun validatePasswordAgainstPolicy(

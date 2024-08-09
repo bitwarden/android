@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import okhttp3.ResponseBody
 
 /**
  * Provides an API for querying identity endpoints.
@@ -65,7 +64,7 @@ interface IdentityService {
     /**
      * Send a verification email.
      */
-    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<ResponseBody?>
+    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<String?>
 
     /**
      * Register a new account to Bitwarden using email verification flow.

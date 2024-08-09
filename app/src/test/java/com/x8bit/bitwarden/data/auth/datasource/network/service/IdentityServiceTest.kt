@@ -395,14 +395,22 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `sendVerificationEmail when response is success should return ResponseBody`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
+    fun `sendVerificationEmail should return a string when response is populated success`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
+            val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST_JSON)
+            assertEquals(EMAIL_TOKEN.asSuccess(), result)
+        }
+
+    @Test
+    fun `sendVerificationEmail should return null when response is empty success`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(204))
         val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST_JSON)
-        assertTrue(result.isSuccess)
+        assertEquals(null.asSuccess(), result)
     }
 
     @Test
-    fun `sendVerificationEmail when response is an error should return an error`() = runTest {
+    fun `sendVerificationEmail should return an error when response is an error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(400))
         val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST_JSON)
         assertTrue(result.isFailure)
