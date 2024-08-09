@@ -11,6 +11,7 @@ import com.x8bit.bitwarden.data.platform.repository.model.BiometricsKeyResult
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModelTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.components.toggle.UnlockWithPinState
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -152,6 +153,62 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 settingsRepository.setupBiometricsKey()
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithPinToggle Disabled should set pin unlock to false and clear the PIN in settings`() {
+        val initialState = DEFAULT_STATE.copy(isUnlockWithPinEnabled = true)
+        every { settingsRepository.clearUnlockPin() } just runs
+        val viewModel = createViewModel(state = initialState)
+        viewModel.trySendAction(SetupUnlockAction.UnlockWithPinToggle(UnlockWithPinState.Disabled))
+        assertEquals(
+            initialState.copy(isUnlockWithPinEnabled = false),
+            viewModel.stateFlow.value,
+        )
+        verify(exactly = 1) {
+            settingsRepository.clearUnlockPin()
+        }
+    }
+
+    @Test
+    fun `on UnlockWithPinToggle PendingEnabled should set pin unlock to true`() {
+        val initialState = DEFAULT_STATE.copy(isUnlockWithPinEnabled = false)
+        val viewModel = createViewModel(state = initialState)
+        viewModel.trySendAction(
+            SetupUnlockAction.UnlockWithPinToggle(UnlockWithPinState.PendingEnabled),
+        )
+        assertEquals(
+            initialState.copy(isUnlockWithPinEnabled = true),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on UnlockWithPinToggle Enabled should set pin unlock to true and set the PIN in settings`() {
+        val initialState = DEFAULT_STATE.copy(isUnlockWithPinEnabled = false)
+        every { settingsRepository.storeUnlockPin(any(), any()) } just runs
+
+        val viewModel = createViewModel(state = initialState)
+        viewModel.trySendAction(
+            SetupUnlockAction.UnlockWithPinToggle(
+                UnlockWithPinState.Enabled(
+                    pin = "1234",
+                    shouldRequireMasterPasswordOnRestart = true,
+                ),
+            ),
+        )
+        assertEquals(
+            initialState.copy(isUnlockWithPinEnabled = true),
+            viewModel.stateFlow.value,
+        )
+        verify {
+            settingsRepository.storeUnlockPin(
+                pin = "1234",
+                shouldRequireMasterPasswordOnRestart = true,
+            )
+        }
+    }
 
     private fun createViewModel(
         state: SetupUnlockState? = null,
