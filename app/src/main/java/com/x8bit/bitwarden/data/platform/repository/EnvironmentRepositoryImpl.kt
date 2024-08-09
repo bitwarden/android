@@ -58,11 +58,14 @@ class EnvironmentRepositoryImpl(
     }
 
     override fun loadEnvironmentForEmail(userEmail: String): Boolean {
-        val urls = authDiskSource.getEmailVerificationUrls(userEmail) ?: return false
+        val urls = authDiskSource
+            .getEmailVerificationUrls(userEmail)
+            ?: return false
         environment = urls.toEnvironmentUrls()
         return true
     }
 
     override fun saveCurrentEnvironmentForEmail(userEmail: String) =
-        authDiskSource.storeEmailVerificationUrls(userEmail, environment.environmentUrlData)
+        authDiskSource
+            .storeEmailVerificationUrls(userEmail, environment.environmentUrlData)
 }

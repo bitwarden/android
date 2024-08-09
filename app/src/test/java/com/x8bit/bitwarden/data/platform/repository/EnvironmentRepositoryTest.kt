@@ -154,9 +154,13 @@ class EnvironmentRepositoryTest {
             every { environmentUrlData } returns environmentUrlDataJson
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
-        fakeAuthDiskSource.storeEmailVerificationUrls("email@example.com", environmentUrlDataJson)
 
-        repository.loadEnvironmentForEmail("email@example.com")
+        fakeAuthDiskSource.storeEmailVerificationUrls(
+            userEmail = "email@example.com",
+            environmentUrlDataJson,
+        )
+
+        repository.loadEnvironmentForEmail(userEmail = "email@example.com")
 
         assertEquals(
             environment,
@@ -171,14 +175,17 @@ class EnvironmentRepositoryTest {
             every { environmentUrlData } returns environmentUrlDataJson
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
-        repository.environment = Environment.Eu
-        fakeAuthDiskSource.storeEmailVerificationUrls("email@example.com", environmentUrlDataJson)
 
-        repository.saveCurrentEnvironmentForEmail("email@example.com")
+        repository.environment = Environment.Eu
+        fakeAuthDiskSource.storeEmailVerificationUrls(
+            userEmail = "email@example.com",
+            environmentUrlDataJson,)
+
+        repository.saveCurrentEnvironmentForEmail(userEmail = "email@example.com")
 
         assertEquals(
             Environment.Eu.environmentUrlData,
-            fakeAuthDiskSource.getEmailVerificationUrls("email@example.com"),
+            fakeAuthDiskSource.getEmailVerificationUrls(userEmail = "email@example.com"),
         )
     }
 
