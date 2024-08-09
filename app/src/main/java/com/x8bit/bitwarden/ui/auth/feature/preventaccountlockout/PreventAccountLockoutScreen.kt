@@ -74,46 +74,57 @@ fun PreventAccountLockoutScreen(
         },
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(size = 4.dp))
-                .background(MaterialTheme.colorScheme.surfaceContainerLowest),
+            modifier = Modifier.padding(innerPadding),
         ) {
-            Column(
-                modifier = Modifier.padding(24.dp),
-            ) {
-                Text(
-                    text = stringResource(R.string.never_lose_access_to_your_vault),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Text(
-                    text = stringResource(
-                        R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
-                    ),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            AccountRecoveryTipRow(
-                title = stringResource(R.string.create_a_hint),
-                description = stringResource(
-                    R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
-                ),
-                icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
-            )
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline)
-            AccountRecoveryTipRow(
-                title = stringResource(R.string.write_your_password_down),
-                description = stringResource(R.string.keep_it_secret_keep_it_safe),
-                icon = rememberVectorPainter(id = R.drawable.ic_edit),
-            )
+            NeverLoseAccessContent()
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
+    }
+}
+
+@Composable
+private fun NeverLoseAccessContent(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(size = 4.dp))
+            .background(MaterialTheme.colorScheme.surfaceContainerLowest),
+    ) {
+        Column(
+            modifier = Modifier.padding(24.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.never_lose_access_to_your_vault),
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = stringResource(
+                    R.string.the_best_way_to_make_sure_you_can_always_access_your_account,
+                ),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        AccountRecoveryTipRow(
+            title = stringResource(R.string.create_a_hint),
+            description = stringResource(
+                R.string.your_hint_will_be_send_to_you_via_email_when_you_request_it,
+            ),
+            icon = rememberVectorPainter(id = R.drawable.ic_light_bulb),
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        AccountRecoveryTipRow(
+            title = stringResource(R.string.write_your_password_down),
+            description = stringResource(R.string.keep_it_secret_keep_it_safe),
+            icon = rememberVectorPainter(id = R.drawable.ic_edit),
+        )
     }
 }
 

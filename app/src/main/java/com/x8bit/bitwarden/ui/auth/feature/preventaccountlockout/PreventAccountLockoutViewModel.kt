@@ -23,7 +23,7 @@ class PreventAccountLockoutViewModel @Inject constructor() :
 }
 
 /**
- * Model events to send to the [PreventAccountLockoutScreen].
+ * Model events to sent to the [PreventAccountLockoutScreen].
  */
 sealed class PreventAccountLockoutEvent {
 

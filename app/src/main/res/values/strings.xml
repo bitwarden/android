@@ -955,8 +955,8 @@ Do you want to switch to this account?</string>
   <string name="never_lose_access_to_your_vault">Never lose access to your vault</string>
   <string name="the_best_way_to_make_sure_you_can_always_access_your_account">The best way to make sure you can always access your account is to set up safeguards from the start.</string>
   <string name="create_a_hint">Create a hint</string>
-  <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Your hint will be send to you via email when you request it.</string>
+  <string name="your_hint_will_be_send_to_you_via_email_when_you_request_it">Your hint will be sent to you via email when you request it.</string>
   <string name="write_your_password_down">Write your password down</string>
-  <string name="keep_it_secret_keep_it_safe">Be careful to keep your written password somewhere secret and safe</string>
+  <string name="keep_it_secret_keep_it_safe">Be careful to keep your written password somewhere secret and safe.</string>
   <string name="prevent_account_lockout">Prevent account lockout</string>
 </resources>
