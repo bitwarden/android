@@ -128,7 +128,6 @@ class IdentityServiceImpl(
                         json = json,
                     )
                     ?: throw throwable
-
             }
 
     override suspend fun sendVerificationEmail(

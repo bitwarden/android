@@ -65,7 +65,9 @@ interface IdentityService {
     /**
      * Send a verification email.
      */
-    suspend fun sendVerificationEmail(body: SendVerificationEmailRequestJson): Result<JsonPrimitive?>
+    suspend fun sendVerificationEmail(
+        body: SendVerificationEmailRequestJson,
+    ): Result<JsonPrimitive?>
 
     /**
      * Register a new account to Bitwarden using email verification flow.
