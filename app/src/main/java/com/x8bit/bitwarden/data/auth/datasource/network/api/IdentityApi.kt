@@ -5,8 +5,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
+import kotlinx.serialization.json.JsonPrimitive
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -66,4 +69,14 @@ interface IdentityApi {
 
     @POST("/accounts/register")
     suspend fun register(@Body body: RegisterRequestJson): Result<RegisterResponseJson.Success>
+
+    @POST("/accounts/register/finish")
+    suspend fun registerFinish(
+        @Body body: RegisterFinishRequestJson,
+    ): Result<RegisterResponseJson.Success>
+
+    @POST("/accounts/register/send-verification-email")
+    suspend fun sendVerificationEmail(
+        @Body body: SendVerificationEmailRequestJson,
+    ): Result<JsonPrimitive?>
 }
