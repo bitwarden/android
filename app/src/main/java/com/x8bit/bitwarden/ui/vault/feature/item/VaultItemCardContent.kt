@@ -19,9 +19,11 @@ import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.icon.BitwardenIconButtonWithResource
 import com.x8bit.bitwarden.ui.platform.components.model.IconResource
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
+import com.x8bit.bitwarden.ui.vault.components.BankCardContent
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCardItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.item.handlers.VaultCommonItemTypeHandlers
 import com.x8bit.bitwarden.ui.vault.model.VaultCardBrand
+import com.x8bit.bitwarden.ui.vault.util.Constants.CARD_HOLDER_NAME_PLACEHOLDER_TEXT
 import com.x8bit.bitwarden.ui.vault.util.shortName
 
 /**
@@ -37,6 +39,16 @@ fun VaultItemCardContent(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
+        item {
+            BankCardContent(
+                holderName = cardState.cardholderName.orEmpty().ifEmpty { CARD_HOLDER_NAME_PLACEHOLDER_TEXT },
+                number = cardState.number?.number.orEmpty(),
+                expiry = cardState.expiration.orEmpty(),
+                cvv = cardState.securityCode?.code.orEmpty(),
+                onCardNumberClick = vaultCardItemTypeHandlers.onCopyNumberClick,
+                onSecurityCodeClick = vaultCardItemTypeHandlers.onCopySecurityCodeClick
+            )
+        }
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),

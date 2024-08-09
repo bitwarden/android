@@ -17,10 +17,12 @@ import com.x8bit.bitwarden.ui.platform.components.dropdown.BitwardenMultiSelectB
 import com.x8bit.bitwarden.ui.platform.components.header.BitwardenListHeaderText
 import com.x8bit.bitwarden.ui.platform.components.text.BitwardenPolicyWarningText
 import com.x8bit.bitwarden.ui.platform.manager.permissions.PermissionsManager
+import com.x8bit.bitwarden.ui.vault.components.BankCardContent
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCardTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditCommonHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditIdentityTypeHandlers
 import com.x8bit.bitwarden.ui.vault.feature.addedit.handlers.VaultAddEditLoginTypeHandlers
+import com.x8bit.bitwarden.ui.vault.util.Constants.CARD_HOLDER_NAME_PLACEHOLDER_TEXT
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -65,6 +67,18 @@ fun VaultAddEditContent(
             }
         }
 
+        if (state.type is VaultAddEditState.ViewState.Content.ItemType.Card) {
+            item {
+                BankCardContent(
+                    holderName = state.type.cardHolderName.ifEmpty { CARD_HOLDER_NAME_PLACEHOLDER_TEXT },
+                    number = state.type.number,
+                    expiry = state.type.expirationMonth.number + "/" + state.type.expirationYear,
+                    cvv = state.type.securityCode,
+                    editable = true
+                )
+            }
+        }
+
         item {
             BitwardenListHeaderText(
                 label = stringResource(id = R.string.item_information),
@@ -73,6 +87,7 @@ fun VaultAddEditContent(
                     .padding(horizontal = 16.dp),
             )
         }
+
         if (isAddItemMode) {
             item {
                 Spacer(modifier = Modifier.height(8.dp))
