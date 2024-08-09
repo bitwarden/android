@@ -10,7 +10,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJso
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorDataModel
-import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * Provides an API for querying identity endpoints.
@@ -67,7 +66,7 @@ interface IdentityService {
      */
     suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson,
-    ): Result<JsonPrimitive?>
+    ): Result<String?>
 
     /**
      * Register a new account to Bitwarden using email verification flow.
