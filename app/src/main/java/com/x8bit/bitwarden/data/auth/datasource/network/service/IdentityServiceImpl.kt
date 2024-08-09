@@ -18,7 +18,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.util.executeForResul
 import com.x8bit.bitwarden.data.platform.datasource.network.util.parseErrorBodyOrNull
 import com.x8bit.bitwarden.data.platform.util.DeviceModelProvider
 import kotlinx.serialization.json.Json
-import okhttp3.ResponseBody
 
 class IdentityServiceImpl(
     private val api: IdentityApi,
@@ -35,16 +34,21 @@ class IdentityServiceImpl(
             .register(body)
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
-                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
-                    code = 400,
-                    json = json,
-                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                    codes = listOf(400, 429),
-                    json = json,
-                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                    code = 429,
-                    json = json,
-                ) ?: throw throwable
+                bitwardenError
+                    .parseErrorBodyOrNull<RegisterResponseJson.CaptchaRequired>(
+                        code = 400,
+                        json = json,
+                    )
+                    ?: bitwardenError
+                        .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                            codes = listOf(400, 429),
+                            json = json,
+                        )
+                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
+                        code = 429,
+                        json = json,
+                    )
+                    ?: throw throwable
             }
 
     @Suppress("MagicNumber")
@@ -113,18 +117,23 @@ class IdentityServiceImpl(
             .registerFinish(body)
             .recoverCatching { throwable ->
                 val bitwardenError = throwable.toBitwardenError()
-                bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
-                    codes = listOf(400, 429),
-                    json = json,
-                ) ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
-                    code = 429,
-                    json = json,
-                ) ?: throw throwable
+                bitwardenError
+                    .parseErrorBodyOrNull<RegisterResponseJson.Invalid>(
+                        codes = listOf(400, 429),
+                        json = json,
+                    )
+                    ?: bitwardenError.parseErrorBodyOrNull<RegisterResponseJson.Error>(
+                        code = 429,
+                        json = json,
+                    )
+                    ?: throw throwable
             }
 
     override suspend fun sendVerificationEmail(
         body: SendVerificationEmailRequestJson,
-    ): Result<ResponseBody?> {
-        return api.sendVerificationEmail(body = body)
+    ): Result<String?> {
+        return api
+            .sendVerificationEmail(body = body)
+            .map { it?.content }
     }
 }

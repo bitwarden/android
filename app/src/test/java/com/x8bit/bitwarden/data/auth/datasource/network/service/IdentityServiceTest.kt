@@ -134,15 +134,10 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register success json should be Success`() = runTest {
-        val json = """
-            {
-              "captchaBypassToken": "mock_token"
-            }
-            """
         val expectedResponse = RegisterResponseJson.Success(
             captchaBypassToken = "mock_token",
         )
-        val response = MockResponse().setBody(json)
+        val response = MockResponse().setBody(CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON)
         server.enqueue(response)
         assertEquals(
             expectedResponse.asSuccess(),
@@ -152,21 +147,9 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register failure with Invalid json should be Invalid`() = runTest {
-        val json = """
-            {
-              "message": "The model state is invalid.",
-              "validationErrors": {
-                "": [
-                  "Email '' is already taken."
-                ]
-              },
-              "exceptionMessage": null,
-              "exceptionStackTrace": null,
-              "innerExceptionMessage": null,
-              "object": "error"
-            }
-            """
-        val response = MockResponse().setResponseCode(400).setBody(json)
+        val response = MockResponse().setResponseCode(400).setBody(
+            INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON,
+        )
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
@@ -180,13 +163,7 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register failure with Error json should return Error`() = runTest {
-        val json = """
-            {
-              "Object": "error",
-              "Message": "Slow down! Too many requests. Try again soon."
-            }
-        """.trimIndent()
-        val response = MockResponse().setResponseCode(429).setBody(json)
+        val response = MockResponse().setResponseCode(429).setBody(TOO_MANY_REQUEST_ERROR_JSON)
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
@@ -331,15 +308,10 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `registerFinish success json should be Success`() = runTest {
-        val json = """
-            {
-              "captchaBypassToken": "mock_token"
-            }
-            """
         val expectedResponse = RegisterResponseJson.Success(
             captchaBypassToken = "mock_token",
         )
-        val response = MockResponse().setBody(json)
+        val response = MockResponse().setBody(CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON)
         server.enqueue(response)
         assertEquals(
             expectedResponse.asSuccess(),
@@ -349,21 +321,9 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `registerFinish failure with Invalid json should be Invalid`() = runTest {
-        val json = """
-            {
-              "message": "The model state is invalid.",
-              "validationErrors": {
-                "": [
-                  "Email '' is already taken."
-                ]
-              },
-              "exceptionMessage": null,
-              "exceptionStackTrace": null,
-              "innerExceptionMessage": null,
-              "object": "error"
-            }
-            """
-        val response = MockResponse().setResponseCode(400).setBody(json)
+        val response = MockResponse().setResponseCode(400).setBody(
+            INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON,
+        )
         server.enqueue(response)
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
@@ -377,13 +337,7 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `registerFinish failure with Error json should return Error`() = runTest {
-        val json = """
-            {
-              "Object": "error",
-              "Message": "Slow down! Too many requests. Try again soon."
-            }
-        """.trimIndent()
-        val response = MockResponse().setResponseCode(429).setBody(json)
+        val response = MockResponse().setResponseCode(429).setBody(TOO_MANY_REQUEST_ERROR_JSON)
         server.enqueue(response)
         val result = identityService.registerFinish(registerFinishRequestBody)
         assertEquals(
@@ -395,16 +349,24 @@ class IdentityServiceTest : BaseServiceTest() {
     }
 
     @Test
-    fun `sendVerificationEmail when response is success should return ResponseBody`() = runTest {
-        server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
-        val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST_JSON)
-        assertTrue(result.isSuccess)
+    fun `sendVerificationEmail should return a string when response is populated success`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
+            val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
+            assertEquals(JsonPrimitive(EMAIL_TOKEN).content.asSuccess(), result)
+        }
+
+    @Test
+    fun `sendVerificationEmail should return null when response is empty success`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(204))
+        val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
+        assertEquals(null.asSuccess(), result)
     }
 
     @Test
-    fun `sendVerificationEmail when response is an error should return an error`() = runTest {
+    fun `sendVerificationEmail should return an error when response is an error`() = runTest {
         server.enqueue(MockResponse().setResponseCode(400))
-        val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST_JSON)
+        val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
         assertTrue(result.isFailure)
     }
 
@@ -580,13 +542,41 @@ private const val INVALID_LOGIN_JSON = """
 }
 """
 
+private const val TOO_MANY_REQUEST_ERROR_JSON = """
+{
+  "Object": "error",
+  "Message": "Slow down! Too many requests. Try again soon."
+}
+"""
+
+private const val INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON = """
+{
+  "message": "The model state is invalid.",
+  "validationErrors": {
+    "": [
+      "Email '' is already taken."
+    ]
+  },
+  "exceptionMessage": null,
+  "exceptionStackTrace": null,
+  "innerExceptionMessage": null,
+  "object": "error"
+}
+"""
+
+private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
+{
+  "captchaBypassToken": "mock_token"
+}
+"""
+
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
         errorMessage = "123",
     ),
 )
 
-private val SEND_VERIFICATION_EMAIL_REQUEST_JSON = SendVerificationEmailRequestJson(
+private val SEND_VERIFICATION_EMAIL_REQUEST = SendVerificationEmailRequestJson(
     email = "email@example.com",
     name = "Name Example",
     receiveMarketingEmails = true,

@@ -9,7 +9,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequ
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
-import okhttp3.ResponseBody
+import kotlinx.serialization.json.JsonPrimitive
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -78,5 +78,5 @@ interface IdentityApi {
     @POST("/accounts/register/send-verification-email")
     suspend fun sendVerificationEmail(
         @Body body: SendVerificationEmailRequestJson,
-    ): Result<ResponseBody?>
+    ): Result<JsonPrimitive?>
 }
