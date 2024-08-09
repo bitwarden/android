@@ -36,16 +36,23 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.util.isPortrait
+
+/**
+ * The custom horizontal margin that is specific to this screen.
+ */
+private val LANDSCAPE_HORIZONTAL_MARGIN: Dp = 128.dp
 
 /**
  * Top level composable for the welcome screen.
@@ -107,9 +114,6 @@ private fun WelcomeScreenContent(
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLandscape = !LocalConfiguration.current.isPortrait
-    val horizontalPadding = if (isLandscape) 128.dp else 16.dp
-
     LaunchedEffect(pagerState.currentPage) {
         onPagerSwipe(pagerState.currentPage)
     }
@@ -121,15 +125,16 @@ private fun WelcomeScreenContent(
         Spacer(modifier = Modifier.weight(1f))
 
         HorizontalPager(state = pagerState) { index ->
-            if (isLandscape) {
-                WelcomeCardLandscape(
-                    state = state.pages[index],
-                    modifier = Modifier.padding(horizontal = horizontalPadding),
-                )
-            } else {
+            if (LocalConfiguration.current.isPortrait) {
                 WelcomeCardPortrait(
                     state = state.pages[index],
-                    modifier = Modifier.padding(horizontal = horizontalPadding),
+                    modifier = Modifier.standardHorizontalMargin(),
+                )
+            } else {
+                WelcomeCardLandscape(
+                    state = state.pages[index],
+                    modifier = Modifier
+                        .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN),
                 )
             }
         }
@@ -149,7 +154,7 @@ private fun WelcomeScreenContent(
             label = stringResource(id = R.string.create_account),
             onClick = onCreateAccountClick,
             modifier = Modifier
-                .padding(horizontal = horizontalPadding)
+                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
                 .fillMaxWidth(),
         )
 
@@ -157,7 +162,7 @@ private fun WelcomeScreenContent(
             label = stringResource(id = R.string.log_in),
             onClick = onLoginClick,
             modifier = Modifier
-                .padding(horizontal = horizontalPadding)
+                .standardHorizontalMargin(landscape = LANDSCAPE_HORIZONTAL_MARGIN)
                 .padding(bottom = 32.dp),
         )
 

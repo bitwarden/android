@@ -1,5 +1,6 @@
 package com.x8bit.bitwarden.ui.platform.base.util
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -19,12 +20,14 @@ import androidx.compose.ui.input.key.isShiftPressed
 import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
+import com.x8bit.bitwarden.ui.platform.util.isPortrait
 
 /**
  * Adds a performance-optimized background color specified by the given [topAppBarScrollBehavior]
@@ -119,4 +122,18 @@ fun Modifier.tabNavigation(): Modifier {
             false
         }
     }
+}
+
+/**
+ * This is a [Modifier] extension for ensuring that the content uses the standard horizontal margin.
+ */
+@OmitFromCoverage
+@Stable
+@Composable
+fun Modifier.standardHorizontalMargin(
+    portrait: Dp = 16.dp,
+    landscape: Dp = 48.dp,
+): Modifier {
+    val config = LocalConfiguration.current
+    return this.padding(horizontal = if (config.isPortrait) portrait else landscape)
 }
