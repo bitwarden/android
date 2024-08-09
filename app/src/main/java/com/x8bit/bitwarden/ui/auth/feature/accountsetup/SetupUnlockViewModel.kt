@@ -103,7 +103,22 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleUnlockWithPinToggle(action: SetupUnlockAction.UnlockWithPinToggle) {
-        // TODO: Handle pin unlocking logic PM-10628
+        mutableStateFlow.update {
+            it.copy(isUnlockWithPinEnabled = action.state.isUnlockWithPinEnabled)
+        }
+
+        when (val state = action.state) {
+            UnlockWithPinState.PendingEnabled -> Unit
+            UnlockWithPinState.Disabled -> settingsRepository.clearUnlockPin()
+
+            is UnlockWithPinState.Enabled -> {
+                settingsRepository.storeUnlockPin(
+                    pin = state.pin,
+                    shouldRequireMasterPasswordOnRestart =
+                    state.shouldRequireMasterPasswordOnRestart,
+                )
+            }
+        }
     }
 
     private fun handleInternalActions(action: SetupUnlockAction.Internal) {
