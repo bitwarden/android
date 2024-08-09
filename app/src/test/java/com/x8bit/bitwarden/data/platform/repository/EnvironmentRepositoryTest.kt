@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -169,6 +170,12 @@ class EnvironmentRepositoryTest {
     }
 
     @Test
+    fun `loadEnvironmentForEmail returns false on fail`() = runTest {
+        val result = repository.loadEnvironmentForEmail(userEmail = EMAIL)
+        assertFalse(result)
+    }
+
+    @Test
     fun `saveCurrentEnvironmentForEmail should save the environment`() = runTest {
         val environmentUrlDataJson = mockk<EnvironmentUrlDataJson>()
         val environment = mockk<Environment> {
@@ -179,7 +186,8 @@ class EnvironmentRepositoryTest {
         repository.environment = Environment.Eu
         fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
             userEmail = EMAIL,
-            environmentUrlDataJson,)
+            environmentUrlDataJson,
+        )
 
         repository.saveCurrentEnvironmentForEmail(userEmail = EMAIL)
 
