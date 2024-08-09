@@ -19,6 +19,7 @@ import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedPasswo
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratedRandomWordUsernameResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.GeneratorResult
 import com.x8bit.bitwarden.data.tools.generator.repository.model.PasscodeGenerationOptions
+import com.x8bit.bitwarden.data.tools.generator.repository.model.UsernameGenerationOptions
 import com.x8bit.bitwarden.data.tools.generator.repository.util.FakeGeneratorRepository
 import com.x8bit.bitwarden.data.vault.datasource.network.model.PolicyTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -110,6 +111,70 @@ class GeneratorViewModelTest : BaseViewModelTest() {
     fun `initial state should be correct when there is a saved state`() {
         val viewModel = createViewModel(state = initialPasscodeState)
         assertEquals(initialPasscodeState, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct for username modal`() {
+        val usernameGenerationOptions = UsernameGenerationOptions(
+            type = UsernameGenerationOptions.UsernameType.RANDOM_WORD,
+        )
+        fakeGeneratorRepository.saveUsernameGenerationOptions(usernameGenerationOptions)
+        val expected = GeneratorState(
+            generatedText = "randomWord",
+            selectedType = GeneratorState.MainType.Username(
+                selectedType = GeneratorState.MainType.Username.UsernameType.RandomWord(
+                    capitalize = false,
+                    includeNumber = false,
+                ),
+            ),
+            generatorMode = GeneratorMode.Modal.Username(website = ""),
+            currentEmailAddress = "currentEmail",
+            isUnderPolicy = false,
+            website = "",
+        )
+
+        val viewModel = createViewModel(
+            state = null,
+            type = "username_generator",
+            website = "",
+        )
+        assertEquals(expected, viewModel.stateFlow.value)
+    }
+
+    @Test
+    fun `initial state should be correct for passcode modal`() {
+        val passcodeGenerationOptions = PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSPHRASE,
+            length = 14,
+            allowAmbiguousChar = true,
+            hasNumbers = true,
+            minNumber = 1,
+            hasUppercase = true,
+            hasLowercase = true,
+            allowSpecial = false,
+            minSpecial = 1,
+            numWords = 3,
+            wordSeparator = "-",
+            allowCapitalize = false,
+            allowIncludeNumber = false,
+        )
+        fakeGeneratorRepository.savePasscodeGenerationOptions(passcodeGenerationOptions)
+        val expected = GeneratorState(
+            generatedText = "updatedPassphrase",
+            selectedType = GeneratorState.MainType.Passcode(
+                selectedType = GeneratorState.MainType.Passcode.PasscodeType.Passphrase(),
+            ),
+            generatorMode = GeneratorMode.Modal.Password,
+            currentEmailAddress = "currentEmail",
+            isUnderPolicy = false,
+            website = null,
+        )
+
+        val viewModel = createViewModel(
+            state = null,
+            type = "password_generator",
+        )
+        assertEquals(expected, viewModel.stateFlow.value)
     }
 
     @Test
@@ -2338,8 +2403,14 @@ class GeneratorViewModelTest : BaseViewModelTest() {
 
     private fun createViewModel(
         state: GeneratorState? = initialPasscodeState,
+        type: String? = null,
+        website: String? = null,
     ): GeneratorViewModel = createViewModel(
-        savedStateHandle = SavedStateHandle().apply { set("state", state) },
+        savedStateHandle = SavedStateHandle().apply {
+            set("state", state)
+            set("generator_mode_type", type)
+            set("generator_website", website)
+        },
     )
 
     private fun setupMockPassphraseTypePolicy() {
