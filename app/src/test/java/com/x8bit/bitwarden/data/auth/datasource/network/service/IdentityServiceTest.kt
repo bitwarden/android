@@ -9,8 +9,10 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.MasterPasswordPoli
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PreLoginResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PrevalidateSsoResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RefreshTokenResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterFinishRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.SendVerificationEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TrustedDeviceUserDecryptionOptionsJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.TwoFactorAuthMethod
 import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOptionsJson
@@ -132,15 +134,10 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register success json should be Success`() = runTest {
-        val json = """
-            {
-              "captchaBypassToken": "mock_token"
-            }
-            """
         val expectedResponse = RegisterResponseJson.Success(
             captchaBypassToken = "mock_token",
         )
-        val response = MockResponse().setBody(json)
+        val response = MockResponse().setBody(CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON)
         server.enqueue(response)
         assertEquals(
             expectedResponse.asSuccess(),
@@ -150,21 +147,9 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register failure with Invalid json should be Invalid`() = runTest {
-        val json = """
-            {
-              "message": "The model state is invalid.",
-              "validationErrors": {
-                "": [
-                  "Email '' is already taken."
-                ]
-              },
-              "exceptionMessage": null,
-              "exceptionStackTrace": null,
-              "innerExceptionMessage": null,
-              "object": "error"
-            }
-            """
-        val response = MockResponse().setResponseCode(400).setBody(json)
+        val response = MockResponse().setResponseCode(400).setBody(
+            INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON,
+        )
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
@@ -178,13 +163,7 @@ class IdentityServiceTest : BaseServiceTest() {
 
     @Test
     fun `register failure with Error json should return Error`() = runTest {
-        val json = """
-            {
-              "Object": "error",
-              "Message": "Slow down! Too many requests. Try again soon."
-            }
-        """.trimIndent()
-        val response = MockResponse().setResponseCode(429).setBody(json)
+        val response = MockResponse().setResponseCode(429).setBody(TOO_MANY_REQUEST_ERROR_JSON)
         server.enqueue(response)
         val result = identityService.register(registerRequestBody)
         assertEquals(
@@ -327,9 +306,74 @@ class IdentityServiceTest : BaseServiceTest() {
         assertTrue(result.isFailure)
     }
 
+    @Test
+    fun `registerFinish success json should be Success`() = runTest {
+        val expectedResponse = RegisterResponseJson.Success(
+            captchaBypassToken = "mock_token",
+        )
+        val response = MockResponse().setBody(CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON)
+        server.enqueue(response)
+        assertEquals(
+            expectedResponse.asSuccess(),
+            identityService.registerFinish(registerFinishRequestBody),
+        )
+    }
+
+    @Test
+    fun `registerFinish failure with Invalid json should be Invalid`() = runTest {
+        val response = MockResponse().setResponseCode(400).setBody(
+            INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON,
+        )
+        server.enqueue(response)
+        val result = identityService.registerFinish(registerFinishRequestBody)
+        assertEquals(
+            RegisterResponseJson.Invalid(
+                message = "The model state is invalid.",
+                validationErrors = mapOf("" to listOf("Email '' is already taken.")),
+            ),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `registerFinish failure with Error json should return Error`() = runTest {
+        val response = MockResponse().setResponseCode(429).setBody(TOO_MANY_REQUEST_ERROR_JSON)
+        server.enqueue(response)
+        val result = identityService.registerFinish(registerFinishRequestBody)
+        assertEquals(
+            RegisterResponseJson.Error(
+                message = "Slow down! Too many requests. Try again soon.",
+            ),
+            result.getOrThrow(),
+        )
+    }
+
+    @Test
+    fun `sendVerificationEmail should return a string when response is populated success`() =
+        runTest {
+            server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
+            val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
+            assertEquals(JsonPrimitive(EMAIL_TOKEN).content.asSuccess(), result)
+        }
+
+    @Test
+    fun `sendVerificationEmail should return null when response is empty success`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(204))
+        val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
+        assertEquals(null.asSuccess(), result)
+    }
+
+    @Test
+    fun `sendVerificationEmail should return an error when response is an error`() = runTest {
+        server.enqueue(MockResponse().setResponseCode(400))
+        val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST)
+        assertTrue(result.isFailure)
+    }
+
     companion object {
         private const val UNIQUE_APP_ID = "testUniqueAppId"
         private const val REFRESH_TOKEN = "refreshToken"
+        private const val EMAIL_TOKEN = "emailToken"
         private const val EMAIL = "email"
         private const val PASSWORD_HASH = "passwordHash"
         private val registerRequestBody = RegisterRequestJson(
@@ -339,6 +383,20 @@ class IdentityServiceTest : BaseServiceTest() {
             captchaResponse = "mockk_captchaResponse",
             key = "mockk_key",
             keys = RegisterRequestJson.Keys(
+                publicKey = "mockk_publicKey",
+                encryptedPrivateKey = "mockk_encryptedPrivateKey",
+            ),
+            kdfType = KdfTypeJson.PBKDF2_SHA256,
+            kdfIterations = 600000U,
+        )
+        private val registerFinishRequestBody = RegisterFinishRequestJson(
+            email = EMAIL,
+            masterPasswordHash = "mockk_masterPasswordHash",
+            masterPasswordHint = "mockk_masterPasswordHint",
+            emailVerificationToken = "mock_emailVerificationToken",
+            captchaResponse = "mockk_captchaResponse",
+            userSymmetricKey = "mockk_key",
+            userAsymmetricKeys = RegisterFinishRequestJson.Keys(
                 publicKey = "mockk_publicKey",
                 encryptedPrivateKey = "mockk_encryptedPrivateKey",
             ),
@@ -484,8 +542,42 @@ private const val INVALID_LOGIN_JSON = """
 }
 """
 
+private const val TOO_MANY_REQUEST_ERROR_JSON = """
+{
+  "Object": "error",
+  "Message": "Slow down! Too many requests. Try again soon."
+}
+"""
+
+private const val INVALID_MODEL_STATE_EMAIL_TAKEN_ERROR_JSON = """
+{
+  "message": "The model state is invalid.",
+  "validationErrors": {
+    "": [
+      "Email '' is already taken."
+    ]
+  },
+  "exceptionMessage": null,
+  "exceptionStackTrace": null,
+  "innerExceptionMessage": null,
+  "object": "error"
+}
+"""
+
+private const val CAPTCHA_BYPASS_TOKEN_RESPONSE_JSON = """
+{
+  "captchaBypassToken": "mock_token"
+}
+"""
+
 private val INVALID_LOGIN = GetTokenResponseJson.Invalid(
     errorModel = GetTokenResponseJson.Invalid.ErrorModel(
         errorMessage = "123",
     ),
+)
+
+private val SEND_VERIFICATION_EMAIL_REQUEST = SendVerificationEmailRequestJson(
+    email = "email@example.com",
+    name = "Name Example",
+    receiveMarketingEmails = true,
 )
