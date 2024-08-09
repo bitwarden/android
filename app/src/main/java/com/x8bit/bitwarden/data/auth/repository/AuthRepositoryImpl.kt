@@ -1197,7 +1197,7 @@ class AuthRepositoryImpl(
             )
             .fold(
                 onSuccess = {
-                    SendVerificationEmailResult.Success(it)
+                    SendVerificationEmailResult.Success(it?.content)
                 },
                 onFailure = {
                     SendVerificationEmailResult.Error(null)

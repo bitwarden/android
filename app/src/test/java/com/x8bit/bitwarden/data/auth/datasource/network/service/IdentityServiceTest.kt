@@ -399,7 +399,7 @@ class IdentityServiceTest : BaseServiceTest() {
         runTest {
             server.enqueue(MockResponse().setResponseCode(200).setBody(EMAIL_TOKEN))
             val result = identityService.sendVerificationEmail(SEND_VERIFICATION_EMAIL_REQUEST_JSON)
-            assertEquals(EMAIL_TOKEN.asSuccess(), result)
+            assertEquals(JsonPrimitive(EMAIL_TOKEN).content.asSuccess(), result)
         }
 
     @Test

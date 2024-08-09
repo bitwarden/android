@@ -5385,7 +5385,7 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
+        } returns JsonPrimitive(EMAIL_VERIFICATION_TOKEN).asSuccess()
 
         var result = repository.sendVerificationEmail(
             email = EMAIL,
