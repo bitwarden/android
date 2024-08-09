@@ -928,7 +928,6 @@ Pretende mudar para esta conta?</string>
   <string name="user_verification_direction">Verificação do utilizador</string>
   <string name="privacy_prioritized">Privacidade, priorizada</string>
   <string name="welcome_message_1">Guarde credenciais, cartões e identidades no seu cofre seguro. O Bitwarden utiliza encriptação de conhecimento zero e de ponto a ponto para proteger o que é importante para si.</string>
-  <string name="never_guess_again">Nunca mais volte a adivinhar</string>
   <string name="welcome_message_2">Configure o desbloqueio biométrico e o preenchimento automático para iniciar sessão nas suas contas sem escrever uma única letra.</string>
   <string name="level_up_your_logins">Eleve o nível das suas credenciais</string>
   <string name="welcome_message_3">Utilize o gerador para criar e guardar palavras-passe fortes e únicas para todas as suas contas.</string>

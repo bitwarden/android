@@ -929,7 +929,6 @@ Bạn có muốn chuyển sang tài khoản này không?</string>
   <string name="user_verification_direction">Xác minh người dùng</string>
   <string name="privacy_prioritized">Bảo mật, riêng tư</string>
   <string name="welcome_message_1">Lưu thông tin đăng nhập, thẻ tín dụng và danh tính vào kho lưu trữ an toàn của bạn. Bitwarden sử dụng mã hóa đầu cuối không cần kiến ​​thức để bảo vệ những gì quan trọng với bạn.</string>
-  <string name="never_guess_again">Không phải nhớ nữa</string>
   <string name="welcome_message_2">Thiết lập mở khóa sinh trắc học và tự động điền để đăng nhập vào tài khoản của bạn mà không cần nhập tay.</string>
   <string name="level_up_your_logins">Nâng cấp thông tin đăng nhập của bạn</string>
   <string name="welcome_message_3">Sử dụng trình tạo mật khẩu để tạo và lưu trữ các mật khẩu mạnh, duy nhất cho mọi tài khoản của bạn.</string>

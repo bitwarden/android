@@ -929,7 +929,6 @@
   <string name="user_verification_direction">用户验证</string>
   <string name="privacy_prioritized">Privacy, prioritized</string>
   <string name="welcome_message_1">将登录、支付卡和身份保存到您的安全密码库。Bitwarden 使用零知识、端到端的加密来保护您的重要信息。</string>
-  <string name="never_guess_again">再也不用去猜密码了</string>
   <string name="welcome_message_2">设置生物识别解锁和自动填充，无需输入任何字符即可登录您的账户。</string>
   <string name="level_up_your_logins">提升您的登录体验</string>
   <string name="welcome_message_3">使用生成器创建和保存强大且唯一的密码，以保护您的所有账户。</string>
