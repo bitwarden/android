@@ -5,7 +5,7 @@ import com.bitwarden.send.SendFile
 import com.bitwarden.send.SendText
 import com.bitwarden.send.SendType
 import com.bitwarden.send.SendView
-import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
+import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SendTypeJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -133,7 +133,7 @@ private fun SendTypeJson.toSdkSendType(): SendType =
 fun List<SendView>.sortAlphabetically(): List<SendView> {
     return this.sortedWith(
         comparator = { send1, send2 ->
-            CompareStringSpecialCharWithPrecedence.compare(send1.name, send2.name)
+            SpecialCharWithPrecedenceComparator.compare(send1.name, send2.name)
         },
     )
 }

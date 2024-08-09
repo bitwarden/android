@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.vault.Collection
 import com.bitwarden.vault.CollectionView
-import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
+import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 
 /**
@@ -33,7 +33,7 @@ fun List<SyncResponseJson.Collection>.toEncryptedSdkCollectionList(): List<Colle
 fun List<CollectionView>.sortAlphabetically(): List<CollectionView> {
     return this.sortedWith(
         comparator = { collection1, collection2 ->
-            CompareStringSpecialCharWithPrecedence.compare(collection1.name, collection2.name)
+            SpecialCharWithPrecedenceComparator.compare(collection1.name, collection2.name)
         },
     )
 }

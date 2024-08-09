@@ -2,7 +2,7 @@ package com.x8bit.bitwarden.data.vault.repository.util
 
 import com.bitwarden.vault.Folder
 import com.bitwarden.vault.FolderView
-import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
+import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.FolderJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
 
@@ -38,7 +38,7 @@ fun Folder.toEncryptedNetworkFolder(): FolderJsonRequest =
 fun List<FolderView>.sortAlphabetically(): List<FolderView> {
     return this.sortedWith(
         comparator = { folder1, folder2 ->
-            CompareStringSpecialCharWithPrecedence.compare(folder1.name, folder2.name)
+            SpecialCharWithPrecedenceComparator.compare(folder1.name, folder2.name)
         },
     )
 }

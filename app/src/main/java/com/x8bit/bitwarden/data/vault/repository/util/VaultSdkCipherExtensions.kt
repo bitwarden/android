@@ -18,7 +18,7 @@ import com.bitwarden.vault.PasswordHistory
 import com.bitwarden.vault.SecureNote
 import com.bitwarden.vault.SecureNoteType
 import com.bitwarden.vault.UriMatchType
-import com.x8bit.bitwarden.data.platform.util.CompareStringSpecialCharWithPrecedence
+import com.x8bit.bitwarden.data.platform.util.SpecialCharWithPrecedenceComparator
 import com.x8bit.bitwarden.data.vault.datasource.network.model.AttachmentJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherJsonRequest
 import com.x8bit.bitwarden.data.vault.datasource.network.model.CipherRepromptTypeJson
@@ -560,7 +560,7 @@ fun FieldTypeJson.toSdkFieldType(): FieldType =
 fun List<CipherView>.sortAlphabetically(): List<CipherView> {
     return this.sortedWith(
         comparator = { cipher1, cipher2 ->
-            CompareStringSpecialCharWithPrecedence.compare(cipher1.name, cipher2.name)
+            SpecialCharWithPrecedenceComparator.compare(cipher1.name, cipher2.name)
         },
     )
 }
