@@ -24,6 +24,7 @@ import com.x8bit.bitwarden.data.vault.repository.model.DeleteSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.RemovePasswordSendResult
 import com.x8bit.bitwarden.data.vault.repository.model.UpdateSendResult
 import com.x8bit.bitwarden.ui.platform.base.BaseViewModel
+import com.x8bit.bitwarden.ui.platform.base.util.BackgroundEvent
 import com.x8bit.bitwarden.ui.platform.base.util.Text
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.concat
@@ -868,7 +869,9 @@ sealed class AddSendEvent {
     /**
      * Show share sheet.
      */
-    data class ShowShareSheet(val message: String) : AddSendEvent()
+    data class ShowShareSheet(
+        val message: String,
+    ) : BackgroundEvent, AddSendEvent()
 
     /**
      * Show Toast.
