@@ -270,7 +270,6 @@ class GeneratorViewModel @Inject constructor(
         when (val selectedType = state.selectedType) {
             is Passcode -> loadPasscodeOptions(
                 selectedType = selectedType,
-                usePolicyDefault = false,
             )
 
             is Username -> loadUsernameOptions(
@@ -281,26 +280,14 @@ class GeneratorViewModel @Inject constructor(
     }
 
     @Suppress("CyclomaticComplexMethod")
-    private fun loadPasscodeOptions(selectedType: Passcode, usePolicyDefault: Boolean) {
-        val passwordType = if (usePolicyDefault) {
-            Passcode(
-                selectedType = generatorRepository
-                    .getPasswordGeneratorPolicy()
-                    ?.defaultType
-                    ?.toSelectedType()
-                    ?: Password(),
-            )
-        } else {
-            selectedType
-        }
-
+    private fun loadPasscodeOptions(selectedType: Passcode) {
         val options = generatorRepository.getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
 
         val policy = policyManager
             .getActivePolicies<PolicyInformation.PasswordGenerator>()
             .toStrictestPolicy()
-        when (passwordType.selectedType) {
+        when (selectedType.selectedType) {
             is Passphrase -> {
                 val minNumWords = policy.minNumberWords ?: Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
                 val passphrase = Passphrase(
@@ -702,7 +689,6 @@ class GeneratorViewModel @Inject constructor(
                 val type = generatorRepository.getPasscodeGenerationOptions().passcodeType
                 loadPasscodeOptions(
                     selectedType = Passcode(selectedType = type),
-                    usePolicyDefault = false,
                 )
             }
 
@@ -726,12 +712,10 @@ class GeneratorViewModel @Inject constructor(
         when (action.passcodeTypeOption) {
             PasscodeTypeOption.PASSWORD -> loadPasscodeOptions(
                 selectedType = Passcode(selectedType = Password()),
-                usePolicyDefault = false,
             )
 
             PasscodeTypeOption.PASSPHRASE -> loadPasscodeOptions(
                 selectedType = Passcode(selectedType = Passphrase()),
-                usePolicyDefault = false,
             )
         }
     }
