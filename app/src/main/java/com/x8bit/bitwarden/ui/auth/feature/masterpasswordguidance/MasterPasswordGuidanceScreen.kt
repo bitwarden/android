@@ -56,7 +56,6 @@ fun MasterPasswordGuidanceScreen(
     onNavigateToGeneratePassword: () -> Unit,
     viewModel: MasterPasswordGuidanceViewModel = hiltViewModel(),
 ) {
-
     EventsEffect(viewModel = viewModel) { event ->
         when (event) {
             MasterPasswordGuidanceEvent.NavigateBack -> onNavigateBack()
@@ -118,7 +117,7 @@ fun MasterPasswordGuidanceScreen(
                         ),
                     )
                 }
-                HorizontalDivider()
+                HorizontalDivider(color = MaterialTheme.colorScheme.outline)
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
