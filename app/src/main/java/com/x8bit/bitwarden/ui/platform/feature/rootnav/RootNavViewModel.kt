@@ -133,18 +133,11 @@ class RootNavViewModel @Inject constructor(
                         )
                     }
 
+                    is SpecialCircumstance.CompleteRegistration,
                     SpecialCircumstance.GeneratorShortcut,
                     SpecialCircumstance.VaultShortcut,
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
-
-                    is SpecialCircumstance.CompleteRegistration ->
-                        RootNavState.CompleteOngoingRegistration(
-                            email = specialCircumstance.completeRegistrationData.email,
-                            verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
-                            fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
-                            timestamp = specialCircumstance.timestamp,
-                        )
                 }
             }
 
