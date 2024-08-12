@@ -231,7 +231,7 @@ class IntentManagerImpl(
             context,
             0,
             tileIntent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_IMMUTABLE,
         )
     }
 

@@ -87,8 +87,15 @@ interface IntentManager {
      */
     fun createDocumentIntent(fileName: String): Intent
 
-    fun createTileIntent(extra: String): Intent
+    /**
+     * Creates an intent using [data] when selecting a quick settings tile.
+     */
+    fun createTileIntent(data: String): Intent
 
+    /**
+     * Creates an pending intent using [tileIntent] when selecting a quick settings tile on
+     * API 34+.
+     */
     fun createTilePendingIntent(tileIntent: Intent): PendingIntent
 
     /**
