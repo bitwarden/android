@@ -421,6 +421,7 @@ class GeneratorRepositoryTest {
     fun `getPasscodeGenerationOptions should return options when available`() = runTest {
         val userId = "activeUserId"
         val expectedOptions = PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -476,6 +477,7 @@ class GeneratorRepositoryTest {
     fun `savePasscodeGenerationOptions should store options correctly`() = runTest {
         val userId = "activeUserId"
         val optionsToSave = PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = 14,
             allowAmbiguousChar = false,
             hasNumbers = true,
@@ -607,6 +609,7 @@ class GeneratorRepositoryTest {
     fun `savePasscodeGenerationOptions should not store options when there is no active user`() =
         runTest {
             val optionsToSave = PasscodeGenerationOptions(
+                type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
                 length = 14,
                 allowAmbiguousChar = false,
                 hasNumbers = true,
