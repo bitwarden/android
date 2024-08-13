@@ -51,9 +51,7 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
     fun `With previous saved state, initial password state is saved value`() {
         val savedPassword = "saved-pw"
         val viewModel = createViewModel(
-            savedStateHandle = createSavedStateHandle(
-                MasterPasswordGeneratorState(generatedPassword = savedPassword),
-            ),
+            initialState = MasterPasswordGeneratorState(generatedPassword = savedPassword)
         )
 
         assertEquals(
@@ -129,19 +127,12 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
     // region helpers
 
     private fun createViewModel(
-        savedStateHandle: SavedStateHandle = createSavedStateHandle(),
+        initialState: MasterPasswordGeneratorState? = null,
     ): MasterPasswordGeneratorViewModel = MasterPasswordGeneratorViewModel(
-        savedStateHandle = savedStateHandle,
+        savedStateHandle = SavedStateHandle().apply { this["state"] = initialState },
         generatorRepository = fakeGeneratorRepository,
         policyManager = mockPolicyManager,
     )
-
-    private fun createSavedStateHandle(initialState: MasterPasswordGeneratorState? = null) =
-        SavedStateHandle().apply {
-            initialState?.let {
-                this["state"] = it
-            }
-        }
 
     // endregion helpers
 }

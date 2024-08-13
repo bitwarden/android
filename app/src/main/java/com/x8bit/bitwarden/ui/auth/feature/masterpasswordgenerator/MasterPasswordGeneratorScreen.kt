@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -169,6 +170,7 @@ private fun MasterPasswordGeneratorContent(
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
             onClick = onLearnToPreventLockout,
+            innerPadding = PaddingValues(horizontal = 0.dp, vertical = 4.dp),
         )
     }
 }
