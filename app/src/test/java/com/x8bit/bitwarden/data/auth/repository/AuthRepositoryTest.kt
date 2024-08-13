@@ -125,7 +125,6 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -5385,9 +5384,9 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns EMAIL_VERIFICATION_TOKEN.toResponseBody().asSuccess()
+        } returns EMAIL_VERIFICATION_TOKEN.asSuccess()
 
-        var result = repository.sendVerificationEmail(
+        val result = repository.sendVerificationEmail(
             email = EMAIL,
             name = NAME,
             receiveMarketingEmails = true,
@@ -5408,9 +5407,9 @@ class AuthRepositoryTest {
                     receiveMarketingEmails = true,
                 ),
             )
-        } returns IllegalStateException("Unexpected null body!").asFailure()
+        } returns null.asSuccess()
 
-        var result = repository.sendVerificationEmail(
+        val result = repository.sendVerificationEmail(
             email = EMAIL,
             name = NAME,
             receiveMarketingEmails = true,
@@ -5433,7 +5432,7 @@ class AuthRepositoryTest {
             )
         } returns Throwable("fail").asFailure()
 
-        var result = repository.sendVerificationEmail(
+        val result = repository.sendVerificationEmail(
             email = EMAIL,
             name = NAME,
             receiveMarketingEmails = true,

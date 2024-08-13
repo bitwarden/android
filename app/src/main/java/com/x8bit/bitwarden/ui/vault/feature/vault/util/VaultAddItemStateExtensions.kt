@@ -147,7 +147,8 @@ private fun VaultAddEditState.ViewState.Content.ItemType.toLoginView(
             uris = it.uriList.toLoginUriView(),
             totp = it.totp,
             autofillOnPageLoad = common.originalCipher?.login?.autofillOnPageLoad,
-            fido2Credentials = common.originalCipher?.login?.fido2Credentials,
+            fido2Credentials = common.originalCipher?.login?.fido2Credentials
+                .takeIf { _ -> it.fido2CredentialCreationDateTime != null },
         )
     }
 

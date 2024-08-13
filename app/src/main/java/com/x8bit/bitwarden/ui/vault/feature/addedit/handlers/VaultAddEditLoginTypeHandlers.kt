@@ -24,6 +24,8 @@ import com.x8bit.bitwarden.ui.vault.feature.addedit.model.UriItem
  * @property onAddNewUriClick Handles the action when the add new URI button is clicked.
  * @property onPasswordVisibilityChange Handles the action when the password visibility button is
  * clicked.
+ * @property onClearFido2CredentialClick Handles the action when the clear Fido2 credential button
+ * is clicked.
  */
 @Suppress("LongParameterList")
 data class VaultAddEditLoginTypeHandlers(
@@ -39,6 +41,7 @@ data class VaultAddEditLoginTypeHandlers(
     val onClearTotpKeyClick: () -> Unit,
     val onAddNewUriClick: () -> Unit,
     val onPasswordVisibilityChange: (Boolean) -> Unit,
+    val onClearFido2CredentialClick: () -> Unit,
 ) {
     companion object {
 
@@ -112,6 +115,11 @@ data class VaultAddEditLoginTypeHandlers(
                 onPasswordVisibilityChange = {
                     viewModel.trySendAction(
                         VaultAddEditAction.ItemType.LoginType.PasswordVisibilityChange(it),
+                    )
+                },
+                onClearFido2CredentialClick = {
+                    viewModel.trySendAction(
+                        VaultAddEditAction.ItemType.LoginType.ClearFido2CredentialClick,
                     )
                 },
             )
