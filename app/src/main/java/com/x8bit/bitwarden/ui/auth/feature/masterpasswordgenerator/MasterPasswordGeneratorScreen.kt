@@ -139,11 +139,6 @@ private fun MasterPasswordGeneratorContent(
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Text(
-            text = stringResource(R.string.generate_master_password),
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
         Spacer(modifier = Modifier.height(24.dp))
         BitwardenTextField(
             label = "",
@@ -186,7 +181,7 @@ private fun MasterPasswordGeneratorTopBar(
     onSaveClick: () -> Unit,
 ) {
     BitwardenTopAppBar(
-        title = "",
+        title = stringResource(R.string.generate_master_password),
         scrollBehavior = scrollBehavior,
         navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
         navigationIconContentDescription = stringResource(id = R.string.back),
