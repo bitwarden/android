@@ -51,7 +51,7 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
     fun `With previous saved state, initial password state is saved value`() {
         val savedPassword = "saved-pw"
         val viewModel = createViewModel(
-            initialState = MasterPasswordGeneratorState(generatedPassword = savedPassword)
+            initialState = MasterPasswordGeneratorState(generatedPassword = savedPassword),
         )
 
         assertEquals(
