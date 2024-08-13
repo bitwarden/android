@@ -71,6 +71,9 @@ android {
             }
         }
     }
+    lint {
+        disable.add("MissingTranslation")
+    }
 }
 
 kotlin {
