@@ -36,7 +36,6 @@ class CompleteRegistrationDataUtilsTest {
         every { uriMock.path } returns "/finish-signup"
         every { uriMock.getQueryParameter("email") } returns "example@email.com"
         every { uriMock.getQueryParameter("token") } returns "verificationtoken"
-        every { uriMock.getQueryParameter("fromEmail") } returns "true"
         every { uriMock.getBooleanQueryParameter("fromEmail", true) } returns true
 
         assertEquals(
@@ -115,23 +114,6 @@ class CompleteRegistrationDataUtilsTest {
         every { uriMock.path } returns "/finish-signup"
         every { uriMock.getQueryParameter("email") } returns "example@email.com"
         every { uriMock.getQueryParameter("token") } returns null
-        assertNull(
-            mockIntent.getCompleteRegistrationDataIntentOrNull(),
-        )
-    }
-
-    @Test
-    fun `getCompleteRegistrationDataIntentOrNull URI does not contain parameter fromEmail`() {
-            val mockIntent = mockk<Intent> {
-                every { data } returns mockk()
-            }
-            val uriMock = mockk<Uri>()
-            every { Uri.parse(any()) } returns uriMock
-            every { uriMock.host } returns "www.bitwarden.com"
-            every { uriMock.path } returns "/finish-signup"
-            every { uriMock.getQueryParameter("email") } returns "example@email.com"
-            every { uriMock.getQueryParameter("token") } returns "verificationtoken"
-            every { uriMock.getQueryParameter("fromEmail") } returns null
         assertNull(
             mockIntent.getCompleteRegistrationDataIntentOrNull(),
         )
