@@ -33,9 +33,9 @@ class CheckEmailViewModel @Inject constructor(
 
     override fun handleAction(action: CheckEmailAction) {
         when (action) {
-            CheckEmailAction.CloseTap -> sendEvent(CheckEmailEvent.NavigateBack)
-            CheckEmailAction.LoginTap -> sendEvent(CheckEmailEvent.NavigateBackToLanding)
-            CheckEmailAction.OpenEmailTap -> sendEvent(CheckEmailEvent.NavigateToEmailApp)
+            CheckEmailAction.CloseClick -> sendEvent(CheckEmailEvent.NavigateBack)
+            CheckEmailAction.LoginClick -> sendEvent(CheckEmailEvent.NavigateBackToLanding)
+            CheckEmailAction.OpenEmailClick -> sendEvent(CheckEmailEvent.NavigateToEmailApp)
         }
     }
 }
@@ -76,15 +76,15 @@ sealed class CheckEmailAction {
     /**
      * User tapped close.
      */
-    data object CloseTap : CheckEmailAction()
+    data object CloseClick : CheckEmailAction()
 
     /**
      * User tapped log in.
      */
-    data object LoginTap : CheckEmailAction()
+    data object LoginClick : CheckEmailAction()
 
     /**
      * User tapped open email.
      */
-    data object OpenEmailTap : CheckEmailAction()
+    data object OpenEmailClick : CheckEmailAction()
 }

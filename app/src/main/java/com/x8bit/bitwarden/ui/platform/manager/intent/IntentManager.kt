@@ -120,7 +120,7 @@ interface IntentManager {
     /**
      * Open the default email app on device.
      */
-    fun openEmailApp()
+    fun startDefaultEmailApplication()
 
     /**
      * Represents file information.

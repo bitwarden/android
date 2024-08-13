@@ -265,7 +265,7 @@ class IntentManagerImpl(
         )
     }
 
-    override fun openEmailApp() {
+    override fun startDefaultEmailApplication() {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.addCategory(Intent.CATEGORY_APP_EMAIL)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

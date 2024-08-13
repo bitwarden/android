@@ -65,7 +65,7 @@ fun CheckEmailScreen(
             }
 
             is CheckEmailEvent.NavigateToEmailApp -> {
-                intentManager.openEmailApp()
+                intentManager.startDefaultEmailApplication()
             }
 
             is CheckEmailEvent.NavigateBackToLanding -> {
@@ -86,7 +86,7 @@ fun CheckEmailScreen(
                 navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
                 navigationIconContentDescription = stringResource(id = R.string.close),
                 onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(CheckEmailAction.CloseTap) }
+                    { viewModel.trySendAction(CheckEmailAction.CloseClick) }
                 },
             )
         },
@@ -147,7 +147,7 @@ fun CheckEmailScreen(
             BitwardenFilledButton(
                 label = stringResource(id = R.string.open_email_app),
                 onClick = remember(viewModel) {
-                    { viewModel.trySendAction(CheckEmailAction.OpenEmailTap) }
+                    { viewModel.trySendAction(CheckEmailAction.OpenEmailClick) }
                 },
                 modifier = Modifier
                     .testTag("OpenEmailApp")
@@ -171,7 +171,7 @@ fun CheckEmailScreen(
                         goBackAnnotatedString
                             .getStringAnnotations("URL", it, it)
                             .firstOrNull()?.let {
-                                viewModel.trySendAction(CheckEmailAction.CloseTap)
+                                viewModel.trySendAction(CheckEmailAction.CloseClick)
                             }
                     },
                 )
@@ -188,7 +188,7 @@ fun CheckEmailScreen(
                         logInAnnotatedString
                             .getStringAnnotations("URL", it, it)
                             .firstOrNull()?.let {
-                                viewModel.trySendAction(CheckEmailAction.LoginTap)
+                                viewModel.trySendAction(CheckEmailAction.LoginClick)
                             }
                     },
                 )

@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class CheckEmailModelTest : BaseViewModelTest() {
+class CheckEmailViewModelTest : BaseViewModelTest() {
     @Test
     fun `initial state should be correct`() = runTest {
         val viewModel = createViewModel()
@@ -31,7 +31,7 @@ class CheckEmailModelTest : BaseViewModelTest() {
     fun `CloseTap should emit NavigateBack`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.CloseTap)
+            viewModel.trySendAction(CheckEmailAction.CloseClick)
             assertEquals(
                 CheckEmailEvent.NavigateBack,
                 awaitItem(),
@@ -43,7 +43,7 @@ class CheckEmailModelTest : BaseViewModelTest() {
     fun `LoginTap should emit NavigateBackToLanding`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.LoginTap)
+            viewModel.trySendAction(CheckEmailAction.LoginClick)
             assertEquals(
                 CheckEmailEvent.NavigateBackToLanding,
                 awaitItem(),
@@ -55,7 +55,7 @@ class CheckEmailModelTest : BaseViewModelTest() {
     fun `OpenEmailTap should emit NavigateToEmailApp`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CheckEmailAction.OpenEmailTap)
+            viewModel.trySendAction(CheckEmailAction.OpenEmailClick)
             assertEquals(
                 CheckEmailEvent.NavigateToEmailApp,
                 awaitItem(),

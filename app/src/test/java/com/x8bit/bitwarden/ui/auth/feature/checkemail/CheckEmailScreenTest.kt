@@ -18,7 +18,7 @@ import org.junit.Test
 
 class CheckEmailScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
-        every { openEmailApp() } just runs
+        every { startDefaultEmailApplication() } just runs
     }
     private var onNavigateBackCalled = false
     private var onNavigateBackToLandingCalled = false
@@ -47,7 +47,7 @@ class CheckEmailScreenTest : BaseComposeTest() {
     fun `close button click should send CloseTap action`() {
         composeTestRule.onNodeWithContentDescription("Close").performClick()
         verify {
-            viewModel.trySendAction(CheckEmailAction.CloseTap)
+            viewModel.trySendAction(CheckEmailAction.CloseClick)
         }
     }
 
@@ -55,7 +55,7 @@ class CheckEmailScreenTest : BaseComposeTest() {
     fun `open email app button click should send OpenEmailTap action`() {
         composeTestRule.onNodeWithText("Open email app").performClick()
         verify {
-            viewModel.trySendAction(CheckEmailAction.OpenEmailTap)
+            viewModel.trySendAction(CheckEmailAction.OpenEmailClick)
         }
     }
 
@@ -75,7 +75,7 @@ class CheckEmailScreenTest : BaseComposeTest() {
     fun `NavigateToEmailApp should call openEmailApp`() {
         mutableEventFlow.tryEmit(CheckEmailEvent.NavigateToEmailApp)
         verify {
-            intentManager.openEmailApp()
+            intentManager.startDefaultEmailApplication()
         }
     }
 
