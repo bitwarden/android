@@ -83,41 +83,52 @@ class VaultUnlockedNavBarViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `on init with no organizations should set correct vault label res`() = runTest {
-        val viewModel = createViewModel()
-        val expected = VaultUnlockedNavBarState(
+    fun `new user state should update vault nav bar title`() = runTest {
+        val activeUserId = "activeUserId"
+        val accountWithOrganizations: UserState.Account = mockk {
+            every { userId } returns activeUserId
+            every { organizations } returns listOf(mockk())
+        }
+        val expectedWithOrganizations = VaultUnlockedNavBarState(
+            vaultNavBarLabelRes = R.string.vaults,
+            vaultNavBarContentDescriptionRes = R.string.vaults,
+        )
+        val accountWithoutOrganizations: UserState.Account = mockk {
+            every { userId } returns activeUserId
+            every { organizations } returns emptyList()
+        }
+        val expectedWithoutOrganizations = VaultUnlockedNavBarState(
             vaultNavBarLabelRes = R.string.my_vault,
             vaultNavBarContentDescriptionRes = R.string.my_vault,
         )
 
+        val viewModel = createViewModel()
+
         viewModel.stateFlow.test {
             assertEquals(
-                expected,
+                expectedWithoutOrganizations,
                 awaitItem(),
             )
-        }
-    }
 
-    @Test
-    fun `on init with organizations should set correct vault label res`() = runTest {
-        val activeUserId = "activeUserId"
-        val account: UserState.Account = mockk {
-            every { userId } returns activeUserId
-            every { organizations } returns listOf(mockk())
-        }
-        mutableUserStateFlow.value = UserState(
-            activeUserId = activeUserId,
-            accounts = listOf(account),
-        )
-        val viewModel = createViewModel()
-        val expected = VaultUnlockedNavBarState(
-            vaultNavBarLabelRes = R.string.vaults,
-            vaultNavBarContentDescriptionRes = R.string.vaults,
-        )
-
-        viewModel.stateFlow.test {
+            mutableUserStateFlow.tryEmit(
+                UserState(
+                    activeUserId = activeUserId,
+                    accounts = listOf(accountWithOrganizations),
+                ),
+            )
             assertEquals(
-                expected,
+                expectedWithOrganizations,
+                awaitItem(),
+            )
+
+            mutableUserStateFlow.tryEmit(
+                UserState(
+                    activeUserId = activeUserId,
+                    accounts = listOf(accountWithoutOrganizations),
+                ),
+            )
+            assertEquals(
+                expectedWithoutOrganizations,
                 awaitItem(),
             )
         }
