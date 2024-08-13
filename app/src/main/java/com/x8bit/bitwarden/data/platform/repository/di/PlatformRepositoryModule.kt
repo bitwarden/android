@@ -37,14 +37,12 @@ object PlatformRepositoryModule {
         configDiskSource: ConfigDiskSource,
         configService: ConfigService,
         clock: Clock,
-        environmentRepository: EnvironmentRepository,
         dispatcherManager: DispatcherManager,
     ): ServerConfigRepository =
         ServerConfigRepositoryImpl(
             configDiskSource = configDiskSource,
             configService = configService,
             clock = clock,
-            environmentRepository = environmentRepository,
             dispatcherManager = dispatcherManager,
         )
 
