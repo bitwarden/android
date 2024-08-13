@@ -17,4 +17,14 @@ interface EnvironmentDiskSource {
      * if any.
      */
     val preAuthEnvironmentUrlDataFlow: Flow<EnvironmentUrlDataJson?>
+
+    /**
+     * Gets the pre authentication urls for the given [userEmail].
+     */
+    fun getPreAuthEnvironmentUrlDataForEmail(userEmail: String): EnvironmentUrlDataJson?
+
+    /**
+     * Stores the [urls] for the given [userEmail].
+     */
+    fun storePreAuthEnvironmentUrlDataForEmail(userEmail: String, urls: EnvironmentUrlDataJson)
 }

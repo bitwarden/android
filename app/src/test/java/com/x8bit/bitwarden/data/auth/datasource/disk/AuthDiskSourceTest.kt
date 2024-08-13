@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOpti
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
@@ -978,44 +977,6 @@ class AuthDiskSourceTest {
         )
         assertEquals(
             json.encodeToJsonElement(accountTokens),
-            json.parseToJsonElement(requireNotNull(actual)),
-        )
-    }
-
-    @Test
-    fun `getEmailVerificationUrls should pull from SharedPreferences`() {
-        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
-        val mockUserEmail = "mockUserEmail"
-        val mockUrls = Environment.Us.environmentUrlData
-        fakeSharedPreferences
-            .edit {
-                putString(
-                    "${emailVerificationUrlsBaseKey}_$mockUserEmail",
-                    json.encodeToString(mockUrls),
-                )
-            }
-        val actual = authDiskSource.getEmailVerificationUrls(userEmail = mockUserEmail)
-        assertEquals(
-            mockUrls,
-            actual,
-        )
-    }
-
-    @Test
-    fun `storeEmailVerificationUrls should update SharedPreferences`() {
-        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
-        val mockUserEmail = "mockUserEmail"
-        val mockUrls = Environment.Us.environmentUrlData
-        authDiskSource.storeEmailVerificationUrls(
-            userEmail = mockUserEmail,
-            urls = mockUrls,
-        )
-        val actual = fakeSharedPreferences.getString(
-            "${emailVerificationUrlsBaseKey}_$mockUserEmail",
-            null,
-        )
-        assertEquals(
-            json.encodeToJsonElement(mockUrls),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

@@ -139,11 +139,8 @@ class RootNavViewModel @Inject constructor(
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
                     is SpecialCircumstance.CompleteRegistration ->
-                        RootNavState.CompleteOngoingRegistration(
-                            email = specialCircumstance.completeRegistrationData.email,
-                            verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
-                            fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
-                            timestamp = specialCircumstance.timestamp,
+                        throw IllegalStateException(
+                            "Special circumstance should have been already handled.",
                         )
                 }
             }

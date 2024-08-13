@@ -57,6 +57,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Clock
+import java.time.Instant
+import java.time.ZoneOffset
 
 @Suppress("LargeClass")
 class MainViewModelTest : BaseViewModelTest() {
@@ -317,15 +320,16 @@ class MainViewModelTest : BaseViewModelTest() {
     @Test
     fun `on ReceiveFirstIntent with complete registration data should set the special circumstance to CompleteRegistration`() {
         val viewModel = createViewModel()
-        val mockIntent = mockk<Intent>()
         val completeRegistrationData = mockk<CompleteRegistrationData>()
-        every { mockIntent.getPasswordlessRequestDataIntentOrNull() } returns null
-        every { mockIntent.getAutofillSaveItemOrNull() } returns null
-        every { mockIntent.getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
-        every { mockIntent.getAutofillSelectionDataOrNull() } returns null
+        val mockIntent = mockk<Intent> {
+            every { getPasswordlessRequestDataIntentOrNull() } returns null
+            every { getAutofillSaveItemOrNull() } returns null
+            every { getCompleteRegistrationDataIntentOrNull() } returns completeRegistrationData
+            every { getAutofillSelectionDataOrNull() } returns null
+            every { isMyVaultShortcut } returns false
+            every { isPasswordGeneratorShortcut } returns false
+        }
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
-        every { mockIntent.isMyVaultShortcut } returns false
-        every { mockIntent.isPasswordGeneratorShortcut } returns false
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
@@ -742,6 +746,7 @@ class MainViewModelTest : BaseViewModelTest() {
         settingsRepository = settingsRepository,
         vaultRepository = vaultRepository,
         authRepository = authRepository,
+        clock = FIXED_CLOCK,
         savedStateHandle = savedStateHandle.apply {
             set(SPECIAL_CIRCUMSTANCE_KEY, initialSpecialCircumstance)
         },
@@ -795,6 +800,7 @@ private fun createMockFido2AssertionIntent(
     every { getPasswordlessRequestDataIntentOrNull() } returns null
     every { getAutofillSelectionDataOrNull() } returns null
     every { getAutofillSaveItemOrNull() } returns null
+    every { getCompleteRegistrationDataIntentOrNull() } returns null
     every { isMyVaultShortcut } returns false
     every { isPasswordGeneratorShortcut } returns false
 }
@@ -810,6 +816,12 @@ private fun createMockFido2GetCredentialsIntent(
     every { getAutofillSaveItemOrNull() } returns null
     every { getFido2CredentialRequestOrNull() } returns null
     every { getFido2AssertionRequestOrNull() } returns null
+    every { getCompleteRegistrationDataIntentOrNull() } returns null
     every { isMyVaultShortcut } returns false
     every { isPasswordGeneratorShortcut } returns false
 }
+
+private val FIXED_CLOCK: Clock = Clock.fixed(
+    Instant.parse("2023-10-27T12:00:00Z"),
+    ZoneOffset.UTC,
+)

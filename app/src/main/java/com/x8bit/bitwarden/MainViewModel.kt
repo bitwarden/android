@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.parcelize.Parcelize
+import java.time.Clock
 import javax.inject.Inject
 
 private const val SPECIAL_CIRCUMSTANCE_KEY = "special-circumstance"
@@ -54,6 +55,7 @@ class MainViewModel @Inject constructor(
     private val vaultRepository: VaultRepository,
     private val authRepository: AuthRepository,
     private val savedStateHandle: SavedStateHandle,
+    private val clock: Clock,
 ) : BaseViewModel<MainState, MainEvent, MainAction>(
     initialState = MainState(
         theme = settingsRepository.appTheme,
@@ -207,7 +209,7 @@ class MainViewModel @Inject constructor(
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.CompleteRegistration(
                         completeRegistrationData = completeRegistrationData,
-                        timestamp = System.currentTimeMillis(),
+                        timestamp = clock.millis(),
                     )
             }
 
