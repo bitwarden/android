@@ -4,10 +4,9 @@ import com.x8bit.bitwarden.data.auth.repository.model.PolicyInformation
 
 /**
  * Creates the strictest set of rules based on contents of list of
- *
+ * [PolicyInformation.MasterPassword].
  */
-fun List<PolicyInformation.MasterPassword>.toStrictestPolicy():
-    PolicyInformation.MasterPassword = PolicyInformation.MasterPassword(
+fun List<PolicyInformation.MasterPassword>.toStrictestPolicy() = PolicyInformation.MasterPassword(
     minLength = mapNotNull { it.minLength }.maxOrNull(),
     minComplexity = mapNotNull { it.minComplexity }.maxOrNull(),
     requireUpper = mapNotNull { it.requireUpper }.any { it },

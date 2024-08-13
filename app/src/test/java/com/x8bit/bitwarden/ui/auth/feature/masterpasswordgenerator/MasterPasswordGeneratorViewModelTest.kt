@@ -35,20 +35,20 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
 
     @Test
     @Suppress("MaxLineLength")
-    fun `With no saved state and failed generator result, initial password state is default value`() =
-        runTest {
-            fakeGeneratorRepository.setMockGeneratePassphraseResult(
-                result = GeneratedPassphraseResult.InvalidRequest,
-            )
-            val viewModel = createViewModel()
+    fun `With no saved state and failed generator result, initial password state is default value`() {
+        fakeGeneratorRepository.setMockGeneratePassphraseResult(
+            result = GeneratedPassphraseResult.InvalidRequest,
+        )
+        val viewModel = createViewModel()
 
-            viewModel.stateFlow.test {
-                assertEquals(MasterPasswordGeneratorState(generatedPassword = "-"), awaitItem())
-            }
-        }
+        assertEquals(
+            MasterPasswordGeneratorState(generatedPassword = "-"),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Test
-    fun `With previous saved state, initial password state is saved value`() = runTest {
+    fun `With previous saved state, initial password state is saved value`() {
         val savedPassword = "saved-pw"
         val viewModel = createViewModel(
             savedStateHandle = createSavedStateHandle(
@@ -56,21 +56,18 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
             ),
         )
 
-        viewModel.stateFlow.test {
-            assertEquals(
-                MasterPasswordGeneratorState(generatedPassword = savedPassword),
-                awaitItem(),
-            )
-        }
+        assertEquals(
+            MasterPasswordGeneratorState(generatedPassword = savedPassword),
+            viewModel.stateFlow.value,
+        )
     }
 
     @Test
-    fun `Verify passphrase request is created and attempts to check for policy constraints`() =
-        runTest {
-            createViewModel()
+    fun `Verify passphrase request is created and attempts to check for policy constraints`() {
+        createViewModel()
 
-            verify { mockPolicyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD) }
-        }
+        verify { mockPolicyManager.getActivePolicies(type = PolicyTypeJson.MASTER_PASSWORD) }
+    }
 
     @Test
     fun `State updates when generate action is sent and repository returns success result`() =
@@ -129,7 +126,7 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
             }
         }
 
-    // region: helpers
+    // region helpers
 
     private fun createViewModel(
         savedStateHandle: SavedStateHandle = createSavedStateHandle(),
@@ -146,5 +143,5 @@ class MasterPasswordGeneratorViewModelTest : BaseViewModelTest() {
             }
         }
 
-// end region: helpers
+    // endregion helpers
 }

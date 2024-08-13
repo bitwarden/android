@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,11 +32,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButtonWithIcon
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
 import com.x8bit.bitwarden.ui.platform.components.field.BitwardenTextField
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
+import com.x8bit.bitwarden.ui.platform.components.text.BitwardenClickableText
 import com.x8bit.bitwarden.ui.platform.components.util.nonLetterColorVisualTransformation
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
@@ -121,7 +122,7 @@ fun MasterPasswordGeneratorScreen(
                         )
                     }
                 },
-                modifier = Modifier.padding(horizontal = 16.dp),
+                modifier = Modifier.standardHorizontalMargin(),
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
@@ -168,11 +169,11 @@ private fun MasterPasswordGeneratorContent(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Text(
-            text = stringResource(R.string.learn_about_other_ways_to_prevent_account_lockout),
+        BitwardenClickableText(
+            label = stringResource(R.string.learn_about_other_ways_to_prevent_account_lockout),
             style = MaterialTheme.typography.labelMedium,
             color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.clickable(onClick = onLearnToPreventLockout),
+            onClick = onLearnToPreventLockout,
         )
     }
 }
