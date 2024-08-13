@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Upload sources
-        uses: crowdin/github-action@61ac8b980551f674046220c3e104bddae2916ac5 # v2.0.0
+        uses: crowdin/github-action@6ed209d411599a981ccb978df3be9dc9b8a81699 # v2.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ secrets.CROWDIN_API_TOKEN }}
