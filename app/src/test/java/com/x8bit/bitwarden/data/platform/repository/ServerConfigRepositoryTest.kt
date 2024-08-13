@@ -9,8 +9,6 @@ import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponse
 import com.x8bit.bitwarden.data.platform.datasource.network.model.ConfigResponseJson.ServerJson
 import com.x8bit.bitwarden.data.platform.datasource.network.service.ConfigService
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
 import com.x8bit.bitwarden.data.platform.util.asSuccess
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -34,10 +32,6 @@ class ServerConfigRepositoryTest {
         } returns CONFIG_RESPONSE_JSON.asSuccess()
     }
 
-    private val environmentRepository = FakeEnvironmentRepository().apply {
-        environment = Environment.Us
-    }
-
     private val fixedClock: Clock = Clock.fixed(
         Instant.parse("2023-10-27T12:00:00Z"),
         ZoneOffset.UTC,
@@ -47,30 +41,12 @@ class ServerConfigRepositoryTest {
         configDiskSource = fakeConfigDiskSource,
         configService = configService,
         clock = fixedClock,
-        environmentRepository = environmentRepository,
         dispatcherManager = fakeDispatcherManager,
     )
 
     @BeforeEach
     fun setUp() {
         fakeConfigDiskSource.serverConfig = null
-    }
-
-    @Test
-    fun `environmentRepository stateflow should trigger new server configuration`() = runTest {
-        assertNull(
-            fakeConfigDiskSource.serverConfig,
-        )
-
-        // This should trigger a new server config to be fetched
-        environmentRepository.environment = Environment.Eu
-
-        repository.serverConfigStateFlow.test {
-            assertEquals(
-                SERVER_CONFIG,
-                awaitItem(),
-            )
-        }
     }
 
     @Test

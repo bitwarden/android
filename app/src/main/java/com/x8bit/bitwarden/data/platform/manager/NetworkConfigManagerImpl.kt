@@ -7,17 +7,23 @@ import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.AuthToke
 import com.x8bit.bitwarden.data.platform.datasource.network.interceptor.BaseUrlInterceptors
 import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
+import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+
+private const val ENVIRONMENT_DEBOUNCE_TIMEOUT_MS: Long = 500L
 
 /**
  * Primary implementation of [NetworkConfigManager].
  */
+@Suppress("LongParameterList")
 class NetworkConfigManagerImpl(
     authRepository: AuthRepository,
     private val authTokenInterceptor: AuthTokenInterceptor,
     environmentRepository: EnvironmentRepository,
+    serverConfigRepository: ServerConfigRepository,
     private val baseUrlInterceptors: BaseUrlInterceptors,
     refreshAuthenticator: RefreshAuthenticator,
     dispatcherManager: DispatcherManager,
@@ -37,10 +43,17 @@ class NetworkConfigManagerImpl(
             }
             .launchIn(collectionScope)
 
+        @Suppress("OPT_IN_USAGE")
         environmentRepository
             .environmentStateFlow
             .onEach { environment ->
                 baseUrlInterceptors.environment = environment
+            }
+            .debounce(timeoutMillis = ENVIRONMENT_DEBOUNCE_TIMEOUT_MS)
+            .onEach { _ ->
+                // This updates the stored service configuration by performing a network request.
+                // We debounce it to avoid rapid repeated requests.
+                serverConfigRepository.getServerConfig(forceRefresh = true)
             }
             .launchIn(collectionScope)
 
