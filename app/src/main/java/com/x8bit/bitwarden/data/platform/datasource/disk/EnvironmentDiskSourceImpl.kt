@@ -10,6 +10,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 private const val PRE_AUTH_URLS_KEY = "preAuthEnvironmentUrls"
+private const val EMAIL_VERIFICATION_URLS = "emailVerificationUrls"
 
 /**
  * Primary implementation of [EnvironmentDiskSource].
@@ -35,4 +36,22 @@ class EnvironmentDiskSourceImpl(
 
     private val mutableEnvironmentUrlDataFlow =
         bufferedMutableSharedFlow<EnvironmentUrlDataJson?>(replay = 1)
+
+    override fun getPreAuthEnvironmentUrlDataForEmail(
+        userEmail: String,
+    ): EnvironmentUrlDataJson? =
+        getString(key = EMAIL_VERIFICATION_URLS.appendIdentifier(userEmail))
+            ?.let {
+                json.decodeFromStringOrNull(it)
+            }
+
+    override fun storePreAuthEnvironmentUrlDataForEmail(
+        userEmail: String,
+        urls: EnvironmentUrlDataJson,
+    ) {
+        putString(
+            key = EMAIL_VERIFICATION_URLS.appendIdentifier(userEmail),
+            value = json.encodeToString(urls),
+        )
+    }
 }
