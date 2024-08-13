@@ -929,7 +929,6 @@ Chcete prepnúť na toto konto?</string>
   <string name="user_verification_direction">Overenie používateľa</string>
   <string name="privacy_prioritized">Dôvera na prvom mieste</string>
   <string name="welcome_message_1">Ukladajte prihlasovacie údaje, karty a identity do zabezpečeného trezoru. Bitwarden používa end-to-end šifrovanie s nulovou na ochranu toho, čo je pre vás dôležité.</string>
-  <string name="never_guess_again">Už nemusíte hádať</string>
   <string name="welcome_message_2">Nastavte si odomykanie biometrickými údajmi a automatické vypĺňanie na prihlasovanie do účtov bez zadávania jediného písmena.</string>
   <string name="level_up_your_logins">Posuňte prihlasovanie na vyššiu úroveň</string>
   <string name="welcome_message_3">Pomocou generátora vytvorte a uložte silné a jedinečné heslá pre všetky svoje účty.</string>

@@ -929,7 +929,6 @@ Soovid selle konto peale lülituda?</string>
   <string name="user_verification_direction">User verification</string>
   <string name="privacy_prioritized">Privacy, prioritized</string>
   <string name="welcome_message_1">Save logins, cards, and identities to your secure vault. Bitwarden uses zero-knowledge, end-to-end encryption to protect what’s important to you.</string>
-  <string name="never_guess_again">Never guess again</string>
   <string name="welcome_message_2">Set up biometric unlock and autofill to log into your accounts without typing a single letter.</string>
   <string name="level_up_your_logins">Level up your logins</string>
   <string name="welcome_message_3">Use the generator to create and save strong, unique passwords for all your accounts.</string>

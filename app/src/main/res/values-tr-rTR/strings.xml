@@ -928,7 +928,6 @@ Bu hesaba geçmek ister misiniz?</string>
   <string name="user_verification_direction">User verification</string>
   <string name="privacy_prioritized">Önce gizlilik</string>
   <string name="welcome_message_1">Hesaplarınızı, kartlarınızı ve kimliklerinizi güvenli kasanıza kaydedin. Bitwarden\'ın sıfır bilgi ispatlı uçtan uca şifrelemesi sizin için önemli olan her şeyi korur.</string>
-  <string name="never_guess_again">Ezberleri unutun</string>
   <string name="welcome_message_2">Hesaplarınıza parola yazmadan giriş yapmak için biyometrik kilit açmayı ayarlayabilirsiniz.</string>
   <string name="level_up_your_logins">Hesaplarınızı güçlendirin</string>
   <string name="welcome_message_3">Hesaplarınız için güçlü ve benzersiz parolalar oluşturmak amacıyla üreteci kullanabilirsiniz.</string>

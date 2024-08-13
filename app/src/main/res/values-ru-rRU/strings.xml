@@ -931,7 +931,6 @@
   <string name="user_verification_direction">Верификация пользователя</string>
   <string name="privacy_prioritized">Конфиденциальность, приоритет</string>
   <string name="welcome_message_1">Сохраняйте логины, карты и личные данные в своем защищенном хранилище. Bitwarden использует сквозное шифрование, чтобы защитить то, что для вас важно.</string>
-  <string name="never_guess_again">Больше никогда не угадывайте</string>
   <string name="welcome_message_2">Настройте биометрическую разблокировку и автозаполнение, чтобы входить в свои аккаунты, не набирая ни одной буквы.</string>
   <string name="level_up_your_logins">Сделайте авторизацию еще проще</string>
   <string name="welcome_message_3">Используйте генератор для создания и сохранения надежных, уникальных паролей для всех ваших аккаунтов.</string>

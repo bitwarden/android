@@ -929,7 +929,6 @@
   <string name="user_verification_direction">Перевірка користувача</string>
   <string name="privacy_prioritized">Приватність понад усе</string>
   <string name="welcome_message_1">Зберігайте записи входу, картки та посвідчення в захищеному сховищі. Для захисту ваших даних Bitwarden використовує наскрізне шифрування з нульовим рівнем доступу.</string>
-  <string name="never_guess_again">Ніколи не забувайте</string>
   <string name="welcome_message_2">Налаштуйте біометричне розблокування та автозаповнення, щоб миттєво входити в облікові записи.</string>
   <string name="level_up_your_logins">Вдоскональте свої паролі</string>
   <string name="welcome_message_3">Використовуйте генератор для створення та збереження надійних, унікальних паролів для всіх облікових записів.</string>
