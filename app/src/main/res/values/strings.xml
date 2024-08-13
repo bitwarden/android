@@ -959,4 +959,8 @@ Do you want to switch to this account?</string>
   <string name="write_your_password_down">Write your password down</string>
   <string name="keep_it_secret_keep_it_safe">Be careful to keep your written password somewhere secret and safe.</string>
   <string name="prevent_account_lockout">Prevent account lockout</string>
+  <string name="generate_master_password">Generate master password</string>
+  <string name="generate_button_label">Generate</string>
+    <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
+  <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
 </resources>
