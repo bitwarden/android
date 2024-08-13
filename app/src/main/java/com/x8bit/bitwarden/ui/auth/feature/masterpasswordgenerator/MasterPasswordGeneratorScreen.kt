@@ -15,7 +15,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -203,27 +202,23 @@ private fun MasterPasswordGeneratorTopBar(
 @Composable
 private fun MasterPasswordGeneratorTopBarPreview() {
     BitwardenTheme {
-        Surface {
-            MasterPasswordGeneratorTopBar(
-                scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-                onBackClick = { },
-                onSaveClick = { },
-            )
-        }
+        MasterPasswordGeneratorTopBar(
+            scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+            onBackClick = { },
+            onSaveClick = { },
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MasterPasswordGeneratorContentPreview() {
     BitwardenTheme {
-        Surface {
-            MasterPasswordGeneratorContent(
-                generatedPassword = "really-secure-password",
-                onGenerateNewPassword = { },
-                onLearnToPreventLockout = { },
-                modifier = Modifier.padding(16.dp),
-            )
-        }
+        MasterPasswordGeneratorContent(
+            generatedPassword = "really-secure-password",
+            onGenerateNewPassword = { },
+            onLearnToPreventLockout = { },
+            modifier = Modifier.padding(16.dp),
+        )
     }
 }
