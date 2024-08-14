@@ -75,6 +75,11 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 
 /**
+ * Constant string to be used in string annotation tag field
+ */
+private const val TAG_URL = "URL"
+
+/**
  * Top level composable for the start registration screen.
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -301,13 +306,13 @@ private fun TermsAndPrivacyText(
             end = endIndexPrivacy,
         )
         addStringAnnotation(
-            tag = "URL",
+            tag = TAG_URL,
             annotation = strTerms,
             start = startIndexTerms,
             end = endIndexTerms,
         )
         addStringAnnotation(
-            tag = "URL",
+            tag = TAG_URL,
             annotation = strPrivacy,
             start = startIndexPrivacy,
             end = endIndexPrivacy,
@@ -329,7 +334,7 @@ private fun TermsAndPrivacyText(
                 style = MaterialTheme.typography.bodyMedium,
                 onClick = {
                     annotatedLinkString
-                        .getStringAnnotations("URL", it, it)
+                        .getStringAnnotations(TAG_URL, it, it)
                         .firstOrNull()?.let { stringAnnotation ->
                             if (stringAnnotation.item == termsUrl) {
                                 onTermsClick()
@@ -375,7 +380,7 @@ private fun ReceiveMarketingEmailsSwitch(
             end = endIndexUnsubscribe,
         )
         addStringAnnotation(
-            tag = "URL",
+            tag = TAG_URL,
             annotation = strUnsubscribe,
             start = startIndexUnsubscribe,
             end = endIndexUnsubscribe,
@@ -410,7 +415,7 @@ private fun ReceiveMarketingEmailsSwitch(
                 style = MaterialTheme.typography.bodyMedium,
                 onClick = {
                     annotatedLinkString
-                        .getStringAnnotations("URL", it, it)
+                        .getStringAnnotations(TAG_URL, it, it)
                         .firstOrNull()?.let {
                             onUnsubscribeClick()
                         }
