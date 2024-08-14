@@ -3,8 +3,7 @@
     android:supportsInlineSuggestions="true">
     <!--
     "Maintain alphabetical order for these compatibility packages and ensure synchronization with
-    both /xml/autofill_service_configuration.xml and the COMPAT_BROWSERS list within
-    SaveInfoBuilderImpl.kt."
+    /xml/autofill_service_configuration.xml.
     -->
     <compatibility-package
         android:name="alook.browser"
