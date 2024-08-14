@@ -5,12 +5,17 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
@@ -64,8 +69,12 @@ fun BitwardenTopAppBar(
  * - a [actions] lambda containing the set of actions (usually icons or similar) to display
  *  in the app bar's trailing side. This lambda extends [RowScope], allowing flexibility in
  *  defining the layout of the actions.
+ * - if the title text causes an overflow in the standard material [TopAppBar] a [MediumTopAppBar]
+ *   will be used instead, droping the title text to a second row beneath the [navigationIcon] and
+ *   [actions].
  */
 @OptIn(ExperimentalMaterial3Api::class)
+@Suppress("LongMethod")
 @Composable
 fun BitwardenTopAppBar(
     title: String,
@@ -74,16 +83,12 @@ fun BitwardenTopAppBar(
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
-    TopAppBar(
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.surface,
-            scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-            titleContentColor = MaterialTheme.colorScheme.onSurface,
-            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        ),
-        scrollBehavior = scrollBehavior,
-        navigationIcon = {
+    var titleTextHasOverflow by remember {
+        mutableStateOf(false)
+    }
+
+    val navigationIconContent: @Composable () -> Unit = remember {
+        {
             navigationIcon?.let {
                 IconButton(
                     onClick = it.onNavigationIconClick,
@@ -96,20 +101,59 @@ fun BitwardenTopAppBar(
                     )
                 }
             }
-        },
-        title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-                maxLines = 1,
-                softWrap = false,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.testTag("PageTitleLabel"),
-            )
-        },
-        modifier = modifier.testTag("HeaderBarComponent"),
-        actions = actions,
+        }
+    }
+
+    val topAppBarColors = TopAppBarDefaults.largeTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+        navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+        titleContentColor = MaterialTheme.colorScheme.onSurface,
+        actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
     )
+
+    if (titleTextHasOverflow) {
+        MediumTopAppBar(
+            colors = topAppBarColors,
+            scrollBehavior = scrollBehavior,
+            navigationIcon = navigationIconContent,
+            title = {
+                /*
+                 * The height of the component is controlled and will only allow for 1 extra row,
+                 * making adding any arguments for softWrap and minLines superfluous.
+                 */
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.testTag("PageTitleLabel"),
+                )
+            },
+            modifier = modifier.testTag("HeaderBarComponent"),
+            actions = actions,
+        )
+    } else {
+        TopAppBar(
+            colors = topAppBarColors,
+            scrollBehavior = scrollBehavior,
+            navigationIcon = navigationIconContent,
+            title = {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 1,
+                    softWrap = false,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.testTag("PageTitleLabel"),
+                    onTextLayout = {
+                        titleTextHasOverflow = it.hasVisualOverflow
+                    },
+                )
+            },
+            modifier = modifier.testTag("HeaderBarComponent"),
+            actions = actions,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -119,6 +163,46 @@ private fun BitwardenTopAppBar_preview() {
     BitwardenTheme {
         BitwardenTopAppBar(
             title = "Title",
+            scrollBehavior = TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
+                ),
+            navigationIcon = NavigationIcon(
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIconContentDescription = stringResource(id = R.string.close),
+                onNavigationIconClick = { },
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun BitwardenTopAppBarOverflow_preview() {
+    BitwardenTheme {
+        BitwardenTopAppBar(
+            title = "Title that is too long for the top line",
+            scrollBehavior = TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
+                ),
+            navigationIcon = NavigationIcon(
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
+                navigationIconContentDescription = stringResource(id = R.string.close),
+                onNavigationIconClick = { },
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun BitwardenTopAppBarOverflowCutoff_preview() {
+    BitwardenTheme {
+        BitwardenTopAppBar(
+            title = "Title that is too long for the top line and the bottom line",
             scrollBehavior = TopAppBarDefaults
                 .exitUntilCollapsedScrollBehavior(
                     rememberTopAppBarState(),
