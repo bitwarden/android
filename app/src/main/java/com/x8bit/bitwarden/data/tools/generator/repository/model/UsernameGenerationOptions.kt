@@ -113,6 +113,9 @@ data class UsernameGenerationOptions(
 
         @SerialName("4")
         FASTMAIL,
+
+        @SerialName("5")
+        FORWARD_EMAIL,
     }
 }
 

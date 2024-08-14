@@ -472,6 +472,13 @@ class GeneratorViewModel @Inject constructor(
                 simpleLoginApiKey = forwardedEmailAlias.selectedServiceType.apiKey,
             )
 
+            is ForwardEmail -> options.copy(
+                type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
+                serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.FORWARD_EMAIL,
+                forwardEmailApiAccessToken = forwardedEmailAlias.selectedServiceType.apiKey,
+                forwardEmailDomainName = forwardedEmailAlias.selectedServiceType.domainName,
+            )
+
             else -> options.copy(
                 type = UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS,
                 serviceType = UsernameGenerationOptions.ForwardedEmailServiceType.NONE,
@@ -2619,6 +2626,13 @@ private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(
             AddyIo(
                 apiAccessToken = options.anonAddyApiAccessToken.orEmpty(),
                 domainName = options.anonAddyDomainName.orEmpty(),
+            )
+        }
+
+        UsernameGenerationOptions.ForwardedEmailServiceType.FORWARD_EMAIL -> {
+            ForwardEmail(
+                apiKey = options.forwardEmailApiAccessToken.orEmpty(),
+                domainName = options.forwardEmailDomainName.orEmpty(),
             )
         }
 
