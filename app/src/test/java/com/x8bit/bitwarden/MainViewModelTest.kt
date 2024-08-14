@@ -337,8 +337,11 @@ class MainViewModelTest : BaseViewModelTest() {
             ),
         )
         assertEquals(
-            completeRegistrationData,
-            (specialCircumstanceManager.specialCircumstance as SpecialCircumstance.CompleteRegistration).completeRegistrationData,
+            SpecialCircumstance.CompleteRegistration(
+                completeRegistrationData = completeRegistrationData,
+                timestamp = FIXED_CLOCK.millis(),
+            ),
+            specialCircumstanceManager.specialCircumstance,
         )
     }
 

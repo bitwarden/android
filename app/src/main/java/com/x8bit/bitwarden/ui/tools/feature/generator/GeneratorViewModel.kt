@@ -85,8 +85,16 @@ class GeneratorViewModel @Inject constructor(
         GeneratorState(
             generatedText = NO_GENERATED_TEXT,
             selectedType = when (generatorMode) {
-                is GeneratorMode.Modal.Username -> Username()
-                GeneratorMode.Modal.Password -> Passcode()
+                is GeneratorMode.Modal.Username -> {
+                    val type = generatorRepository.getUsernameGenerationOptions().usernameType
+                    Username(selectedType = type)
+                }
+
+                GeneratorMode.Modal.Password -> {
+                    val type = generatorRepository.getPasscodeGenerationOptions().passcodeType
+                    Passcode(selectedType = type)
+                }
+
                 GeneratorMode.Default -> Passcode(selectedType = Password())
             },
             generatorMode = generatorMode,
@@ -260,7 +268,10 @@ class GeneratorViewModel @Inject constructor(
 
     private fun loadOptions() {
         when (val selectedType = state.selectedType) {
-            is Passcode -> loadPasscodeOptions(selectedType = selectedType, usePolicyDefault = true)
+            is Passcode -> loadPasscodeOptions(
+                selectedType = selectedType,
+            )
+
             is Username -> loadUsernameOptions(
                 selectedType = selectedType,
                 forceRegeneration = selectedType.selectedType !is ForwardedEmailAlias,
@@ -269,26 +280,14 @@ class GeneratorViewModel @Inject constructor(
     }
 
     @Suppress("CyclomaticComplexMethod")
-    private fun loadPasscodeOptions(selectedType: Passcode, usePolicyDefault: Boolean) {
-        val passwordType = if (usePolicyDefault) {
-            Passcode(
-                selectedType = generatorRepository
-                    .getPasswordGeneratorPolicy()
-                    ?.defaultType
-                    ?.toSelectedType()
-                    ?: Password(),
-            )
-        } else {
-            selectedType
-        }
-
+    private fun loadPasscodeOptions(selectedType: Passcode) {
         val options = generatorRepository.getPasscodeGenerationOptions()
             ?: generatePasscodeDefaultOptions()
 
         val policy = policyManager
             .getActivePolicies<PolicyInformation.PasswordGenerator>()
             .toStrictestPolicy()
-        when (passwordType.selectedType) {
+        when (selectedType.selectedType) {
             is Passphrase -> {
                 val minNumWords = policy.minNumberWords ?: Passphrase.PASSPHRASE_MIN_NUMBER_OF_WORDS
                 val passphrase = Passphrase(
@@ -380,6 +379,7 @@ class GeneratorViewModel @Inject constructor(
         val options = generatorRepository
             .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
         val newOptions = options.copy(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = password.length,
             allowAmbiguousChar = password.avoidAmbiguousChars,
             hasNumbers = password.useNumbers,
@@ -396,6 +396,7 @@ class GeneratorViewModel @Inject constructor(
         val options = generatorRepository
             .getPasscodeGenerationOptions() ?: generatePasscodeDefaultOptions()
         val newOptions = options.copy(
+            type = PasscodeGenerationOptions.PasscodeType.PASSPHRASE,
             numWords = passphrase.numWords,
             wordSeparator = passphrase.wordSeparator.toString(),
             allowCapitalize = passphrase.capitalize,
@@ -485,6 +486,7 @@ class GeneratorViewModel @Inject constructor(
         val defaultPassphrase = Passphrase()
 
         return PasscodeGenerationOptions(
+            type = PasscodeGenerationOptions.PasscodeType.PASSWORD,
             length = defaultPassword.length,
             allowAmbiguousChar = defaultPassword.avoidAmbiguousChars,
             hasNumbers = defaultPassword.useNumbers,
@@ -684,11 +686,18 @@ class GeneratorViewModel @Inject constructor(
     private fun handleMainTypeOptionSelect(action: GeneratorAction.MainTypeOptionSelect) {
         when (action.mainTypeOption) {
             GeneratorState.MainTypeOption.PASSWORD -> {
-                loadPasscodeOptions(selectedType = Passcode(), usePolicyDefault = true)
+                val type = generatorRepository.getPasscodeGenerationOptions().passcodeType
+                loadPasscodeOptions(
+                    selectedType = Passcode(selectedType = type),
+                )
             }
 
             GeneratorState.MainTypeOption.USERNAME -> {
-                loadUsernameOptions(selectedType = Username(), forceRegeneration = true)
+                val type = generatorRepository.getUsernameGenerationOptions().usernameType
+                loadUsernameOptions(
+                    selectedType = Username(selectedType = type),
+                    forceRegeneration = true,
+                )
             }
         }
     }
@@ -703,12 +712,10 @@ class GeneratorViewModel @Inject constructor(
         when (action.passcodeTypeOption) {
             PasscodeTypeOption.PASSWORD -> loadPasscodeOptions(
                 selectedType = Passcode(selectedType = Password()),
-                usePolicyDefault = false,
             )
 
             PasscodeTypeOption.PASSPHRASE -> loadPasscodeOptions(
                 selectedType = Passcode(selectedType = Passphrase()),
-                usePolicyDefault = false,
             )
         }
     }
@@ -2570,6 +2577,22 @@ private val Password.minimumLength: Int
         val minimumNumbers = if (useNumbers) max(1, minNumbers) else 0
         val minimumSpecial = if (useSpecialChars) max(1, minSpecial) else 0
         return minLowercase + minUppercase + minimumNumbers + minimumSpecial
+    }
+
+private val PasscodeGenerationOptions?.passcodeType: Passcode.PasscodeType
+    get() = when (this?.type) {
+        PasscodeGenerationOptions.PasscodeType.PASSWORD -> Password()
+        PasscodeGenerationOptions.PasscodeType.PASSPHRASE -> Passphrase()
+        else -> Password()
+    }
+
+private val UsernameGenerationOptions?.usernameType: Username.UsernameType
+    get() = when (this?.type) {
+        UsernameGenerationOptions.UsernameType.PLUS_ADDRESSED_EMAIL -> PlusAddressedEmail()
+        UsernameGenerationOptions.UsernameType.CATCH_ALL_EMAIL -> CatchAllEmail()
+        UsernameGenerationOptions.UsernameType.FORWARDED_EMAIL_ALIAS -> ForwardedEmailAlias()
+        UsernameGenerationOptions.UsernameType.RANDOM_WORD -> RandomWord()
+        else -> PlusAddressedEmail()
     }
 
 private fun UsernameGenerationOptions.ForwardedEmailServiceType?.toServiceType(

@@ -1,11 +1,14 @@
 package com.x8bit.bitwarden.data.tools.generator.repository.model
 
+import androidx.annotation.Keep
+import com.x8bit.bitwarden.data.platform.datasource.network.serializer.BaseEnumeratedIntSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
  * A data class representing the configuration options for both password and passphrase generation.
  *
+ * @property type The type of passcode to be generated, as defined in PasscodeType.
  * @property length The total length of the generated password.
  * @property allowAmbiguousChar Indicates whether ambiguous characters are allowed in the password.
  * @property hasNumbers Indicates whether the password should contain numbers.
@@ -23,6 +26,8 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class PasscodeGenerationOptions(
+    @SerialName("type")
+    val type: PasscodeType,
 
     // Password-specific options
 
@@ -69,4 +74,22 @@ data class PasscodeGenerationOptions(
 
     @SerialName("includeNumber")
     val allowIncludeNumber: Boolean,
-)
+) {
+    /**
+     * Represents different Passcode types.
+     */
+    @Serializable(with = PasscodeTypeSerializer::class)
+    enum class PasscodeType {
+        @SerialName("0")
+        PASSWORD,
+
+        @SerialName("1")
+        PASSPHRASE,
+    }
+}
+
+@Keep
+private class PasscodeTypeSerializer :
+    BaseEnumeratedIntSerializer<PasscodeGenerationOptions.PasscodeType>(
+        PasscodeGenerationOptions.PasscodeType.entries.toTypedArray(),
+    )

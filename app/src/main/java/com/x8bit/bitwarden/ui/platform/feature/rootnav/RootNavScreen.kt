@@ -195,13 +195,6 @@ fun RootNavScreen(
             is RootNavState.CompleteOngoingRegistration -> {
                 navController.navigateToAuthGraph(rootNavOptions)
                 // TODO PR-3622: add navigation to complete registration
-                /*
-                    navController.navigateToCompleteRegistration(
-                        emailAddress = currentState.email,
-                        verificationToken = currentState.verificationToken,
-                        fromEmail = currentState.fromEmail
-                    )
-                */
             }
         }
     }
