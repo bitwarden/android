@@ -357,12 +357,12 @@ class LandingViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CreateAccountClick should emit NavigateToStartRegistration`() = runTest {
+    fun `CreateAccountClick should emit NavigateToCreateAccount`() = runTest {
         val viewModel = createViewModel()
         viewModel.eventFlow.test {
             viewModel.trySendAction(LandingAction.CreateAccountClick)
             assertEquals(
-                LandingEvent.NavigateToStartRegistration,
+                LandingEvent.NavigateToCreateAccount,
                 awaitItem(),
             )
         }

@@ -10,7 +10,7 @@ sealed class SendVerificationEmailResult {
      * @param emailVerificationToken the token to verify the email.
      */
     data class Success(
-        val emailVerificationToken: String? = null,
+        val emailVerificationToken: String?,
     ) : SendVerificationEmailResult()
 
     /**

@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.onSubscription
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -154,14 +155,24 @@ class EnvironmentRepositoryTest {
             every { environmentUrlData } returns environmentUrlDataJson
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
-        fakeAuthDiskSource.storeEmailVerificationUrls("email@example.com", environmentUrlDataJson)
 
-        repository.loadEnvironmentForEmail("email@example.com")
+        fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
+            userEmail = EMAIL,
+            environmentUrlDataJson,
+        )
+
+        repository.loadEnvironmentForEmail(userEmail = EMAIL)
 
         assertEquals(
             environment,
             repository.environment,
         )
+    }
+
+    @Test
+    fun `loadEnvironmentForEmail returns false on fail`() = runTest {
+        val result = repository.loadEnvironmentForEmail(userEmail = EMAIL)
+        assertFalse(result)
     }
 
     @Test
@@ -171,14 +182,21 @@ class EnvironmentRepositoryTest {
             every { environmentUrlData } returns environmentUrlDataJson
         }
         every { environmentUrlDataJson.toEnvironmentUrls() } returns environment
-        repository.environment = Environment.Eu
-        fakeAuthDiskSource.storeEmailVerificationUrls("email@example.com", environmentUrlDataJson)
 
-        repository.saveCurrentEnvironmentForEmail("email@example.com")
+        repository.environment = Environment.Eu
+        fakeEnvironmentDiskSource.storePreAuthEnvironmentUrlDataForEmail(
+            userEmail = EMAIL,
+            environmentUrlDataJson,
+        )
+
+        repository.saveCurrentEnvironmentForEmail(userEmail = EMAIL)
 
         assertEquals(
             Environment.Eu.environmentUrlData,
-            fakeAuthDiskSource.getEmailVerificationUrls("email@example.com"),
+            fakeEnvironmentDiskSource
+                .getPreAuthEnvironmentUrlDataForEmail(
+                    userEmail = EMAIL,
+                ),
         )
     }
 
@@ -199,7 +217,11 @@ class EnvironmentRepositoryTest {
         )
 }
 
+private const val EMAIL = "email@example.com"
+
 private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
+    private val storedEmailVerificationUrls = mutableMapOf<String, EnvironmentUrlDataJson?>()
+
     override var preAuthEnvironmentUrlData: EnvironmentUrlDataJson? = null
         set(value) {
             field = value
@@ -209,6 +231,16 @@ private class FakeEnvironmentDiskSource : EnvironmentDiskSource {
     override val preAuthEnvironmentUrlDataFlow: Flow<EnvironmentUrlDataJson?>
         get() = mutablePreAuthEnvironmentUrlDataFlow
             .onSubscription { emit(preAuthEnvironmentUrlData) }
+
+    override fun getPreAuthEnvironmentUrlDataForEmail(userEmail: String): EnvironmentUrlDataJson? =
+        storedEmailVerificationUrls[userEmail]
+
+    override fun storePreAuthEnvironmentUrlDataForEmail(
+        userEmail: String,
+        urls: EnvironmentUrlDataJson,
+    ) {
+        storedEmailVerificationUrls[userEmail] = urls
+    }
 
     private val mutablePreAuthEnvironmentUrlDataFlow =
         bufferedMutableSharedFlow<EnvironmentUrlDataJson?>(replay = 1)

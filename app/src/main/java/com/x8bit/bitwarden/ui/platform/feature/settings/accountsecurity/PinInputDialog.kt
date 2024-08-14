@@ -108,6 +108,7 @@ fun PinInputDialog(
                 BitwardenTextField(
                     label = stringResource(id = R.string.pin),
                     value = pin,
+                    autoFocus = true,
                     onValueChange = { pin = it },
                     keyboardType = KeyboardType.Number,
                     modifier = Modifier
