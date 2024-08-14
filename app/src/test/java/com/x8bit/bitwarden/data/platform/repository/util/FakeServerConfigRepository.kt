@@ -14,8 +14,8 @@ class FakeServerConfigRepository : ServerConfigRepository {
     var serverConfigValue: ServerConfig?
         get() = mutableServerConfigFlow.value
         set(value) {
-             mutableServerConfigFlow.value = value
-         }
+            mutableServerConfigFlow.value = value
+        }
 
     private val mutableServerConfigFlow = MutableStateFlow<ServerConfig?>(SERVER_CONFIG)
 
@@ -52,7 +52,7 @@ private val SERVER_CONFIG = ServerConfig(
         featureStates = mapOf(
             "duo-redirect" to JsonPrimitive(true),
             "flexible-collections-v-1" to JsonPrimitive(false),
-            "email-verification" to JsonPrimitive(true),
+            "dummy-boolean" to JsonPrimitive(true),
         ),
     ),
 )
