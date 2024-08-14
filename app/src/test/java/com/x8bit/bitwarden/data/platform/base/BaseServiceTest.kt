@@ -5,7 +5,11 @@ import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkMo
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.Rule
 import org.junit.jupiter.api.AfterEach
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
@@ -13,6 +17,9 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
  * Base class for service tests. Provides common mock web server and retrofit setup.
  */
 abstract class BaseServiceTest {
+
+    @get:Rule
+    val throwRule = RethrowingExceptionHandler()
 
     protected val json = PlatformNetworkModule.providesJson()
 
@@ -33,3 +40,21 @@ abstract class BaseServiceTest {
         server.shutdown()
     }
 }
+
+class RethrowingExceptionHandler : TestRule, Thread.UncaughtExceptionHandler {
+    override fun uncaughtException(
+        thread: Thread,
+        throwable: Throwable,
+    ): Nothing = throw UncaughtException(throwable)
+
+    override fun apply(base: Statement, description: Description): Statement {
+        return object : Statement() {
+            @Throws(Throwable::class)
+            override fun evaluate() {
+                // Noop
+            }
+        }
+    }
+}
+
+internal class UncaughtException(cause: Throwable) : Exception(cause)
