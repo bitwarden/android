@@ -7,7 +7,7 @@ targetSdk = "34"
 minSdk = "29"
 
 # Dependency Versions
-androidGradlePlugin = "8.5.1"
+androidGradlePlugin = "8.5.2"
 androidxActivity = "1.9.1"
 androidXBiometrics = "1.2.0-alpha05"
 androidxBrowser = "1.8.0"
