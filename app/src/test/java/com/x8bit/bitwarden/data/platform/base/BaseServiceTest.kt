@@ -5,11 +5,7 @@ import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkMo
 import okhttp3.HttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.Rule
 import org.junit.jupiter.api.AfterEach
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
