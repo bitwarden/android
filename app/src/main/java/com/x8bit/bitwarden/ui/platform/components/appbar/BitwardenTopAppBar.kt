@@ -118,7 +118,6 @@ fun BitwardenTopAppBar(
             scrollBehavior = scrollBehavior,
             navigationIcon = navigationIconContent,
             title = {
-
                 // The height of the component is controlled and will only allow for 1 extra row,
                 // making adding any arguments for softWrap and minLines superfluous.
                 Text(
