@@ -9,6 +9,7 @@ import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.KeyStore
+import java.security.ProviderException
 import java.security.UnrecoverableKeyException
 import java.util.UUID
 import javax.crypto.Cipher
@@ -58,6 +59,10 @@ class BiometricsEncryptionManagerImpl(
             // user removed all biometrics from the device
             settingsDiskSource.systemBiometricIntegritySource = null
             return null
+        } catch (e: ProviderException) {
+            // key generation failed because user cannot be authenticated by the OS.
+            settingsDiskSource.systemBiometricIntegritySource = null
+            return null
         }
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         val isCipherInitialized = initializeCipher(
@@ -89,7 +94,10 @@ class BiometricsEncryptionManagerImpl(
 
     /**
      * Generates a [SecretKey] from which the [Cipher] will be generated.
+     *
+     * @throws ProviderException if [KeyGenerator] is unable to generate a key.
      */
+    @Throws(ProviderException::class)
     private fun generateKey(): SecretKey {
         val keyGen = KeyGenerator.getInstance(
             KeyProperties.KEY_ALGORITHM_AES,
