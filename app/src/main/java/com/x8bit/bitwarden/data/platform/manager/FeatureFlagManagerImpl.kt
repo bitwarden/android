@@ -42,7 +42,9 @@ class FeatureFlagManagerImpl(
 
 private fun <T : Any> ServerConfig?.getFlagValueOrDefault(key: FlagKey<T>): T {
     val defaultValue = key.defaultValue
-    return this?.serverData
+    if (!key.isRemotelyConfigured) return key.defaultValue
+    return this
+        ?.serverData
         ?.featureStates
         ?.get(key.keyName)
         ?.let {
