@@ -122,6 +122,24 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `shouldUseKeyConnector should pull from and update SharedPreferences`() {
+        val userId = "userId"
+        val shouldUseKeyConnectorKey = "bwPreferencesStorage:usesKeyConnector_$userId"
+
+        // Shared preferences and the disk source start with the same value.
+        assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
+        assertFalse(fakeSharedPreferences.getBoolean(shouldUseKeyConnectorKey, false))
+
+        // Updating the disk source updates shared preferences
+        authDiskSource.storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = true)
+        assertTrue(fakeSharedPreferences.getBoolean(shouldUseKeyConnectorKey, false))
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit { putBoolean(shouldUseKeyConnectorKey, false) }
+        assertFalse(authDiskSource.getShouldUseKeyConnector(userId = userId) ?: true)
+    }
+
+    @Test
     fun `shouldTrustDevice should pull from and update SharedPreferences`() {
         val userId = "userId"
         val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice_$userId"
@@ -191,6 +209,7 @@ class AuthDiskSourceTest {
             userId = userId,
             pendingAuthRequest = pendingAuthRequestJson,
         )
+        authDiskSource.storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = true)
         val shouldTrustDevice = true
         authDiskSource.storeShouldTrustDevice(
             userId = userId,
@@ -258,6 +277,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getAccountTokens(userId = userId))
         assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
+        assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
     }
 
     @Test
