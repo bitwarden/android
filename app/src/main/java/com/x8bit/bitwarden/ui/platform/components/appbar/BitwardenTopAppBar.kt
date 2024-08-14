@@ -87,7 +87,7 @@ fun BitwardenTopAppBar(
         mutableStateOf(false)
     }
 
-    val navigationIconContent: @Composable () -> Unit = remember {
+    val navigationIconContent: @Composable () -> Unit = remember(navigationIcon) {
         {
             navigationIcon?.let {
                 IconButton(
