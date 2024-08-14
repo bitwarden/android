@@ -18,9 +18,6 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
  */
 abstract class BaseServiceTest {
 
-    @get:Rule
-    val throwRule = RethrowingExceptionHandler()
-
     protected val json = PlatformNetworkModule.providesJson()
 
     protected val server = MockWebServer().apply { start() }
@@ -40,21 +37,3 @@ abstract class BaseServiceTest {
         server.shutdown()
     }
 }
-
-class RethrowingExceptionHandler : TestRule, Thread.UncaughtExceptionHandler {
-    override fun uncaughtException(
-        thread: Thread,
-        throwable: Throwable,
-    ): Nothing = throw UncaughtException(throwable)
-
-    override fun apply(base: Statement, description: Description): Statement {
-        return object : Statement() {
-            @Throws(Throwable::class)
-            override fun evaluate() {
-                // Noop
-            }
-        }
-    }
-}
-
-internal class UncaughtException(cause: Throwable) : Exception(cause)
