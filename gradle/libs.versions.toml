@@ -4,7 +4,7 @@
 # SDK Versions
 compileSdk = "34"
 targetSdk = "34"
-minSdk = "28"
+minSdk = "29"
 
 # Dependency Versions
 androidGradlePlugin = "8.5.1"
