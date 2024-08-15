@@ -35,10 +35,7 @@ object VaultNetworkModule {
         clock: Clock,
     ): CiphersService = CiphersServiceImpl(
         azureApi = retrofits
-            .staticRetrofitBuilder
-            // This URL will be overridden dynamically
-            .baseUrl("https://www.bitwarden.com")
-            .build()
+            .createStaticRetrofit()
             .create(),
         ciphersApi = retrofits.authenticatedApiRetrofit.create(),
         json = json,
@@ -63,10 +60,7 @@ object VaultNetworkModule {
         clock: Clock,
     ): SendsService = SendsServiceImpl(
         azureApi = retrofits
-            .staticRetrofitBuilder
-            // This URL will be overridden dynamically
-            .baseUrl("https://www.bitwarden.com")
-            .build()
+            .createStaticRetrofit()
             .create(),
         sendsApi = retrofits.authenticatedApiRetrofit.create(),
         json = json,
@@ -87,10 +81,7 @@ object VaultNetworkModule {
         retrofits: Retrofits,
     ): DownloadService = DownloadServiceImpl(
         downloadApi = retrofits
-            .staticRetrofitBuilder
-            // This URL will be overridden dynamically
-            .baseUrl("https://www.bitwarden.com")
-            .build()
+            .createStaticRetrofit()
             .create(),
     )
 }

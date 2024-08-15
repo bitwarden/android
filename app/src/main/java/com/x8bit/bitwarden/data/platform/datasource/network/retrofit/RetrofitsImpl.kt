@@ -60,19 +60,22 @@ class RetrofitsImpl(
 
     //endregion Unauthenticated Retrofits
 
-    //region Other Retrofits
+    //region Static Retrofit
 
-    override val staticRetrofitBuilder: Retrofit.Builder
-        get() =
-            baseRetrofitBuilder
-                .client(
-                    baseOkHttpClient
-                        .newBuilder()
-                        .addInterceptor(loggingInterceptor)
-                        .build(),
-                )
+    override fun createStaticRetrofit(isAuthenticated: Boolean, baseUrl: String): Retrofit {
+        val baseClient = if (isAuthenticated) authenticatedOkHttpClient else baseOkHttpClient
+        return baseRetrofitBuilder
+            .baseUrl(baseUrl)
+            .client(
+                baseClient
+                    .newBuilder()
+                    .addInterceptor(loggingInterceptor)
+                    .build(),
+            )
+            .build()
+    }
 
-    //endregion Other Retrofits
+    //endregion Static Retrofit
 
     //region Helper properties and functions
     private val loggingInterceptor: HttpLoggingInterceptor by lazy {
