@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.UserState
+import com.x8bit.bitwarden.data.platform.manager.FeatureFlagManager
+import com.x8bit.bitwarden.data.platform.manager.model.FlagKey
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.repository.VaultRepository
@@ -34,6 +36,7 @@ class LandingViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val vaultRepository: VaultRepository,
     private val environmentRepository: EnvironmentRepository,
+    private val featureFlagManager: FeatureFlagManager,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<LandingState, LandingEvent, LandingAction>(
     initialState = savedStateHandle[KEY_STATE]
@@ -191,8 +194,12 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClicked() {
-        // TODO PM-9401: ADD FEATURE FLAG email-verification and navigation to StartRegistration
-        sendEvent(LandingEvent.NavigateToCreateAccount)
+        val navigationEvent = if (featureFlagManager.getFeatureFlag(key = FlagKey.OnboardingFlow)) {
+            LandingEvent.NavigateToStartRegistration
+        } else {
+            LandingEvent.NavigateToCreateAccount
+        }
+        sendEvent(navigationEvent)
     }
 
     private fun handleDialogDismiss() {
