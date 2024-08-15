@@ -46,11 +46,21 @@ interface AuthDiskSource {
     fun clearData(userId: String)
 
     /**
+     * Retrieves the state indicating that the user should use a key connector.
+     */
+    fun getShouldUseKeyConnector(userId: String): Boolean?
+
+    /**
+     * Stores the boolean indicating that the user should use a key connector.
+     */
+    fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?)
+
+    /**
      * Retrieves the state indicating that the user has chosen to trust this device.
      *
      * Note: This indicates intent to trust the device, the device may not be trusted yet.
      */
-    fun getShouldTrustDevice(userId: String): Boolean
+    fun getShouldTrustDevice(userId: String): Boolean?
 
     /**
      * Stores the boolean indicating that the user has chosen to trust this device for the given

@@ -191,6 +191,7 @@ class LandingViewModel @Inject constructor(
     }
 
     private fun handleCreateAccountClicked() {
+        // TODO PM-9401: ADD FEATURE FLAG email-verification and navigation to StartRegistration
         sendEvent(LandingEvent.NavigateToCreateAccount)
     }
 
@@ -290,6 +291,11 @@ sealed class LandingEvent {
      * Navigates to the Create Account screen.
      */
     data object NavigateToCreateAccount : LandingEvent()
+
+    /**
+     * Navigates to the Start Registration screen.
+     */
+    data object NavigateToStartRegistration : LandingEvent()
 
     /**
      * Navigates to the Login screen with the given email address and region label.

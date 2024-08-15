@@ -26,6 +26,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
+    private val storedShouldUseKeyConnector = mutableMapOf<String, Boolean?>()
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
@@ -70,6 +71,14 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
+    }
+
+    override fun getShouldUseKeyConnector(
+        userId: String,
+    ): Boolean = storedShouldUseKeyConnector[userId] ?: false
+
+    override fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?) {
+        storedShouldUseKeyConnector[userId] = shouldUseKeyConnector
     }
 
     override fun getShouldTrustDevice(userId: String): Boolean =
@@ -212,6 +221,13 @@ class FakeAuthDiskSource : AuthDiskSource {
     override fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?) {
         storedAccountTokens[userId] = accountTokens
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
+    }
+
+    /**
+     * Assert the the [shouldUseKeyConnector] was stored successfully using the [userId].
+     */
+    fun assertShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?) {
+        assertEquals(shouldUseKeyConnector, storedShouldUseKeyConnector[userId])
     }
 
     /**

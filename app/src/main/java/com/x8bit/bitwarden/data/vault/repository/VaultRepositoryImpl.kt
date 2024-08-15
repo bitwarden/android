@@ -898,27 +898,29 @@ class VaultRepositoryImpl(
     ) {
         val profile = syncResponse.profile
         val userId = profile.id
-        val userKey = profile.key
-        val privateKey = profile.privateKey
         authDiskSource.apply {
             storeUserKey(
                 userId = userId,
-                userKey = userKey,
+                userKey = profile.key,
             )
             storePrivateKey(
                 userId = userId,
-                privateKey = privateKey,
+                privateKey = profile.privateKey,
             )
             storeOrganizationKeys(
-                userId = profile.id,
+                userId = userId,
                 organizationKeys = profile.organizations
                     .orEmpty()
                     .filter { it.key != null }
                     .associate { it.id to requireNotNull(it.key) },
             )
+            storeShouldUseKeyConnector(
+                userId = userId,
+                shouldUseKeyConnector = profile.shouldUseKeyConnector,
+            )
             storeOrganizations(
-                userId = profile.id,
-                organizations = syncResponse.profile.organizations,
+                userId = userId,
+                organizations = profile.organizations,
             )
         }
     }

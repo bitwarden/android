@@ -51,6 +51,15 @@ sealed class SpecialCircumstance : Parcelable {
     ) : SpecialCircumstance()
 
     /**
+     * The app was launched via AppLink in order to allow the user complete an ongoing registration.
+     */
+    @Parcelize
+    data class CompleteRegistration(
+        val completeRegistrationData: CompleteRegistrationData,
+        val timestamp: Long,
+    ) : SpecialCircumstance()
+
+    /**
      * The app was launched via the credential manager framework in order to allow the user to
      * manually save a passkey to their vault.
      */
