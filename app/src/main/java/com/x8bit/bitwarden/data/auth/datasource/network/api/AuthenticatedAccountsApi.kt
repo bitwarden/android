@@ -2,6 +2,7 @@ package com.x8bit.bitwarden.data.auth.datasource.network.api
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.VerifyOtpRequestJson
@@ -13,6 +14,13 @@ import retrofit2.http.POST
  * Defines raw calls under the /accounts API with authentication applied.
  */
 interface AuthenticatedAccountsApi {
+
+    /**
+     * Converts the currently active account to a key-connector account.
+     */
+    @POST("/accounts/convert-to-key-connector")
+    suspend fun convertToKeyConnector(): Result<Unit>
+
     /**
      * Creates the keys for the current account.
      */
@@ -44,6 +52,12 @@ interface AuthenticatedAccountsApi {
      */
     @HTTP(method = "POST", path = "/accounts/password", hasBody = true)
     suspend fun resetPassword(@Body body: ResetPasswordRequestJson): Result<Unit>
+
+    /**
+     * Sets the key connector key.
+     */
+    @POST("/accounts/set-key-connector-key")
+    suspend fun setKeyConnectorKey(@Body body: KeyConnectorKeyRequestJson): Result<Unit>
 
     /**
      * Sets the password.

@@ -5,6 +5,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccount
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
@@ -20,6 +21,12 @@ class AccountsServiceImpl(
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
     private val json: Json,
 ) : AccountsService {
+
+    /**
+     * Converts the currently active account to a key-connector account.
+     */
+    override suspend fun convertToKeyConnector(): Result<Unit> =
+        authenticatedAccountsApi.convertToKeyConnector()
 
     override suspend fun createAccountKeys(
         publicKey: String,
@@ -92,6 +99,10 @@ class AccountsServiceImpl(
             authenticatedAccountsApi.resetPassword(body = body)
         }
     }
+
+    override suspend fun setKeyConnectorKey(
+        body: KeyConnectorKeyRequestJson,
+    ): Result<Unit> = authenticatedAccountsApi.setKeyConnectorKey(body)
 
     override suspend fun setPassword(
         body: SetPasswordRequestJson,
