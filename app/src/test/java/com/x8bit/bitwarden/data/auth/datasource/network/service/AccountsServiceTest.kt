@@ -2,6 +2,8 @@ package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.RegisterRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
@@ -27,6 +29,16 @@ class AccountsServiceTest : BaseServiceTest() {
             ignoreUnknownKeys = true
         },
     )
+
+    @Test
+    fun `convertToKeyConnector with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+
+        val result = service.convertToKeyConnector()
+
+        assertTrue(result.isSuccess)
+    }
 
     @Test
     fun `createAccountKeys with empty response is success`() = runTest {
@@ -166,6 +178,27 @@ class AccountsServiceTest : BaseServiceTest() {
                 kdfType = null,
                 key = "encryptedUserKey",
                 keys = RegisterRequestJson.Keys(
+                    publicKey = "public",
+                    encryptedPrivateKey = "private",
+                ),
+            ),
+        )
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `setKeyConnectorKey with empty response is success`() = runTest {
+        val response = MockResponse().setBody("")
+        server.enqueue(response)
+        val result = service.setKeyConnectorKey(
+            body = KeyConnectorKeyRequestJson(
+                organizationIdentifier = "organizationId",
+                kdfIterations = 7,
+                kdfMemory = 1,
+                kdfParallelism = 2,
+                kdfType = KdfTypeJson.ARGON2_ID,
+                userKey = "encryptedUserKey",
+                keys = KeyConnectorKeyRequestJson.Keys(
                     publicKey = "public",
                     encryptedPrivateKey = "private",
                 ),

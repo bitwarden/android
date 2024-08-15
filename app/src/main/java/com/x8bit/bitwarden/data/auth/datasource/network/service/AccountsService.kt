@@ -1,6 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
+import com.x8bit.bitwarden.data.auth.datasource.network.model.KeyConnectorKeyRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.PasswordHintResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResendEmailRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.ResetPasswordRequestJson
@@ -10,6 +11,11 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.SetPasswordRequest
  * Provides an API for querying accounts endpoints.
  */
 interface AccountsService {
+
+    /**
+     * Converts the currently active account to a key-connector account.
+     */
+    suspend fun convertToKeyConnector(): Result<Unit>
 
     /**
      * Creates a new account's keys.
@@ -48,6 +54,11 @@ interface AccountsService {
      * Reset the password.
      */
     suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit>
+
+    /**
+     * Set the key connector key.
+     */
+    suspend fun setKeyConnectorKey(body: KeyConnectorKeyRequestJson): Result<Unit>
 
     /**
      * Set the password.
