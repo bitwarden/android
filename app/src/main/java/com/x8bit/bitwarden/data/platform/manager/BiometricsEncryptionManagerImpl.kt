@@ -6,11 +6,16 @@ import android.security.keystore.KeyProperties
 import com.x8bit.bitwarden.BuildConfig
 import com.x8bit.bitwarden.data.platform.annotation.OmitFromCoverage
 import com.x8bit.bitwarden.data.platform.datasource.disk.SettingsDiskSource
+import java.io.IOException
 import java.security.InvalidAlgorithmParameterException
 import java.security.InvalidKeyException
 import java.security.KeyStore
+import java.security.KeyStoreException
+import java.security.NoSuchAlgorithmException
+import java.security.NoSuchProviderException
 import java.security.ProviderException
 import java.security.UnrecoverableKeyException
+import java.security.cert.CertificateException
 import java.util.UUID
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -42,7 +47,11 @@ class BiometricsEncryptionManagerImpl(
 
     override fun createCipherOrNull(userId: String): Cipher? {
         val secretKey: SecretKey = generateKeyOrNull()
-            ?: return null
+            ?: run {
+                // user removed all biometrics from the device
+                settingsDiskSource.systemBiometricIntegritySource = null
+                return null
+            }
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         // This should never fail to initialize / return false because the cipher is newly generated
         initializeCipher(
@@ -54,15 +63,15 @@ class BiometricsEncryptionManagerImpl(
     }
 
     override fun getOrCreateCipher(userId: String): Cipher? {
-        val secretKey = try {
+        val secretKey =
             getSecretKey()
                 ?: generateKeyOrNull()
-                ?: return null
-        } catch (e: InvalidAlgorithmParameterException) {
-            // user removed all biometrics from the device
-            settingsDiskSource.systemBiometricIntegritySource = null
-            return null
-        }
+                ?: run {
+                    // user removed all biometrics from the device
+                    settingsDiskSource.systemBiometricIntegritySource = null
+                    return null
+                }
+
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         val isCipherInitialized = initializeCipher(
             userId = userId,
@@ -95,17 +104,32 @@ class BiometricsEncryptionManagerImpl(
      * Generates a [SecretKey] from which the [Cipher] will be generated, or `null` if a key cannot
      * be generated.
      */
+    @Suppress("TooGenericExceptionCaught")
     private fun generateKeyOrNull(): SecretKey? {
-        val keyGen = KeyGenerator.getInstance(
-            KeyProperties.KEY_ALGORITHM_AES,
-            ENCRYPTION_KEYSTORE_NAME,
-        )
-        keyGen.init(keyGenParameterSpec)
+        val keyGen = try {
+            KeyGenerator.getInstance(
+                KeyProperties.KEY_ALGORITHM_AES,
+                ENCRYPTION_KEYSTORE_NAME,
+            )
+        } catch (e: NullPointerException) {
+            return null
+        } catch (e: NoSuchAlgorithmException) {
+            return null
+        } catch (e: NoSuchProviderException) {
+            return null
+        } catch (e: IllegalArgumentException) {
+            return null
+        }
+
         try {
+            keyGen.init(keyGenParameterSpec)
             keyGen.generateKey()
+        } catch (e: InvalidAlgorithmParameterException) {
+            return null
         } catch (e: ProviderException) {
             return null
         }
+
         return getSecretKey()
     }
 
@@ -113,8 +137,34 @@ class BiometricsEncryptionManagerImpl(
      * Returns the [SecretKey] stored in the keystore, or null if there isn't one.
      */
     private fun getSecretKey(): SecretKey? {
-        keystore.load(null)
-        return keystore.getKey(ENCRYPTION_KEY_NAME, null) as? SecretKey
+        try {
+            keystore.load(null)
+        } catch (e: IllegalArgumentException) {
+            // keystore could not be loaded because [param] is unrecognized.
+            return null
+        } catch (e: IOException) {
+            // keystore data format is invalid or the password is incorrect.
+            return null
+        } catch (e: NoSuchAlgorithmException) {
+            // keystore integrity could not be checked due to missing algorithm.
+            return null
+        } catch (e: CertificateException) {
+            // keystore certificates could not be loaded
+            return null
+        }
+
+        return try {
+            keystore.getKey(ENCRYPTION_KEY_NAME, null) as? SecretKey
+        } catch (e: KeyStoreException) {
+            // keystore was not loaded
+            null
+        } catch (e: NoSuchAlgorithmException) {
+            // keystore algorithm cannot be found
+            null
+        } catch (e: UnrecoverableKeyException) {
+            // key could not be recovered
+            null
+        }
     }
 
     /**
