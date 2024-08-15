@@ -2,7 +2,6 @@ package com.x8bit.bitwarden.data.auth.datasource.disk.util
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.AuthDiskSource
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
@@ -27,6 +26,7 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableMapOf<String, MutableSharedFlow<AccountTokensJson?>>()
     private val mutableUserStateFlow = bufferedMutableSharedFlow<UserStateJson?>(replay = 1)
 
+    private val storedShouldUseKeyConnector = mutableMapOf<String, Boolean?>()
     private val storedShouldTrustDevice = mutableMapOf<String, Boolean?>()
     private val storedInvalidUnlockAttempts = mutableMapOf<String, Int?>()
     private val storedUserKeys = mutableMapOf<String, String?>()
@@ -44,7 +44,6 @@ class FakeAuthDiskSource : AuthDiskSource {
     private val storedBiometricKeys = mutableMapOf<String, String?>()
     private val storedMasterPasswordHashes = mutableMapOf<String, String?>()
     private val storedPolicies = mutableMapOf<String, List<SyncResponseJson.Policy>?>()
-    private val storedEmailVerificationUrls = mutableMapOf<String, EnvironmentUrlDataJson?>()
 
     override var userState: UserStateJson? = null
         set(value) {
@@ -72,6 +71,14 @@ class FakeAuthDiskSource : AuthDiskSource {
         mutableOrganizationsFlowMap.remove(userId)
         mutablePoliciesFlowMap.remove(userId)
         mutableAccountTokensFlowMap.remove(userId)
+    }
+
+    override fun getShouldUseKeyConnector(
+        userId: String,
+    ): Boolean = storedShouldUseKeyConnector[userId] ?: false
+
+    override fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?) {
+        storedShouldUseKeyConnector[userId] = shouldUseKeyConnector
     }
 
     override fun getShouldTrustDevice(userId: String): Boolean =
@@ -216,11 +223,11 @@ class FakeAuthDiskSource : AuthDiskSource {
         getMutableAccountTokensFlow(userId = userId).tryEmit(accountTokens)
     }
 
-    override fun getEmailVerificationUrls(userEmail: String): EnvironmentUrlDataJson? =
-        storedEmailVerificationUrls[userEmail]
-
-    override fun storeEmailVerificationUrls(userEmail: String, urls: EnvironmentUrlDataJson) {
-        storedEmailVerificationUrls[userEmail] = urls
+    /**
+     * Assert the the [shouldUseKeyConnector] was stored successfully using the [userId].
+     */
+    fun assertShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?) {
+        assertEquals(shouldUseKeyConnector, storedShouldUseKeyConnector[userId])
     }
 
     /**

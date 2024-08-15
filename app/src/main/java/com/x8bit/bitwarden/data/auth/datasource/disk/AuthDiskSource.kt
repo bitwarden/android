@@ -1,7 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.disk
 
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.AccountTokensJson
-import com.x8bit.bitwarden.data.auth.datasource.disk.model.EnvironmentUrlDataJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.PendingAuthRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.disk.model.UserStateJson
 import com.x8bit.bitwarden.data.vault.datasource.network.model.SyncResponseJson
@@ -47,11 +46,21 @@ interface AuthDiskSource {
     fun clearData(userId: String)
 
     /**
+     * Retrieves the state indicating that the user should use a key connector.
+     */
+    fun getShouldUseKeyConnector(userId: String): Boolean?
+
+    /**
+     * Stores the boolean indicating that the user should use a key connector.
+     */
+    fun storeShouldUseKeyConnector(userId: String, shouldUseKeyConnector: Boolean?)
+
+    /**
      * Retrieves the state indicating that the user has chosen to trust this device.
      *
      * Note: This indicates intent to trust the device, the device may not be trusted yet.
      */
-    fun getShouldTrustDevice(userId: String): Boolean
+    fun getShouldTrustDevice(userId: String): Boolean?
 
     /**
      * Stores the boolean indicating that the user has chosen to trust this device for the given
@@ -246,14 +255,4 @@ interface AuthDiskSource {
      * Stores the [accountTokens] for the given [userId].
      */
     fun storeAccountTokens(userId: String, accountTokens: AccountTokensJson?)
-
-    /**
-     * Gets the pre authentication urls for the given [userEmail].
-     */
-    fun getEmailVerificationUrls(userEmail: String): EnvironmentUrlDataJson?
-
-    /**
-     * Stores the [urls] for the given [userEmail].
-     */
-    fun storeEmailVerificationUrls(userEmail: String, urls: EnvironmentUrlDataJson)
 }

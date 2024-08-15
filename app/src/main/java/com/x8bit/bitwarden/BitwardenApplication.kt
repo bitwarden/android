@@ -7,7 +7,6 @@ import com.x8bit.bitwarden.data.platform.manager.CrashLogsManager
 import com.x8bit.bitwarden.data.platform.manager.NetworkConfigManager
 import com.x8bit.bitwarden.data.platform.manager.event.OrganizationEventManager
 import com.x8bit.bitwarden.data.platform.manager.restriction.RestrictionManager
-import com.x8bit.bitwarden.data.platform.repository.ServerConfigRepository
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -33,7 +32,4 @@ class BitwardenApplication : Application() {
 
     @Inject
     lateinit var restrictionManager: RestrictionManager
-
-    @Inject
-    lateinit var serverConfigRepository: ServerConfigRepository
 }

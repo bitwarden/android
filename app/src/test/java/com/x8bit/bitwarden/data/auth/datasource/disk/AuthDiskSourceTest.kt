@@ -15,7 +15,6 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.UserDecryptionOpti
 import com.x8bit.bitwarden.data.platform.base.FakeSharedPreferences
 import com.x8bit.bitwarden.data.platform.datasource.disk.legacy.LegacySecureStorageMigrator
 import com.x8bit.bitwarden.data.platform.datasource.network.di.PlatformNetworkModule
-import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockOrganization
 import com.x8bit.bitwarden.data.vault.datasource.network.model.createMockPolicy
 import io.mockk.every
@@ -123,12 +122,30 @@ class AuthDiskSourceTest {
     }
 
     @Test
+    fun `shouldUseKeyConnector should pull from and update SharedPreferences`() {
+        val userId = "userId"
+        val shouldUseKeyConnectorKey = "bwPreferencesStorage:usesKeyConnector_$userId"
+
+        // Shared preferences and the disk source start with the same value.
+        assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
+        assertFalse(fakeSharedPreferences.getBoolean(shouldUseKeyConnectorKey, false))
+
+        // Updating the disk source updates shared preferences
+        authDiskSource.storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = true)
+        assertTrue(fakeSharedPreferences.getBoolean(shouldUseKeyConnectorKey, false))
+
+        // Update SharedPreferences updates the disk source
+        fakeSharedPreferences.edit { putBoolean(shouldUseKeyConnectorKey, false) }
+        assertFalse(authDiskSource.getShouldUseKeyConnector(userId = userId) ?: true)
+    }
+
+    @Test
     fun `shouldTrustDevice should pull from and update SharedPreferences`() {
         val userId = "userId"
         val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice_$userId"
 
         // Shared preferences and the disk source start with the same value.
-        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId))
+        assertNull(authDiskSource.getShouldTrustDevice(userId = userId))
         assertFalse(fakeSharedPreferences.getBoolean(shouldTrustDeviceKey, false))
 
         // Updating the disk source updates shared preferences
@@ -137,7 +154,7 @@ class AuthDiskSourceTest {
 
         // Update SharedPreferences updates the disk source
         fakeSharedPreferences.edit { putBoolean(shouldTrustDeviceKey, false) }
-        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId))
+        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId) ?: true)
     }
 
     @Test
@@ -192,6 +209,7 @@ class AuthDiskSourceTest {
             userId = userId,
             pendingAuthRequest = pendingAuthRequestJson,
         )
+        authDiskSource.storeShouldUseKeyConnector(userId = userId, shouldUseKeyConnector = true)
         val shouldTrustDevice = true
         authDiskSource.storeShouldTrustDevice(
             userId = userId,
@@ -259,6 +277,7 @@ class AuthDiskSourceTest {
         assertNull(authDiskSource.getAccountTokens(userId = userId))
         assertNull(authDiskSource.getEncryptedPin(userId = userId))
         assertNull(authDiskSource.getMasterPasswordHash(userId = userId))
+        assertNull(authDiskSource.getShouldUseKeyConnector(userId = userId))
     }
 
     @Test
@@ -978,44 +997,6 @@ class AuthDiskSourceTest {
         )
         assertEquals(
             json.encodeToJsonElement(accountTokens),
-            json.parseToJsonElement(requireNotNull(actual)),
-        )
-    }
-
-    @Test
-    fun `getEmailVerificationUrls should pull from SharedPreferences`() {
-        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
-        val mockUserEmail = "mockUserEmail"
-        val mockUrls = Environment.Us.environmentUrlData
-        fakeSharedPreferences
-            .edit {
-                putString(
-                    "${emailVerificationUrlsBaseKey}_$mockUserEmail",
-                    json.encodeToString(mockUrls),
-                )
-            }
-        val actual = authDiskSource.getEmailVerificationUrls(userEmail = mockUserEmail)
-        assertEquals(
-            mockUrls,
-            actual,
-        )
-    }
-
-    @Test
-    fun `storeEmailVerificationUrls should update SharedPreferences`() {
-        val emailVerificationUrlsBaseKey = "bwPreferencesStorage:emailVerificationUrls"
-        val mockUserEmail = "mockUserEmail"
-        val mockUrls = Environment.Us.environmentUrlData
-        authDiskSource.storeEmailVerificationUrls(
-            userEmail = mockUserEmail,
-            urls = mockUrls,
-        )
-        val actual = fakeSharedPreferences.getString(
-            "${emailVerificationUrlsBaseKey}_$mockUserEmail",
-            null,
-        )
-        assertEquals(
-            json.encodeToJsonElement(mockUrls),
             json.parseToJsonElement(requireNotNull(actual)),
         )
     }

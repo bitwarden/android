@@ -16,6 +16,8 @@ import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.enterpriseSignOnDest
 import com.x8bit.bitwarden.ui.auth.feature.enterprisesignon.navigateToEnterpriseSignOn
 import com.x8bit.bitwarden.ui.auth.feature.environment.environmentDestination
 import com.x8bit.bitwarden.ui.auth.feature.environment.navigateToEnvironment
+import com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator.masterPasswordGeneratorDestination
+import com.x8bit.bitwarden.ui.auth.feature.masterpasswordgenerator.navigateToMasterPasswordGenerator
 import com.x8bit.bitwarden.ui.auth.feature.landing.LANDING_ROUTE
 import com.x8bit.bitwarden.ui.auth.feature.landing.landingDestination
 import com.x8bit.bitwarden.ui.auth.feature.landing.navigateToLanding
@@ -24,8 +26,11 @@ import com.x8bit.bitwarden.ui.auth.feature.login.navigateToLogin
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.loginWithDeviceDestination
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.model.LoginWithDeviceType
 import com.x8bit.bitwarden.ui.auth.feature.loginwithdevice.navigateToLoginWithDevice
+import com.x8bit.bitwarden.ui.auth.feature.masterpasswordguidance.masterPasswordGuidanceDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.masterPasswordHintDestination
 import com.x8bit.bitwarden.ui.auth.feature.masterpasswordhint.navigateToMasterPasswordHint
+import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.navigateToPreventAccountLockout
+import com.x8bit.bitwarden.ui.auth.feature.preventaccountlockout.preventAccountLockoutDestination
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.navigateToSetPassword
 import com.x8bit.bitwarden.ui.auth.feature.setpassword.setPasswordDestination
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.navigateToStartRegistration
@@ -154,6 +159,17 @@ fun NavGraphBuilder.authGraph(
         )
         twoFactorLoginDestination(
             onNavigateBack = { navController.popBackStack() },
+        )
+        masterPasswordGuidanceDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToGeneratePassword = { navController.navigateToMasterPasswordGenerator() },
+        )
+        preventAccountLockoutDestination(
+            onNavigateBack = { navController.popBackStack() },
+        )
+        masterPasswordGeneratorDestination(
+            onNavigateBack = { navController.popBackStack() },
+            onNavigateToPreventLockout = { navController.navigateToPreventAccountLockout() },
         )
     }
 }

@@ -35,7 +35,7 @@ class PushDiskSourceImpl(
     }
 
     override fun getLastPushTokenRegistrationDate(userId: String): ZonedDateTime? {
-        return getLong(LAST_REGISTRATION_DATE_KEY.appendIdentifier(userId), null)
+        return getLong(LAST_REGISTRATION_DATE_KEY.appendIdentifier(userId))
             ?.let { getZoneDateTimeFromBinaryLong(it) }
     }
 

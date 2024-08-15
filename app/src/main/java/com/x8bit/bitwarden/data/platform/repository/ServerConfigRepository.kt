@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.StateFlow
 interface ServerConfigRepository {
 
     /**
+     * Emits updates that track [ServerConfig].
+     */
+    val serverConfigStateFlow: StateFlow<ServerConfig?>
+
+    /**
      * Gets the state [ServerConfig]. If needed or forced by [forceRefresh],
      * updates the values using server side data.
      */
     suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig?
-
-    /**
-     * Emits updates that track [ServerConfig].
-     */
-    val serverConfigStateFlow: StateFlow<ServerConfig?>
 }

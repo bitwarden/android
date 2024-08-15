@@ -7,8 +7,6 @@ import com.x8bit.bitwarden.data.platform.manager.dispatcher.DispatcherManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import java.time.Clock
 import java.time.Instant
@@ -20,20 +18,19 @@ class ServerConfigRepositoryImpl(
     private val configDiskSource: ConfigDiskSource,
     private val configService: ConfigService,
     private val clock: Clock,
-    environmentRepository: EnvironmentRepository,
     dispatcherManager: DispatcherManager,
 ) : ServerConfigRepository {
 
     private val unconfinedScope = CoroutineScope(dispatcherManager.unconfined)
 
-    init {
-        environmentRepository
-            .environmentStateFlow
-            .onEach {
-                getServerConfig(true)
-            }
-            .launchIn(unconfinedScope)
-    }
+    override val serverConfigStateFlow: StateFlow<ServerConfig?>
+        get() = configDiskSource
+            .serverConfigFlow
+            .stateIn(
+                scope = unconfinedScope,
+                started = SharingStarted.Eagerly,
+                initialValue = configDiskSource.serverConfig,
+            )
 
     override suspend fun getServerConfig(forceRefresh: Boolean): ServerConfig? {
         val localConfig = configDiskSource.serverConfig
@@ -61,15 +58,6 @@ class ServerConfigRepositoryImpl(
         // fall back to the local configuration.
         return localConfig
     }
-
-    override val serverConfigStateFlow: StateFlow<ServerConfig?>
-        get() = configDiskSource
-            .serverConfigFlow
-            .stateIn(
-                scope = unconfinedScope,
-                started = SharingStarted.Eagerly,
-                initialValue = configDiskSource.serverConfig,
-            )
 
     companion object {
         private const val MINIMUM_CONFIG_SYNC_INTERVAL_SEC: Long = 60 * 60

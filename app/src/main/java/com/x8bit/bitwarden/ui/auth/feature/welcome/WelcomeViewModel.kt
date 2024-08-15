@@ -72,9 +72,9 @@ data class WelcomeState(
          */
         @Parcelize
         data object CardOne : WelcomeCard() {
-            override val imageRes: Int = R.drawable.welcome_1
-            override val titleRes: Int = R.string.privacy_prioritized
-            override val messageRes: Int = R.string.welcome_message_1
+            override val imageRes: Int get() = R.drawable.welcome_1
+            override val titleRes: Int get() = R.string.privacy_prioritized
+            override val messageRes: Int get() = R.string.welcome_message_1
         }
 
         /**
@@ -82,9 +82,9 @@ data class WelcomeState(
          */
         @Parcelize
         data object CardTwo : WelcomeCard() {
-            override val imageRes: Int = R.drawable.welcome_2
-            override val titleRes: Int = R.string.never_guess_again
-            override val messageRes: Int = R.string.welcome_message_2
+            override val imageRes: Int get() = R.drawable.welcome_2
+            override val titleRes: Int get() = R.string.quick_and_easy_login
+            override val messageRes: Int get() = R.string.welcome_message_2
         }
 
         /**
@@ -92,9 +92,9 @@ data class WelcomeState(
          */
         @Parcelize
         data object CardThree : WelcomeCard() {
-            override val imageRes: Int = R.drawable.welcome_3
-            override val titleRes: Int = R.string.level_up_your_logins
-            override val messageRes: Int = R.string.welcome_message_3
+            override val imageRes: Int get() = R.drawable.welcome_3
+            override val titleRes: Int get() = R.string.level_up_your_logins
+            override val messageRes: Int get() = R.string.welcome_message_3
         }
 
         /**
@@ -102,9 +102,9 @@ data class WelcomeState(
          */
         @Parcelize
         data object CardFour : WelcomeCard() {
-            override val imageRes: Int = R.drawable.welcome_4
-            override val titleRes: Int = R.string.your_data_when_and_where_you_need_it
-            override val messageRes: Int = R.string.welcome_message_4
+            override val imageRes: Int get() = R.drawable.welcome_4
+            override val titleRes: Int get() = R.string.your_data_when_and_where_you_need_it
+            override val messageRes: Int get() = R.string.welcome_message_4
         }
     }
 }

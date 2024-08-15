@@ -68,11 +68,6 @@ class RootNavViewModel @Inject constructor(
             userState?.activeAccount?.needsPasswordReset == true -> RootNavState.ResetPassword
 
             specialCircumstance is SpecialCircumstance.CompleteRegistration -> {
-                // When the user is on the lock screen or already in the vault
-                if (userState?.activeAccount != null && !authRepository.hasPendingAccountAddition) {
-                    authRepository.hasPendingAccountAddition = true
-                    return
-                }
                 RootNavState.CompleteOngoingRegistration(
                     email = specialCircumstance.completeRegistrationData.email,
                     verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
@@ -138,13 +133,11 @@ class RootNavViewModel @Inject constructor(
                     null,
                     -> RootNavState.VaultUnlocked(activeUserId = userState.activeAccount.userId)
 
-                    is SpecialCircumstance.CompleteRegistration ->
-                        RootNavState.CompleteOngoingRegistration(
-                            email = specialCircumstance.completeRegistrationData.email,
-                            verificationToken = specialCircumstance.completeRegistrationData.verificationToken,
-                            fromEmail = specialCircumstance.completeRegistrationData.fromEmail,
-                            timestamp = specialCircumstance.timestamp,
+                    is SpecialCircumstance.CompleteRegistration -> {
+                        throw IllegalStateException(
+                            "Special circumstance should have been already handled.",
                         )
+                    }
                 }
             }
 

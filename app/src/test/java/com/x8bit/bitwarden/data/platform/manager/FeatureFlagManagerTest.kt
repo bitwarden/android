@@ -43,7 +43,7 @@ class FeatureFlagManagerTest {
         // This should trigger a new server config to be fetched
         fakeServerConfigRepository.serverConfigValue = SERVER_CONFIG
 
-        manager.getFeatureFlagFlow(FlagKey.EmailVerification).test {
+        manager.getFeatureFlagFlow(FlagKey.DummyBoolean).test {
             assertNotNull(
                 awaitItem(),
             )
@@ -55,7 +55,7 @@ class FeatureFlagManagerTest {
         runTest {
             fakeServerConfigRepository.serverConfigValue = null
 
-            manager.getFeatureFlagFlow(FlagKey.EmailVerification).test {
+            manager.getFeatureFlagFlow(FlagKey.DummyBoolean).test {
                 assertFalse(
                     awaitItem(),
                 )
@@ -65,7 +65,7 @@ class FeatureFlagManagerTest {
     @Test
     fun `getFeatureFlag Boolean should return value if exists`() = runTest {
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.EmailVerification,
+            key = FlagKey.DummyBoolean,
             forceRefresh = true,
         )
         assertTrue(flagValue)
@@ -99,7 +99,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt,
+            key = FlagKey.DummyInt(),
             forceRefresh = false,
         )
 
@@ -120,7 +120,7 @@ class FeatureFlagManagerTest {
         )
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt,
+            key = FlagKey.DummyInt(),
             forceRefresh = false,
         )
 
@@ -192,7 +192,22 @@ class FeatureFlagManagerTest {
         fakeServerConfigRepository.serverConfigValue = null
 
         val flagValue = manager.getFeatureFlag(
-            key = FlagKey.DummyInt,
+            key = FlagKey.DummyInt(),
+            forceRefresh = false,
+        )
+
+        assertEquals(
+            Int.MIN_VALUE,
+            flagValue,
+        )
+    }
+
+    @Test
+    fun `getFeatureFlag Int should return default value when not remotely controlled`() = runTest {
+        fakeServerConfigRepository.serverConfigValue = null
+
+        val flagValue = manager.getFeatureFlag(
+            key = FlagKey.DummyInt(isRemotelyConfigured = false),
             forceRefresh = false,
         )
 
@@ -225,7 +240,7 @@ class FeatureFlagManagerTest {
             ),
         )
 
-        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyInt)
+        val flagValue = manager.getFeatureFlag(key = FlagKey.DummyInt())
 
         assertEquals(Int.MIN_VALUE, flagValue)
     }
@@ -273,7 +288,7 @@ private val SERVER_CONFIG = ServerConfig(
             ssoUrl = "http://localhost:51822",
         ),
         featureStates = mapOf(
-            "email-verification" to JsonPrimitive(true),
+            "dummy-boolean" to JsonPrimitive(true),
             "flexible-collections-v-1" to JsonPrimitive(false),
         ),
     ),

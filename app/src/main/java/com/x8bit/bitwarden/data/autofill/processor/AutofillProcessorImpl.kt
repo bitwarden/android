@@ -128,7 +128,6 @@ class AutofillProcessorImpl(
                     autofillRequest = autofillRequest,
                 )
                 val saveInfo = saveInfoBuilder.build(
-                    autofillAppInfo = autofillAppInfo,
                     autofillPartition = autofillRequest.partition,
                     fillRequest = fillRequest,
                     packageName = autofillRequest.packageName,
