@@ -28,9 +28,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -140,7 +138,7 @@ fun CheckEmailScreen(
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     fontWeight = FontWeight.Bold,
                 ),
-                tag = "EMAIL"
+                tag = "EMAIL",
             )
             Text(
                 text = descriptionAnnotatedString,
@@ -171,7 +169,7 @@ fun CheckEmailScreen(
                         id = R.string.no_email_go_back_to_edit_your_email_address,
                     ),
                     highlights = listOf(stringResource(id = R.string.go_back)),
-                    tag = TAG_URL
+                    tag = TAG_URL,
                 )
                 ClickableText(
                     text = goBackAnnotatedString,
@@ -189,7 +187,7 @@ fun CheckEmailScreen(
                         id = R.string.or_log_in_you_may_already_have_an_account,
                     ),
                     highlights = listOf(stringResource(id = R.string.log_in)),
-                    tag = TAG_URL
+                    tag = TAG_URL,
                 )
                 ClickableText(
                     text = logInAnnotatedString,

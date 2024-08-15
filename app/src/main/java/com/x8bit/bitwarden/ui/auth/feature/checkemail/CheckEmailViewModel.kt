@@ -74,17 +74,17 @@ sealed class CheckEmailEvent {
  */
 sealed class CheckEmailAction {
     /**
-     * User tapped close.
+     * User clicked close.
      */
     data object CloseClick : CheckEmailAction()
 
     /**
-     * User tapped log in.
+     * User clicked log in.
      */
     data object LoginClick : CheckEmailAction()
 
     /**
-     * User tapped open email.
+     * User clicked open email.
      */
     data object OpenEmailClick : CheckEmailAction()
 }
