@@ -4,9 +4,14 @@ import android.content.res.Resources
 import android.os.Parcelable
 import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -117,3 +122,47 @@ fun @receiver:StringRes Int.asText(): Text = ResText(this)
  * Convert a resource Id to [Text] with format args.
  */
 fun @receiver:StringRes Int.asText(vararg args: Any): Text = ResArgsText(this, args.asList())
+
+/**
+ * Create an [AnnotatedString] with highlighted parts.
+ * @param mainString the full string
+ * @param highlights parts of the mainString that will be highlighted
+ * @param tag the tag that will be used for the annotation
+ */
+@Composable
+fun createAnnotatedString(
+    mainString: String,
+    highlights: List<String>,
+    tag: String,
+): AnnotatedString {
+    return buildAnnotatedString {
+        append(mainString)
+        addStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            ),
+            start = 0,
+            end = mainString.length,
+        )
+        for (highlightString in highlights) {
+            val startIndexUnsubscribe = mainString.indexOf(highlightString, ignoreCase = true)
+            val endIndexUnsubscribe = startIndexUnsubscribe + highlightString.length
+            addStyle(
+                style = SpanStyle(
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+                    fontWeight = FontWeight.Bold,
+                ),
+                start = startIndexUnsubscribe,
+                end = endIndexUnsubscribe,
+            )
+            addStringAnnotation(
+                tag = tag,
+                annotation = highlightString,
+                start = startIndexUnsubscribe,
+                end = endIndexUnsubscribe,
+            )
+        }
+    }
+}

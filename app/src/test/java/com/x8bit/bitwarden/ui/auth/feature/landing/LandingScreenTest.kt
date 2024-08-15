@@ -49,6 +49,7 @@ class LandingScreenTest : BaseComposeTest() {
     private var onNavigateToCreateAccountCalled = false
     private var onNavigateToLoginCalled = false
     private var onNavigateToEnvironmentCalled = false
+    private var onNavigateToStartRegistrationCalled = false
     private val mutableEventFlow = bufferedMutableSharedFlow<LandingEvent>()
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
     private val viewModel = mockk<LandingViewModel>(relaxed = true) {
@@ -66,6 +67,7 @@ class LandingScreenTest : BaseComposeTest() {
                     onNavigateToLoginCalled = true
                 },
                 onNavigateToEnvironment = { onNavigateToEnvironmentCalled = true },
+                onNavigateToStartRegistration = { onNavigateToStartRegistrationCalled = true },
                 viewModel = viewModel,
             )
         }
