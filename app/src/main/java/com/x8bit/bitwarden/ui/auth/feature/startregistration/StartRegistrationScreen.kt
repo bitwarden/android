@@ -62,6 +62,7 @@ import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEv
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
+import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -355,37 +356,12 @@ private fun ReceiveMarketingEmailsSwitch(
     onCheckedChange: (Boolean) -> Unit,
     onUnsubscribeClick: () -> Unit,
 ) {
-    val annotatedLinkString: AnnotatedString = buildAnnotatedString {
-        @Suppress("MaxLineLength")
-        val strMarketingEmail = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time)
-        val strUnsubscribe = stringResource(id = R.string.unsubscribe)
-        val startIndexUnsubscribe = strMarketingEmail.indexOf(strUnsubscribe, ignoreCase = true)
-        val endIndexUnsubscribe = startIndexUnsubscribe + strUnsubscribe.length
-        append(strMarketingEmail)
-        addStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-            ),
-            start = 0,
-            end = strMarketingEmail.length,
-        )
-        addStyle(
-            style = SpanStyle(
-                color = MaterialTheme.colorScheme.primary,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                fontWeight = FontWeight.Bold,
-            ),
-            start = startIndexUnsubscribe,
-            end = endIndexUnsubscribe,
-        )
-        addStringAnnotation(
-            tag = TAG_URL,
-            annotation = strUnsubscribe,
-            start = startIndexUnsubscribe,
-            end = endIndexUnsubscribe,
-        )
-    }
+    @Suppress("MaxLineLength")
+    val annotatedLinkString = createAnnotatedString(
+        mainString = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time),
+        highlights = listOf(stringResource(id = R.string.unsubscribe)),
+        tag = TAG_URL,
+    )
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
