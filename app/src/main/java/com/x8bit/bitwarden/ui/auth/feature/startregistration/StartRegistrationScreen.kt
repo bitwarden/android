@@ -1,11 +1,11 @@
 package com.x8bit.bitwarden.ui.auth.feature.startregistration
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,13 +13,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.TopAppBarDefaults
@@ -33,6 +37,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.toggleableState
@@ -42,27 +48,24 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ErrorDialogDismiss
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.NameInputChange
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.PrivacyPolicyClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ReceiveMarketingEmailsToggle
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.TermsClick
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.UnsubscribeMarketingEmailsClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToPrivacyPolicy
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationEvent.NavigateToTerms
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.StartRegistrationHandler
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.handlers.rememberStartRegistrationHandler
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
 import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
+import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
@@ -74,6 +77,7 @@ import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 
 /**
  * Constant string to be used in string annotation tag field
@@ -98,6 +102,7 @@ fun StartRegistrationScreen(
     viewModel: StartRegistrationViewModel = hiltViewModel(),
 ) {
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val handler = rememberStartRegistrationHandler(viewModel = viewModel)
     val context = LocalContext.current
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -111,6 +116,12 @@ fun StartRegistrationScreen(
 
             is StartRegistrationEvent.NavigateToUnsubscribe -> {
                 intentManager.launchUri("https://bitwarden.com/email-preferences/".toUri())
+            }
+
+            is StartRegistrationEvent.NavigateToServerSelectionInfo -> {
+                intentManager.launchUri(
+                    uri = "https://bitwarden.com/help/server-geographies/".toUri(),
+                )
             }
 
             is StartRegistrationEvent.NavigateBack -> onNavigateBack.invoke()
@@ -164,11 +175,9 @@ fun StartRegistrationScreen(
             BitwardenTopAppBar(
                 title = stringResource(id = R.string.create_account),
                 scrollBehavior = scrollBehavior,
-                navigationIcon = rememberVectorPainter(id = R.drawable.ic_close),
-                navigationIconContentDescription = stringResource(id = R.string.close),
-                onNavigationIconClick = remember(viewModel) {
-                    { viewModel.trySendAction(CloseClick) }
-                },
+                navigationIcon = rememberVectorPainter(id = R.drawable.ic_back),
+                navigationIconContentDescription = stringResource(id = R.string.back),
+                onNavigationIconClick = handler.onBackClick,
             )
         },
     ) { innerPadding ->
@@ -179,102 +188,138 @@ fun StartRegistrationScreen(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenTextField(
-                label = stringResource(id = R.string.email_address),
-                value = state.emailInput,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(EmailInputChange(it)) }
-                },
-                modifier = Modifier
-                    .testTag("EmailAddressEntry")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                keyboardType = KeyboardType.Email,
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            EnvironmentSelector(
-                labelText = stringResource(id = R.string.creating_on),
-                selectedOption = state.selectedEnvironmentType,
-                onOptionSelected = remember(viewModel) {
-                    { viewModel.trySendAction(EnvironmentTypeSelect(it)) }
-                },
-                modifier = Modifier
-                    .testTag("RegionSelectorDropdown")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            BitwardenTextField(
-                label = stringResource(id = R.string.name),
-                value = state.nameInput,
-                onValueChange = remember(viewModel) {
-                    { viewModel.trySendAction(NameInputChange(it)) }
-                },
-                modifier = Modifier
-                    .testTag("NameEntry")
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (state.selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
-                ReceiveMarketingEmailsSwitch(
-                    isChecked = state.isReceiveMarketingEmailsToggled,
-                    onCheckedChange = remember(viewModel) {
-                        {
-                            viewModel.trySendAction(
-                                ReceiveMarketingEmailsToggle(
-                                    it,
-                                ),
-                            )
-                        }
-                    },
-                    onUnsubscribeClick = remember(viewModel) {
-                        { viewModel.trySendAction(UnsubscribeMarketingEmailsClick) }
-                    },
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-
-            BitwardenFilledButton(
-                label = stringResource(id = R.string.continue_text),
-                onClick = remember(viewModel) {
-                    { viewModel.trySendAction(ContinueClick) }
-                },
-                isEnabled = state.isContinueButtonEnabled,
-                modifier = Modifier
-                    .testTag("ContinueButton")
-                    .padding(horizontal = 16.dp)
-                    .fillMaxWidth(),
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            TermsAndPrivacyText(
-                onTermsClick = remember(viewModel) {
-                    { viewModel.trySendAction(TermsClick) }
-                },
-                onPrivacyPolicyClick = remember(viewModel) {
-                    { viewModel.trySendAction(PrivacyPolicyClick) }
-                },
+            StartRegistrationContent(
+                emailInput = state.emailInput,
+                selectedEnvironmentType = state.selectedEnvironmentType,
+                nameInput = state.nameInput,
+                isReceiveMarketingEmailsToggled = state.isReceiveMarketingEmailsToggled,
+                isContinueButtonEnabled = state.isContinueButtonEnabled,
+                handler = handler,
             )
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+@Suppress("LongMethod")
+@Composable
+private fun StartRegistrationContent(
+    emailInput: String,
+    selectedEnvironmentType: Environment.Type,
+    nameInput: String,
+    isReceiveMarketingEmailsToggled: Boolean,
+    isContinueButtonEnabled: Boolean,
+    handler: StartRegistrationHandler,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Spacer(modifier = Modifier.height(16.dp))
+        Image(
+            painter = rememberVectorPainter(id = R.drawable.vault),
+            contentDescription = null,
+            modifier = Modifier
+                .size(132.dp)
+                .align(Alignment.CenterHorizontally),
+        )
+        Spacer(modifier = Modifier.height(48.dp))
+        BitwardenTextField(
+            label = stringResource(id = R.string.name),
+            value = nameInput,
+            onValueChange = handler.onNameInputChange,
+            modifier = Modifier
+                .testTag("NameEntry")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        BitwardenTextField(
+            label = if (emailInput.isEmpty()) {
+                stringResource(R.string.email_address_required)
+            } else {
+                stringResource(
+                    id = R.string.email_address,
+                )
+            },
+            placeholder = stringResource(R.string.email_address_required),
+            value = emailInput,
+            onValueChange = handler.onEmailInputChange,
+            modifier = Modifier
+                .testTag("EmailAddressEntry")
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+            keyboardType = KeyboardType.Email,
+        )
+        Spacer(modifier = Modifier.height(2.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .standardHorizontalMargin(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            EnvironmentSelector(
+                labelText = stringResource(id = R.string.creating_on),
+                selectedOption = selectedEnvironmentType,
+                onOptionSelected = handler.onEnvironmentTypeSelect,
+                modifier = Modifier
+                    .testTag("RegionSelectorDropdown"),
+            )
+            IconButton(
+                onClick = handler.onServerGeologyHelpClick,
+                // Align with design but keep accessible touch target of IconButton.
+                modifier = Modifier.offset(y = (-8f).dp, x = 16.dp),
+            ) {
+                Icon(
+                    painter = rememberVectorPainter(id = R.drawable.ic_tooltip_small),
+                    contentDescription = stringResource(R.string.help_with_server_geolocations),
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(18.dp),
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(24.dp))
+
+        if (selectedEnvironmentType != Environment.Type.SELF_HOSTED) {
+            ReceiveMarketingEmailsSwitch(
+                isChecked = isReceiveMarketingEmailsToggled,
+                onCheckedChange = handler.onReceiveMarketingEmailsToggle,
+                onUnsubscribeClick = handler.onUnsubscribeMarketingEmailsClick,
+                modifier = Modifier.standardHorizontalMargin(),
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        BitwardenFilledButton(
+            label = stringResource(id = R.string.continue_text),
+            onClick = handler.onContinueClick,
+            isEnabled = isContinueButtonEnabled,
+            modifier = Modifier
+                .testTag("ContinueButton")
+                .standardHorizontalMargin()
+                .fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        TermsAndPrivacyText(
+            onTermsClick = handler.onTermsClick,
+            onPrivacyPolicyClick = handler.onPrivacyPolicyClick,
+            modifier = Modifier.standardHorizontalMargin(),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+    }
+}
+
 @Suppress("LongMethod")
 @Composable
 private fun TermsAndPrivacyText(
     onTermsClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val strTerms = stringResource(id = R.string.terms_of_service)
+    val strPrivacy = stringResource(id = R.string.privacy_policy)
     val annotatedLinkString: AnnotatedString = buildAnnotatedString {
         val strTermsAndPrivacy = stringResource(
             id = R.string.by_continuing_you_agree_to_the_terms_of_service_and_privacy_policy,
         )
-        val strTerms = stringResource(id = R.string.terms_of_service)
-        val strPrivacy = stringResource(id = R.string.privacy_policy)
         val startIndexTerms = strTermsAndPrivacy.indexOf(strTerms)
         val endIndexTerms = startIndexTerms + strTerms.length
         val startIndexPrivacy = strTermsAndPrivacy.indexOf(strPrivacy)
@@ -322,30 +367,47 @@ private fun TermsAndPrivacyText(
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .semantics(mergeDescendants = true) {
                 testTag = "DisclaimerText"
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = strTerms,
+                        action = {
+                            onTermsClick()
+                            true
+                        },
+                    ),
+                    CustomAccessibilityAction(
+                        label = strPrivacy,
+                        action = {
+                            onPrivacyPolicyClick()
+                            true
+                        },
+                    ),
+                )
             }
+            .padding(horizontal = 16.dp)
             .fillMaxWidth(),
     ) {
         val termsUrl = stringResource(id = R.string.terms_of_service)
-        Column(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
-            ClickableText(
-                text = annotatedLinkString,
-                style = MaterialTheme.typography.bodyMedium,
-                onClick = {
-                    annotatedLinkString
-                        .getStringAnnotations(TAG_URL, it, it)
-                        .firstOrNull()?.let { stringAnnotation ->
-                            if (stringAnnotation.item == termsUrl) {
-                                onTermsClick()
-                            } else {
-                                onPrivacyPolicyClick()
-                            }
+        ClickableText(
+            text = annotatedLinkString,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                textAlign = TextAlign.Center,
+            ),
+            onClick = {
+                annotatedLinkString
+                    .getStringAnnotations(TAG_URL, it, it)
+                    .firstOrNull()?.let { stringAnnotation ->
+                        if (stringAnnotation.item == termsUrl) {
+                            onTermsClick()
+                        } else {
+                            onPrivacyPolicyClick()
                         }
-                },
-            )
-        }
+                    }
+            },
+        )
     }
 }
 
@@ -355,27 +417,37 @@ private fun ReceiveMarketingEmailsSwitch(
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     onUnsubscribeClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val unsubscribeString = stringResource(id = R.string.unsubscribe)
     @Suppress("MaxLineLength")
     val annotatedLinkString = createAnnotatedString(
         mainString = stringResource(id = R.string.get_emails_from_bitwarden_for_announcements_advices_and_research_opportunities_unsubscribe_any_time),
-        highlights = listOf(stringResource(id = R.string.unsubscribe)),
+        highlights = listOf(unsubscribeString),
         tag = TAG_URL,
     )
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .semantics(mergeDescendants = true) {
                 testTag = "ReceiveMarketingEmailsToggle"
                 toggleableState = ToggleableState(isChecked)
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = unsubscribeString,
+                        action = {
+                            onUnsubscribeClick()
+                            true
+                        },
+                    ),
+                )
             }
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(color = MaterialTheme.colorScheme.primary),
                 onClick = { onCheckedChange.invoke(!isChecked) },
             )
-            .padding(start = 16.dp)
             .fillMaxWidth(),
     ) {
         Switch(
@@ -385,18 +457,69 @@ private fun ReceiveMarketingEmailsSwitch(
             checked = isChecked,
             onCheckedChange = null,
         )
-        Column(Modifier.padding(start = 16.dp, top = 4.dp, bottom = 4.dp)) {
-            ClickableText(
-                text = annotatedLinkString,
-                style = MaterialTheme.typography.bodyMedium,
-                onClick = {
-                    annotatedLinkString
-                        .getStringAnnotations(TAG_URL, it, it)
-                        .firstOrNull()?.let {
-                            onUnsubscribeClick()
-                        }
-                },
-            )
-        }
+        Spacer(modifier = Modifier.width(16.dp))
+        ClickableText(
+            text = annotatedLinkString,
+            style = MaterialTheme.typography.bodyMedium,
+            onClick = {
+                annotatedLinkString
+                    .getStringAnnotations(TAG_URL, it, it)
+                    .firstOrNull()?.let {
+                        onUnsubscribeClick()
+                    }
+            },
+        )
+    }
+}
+
+@PreviewScreenSizes
+@Composable
+private fun StartRegistrationContentPreview_filledout() {
+    BitwardenTheme {
+        StartRegistrationContent(
+            emailInput = "e@mail.com",
+            selectedEnvironmentType = Environment.Type.US,
+            nameInput = "Test User",
+            isReceiveMarketingEmailsToggled = true,
+            isContinueButtonEnabled = true,
+            handler = StartRegistrationHandler(
+                onEmailInputChange = {},
+                onNameInputChange = {},
+                onEnvironmentTypeSelect = {},
+                onContinueClick = {},
+                onTermsClick = {},
+                onPrivacyPolicyClick = {},
+                onReceiveMarketingEmailsToggle = {},
+                onUnsubscribeMarketingEmailsClick = {},
+                onServerGeologyHelpClick = {},
+                onBackClick = {},
+            ),
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StartRegistrationContentPreview_empty() {
+    BitwardenTheme {
+        StartRegistrationContent(
+            emailInput = "",
+            selectedEnvironmentType = Environment.Type.US,
+            nameInput = "",
+            isReceiveMarketingEmailsToggled = false,
+            isContinueButtonEnabled = false,
+            handler = StartRegistrationHandler(
+                onEmailInputChange = {},
+                onNameInputChange = {},
+                onEnvironmentTypeSelect = {},
+                onContinueClick = {},
+                onTermsClick = {},
+                onPrivacyPolicyClick = {},
+                onReceiveMarketingEmailsToggle = {},
+                onUnsubscribeMarketingEmailsClick = {},
+                onServerGeologyHelpClick = {},
+                onBackClick = {},
+            ),
+        )
     }
 }
