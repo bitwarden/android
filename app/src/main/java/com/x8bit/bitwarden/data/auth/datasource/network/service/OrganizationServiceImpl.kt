@@ -1,7 +1,7 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedOrganizationApi
-import com.x8bit.bitwarden.data.auth.datasource.network.api.OrganizationApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedOrganizationApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationAutoEnrollStatusResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationDomainSsoDetailsResponseJson
@@ -13,7 +13,7 @@ import com.x8bit.bitwarden.data.auth.datasource.network.model.OrganizationResetP
  */
 class OrganizationServiceImpl(
     private val authenticatedOrganizationApi: AuthenticatedOrganizationApi,
-    private val organizationApi: OrganizationApi,
+    private val unauthenticatedOrganizationApi: UnauthenticatedOrganizationApi,
 ) : OrganizationService {
     override suspend fun organizationResetPasswordEnroll(
         organizationId: String,
@@ -32,7 +32,7 @@ class OrganizationServiceImpl(
 
     override suspend fun getOrganizationDomainSsoDetails(
         email: String,
-    ): Result<OrganizationDomainSsoDetailsResponseJson> = organizationApi
+    ): Result<OrganizationDomainSsoDetailsResponseJson> = unauthenticatedOrganizationApi
         .getClaimedDomainOrganizationDetails(
             body = OrganizationDomainSsoDetailsRequestJson(
                 email = email,

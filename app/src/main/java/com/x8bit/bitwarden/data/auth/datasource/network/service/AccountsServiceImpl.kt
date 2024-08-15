@@ -1,8 +1,8 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.AccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.api.AuthenticatedKeyConnectorApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedAccountsApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.CreateAccountKeysRequest
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountRequestJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.DeleteAccountResponseJson
@@ -24,7 +24,7 @@ import kotlinx.serialization.json.Json
  */
 @Suppress("TooManyFunctions")
 class AccountsServiceImpl(
-    private val accountsApi: AccountsApi,
+    private val unauthenticatedAccountsApi: UnauthenticatedAccountsApi,
     private val authenticatedAccountsApi: AuthenticatedAccountsApi,
     private val authenticatedKeyConnectorApi: AuthenticatedKeyConnectorApi,
     private val json: Json,
@@ -84,7 +84,7 @@ class AccountsServiceImpl(
     override suspend fun requestPasswordHint(
         email: String,
     ): Result<PasswordHintResponseJson> =
-        accountsApi
+        unauthenticatedAccountsApi
             .passwordHintRequest(PasswordHintRequestJson(email))
             .map { PasswordHintResponseJson.Success }
             .recoverCatching { throwable ->
@@ -98,7 +98,7 @@ class AccountsServiceImpl(
             }
 
     override suspend fun resendVerificationCodeEmail(body: ResendEmailRequestJson): Result<Unit> =
-        accountsApi.resendVerificationCodeEmail(body = body)
+        unauthenticatedAccountsApi.resendVerificationCodeEmail(body = body)
 
     override suspend fun resetPassword(body: ResetPasswordRequestJson): Result<Unit> {
         return if (body.currentPasswordHash == null) {

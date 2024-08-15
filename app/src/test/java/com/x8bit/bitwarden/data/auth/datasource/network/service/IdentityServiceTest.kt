@@ -1,6 +1,6 @@
 package com.x8bit.bitwarden.data.auth.datasource.network.service
 
-import com.x8bit.bitwarden.data.auth.datasource.network.api.IdentityApi
+import com.x8bit.bitwarden.data.auth.datasource.network.api.UnauthenticatedIdentityApi
 import com.x8bit.bitwarden.data.auth.datasource.network.model.GetTokenResponseJson
 import com.x8bit.bitwarden.data.auth.datasource.network.model.IdentityTokenAuthModel
 import com.x8bit.bitwarden.data.auth.datasource.network.model.KdfTypeJson
@@ -34,13 +34,13 @@ import retrofit2.create
 
 class IdentityServiceTest : BaseServiceTest() {
 
-    private val identityApi: IdentityApi = retrofit.create()
+    private val unauthenticatedIdentityApi: UnauthenticatedIdentityApi = retrofit.create()
     private val deviceModelProvider = mockk<DeviceModelProvider> {
         every { deviceModel } returns "Test Device"
     }
 
     private val identityService = IdentityServiceImpl(
-        api = identityApi,
+        unauthenticatedIdentityApi = unauthenticatedIdentityApi,
         json = Json {
             ignoreUnknownKeys = true
         },
