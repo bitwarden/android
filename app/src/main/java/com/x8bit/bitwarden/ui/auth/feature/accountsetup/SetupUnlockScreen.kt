@@ -43,6 +43,8 @@ import com.x8bit.bitwarden.ui.platform.base.util.standardHorizontalMargin
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenTextButton
+import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
+import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenBasicDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenLoadingDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.BitwardenTwoButtonDialog
 import com.x8bit.bitwarden.ui.platform.components.dialog.LoadingDialogState
@@ -86,7 +88,12 @@ fun SetupUnlockScreen(
         }
     }
 
-    SetupUnlockScreenDialogs(dialogState = state.dialogState)
+    SetupUnlockScreenDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(SetupUnlockAction.DismissDialog) }
+        },
+    )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     BitwardenScaffold(
@@ -292,10 +299,19 @@ private fun SetupUnlockHeaderLandscape(
 @Composable
 private fun SetupUnlockScreenDialogs(
     dialogState: SetupUnlockState.DialogState?,
+    onDismissRequest: () -> Unit,
 ) {
     when (dialogState) {
         is SetupUnlockState.DialogState.Loading -> BitwardenLoadingDialog(
             visibilityState = LoadingDialogState.Shown(text = dialogState.title),
+        )
+
+        is SetupUnlockState.DialogState.Error -> BitwardenBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                title = dialogState.title,
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
         )
 
         null -> Unit

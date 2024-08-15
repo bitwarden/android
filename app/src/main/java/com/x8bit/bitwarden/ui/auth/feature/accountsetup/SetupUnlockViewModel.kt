@@ -56,6 +56,7 @@ class SetupUnlockViewModel @Inject constructor(
             SetupUnlockAction.ContinueClick -> handleContinueClick()
             SetupUnlockAction.EnableBiometricsClick -> handleEnableBiometricsClick()
             SetupUnlockAction.SetUpLaterClick -> handleSetUpLaterClick()
+            SetupUnlockAction.DismissDialog -> handleDismissDialog()
             is SetupUnlockAction.UnlockWithBiometricToggle -> {
                 handleUnlockWithBiometricToggle(action)
             }
@@ -70,16 +71,21 @@ class SetupUnlockViewModel @Inject constructor(
     }
 
     private fun handleEnableBiometricsClick() {
-        sendEvent(
-            SetupUnlockEvent.ShowBiometricsPrompt(
-                // Generate a new key in case the previous one was invalidated
-                cipher = biometricsEncryptionManager.createCipher(userId = state.userId),
+        trySendAction(
+            SetupUnlockAction.Internal.ReceiveCreateCipherResult(
+                cipher = biometricsEncryptionManager.createCipherOrNull(userId = state.userId),
             ),
         )
     }
 
     private fun handleSetUpLaterClick() {
         sendEvent(SetupUnlockEvent.NavigateToSetupAutofill)
+    }
+
+    private fun handleDismissDialog() {
+        mutableStateFlow.update {
+            it.copy(dialogState = null)
+        }
     }
 
     private fun handleUnlockWithBiometricToggle(
@@ -126,6 +132,10 @@ class SetupUnlockViewModel @Inject constructor(
             is SetupUnlockAction.Internal.BiometricsKeyResultReceive -> {
                 handleBiometricsKeyResultReceive(action)
             }
+
+            is SetupUnlockAction.Internal.ReceiveCreateCipherResult -> {
+                handleReceiveCreateCipherResult(action)
+            }
         }
     }
 
@@ -149,6 +159,32 @@ class SetupUnlockViewModel @Inject constructor(
                         isUnlockWithBiometricsEnabled = true,
                     )
                 }
+            }
+        }
+    }
+
+    private fun handleReceiveCreateCipherResult(
+        action: SetupUnlockAction.Internal.ReceiveCreateCipherResult,
+    ) {
+        when (val cipher = action.cipher) {
+            null -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        dialogState = SetupUnlockState.DialogState.Error(
+                            title = R.string.an_error_has_occurred.asText(),
+                            message = R.string.generic_error_message.asText(),
+                        ),
+                    )
+                }
+            }
+
+            else -> {
+                sendEvent(
+                    SetupUnlockEvent.ShowBiometricsPrompt(
+                        // Generate a new key in case the previous one was invalidated
+                        cipher = cipher,
+                    ),
+                )
             }
         }
     }
@@ -181,6 +217,15 @@ data class SetupUnlockState(
         @Parcelize
         data class Loading(
             val title: Text,
+        ) : DialogState()
+
+        /**
+         * Displays an error dialog with a title, message, and an acknowledgement button.
+         */
+        @Parcelize
+        data class Error(
+            val title: Text,
+            val message: Text,
         ) : DialogState()
     }
 }
@@ -236,6 +281,11 @@ sealed class SetupUnlockAction {
     data object SetUpLaterClick : SetupUnlockAction()
 
     /**
+     * The user has dismissed the dialog.
+     */
+    data object DismissDialog : SetupUnlockAction()
+
+    /**
      * Models actions that can be sent by the view model itself.
      */
     sealed class Internal : SetupUnlockAction() {
@@ -244,6 +294,13 @@ sealed class SetupUnlockAction {
          */
         data class BiometricsKeyResultReceive(
             val result: BiometricsKeyResult,
+        ) : Internal()
+
+        /**
+         * Indicates a result for creating a cryptographic cipher for biometrics has been received.
+         */
+        data class ReceiveCreateCipherResult(
+            val cipher: Cipher?,
         ) : Internal()
     }
 }

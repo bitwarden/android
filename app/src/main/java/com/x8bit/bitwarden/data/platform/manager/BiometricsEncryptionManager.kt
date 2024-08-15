@@ -9,9 +9,9 @@ interface BiometricsEncryptionManager {
     /**
      * Creates a [Cipher] built from a keystore.
      */
-    fun createCipher(
+    fun createCipherOrNull(
         userId: String,
-    ): Cipher
+    ): Cipher?
 
     /**
      * Gets the [Cipher] built from a keystore, or creates one if it doesn't already exist.

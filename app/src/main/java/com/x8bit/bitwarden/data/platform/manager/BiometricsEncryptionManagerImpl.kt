@@ -40,8 +40,9 @@ class BiometricsEncryptionManagerImpl(
             .setInvalidatedByBiometricEnrollment(true)
             .build()
 
-    override fun createCipher(userId: String): Cipher {
-        val secretKey: SecretKey = generateKey()
+    override fun createCipherOrNull(userId: String): Cipher? {
+        val secretKey: SecretKey = generateKeyOrNull()
+            ?: return null
         val cipher = Cipher.getInstance(CIPHER_TRANSFORMATION)
         // This should never fail to initialize / return false because the cipher is newly generated
         initializeCipher(
@@ -54,13 +55,11 @@ class BiometricsEncryptionManagerImpl(
 
     override fun getOrCreateCipher(userId: String): Cipher? {
         val secretKey = try {
-            getSecretKey() ?: generateKey()
+            getSecretKey()
+                ?: generateKeyOrNull()
+                ?: return null
         } catch (e: InvalidAlgorithmParameterException) {
             // user removed all biometrics from the device
-            settingsDiskSource.systemBiometricIntegritySource = null
-            return null
-        } catch (e: ProviderException) {
-            // key generation failed because user cannot be authenticated by the OS.
             settingsDiskSource.systemBiometricIntegritySource = null
             return null
         }
@@ -93,18 +92,21 @@ class BiometricsEncryptionManagerImpl(
     }
 
     /**
-     * Generates a [SecretKey] from which the [Cipher] will be generated.
-     *
-     * @throws ProviderException if [KeyGenerator] is unable to generate a key.
+     * Generates a [SecretKey] from which the [Cipher] will be generated, or `null` if a key cannot
+     * be generated.
      */
-    private fun generateKey(): SecretKey {
+    private fun generateKeyOrNull(): SecretKey? {
         val keyGen = KeyGenerator.getInstance(
             KeyProperties.KEY_ALGORITHM_AES,
             ENCRYPTION_KEYSTORE_NAME,
         )
         keyGen.init(keyGenParameterSpec)
-        keyGen.generateKey()
-        return requireNotNull(getSecretKey())
+        try {
+            keyGen.generateKey()
+        } catch (e: ProviderException) {
+            return null
+        }
+        return getSecretKey()
     }
 
     /**
@@ -173,7 +175,7 @@ class BiometricsEncryptionManagerImpl(
         )
 
         try {
-            createCipher(userId)
+            createCipherOrNull(userId)
         } catch (e: Exception) {
             // Catch silently to allow biometrics to function on devices that are in
             // a state where key generation is not functioning

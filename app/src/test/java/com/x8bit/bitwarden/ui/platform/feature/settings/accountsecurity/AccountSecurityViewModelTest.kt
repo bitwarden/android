@@ -57,7 +57,7 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
     }
     private val mutableActivePolicyFlow = bufferedMutableSharedFlow<List<SyncResponseJson.Policy>>()
     private val biometricsEncryptionManager: BiometricsEncryptionManager = mockk {
-        every { createCipher(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
+        every { createCipherOrNull(DEFAULT_USER_STATE.activeUserId) } returns CIPHER
     }
     private val policyManager: PolicyManager = mockk {
         every {
@@ -576,6 +576,47 @@ class AccountSecurityViewModelTest : BaseViewModelTest() {
                 )
             }
         }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on CreateBiometricsCipherResultReceive should send ShowBiometricsPrompt event when result is not null`() =
+        runTest {
+            val cipher = mockk<Cipher>()
+            val viewModel = createViewModel()
+
+            viewModel.trySendAction(
+                AccountSecurityAction.Internal.CreateBiometricsCipherResultReceive(cipher = cipher),
+            )
+
+            viewModel.eventFlow.test {
+                assertEquals(
+                    AccountSecurityEvent.ShowBiometricsPrompt(
+                        cipher = cipher,
+                    ),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Suppress("MaxLineLength")
+    @Test
+    fun `on CreateBiometricsCipherResultReceive should show Error dialog when result is null`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            AccountSecurityAction.Internal.CreateBiometricsCipherResultReceive(cipher = null),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialog = AccountSecurityDialog.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
+    }
 
     @Suppress("LongParameterList")
     private fun createViewModel(

@@ -40,6 +40,7 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
         every {
             isBiometricIntegrityValid(userId = DEFAULT_USER_ID, cipher = CIPHER)
         } returns false
+        every { createCipherOrNull(DEFAULT_USER_ID) } returns CIPHER
     }
 
     @Test
@@ -208,6 +209,69 @@ class SetupUnlockViewModelTest : BaseViewModelTest() {
                 shouldRequireMasterPasswordOnRestart = true,
             )
         }
+    }
+
+    @Test
+    fun `on DismissDialog should hide dialog`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SetupUnlockAction.DismissDialog)
+
+        assertEquals(
+            DEFAULT_STATE.copy(dialogState = null),
+            viewModel.stateFlow.value,
+        )
+    }
+
+    @Test
+    fun `EnableBiometricsClick action should create a new biometrics cipher and emit result`() {
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(SetupUnlockAction.EnableBiometricsClick)
+
+        verify {
+            biometricsEncryptionManager.getOrCreateCipher(DEFAULT_USER_ID)
+        }
+    }
+
+    @Test
+    fun `ReceiveCreateCipherResult should show biometrics prompt when cipher is not null`() =
+        runTest {
+            val viewModel = createViewModel()
+
+            viewModel.eventFlow.test {
+                viewModel.trySendAction(
+                    SetupUnlockAction.Internal.ReceiveCreateCipherResult(
+                        cipher = CIPHER,
+                    ),
+                )
+                assertEquals(
+                    SetupUnlockEvent.ShowBiometricsPrompt(CIPHER),
+                    awaitItem(),
+                )
+            }
+        }
+
+    @Test
+    fun `ReceiveCreateCipherResult should show error dialog when cipher is null`() {
+        every {
+            biometricsEncryptionManager.createCipherOrNull(DEFAULT_USER_ID)
+        } returns null
+        val viewModel = createViewModel()
+
+        viewModel.trySendAction(
+            SetupUnlockAction.Internal.ReceiveCreateCipherResult(cipher = null),
+        )
+
+        assertEquals(
+            DEFAULT_STATE.copy(
+                dialogState = SetupUnlockState.DialogState.Error(
+                    title = R.string.an_error_has_occurred.asText(),
+                    message = R.string.generic_error_message.asText(),
+                ),
+            ),
+            viewModel.stateFlow.value,
+        )
     }
 
     private fun createViewModel(
