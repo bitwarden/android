@@ -97,7 +97,6 @@ class BiometricsEncryptionManagerImpl(
      *
      * @throws ProviderException if [KeyGenerator] is unable to generate a key.
      */
-    @Throws(ProviderException::class)
     private fun generateKey(): SecretKey {
         val keyGen = KeyGenerator.getInstance(
             KeyProperties.KEY_ALGORITHM_AES,
