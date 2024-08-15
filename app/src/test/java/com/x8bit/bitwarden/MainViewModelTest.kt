@@ -330,6 +330,7 @@ class MainViewModelTest : BaseViewModelTest() {
             every { isPasswordGeneratorShortcut } returns false
         }
         every { intentManager.getShareDataFromIntent(mockIntent) } returns null
+        every { authRepository.activeUserId } returns null
 
         viewModel.trySendAction(
             MainAction.ReceiveFirstIntent(
