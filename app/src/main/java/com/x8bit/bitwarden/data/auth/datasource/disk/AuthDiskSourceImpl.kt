@@ -140,10 +140,9 @@ class AuthDiskSourceImpl(
         )
     }
 
-    override fun getShouldTrustDevice(userId: String): Boolean =
-        requireNotNull(
-            getBoolean(key = SHOULD_TRUST_DEVICE_KEY.appendIdentifier(userId), default = false),
-        )
+    override fun getShouldTrustDevice(
+        userId: String,
+    ): Boolean? = getBoolean(key = SHOULD_TRUST_DEVICE_KEY.appendIdentifier(userId))
 
     override fun storeShouldTrustDevice(userId: String, shouldTrustDevice: Boolean?) {
         putBoolean(SHOULD_TRUST_DEVICE_KEY.appendIdentifier(userId), shouldTrustDevice)

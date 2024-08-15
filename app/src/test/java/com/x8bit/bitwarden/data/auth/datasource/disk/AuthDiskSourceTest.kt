@@ -145,7 +145,7 @@ class AuthDiskSourceTest {
         val shouldTrustDeviceKey = "bwPreferencesStorage:shouldTrustDevice_$userId"
 
         // Shared preferences and the disk source start with the same value.
-        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId))
+        assertNull(authDiskSource.getShouldTrustDevice(userId = userId))
         assertFalse(fakeSharedPreferences.getBoolean(shouldTrustDeviceKey, false))
 
         // Updating the disk source updates shared preferences
@@ -154,7 +154,7 @@ class AuthDiskSourceTest {
 
         // Update SharedPreferences updates the disk source
         fakeSharedPreferences.edit { putBoolean(shouldTrustDeviceKey, false) }
-        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId))
+        assertFalse(authDiskSource.getShouldTrustDevice(userId = userId) ?: true)
     }
 
     @Test
