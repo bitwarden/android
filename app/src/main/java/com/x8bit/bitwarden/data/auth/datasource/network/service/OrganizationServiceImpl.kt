@@ -52,4 +52,9 @@ class OrganizationServiceImpl(
         .getOrganizationKeys(
             organizationId = organizationId,
         )
+
+    override suspend fun leaveOrganization(
+        organizationId: String,
+    ): Result<Unit> =
+        authenticatedOrganizationApi.leaveOrganization(organizationId = organizationId)
 }

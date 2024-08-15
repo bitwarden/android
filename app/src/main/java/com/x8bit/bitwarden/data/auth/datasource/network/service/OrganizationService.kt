@@ -38,4 +38,11 @@ interface OrganizationService {
     suspend fun getOrganizationKeys(
         organizationId: String,
     ): Result<OrganizationKeysResponseJson>
+
+    /**
+     * Leaves this organization.
+     */
+    suspend fun leaveOrganization(
+        organizationId: String,
+    ): Result<Unit>
 }
