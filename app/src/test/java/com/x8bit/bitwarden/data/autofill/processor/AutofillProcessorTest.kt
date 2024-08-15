@@ -157,7 +157,6 @@ class AutofillProcessorTest {
             } returns autofillRequest
             every {
                 saveInfoBuilder.build(
-                    autofillAppInfo = appInfo,
                     autofillPartition = autofillPartition,
                     fillRequest = fillRequest,
                     packageName = PACKAGE_NAME,
@@ -233,7 +232,6 @@ class AutofillProcessorTest {
             } returns autofillRequest
             every {
                 saveInfoBuilder.build(
-                    autofillAppInfo = appInfo,
                     autofillPartition = autofillPartition,
                     fillRequest = fillRequest,
                     packageName = PACKAGE_NAME,
@@ -494,7 +492,6 @@ class AutofillProcessorTest {
         coEvery { filledDataBuilder.build(autofillRequest = autofillRequest) } returns filledData
         every {
             saveInfoBuilder.build(
-                autofillAppInfo = appInfo,
                 autofillPartition = autofillPartition,
                 fillRequest = fillRequest,
                 packageName = PACKAGE_NAME,

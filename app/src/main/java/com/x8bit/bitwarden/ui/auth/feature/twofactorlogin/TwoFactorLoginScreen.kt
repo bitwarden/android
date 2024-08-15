@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -59,6 +60,7 @@ import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.composition.LocalNfcManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
 import com.x8bit.bitwarden.ui.platform.manager.nfc.NfcManager
+import com.x8bit.bitwarden.ui.platform.theme.BitwardenTheme
 import kotlinx.collections.immutable.toPersistentList
 
 /**
@@ -291,6 +293,34 @@ private fun TwoFactorLoginScreenContent(
                 modifier = Modifier
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Preview(showBackground = true)
+private fun TwoFactorLoginScreenContentPreview() {
+    BitwardenTheme {
+        BitwardenScaffold {
+            TwoFactorLoginScreenContent(
+                state = TwoFactorLoginState(
+                    TwoFactorAuthMethod.EMAIL,
+                    availableAuthMethods = listOf(TwoFactorAuthMethod.EMAIL),
+                    codeInput = "",
+                    dialogState = null,
+                    displayEmail = "email@dot.com",
+                    isContinueButtonEnabled = true,
+                    isRememberMeEnabled = true,
+                    captchaToken = null,
+                    email = "",
+                    password = "",
+                ),
+                onCodeInputChange = {},
+                onContinueButtonClick = {},
+                onRememberMeToggle = {},
+                onResendEmailButtonClick = {},
             )
         }
     }

@@ -206,6 +206,9 @@ class MainViewModel @Inject constructor(
             }
 
             completeRegistrationData != null -> {
+                if (authRepository.activeUserId != null) {
+                    authRepository.hasPendingAccountAddition = true
+                }
                 specialCircumstanceManager.specialCircumstance =
                     SpecialCircumstance.CompleteRegistration(
                         completeRegistrationData = completeRegistrationData,
