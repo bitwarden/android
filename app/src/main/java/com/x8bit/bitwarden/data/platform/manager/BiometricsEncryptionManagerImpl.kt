@@ -104,15 +104,12 @@ class BiometricsEncryptionManagerImpl(
      * Generates a [SecretKey] from which the [Cipher] will be generated, or `null` if a key cannot
      * be generated.
      */
-    @Suppress("TooGenericExceptionCaught")
     private fun generateKeyOrNull(): SecretKey? {
         val keyGen = try {
             KeyGenerator.getInstance(
                 KeyProperties.KEY_ALGORITHM_AES,
                 ENCRYPTION_KEYSTORE_NAME,
             )
-        } catch (e: NullPointerException) {
-            return null
         } catch (e: NoSuchAlgorithmException) {
             return null
         } catch (e: NoSuchProviderException) {
