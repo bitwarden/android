@@ -38,12 +38,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.x8bit.bitwarden.R
 import com.x8bit.bitwarden.ui.platform.base.util.EventsEffect
+import com.x8bit.bitwarden.ui.platform.base.util.createAnnotatedString
 import com.x8bit.bitwarden.ui.platform.components.appbar.BitwardenTopAppBar
 import com.x8bit.bitwarden.ui.platform.components.button.BitwardenFilledButton
 import com.x8bit.bitwarden.ui.platform.components.scaffold.BitwardenScaffold
 import com.x8bit.bitwarden.ui.platform.components.util.rememberVectorPainter
 import com.x8bit.bitwarden.ui.platform.composition.LocalIntentManager
 import com.x8bit.bitwarden.ui.platform.manager.intent.IntentManager
+
+/**
+ * Constant string to be used in string annotation tag field
+ */
+private const val TAG_URL = "URL"
 
 /**
  * Top level composable for the check email screen.
@@ -123,17 +129,18 @@ fun CheckEmailScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             @Suppress("MaxLineLength")
-            val descriptionAnnotatedString = CreateAnnotatedString(
-                mainText = stringResource(
+            val descriptionAnnotatedString = createAnnotatedString(
+                mainString = stringResource(
                     id = R.string.follow_the_instructions_in_the_email_sent_to_x_to_continue_creating_your_account,
                     state.email,
                 ),
-                highlightText = state.email,
-                highlightSpanStyle = SpanStyle(
+                highlights = listOf(state.email),
+                highlightStyle = SpanStyle(
                     color = MaterialTheme.colorScheme.onSurface,
                     fontSize = MaterialTheme.typography.bodyMedium.fontSize,
                     fontWeight = FontWeight.Bold,
                 ),
+                tag = "EMAIL"
             )
             Text(
                 text = descriptionAnnotatedString,
@@ -159,34 +166,36 @@ fun CheckEmailScreen(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                val goBackAnnotatedString = CreateAnnotatedString(
-                    mainText = stringResource(
+                val goBackAnnotatedString = createAnnotatedString(
+                    mainString = stringResource(
                         id = R.string.no_email_go_back_to_edit_your_email_address,
                     ),
-                    highlightText = stringResource(id = R.string.go_back),
+                    highlights = listOf(stringResource(id = R.string.go_back)),
+                    tag = TAG_URL
                 )
                 ClickableText(
                     text = goBackAnnotatedString,
                     onClick = {
                         goBackAnnotatedString
-                            .getStringAnnotations("URL", it, it)
+                            .getStringAnnotations(TAG_URL, it, it)
                             .firstOrNull()?.let {
                                 viewModel.trySendAction(CheckEmailAction.CloseClick)
                             }
                     },
                 )
                 Spacer(modifier = Modifier.height(32.dp))
-                val logInAnnotatedString = CreateAnnotatedString(
-                    mainText = stringResource(
+                val logInAnnotatedString = createAnnotatedString(
+                    mainString = stringResource(
                         id = R.string.or_log_in_you_may_already_have_an_account,
                     ),
-                    highlightText = stringResource(id = R.string.log_in),
+                    highlights = listOf(stringResource(id = R.string.log_in)),
+                    tag = TAG_URL
                 )
                 ClickableText(
                     text = logInAnnotatedString,
                     onClick = {
                         logInAnnotatedString
-                            .getStringAnnotations("URL", it, it)
+                            .getStringAnnotations(TAG_URL, it, it)
                             .firstOrNull()?.let {
                                 viewModel.trySendAction(CheckEmailAction.LoginClick)
                             }
@@ -195,42 +204,5 @@ fun CheckEmailScreen(
             }
             Spacer(modifier = Modifier.navigationBarsPadding())
         }
-    }
-}
-
-@Composable
-private fun CreateAnnotatedString(
-    mainText: String,
-    highlightText: String,
-    mainSpanStyle: SpanStyle = SpanStyle(
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-    ),
-    highlightSpanStyle: SpanStyle = SpanStyle(
-        color = MaterialTheme.colorScheme.primary,
-        fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-        fontWeight = FontWeight.Bold,
-    ),
-): AnnotatedString {
-    return buildAnnotatedString {
-        val startIndex = mainText.indexOf(highlightText, ignoreCase = true)
-        val endIndex = startIndex + highlightText.length
-        append(mainText)
-        addStyle(
-            style = mainSpanStyle,
-            start = 0,
-            end = mainText.length,
-        )
-        addStyle(
-            style = highlightSpanStyle,
-            start = startIndex,
-            end = endIndex,
-        )
-        addStringAnnotation(
-            tag = "URL",
-            annotation = highlightText,
-            start = startIndex,
-            end = endIndex,
-        )
     }
 }
