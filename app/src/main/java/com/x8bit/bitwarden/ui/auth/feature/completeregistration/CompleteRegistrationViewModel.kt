@@ -14,8 +14,12 @@ import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CloseClick
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ConfirmPasswordInputChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ContinueWithBreachedPasswordClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CreateAccountClick
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.ErrorDialogDismiss
+import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.Internal.ReceivePasswordStrengthResult
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordHintChange
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.PasswordInputChange
@@ -81,7 +85,7 @@ class CompleteRegistrationViewModel @Inject constructor(
             .captchaTokenResultFlow
             .onEach {
                 sendAction(
-                    CompleteRegistrationAction.Internal.ReceiveCaptchaToken(
+                    Internal.ReceiveCaptchaToken(
                         tokenResult = it,
                     ),
                 )
@@ -111,18 +115,18 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     override fun handleAction(action: CompleteRegistrationAction) {
         when (action) {
-            is CompleteRegistrationAction.CreateAccountClick -> handleCreateAccountClick()
+            is CreateAccountClick -> handleCreateAccountClick()
             is ConfirmPasswordInputChange -> handleConfirmPasswordInputChanged(action)
             is PasswordHintChange -> handlePasswordHintChanged(action)
             is PasswordInputChange -> handlePasswordInputChanged(action)
-            is CompleteRegistrationAction.CloseClick -> handleCloseClick()
-            is CompleteRegistrationAction.ErrorDialogDismiss -> handleDialogDismiss()
+            is CloseClick -> handleCloseClick()
+            is ErrorDialogDismiss -> handleDialogDismiss()
             is CheckDataBreachesToggle -> handleCheckDataBreachesToggle(action)
-            is CompleteRegistrationAction.Internal.ReceiveRegisterResult -> {
+            is Internal.ReceiveRegisterResult -> {
                 handleReceiveRegisterAccountResult(action)
             }
 
-            is CompleteRegistrationAction.Internal.ReceiveCaptchaToken -> {
+            is Internal.ReceiveCaptchaToken -> {
                 handleReceiveCaptchaToken(action)
             }
 
@@ -155,7 +159,7 @@ class CompleteRegistrationViewModel @Inject constructor(
     }
 
     private fun handleReceiveCaptchaToken(
-        action: CompleteRegistrationAction.Internal.ReceiveCaptchaToken,
+        action: Internal.ReceiveCaptchaToken,
     ) {
         when (val result = action.tokenResult) {
             is CaptchaCallbackTokenResult.MissingToken -> {
@@ -183,7 +187,7 @@ class CompleteRegistrationViewModel @Inject constructor(
 
     @Suppress("LongMethod", "MaxLineLength")
     private fun handleReceiveRegisterAccountResult(
-        action: CompleteRegistrationAction.Internal.ReceiveRegisterResult,
+        action: Internal.ReceiveRegisterResult,
     ) {
         when (val registerAccountResult = action.registerResult) {
             is RegisterResult.CaptchaRequired -> {
@@ -368,7 +372,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 captchaToken = captchaToken,
             )
             sendAction(
-                CompleteRegistrationAction.Internal.ReceiveRegisterResult(
+                Internal.ReceiveRegisterResult(
                     registerResult = result,
                 ),
             )
