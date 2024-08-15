@@ -10,7 +10,7 @@ import com.x8bit.bitwarden.data.auth.repository.model.SendVerificationEmailResul
 import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.FakeEnvironmentRepository
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.ContinueClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EnvironmentTypeSelect
@@ -293,14 +293,14 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         }
 
     @Test
-    fun `CloseClick should emit NavigateBack`() = runTest {
+    fun `BackClick should emit NavigateBack`() = runTest {
         val viewModel = StartRegistrationViewModel(
             savedStateHandle = SavedStateHandle(),
             authRepository = mockAuthRepository,
             environmentRepository = fakeEnvironmentRepository,
         )
         viewModel.eventFlow.test {
-            viewModel.trySendAction(CloseClick)
+            viewModel.trySendAction(BackClick)
             assertEquals(NavigateBack, awaitItem())
         }
     }
@@ -429,6 +429,20 @@ class StartRegistrationViewModelTest : BaseViewModelTest() {
         viewModel.trySendAction(ReceiveMarketingEmailsToggle(false))
         viewModel.stateFlow.test {
             assertEquals(DEFAULT_STATE.copy(isReceiveMarketingEmailsToggled = false), awaitItem())
+        }
+    }
+
+    @Test
+    fun `ServerGeologyHelpClickAction should emit NavigateToServerSelectionInfo`() = runTest {
+        val viewModel = StartRegistrationViewModel(
+            savedStateHandle = SavedStateHandle(),
+            authRepository = mockAuthRepository,
+            environmentRepository = fakeEnvironmentRepository,
+        )
+
+        viewModel.eventFlow.test {
+            viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick)
+            assertEquals(StartRegistrationEvent.NavigateToServerSelectionInfo, awaitItem())
         }
     }
 

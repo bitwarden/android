@@ -975,4 +975,6 @@ Do you want to switch to this account?</string>
   <string name="generate_button_label">Generate</string>
   <string name="write_this_password_down_and_keep_it_somewhere_safe">Write this password down and keep it somewhere safe.</string>
   <string name="learn_about_other_ways_to_prevent_account_lockout">Learn about other ways to prevent account lockout</string>
+  <string name="help_with_server_geolocations">Help with server geolocations.</string>
+  <string name="email_address_required">Email address (required)</string>
 </resources>

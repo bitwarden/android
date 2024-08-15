@@ -8,11 +8,12 @@ import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.core.net.toUri
 import com.x8bit.bitwarden.data.platform.repository.model.Environment
 import com.x8bit.bitwarden.data.platform.repository.util.bufferedMutableSharedFlow
-import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.CloseClick
+import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.BackClick
 import com.x8bit.bitwarden.ui.auth.feature.startregistration.StartRegistrationAction.EmailInputChange
 import com.x8bit.bitwarden.ui.platform.base.BaseComposeTest
 import com.x8bit.bitwarden.ui.platform.base.util.asText
@@ -39,6 +40,7 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     private val intentManager = mockk<IntentManager>(relaxed = true) {
         every { startCustomTabsActivity(any()) } just runs
         every { startActivity(any()) } just runs
+        every { launchUri(any()) } just runs
     }
 
     private val mutableStateFlow = MutableStateFlow(DEFAULT_STATE)
@@ -66,9 +68,9 @@ class StartRegistrationScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun `close click should send CloseClick action`() {
-        composeTestRule.onNodeWithContentDescription("Close").performClick()
-        verify { viewModel.trySendAction(CloseClick) }
+    fun `close click should send BackClick action`() {
+        composeTestRule.onNodeWithContentDescription("Back").performClick()
+        verify { viewModel.trySendAction(BackClick) }
     }
 
     @Test
@@ -172,6 +174,27 @@ class StartRegistrationScreenTest : BaseComposeTest() {
             )
         }
         composeTestRule.onNode(isDialog()).assertIsDisplayed()
+    }
+
+    @Test
+    fun `clicking the server tool tip should send ServerGeologyHelpClickAction`() {
+        composeTestRule
+            .onNodeWithContentDescription("Help with server geolocations.")
+            .performScrollTo()
+            .performClick()
+
+        verify { viewModel.trySendAction(StartRegistrationAction.ServerGeologyHelpClick) }
+    }
+
+    @Test
+    fun `when NavigateToServerSelectionInfo is observed event should invoke intent manager`() {
+        mutableEventFlow.tryEmit(StartRegistrationEvent.NavigateToServerSelectionInfo)
+
+        verify {
+            intentManager.launchUri(
+                uri = "https://bitwarden.com/help/server-geographies/".toUri(),
+            )
+        }
     }
 
     companion object {
