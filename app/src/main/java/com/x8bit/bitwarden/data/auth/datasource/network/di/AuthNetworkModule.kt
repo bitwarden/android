@@ -73,10 +73,8 @@ object AuthNetworkModule {
     fun providesHaveIBeenPwnedService(
         retrofits: Retrofits,
     ): HaveIBeenPwnedService = HaveIBeenPwnedServiceImpl(
-        retrofits
-            .staticRetrofitBuilder
-            .baseUrl("https://api.pwnedpasswords.com")
-            .build()
+        api = retrofits
+            .createStaticRetrofit(baseUrl = "https://api.pwnedpasswords.com")
             .create(),
     )
 

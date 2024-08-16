@@ -24,10 +24,7 @@ object Fido2NetworkModule {
     ): DigitalAssetLinkService =
         DigitalAssetLinkServiceImpl(
             digitalAssetLinkApi = retrofits
-                .staticRetrofitBuilder
-                // This URL will be overridden dynamically.
-                .baseUrl("https://www.bitwarden.com")
-                .build()
+                .createStaticRetrofit()
                 .create(),
         )
 }
