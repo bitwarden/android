@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import android.net.Uri
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
@@ -9,8 +8,6 @@ import com.x8bit.bitwarden.data.auth.datasource.sdk.model.PasswordStrength
 import com.x8bit.bitwarden.data.auth.repository.AuthRepository
 import com.x8bit.bitwarden.data.auth.repository.model.PasswordStrengthResult
 import com.x8bit.bitwarden.data.auth.repository.model.RegisterResult
-import com.x8bit.bitwarden.data.auth.repository.util.CaptchaCallbackTokenResult
-import com.x8bit.bitwarden.data.auth.repository.util.generateUriForCaptcha
 import com.x8bit.bitwarden.data.platform.manager.SpecialCircumstanceManager
 import com.x8bit.bitwarden.data.platform.repository.EnvironmentRepository
 import com.x8bit.bitwarden.ui.auth.feature.completeregistration.CompleteRegistrationAction.CheckDataBreachesToggle
@@ -81,16 +78,6 @@ class CompleteRegistrationViewModel @Inject constructor(
         stateFlow
             .onEach { savedStateHandle[KEY_STATE] = it }
             .launchIn(viewModelScope)
-        authRepository
-            .captchaTokenResultFlow
-            .onEach {
-                sendAction(
-                    Internal.ReceiveCaptchaToken(
-                        tokenResult = it,
-                    ),
-                )
-            }
-            .launchIn(viewModelScope)
     }
 
     private fun verifyEmailAddress() {
@@ -126,10 +113,6 @@ class CompleteRegistrationViewModel @Inject constructor(
                 handleReceiveRegisterAccountResult(action)
             }
 
-            is Internal.ReceiveCaptchaToken -> {
-                handleReceiveCaptchaToken(action)
-            }
-
             ContinueWithBreachedPasswordClick -> handleContinueWithBreachedPasswordClick()
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
         }
@@ -158,44 +141,15 @@ class CompleteRegistrationViewModel @Inject constructor(
         }
     }
 
-    private fun handleReceiveCaptchaToken(
-        action: Internal.ReceiveCaptchaToken,
-    ) {
-        when (val result = action.tokenResult) {
-            is CaptchaCallbackTokenResult.MissingToken -> {
-                mutableStateFlow.update {
-                    it.copy(
-                        dialog = CompleteRegistrationDialog.Error(
-                            BasicDialogState.Shown(
-                                title = R.string.an_error_has_occurred.asText(),
-                                message = R.string.captcha_failed.asText(),
-                            ),
-                        ),
-                    )
-                }
-            }
-
-            is CaptchaCallbackTokenResult.Success -> {
-                submitRegisterAccountRequest(
-                    shouldCheckForDataBreaches = false,
-                    shouldIgnorePasswordStrength = true,
-                    captchaToken = result.token,
-                )
-            }
-        }
-    }
-
     @Suppress("LongMethod", "MaxLineLength")
     private fun handleReceiveRegisterAccountResult(
         action: Internal.ReceiveRegisterResult,
     ) {
         when (val registerAccountResult = action.registerResult) {
+            // TODO PM-6675: Remove captcha from RegisterResult when old flow gets removed
             is RegisterResult.CaptchaRequired -> {
-                mutableStateFlow.update { it.copy(dialog = null) }
-                sendEvent(
-                    CompleteRegistrationEvent.NavigateToCaptcha(
-                        uri = generateUriForCaptcha(captchaId = registerAccountResult.captchaId),
-                    ),
+                throw IllegalStateException(
+                    "Captcha should not be required for the new registration flow",
                 )
             }
 
@@ -337,7 +291,6 @@ class CompleteRegistrationViewModel @Inject constructor(
             submitRegisterAccountRequest(
                 shouldCheckForDataBreaches = state.isCheckDataBreachesToggled,
                 shouldIgnorePasswordStrength = false,
-                captchaToken = null,
             )
         }
     }
@@ -346,14 +299,12 @@ class CompleteRegistrationViewModel @Inject constructor(
         submitRegisterAccountRequest(
             shouldCheckForDataBreaches = false,
             shouldIgnorePasswordStrength = true,
-            captchaToken = null,
         )
     }
 
     private fun submitRegisterAccountRequest(
         shouldCheckForDataBreaches: Boolean,
         shouldIgnorePasswordStrength: Boolean,
-        captchaToken: String?,
     ) {
         mutableStateFlow.update {
             it.copy(dialog = CompleteRegistrationDialog.Loading)
@@ -369,7 +320,7 @@ class CompleteRegistrationViewModel @Inject constructor(
                 email = state.userEmail,
                 masterPassword = state.passwordInput,
                 masterPasswordHint = state.passwordHintInput.ifBlank { null },
-                captchaToken = captchaToken,
+                captchaToken = null,
             )
             sendAction(
                 Internal.ReceiveRegisterResult(
@@ -472,11 +423,6 @@ sealed class CompleteRegistrationEvent {
     ) : CompleteRegistrationEvent()
 
     /**
-     * Navigates to the captcha verification screen.
-     */
-    data class NavigateToCaptcha(val uri: Uri) : CompleteRegistrationEvent()
-
-    /**
      * Navigates to the landing screen.
      */
     data object NavigateToLanding : CompleteRegistrationEvent()
@@ -530,13 +476,6 @@ sealed class CompleteRegistrationAction {
      * Models actions that the [CompleteRegistrationViewModel] itself might send.
      */
     sealed class Internal : CompleteRegistrationAction() {
-        /**
-         * Indicates a captcha callback token has been received.
-         */
-        data class ReceiveCaptchaToken(
-            val tokenResult: CaptchaCallbackTokenResult,
-        ) : Internal()
-
         /**
          * Indicates a [RegisterResult] has been received.
          */

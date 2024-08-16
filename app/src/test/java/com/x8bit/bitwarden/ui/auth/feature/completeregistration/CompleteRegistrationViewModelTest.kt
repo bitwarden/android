@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
@@ -29,12 +28,9 @@ import com.x8bit.bitwarden.ui.platform.base.util.asText
 import com.x8bit.bitwarden.ui.platform.components.dialog.BasicDialogState
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -49,9 +45,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
      * Saved state handle that has valid inputs. Useful for tests that want to test things
      * after the user has entered all valid inputs.
      */
-    private val mockAuthRepository = mockk<AuthRepository> {
-        every { captchaTokenResultFlow } returns flowOf()
-    }
+    private val mockAuthRepository = mockk<AuthRepository>()
 
     private val fakeEnvironmentRepository = FakeEnvironmentRepository()
 
@@ -102,7 +96,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         runTest {
             val input = "abcdefghikl"
             coEvery {
-                mockAuthRepository.getPasswordStrength("test@test.com", input)
+                mockAuthRepository.getPasswordStrength(EMAIL, input)
             } returns PasswordStrengthResult.Error
             val viewModel = createCompleteRegistrationViewModel()
             viewModel.trySendAction(PasswordInputChange(input))
@@ -124,15 +118,14 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `CreateAccountClick with passwords not matching should show password match dialog`() =
         runTest {
-            val input = "testtesttesttest"
             coEvery {
-                mockAuthRepository.getPasswordStrength(EMAIL, input)
+                mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
             } returns PasswordStrengthResult.Error
             val viewModel = createCompleteRegistrationViewModel()
-            viewModel.trySendAction(PasswordInputChange(input))
+            viewModel.trySendAction(PasswordInputChange(PASSWORD))
             val expectedState = DEFAULT_STATE.copy(
                 userEmail = EMAIL,
-                passwordInput = input,
+                passwordInput = PASSWORD,
                 dialog = CompleteRegistrationDialog.Error(
                     BasicDialogState.Shown(
                         title = R.string.an_error_has_occurred.asText(),
@@ -149,7 +142,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `CreateAccountClick with all inputs valid should show and hide loading dialog`() = runTest {
         val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
             coEvery {
                 register(
                     email = EMAIL,
@@ -160,7 +152,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Success(captchaToken = "mock_token")
+            } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
         }
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
         turbineScope {
@@ -184,7 +176,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `CreateAccountClick register returns error should update errorDialogState`() = runTest {
         val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
             coEvery {
                 register(
                     email = EMAIL,
@@ -220,44 +211,8 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     }
 
     @Test
-    fun `CreateAccountClick register returns CaptchaRequired should emit NavigateToCaptcha`() =
-        runTest {
-            val mockkUri = mockk<Uri>()
-            every {
-                generateUriForCaptcha(captchaId = "mock_captcha_id")
-            } returns mockkUri
-            val repo = mockk<AuthRepository> {
-                every { captchaTokenResultFlow } returns flowOf()
-                coEvery {
-                    register(
-                        email = EMAIL,
-                        masterPassword = PASSWORD,
-                        masterPasswordHint = null,
-                        emailVerificationToken = TOKEN,
-                        captchaToken = null,
-                        shouldCheckDataBreaches = false,
-                        isMasterPasswordStrong = true,
-                    )
-                } returns RegisterResult.CaptchaRequired(captchaId = "mock_captcha_id")
-            }
-            val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
-            viewModel.eventFlow.test {
-                viewModel.trySendAction(CompleteRegistrationAction.CreateAccountClick)
-                assertEquals(
-                    CompleteRegistrationEvent.NavigateToCaptcha(uri = mockkUri),
-                    awaitItem(),
-                )
-            }
-        }
-
-    @Test
     fun `CreateAccountClick register returns Success should emit NavigateToLogin`() = runTest {
-        val mockkUri = mockk<Uri>()
-        every {
-            generateUriForCaptcha(captchaId = "mock_captcha_id")
-        } returns mockkUri
         val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
             coEvery {
                 register(
                     email = EMAIL,
@@ -268,7 +223,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
                     shouldCheckDataBreaches = false,
                     isMasterPasswordStrong = true,
                 )
-            } returns RegisterResult.Success(captchaToken = "mock_captcha_token")
+            } returns RegisterResult.Success(captchaToken = CAPTCHA_BYPASS_TOKEN)
         }
         val viewModel = createCompleteRegistrationViewModel(VALID_INPUT_STATE, repo)
         viewModel.eventFlow.test {
@@ -283,7 +238,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `ContinueWithBreachedPasswordClick should call repository with checkDataBreaches false`() {
         val repo = mockk<AuthRepository> {
-            every { captchaTokenResultFlow } returns flowOf()
             coEvery {
                 register(
                     email = EMAIL,
@@ -315,7 +269,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `CreateAccountClick register returns ShowDataBreaches should show HaveIBeenPwned dialog`() =
         runTest {
             mockAuthRepository.apply {
-                every { captchaTokenResultFlow } returns flowOf()
                 coEvery {
                     register(
                         email = EMAIL,
@@ -354,7 +307,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `CreateAccountClick register returns DataBreachAndWeakPassword should show HaveIBeenPwned dialog`() =
         runTest {
             mockAuthRepository.apply {
-                every { captchaTokenResultFlow } returns emptyFlow()
                 coEvery {
                     register(
                         email = EMAIL,
@@ -388,7 +340,6 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     fun `CreateAccountClick register returns WeakPassword should show HaveIBeenPwned dialog`() =
         runTest {
             mockAuthRepository.apply {
-                every { captchaTokenResultFlow } returns flowOf()
                 coEvery {
                     register(
                         email = EMAIL,
@@ -447,32 +398,32 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
     @Test
     fun `ConfirmPasswordInputChange update passwordInput`() = runTest {
         val viewModel = createCompleteRegistrationViewModel()
-        viewModel.trySendAction(ConfirmPasswordInputChange("input"))
+        viewModel.trySendAction(ConfirmPasswordInputChange(PASSWORD))
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE.copy(confirmPasswordInput = "input"), awaitItem())
+            assertEquals(DEFAULT_STATE.copy(confirmPasswordInput = PASSWORD), awaitItem())
         }
     }
 
     @Test
     fun `PasswordHintChange update passwordInput`() = runTest {
         val viewModel = createCompleteRegistrationViewModel()
-        viewModel.trySendAction(PasswordHintChange("input"))
+        viewModel.trySendAction(PasswordHintChange(PASSWORD))
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE.copy(passwordHintInput = "input"), awaitItem())
+            assertEquals(DEFAULT_STATE.copy(passwordHintInput = PASSWORD), awaitItem())
         }
     }
 
     @Test
     fun `PasswordInputChange update passwordInput and call getPasswordStrength`() = runTest {
         coEvery {
-            mockAuthRepository.getPasswordStrength(EMAIL, "input")
+            mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD)
         } returns PasswordStrengthResult.Error
         val viewModel = createCompleteRegistrationViewModel()
-        viewModel.trySendAction(PasswordInputChange("input"))
+        viewModel.trySendAction(PasswordInputChange(PASSWORD))
         viewModel.stateFlow.test {
-            assertEquals(DEFAULT_STATE.copy(passwordInput = "input"), awaitItem())
+            assertEquals(DEFAULT_STATE.copy(passwordInput = PASSWORD), awaitItem())
         }
-        coVerify { mockAuthRepository.getPasswordStrength(EMAIL, "input") }
+        coVerify { mockAuthRepository.getPasswordStrength(EMAIL, PASSWORD) }
     }
 
     @Test
@@ -562,6 +513,7 @@ class CompleteRegistrationViewModelTest : BaseViewModelTest() {
         private const val PASSWORD = "longenoughtpassword"
         private const val EMAIL = "test@test.com"
         private const val TOKEN = "token"
+        private const val CAPTCHA_BYPASS_TOKEN = "captcha_bypass"
         private val DEFAULT_STATE = CompleteRegistrationState(
             userEmail = EMAIL,
             emailVerificationToken = TOKEN,

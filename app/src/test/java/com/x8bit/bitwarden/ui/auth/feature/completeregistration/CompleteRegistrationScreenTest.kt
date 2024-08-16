@@ -1,6 +1,5 @@
 package com.x8bit.bitwarden.ui.auth.feature.completeregistration
 
-import android.net.Uri
 import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
@@ -98,15 +97,6 @@ class CompleteRegistrationScreenTest : BaseComposeTest() {
     fun `NavigateToLogin event should invoke navigate login lambda`() {
         mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToLanding)
         assertTrue(onNavigateToLandingCalled)
-    }
-
-    @Test
-    fun `NavigateToCaptcha event should invoke intent manager`() {
-        val mockUri = mockk<Uri>()
-        mutableEventFlow.tryEmit(CompleteRegistrationEvent.NavigateToCaptcha(uri = mockUri))
-        verify {
-            intentManager.startCustomTabsActivity(mockUri)
-        }
     }
 
     @Test

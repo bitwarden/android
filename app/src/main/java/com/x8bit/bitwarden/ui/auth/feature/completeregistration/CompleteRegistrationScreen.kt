@@ -76,10 +76,6 @@ fun CompleteRegistrationScreen(
                 Toast.makeText(context, event.message(context.resources), Toast.LENGTH_SHORT).show()
             }
 
-            is CompleteRegistrationEvent.NavigateToCaptcha -> {
-                intentManager.startCustomTabsActivity(uri = event.uri)
-            }
-
             is CompleteRegistrationEvent.NavigateToLanding -> {
                 onNavigateToLanding()
             }
